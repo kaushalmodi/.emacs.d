@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 11:54:58 kmodi>
+;; Time-stamp: <2014-02-04 12:28:10 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -83,23 +83,26 @@
 ;; So a 10pt font size is equal to 100 in internal font size value.
 (set-face-attribute 'default nil :height (* font-size-pt 10))
 
-(defun font-size-incr ()
-  "Increase font size by 1 pt"
-  (interactive)
-  (setq font-size-pt (+ font-size-pt 1))
-  (set-face-attribute 'default nil :height (* font-size-pt 10)))
+;; Below custom function are not required, the default C-x C-0/-/= bindings do
+;; excellent job
 
-(defun font-size-decr ()
-  "Decrease font size by 1 pt"
-  (interactive)
-  (setq font-size-pt (- font-size-pt 1))
-  (set-face-attribute 'default nil :height (* font-size-pt 10)))
+;; (defun font-size-incr ()
+;;   "Increase font size by 1 pt"
+;;   (interactive)
+;;   (setq font-size-pt (+ font-size-pt 1))
+;;   (set-face-attribute 'default nil :height (* font-size-pt 10)))
 
-(defun font-size-reset ()
-  "Reset font size to default-font-size-pt"
-  (interactive)
-  (setq font-size-pt default-font-size-pt)
-  (set-face-attribute 'default nil :height (* font-size-pt 10)))
+;; (defun font-size-decr ()
+;;   "Decrease font size by 1 pt"
+;;   (interactive)
+;;   (setq font-size-pt (- font-size-pt 1))
+;;   (set-face-attribute 'default nil :height (* font-size-pt 10)))
+
+;; (defun font-size-reset ()
+;;   "Reset font size to default-font-size-pt"
+;;   (interactive)
+;;   (setq font-size-pt default-font-size-pt)
+;;   (set-face-attribute 'default nil :height (* font-size-pt 10)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

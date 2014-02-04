@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-03 15:03:46 kmodi>
+;; Time-stamp: <2014-02-04 12:25:41 kmodi>
 
 ;; KEY BINDINGS
 
@@ -272,9 +272,6 @@
 (global-set-key (kbd "C-x t")     'toggle-truncate-lines)
 
 (when (boundp 'setup-visual-loaded)
-  (global-set-key (kbd "C-x C-=") 'font-size-incr)
-  (global-set-key (kbd "C-x C--") 'font-size-decr)
-  (global-set-key (kbd "C-x C-0") 'font-size-reset)
   (define-key modi-map (kbd "g")  'hidden-mode-line-mode) ;; C-x m g (no mode line, no Ground)
   (define-key modi-map (kbd "f")  'bzg-big-fringe-mode) ;; C-x m f
   )
