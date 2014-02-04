@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 13:32:07 kmodi>
+;; Time-stamp: <2014-02-04 14:01:54 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -10,7 +10,7 @@
 (defvar my-packages
   '(
     ;; projectile
-    ;; header2 ;; using locally editted version
+    ;; header2 ;; INSTR_UNCOMMENT_THIS_LINE
     ;; highlight-symbol ;; The highlight-global package does a better job
     ace-jump-mode
     auto-complete fuzzy
@@ -89,7 +89,7 @@
 ;; (require 'setup-hspice)
 
 ;; custom packages
-(require 'setup-sos) ;; This require line should be removed by you.
+(require 'setup-sos) ;; INSTR_DELETE_THIS_LINE
 (require 'setup-windows-buffers)
 (require 'setup-registers)
 (require 'setup-navigation)
