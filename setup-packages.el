@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 10:11:54 kmodi>
+;; Time-stamp: <2014-02-04 13:35:48 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -28,7 +28,8 @@
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
-(package-initialize)
+
+(package-initialize) ;; Load emacs packages and activate them
 
 ;; Auto install the required packages
 ;; Source: https://github.com/bbatsov/prelude/blob/master/core/prelude-packages.el
