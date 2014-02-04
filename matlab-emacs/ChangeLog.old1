@@ -1,0 +1,979 @@
+This is the old-style ChangeLog before integration into CVS @ The MathWorks
+
+-------
+30Jul01 by Eric Ludlam <eludlam@mathworks.com>
+    Better doc for matlab-mode & stringify.
+    Fix `matlab-fill-paragraph' so comments do not bleed into
+      the previous line.
+
+04Jun01 by Eric Ludlam <eludlam@mathworks.com>
+    Version change to 2.2.4.alpha
+
+07May01 by Eric Ludlam <eludlam@mathworks.com>
+    Set `indent-tabs-mode' to nil for M files.  Tabs are not allowed for V6.
+
+05Apr01 by Eric Ludlam <eludlam@mathworks.com>
+    Fixed auto-fill for code to add end brackets after a string if the string is already complete.
+
+16Feb01 by Stefan Holst <Stefan.Michael.Holst@uni-konstanz.de>
+    Add ./ to list of highlighted math operators.
+
+15Dec00 by Peter Boettcher <boettcher@ll.mit.edu>
+        hacked by Eric Ludlam <eludlam@mathworks.com>
+    Add local binding to `matlab-mode' for `add-log-current-defun-function'.
+    New function `matlab-match-function-re' to match functions.
+    New function `matlab-current-defun' gets the name of the current fn.
+    In `matlab-mode-vf-functionname' use `matlab-match-function-re'.
+    Added @ for file names to regexp `gud-matlab-error-regexp'.
+
+27Oct00 by Volker Franz <volker.franz@tuebingen.mpg.de>
+    Add text to `comint-input-ring' in `matlab-shell-save-and-go'.
+
+10Oct00 by Eric Ludlam <eludlam@mathworks.com>
+     When using a value from `matlab-maximum-indents', enable the maximum to be offset by the current
+       indentation level.
+
+08Sep00 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed numeric ij highlighting.
+     Fixed `matlab-comment-on-line' for case when only % is inside a
+       string.
+
+08Jun00 by Eric Ludlam <eludlam@mathworks.com>
+     Added menu item for `matlab-uncomment-region'.
+
+06Jun00 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-shell-input-ring-size' as a variable.
+
+30May00 by Eric Ludlam <eludlam@mathworks.com>
+     `matlab-beginning-of-command' now skips past comments which
+       are continuations from the previous line.
+     Fixed `matlab-defun-regex' to require real whitespace after the
+       function keyword.
+
+18Apr00 by Eric Ludlam <eludlam@mathworks.com>
+     Finally: Version 2.2.3.
+
+13Apr00 by Eric Ludlam <eludlam@mathworks.com> with original
+        from Hubert Selhofer <hubert@na.uni-tuebingen.de>
+     Added `matlab-find-unreachable-code' to detect if (0)
+       situations.  Use this in font lock to turn that code
+       into comment colors.
+     Update `matlab-forward-sexp' to take universal argument.
+       When set, stop on else/case/catch blocks.  Used by above
+       fn to not highlight ELSE clause.
+     Version 2.2.3.b4
+
+06Apr00 by Eric Ludlam <eludlam@mathworks.com>
+     Updated `matlab-mode-vf-quietafy-buffer' to remove trailing
+       whitespace too.
+     Make sure the `fume' vairables exist before modifying them.
+
+08Mar00 by Adrie Dane <A.D.Dane@chem.hull.ac.uk>
+        tweeked by Eric M. Ludlam
+     Added support for XEmacs' func-menu program.
+
+19Jan00 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed typo in C-c: binding to uncomment region.
+
+19Jan00 by Hubert Selhofer <hubert@na.uni-tuebingen.de>
+     Font-lock complex numbers (i,j).
+
+12Jan00 by Eric M. Ludlam <eludlam@mathworks.com> idea by
+           Jinwei Shen <shenjw@wam.umd.edu>
+     Added `matlab-show-matlab-shell-buffer' to display the shell
+       from a matlab buffer.
+     I moved commands that affect the shell from a text buffer into
+       their own section.
+
+29Oct99 by Eric M. Ludlam <eludlam@mathworks.com>
+     `matlab-shell-command-switches' is now a custom string type.
+     Version 2.2.3.b2
+
+04Aug99 by Eric M. Ludlam <eludlam@mathworks.com>
+     Customize new font lock keyword list variables.
+     Fixed `matlab-lattr-middle-block-cont' to return 0 if there IS
+       a middle block that also contains an END on the same line.
+
+03Aug99 by Hubert Selhofer <hubert@na.uni-tuebingen.de> augmented by
+           Eric M. Ludlam <eludlam@mathworks.com>
+     Use Emacs 20's `line-end-position' and `line-beginning-position'.
+     Use Emacs 20's `regexp-opt' when generating font-lock keywords.
+     Version 2.2.3.b1
+
+23July99 by Peter J. Acklam <jacklam@math.uio.no>
+     Font Lock keywords for function defs w/ special EOL.
+
+02July99 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-uncomment-region' command bound to C-c :
+
+04June99 by Ian Wells <I.Wells@tarragon-et.co.uk>
+     Updated `gud-matlab-error-regexp' to work w/ windows filenames.
+
+20May99 by Eric Ludlam <eludlam@mathworks.com>
+     Updateded the ftp site where you can get matlab.el
+
+21Apr99 by Eric Ludlam <eludlam@mathworks.com>
+     Added menu items to toggle code-filling, and periodic details.
+     Update version to 2.2.2.
+
+14Apr99 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-comment-line-break-function' on M-j for compatibility.
+
+12Apr99 by Eric Ludlam <eludlam@mathworks.com>
+     In `matlab-valid-end-construct-p' do not use end-of-command.
+       The end of line command seems to work just fine.
+
+31Mar99 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-end-of-command' to have a better short-cicuit for
+       long buffers.  (depends on block commands not appearing in matrix)
+
+04Mar99 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-end-of-command' to be savvy of eob.
+     Fixed `matlab-indent-end-before-ret' to correctly use the
+       regex functions that need re-indenting backwards.  Use of
+       `matlab-block-beg-re' was just wrong.
+
+01Mar99 by Eric Ludlam <eludlam@mathworks.com>
+     Removed ' from menu bindings toggling variables.
+
+10Feb99 by Eric Ludlam <eludlam@mathworks.com>
+     `matlab-navigation-syntax' will ALSO set `case-fold-search' to nil.
+
+09Feb99 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-beginning-of-command' to not stall inside a
+       matrix inside a continuation.
+
+29Jan99 by Eric Ludlam <eludlam@mathworks.com>
+     Added try/catch to hilit19 keywords.
+
+28Jan99 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-indent-end-before-ret' to use `matlab-block-beg-re'
+       instead of a home-grown regular expression.
+
+17Dec98 by Eric Ludlam <eludlam@mathworks.com>
+     Updated some documentation.
+     Post 2.2.1
+
+16Dec98 by Eric Ludlam <eludlam@mathworks.com>
+     Do not require font lock.  Set up font-lock hooks to generate our
+       special faces when font lock is loaded (if it isn't already)
+     Add require 'gud on compile.
+     Added `matlab-handle-simulink'.  When set to nil, font lock keywords
+       are modified to remove simulink special stuff.
+     Fixed `matlab-cursor-in-string' so that the `incomplete' param
+       works with strings w/ '' in them.
+     Added celeron to `matlab-mode-vf-quietafy-buffer', and also added
+       a speed optimization when calling `matlab-end-of-command'.
+
+07Dec98 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-maximum-indents' to hold indentation maximum data.
+     Update `matlab-calculate-indentation' to use the maximums
+       variable to allow custom indentation levels.  Also fixed so
+       that if a given paren is immediatly followed by EOL, or if
+       an indent past arg1's 1st arg is followed by and EOL, then
+       backup one indentation type.
+
+04Dec98 by Eric Ludlam <eludlam@mathworks.com>
+     In `gud-matlab-find-file', don't use replace-match on a string.
+     Fixed nasty bug when a paren appears in a string in an array.
+     Added `matlab-up-list' which only works backwards at the moment.
+     Added `array-cont' and `array-end' indentation types.  Array-end types
+       will line up with the opening bracket, not the array elements.
+     Hacked several fns to use `array-cont's restrict parameter
+       to speed things up.
+
+03Dec98 by Eric Ludlam <eludlam@mathworks.com>
+     Moved simulink keywords into a guadier level.  Added require font-lock.
+     Fixed `matlab-ltype-help-comm' to not loop endlessly @ bob.
+     Added `matlab-ispell-strings-region', `matlab-ispell-strings', and
+       `matlab-ispell-comments'.  Added to menu & keymap.
+
+02Dec98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-show-line-info' to not use old indent functions.
+     Fixed "proc" ref in `matlab-shell-send-string' which only
+       worked incidentally.
+     Release 2.2
+
+15Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     When auto-filling comments at the end of a line, use
+       auto-fill, and not fill-paragraph.
+     `matlab-set-comm-fill-prefix' no longer grabs preceding spaces.
+
+12Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     When a regular matlab prompt appears, turn off the overlay arrow.
+
+11Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     Attempted to make `matlab-shell-echos' disply the string about
+       to be run for save-and-go, and run-region in the fn
+       `matlab-shell-send-string'
+
+10Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed bug in `gud-matlab-marker-filter' so that instead of
+       checking for specific prompts, we check specifically for the
+       error prefix, and display everything else (which includes
+       the prompt of the INPUT command.
+
+04Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-shell-echos' -> `matlab-shell-echoes'.
+
+04Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     Post 2.1.4d.
+
+03Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-shell-echos' for NT engine program.
+
+02Nov98 by Eric Ludlam <eludlam@mathworks.com>
+     Due to new engine program for NT, be careful w/ error message in
+       `matlab-shell'.
+
+31Oct98 by Matt Wette <mwette@alumni.caltech.edu>
+	changed local variable `comment-column' to value of
+       `matlab-comment-column' (not the symbol)
+     changed reference of `matlab-comment-column' to `comment-column'.
+     Fixed matlab-comment on lines w/ comment.
+
+26Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     Added help for `matlab-shell' on Windows platform.
+
+23Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed font locking for statement vars for an embedded fn call.
+     Fixed font locking non-simulink commands starting w/ `sim'
+
+19Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     When auto-filling, ignore lines which are commented regions.
+
+16Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     In `matlab-set-comm-fill-prefix', account for the $$$ of a
+        region comment.
+
+14Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     When debugging source, convert .p files into .m files before loading.
+
+07Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     A bunch of changes to enable GUD usage under XEmacs 20.4.
+     Updated some documentation.  Switched to 2.1.4 due to changes.
+
+06Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     Added binding for `backspace' symbol to not delete prompt.
+
+02Oct98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed matlab shell to beep shell to beep when filtering C-g
+     Added a command to prevent simple deletion of the prompt in shell mode.
+
+30Sept98 by Eric Ludlam <eludlam@mathworks.com>
+     Post 2.1.3i to mailing list.
+
+25Sept98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed a region bug for Emacs 20.2.  Apparently `region-face'
+        is important, and I shouldn't have used it as a local
+        variable.
+
+24Sept98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed bug for arg1 functions when 1st arg is a function call,
+        and the lineup code matches past arg1 of this fn.
+     Added `matlab-arg1-max-indent-length' to control how long the
+        first argument must be before we stop indenting.
+
+23Sept98 by Eric Ludlam <eludlam@mathworks.com>
+     Made sure region was correctly found for XEmacs users w/ custom.
+
+22Sept98 by Eric Ludlam <eludlam@mathworks.com>
+     Added optional arg REINDENT to `matlab-insert-end-block' to reindent
+        the code affected by the new block.
+
+10Sept98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed use of `matlab-indent-past-arg1-functions' so that the `_' char
+        is also skipped over when backing up.
+     The font lock keywords for 1st arg is var functions now uses
+        `matlab-indent-past-arg1-functions' as the default reference.
+     Added a bunch of simulink keywords to font lock, included a simulink
+        keyword face, and to `matlab-indent-past-arg1-functions'.
+
+09Sept98 by Eric Ludlam <eludlam@mathworks.com>
+     Added waitfor in with set/get as a handle/property pair acceptor.
+     Fixed defcustom rules for for `matlab-unterminated-string-face'
+        to take the same properties as `font-lock-string-face'.
+     Added some really gaudy keywords for highlighting interesting
+        things in a file's help comment.
+
+31Aug98 by Eric Ludlam <eludlam@mathworks.com>
+     Post 2.1.3f to mailing list.
+     Fixed typo in `matlab-shell' relating to keymaps for older emacsen.
+
+21Aug98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-ltype-help-comm' to not hang at beginning of buffer.
+     Add `matlab-ltype-comm-ignore' returns t on lines which were
+        hit with `matlab-comment-region'.  `matlab-prev-line'
+        ignores these when scanning backwards, and
+        `matlab-calculate-indentation' forces these lines to indent
+        to column 0.
+
+20Aug98 by Eric Ludlam <eludlam@mathworks.com>
+     Update doc for `matlab-case-level' to include cons cell
+     Update `matlab-calc-indent' and `matlab-next-line-indentation'
+     to handle cons cell for `matlab-case-level'.
+
+19Aug98 by Eric Ludlam <eludlam@mathworks.com>
+     Removed docs about 'nohelpcomment.  This is the default now.
+
+18Aug98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-find-convenient-line-break' to break before a function
+        name, not instead of at it's opening parenthisis.
+
+14Aug98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-auto-fill' so that when filling many parameters
+        of strings, the small confusion of string continues doesn't
+        mess things up (by inserting brackets and things like that.)
+     Added `matlab-indent-past-arg1-functions' regex which permits
+        indentation of continuations after certain classes of
+        functions to occur with the second argument.
+     Updated `matlab-set-comm-fill-prefix' to be smaller, and smarter.
+        This eliminated `matlab-set-comm-fill-prefix-post-code'
+     Removed the unused `matlab-set-code-fill-prefix'.
+     Fixed `matlab-auto-fill' to fill post code comments first when
+        applicable.
+     Fixed `matlab-fill-paragraph' so that if the cursor is AFTER
+        the ..., it will fill in code mode, not comment mode.
+        Also, trailing comments are correctly decommented.
+
+12Aug98 by Eric Ludlam <eludlam@mathworks.com>
+     Rewrote `matlab-fill-region' to go through the region on a
+        command by command basis calling `matlab-fill-paragraph'
+     Fixed `matlab-fill-paragraph' to justify code lines, and
+        insert spaces wher the line breaks were.
+     Deleted `matlab-justify-comment-line' since we can get that
+        behavior built in.
+     Added `matlab-fill-fudge-hard-maximum' to be the hard maximum
+        limit when filling code.
+     Fixed `matlab-beginning-of-command' to correctly handle
+        continued lines at the beginning of a buffer.
+     Fixed `matlab-calc-indent' to be better about indentation at
+        the beginning of a buffer.
+     Fixed `matlab-find-convenient-line-break' to be smarter about
+        varios potential problems including double-fudge parens,
+        and before/after space search short-circuiting.
+
+31Jul98 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-fill-fudge' which is a fuzzy fill zone.  Also added
+        `matlab-find-convenient-line-break' which calculates a fuzzy
+        column to break a line on.  Updated `matlab-do-autofill' to
+        use the above function.
+     Updated `matlab-fill-paragraph' to use the new fuzzy line-break
+        calculation on code.
+     Added `matlab-ltype-continued-comm' to identify the column on
+        a previous line where the comment column is.
+     Updated indentor to indent comments indentically to the previous
+        line's comment column even if it follows code.
+     Updated `matlab-beginning-of-command' and `matlab-end-of-command'
+        to correctly trace to the end of a command's comments.
+
+29Jul98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed `matlab-auto-fill' to prevent filling if typing a space
+        while the cursor is on the first . or the elipsis.
+     Fixed `matlab-ltype-endfunction-comm' so it won't barf on end-of-
+        file conditions.
+
+27Jul98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed first code line in a function indenting problem.  The
+        variable `matlab-indent-function' was ignored, where code
+        after a help comment was always indented, and code after
+        the first function decl, but w/ no help was always not
+        indented.
+     Fixed `matlab-beginning-of-command' to correctly handle the
+        first line in a file containing continuation marks.
+     Fixed auto fill to not fill lines with elipses on them already.
+     Fixed `matlab-valid-end-construct-p' to handle unterminated lists
+        or matrixes.  If a list is unterminated, then all ends are
+        assumed to be invalid.
+
+20Jul98 by Eric Ludlam <eludlam@mathworks.com>
+     Check to make sure `set-keymap-parent' exists before using it.
+
+07Jul98 by Eric Ludlam <eludlam@mathworks.com>
+     Moved `matlab-mode-verify-fix-functions' to custom variable section,
+        and turned it into a defcustom declaration.
+     Added `matlab-lattr-array-cont' function to identify lines that
+        have unstarted/ended arrays in them.
+     `matlab-beginning-of-command' and `matlab-end-of-command' now track
+        across unbounded array constants.
+
+06Jul98 by Eric Ludlam <eludlam@mathworks.com>
+     Put `matlab-indent-function' back to nil.
+     `matlab-mode-vf-quietafy-buffer' can take optional ignored FAST arg.
+     Release 2.1.2.
+
+02Jul98 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-mode-vf-quietafy-buffer' which finds lines which may
+        produce ANS style output.
+     When `matlab-indent-function' is 'nohelpcomment, then the first
+        comment in a function is unindented while the function body
+        is indented.
+
+22Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     Even more string highlighting fixes for spaces in strings.
+
+17Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     Re-worked the string/comment font locking to use functions instead
+        of string matching.  The functions are now much more accurate.
+
+16Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed auto-fill prefix for comments to not require a space.
+
+15Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     More string font lock fixing comments directly after a string.
+
+10Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed unterminated strings that contain comment characters,
+        and don't highlight the comments in unterminated strings.
+     Discovered why XEmacs 20 wouldn't highlight some items, and
+        fixed it.  Required lots of 'appends, plus the removal
+        of 'prepend for comments which allowed other keywords to show
+        through.
+
+10Jun98 by Peter J. Acklam <jacklam@math.uio.no>
+     Fixed unterminated strings with quoted quotes.
+
+05Jun98 by Stelios Kyriacou <kyriacou@cbmv.jhu.edu>
+     Update `gud-matlab-error-regexp' to handle warnings.
+     Update `matlab-shell-last-error' to find errors the cursor is in.
+
+04Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     Attempt to make `matlab-unterminated-string-face' do the defface thing.
+
+04Jun98 by Stelios Kyriacou <kyriacou@cbmv.jhu.edu>
+     Fixed `matlab-find-file-on-path' to correctly search the list of paths.
+        Added check that a path is a directory before fetching it's files.
+     Fixed a bug when I merged a change in from jacklam which I seem to
+        have forgotten to put into this history.
+
+03Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     `matlab-unterminated-string-face' is now a self-referencing variable.
+     Post version 2.1.1
+
+02Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed the function `matlab-mode-determine-mfile-path' to not fail.
+     Updated `matlab-find-file-on-path' to handle nil's in the list
+        and provide helpful errors
+
+01Jun98 by Eric Ludlam <eludlam@mathworks.com>
+     Post version 2.1
+
+27May98 by Eric Ludlam <eludlam@mathworks.com>
+     Enabled `matlab-mode-determine-mfile-path' and used it to
+       define the variable `matlab-mode-install-path'.  This is
+       then used by the new commands `matlab-find-file-on-path' and
+       `matlab-find-file-click'  Added these to the keymap and meny.
+
+22May98 by Dan Nicolaescu <done@wynken.ece.arizona.edu>
+     Fixed derived modes to correctly font lock upon creation.
+
+19May98 by Peter J. Acklam <jacklam@math.uio.no>
+     New function highlighting regexps which are more accurate.
+
+11May98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Ran new checkdoc on the file and fixed all calls to `error'
+
+11May98 by Peter J. Acklam <jacklam@math.uio.no>
+     Fixed a string highlighting bug.
+
+11May98 Michael Granzow <mg@medi.physik.uni-oldenburg.de>
+     Found bug in `matlab-keywords-boolean'.
+
+08May98 by Eric M. Ludlam <eludlam@mathworks.com>
+     CR after unterminated END will error, but still insert the CR.
+
+08May98 by Hubert Selhofer <hubert@na.mathematik.uni-tuebingen.de>
+     CR when (point) == (point-min) no longer errors
+
+05May98 by Hubert Selhofer <hubert@na.mathematik.uni-tuebingen.de>
+     Many spelling fixes in comments, and doc strings.
+     Adjusted some font-lock keywords to be more compact/effecient.
+
+30Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     %endfunction unindenting can now have arbitrary text after it.
+
+24Apr98 by Peter J. Acklam <jacklam@math.uio.no>
+     Fixed highlighting of for statements w/ traling comments.
+
+23Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed -vf-block functions to have more restrictive before-keyword
+       so we don't accidentally match keywords at the end of symbols.
+
+22Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Release 2.0 to web site and newsgroups.
+     Ran checkdoc/ispell on entire file.
+     Cleaned up some compile-time warnings.
+     Verified XEmacs compatibility.
+
+13Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed bug in `matlab-mode-vf-functionname' to prevent infinite loop
+       on empty files.
+
+10Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Added break to highlighted keywords.
+     Case variable highlighting now stops at comment endings.
+
+07Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     `matlab-ltype-comm' no longer demands a space after the %.
+     Indentor now unindents the comment %endfunction.
+     Removed transposing transpose part.  It broke quoted quotes.
+
+02Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Comments appearing at the end of a function, and just before a new
+         subfunction, are now unintented if `matlab-indent-function' is
+         non-nil.  This lets matlab users use %endfunction at the end
+         of a function, and get the indentation right.
+
+01Apr98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Smarter font lock for case (jacklam@math.uio.no)
+     Auto fill accounts for chars inserted based on the variable
+         `matlab-fill-count-ellipsis-flag'.
+     Auto fill will now fill a string by putting it into brackets
+         controlled by `matlab-fill-strings-flag'.
+
+18Mar98 by Peter J. Acklam <jacklam@math.uio.no>
+     Enabled multi-line function definitions in font-lock and imenu.
+
+16Mar98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed potential error in comment searching around ...
+     Fixed many function regexp's as per Peter J. Acklam's
+         <jacklam@math.uio.no> suggestion.
+
+09Mar98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed `tempo-template-matlab-function' to work correctly.
+     Fixed indentation for many other templates.
+     Made sure the verifier uses navigation syntax.
+
+23Feb98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed problem with x='%'    % ' this shouldn't work
+     Fixed a problem w/ strung up brackets messing up valid
+        end identification.
+
+17Feb98 by Aki Vehtari <Aki.Vehtari@hut.fi>
+     Fixed prompt regexp to include the debugging K.
+
+11Feb98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Made `matlab-mode-vf-functionname' more robust to arbitrary
+        versions of a function definition.  This includes allowing
+        comments and blank lines before the first fn definition.
+     Fixed up the font lock keywords for functions some
+
+10Feb98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed problem with derived view mode.
+     Fixed font locking of globals to allow a ; at the end.
+     Fixed function name verifier to not allow = on next line.
+        It used to match invalid expressions.
+     `matlab-shell-collect-command-output' now uses a different prompt
+        detector when waiting for output.  This prevents early exit.
+
+09Feb98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Updated `matlab-indent-line' to not edit the buffer if no changes
+        are needed, and to make after cursor position smarter.
+
+05Feb98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Added completion semantics and lists for HandleGraphics property lists
+     Added `matlab-completion-technique' and made it's default value
+        'completion.  This shows a buffer of completions instead of
+        cycling through them as the hippie-expand command does.
+
+26Jan98 by Aki Vehtari <Aki.Vehtari@hut.fi>
+     The Matlab logo variable now uses XEmacs 20.4 locate function.
+     Small cleanups
+
+26Jan98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Updated `matlab-fill-paragraph' to use a better fill prefix.
+     Moved code sections around, and added page breaks for navigation.
+
+23Jan98 by Aki Vehtari <Aki.Vehtari@hut.fi>
+	(matlab-frame-init): Fix typo in menu.
+	(matlab-output-to-temp-buffer): Use matlab-shell-help-mode.
+	(matlab-shell-run-region): New function.
+	(matlab-shell-collect-command-output): Remove (goto-char (point-max)).
+	(matlab-shell-topic-mode-hook): Name change.
+	(matlab-shell-topic-browser): Use matlab-shell-topic-mode.
+	(matlab-shell-help-mode): New mode. Derive from view-major-mode.
+	(matlab-shell-help-mode-menu): Define.
+	(matlab-shell-topic-mode): Name change and derive from
+	   matlab-shell-help-mode.
+	(matlab-shell-topic-mode-menu): Name change.
+
+22Jan98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Make `matlab-comment' insert `matlab-comment-s' on lines with
+        no text when there there is no previous comment line to mimic.
+
+21Jan98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Fixed a few templates.  Added `matlab-if-else'.
+     `matlab-insert-end-block' will now add a comment consisting of
+        the text starting the block being ended.
+     Added colors to variables defined with the global command.
+     Added `matlab-complete-symbol' which uses `matlab-find-recent-variable'
+        which searches backwards for variables names, and
+        `matlab-find-user-functions' which finds user functions.
+        There are also `matlab-*-completions' for solo commands
+        (if, else, etc), value commands, and boolean commands.
+        The current semantic state is found w/ `matlab-lattr-semantics'
+
+20Jan98 by Eric M. Ludlam <eludlam@mathworks.com>
+    Changed `matlab-block-scan-re' to have a limiting expression at
+        the beginning.  This makes sexp scanning faster by skipping
+        more semantically bad matches.
+    Forward/backward sexp now watch `matlab-scan-on-screen-only', which
+        make them stop when the scan falls off the screen.  Useful for
+        making the block highlighter *much* faster for large constructs,
+        and is logical since we can't see the highlight anyway.
+    Added `matlab-block-verify-max-buffer-size' to turn off long checks
+        on big buffers during save only.  Requesting a verify will do
+        the checks anyway.
+    Fixed block verifiers to check that found end keywords are also
+        valid block terminators.
+
+19Jan98 by Eric M. Ludlam <eludlam@mathworks.com>
+    Fixed `gud-matlab-marker-filter' and `matlab-join-comment-lines'
+        to not use `replace-match's fifth argument.
+    Replaced `matlab-insert-' with tempo templates where appropriate.
+
+19Jan98 by Aki Vehtari <Aki.Vehtari@hut.fi>
+     Fixed `matlab-mode-vf-functionname' to use a correct form
+        of `replace-match' for XEmacs.
+     Suggested form of `matlab-navigation-syntax'.
+
+14Jan98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Added manu `matlab-insert-' functions, including:
+       `switch-block', `next-case', `end-block', `if-block',
+       `for-block', `try-block', `while-block'.
+     Added `matlab-stringify-region' which takes a region, and
+       converts it to a string by adding ' around it, and quoting
+       all the quotes in the region.
+     Added an insertion prefix C-c C-c for all insert commands, and
+       the stringify function.
+     `matlab-auto-fill' is now assigned to `normal-auto-fill-function',
+       which is an Emacs 20 thing for auto-fill minor mode.
+     Added `matlab-beginning-of-command' and `end-of-command' which
+       moves across lines w/ continuation.
+     Changed `matlab-lattr-cont' to allow continuation on lines
+       ending in semicolon.  Is this correct?
+     Changed the main menu to have submenues for navigation,
+       formatting, and the new insert functions.
+     Fixed `matlab-forward-sexp' to not skip over brackets which
+       was appeared to be a missunderstanding.
+     Block highlighter and block verifiers no longer treat function
+       as requiring an "end" keyword.
+
+09Jan98 by Eric M. Ludlam <eludlam@mathworks.com>
+     Based on code donated by Driscoll Tobin A <tad@cauchy.colorado.edu>
+       `matlab-fill-paragraph' designed for M file help text, which
+       will fill/justify comment text, and uses paragraph rules.
+       `matlab-fill-comment-line' does not know about paragraphs.
+     `matlab-cursor-in-string' can now take an optional argument
+       which will identify an unterminated string.
+     `matlab-auto-fill' will not fill strings, and if the string is
+       not yet terminated, will also not fill it.  When the string
+       is terminated, the split will happen after the string, even
+       if it occurs after the `fill-column'.
+
+08Jan98 by Aki Vehtari  <Aki.Vehtari@hut.fi>
+     XEmacs compatibility associated with timers.
+     XEmacs optimizations associated with point-at-[eb]ol.
+     Turned key sequences from strings to Emacs/XEmacs wide [()] form
+     Documentation string fixes.
+     Customizable hooks.  Also update other custom vars.
+     Remove `matlab-reset-vars' and turn variables controlled by
+       `matlab-indent-function' into functions.
+     Some menu re-arrangements & topic-browser menu.
+     Use matlab-region-face instead of 'region when highlighting stuff.
+     `matlab-shell-exit' now deletes the buffer when it's done.
+     `write-contents-hooks' is forced buffer local.
+     Fixed `matlab-output-to-temp-buffer'.
+     Made matlab-shell group.
+
+07Jan98 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed indenting problem when end is first used as matrix index
+       and is also the first word on a line.
+
+07Jan98 by Aki Vehtari  <Aki.Vehtari@hut.fi>
+     Fixed comments to use add-hook instead of setq.
+     Variable name cleanup.  Added ###autoload tags to -mode and -shell.
+     Removed some unused variables.
+
+24Dec97 by Eric Ludlam <eludlam@mathworks.com>
+     Added `matlab-shell-enable-gud-flag' to control if the GUD features
+       are used in shell mode or not.  This is automatically set to nil
+       when certain GUD features are not present
+     Added stop/clear if error to menu to help people out w/ the debugger.
+     Added block highlighting of if/for/etc/end constructs.
+     Fixed up cursor-in-string even more to handle bol better.
+     Fixed problem w/ syntax table installing itself in funny places
+       and fixed the fact that tab was now treated as whitespace.
+
+22Dec97 by Eric Ludlam <eludlam@mathworks.com>
+     Added verify/fix mode when saving.  Added function name check.
+       Added unterminated block check.  Added unmatched end check.
+     Fixed `matlab-backward-sexp' to error on mismatched end/begin blocks.
+
+15Dec97 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed some string stuff, and added checks when starting the shell.
+
+10Dec97 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed string font-locking based on suggestions from:
+       Hubert Selhofer <hubert@na.uni-tuebingen.de>
+       Peter John Acklam <jacklam@math.uio.no>
+       Tim Toolan <toolan@ele.uri.edu>
+     Fixed comment with ... indenting next line.
+     Made command output collecting much faster.
+
+10Dec97 merged the following:
+21May97 by Alf-Ivar Holm <alfh@ifi.uio.no>
+     Added smart initial values of matlab help commands.
+     Running commands in matlab-shell remembers old cmd line
+     Commands can be run when a parial command line is waiting
+     Changed apropo to apropos where applicable.
+
+9Dec98 merged the following:
+30May97 by Hubert Selhofer <hubert@na.uni-tuebingen.de>
+     Added 'endfunction' to keyword patterns (octave), slightly
+         changed regexp for better performance.
+     Added 'endfunction' to `matlab-block-end-pre-no-if' for compliance
+         with octave.
+     Fixed `matlab-clear-vars' (symbol names were incorrectly
+          spelled matlab-matlab-*).
+     Fixed typo in `matlab-really-gaudy-font-lock-keywords'.
+
+26Nov97 by Eric Ludlam <eludlam@mathworks.com>
+     Added support for cell array indenting/continuation.
+     Begin re-enumeration to V 2.0
+
+11Nov97 by Eric Ludlam <eludlam@mathworks.com>
+     Added custom support for [X]emacs 20.
+
+11Nov97 by Eric Ludlam <eludlam@mathworks.com>
+     Added beginning/end-defun navigation functions.
+     Ran through latest version of checkdoc for good doc strings.
+
+04Sep97 by Eric Ludlam <eludlam@mathworks.com>
+     Added try/catch blocks which are new Matlab 5.2 keywords.
+
+02Sep97 by Eric Ludlam <eludlam@mathworks.com>
+     Made auto-fill mode more robust with regard to comments
+       at the end of source lines
+
+13Aug97 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed indentation bugs regarding the beginning of buffer.
+     Added GUD support into matlab-shell.  Debugger commands will
+       now automatically check the stack and post the files being
+       examined via this facility.
+
+26Jun97 by Eric Ludlam <eludlam@mathworks.com>
+     Help/Apropo buffers are now in Topic mode, and are highlighted.
+       This allows navigation via key-clicks through the help.
+     Describe-command can find a default in the current M file.
+     Mouse-face set to make clickable items mouse-sensitive in topic buffers
+
+25Jun97 by Anders Stenman <stenman@isy.liu.se>
+     Some XEmacs hacks. Implemented highlighting of subtopics and
+     commands under mouse in topic-browser mode. Added a nice Matlab
+     logo in matlab-shell mode.
+     See: http://www.control.isy.liu.se/~stenman/matlab
+
+13Jun97 by Anders Stenman <stenman@isy.liu.se>
+     Use the easymenu package for menus. Works both in XEmacs and
+     FSF Emacs. Bound TAB to comint-dynamic-complete-filename in
+     matlab-shell mode. Added a function matlab-shell-process-filter
+     to filter out some escape character rubbish from Matlab output.
+
+20May97 by Matt Wette <mwette@alumni.caltech.edu>
+	Released as version 1.10.0.
+
+16May97 by Eric Ludlam <eludlam@mathworks.com>
+     Ran through checkdoc to fix documentation strings.
+
+15May97 by Matt Wette <mwette@alumni.caltech.edu>
+	Added shell-mode-map bindings; run matlab-shell-mode-hook, not
+	matlab-shell-mode-hooks (PMiller). Changed keymaps for \C-<letter>,
+	which conflicted w/ emacs style guidelines.
+
+08May97 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed forward/backward sexp error when end keyword appears as
+           word component such as the symbol the_end
+
+22Apr97 by Eric Ludlam <eludlam@mathworks.com>
+     Fixed comment where `indent-function' was incorrectly spelled
+     Fixed indentation when strings contained [] characters.
+     Fixed indentation for multi-function files
+     Added Imenu keywords.  Permits use w/ imenu and emacs/speedbar
+     The actual version of matlab file is not in a variable
+     Keybinding for forward/backward sexp
+     New function finds the mfile path.  Not used for anything useful yet.
+     Added matlab-shell/emacs io scripting functions.  Used this in
+           a topic/help/apropo browser.  Could be used w/ other
+           functions quite easily.
+
+12Mar97 by Eric Ludlam <eludlam@mathworks.com>
+     Added new `matlab-shell-collect-command-output' to use for running
+           matlab commands and getting strings back.  Used this function
+           to create `-describe-function', `-describe-variable', and
+           `-apropo'.  Should be useful for other things too.
+     Added some XEmacs specific stuff.
+
+07Mar97 by Matt Wette <mwette@alumni.caltech.edu>
+	Fixed a few xemacs problems.  Released as 1.09.0.
+
+03Mar97 by Eric Ludlam <eludlam@mathworks.com>
+     Added expressions to handle blocks which are not terminated with
+           the 'end' command
+     Added `matlab-shell-save-and-go' function to automatically run
+           a function after saving it.
+     Bug fixes to `matlab-forward-sexp'
+     Improved font lock interface to take advantage of the user
+           variable `font-lock-use-maximal-decoration'
+
+24Feb97 by Eric Ludlam <eludlam@mathworks.com>
+     Added more font locking, plus font locking of `matlab-shell'
+     Added `matlab-backward-sexp',`matlab-cursor-in-string-or-comment'
+     Added ability to indent switch/case/case/otherwise/end blocks
+           as per manual specifications for matlab v5.0
+     Added command for matlab-shell to goto the last reported error
+     Modified matlab-shell to use comint features instead of hand
+           crafted workarounds of the defaults
+
+07Dec96 by Matt Wette <mwette@alumni.caltech.edu>
+	incorporated many fixes from Mats Bengtsson <matsb@s3.kth.se>;
+	font-lock comment/string fixes, Eric Ludlam <eludlam@mathworks.com>;
+	added support for switch construct;
+
+01Aug96 by Matt Wette <mwette@alumni.caltech.edu>
+	fixed to jive w/ emacs lib conventions: changed name of file from
+	matlab-mode.el to matlab.el (14 char limit); released as 1.08.0
+
+28Apr96 by Matt Wette <mwette@alumni.caltech.edu>
+	comments lines w/ just % are now hilighted; syntax table: "-2" changed
+	to " 2"; released 1.07.6
+
+30Jan96 by Matt Wette <mwette@alumni.caltech.edu>
+	fixed problem w/ emacs-19.30 filling and auto-fill problem thanks to
+	Mats Bengtsson <matsb@s3.kth.se>; started implementation of matlab-
+	shell, based on comint and shell-mode; released 1.07.5
+
+25Jan96 by Matt Wette <mwette@alumni.caltech.edu>
+	added "global" to font-lock, hilit keywords; fixed indenting of 2nd
+	line if first ends in ...; filling is broken for FSF19.30 (works for
+	FSF19.28); torkel fixes to matlab-reset-vars; fixed indent bug
+	reported by Trevor Cooper;
+
+20Jan96 by Matt Wette <mwette@alumni.caltech.edu>
+	cleaned up commenting; added preliminary `matlab-shell' mode,
+	rel 1.07.4
+
+19Jan96 by Matt Wette <mwette@alumni.caltech.edu>
+	commented out `debug-on-error'; got hilit to work for sam
+
+18Jan96 by Matt Wette <mwette@alumni.caltech.edu>
+	fixed problem int `matlab-prev-line' which caused fatal `matlab-mode';
+	crash fixed problem with indenting when keywords in comments; still
+	haven't cleaned up comment formatting ...
+
+21Jul95 by Matt Wette <mwette@alumni.caltech.edu>
+	fixes by Bjorn Torkelsson <torkel@cs.umu.se>: replaced
+	lattr-comment w/ lattr-comm to fix inconsistency; added
+	function to font-lock keywords, added function name to
+	`font-lock-function-name-face'.  He had also added function as
+	a block begin keyword.  This should be an option since it will
+	cause the body of a function to be indented.  Worked on
+	filling.  More work on filling.  fixed many bugs reported by
+	Rob Cunningham.  Pulled cadr.
+
+13Jul95 by Matt Wette <mwette@mr-ed.jpl.nasa.gov>
+	changed indenting for continuation lines in calc-deltas to use
+	cont-level; changed syntax-table;  changed the way the return key is
+	mapped; released version 1.07.1
+
+08Jul95 by Matt Wette <mwette@mr-ed.jpl.nasa.gov>
+	This is a fairly major rewrite of the indenting functions to
+	fix long- startednding problems arising from keywords and
+	percents in strings.  We may have to add more heuristics later
+	but this may work better.  Changed comment region string.
+	Released version 1.07.0.
+
+10Oct94 by Matt Wette <mwette@csi.jpl.nasa.gov>
+	changed 'auto-fill-mode' to `auto-fill-function'; changed
+	`comment-indent-' to `comment-indent-function'; fixed percents
+	in strings being interpreted as comments, but a % for comment
+	should not be followed by [disx%]
+
+23Nov93 by Matt Wette <mwette@csi.jpl.nasa.gov>
+	added Lucid emacs, GNU emacs font-lock and lhilit support; repaired
+	mtlb-block-{beg,end}-kw (Thanks to Dave Mellinger <dkm1@cornell.edu>)
+	removed string delim entry from matlab-mode-syntax-table (MATLAB lang
+	sucks here -- why not use " for strings?).   Released vers 1.06.0
+
+10Aug93 by Matt Wette <mwette@csi.jpl.nasa.gov>
+	added `matlab-indent-end-before-return'; indent may be fixed now
+	still not working for emacs 19
+
+02Aug93 by Matt Wette <mwette@csi.jpl.nasa.gov>
+	fixed error in `mtlb-calc-indent'; bumped version to 1.05.1;
+	added `mtlb-prev-line'; bumped version to 1.05.3; added
+	`mtlb-calc-block-indent'
+
+01Aug93 by Matt Wette <mwette@csi.jpl.nasa.gov>
+	Fixed bug which treated form as block-begin keyword.  Reworked
+	`mtlb-calc-indent' -- seems to work better w/ redundant cont
+	lines now. Bumbed version to 1.05.
+
+13Jun93 by Matt Wette <mwette@csi.jpl.nasa.gov>
+	Changed `linea' to `lattr', `linet' to `ltype', fixed
+	Bumped version number from 1.03bb to 1.04.
+
+02May91 by Matt Wette, mwette@csi.jpl.nasa.gov
+	Added `matlab-auto-fill' for `auto-fill-hook' so that this
+	mode doesn't try to fill matlab code, just comments.
+
+22Apr91 by Matt Wette, mwette@csi.jpl.nasa.gov
+	Changed `mtlb-ltype-cont' to `mtlb-lattr-cont',
+	`mtlb-ltype-comment-on-line' to `mtlb-lattr-comment' and
+	`mtlb-ltype-unbal-mexp' to `mtlb- attr-unbal-mext' to
+	emphasize that these are line attributes and not line types.
+	Modified `matlab-line-type' to reflect the change ini logic.
+
+18Apr91 by Matt Wette, mwette@csi.jpl.nasa.gov
+     Modified `matlab-comment-return' so that when hit on a line with a
+	comment at the end it will go to the comment column.  To get the
+	comment indented with the code, just hit TAB.
+
+17Apr91 by Matt Wette, mwette@csi.jpl.nasa.gov
+	Received critique from gray@scr.slb.com.  Changed ml- to mtlb-
+	due to possible conflict with mlsupport.el routines.  Added
+	`matlab-comment' -line-s and -on-line-s.  Fixed bug in
+	`matlab-comment' (set-fill-prefix).  `matlab-comment-return'
+	now works if called on a non-comment line.
+
+04Mar91 by Matt Wette, mwette@csi.jpl.nasa.gov
+	Added const `matlab-indent-before-return'.  Released Version 1.02.
+
+02Feb91 by Matt Wette, mwette@csi.jpl.nasa.gov
+	Changed names of `ml-*-line' to `ml-ltype-*'.  Cleaned up a
+	lot. Added `ml-format-comment-line', fixed `ml-format-region'.
+	Changed added "-s" on end of `matlab-comment-region' string.
+	Justify needs to be cleaned up.
+
+Fri Feb  1 09:03:09 1991; gray@scr.slb.com
+     Add function `matlab-comment-region', which inserts the string
+     contained in the variable matlab-comment-region at the start
+     of every line in the region.  With an argument the region is
+     uncommented.  [Straight copy from fortran.el]
+
+25Jan91 by Matt Wette, mwette@csi.jpl.nasa.gov
+	Got indentation of matrix expression to work, I think.  Also,
+	added tabs to comment start regular-expression.
+
+14Jan91 by Matt Wette, mwette@csi.jpl.nasa.gov
+	Added functions `ml-unbal-matexp' `ml-matexp-indent' for matrix
+	expressions.
+
+07Jan91 by Matt Wette, mwette@csi.jpl.nasa.gov
+     Many changes.  Seems to work reasonably well.  Still would like
+     to add some support for filling in comments and handle continued
+     matrix expressions.  Released as Version 1.0.
+
+04Jan91 by Matt Wette, mwette@csi.jpl.nasa.gov
+     Created.  Used eiffel.el as a guide.
+

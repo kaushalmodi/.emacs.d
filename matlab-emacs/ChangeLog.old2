@@ -1,0 +1,630 @@
+This is the old ChangeLog from CVS @ MathWorks via checkin comments.
+
+---------------
+
+;;; $Log: ChangeLog.old2,v $
+;;; Revision 1.1  2005/12/01 18:37:46  zappo
+;;; *** empty log message ***
+;;;
+Revision 1.4.4.11.2.4.2.2  2005/11/16 13:53:36  eludlam
+Small completion patch.
+
+Revision 1.4.4.11.2.4.2.1  2005/11/16 13:52:20  eludlam
+Small completion patch.
+
+Revision 1.4.4.11.2.4  2005/07/11 20:14:13  batserve
+2005/06/27  1.4.4.14  batserve
+  2005/06/21  1.4.4.13.2.1  padman
+    Saved after merging from 1.4.8.2 (Akernel) to dev_padman_A (1.4.4.13.2.0)
+  2005/06/21  1.4.4.13.2.2  padman
+    Code Reviewer: TBRB mkarr,eludlam,csiegal
+    merged Akernel,A versions
+    some of Akernel's changes already got into A
+    please review the merges
+  Accepted job 28303 in A
+Accepted job 15746a in Ami
+Revision 1.4.4.11.2.5  2005/09/20 04:53:59  batserve
+2005/09/08  1.4.4.15  batserve
+  2005/08/01  1.4.10.1  batserve
+    2005/07/29  1.4.4.14.6.1  mkarr
+      Related Records: 274559
+      Code Reviewer: Eric Ludlam
+      Introduced functions-have-end minor mode.
+      Introduced special highlighting for nested function/end.
+      Optimize matlab-backward-sexp by assuming that sexps to not cross
+      "function" at the left margin.
+      Handle documentation anchors (links).
+      Fixed a bug in highlighting cross-function variables.
+      Fixed infinite loop bug when matching "end" to "function",
+      in the mode where functions are not expected to have "end".
+    Accepted job 2313 in Alead
+  Accepted job 28899 in A
+Accepted job 16896b in Ami
+
+Revision 1.4.4.15  2005/09/08 20:31:39  batserve
+2005/08/01  1.4.10.1  batserve
+  2005/07/29  1.4.4.14.6.1  mkarr
+    Related Records: 274559
+    Code Reviewer: Eric Ludlam
+    Introduced functions-have-end minor mode.
+    Introduced special highlighting for nested function/end.
+    Optimize matlab-backward-sexp by assuming that sexps to not cross
+    "function" at the left margin.
+    Handle documentation anchors (links).
+    Fixed a bug in highlighting cross-function variables.
+    Fixed infinite loop bug when matching "end" to "function",
+    in the mode where functions are not expected to have "end".
+  Accepted job 2313 in Alead
+Accepted job 28899 in A
+
+Revision 1.4.10.1  2005/08/01 15:13:19  batserve
+2005/07/29  1.4.4.14.6.1  mkarr
+  Related Records: 274559
+  Code Reviewer: Eric Ludlam
+  Introduced functions-have-end minor mode.
+  Introduced special highlighting for nested function/end.
+  Optimize matlab-backward-sexp by assuming that sexps to not cross
+  "function" at the left margin.
+  Handle documentation anchors (links).
+  Fixed a bug in highlighting cross-function variables.
+  Fixed infinite loop bug when matching "end" to "function",
+  in the mode where functions are not expected to have "end".
+Accepted job 2313 in Alead
+
+Revision 1.4.4.14.6.1  2005/07/29 19:50:48  mkarr
+Related Records: 274559
+Code Reviewer: Eric Ludlam
+
+Introduced functions-have-end minor mode.
+Introduced special highlighting for nested function/end.
+Optimize matlab-backward-sexp by assuming that sexps to not cross
+"function" at the left margin.
+Handle documentation anchors (links).
+Fixed a bug in highlighting cross-function variables.
+Fixed infinite loop bug when matching "end" to "function",
+in the mode where functions are not expected to have "end".
+Revision 1.4.4.11.2.5  2005/09/20 04:53:59  batserve
+2005/09/08  1.4.4.15  batserve
+  2005/08/01  1.4.10.1  batserve
+    2005/07/29  1.4.4.14.6.1  mkarr
+      Related Records: 274559
+      Code Reviewer: Eric Ludlam
+      Introduced functions-have-end minor mode.
+      Introduced special highlighting for nested function/end.
+      Optimize matlab-backward-sexp by assuming that sexps to not cross
+      "function" at the left margin.
+      Handle documentation anchors (links).
+      Fixed a bug in highlighting cross-function variables.
+      Fixed infinite loop bug when matching "end" to "function",
+      in the mode where functions are not expected to have "end".
+    Accepted job 2313 in Alead
+  Accepted job 28899 in A
+Accepted job 16896b in Ami
+
+Revision 1.4.4.15  2005/09/08 20:31:39  batserve
+2005/08/01  1.4.10.1  batserve
+  2005/07/29  1.4.4.14.6.1  mkarr
+    Related Records: 274559
+    Code Reviewer: Eric Ludlam
+    Introduced functions-have-end minor mode.
+    Introduced special highlighting for nested function/end.
+    Optimize matlab-backward-sexp by assuming that sexps to not cross
+    "function" at the left margin.
+    Handle documentation anchors (links).
+    Fixed a bug in highlighting cross-function variables.
+    Fixed infinite loop bug when matching "end" to "function",
+    in the mode where functions are not expected to have "end".
+  Accepted job 2313 in Alead
+Accepted job 28899 in A
+
+Revision 1.4.10.1  2005/08/01 15:13:19  batserve
+2005/07/29  1.4.4.14.6.1  mkarr
+  Related Records: 274559
+  Code Reviewer: Eric Ludlam
+  Introduced functions-have-end minor mode.
+  Introduced special highlighting for nested function/end.
+  Optimize matlab-backward-sexp by assuming that sexps to not cross
+  "function" at the left margin.
+  Handle documentation anchors (links).
+  Fixed a bug in highlighting cross-function variables.
+  Fixed infinite loop bug when matching "end" to "function",
+  in the mode where functions are not expected to have "end".
+Accepted job 2313 in Alead
+
+Revision 1.4.4.14.6.1  2005/07/29 19:50:48  mkarr
+Related Records: 274559
+Code Reviewer: Eric Ludlam
+
+Introduced functions-have-end minor mode.
+Introduced special highlighting for nested function/end.
+Optimize matlab-backward-sexp by assuming that sexps to not cross
+"function" at the left margin.
+Handle documentation anchors (links).
+Fixed a bug in highlighting cross-function variables.
+Fixed infinite loop bug when matching "end" to "function",
+in the mode where functions are not expected to have "end".
+
+Revision 1.4.4.14  2005/06/27 20:27:59  batserve
+2005/06/21  1.4.4.13.2.1  padman
+  Saved after merging from 1.4.8.2 (Akernel) to dev_padman_A (1.4.4.13.2.0)
+2005/06/21  1.4.4.13.2.2  padman
+  Code Reviewer: TBRB mkarr,eludlam,csiegal
+  merged Akernel,A versions
+  some of Akernel's changes already got into A
+  please review the merges
+Accepted job 28303 in A
+
+Revision 1.4.4.13.2.2  2005/06/21 22:38:35  padman
+Code Reviewer: TBRB mkarr,eludlam,csiegal
+merged Akernel,A versions
+some of Akernel's changes already got into A
+please review the merges
+
+Revision 1.4.4.13.2.1  2005/06/21 22:21:29  padman
+Saved after merging from 1.4.8.2 (Akernel) to dev_padman_A (1.4.4.13.2.0)
+
+Revision 1.4.4.13  2005/06/21 18:51:17  batserve
+2005/05/25  1.4.4.11.2.2  batserve
+  2005/01/21  1.4.2.12.2.2  eludlam
+    Update copyright
+  2005/05/17  1.4.2.12.2.3  eludlam
+    tic/toc indent fix.  User fix for auto-fill.
+  2005/05/24  1.4.2.12.2.4  eludlam
+    Related Records: 257613 258664
+    Code Reviewer: mkarr
+    Fix indentation numbers.
+    Fix tic/toc indentation w/ assignments.
+    Integrate user patch for auto-fill of of strings.
+  Accepted job 15048 in Ami
+2005/06/04  1.4.4.11.2.3  batserve
+  2005/06/02  1.4.2.12.2.5  eludlam
+    Related Records: 266250
+    Code Reviewer: mkarr
+    Allow H1 lines for nested functions to indent correctly.
+    Make comment char insertion electric.
+    Added a few completion words.
+    Fixed byte compilation warnings.
+  Accepted job 15385 in Ami
+Accepted job 28180 in A
+
+Revision 1.4.4.11.2.3  2005/06/04 23:41:36  batserve
+2005/06/02  1.4.2.12.2.5  eludlam
+  Related Records: 266250
+  Code Reviewer: mkarr
+  Allow H1 lines for nested functions to indent correctly.
+  Make comment char insertion electric.
+  Added a few completion words.
+  Fixed byte compilation warnings.
+Accepted job 15385 in Ami
+
+Revision 1.4.2.12.2.5  2005/06/02 18:44:30  eludlam
+Related Records: 266250
+Code Reviewer: mkarr
+Allow H1 lines for nested functions to indent correctly.
+Make comment char insertion electric.
+Added a few completion words.
+Fixed byte compilation warnings.
+
+Revision 1.4.2.12.2.4  2005/05/24 18:26:06  eludlam
+Related Records: 257613 258664
+Code Reviewer: mkarr
+Fix indentation numbers.
+Fix tic/toc indentation w/ assignments.
+Integrate user patch for auto-fill of of strings.
+
+Revision 1.4.2.12.2.3  2005/05/17 14:59:06  eludlam
+tic/toc indent fix.  User fix for auto-fill.
+
+Revision 1.4.2.12.2.2  2005/01/21 21:32:24  eludlam
+Update copyright
+
+Revision 1.4.2.12.2.1  2005/01/21 13:25:11  eludlam
+Related Records: 250151
+Code Reviewer: paulk
+Fix mlint dependency problem.
+Fix XEmacs compatibility problem.
+Add (behind option) experimental shell completion system.
+Add (behind comment) hideshow support.
+
+Revision 1.4.2.12  2004/06/16 03:10:04  batserve
+2004/06/10  1.4.2.11.2.1  mkarr
+  Related Records: 168455
+  Code Reviewer: Ty Lightner, Eric Ludlam
+  Changes to support nested functions.
+Accepted job 12607 in Amisc
+
+Revision 1.4.2.11.2.1  2004/06/10 13:47:15  mkarr
+Related Records: 168455
+Code Reviewer: Ty Lightner, Eric Ludlam
+
+Changes to support nested functions.
+
+Revision 1.4.2.11  2004/05/13 02:52:11  batserve
+2004/03/11  1.4.6.12  eludlam
+  Saved after merging with Amisc (1.4.2.9)
+2004/03/19  1.4.6.13  eludlam
+  Related Records: 210470
+  Code Reviewer: Various
+  Fix header comments.
+  Fix XEmacs compatibility itimer start.
+  Fix XEmacs overlay compatibility macros.
+  Add if(false) next to if(0) special code.
+  Add support for %{ %} block comments.
+  Fix problem with Emacs Link when not in use, and add new config item.
+  Add optional feature for automatically adding a semicolon when needed.
+  Add variable for lines that don't need semicolons.
+  Fix menu item for mlint to not require it.
+  Add -nodesktop to the command line switches.
+  Fix debugger overlay arrow.
+  Add `matlab-shell-run-region-or-line' command.
+2004/03/19  1.4.6.14  eludlam
+  Saved after merging with Amisc (1.4.2.10)
+Accepted job 12462 in Amisc
+
+Revision 1.4.6.14  2004/03/19 21:02:02  eludlam
+Saved after merging with Amisc (1.4.2.10)
+
+Revision 1.4.6.13  2004/03/19 20:59:56  eludlam
+Related Records: 210470
+Code Reviewer: Various
+Fix header comments.
+Fix XEmacs compatibility itimer start.
+Fix XEmacs overlay compatibility macros.
+Add if(false) next to if(0) special code.
+Add support for %{ %} block comments.
+Fix problem with Emacs Link when not in use, and add new config item.
+Add optional feature for automatically adding a semicolon when needed.
+Add variable for lines that don't need semicolons.
+Fix menu item for mlint to not require it.
+Add -nodesktop to the command line switches.
+Fix debugger overlay arrow.
+Add `matlab-shell-run-region-or-line' command.
+
+Revision 1.4.6.12  2004/03/11 13:42:54  eludlam
+Saved after merging with Amisc (1.4.2.9)
+
+Revision 1.4.6.11  2004/03/10 18:40:26  eludlam
+Related Records: 208705
+Code Reviewer: ciolfi
+Version number change to 2.3.2
+Fix comment for installatin.
+Fix matlab-end-of-command (patch from user.)
+Add mlint enable/disable to matlab menu.
+
+Revision 1.4.6.10  2003/07/15 16:49:31  eludlam
+Version number change.
+Added continue to keyword list.
+Added use contributed matlab-generate-latex command.
+Revision 1.4.2.9  2004/01/30 22:44:48  batserve
+2004/01/28  1.4.4.9  batserve
+  2004/01/23  1.4.8.1  batserve
+    2004/01/13  1.4.2.8.2.1  mkarr
+      Code Reviewer: elijah
+      merged in changes
+    2004/01/20  1.4.2.8.2.2  mkarr
+      Code Reviewer: Eric Ludlam
+      Make filter buffer-local.
+      Put in html "rendering" and other changes for
+      new handling of source locations.
+    2004/01/22  1.4.2.8.2.3  mkarr
+      Code Reviewer: Eric Ludlam
+      Adapt to column positions in matlab-url.
+    Accepted job 7543 in Akernel
+  Accepted job 13127 in A
+Accepted job 11551 in Amisc
+Revision 1.4.2.10  2004/03/18 21:17:17  batserve
+2004/03/14  1.4.4.10  batserve
+  2004/03/10  1.4.4.9.2.1  padman
+    Saved after merging with 1.4.6.11 (dev_eludlam)
+  Accepted job 14370 in A
+Accepted job 11967a in Amisc
+
+Revision 1.4.4.10  2004/03/14 15:30:34  batserve
+2004/03/10  1.4.4.9.2.1  padman
+  Saved after merging with 1.4.6.11 (dev_eludlam)
+Accepted job 14370 in A
+
+Revision 1.4.4.9.2.1  2004/03/10 20:30:27  padman
+Saved after merging with 1.4.6.11 (dev_eludlam)
+
+Revision 1.4.4.9  2004/01/28 23:06:13  batserve
+2004/01/23  1.4.8.1  batserve
+  2004/01/13  1.4.2.8.2.1  mkarr
+    Code Reviewer: elijah
+    merged in changes
+  2004/01/20  1.4.2.8.2.2  mkarr
+    Code Reviewer: Eric Ludlam
+    Make filter buffer-local.
+    Put in html "rendering" and other changes for
+    new handling of source locations.
+  2004/01/22  1.4.2.8.2.3  mkarr
+    Code Reviewer: Eric Ludlam
+    Adapt to column positions in matlab-url.
+  Accepted job 7543 in Akernel
+Accepted job 13127 in A
+
+Revision 1.4.8.2  2005/05/18 19:25:28  batserve
+2005/05/02  1.4.4.11.2.1.2.1  mkarr
+  Related Records: 231734
+  Code Reviewer: Eric Ludlam
+  Allow for html anchors when matching for debugger output.
+  Indent line beginning with end according to beginning of block,
+  not according to the indentation of the previous line.
+  Respond to "matlab:" anchors (evaluate an M expression).
+Accepted job 12245 in Akernel
+
+Revision 1.4.4.11.2.1.2.1  2005/05/02 23:35:19  mkarr
+Related Records: 231734
+Code Reviewer: Eric Ludlam
+
+Allow for html anchors when matching for debugger output.
+Indent line beginning with end according to beginning of block,
+not according to the indentation of the previous line.
+Respond to "matlab:" anchors (evaluate an M expression).
+
+Revision 1.4.4.11.2.1  2005/01/23 18:39:17  batserve
+2005/01/21  1.4.2.12.2.1  eludlam
+  Related Records: 250151
+  Code Reviewer: paulk
+  Fix mlint dependency problem.
+  Fix XEmacs compatibility problem.
+  Add (behind option) experimental shell completion system.
+  Add (behind comment) hideshow support.
+Accepted job 13342 in Ami
+
+Revision 1.4.2.12.2.1  2005/01/21 13:25:11  eludlam
+Related Records: 250151
+Code Reviewer: paulk
+Fix mlint dependency problem.
+Fix XEmacs compatibility problem.
+Add (behind option) experimental shell completion system.
+Add (behind comment) hideshow support.
+
+Revision 1.4.2.12  2004/06/16 03:10:04  batserve
+2004/06/10  1.4.2.11.2.1  mkarr
+  Related Records: 168455
+  Code Reviewer: Ty Lightner, Eric Ludlam
+  Changes to support nested functions.
+Accepted job 12607 in Amisc
+
+Revision 1.4.2.11.2.1  2004/06/10 13:47:15  mkarr
+Related Records: 168455
+Code Reviewer: Ty Lightner, Eric Ludlam
+
+Changes to support nested functions.
+
+Revision 1.4.2.11  2004/05/13 02:52:11  batserve
+2004/03/11  1.4.6.12  eludlam
+  Saved after merging with Amisc (1.4.2.9)
+2004/03/19  1.4.6.13  eludlam
+  Related Records: 210470
+  Code Reviewer: Various
+  Fix header comments.
+  Fix XEmacs compatibility itimer start.
+  Fix XEmacs overlay compatibility macros.
+  Add if(false) next to if(0) special code.
+  Add support for %{ %} block comments.
+  Fix problem with Emacs Link when not in use, and add new config item.
+  Add optional feature for automatically adding a semicolon when needed.
+  Add variable for lines that don't need semicolons.
+  Fix menu item for mlint to not require it.
+  Add -nodesktop to the command line switches.
+  Fix debugger overlay arrow.
+  Add `matlab-shell-run-region-or-line' command.
+2004/03/19  1.4.6.14  eludlam
+  Saved after merging with Amisc (1.4.2.10)
+Accepted job 12462 in Amisc
+
+Revision 1.4.6.14  2004/03/19 21:02:02  eludlam
+Saved after merging with Amisc (1.4.2.10)
+
+Revision 1.4.6.13  2004/03/19 20:59:56  eludlam
+Related Records: 210470
+Code Reviewer: Various
+Fix header comments.
+Fix XEmacs compatibility itimer start.
+Fix XEmacs overlay compatibility macros.
+Add if(false) next to if(0) special code.
+Add support for %{ %} block comments.
+Fix problem with Emacs Link when not in use, and add new config item.
+Add optional feature for automatically adding a semicolon when needed.
+Add variable for lines that don't need semicolons.
+Fix menu item for mlint to not require it.
+Add -nodesktop to the command line switches.
+Fix debugger overlay arrow.
+Add `matlab-shell-run-region-or-line' command.
+
+Revision 1.4.6.12  2004/03/11 13:42:54  eludlam
+Saved after merging with Amisc (1.4.2.9)
+
+Revision 1.4.6.11  2004/03/10 18:40:26  eludlam
+Related Records: 208705
+Code Reviewer: ciolfi
+Version number change to 2.3.2
+Fix comment for installatin.
+Fix matlab-end-of-command (patch from user.)
+Add mlint enable/disable to matlab menu.
+
+Revision 1.4.6.10  2003/07/15 16:49:31  eludlam
+Version number change.
+Added continue to keyword list.
+Added use contributed matlab-generate-latex command.
+Revision 1.4.2.9  2004/01/30 22:44:48  batserve
+2004/01/28  1.4.4.9  batserve
+  2004/01/23  1.4.8.1  batserve
+    2004/01/13  1.4.2.8.2.1  mkarr
+      Code Reviewer: elijah
+      merged in changes
+    2004/01/20  1.4.2.8.2.2  mkarr
+      Code Reviewer: Eric Ludlam
+      Make filter buffer-local.
+      Put in html "rendering" and other changes for
+      new handling of source locations.
+    2004/01/22  1.4.2.8.2.3  mkarr
+      Code Reviewer: Eric Ludlam
+      Adapt to column positions in matlab-url.
+    Accepted job 7543 in Akernel
+  Accepted job 13127 in A
+Accepted job 11551 in Amisc
+Revision 1.4.2.10  2004/03/18 21:17:17  batserve
+2004/03/14  1.4.4.10  batserve
+  2004/03/10  1.4.4.9.2.1  padman
+    Saved after merging with 1.4.6.11 (dev_eludlam)
+  Accepted job 14370 in A
+Accepted job 11967a in Amisc
+
+Revision 1.4.4.10  2004/03/14 15:30:34  batserve
+2004/03/10  1.4.4.9.2.1  padman
+  Saved after merging with 1.4.6.11 (dev_eludlam)
+Accepted job 14370 in A
+
+Revision 1.4.4.9.2.1  2004/03/10 20:30:27  padman
+Saved after merging with 1.4.6.11 (dev_eludlam)
+
+Revision 1.4.4.9  2004/01/28 23:06:13  batserve
+2004/01/23  1.4.8.1  batserve
+  2004/01/13  1.4.2.8.2.1  mkarr
+    Code Reviewer: elijah
+    merged in changes
+  2004/01/20  1.4.2.8.2.2  mkarr
+    Code Reviewer: Eric Ludlam
+    Make filter buffer-local.
+    Put in html "rendering" and other changes for
+    new handling of source locations.
+  2004/01/22  1.4.2.8.2.3  mkarr
+    Code Reviewer: Eric Ludlam
+    Adapt to column positions in matlab-url.
+  Accepted job 7543 in Akernel
+Accepted job 13127 in A
+
+Revision 1.4.8.1  2004/01/23 20:35:05  batserve
+2004/01/13  1.4.2.8.2.1  mkarr
+  Code Reviewer: elijah
+  merged in changes
+2004/01/20  1.4.2.8.2.2  mkarr
+  Code Reviewer: Eric Ludlam
+  Make filter buffer-local.
+  Put in html "rendering" and other changes for
+  new handling of source locations.
+2004/01/22  1.4.2.8.2.3  mkarr
+  Code Reviewer: Eric Ludlam
+  Adapt to column positions in matlab-url.
+Accepted job 7543 in Akernel
+
+Revision 1.4.2.8.2.3  2004/01/22 16:42:39  mkarr
+Code Reviewer: Eric Ludlam
+Adapt to column positions in matlab-url.
+
+Revision 1.4.2.8.2.2  2004/01/20 22:31:16  mkarr
+Code Reviewer: Eric Ludlam
+Make filter buffer-local.
+Put in html "rendering" and other changes for
+new handling of source locations.
+
+Revision 1.4.4.8  2003/05/08 19:45:08  batserve
+2003/04/29  1.4.2.8  batserve
+  2003/04/28  1.4.6.9  eludlam
+    Doc comment update (New file exchange link, matlab shell switches)
+    Font lock of pragmas
+    Whitespace mode support.
+  Accepted job 7691 in Amisc
+Accepted job 6970 in A
+
+Revision 1.4.2.8  2003/04/29 22:45:52  batserve
+2003/04/28  1.4.6.9  eludlam
+  Doc comment update (New file exchange link, matlab shell switches)
+  Font lock of pragmas
+  Whitespace mode support.
+Accepted job 7691 in Amisc
+
+Revision 1.4.6.11  2004/03/10 18:40:26  eludlam
+Related Records: 208705
+Code Reviewer: ciolfi
+Version number change to 2.3.2
+Fix comment for installatin.
+Fix matlab-end-of-command (patch from user.)
+Add mlint enable/disable to matlab menu.
+
+Revision 1.4.6.10  2003/07/15 16:49:31  eludlam
+Version number change.
+Added continue to keyword list.
+Added use contributed matlab-generate-latex command.
+
+Revision 1.4.6.9  2003/04/28 13:38:38  eludlam
+Doc comment update (New file exchange link, matlab shell switches)
+Font lock of pragmas
+Whitespace mode support.
+
+Revision 1.4.6.8  2003/02/19 19:52:11  eludlam
+Exclude block verify from save hooks.
+Fixed if statement regexp for unreachable code.
+Add persistent as a keyword.
+
+Revision 1.4.6.7  2003/01/06 16:04:51  eludlam
+Fill paragraph: Fix to handle comment at end of buffer.
+matlab-shell: Fix where kill-local-variables is called.
+
+Revision 1.4.6.6  2002/10/23 14:56:42  eludlam
+Code Reviewer: eludlam
+User patch for finding the symbol at point.
+
+Revision 1.4.6.5  2002/10/03 18:55:27  eludlam
+Fix XEmacs itimer issue with block highlighting.
+Yoni Wexler contributed patch for indented tic/toc.
+Block highlighting tic/toc.
+font lock for tic toc.
+
+Revision 1.4.6.4  2002/09/27 13:31:22  eludlam
+Release Version 2.3.
+Removed LCD archive entry.
+
+Revision 1.4.6.3  2002/09/12 13:01:36  eludlam
+Added support for matlab-shell reading matlab's history.
+Patch originally posted to cssm.
+
+Revision 1.4.6.2  2002/08/08 18:23:24  eludlam
+User patch converts `matlab-shell-command-switches' to a list.
+
+Revision 1.4.6.1  2002/06/11 18:59:17  eludlam
+Fix block highlight matching for timer buffer switch case.
+
+Revision 1.4  2002/05/08 03:29:39  batserve
+Correct docstring to say that future versions of MATLAB may
+not require ellipses.
+Related Records: 131353
+Code Reviewer: eludlam
+
+Revision 1.4  2002/05/07 20:39:36  paulk
+Correct docstring to say that future versions of MATLAB may
+not require ellipses.
+Related Records: 131353
+Code Reviewer: eludlam
+
+Revision 1.3  2002/05/07 16:44:18  paulk
+- Support implied continuation (off by default)
+- Add a key binding for find-file-on-path to matlab-shell-mode
+- fix banner
+- Fix save-and-go to work in unsaved new buffers
+Related Records: 131353
+Code Reviewer: eludlam
+
+Revision 1.2  2002/03/20 18:35:20  paulk
+Add a patch to matlab-mode from Eric Ludlam to support student edition.
+Related Records: 124543
+Code Reviewer: eludlam
+
+Revision 1.1  2002/02/06 20:43:50  paulk
+Initial revision
+
+Revision 1.3  2001/09/07 16:44:38  paulk
+Changed "Mathworks" to "MathWorks" and "Matlab" to "MATLAB"?
+Related Records: 107855
+
+Revision 1.2  2001/09/06 16:41:39  paulk
+save-and-go and run-region now invoke their eei
+equivalents when eei is active.
+Related Records: 99176
+Code Reviewer: eludlam
+
+Revision 1.1  2001/08/31 20:45:51  paulk
+Initial revision

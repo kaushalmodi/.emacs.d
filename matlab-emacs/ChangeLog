@@ -1,0 +1,283 @@
+2009-07-07  David Engster  <dengste@eml.cc>
+
+	* semanticdb-matlab.el (semanticdb-matlab-scan-directories): Local
+	bind for working-spinner-display.
+
+2009-07-06  Eric Ludlam  <eludlam@mathworks.com>
+
+	* company-matlab-shell.el: Company mode support for matlab-shell.
+
+	* README: Added notes on CEDET use.
+	Added notes on on the MATLAB download script.
+
+	* matlab.el (matlab-mode-version): Update.
+
+	* matlab-publish.el: Utilities for editing MATLAB files for publishing
+
+	* templates/srecode-matlab.srt: SRecode templates for MATLAB Script.
+
+	* semantic-matlab.el: Remove automatic init hook.  See cedet-matlab.el
+
+	* cedet-matlab.el: Initialization support for CEDET tools with MATLAB.
+
+	* dl_emacs_support.m: Convenience download script.
+
+	* matlab.el (matlab-indent-function-body):
+	Allow a value of 'guess, meaning
+	to guess the indentation style of a pre-existing file.
+	(matlab-keyword-list,matlab-font-lock-keywords)
+	(matlab-block-beg-pre-if,matlab-block-beg-pre-no-if)
+	(matlab-keywords-solo,matlab-quiesce-nosemi-regexp):
+	Add spmd.
+
+2008-10-17  Eric Ludlam  <eludlam@mathworks.com>
+
+	* matlab.el: Add enumeration support.
+
+2008-09-18  David Engster
+
+	* semanticdb-matlab.el (semanticdb-find-tags-by-name-method):
+	Use our own database as
+	fall-back method.
+	(semanticdb-find-tags-for-completion-method): Combine results from
+	MATLAB shell and our own database.
+
+2008-09-08  David Engster
+
+	* semantic-matlab.el: (semantic-ctxt-current-symbol)
+	(semantic-ctxt-current-symbol-and-bounds): Return nil when no symbol
+	at point.
+
+	* semantic-matlab.el (semantic-matlab-parse-assignments):
+	Deal with class methods which
+	return same class and be more tolerant with whitespaces.
+
+	* semantic-matlab.el (semantic-matlab-parse-assignments):
+	Fix bug in parsing limit.  Don't parse
+	current line.  Deal with class attribute assignments.
+
+2008-09-07  David Engster
+
+	* semanticdb-matlab.el (semanticdb-matlab-user-class-cache):
+	New variable.
+	(semanticdb-matlab-cache-files): New function for caching files and
+	classes.
+	(semanticdb-matlab-find-name): Use it.
+	(semantic-ctxt-current-class-list): Deal with classes and structures.
+
+	* semantic-matlab.el: (semantic-matlab-parse-oldstyle-class)
+	(semantic-matlab-find-oldstyle-classes): New functions.
+	(semantic-matlab-parse-region): Cache files.  Use new functions for
+	parsing classes.
+	(semantic-matlab-type-hint-string): New variable.
+	(semantic-matlab-parse-assignments): New function.
+	(semantic-get-local-variables): New override.
+	(semantic-ia-insert-tag): Deal with method completions.
+	(semantic-ctxt-current-symbol)
+	(semantic-ctxt-current-symbol-and-bounds): New overrides.
+
+	* semantic-matlab.el (semantic-matlab-root-directory): Follow symlink.
+
+2008-09-05  Eric Ludlam  <eludlam@mathworks.com>
+
+	* semanticdb-matlab.el (semanticdb-find-tags-by-name-method):
+	Fixed to handle case where
+	matlab lies about the doc file location.
+	(semanticdb-find-tags-for-completion-method): Adapt to use
+	matlab-shell when available.
+
+	* semanticdb-matlab.el (semanticdb-find-tags-by-name-method):
+	Use matlab-shell if available.
+
+	* semantic-matlab.el (semantic-matlab-root-directory): New Function.
+	(semantic-matlab-function-tags): Update to use above.
+
+	* matlab.el (matlab-shell-which-fcn): Append .m to builtin.
+	(matlab-shell-matlabroot): New
+	(matlab-shell-collect-command-output): Stop displaying status messages.
+
+	* matlab.el: (matlab-shell-completion-list):
+	Enabled to work in a non-shell buffer by switching over.
+	(matlab-shell-which-fcn): New.
+
+	* INSTALL:
+	Revies to new matlab-load.el style.  Discuss use w/out the Makefile.
+	Remove semantic-matlab.el doc, it needs a re-write.
+
+	* Makefile (LOADPATH): Add semantic/bovine
+
+	* Project.ede (cedet): Add semantic-el dependency.
+
+	* Makefile (LOADPATH): Now includes semantic.
+	(cedet_LISP): New veriables.
+	(cedet): New target.
+	(dist): Add the cedet support files.
+
+	* Project.ede ("lisp"): Added versionsource file.
+	("semantic"): New target
+
+	* matlab.el (matlab-vers-on-startup): Set default to off.
+	(auto-mode-alist): Add .m files.
+	(matlab-block-end-pre-no-iff):  Fix if/else order typo.
+
+	* README: Update to latest information on installing matlab.el
+
+2008-09-02  Eric Ludlam  <eludlam@mathworks.com>
+
+	* mlint.el (mlint-platform):
+	Use string-match to determine 64 bit linux-ness.
+	(mlint-flags): Remove -fix until I get around to supporting it.
+
+2008-09-01  David Engster
+
+	* semanticdb-matlab.el: Fix doc-strings.
+
+	* semantic-matlab.el (semantic-idle-summary-function):
+	Use defvar-mode-local instead of
+	make-local-variable.
+
+2008-08-31  David Engster
+
+	* semantic-matlab.el (semantic-format-tag-prototype):
+	New overload for matlab-mode.
+	(semantic-idle-summary-format-matlab-mode): New function, also
+	displays doc-string.
+	(semantic-ia-insert-tag): Use it.
+	(semantic-default-matlab-setup): Bind `semantic-idle-summary-function'.
+
+	* semantic-matlab.el: Unconditional require of semanticdb-matlab.
+	(semantic-matlab-function-tags): Better parsing of doc strings.
+	Return flag for builtin functions.
+	(semantic-matlab-sort-raw-tags): Include new :builtin attribute.
+
+2008-08-30  David Engster
+
+	* INSTALL: Added section for semantic-matlab.el
+
+	* semantic-matlab.el (semantic-matlab-system-paths-include):
+	New variable.
+	(semantic-matlab-dependency-system-include-path): Use it.
+	(semantic-matlab-root-directory): Take everything until '/bin' as
+	MATLAB root.
+
+	* semanticdb-matlab.el:
+	New file. Semantic database extensions for MATLAB.
+
+2008-08-22  Eric Ludlam  <eludlam@mathworks.com>
+
+	* semantic-matlab.el (semantic-matlab-dependency-system-include-path):
+	Value should be a list.
+
+	* semantic-matlab.el: Changes contributed by: David Engster
+	(semanticdb-matlab): Conditional load.
+	(semeantic-matlb-root-directory): New variable
+	(semantic-matlab-match-function-re): Support _
+	(semantic-matlab-function-tags): Support loading doc strings.
+	(semantic-matlab-sort-raw-tags): Support doc strings.
+	(semantic-matlab-dependency-system-include-path)
+	(semantic-matlab-display-docstring): New variables
+	(semantic-ia-insert-tag): New overload function.
+
+2008-08-05  Eric Ludlam  <eludlam@mathworks.com>
+
+	* matlab.el (matlab-shell-ask-MATLAB-for-completions):
+	Change default to t.
+	Patch from David Engster:
+	(matlab-shell-completion-list): Set scroll-show-maximum-output to nil.
+	(matlab-shell-tab): Improve completion list extraction.
+
+2008-08-01  Eric Ludlam  <eludlam@mathworks.com>
+
+	* mlint.el (mlint-symtab-info): New variable.
+	(mlint-run):  Init symtab local var.
+	Fixed symbol table parsing to work with newer mlint.
+
+	* matlab.el (matlab-block-indent-toc-toc-flag):
+	New variable.  Default nil.
+	(matlab-block-beg-pre-if, matlab-block-beg-pre-no-if)
+	(matlab-block-end-pre-if, matlab-block-end-pre-no-if):
+	If the tic-toc flag is nil, don't indent tic/tocs.
+
+2008-05-19  Eric Ludlam  <eludlam@mathworks.com>
+
+	* semantic-matlab.el: Copied from cedet repository.
+
+	* matlab.el (matlab-keyword-list): Add mcos keywords
+	(matlab-defun-regex, matlab-block-beg-pre-if, matlab-block-beg-pre-no-if):
+	Updated w/ mcos keywords.
+
+	* mlint.el (mlint-calculate-cyclic-complexity-flag): New flag.
+	(mlint-flags): Add -fix
+	(mlint-run): Use cyclic-complexity flag.
+
+	* matlab.el (matlab-mode-version): Update
+	(matlab-cellbreak-face): Fancy new face for cell-breaks.
+	(matlab-font-lock-adjustments): Update cellbreak face.
+	(matlab-font-lock-keywords): Add cellbreak highlighting.
+	(matlab-mode): Fix spelling in indent-sexp keybinding to doc.
+
+2007-03-06  Eric Ludlam  <eludlam@mathworks.com>
+
+	* mlint.el:
+	(mlint-clear-warnings, mlint-clear-cross-function-variable-highlighting):
+	Make font-lock optional.
+
+2007-01-08  Eric Ludlam  <eludlam@mathworks.com>
+
+	* matlab.el: (matlab-block-end-pre-if, matlab-block-end-pre-no-if):
+	Support assigning toc into a subs-assign.  (Thanks Jim Van Zant)
+
+2006-10-04  Eric Ludlam  <eludlam@mathworks.com>
+
+	* mlint.el (mlint-output-regex):
+	Support the changed mlint output syntax
+	(mlint-symtab-line-regexp): Support changed mlint table output syntax
+	(mlint-warning-code-alist): Obsolete
+	(mlint-error-fix-alist): Obsolete
+	(mlint-error-id-fix-alist): New version of the old error-fix-alist.
+	(mlint-run): Add the "-edit" flag when highlighting crossfunction variables.
+	Updated parsing of the mlint table for highlighting cross-function variables.
+	Updated mechanism for highlighting the cross-function variables.
+	(mlint-lm-entry): Update warningid doc.
+	(mlint-warning->class, mlint-warningid->class): Name change.  Use new table of warning ids
+	instead of parsing warning strings.
+	(linemark-new-entry): Use warning id, not warning string for class determination.
+	(mlint-lm-replace-focus): new-text is no longer class allocated.
+	(mlint-lm-entry-depricated): New class rule.
+	(mlint-lm-entry-isstr, mlint-lm-entry-setstr): Deleted.
+	(mlint-lm-eval->trycatch): Commented out.  Not provided by mlint, but it
+	is cool and could be resurrected.
+	(mlint-highlight): Can't provide warningcode anymore.
+	(mlint-clear-cross-function-variable-overlays): Renamed to
+	(mlint-clear-nested-function-info-overlays): updated w/ more info.
+	(mlint-clear-cross-function-variable-highlighting)
+	(mlint-minor-mode): Use new clear function for nested function info.
+
+	* matlab.el: Make fill-paragraph work around cell headings nicely.
+	Add `matlab-shell-run-cell' for cell-mode style execution of code.
+	Change the page delimiter to include cell breaks.
+
+	Support "parfor", available in MATLAB 2006a.
+	Treat cell start comments as the start of a comment block, even if comments preceed it.
+	Make sure typing in comment chars moves cursor to the correct location.
+
+2005-12-02  Eric Ludlam  <eludlam@mathworks.com>
+
+	* ChangeLog: Build and dependancies changes.
+
+	* INSTALL, README: Add info about CEDET dependancies.
+
+	* Makefile, Project.ede, matlab-load.el: Build system.
+
+2005-12-02  Eric Ludlam  <eludlam@mathworks.com>
+
+	* README, INSTALL: Refer to CEDET project for dependancies.
+
+	* Makefile, Project.ede: New build system.
+
+	* matlab-load.el: autoloads file.
+
+2005-12-01  Eric Ludlam  <eludlam@mathworks.com>
+
+	* matlab.el: Removed ChangLog from end of file.
+
