@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 11:55:05 kmodi>
+;; Time-stamp: <2014-02-04 12:16:06 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -27,6 +27,7 @@
     ido-vertical-mode flx-ido
     iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
     key-chord ;; map pairs of simultaneously pressed keys to commands
+    magit ;; for git management
     markdown-mode
     multiple-cursors
     org ;; Get the latest org-mode package from Melpa
