@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 14:01:54 kmodi>
+;; Time-stamp: <2014-02-04 14:09:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -104,4 +104,3 @@
 (require 'setup-key-bindings)
 
 (setq emacs-initialized t)
-;; end of .emacs
