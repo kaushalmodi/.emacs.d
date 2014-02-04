@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 10:07:02 kmodi>
+;; Time-stamp: <2014-02-04 11:24:55 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -59,7 +59,7 @@
 (require 'setup-fci)
 (require 'setup-guide-key)
 (require 'setup-hardcore)
-(require 'setup-header2)
+(require 'setup-header2) ;; Add header2 package from MELPA
 (require 'setup-helm)
 (require 'setup-highlight)
 (require 'setup-hl-line+)
