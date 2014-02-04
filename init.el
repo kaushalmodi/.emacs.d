@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 11:24:55 kmodi>
+;; Time-stamp: <2014-02-04 11:31:28 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -88,7 +88,7 @@
 ;; (require 'setup-hspice)
 
 ;; custom packages
-(require 'setup-sos)
+(require 'setup-sos) ;; This require line should be removed by you.
 (require 'setup-windows-buffers)
 (require 'setup-registers)
 (require 'setup-navigation)
