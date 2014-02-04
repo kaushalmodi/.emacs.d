@@ -3,5 +3,8 @@
 
 My emacs configuration
 
-The unique thing about my config is that I have a central place for all my key bindings: setup-files/setup-key-bindings.el
+Few unique things about my config:
+
+* Central place for **ALL** key bindings: setup-files/setup-key-bindings.el
+* Organized init.el into little chunks
 
