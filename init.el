@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 14:09:51 kmodi>
+;; Time-stamp: <2014-02-04 15:13:35 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -38,6 +38,7 @@
     soft-stone-theme
     stripe-buffer
     visual-regexp
+    web-mode
     yasnippet
     zenburn-theme
     )
@@ -59,17 +60,15 @@
 (require 'setup-fci)
 (require 'setup-guide-key)
 (require 'setup-hardcore)
-(require 'setup-header2) ;; Add header2 package from MELPA
+(require 'setup-header2)
 (require 'setup-helm)
 (require 'setup-highlight)
 (require 'setup-hl-line+)
 (require 'setup-key-chord)
-;; (require 'setup-linum)
 (require 'setup-magit)
 (require 'setup-multiple-cursors)
 (require 'setup-org)
 (require 'setup-popwin)
-;;(require 'setup-projectile)
 (require 'setup-server)
 (require 'setup-smart-compile)
 (require 'setup-smart-mode-line)
@@ -77,6 +76,8 @@
 (require 'setup-stripe-buffer)
 (require 'setup-visual-regexp)
 (require 'setup-yasnippet)
+;; (require 'setup-linum)
+;; (require 'setup-projectile)
 
 ;; Languages
 (require 'setup-verilog)
@@ -84,6 +85,7 @@
 (require 'setup-python)
 (require 'setup-matlab)
 (require 'setup-markdown)
+(require 'setup-web-mode)
 ;; (require 'setup-latex)
 ;; (require 'setup-tcl)
 ;; (require 'setup-hspice)
@@ -95,10 +97,10 @@
 (require 'setup-navigation)
 (require 'setup-editing)
 (require 'setup-search)
-;; (require 'setup-occur) ;; not required as the helm-multi-swoop-all does awesome job
 (require 'setup-print)
 (require 'setup-desktop)
 (require 'setup-misc)
+;; (require 'setup-occur) ;; not required as the helm-multi-swoop-all does awesome job
 
 ;; NOTE: Load below ONLY after loading all the packages
 (require 'setup-key-bindings)
