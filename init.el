@@ -1,11 +1,10 @@
-;; Time-stamp: <2014-02-04 11:31:28 kmodi>
+;; Time-stamp: <2014-02-04 11:55:05 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
 (setq user-emacs-directory "~/.emacs.d"
       setup-packages-file (expand-file-name "setup-packages.el" user-emacs-directory)
       custom-file         (expand-file-name "custom.el" user-emacs-directory)
-      default-font-size-pt 10 ;; default font size
       )
 
 (defvar my-packages

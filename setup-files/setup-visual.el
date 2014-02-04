@@ -1,6 +1,9 @@
-;; Time-stamp: <2014-01-23 11:07:47 kmodi>
+;; Time-stamp: <2014-02-04 11:54:58 kmodi>
 
 ;; Set up the looks of emacs
+
+(setq default-font-size-pt 10 ;; default font size
+      )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MENU/TOOL/SCROLL BARS
