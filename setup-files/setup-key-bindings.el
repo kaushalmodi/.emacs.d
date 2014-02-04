@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 12:25:41 kmodi>
+;; Time-stamp: <2014-02-04 13:42:33 kmodi>
 
 ;; KEY BINDINGS
 
@@ -49,12 +49,11 @@
   (global-set-key [S-f10]  'sos-ci)
   (global-set-key [C-f10]  'sos-discardco))
 
-;; (when (boundp 'setup-highlight-loaded)
-;;   (global-set-key [C-f11]  'highlight-symbol-at-point)
-;;   (global-set-key [f11]    'highlight-symbol-next)
-;;   (global-set-key [S-f11]  'highlight-symbol-prev)
-;;   (global-set-key [M-f11]  'highlight-symbol-query-replace))
-;; (global-set-key [f11]    )
+(when (boundp 'setup-magit-loaded)
+  (global-set-key [f11]    'magit-status)
+  (global-set-key [S-f11]  'magit-push)
+  (global-set-key [M-f11]  'magit-pull)
+  )
 
 (when (boundp 'setup-verilog-loaded)
   (global-set-key [f12]    'verilog-goto-defun)) ;; jump to the module definition file
@@ -85,6 +84,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (boundp 'setup-desktop-loaded)
   (define-key modi-map (kbd "d")  'session-save)) ;; C-x m d (save desktop)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Magit package
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; smex package
