@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 12:16:06 kmodi>
+;; Time-stamp: <2014-02-04 13:32:07 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -65,6 +65,7 @@
 (require 'setup-hl-line+)
 (require 'setup-key-chord)
 ;; (require 'setup-linum)
+(require 'setup-magit)
 (require 'setup-multiple-cursors)
 (require 'setup-org)
 (require 'setup-popwin)
