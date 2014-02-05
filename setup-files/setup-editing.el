@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-01-20 14:11:02 kmodi>
+;; Time-stamp: <2014-02-05 02:27:00 Kaushal>
 
 ;; Functions related to editing text in the buffer
 
@@ -139,7 +139,7 @@ Note the weekly scope of the command's precision.")
   "Align text columns"
   (interactive "r")
   ;; align-regexp syntax:  align-regexp (beg end regexp &optional group spacing repeat)
-  (align-regexp begin end "\\(\\s-+\\)[a-z=(),?':`]" 1 1 t)
+  (align-regexp begin end "\\(\\s-+\\)[a-z=(),?':`\.]" 1 1 t)
   (indent-region begin end) ;; ident the region correctly after alignment
   )
 
