@@ -364,14 +364,13 @@
 
 (when (boundp 'setup-key-chord-loaded)
 
-  (key-chord-define-global "OO"   'ido-find-file)
 
   ;; Editing
   (key-chord-define-global "hj"   'undo)
   (key-chord-define-global "UU"   'undo)
 
   ;; Windows and buffers
-  (key-chord-define-global "BB"   'toggle-between-buffers)
+  (key-chord-define-global "OO"   'other-window)
   (key-chord-define-global "XX"   'kill-this-buffer)
 
   ;; Navigation
