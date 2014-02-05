@@ -1,18 +1,21 @@
-;; Time-stamp: <2013-12-09 14:52:42 kmodi>
+;; Time-stamp: <2014-02-05 02:33:17 Kaushal>
 
 ;; Verilog
 
 ;; Load verilog mode only when needed
 (autoload 'verilog-mode "verilog-mode" "Verilog mode" t )
 ;; Any files that end in .v should be in verilog mode
-(setq auto-mode-alist (cons '("\\.v\\'"    . verilog-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.sv\\'"   . verilog-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.vp\\'"   . verilog-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.tv\\'"   . verilog-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.psl\\'"  . verilog-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.h\\'"    . verilog-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.f\\'"    . verilog-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.vinc\\'" . verilog-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (append
+       '(
+         ("\\.[st]*v[h]*\\'" . verilog-mode) ;; .v, .sv, .svh, .tv
+         ("\\.vp\\'"         . verilog-mode)
+         ("\\.psl\\'"        . verilog-mode)
+         ("\\.h\\'"          . verilog-mode)
+         ("\\.f\\'"          . verilog-mode)
+         ("\\.vinc\\'"       . verilog-mode)
+         ) auto-mode-alist))
+
 
 ;; Replace tabs with spaces when saving files in verilog-mode
 (add-hook 'verilog-mode-hook
