@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 14:22:34 kmodi>
+;; Time-stamp: <2014-02-05 17:28:25 kmodi>
 
 ;; KEY BINDINGS
 
@@ -139,8 +139,8 @@
   (global-set-key (kbd "C-x C-o") 'recentf-open-files)
   (define-key modi-map (kbd "l")  'load-current-file) ;; C-x m l
   (global-set-key (kbd "C-S-t")   'undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
-  (global-set-key (kbd "<M-up>")  'scroll-up-dont-move-point)
-  (global-set-key (kbd "<M-down>")'scroll-down-dont-move-point)
+  (global-set-key (kbd "<M-down>")  'scroll-up-dont-move-point)
+  (global-set-key (kbd "<M-up>")'scroll-down-dont-move-point)
 )
 
 ;; Print to printer defined by env var `PRINTER'
@@ -352,10 +352,15 @@
   ;; remove the conf-mode-map to `C-c Space` as it overrides the ace-jump-mode
   ;; binding, eg. while editing .tmux.conf
   ;; (define-key conf-mode-map (kbd "C-c SPC") nil)
+  ;; FIXME: "C-c SPC" binding conflicts with default bindings in conf-mode-map
+  ;;        org-mode. Need to fix that. For now, creating an alternate
+  ;;        binding for ace-jump-mode
+  ;; Alternate binding for `ace-jump-mode'
+  (define-key modi-map (kbd "a")  'ace-jump-mode) ;; C-x m a
   )
-;;         C-c SPC -> `ace-jump-word-mode'
-;;     C-u C-c SPC -> `ace-jump-char-mode'
-;; C-u C-u C-c SPC -> `ace-jump-line-mode'
+;;         `ace-jump-mode-BINDING' -> `ace-jump-word-mode'
+;;     C-u `ace-jump-mode-BINDING' -> `ace-jump-char-mode'
+;; C-u C-u `ace-jump-mode-BINDING' -> `ace-jump-line-mode'
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -391,8 +396,9 @@
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
     (key-chord-define-global "fg" 'iy-go-to-char)
     (key-chord-define-global "FF" 'iy-go-to-char)
-    (key-chord-define-global "df" 'iy-go-to-char-backward)
-    (key-chord-define-global "bb" 'iy-go-to-char-backward)))
+    (key-chord-define-global "bb" 'iy-go-to-char-backward)
+    (key-chord-define-global "BB" 'iy-go-to-char-backward))
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
