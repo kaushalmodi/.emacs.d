@@ -1,8 +1,30 @@
-;; Time-stamp: <2013-12-02 17:08:12 kmodi>
+;; Time-stamp: <2014-02-05 17:31:29 kmodi>
 
 ;; Org Mode
 
 (setq org-directory "~/org")
+
+(setq org-src-fontify-natively t) ;; fontify code in code blocks
+
+(require 'org-latex)
+(setq org-export-latex-listings 'minted)
+;; Above will output tex files with \usepackage{minted}
+;; While in Org mode, `C-c C-e` followed by 'l' and 'l' (twice) will generate the tex
+
+;; In order to have that tex convert to pdf, you have to ensure that you have
+;; minted.sty in your TEXMF folder.
+;; -> To know if minted.sty in correct path do "kpsewhich minted.sty".
+;; -> If it is not found, download from http://www.ctan.org/tex-archive/macros/latex/contrib/minted
+;; -> Generate minted.sty by "tex minted.ins"
+;; -> To know your TEXMF folder, do "kpsewhich -var-value=TEXMFHOME"
+;; -> For me TEXMF folder was ~/texmf
+;; -> Move the minted.sty to your $TEXMF/tex/latex/commonstuff folder.
+;; -> Do mkdir -p ~/texmf/tex/latex/commonstuff if that folder hierarchy doesn't exist
+;; -> Do "mktexlsr" to refresh the sty database
+;; -> Generate pdf from the org exported tex by "pdflatex -shell-escape FILE.tex"
+;; Sources for org > tex > pdf conversion:
+;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
+;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
 
 (setq org-log-done 'timestamp) ;; Insert only timestamp when closing an org TODO item
 ;; (setq org-log-done 'note) ;; Insert timestamp and note when closing an org TODO item
