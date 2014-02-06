@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-03 14:58:54 kmodi>
+;; Time-stamp: <2014-02-06 01:05:58 Kaushal>
 
 ;; Functions to manipulate windows and buffers
 
@@ -240,6 +240,16 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
   "Scroll down by 1 line without moving the point."
   (interactive)
   (scroll-down 1))
+
+(defun scroll-other-window-up-dont-move-point ()
+  "Scroll other window up by 1 line without moving the point."
+  (interactive)
+  (scroll-other-window 1))
+
+(defun scroll-other-window-down-dont-move-point ()
+  "Scroll other window down by 1 line without moving the point."
+  (interactive)
+  (scroll-other-window -1))
 
 
 (setq setup-windows-buffers-loaded t)

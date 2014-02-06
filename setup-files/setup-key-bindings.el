@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-05 17:28:25 kmodi>
+;; Time-stamp: <2014-02-06 01:14:44 Kaushal>
 
 ;; KEY BINDINGS
 
@@ -87,11 +87,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Magit package
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; smex package
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -131,16 +126,22 @@
 
 (when (boundp 'setup-windows-buffers-loaded)
   ;; overriding the `C-x C-p binding with `mark-page' command
-  (global-set-key (kbd "C-x C-p") 'show-copy-buffer-file-name)
-  (global-set-key (kbd "C-x C-k") 'delete-current-buffer-file)
-  (global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
-  (define-key modi-map (kbd "b")  'switch-to-scratch-and-back) ;; C-x m b
+  (global-set-key (kbd "C-x C-p")   'show-copy-buffer-file-name)
+  (global-set-key (kbd "C-x C-k")   'delete-current-buffer-file)
+  (global-set-key (kbd "C-x C-r")   'rename-current-buffer-file)
+  (define-key modi-map (kbd "b")    'switch-to-scratch-and-back) ;; C-x m b
   ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-  (global-set-key (kbd "C-x C-o") 'recentf-open-files)
-  (define-key modi-map (kbd "l")  'load-current-file) ;; C-x m l
-  (global-set-key (kbd "C-S-t")   'undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
+  (global-set-key (kbd "C-x C-o")   'recentf-open-files)
+  (define-key modi-map (kbd "l")    'load-current-file) ;; C-x m l
+  (global-set-key (kbd "C-S-t")     'undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
+  (global-set-key (kbd "<M-up>")    'scroll-down-dont-move-point)
   (global-set-key (kbd "<M-down>")  'scroll-up-dont-move-point)
-  (global-set-key (kbd "<M-up>")'scroll-down-dont-move-point)
+  ;; Change the default `M-left` key binding from `left-word'
+  ;; The same function anyways is also bound to `C-left`
+  (global-set-key (kbd "<M-left>")  'scroll-other-window-down-dont-move-point)
+  ;; Change the default `M-right` key binding from `right-word'
+  ;; The same function anyways is also bound to `C-right`
+  (global-set-key (kbd "<M-right>") 'scroll-other-window-up-dont-move-point)
 )
 
 ;; Print to printer defined by env var `PRINTER'
