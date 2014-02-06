@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 11:07:11 kmodi>
+;; Time-stamp: <2014-02-06 13:06:31 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -18,11 +18,17 @@
         " Omit"  ;; Omit mode in dired
         " yas"   ;; yasnippet
         " drag"  ;; drag-stuff-mode
+        " ARev"  ;; magit
         )
       sml/replacer-regexp-list
       '(
         ("^~/org/" ":Org:")
         ("^~/\\.emacs\\.d/" ":ED:")
+        ("^~/.*box/uvm/.*examples/" ":UVM_EX:")
+        (":UVM_EX:\\([a-z0-9_]\\{2\\}\\).+/"
+         (lambda (string) (concat ":UVM_EX:"
+                                  (match-string 1 string)
+                                  ":") ) )
         ;; Prefix with first 2 letters and last letter of project name
         ;; To distinguish between projects that could have same first 3 letters
         ;; Using "\,(upcase ...)" only works when calling `replace-regexp` interactively.
