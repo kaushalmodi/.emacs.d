@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-05 17:31:29 kmodi>
+;; Time-stamp: <2014-02-07 01:13:27 Kaushal>
 
 ;; Org Mode
 
@@ -8,6 +8,8 @@
 
 (require 'org-latex)
 (setq org-export-latex-listings 'minted)
+(add-to-list 'org-export-latex-packages-alist '("" "minted"))
+(add-to-list 'org-export-latex-packages-alist '("" "color"))
 ;; Above will output tex files with \usepackage{minted}
 ;; While in Org mode, `C-c C-e` followed by 'l' and 'l' (twice) will generate the tex
 
