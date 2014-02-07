@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-03 12:00:44 kmodi>
+;; Time-stamp: <2014-02-07 12:46:44 kmodi>
 
 ;; Source: http://stackoverflow.com/questions/12558019/shortcut-to-open-a-specific-file-in-emacs
 ;; Source: http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Registers.html#File-Registers
@@ -23,6 +23,10 @@
 
 ;; .alias can be accessed using `C-x r j t`
 (set-register ?t (cons 'file "~/.tmux.conf" ))
+
+;; .alias can be accessed using `C-x r j u`
+(set-register ?u (cons 'file "~/org/uvm_book/uvm.org" ))
+
 
 (setq setup-registers-loaded t)
 (provide 'setup-registers)
