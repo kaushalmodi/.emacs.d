@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-07 14:10:32 kmodi>
+;; Time-stamp: <2014-02-07 16:57:42 kmodi>
 
 ;; Org Mode
 
@@ -37,6 +37,9 @@
 ;;            '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 ;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 ;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+;; Disallow _ and ^ characters from sub/super-scripting strings
+(setq org-export-with-sub-superscripts nil)
 
 (setq org-log-done 'timestamp) ;; Insert only timestamp when closing an org TODO item
 ;; (setq org-log-done 'note) ;; Insert timestamp and note when closing an org TODO item
