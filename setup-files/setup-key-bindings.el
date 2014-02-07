@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-06 01:14:44 Kaushal>
+;; Time-stamp: <2014-02-07 12:12:37 kmodi>
 
 ;; KEY BINDINGS
 
@@ -378,6 +378,7 @@
   ;; Windows and buffers
   (key-chord-define-global "OO"   'other-window)
   (key-chord-define-global "XX"   'kill-this-buffer)
+  (key-chord-define-global "ZZ"   'toggle-between-buffers)
 
   ;; Navigation
   (key-chord-define-global "m,"   'beginning-of-buffer)
