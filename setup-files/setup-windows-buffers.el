@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-06 01:05:58 Kaushal>
+;; Time-stamp: <2014-02-07 14:13:00 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -226,8 +226,16 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 (defun toggle-between-buffers ()
   "Toggle between 2 buffers"
   (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
-
+  ;; (switch-to-buffer (other-buffer (current-buffer) 1)))
+  (switch-to-buffer (other-buffer)))
+;; (other-buffer &optional BUFFER VISIBLE-OK FRAME)
+;; - Return most recently selected buffer other than BUFFER. Ignore the argument
+;;   BUFFER unless it denotes a live buffer.
+;; - If VISIBLE-OK==1, a buffer is returned even when it is visible in a split
+;;   window.Buffers not visible in windows are preferred to visible buffers,
+;;   unless optional second argument VISIBLE-OK is non-nil.
+;; - If the optional third argument FRAME is non-nil, use that frame's buffer
+;;   list instead of the selected frame's buffer list.
 
 
 ;; Scroll without moving the point/cursor
