@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-07 01:13:27 Kaushal>
+;; Time-stamp: <2014-02-07 14:10:32 kmodi>
 
 ;; Org Mode
 
@@ -6,11 +6,15 @@
 
 (setq org-src-fontify-natively t) ;; fontify code in code blocks
 
-(require 'org-latex)
-(setq org-export-latex-listings 'minted)
-(add-to-list 'org-export-latex-packages-alist '("" "minted"))
-(add-to-list 'org-export-latex-packages-alist '("" "color"))
+;; From <ORG EL DIR>/ox-latex.el
+(require 'ox-latex)
+;; (require 'org-latex) in org version < 8.0
+(setq org-latex-listings 'minted)
+;; (setq org-export-latex-listings 'minted) in org version < 8.0
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
 ;; Above will output tex files with \usepackage{minted}
+
 ;; While in Org mode, `C-c C-e` followed by 'l' and 'l' (twice) will generate the tex
 
 ;; In order to have that tex convert to pdf, you have to ensure that you have
@@ -27,6 +31,12 @@
 ;; Sources for org > tex > pdf conversion:
 ;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
 ;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
+
+;; FIXME: Make the below work
+;; (setq org-latex-to-pdf-process
+;;            '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
 (setq org-log-done 'timestamp) ;; Insert only timestamp when closing an org TODO item
 ;; (setq org-log-done 'note) ;; Insert timestamp and note when closing an org TODO item
