@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 15:13:35 kmodi>
+;; Time-stamp: <2014-02-10 17:40:12 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -32,6 +32,7 @@
     multiple-cursors
     org ;; Get the latest org-mode package from Melpa
     popwin ;; Open windows like *Help*, *Completions*, etc in minibuffer
+    rainbow-delimiters
     smart-compile
     smart-mode-line popup
     smex ;; smart M-x
@@ -69,6 +70,7 @@
 (require 'setup-multiple-cursors)
 (require 'setup-org)
 (require 'setup-popwin)
+(require 'setup-rainbow-delimiters)
 (require 'setup-server)
 (require 'setup-smart-compile)
 (require 'setup-smart-mode-line)
