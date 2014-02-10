@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-07 16:57:42 kmodi>
+;; Time-stamp: <2014-02-10 14:48:09 kmodi>
 
 ;; Org Mode
 
@@ -31,6 +31,25 @@
 ;; Sources for org > tex > pdf conversion:
 ;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
 ;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
+
+;; customization of the minted package (applied to embedded source codes)
+;; Source: https://code.google.com/p/minted/
+(setq org-latex-minted-options
+      '(("linenos")
+        ("numbersep" "5pt")
+        ("frame" "lines")
+        ("framesep" "2mm")
+        ))
+
+(add-to-list 'org-latex-classes
+             '("article"
+               "\\documentclass[11pt,letterpaper]{article}"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             )
 
 ;; FIXME: Make the below work
 ;; (setq org-latex-to-pdf-process
