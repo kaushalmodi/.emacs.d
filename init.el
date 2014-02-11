@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-10 17:40:12 kmodi>
+;; Time-stamp: <2014-02-11 15:49:48 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -13,6 +13,7 @@
     ;; header2 ;; INSTR_UNCOMMENT_THIS_LINE
     ;; highlight-symbol ;; The highlight-global package does a better job
     ace-jump-mode
+    anzu ;; shows total search hits in mode line, better query-replace alternative
     auto-complete fuzzy
     color-theme-sanityinc-solarized
     color-theme-sanityinc-tomorrow
