@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-07 12:12:37 kmodi>
+;; Time-stamp: <2014-02-11 15:53:26 kmodi>
 
 ;; KEY BINDINGS
 
@@ -113,6 +113,12 @@
             '(lambda ()
                (define-key verilog-mode-map (kbd "C-;") 'shrink-window))))
 (global-set-key (kbd "C-'")       'enlarge-window) ;; make window taller
+
+;; Make Control+mousewheel do increase/decrease font-size
+;; Source: http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
+(global-set-key (kbd "<C-mouse-4>") 'text-scale-increase) ;; C + wheel-up
+(global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease) ;; C + wheel-down
+
 
 (global-set-key (kbd "C-c k")     'windmove-up) ;; switch to buffer on top
 (global-set-key (kbd "C-c j")     'windmove-down) ;; switch to buffer on bottom
@@ -262,7 +268,12 @@
 (when (boundp 'setup-search-loaded)
   (global-set-key (kbd "C-S-s")   'isearch-current-symbol)
   (global-set-key (kbd "C-S-r")   'isearch-backward-current-symbol)
-  (define-key modi-map (kbd "s")  'search-all-buffers)) ;; C-x m s
+  (define-key modi-map (kbd "s")  'search-all-buffers) ;; C-x m s
+
+  ;; Replace the emacs default regular/regex search-replace with the anzu versions
+  (global-set-key (kbd "M-%")     'anzu-query-replace)
+  (global-set-key (kbd "C-M-%")   'anzu-query-replace-regexp)
+  )
 
 (when (boundp 'setup-highlight-loaded)
   (define-key modi-map (kbd "h")  'highlight-frame-toggle) ;; C-x m h
