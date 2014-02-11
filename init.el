@@ -24,7 +24,7 @@
     hardcore-mode
     helm helm-swoop
     hl-line+
-    ido-vertical-mode flx-ido
+    ido-vertical-mode flx-ido ido-ubiquitous
     iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
     key-chord ;; map pairs of simultaneously pressed keys to commands
     magit ;; for git management

@@ -1,4 +1,4 @@
-;; Time-stamp: <2013-12-09 17:51:39 kmodi>
+;; Time-stamp: <2014-02-11 15:20:29 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -61,9 +61,10 @@
 ;; (require 'ido-at-point)
 ;; (ido-at-point-mode)
 
-;; ;; Use ido everywhere
-;; (require 'ido-ubiquitous)
-;; (ido-ubiquitous-mode 1)
+;; Use ido everywhere, example: when searching for var name `C-h v`, searching
+;; for function name `C-h f`, etc
+(require 'ido-ubiquitous)
+(ido-ubiquitous-mode 1)
 
 ;; ;; Fix ido-ubiquitous for newer packages
 ;; (defmacro ido-ubiquitous-use-new-completing-read (cmd package)
