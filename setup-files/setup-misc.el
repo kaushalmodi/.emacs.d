@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 09:58:57 kmodi>
+;; Time-stamp: <2014-02-11 15:11:27 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -9,6 +9,9 @@
 
 ;; Enable conversion of the selected region to lower case using `C-x C-l`
 (put 'downcase-region 'disabled nil)
+
+;; Do not make mouse wheel accelerate its action (example: scrolling)
+(setq mouse-wheel-progressive-speed nil)
 
 (defun confirm-kill-emacs-save-desktop ()
   "Prevent accidentally killing emacs. Also save current desktop every time when quitting emacs."
