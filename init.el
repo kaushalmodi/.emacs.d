@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-11 15:49:48 kmodi>
+;; Time-stamp: <2014-02-18 11:02:03 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -15,8 +15,8 @@
     ace-jump-mode
     anzu ;; shows total search hits in mode line, better query-replace alternative
     auto-complete fuzzy
+    bookmark+ ;; able to bookmark desktop sessions
     color-theme-sanityinc-solarized
-    color-theme-sanityinc-tomorrow
     dired+ dired-single
     drag-stuff
     expand-region
@@ -28,6 +28,7 @@
     ido-vertical-mode flx-ido ido-ubiquitous
     iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
     key-chord ;; map pairs of simultaneously pressed keys to commands
+    leuven-theme ;; awesome white background theme
     magit ;; for git management
     markdown-mode
     multiple-cursors
@@ -56,6 +57,7 @@
 (eval-after-load 'ido '(require 'setup-ido))
 (require 'setup-ace-jump-mode)
 (require 'setup-auto-complete)
+(require 'setup-bookmark+)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
 (require 'setup-expand-region)
