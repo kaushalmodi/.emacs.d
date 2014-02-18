@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-12 15:12:43 kmodi>
+;; Time-stamp: <2014-02-18 12:44:14 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -203,11 +203,11 @@
 (defun presentation-mode ()
   "Set frame size, theme and fonts suitable for presentation."
   (interactive)
-  (setq font-size-pt 15)
+  (setq font-size-pt 13)
   (set-face-attribute 'default nil :height (* font-size-pt 10))
   (set-frame-position (selected-frame) 0 0) ;; pixels x y from upper left
   (set-frame-size (selected-frame) 80 25)  ;; rows and columns w h
-  (soft-stone) ;; change to a light theme: soft-stone
+  (leuven) ;; change to a light theme
   (delete-other-windows)
   (setq presentation-mode-enabled t))
 
