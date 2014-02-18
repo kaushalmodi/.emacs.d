@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-07 00:35:19 Kaushal>
+;; Time-stamp: <2014-02-12 15:12:43 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -32,6 +32,7 @@
   (disable-theme 'sanityinc-solarized-dark)
   (disable-theme 'sanityinc-solarized-light)
   (disable-theme 'soft-stone)
+  (disable-theme 'leuven)
   (load-theme    'zenburn t))
 
 ;; solarized-dark
@@ -43,6 +44,7 @@
   (disable-theme 'zenburn)
   (disable-theme 'sanityinc-solarized-dark)
   (disable-theme 'soft-stone)
+  (disable-theme 'leuven)
   (load-theme    'sanityinc-solarized-light))
 
 ;; solarized-light
@@ -54,6 +56,7 @@
   (disable-theme 'zenburn)
   (disable-theme 'sanityinc-solarized-light)
   (disable-theme 'soft-stone)
+  (disable-theme 'leuven)
   (load-theme    'sanityinc-solarized-dark))
 
 ;; soft-stone theme
@@ -65,7 +68,20 @@
   (disable-theme 'zenburn)
   (disable-theme 'sanityinc-solarized-light)
   (disable-theme 'sanityinc-solarized-dark)
+  (disable-theme 'leuven)
   (load-theme    'soft-stone))
+
+;;leuven theme
+(defun leuven ()
+  "Activate leuven theme."
+  (interactive)
+  (setq dark-theme nil)
+  ;; disable other themes before setting this theme
+  (disable-theme 'zenburn)
+  (disable-theme 'sanityinc-solarized-light)
+  (disable-theme 'sanityinc-solarized-dark)
+  (disable-theme 'soft-stone)
+  (load-theme    'leuven))
 
 (setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
       font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
