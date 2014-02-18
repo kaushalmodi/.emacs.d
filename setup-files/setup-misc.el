@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-11 15:11:27 kmodi>
+;; Time-stamp: <2014-02-18 11:02:32 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -18,8 +18,8 @@
   (interactive)
   (if (y-or-n-p-with-timeout "Do you really want to exit Emacs ? " 4 nil)
       (progn
-        (when setup-desktop-loaded
-          (session-save t)) ;; save current desktop without asking for confirmation
+        ;; (when setup-desktop-loaded
+        ;;   (session-save t)) ;; save current desktop without asking for confirmation
         (save-buffers-kill-emacs))))
 
 (defun confirm-kill-emacs-dont-save-desktop ()
