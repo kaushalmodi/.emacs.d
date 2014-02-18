@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-11 15:53:26 kmodi>
+;; Time-stamp: <2014-02-12 15:07:25 kmodi>
 
 ;; KEY BINDINGS
 
@@ -251,10 +251,6 @@
   (define-key modi-map (kbd "c")      'toggle-comment-on-line-or-region) ;; C-x m c
   )
 
-(when (boundp 'setup-visual-regexp-loaded)
-  (global-set-key (kbd "C-c r")      'vr/replace)
-  (global-set-key (kbd "C-c q")      'vr/query-replace))
-
 ;; Insert a newline at the current cursor location, while not moving the cursor
 (global-set-key (kbd "C-o")          'open-line)
 ;; Join the following line onto the current one
@@ -266,14 +262,19 @@
 (global-set-key (kbd "C-M-j")        'comment-indent-new-line)
 
 (when (boundp 'setup-search-loaded)
-  (global-set-key (kbd "C-S-s")   'isearch-current-symbol)
-  (global-set-key (kbd "C-S-r")   'isearch-backward-current-symbol)
-  (define-key modi-map (kbd "s")  'search-all-buffers) ;; C-x m s
+  (global-set-key (kbd "C-S-s")      'isearch-current-symbol)
+  (global-set-key (kbd "C-S-r")      'isearch-backward-current-symbol)
+  (define-key modi-map (kbd "s")     'search-all-buffers) ;; C-x m s
 
-  ;; Replace the emacs default regular/regex search-replace with the anzu versions
-  (global-set-key (kbd "M-%")     'anzu-query-replace)
-  (global-set-key (kbd "C-M-%")   'anzu-query-replace-regexp)
+  ;; replace the emacs default query-replace
+  (global-set-key (kbd "M-%")        'anzu-query-replace)
+  (global-set-key (kbd "C-c r")      'anzu-replace-at-cursor-thing)
   )
+
+(when (boundp 'setup-visual-regexp-loaded)
+  ;; replace the emacs default query-replace-regexp
+  (global-set-key (kbd "C-M-%")      'vr/query-replace)
+  (global-set-key (kbd "C-c q")      'vr/query-replace))
 
 (when (boundp 'setup-highlight-loaded)
   (define-key modi-map (kbd "h")  'highlight-frame-toggle) ;; C-x m h
