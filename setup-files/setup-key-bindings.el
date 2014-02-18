@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-12 15:07:25 kmodi>
+;; Time-stamp: <2014-02-18 12:32:39 kmodi>
 
 ;; KEY BINDINGS
 
@@ -10,8 +10,9 @@
 (global-set-key [f1]       'goto-line) ;; Default `M-g M-g` for `goto-line'
 
 (global-set-key [f2]       'menu-bar-mode) ;; Toggle the menu bar: File|Edit|Options|..
-(when (boundp 'setup-desktop-loaded)
-  (global-set-key [S-f2]     'session-save)) ;; Save the current desktop session
+;; (when (boundp 'setup-desktop-loaded)
+;;   (global-set-key [S-f2]     'session-save)) ;; Save the current desktop session
+(global-set-key [S-f2]     'desktop-save-in-desktop-dir)
 
 ;; `boundp` returns t if SYMBOL's value is not void.
 (when (boundp 'setup-editing-loaded)
@@ -389,7 +390,9 @@
 
   ;; Windows and buffers
   (key-chord-define-global "OO"   'other-window)
-  (key-chord-define-global "XX"   'kill-this-buffer)
+  (key-chord-define-global "XX"   ( lambda()
+                                    (interactive)
+                                    (kill-buffer (current-buffer))))
   (key-chord-define-global "ZZ"   'toggle-between-buffers)
 
   ;; Navigation
