@@ -1,4 +1,4 @@
-;; Time-stamp: <2013-12-10 14:59:53 kmodi>
+;; Time-stamp: <2014-02-17 13:10:13 kmodi>
 
 ;; Fill Column Indicator
 ;; Source: http://www.emacswiki.org/FillColumnIndicator
@@ -8,10 +8,11 @@
 ;; Turn on fci-mode only for specific modes
 ;; As truncation is enabled only in fci-mode, truncation will be activated only
 ;; in the below modes
-(add-hook 'verilog-mode-hook 'fci-mode)
+(add-hook 'verilog-mode-hook    'fci-mode)
 (add-hook 'emacs-lisp-mode-hook 'fci-mode)
-(add-hook 'python-mode-hook 'fci-mode)
-(add-hook 'sh-mode-hook 'fci-mode)
+(add-hook 'python-mode-hook     'fci-mode)
+(add-hook 'sh-mode-hook         'fci-mode)
+(add-hook 'cperl-mode-hook      'fci-mode)
 ;; (add-hook 'after-change-major-mode-hook 'fci-mode) ;; Enable fci-mode automatically for all files
 
 ;; TIP: How to know what the current major mode is?
