@@ -1,23 +1,27 @@
-;; Time-stamp: <2013-12-12 13:47:04 kmodi>
+;; Time-stamp: <2014-02-18 10:58:41 kmodi>
 
 ;; Desktop save and restore
 
 ;; Type ‘M-x session-save’, or ‘M-x session-restore’ whenever you want to save
 ;; or restore a desktop. Restored desktops are deleted from disk.
 
-;; use only one desktop
-(setq desktop-dirname user-emacs-directory)
-(setq desktop-path (list desktop-dirname))
-(setq desktop-base-file-name "emacs-desktop")
-(setq desktop-file-name (concat desktop-dirname "/" desktop-base-file-name))
+(desktop-save-mode 1)
+;; comment (desktop-save-mode 1) is you want to use only one desktop
+;; using the below code
 
-;; remove desktop after it's been read
-(add-hook 'desktop-after-read-hook
-	  '(lambda ()
-	     ;; desktop-remove clears desktop-dirname
-	     (setq desktop-dirname-tmp desktop-dirname)
-	     (desktop-remove)
-	     (setq desktop-dirname desktop-dirname-tmp)))
+;; ;; use only one desktop
+;; (setq desktop-dirname user-emacs-directory)
+;; (setq desktop-path (list desktop-dirname))
+;; (setq desktop-base-file-name "emacs-desktop")
+;; (setq desktop-file-name (concat desktop-dirname "/" desktop-base-file-name))
+
+;; ;; remove desktop after it's been read
+;; (add-hook 'desktop-after-read-hook
+;; 	  '(lambda ()
+;; 	     ;; desktop-remove clears desktop-dirname
+;; 	     (setq desktop-dirname-tmp desktop-dirname)
+;; 	     (desktop-remove)
+;; 	     (setq desktop-dirname desktop-dirname-tmp)))
 
 (defun saved-session ()
   (file-exists-p desktop-file-name))
@@ -43,12 +47,12 @@
           (message "Session not saved.")))
     (desktop-save-in-desktop-dir)))
 
-;; ask user whether to restore desktop at start-up
-(add-hook 'after-init-hook
-	  '(lambda ()
-	     (if (saved-session)
-		 (if (y-or-n-p "Restore desktop? ")
-		     (session-restore)))))
+;; ;; ask user whether to restore desktop at start-up
+;; (add-hook 'after-init-hook
+;; 	  '(lambda ()
+;; 	     (if (saved-session)
+;; 		 (if (y-or-n-p "Restore desktop? ")
+;; 		     (session-restore)))))
 
 ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-sessions.el
 ; save a bunch of variables to the desktop file
