@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-18 11:02:32 kmodi>
+;; Time-stamp: <2014-02-18 13:58:52 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -13,20 +13,16 @@
 ;; Do not make mouse wheel accelerate its action (example: scrolling)
 (setq mouse-wheel-progressive-speed nil)
 
-(defun confirm-kill-emacs-save-desktop ()
-  "Prevent accidentally killing emacs. Also save current desktop every time when quitting emacs."
-  (interactive)
-  (if (y-or-n-p-with-timeout "Do you really want to exit Emacs ? " 4 nil)
-      (progn
-        ;; (when setup-desktop-loaded
-        ;;   (session-save t)) ;; save current desktop without asking for confirmation
-        (save-buffers-kill-emacs))))
+;; Quitting emacs via `C-x C-c` or the GUI 'X' button
+(setq confirm-kill-emacs 'y-or-n-p)
 
-(defun confirm-kill-emacs-dont-save-desktop ()
-  "Prevent accidentally killing emacs. Don't save current desktop when quitting emacs."
+(defun save-desktop-save-buffers-kill-emacs ()
+  "Save buffers and current desktop every time when quitting emacs."
   (interactive)
-  (if (y-or-n-p-with-timeout "Do you really want to exit Emacs without saving desktop? " 4 nil)
-      (save-buffers-kill-emacs)))
+  ;; (when setup-desktop-loaded
+  ;;   (session-save t)) ;; save current desktop without asking for confirmation
+  (desktop-save-in-desktop-dir)
+  (save-buffers-kill-emacs))
 
 
 (setq setup-misc-loaded t)

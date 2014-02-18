@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-18 12:32:39 kmodi>
+;; Time-stamp: <2014-02-18 13:59:07 kmodi>
 
 ;; KEY BINDINGS
 
@@ -423,9 +423,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when (boundp 'setup-misc-loaded)
-  (global-set-key (kbd "C-x C-c")   'confirm-kill-emacs-save-desktop)
-  (global-set-key (kbd "C-x M-c")   'confirm-kill-emacs-dont-save-desktop)
+  (global-set-key (kbd "C-x C-c")  'save-desktop-save-buffers-kill-emacs)
 )
+(global-set-key (kbd "C-x M-c")   'save-buffers-kill-emacs)
 
 
 (provide 'setup-key-bindings)
