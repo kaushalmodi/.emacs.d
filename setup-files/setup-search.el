@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-11 16:04:52 kmodi>
+;; Time-stamp: <2014-02-18 11:55:55 kmodi>
 
 ;; Source: http://www.emacswiki.org/emacs/SearchAtPoint
 
@@ -100,13 +100,15 @@ searches all buffers."
 ;; Source: https://github.com/syohex/emacs-anzu
 (require 'anzu)
 (global-anzu-mode +1)
+
 ;; color of search count shown in the mode-line by anzu
 (set-face-attribute 'anzu-mode-line nil
                     :foreground "lightblue" :weight 'bold)
-(custom-set-variables
- '(anzu-mode-lighter "") ;; String to show in the mode-line, default is " Anzu"
- '(anzu-search-threshold 1000) ;; anzu stops searching after reaching 1000 matches
- '(anzu-replace-to-string-separator " => "))
+
+(setq anzu-mode-lighter                "" ;; String to show in the mode-line, default is " Anzu"
+      anzu-search-threshold            1000 ;; anzu stops searching after reaching 1000 matches
+      anzu-replace-to-string-separator " => "
+      )
 
 
 (setq setup-search-loaded t)
