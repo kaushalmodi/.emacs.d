@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-18 10:58:41 kmodi>
+;; Time-stamp: <2014-02-18 12:32:05 kmodi>
 
 ;; Desktop save and restore
 
@@ -23,29 +23,29 @@
 ;; 	     (desktop-remove)
 ;; 	     (setq desktop-dirname desktop-dirname-tmp)))
 
-(defun saved-session ()
-  (file-exists-p desktop-file-name))
+;; (defun saved-session ()
+;;   (file-exists-p desktop-file-name))
 
-;; use session-restore to restore the desktop manually
-(defun session-restore ()
-  "Restore a saved emacs session."
-  (interactive)
-  (if (saved-session)
-      (desktop-read)
-    (message "No desktop found.")))
+;; ;; use session-restore to restore the desktop manually
+;; (defun session-restore ()
+;;   "Restore a saved emacs session."
+;;   (interactive)
+;;   (if (saved-session)
+;;       (desktop-read)
+;;     (message "No desktop found.")))
 
-;; use session-save to save the desktop manually
-(defun session-save (&optional noconfirm)
-  "Save an emacs session."
-  (interactive)
-  (if (saved-session)
-      (if noconfirm
-          (desktop-save-in-desktop-dir)
-        ;; else
-        (if (y-or-n-p "Overwrite existing desktop? ")
-            (desktop-save-in-desktop-dir)
-          (message "Session not saved.")))
-    (desktop-save-in-desktop-dir)))
+;; ;; use session-save to save the desktop manually
+;; (defun session-save (&optional noconfirm)
+;;   "Save an emacs session."
+;;   (interactive)
+;;   (if (saved-session)
+;;       (if noconfirm
+;;           (desktop-save-in-desktop-dir)
+;;         ;; else
+;;         (if (y-or-n-p "Overwrite existing desktop? ")
+;;             (desktop-save-in-desktop-dir)
+;;           (message "Session not saved.")))
+;;     (desktop-save-in-desktop-dir)))
 
 ;; ;; ask user whether to restore desktop at start-up
 ;; (add-hook 'after-init-hook
