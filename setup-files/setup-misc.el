@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-18 13:58:52 kmodi>
+;; Time-stamp: <2014-02-21 15:46:12 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -43,3 +43,6 @@
 ;; (3) See a variable value
 ;; `C-h v`, enter the variable name, Enter
 ;; Example: `C-h v`, `tooltip-mode`, Enter
+
+;; (4) How to insert superscript
+;; `C-x 8 ^ 2` inserts ²
