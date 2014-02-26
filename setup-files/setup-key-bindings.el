@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-18 13:59:07 kmodi>
+;; Time-stamp: <2014-02-26 10:31:06 kmodi>
 
 ;; KEY BINDINGS
 
@@ -383,9 +383,27 @@
 
 (when (boundp 'setup-key-chord-loaded)
 
+  ;; Alternative for `M-x'
+  (key-chord-define-global ";'"   'smex)
+
+  ;; Alternative for `F*' keys
+  (key-chord-define-global "1q"   'goto-line)
+  (key-chord-define-global "2w"   'menu-bar-mode)
+  (when (boundp 'setup-editing-loaded)
+    (key-chord-define-global "3e" 'toggle-comment-on-line-or-region))
+  (key-chord-define-global "5t"   'revert-buffer)
+  ;; (key-chord-define-global "6y"   )
+  ;; (key-chord-define-global "7u"   )
+  (when (boundp 'setup-visual-loaded)
+    (key-chord-define-global "8i" 'toggle-presentation-mode))
+  (key-chord-define-global "9o"   'eval-region)
+  (when (boundp 'setup-sos-loaded)
+    (key-chord-define-global "0p" 'sos-co))
+  (when (boundp 'setup-magit-loaded)
+    (key-chord-define-global "-[" 'magit-status))
+  ;; (key-chord-define-global "=]"   )
 
   ;; Editing
-  (key-chord-define-global "hj"   'undo)
   (key-chord-define-global "UU"   'undo)
 
   ;; Windows and buffers
@@ -398,15 +416,11 @@
   ;; Navigation
   (key-chord-define-global "m,"   'beginning-of-buffer)
   (key-chord-define-global ",."   'end-of-buffer)
+  (key-chord-define-global "]'"   'scroll-down)
+  (key-chord-define-global "'/"   'scroll-up)
 
   (key-chord-define-global "p["   'windmove-left)
-  (key-chord-define-global "HH"   'windmove-left)
   (key-chord-define-global "[]"   'windmove-right)
-  (key-chord-define-global "LL"   'windmove-right)
-  (key-chord-define-global "KK"   'windmove-up)
-  (key-chord-define-global "PP"   'windmove-up)
-  (key-chord-define-global "JJ"   'windmove-down)
-  (key-chord-define-global "NN"   'windmove-down)
 
   (when (boundp                   'setup-navigation-loaded)
     ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
