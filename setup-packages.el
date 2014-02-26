@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-04 13:35:48 kmodi>
+;; Time-stamp: <2014-02-26 10:27:38 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -19,6 +19,8 @@
 
 ;; add all subdirectories under elpa to the load-path
 (let ((default-directory (concat user-emacs-directory "/elpa")))
+  (normal-top-level-add-subdirs-to-load-path))
+(let ((default-directory (concat user-emacs-directory "/from-git"))) ;; packages not on Melpa
   (normal-top-level-add-subdirs-to-load-path))
 
 (require 'cl)
