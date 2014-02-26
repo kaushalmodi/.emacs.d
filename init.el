@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-18 11:02:03 kmodi>
+;; Time-stamp: <2014-02-26 10:30:15 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -51,6 +51,7 @@
 (load custom-file) ;; Load the emacs `M-x customize` generated file
 
 ;; Set up the looks of emacs
+(require 'setup-popwin) ;; require popwin first as packages might depend on it
 (require 'setup-visual)
 
 ;; Set up extensions/packages
@@ -72,7 +73,6 @@
 (require 'setup-magit)
 (require 'setup-multiple-cursors)
 (require 'setup-org)
-(require 'setup-popwin)
 (require 'setup-rainbow-delimiters)
 (require 'setup-server)
 (require 'setup-smart-compile)
