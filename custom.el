@@ -11,6 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(ac-ignores (quote ("/" "//" "/*" "//*" "///" "////")))
  '(ac-stop-words (quote ("/" "//" "/*" "//*" "///" "////")))
+ '(after-save-hook (quote (executable-make-buffer-file-executable-if-script-p sml/generate-buffer-identification helm-swoop--clear-cache)))
  '(ansi-color-faces-vector [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
@@ -31,6 +32,7 @@
  '(projectile-global-mode t)
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(save-place t nil (saveplace) "save the last cursor location for each file")
+ '(send-mail-function nil)
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map (quote ((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3"))))
