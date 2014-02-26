@@ -1,31 +1,59 @@
-;;; highlight-global.el --- package for highlighting multi symbols accross ALL buffer.
-;;;
-;;; When reading source code with EMACS, couples of related files will
-;;; be opened simultaneously. A function/variable defined in one file
-;;; will referenced by another function in another file. A highlight
-;;; of the corresponding function/vairalbe accross these buffers will
-;;; make code reading much more friendly.
-;;;
-;;; EMACS support multi highlight symbols in one buffer but not
-;;; accross multi buffers. This package provide highlighting of
-;;; symbols accross all buffer.
-;;;
-;;; When new highlight is being added, only the windows of current
-;;; frame are updated. Whenever frame configration change(say new
-;;; window is added to current frame), window's highlight will be
-;;; updated to make windows currently showing always has the updated
-;;; highlights. This way is much more effecient than iterating the
-;;; overall buffer-list to update highlights for every buffer.
-;;;
-;;; Multi symbols can be highlighted simultaneously. Different
-;;; highlights have different face. You could add your highlight face
-;;; to highlight-faces.
+;;; highlight-global.el --- package for highlighting multi symbols accross ALL buffers
 
-;; toggle highlight of current region(all symbol under cursor if region is not active)
-;; (global-set-key (kbd "M-\"") 'highlight-frame-toggle)
+;; Copyright 2013-2014 Glen Dai
+;; Author: Glen Dai <gafglen@gmail.com>
+;; Keywords: highlight
+;; URL: https://github.com/glen-dai/highlight-global
+;; Version: 0.01
 
-;; clear all highlight of current frame
-;; (global-set-key (kbd "M-+") 'clear-highlight-frame)
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; When reading source code with EMACS, couples of related files will
+;; be opened simultaneously. A function/variable defined in one file
+;; will be referenced by another function in another file. A
+;; highlight of the corresponding function/vairalbe accross these
+;; buffers will make code reading much more friendly.
+
+;; EMACS support multi highlight symbols in one buffer but not
+;; accross multi buffers. This package provide highlighting of
+;; symbols accross all buffer.
+
+;; When new highlight is being added, only the windows of current
+;; frame are updated. Whenever frame configration change(say new
+;; window is added to current frame), window's highlight will be
+;; updated to make windows currently showing always has the updated
+;; highlights. This way is much more effecient than iterating the
+;; overall buffer-list to update highlights for every buffer.
+;;
+;; Multi symbols can be highlighted simultaneously. Different
+;; highlights have different face. You could add your highlight face
+;; to highlight-faces.
+
+;;; How to use?
+
+;; Put the package into load-path, and load the packaget
+;;     (require 'highlight-global)
+
+;; Toggle highlight of current region (or symbol under cursor if
+;; region is not active) and bind it like this:
+;;     (global-set-key (kbd "M-H") 'highlight-frame-toggle)
+
+;; Clear all highlight of current frame, and bind it like this:
+;;     (global-set-key (kbd "M-C") 'clear-highlight-frame)
+
 
 (require 'hi-lock)
 (setq hi-lock-file-patterns-policy 'never)
@@ -142,12 +170,12 @@ symbol under cursor"
   "Check if HI is already highlighted by checking
 global-highlight-list"
   (let ((the-found-one nil))
-  (progn
-    (dolist (item global-highlight-list)
-      (when (equal hi (car item))
-        (progn
-          (setq the-found-one item))))
-    the-found-one)))
+    (progn
+      (dolist (item global-highlight-list)
+        (when (equal hi (car item))
+          (progn
+            (setq the-found-one item))))
+      the-found-one)))
 
 (defun highlight-frame-toggle ()
   (interactive)
@@ -157,21 +185,21 @@ global-highlight-list"
     (if (stringp thing-to-highlight)
         (progn
           (setq hi (check-whether-highlighted thing-to-highlight))
-        ;; toogle highlight, 2 cases
-        ;; 1) thing already unlighlight and stored in list, unhighight it
-        ;; 2) new highlight, highlight it and add it to list
+          ;; toogle highlight, 2 cases
+          ;; 1) thing already unlighlight and stored in list, unhighight it
+          ;; 2) new highlight, highlight it and add it to list
           (if hi
-            ;; 1) toogle off
-            ;;    1. delete item from global-list && update timestamp
-            ;;    2. set new-unhighlight and unhighight each window
-            (progn
-              (setq new-unhighlight hi)
-              (release-face (cdr new-unhighlight))
-              (setq global-highlight-list
-                    (delete new-unhighlight global-highlight-list))
-              (setq global-highlight-list-update-timestamp (float-time))
-              (walk-windows 'unhighlight-window))
-          ;; 2) new highlight
+              ;; 1) toogle off
+              ;;    1. delete item from global-list && update timestamp
+              ;;    2. set new-unhighlight and unhighight each window
+              (progn
+                (setq new-unhighlight hi)
+                (release-face (cdr new-unhighlight))
+                (setq global-highlight-list
+                      (delete new-unhighlight global-highlight-list))
+                (setq global-highlight-list-update-timestamp (float-time))
+                (walk-windows 'unhighlight-window))
+            ;; 2) new highlight
             (progn
               (setq new-highlight (cons thing-to-highlight (find-and-use-face)))
               (setq global-highlight-list (cons new-highlight global-highlight-list))
@@ -228,8 +256,8 @@ highlight"
   (interactive)
   (save-excursion
     (walk-windows #'(lambda (win)
-                    (select-window win)
-                    (highlight-update-current-buffer)))))
+                      (select-window win)
+                      (highlight-update-current-buffer)))))
 
 ;; Automatically update new buffer's highlights when any windows on
 ;; current frame changed. This will make buffers that to be showned
@@ -244,3 +272,5 @@ highlight"
   (add-to-list 'window-size-change-functions 'update-highlight-fixup))
 
 (provide 'highlight-global)
+
+;;; highlight-global.el ends here
