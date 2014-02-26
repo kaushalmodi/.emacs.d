@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-18 12:44:14 kmodi>
+;; Time-stamp: <2014-02-25 11:51:50 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -322,6 +322,33 @@
 (defun disable-fringe ()
   (interactive)
   (fringe-mode '(0 . 0) ))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Generic mode to syntax highlight .vimrc files (I know, blasphemy!)
+;; Source: http://stackoverflow.com/questions/4236808/syntax-highlight-a-vimrc-file-in-emacs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define-generic-mode 'vimrc-generic-mode
+    '()
+    '()
+    '(("^[\t ]*:?\\(!\\|ab\\|map\\|unmap\\)[^\r\n\"]*\"[^\r\n\"]*\\(\"[^\r\n\"]*\"[^\r\n\"]*\\)*$"
+       (0 font-lock-warning-face))
+      ("\\(^\\|[\t ]\\)\\(\".*\\)$"
+      (2 font-lock-comment-face))
+      ("\"\\([^\n\r\"\\]\\|\\.\\)*\""
+       (0 font-lock-string-face)))
+    '("/vimrc\\'" "\\.vim\\(rc\\)?\\'")
+    '((lambda ()
+        (modify-syntax-entry ?\" ".")))
+    "Generic mode for Vim configuration files.")
+
+(setq auto-mode-alist
+      (append
+       '(
+         ("\\.vimrc.*\\'" . vimrc-generic-mode)
+         ("\\.vim\\'" . vimrc-generic-mode)
+         ) auto-mode-alist))
+
 
 (setq setup-visual-loaded t)
 (provide 'setup-visual)
