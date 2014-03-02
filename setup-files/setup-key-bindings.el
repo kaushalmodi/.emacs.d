@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-26 10:31:06 kmodi>
+;; Time-stamp: <2014-03-02 14:49:41 kmodi>
 
 ;; KEY BINDINGS
 
@@ -234,11 +234,6 @@
   (global-set-key (kbd "C-c C-d")     'insert-current-date-time)
   (global-set-key (kbd "C-c C-t")     'insert-current-time)
 
-  (global-set-key (kbd "<C-S-up>")    'drag-stuff-up)
-  (global-set-key (kbd "<C-S-down>")  'drag-stuff-down)
-  (global-set-key (kbd "<C-S-left>")  'drag-stuff-left)
-  (global-set-key (kbd "<C-S-right>") 'drag-stuff-right)
-
   (global-set-key (kbd "C-S-d")       'duplicate-current-line-or-region)
 
   ;; override the binding of `C-x =` for `what-cursor-position'
@@ -250,6 +245,14 @@
 
   (define-key modi-map (kbd "x")      'eval-and-replace-last-sexp) ;; C-x m x
   (define-key modi-map (kbd "c")      'toggle-comment-on-line-or-region) ;; C-x m c
+  )
+
+(when (boundp 'setup-drag-stuff-loaded)
+  (global-set-key (kbd "C-\"")         'drag-stuff-up)
+  (global-set-key (kbd "C-:")         'drag-stuff-up)
+  (global-set-key (kbd "C-?")         'drag-stuff-down)
+  (global-set-key (kbd "<C-S-left>")  'drag-stuff-left)
+  (global-set-key (kbd "<C-S-right>") 'drag-stuff-right)
   )
 
 ;; Insert a newline at the current cursor location, while not moving the cursor
@@ -416,13 +419,19 @@
   ;; Navigation
   (key-chord-define-global "m,"   'beginning-of-buffer)
   (key-chord-define-global ",."   'end-of-buffer)
-  (key-chord-define-global "]'"   'scroll-down)
-  (key-chord-define-global "'/"   'scroll-up)
 
   (key-chord-define-global "p["   'windmove-left)
   (key-chord-define-global "[]"   'windmove-right)
 
-  (when (boundp                   'setup-navigation-loaded)
+  (when (boundp 'setup-w3m-loaded)
+    (key-chord-define-global "-=" 'wicked/toggle-w3m)
+    )
+
+  ;; Alternate binding for `ace-jump-mode'
+  (when (boundp 'setup-ace-jump-mode-loaded)
+    (key-chord-define-global "]\\" 'ace-jump-mode))
+
+  (when (boundp 'setup-navigation-loaded)
     ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
     (key-chord-define-global "fg" 'iy-go-to-char)
