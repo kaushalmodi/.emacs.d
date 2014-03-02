@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-17 11:43:12 kmodi>
+;; Time-stamp: <2014-02-26 16:20:24 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -35,11 +35,13 @@
         ;; In lisp code you have to give it a function. So we need to change the
         ;; replacement string to,
         ;; `(lambda (string) (concat ":" (upcase (match-string 1 string)) ":")))`.
-        ("/proj.*?/\\([a-z0-9_]\\{2\\}\\).*?\\([a-z0-9_]\\)/.+?/\\([a-z0-9_]\\{3\\}\\).*?/"
+        ("/proj.*?/\\([a-z0-9_]\\{2\\}\\).*?\\([a-z0-9_]\\)/[so]+_\\([a-z0-9]+\\)/\\([a-z0-9_]\\{3\\}\\).*?/"
          (lambda (string) (concat ":"
                                   (capitalize (match-string 1 string))
                                   (upcase (match-string 2 string))
-                                  ":" (upcase (match-string 3 string)) ":"
+                                  (when (not (string= (match-string 3 string) (getenv "USER")))
+                                    (concat "[" (match-string 3 string) "]"))
+                                  ":" (upcase (match-string 4 string)) ":"
                                   ) ) )
         (":\\(.*\\):DIG:tb/"                        ":\\1:TB:" )
         (":\\(.*\\):TB:uvm/"                        ":\\1:UVM:" )
