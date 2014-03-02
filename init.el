@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-26 10:30:15 kmodi>
+;; Time-stamp: <2014-03-02 11:04:41 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -41,7 +41,9 @@
     soft-stone-theme
     stripe-buffer
     visual-regexp
+    w3m ;; web-browsing in emacs
     web-mode
+    xkcd ;; comic
     yasnippet
     zenburn-theme
     )
@@ -80,6 +82,8 @@
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
 (require 'setup-visual-regexp)
+(require 'setup-w3m)
+(require 'setup-xkcd)
 (require 'setup-yasnippet)
 ;; (require 'setup-linum)
 ;; (require 'setup-projectile)
