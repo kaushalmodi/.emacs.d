@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-21 15:46:12 kmodi>
+;; Time-stamp: <2014-02-26 13:16:59 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -46,3 +46,7 @@
 
 ;; (4) How to insert superscript
 ;; `C-x 8 ^ 2` inserts ²
+
+;; (5) Killing buffers from an emacsclient frame
+;; `C-x #`   Kills the buffer in emacsclient frame without killing the frame
+;; `C-x 5 0` Kills the emacsclient frame
