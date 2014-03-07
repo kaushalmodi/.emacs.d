@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-02 11:04:41 kmodi>
+;; Time-stamp: <2014-03-07 15:25:47 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -19,6 +19,7 @@
     color-theme-sanityinc-solarized
     dired+ dired-single
     drag-stuff
+    etags-select ac-etags ctags-update
     expand-region
     fill-column-indicator
     guide-key
@@ -44,6 +45,7 @@
     w3m ;; web-browsing in emacs
     web-mode
     xkcd ;; comic
+    yaml-mode ;; Useful for editing Octopress' _config.yml
     yasnippet
     zenburn-theme
     )
@@ -95,6 +97,7 @@
 (require 'setup-matlab)
 (require 'setup-markdown)
 (require 'setup-web-mode)
+(require 'setup-yaml-mode)
 ;; (require 'setup-latex)
 ;; (require 'setup-tcl)
 ;; (require 'setup-hspice)
@@ -108,6 +111,7 @@
 (require 'setup-search)
 (require 'setup-print)
 (require 'setup-desktop)
+(require 'setup-ctags)
 (require 'setup-misc)
 ;; (require 'setup-occur) ;; not required as the helm-multi-swoop-all does awesome job
 
