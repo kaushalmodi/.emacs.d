@@ -1,4 +1,4 @@
-;; Time-stamp: <2013-12-06 14:25:21 kmodi>
+;; Time-stamp: <2014-03-07 13:44:42 kmodi>
 
 ;; Popwin
 ;; Source: https://github.com/m2ym/popwin-el
@@ -9,7 +9,11 @@
 
 (require 'popwin)
 
+;; etags-select
+(push "*etags-select*" popwin:special-display-config)
+
 (popwin-mode 1)
+
 
 (setq setup-popwin-loaded t)
 (provide 'setup-popwin)
