@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-25 11:51:50 kmodi>
+;; Time-stamp: <2014-03-07 11:19:53 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -188,11 +188,10 @@
 ;; else show only the buffer name (*scratch*, *Messages*, etc)
 ;; Append the value of PRJ_NAME env var to the above.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq project-name (getenv "PRJ_NAME"))
 (setq frame-title-format
       (list '(buffer-file-name "%f"
                                (dired-directory dired-directory "%b"))
-            " [" project-name "]"))
+            " [" (getenv "PRJ_NAME") "]"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
