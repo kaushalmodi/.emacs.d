@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 15:10:05 kmodi>
+;; Time-stamp: <2014-03-07 15:33:22 kmodi>
 
 ;; ctags, etags
 
@@ -100,6 +100,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ctags-update
 ;; Source: https://github.com/jixiuf/helm-etags-plus
+(require 'ctags-update)
 
 ;; Auto update
 (setq ctags-update-delay-seconds (* 60 60)) ;; every 1 hour
