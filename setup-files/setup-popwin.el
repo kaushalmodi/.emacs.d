@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 13:44:42 kmodi>
+;; Time-stamp: <2014-03-07 15:59:54 kmodi>
 
 ;; Popwin
 ;; Source: https://github.com/m2ym/popwin-el
@@ -10,7 +10,9 @@
 (require 'popwin)
 
 ;; etags-select
-(push "*etags-select*" popwin:special-display-config)
+;; (push "*etags-select*" popwin:special-display-config)
+;; Above doesn't work. But I figured that you can quite the etags-select
+;; buffer by pressing q
 
 (popwin-mode 1)
 

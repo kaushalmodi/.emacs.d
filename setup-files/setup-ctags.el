@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 15:33:22 kmodi>
+;; Time-stamp: <2014-03-07 16:06:40 kmodi>
 
 ;; ctags, etags
 
@@ -45,6 +45,22 @@
 ;; etags-select
 ;; Source: http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags/
 (require 'etags-select)
+
+(define-key etags-select-mode-map (kbd "C-g")   'etags-select-quit)
+;; Also quit etags-select when cursor moves to another window
+(define-key etags-select-mode-map (kbd "C-x o") 'etags-select-quit)
+(define-key etags-select-mode-map (kbd "C-p")   'etags-select-previous-tag)
+(define-key etags-select-mode-map (kbd "C-n")   'etags-select-next-tag)
+;; default etags-select bindings
+;;  Return -> 'etags-select-goto-tag
+;;  M-Return -> 'etags-select-goto-tag-other-window
+;;  p -> 'etags-select-previous-tag
+;;  n -> 'etags-select-next-tag
+;;  q -> 'etags-select-quit
+;;  0 -> (etags-select-by-tag-number "0")
+;;  1 -> (etags-select-by-tag-number "1")
+;;  ..                               ..
+;;  9 -> (etags-select-by-tag-number "9")
 
 ;; (defun my-find-tag ()
 ;;   (interactive)
