@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-02 14:49:41 kmodi>
+;; Time-stamp: <2014-03-07 14:46:20 kmodi>
 
 ;; KEY BINDINGS
 
@@ -435,9 +435,19 @@
     ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
     (key-chord-define-global "fg" 'iy-go-to-char)
-    (key-chord-define-global "FF" 'iy-go-to-char)
+    (key-chord-define-global "zx" 'iy-go-to-char-backward)
     (key-chord-define-global "bb" 'iy-go-to-char-backward)
     (key-chord-define-global "BB" 'iy-go-to-char-backward))
+  )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ctags
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (boundp 'setup-ctags-loaded)
+  ;; overriding the default binding to `find-tag'
+  (global-set-key (kbd "M-.") 'etags-select-find-tag-at-point)
   )
 
 
