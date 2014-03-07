@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 14:46:20 kmodi>
+;; Time-stamp: <2014-03-07 17:04:08 kmodi>
 
 ;; KEY BINDINGS
 
@@ -83,8 +83,7 @@
 ;; Setting a secondary key binding for saving session as `S-F2` doesn't work
 ;; when emacs is in terminal mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (boundp 'setup-desktop-loaded)
-  (define-key modi-map (kbd "d")  'session-save)) ;; C-x m d (save desktop)
+(define-key modi-map (kbd "d")  'desktop-save-in-desktop-dir) ;; C-x m d (save desktop)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -172,6 +171,7 @@
                     (dired-single-magic-buffer default-directory)))
   )
 
+(define-key modi-map (kbd "y")    'bury-buffer) ;; C-x m y
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Navigation
@@ -370,10 +370,8 @@
   ;; binding, eg. while editing .tmux.conf
   ;; (define-key conf-mode-map (kbd "C-c SPC") nil)
   ;; FIXME: "C-c SPC" binding conflicts with default bindings in conf-mode-map
-  ;;        org-mode. Need to fix that. For now, creating an alternate
-  ;;        binding for ace-jump-mode
-  ;; Alternate binding for `ace-jump-mode'
-  (define-key modi-map (kbd "a")  'ace-jump-mode) ;; C-x m a
+  ;;        org-mode. Need to fix that. For now, ace-jump-mode is bound to a
+  ;;        key-chord.
   )
 ;;         `ace-jump-mode-BINDING' -> `ace-jump-word-mode'
 ;;     C-u `ace-jump-mode-BINDING' -> `ace-jump-char-mode'
@@ -429,7 +427,7 @@
 
   ;; Alternate binding for `ace-jump-mode'
   (when (boundp 'setup-ace-jump-mode-loaded)
-    (key-chord-define-global "]\\" 'ace-jump-mode))
+    (key-chord-define-global "l;" 'ace-jump-mode))
 
   (when (boundp 'setup-navigation-loaded)
     ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
