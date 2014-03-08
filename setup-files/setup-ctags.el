@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 16:06:40 kmodi>
+;; Time-stamp: <2014-03-08 16:13:14 kmodi>
 
 ;; ctags, etags
 
@@ -135,11 +135,16 @@
 ;;    turn on `ctags-auto-update-mode'.
 
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; helm-etags+
-;; ;; Source: https://github.com/jixiuf/helm-etags-plus
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; helm-etags+
+;; Source: https://github.com/jixiuf/helm-etags-plus
 
-;; (require 'helm-etags+)
+(require 'helm-etags+)
+
+;; dev suggested setting below variables to avoid the issue I posted on his
+;; github: https://github.com/jixiuf/helm-etags-plus/issues/9
+(setq find-file-visit-truename nil)
+(setq helm-etags+-follow-symlink-p nil)
 
 
 (setq setup-ctags-loaded t)
