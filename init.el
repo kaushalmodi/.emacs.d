@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 15:25:47 kmodi>
+;; Time-stamp: <2014-03-09 03:34:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -31,6 +31,7 @@
     key-chord ;; map pairs of simultaneously pressed keys to commands
     leuven-theme ;; awesome white background theme
     magit ;; for git management
+    manage-minor-mode
     markdown-mode
     multiple-cursors
     org ;; Get the latest org-mode package from Melpa
@@ -75,6 +76,7 @@
 (require 'setup-hl-line+)
 (require 'setup-key-chord)
 (require 'setup-magit)
+(require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-org)
 (require 'setup-rainbow-delimiters)
