@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 15:13:15 kmodi>
+;; Time-stamp: <2014-03-09 00:53:22 kmodi>
 
 ;; magit
 ;; Source: https://github.com/magit/magit
@@ -11,6 +11,7 @@
                          )
       )
 
+(magit-auto-revert-mode -1) ;; Disable magit auto revert
 
 (setq setup-magit-loaded t)
 (provide 'setup-magit)
