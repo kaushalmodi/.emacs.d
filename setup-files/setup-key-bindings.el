@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-08 16:57:30 kmodi>
+;; Time-stamp: <2014-03-09 22:06:57 kmodi>
 
 ;; KEY BINDINGS
 
@@ -445,7 +445,8 @@
 
 (when (boundp 'setup-ctags-loaded)
   ;; overriding the default binding to `find-tag'
-  (global-set-key (kbd "M-.") 'etags-select-find-tag-at-point)
+  (global-set-key (kbd "M-.") 'update-etags-table-then-find-tag)
+  ;; (global-set-key (kbd "M-.") 'etags-select-find-tag-at-point)
   ;; (global-set-key (kbd "M-.") 'helm-etags+-select)
   )
 
