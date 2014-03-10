@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-09 04:57:01 kmodi>
+;; Time-stamp: <2014-03-09 22:08:35 kmodi>
 
 ;; ctags, etags
 
@@ -14,18 +14,45 @@
 ;; Don't warn when TAGS files are large
 (setq large-file-warning-threshold nil)
 
-;; List all directories from which you want to read the TAGS files
-(setq tags-table-list '("~/.emacs.d"))
 
-(if (boundp 'setup-sos-loaded)
-    (add-to-list 'tags-table-list project-root t))
+;; ;; List all directories from which you want to read the TAGS files
+;; (setq tags-table-list `(,user-emacs-directory))
+;; (if (boundp 'setup-sos-loaded)
+;;     (add-to-list 'tags-table-list project-root t))
+;; (defun build-ctags ()
+;;   (interactive)
+;;   (loop for dir in tags-table-list do
+;;         (message (concat "building tags in " dir))
+;;         (shell-command (concat "ctags -Re -f " dir "/TAGS " dir)))
+;;   (message "tags built successfully"))
 
-(defun build-ctags ()
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; etags-table
+;; Depending on the location of the file in buffer, the respetive TAGS file is
+;; opened on doing a tag find.
+(require 'etags-table)
+(setq etags-table-alist
+      (list
+       `(,(concat user-emacs-directory "/.*") ,(concat user-emacs-directory "/TAGS"))
+       ))
+;; (when (boundp 'project-root) ;; add-to-list if project-root symbol is defined
+;;     (add-to-list 'etags-table-alist
+;;                  `(,(concat project-root "/.*") ,(concat project-root "/TAGS")) t))
+(setq etags-table-search-up-depth 15) ;; Max depth to search up for a tags file.  nil means don't search.
+
+
+;; Below function comes useful when you change the project-root symbol to a
+;; different value (when switching projects)
+(defun update-etags-table-then-find-tag ()
+  "Update etags-table based on the current value of project-root and then do
+tag find"
   (interactive)
-  (loop for dir in tags-table-list do
-        (message (concat "building tags in " dir))
-        (shell-command (concat "ctags -Re -f " dir "/TAGS " dir)))
-  (message "tags built successfully"))
+  (when (boundp 'project-root) ;; add-to-list if project-root symbol is defined
+    (add-to-list 'etags-table-alist
+                 `(,(concat project-root "/.*") ,(concat project-root "/TAGS")) t))
+  (etags-select-find-tag-at-point)
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
