@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-09 03:34:30 kmodi>
+;; Time-stamp: <2014-03-09 21:48:55 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -19,7 +19,7 @@
     color-theme-sanityinc-solarized
     dired+ dired-single
     drag-stuff
-    etags-select ac-etags ctags-update
+    etags-select etags-table ac-etags ctags-update
     expand-region
     fill-column-indicator
     guide-key
