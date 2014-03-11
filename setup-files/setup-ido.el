@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-11 15:20:29 kmodi>
+;; Time-stamp: <2014-03-11 13:58:35 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -57,10 +57,13 @@
 ;; ;; Always rescan buffer for imenu
 ;; (set-default 'imenu-auto-rescan t)
 
-;; ;; Ido at point (C-,)
-;; (require 'ido-at-point)
-;; (ido-at-point-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ido at point (Replacement for auto-complete)
+;; https://github.com/katspaugh/ido-at-point
+(require 'ido-at-point)
+(ido-at-point-mode t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use ido everywhere, example: when searching for var name `C-h v`, searching
 ;; for function name `C-h f`, etc
 (require 'ido-ubiquitous)
@@ -78,10 +81,11 @@
 ;; (ido-ubiquitous-use-new-completing-read yas-visit-snippet-file 'yasnippet)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sort ido filelist by mtime instead of alphabetically
 ;; source: http://www.emacswiki.org/emacs/InteractivelyDoThings
 (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
-(add-hook 'ido-make-dir-list-hook 'ido-sort-mtime)
+(add-hook 'ido-make-dir-list-hook  'ido-sort-mtime)
 (defun ido-sort-mtime ()
   (setq ido-temp-list
         (sort ido-temp-list
