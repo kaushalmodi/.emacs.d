@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-05 02:33:17 Kaushal>
+;; Time-stamp: <2014-03-11 12:03:47 kmodi>
 
 ;; Verilog
 
@@ -15,23 +15,6 @@
          ("\\.f\\'"          . verilog-mode)
          ("\\.vinc\\'"       . verilog-mode)
          ) auto-mode-alist))
-
-
-;; Replace tabs with spaces when saving files in verilog-mode
-(add-hook 'verilog-mode-hook
-          '(lambda ()
-             (add-hook 'local-write-file-hooks
-                       (lambda()
-                         (untabify (point-min) (point-max))
-                         nil))))
-
-;; ;; Make _ visible to commands like `M-d`, `M-b`, `M-f`, etc
-;; (add-hook 'verilog-mode-hook
-;;           '(lambda()
-;;              ;; Specify the underscore character as a member of emacs’ punctuation class
-;;              (modify-syntax-entry ?_ "_")))
-;; ** Problem with the above code snippet is that the syntax highlighting gets
-;; messed up. In a string like "spi_reg_abc", reg gets highlighted (which shouldn't)
 
 ;; Verilog mode customization
 (setq verilog-indent-level            3
@@ -51,6 +34,24 @@
       verilog-auto-newline             nil
       verilog-tab-to-comment           t
       )
+
+(defun my-verilog-mode-customizations()
+  ;; Unbind the backtick binding done to `electric-verilog-tick'
+  ;; With binding done to electric-verilog-tick, it's not possible to type
+  ;; backticks on multiple lines simultaneously in multiple-cursors mode
+  (define-key verilog-mode-map "\`" nil)
+  ;; Replace tabs with spaces when saving files in verilog-mode
+  (add-hook 'local-write-file-hooks
+            '(lambda()
+               (untabify (point-min) (point-max))
+               nil))
+  ;; ;; Make _ visible to commands like `M-d`, `M-b`, `M-f`, etc
+  ;; ;; Specify the underscore character as a member of emacs’ punctuation class
+  ;; (modify-syntax-entry ?_ "_")
+  ;; ;; ** Problem with the above code snippet is that the syntax highlighting gets
+  ;; ;; messed up. In a string like "spi_reg_abc", reg gets highlighted (which shouldn't)
+  )
+(add-hook 'verilog-mode-hook 'my-verilog-mode-customizations)
 
 ;; Commented because it doesn't work as of now
 ;; ;; Code folding
