@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-09 22:06:57 kmodi>
+;; Time-stamp: <2014-03-11 13:45:31 kmodi>
 
 ;; KEY BINDINGS
 
@@ -308,12 +308,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when (boundp 'setup-multiple-cursors-loaded)
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->")         'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
+  (global-set-key (kbd "C-S-c C-S-c")   'mc/edit-lines)
+  (global-set-key (kbd "C->")           'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<")           'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<")       'mc/mark-all-like-this)
 
-  (define-key modi-map (kbd "m")      'mc/edit-all-like-this) ;; C-x m m
+  (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
+
+  (define-key modi-map (kbd "m")        'mc/mark-all-like-this-dwim) ;; C-x m m
   )
 
 
@@ -406,6 +408,9 @@
 
   ;; Editing
   (key-chord-define-global "UU"   'undo)
+  (key-chord-define-global "]'"   'completion-at-point)
+  (key-chord-define-global "[;"   'completion-at-point)
+  (key-chord-define-global ";."   'completion-at-point)
 
   ;; Windows and buffers
   (key-chord-define-global "OO"   'other-window)
@@ -432,7 +437,7 @@
   (when (boundp 'setup-navigation-loaded)
     ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-    (key-chord-define-global "fg" 'iy-go-to-char)
+    (key-chord-define-global "df" 'iy-go-to-char)
     (key-chord-define-global "zx" 'iy-go-to-char-backward)
     (key-chord-define-global "bb" 'iy-go-to-char-backward)
     (key-chord-define-global "BB" 'iy-go-to-char-backward))
