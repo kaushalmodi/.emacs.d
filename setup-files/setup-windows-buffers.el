@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-07 14:13:00 kmodi>
+;; Time-stamp: <2014-03-11 16:55:28 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -238,6 +238,13 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;;   list instead of the selected frame's buffer list.
 
 
+;; Customizing recentf mode map
+(define-key recentf-dialog-mode-map (kbd "/") 'isearch-forward)
+(define-key recentf-dialog-mode-map (kbd "n") 'isearch-repeat-forward)
+(define-key recentf-dialog-mode-map (kbd "N") 'isearch-repeat-backward)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scroll without moving the point/cursor
 (defun scroll-up-dont-move-point ()
   "Scroll up by 1 line without moving the point."
