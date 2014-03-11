@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-09 21:48:55 kmodi>
+;; Time-stamp: <2014-03-11 16:58:52 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -13,20 +13,22 @@
     ;; header2 ;; INSTR_UNCOMMENT_THIS_LINE
     ;; highlight-symbol ;; The highlight-global package does a better job
     ace-jump-mode
+    ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
+                      ;; You need to have ag installed on your machine
     anzu ;; shows total search hits in mode line, better query-replace alternative
-    auto-complete fuzzy
+    ;; auto-complete fuzzy
     bookmark+ ;; able to bookmark desktop sessions
     color-theme-sanityinc-solarized
     dired+ dired-single
     drag-stuff
-    etags-select etags-table ac-etags ctags-update
+    etags-select etags-table ctags-update ;; ac-etags
     expand-region
     fill-column-indicator
     guide-key
     hardcore-mode
     helm helm-swoop
     hl-line+
-    ido-vertical-mode flx-ido ido-ubiquitous
+    ido-vertical-mode flx-ido ido-ubiquitous ido-at-point
     iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
     key-chord ;; map pairs of simultaneously pressed keys to commands
     leuven-theme ;; awesome white background theme
@@ -37,6 +39,7 @@
     org ;; Get the latest org-mode package from Melpa
     popwin ;; Open windows like *Help*, *Completions*, etc in minibuffer
     rainbow-delimiters
+    region-bindings-mode ;; complements really well with multiple-cursors
     smart-compile
     smart-mode-line popup
     smex ;; smart M-x
@@ -62,7 +65,8 @@
 ;; Set up extensions/packages
 (eval-after-load 'ido '(require 'setup-ido))
 (require 'setup-ace-jump-mode)
-(require 'setup-auto-complete)
+(require 'setup-ag)
+;; (require 'setup-auto-complete)
 (require 'setup-bookmark+)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
@@ -104,7 +108,6 @@
 ;; (require 'setup-tcl)
 ;; (require 'setup-hspice)
 
-;; custom packages
 (require 'setup-sos) ;; INSTR_DELETE_THIS_LINE
 (require 'setup-windows-buffers)
 (require 'setup-registers)
@@ -118,6 +121,8 @@
 ;; (require 'setup-occur) ;; not required as the helm-multi-swoop-all does awesome job
 
 ;; NOTE: Load below ONLY after loading all the packages
+;; region-bindings-mode has bindings for multiple-cursors, visual-regexp, anzu
+(require 'setup-region-bindings-mode)
 (require 'setup-key-bindings)
 
 (setq emacs-initialized t)
