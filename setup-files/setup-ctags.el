@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-09 22:08:35 kmodi>
+;; Time-stamp: <2014-03-11 13:04:07 kmodi>
 
 ;; ctags, etags
 
@@ -77,30 +77,30 @@ tag find"
 ;;  9 -> (etags-select-by-tag-number "9")
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ac-etags
-(require 'ac-etags)
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ac-etags
+;; (require 'ac-etags)
 
-;; Required number of characters of this source completion. You should change
-;; this value before calling ac-etags-setup
-(setq ac-etags-requires 3) ;; default = 3
+;; ;; Required number of characters of this source completion. You should change
+;; ;; this value before calling ac-etags-setup
+;; (setq ac-etags-requires 3) ;; default = 3
 
-(eval-after-load "etags"
-  '(progn
-      (ac-etags-setup)))
+;; (eval-after-load "etags"
+;;   '(progn
+;;       (ac-etags-setup)))
 
-(add-hook 'verilog-mode-hook    'ac-etags-ac-setup)
-(add-hook 'matlab-mode-hook     'ac-etags-ac-setup)
-(add-hook 'emacs-lisp-mode-hook 'ac-etags-ac-setup)
+;; (add-hook 'verilog-mode-hook    'ac-etags-ac-setup)
+;; (add-hook 'matlab-mode-hook     'ac-etags-ac-setup)
+;; (add-hook 'emacs-lisp-mode-hook 'ac-etags-ac-setup)
 
-;; `ac-etags-setup'
-;; Setup auto-complete source for etags. This command must be called at the beginning.
+;; ;; `ac-etags-setup'
+;; ;; Setup auto-complete source for etags. This command must be called at the beginning.
 
-;; `ac-etags-ac-setup'
-;; Setup etags auto-complete source and enable auto-complete-mode if auto-complete is not enabled.
+;; ;; `ac-etags-ac-setup'
+;; ;; Setup etags auto-complete source and enable auto-complete-mode if auto-complete is not enabled.
 
-;; `ac-etags-clear-cache'
-;; Clear completions cache. You should clear cache if you switch project and TAGS file.
+;; ;; `ac-etags-clear-cache'
+;; ;; Clear completions cache. You should clear cache if you switch project and TAGS file.
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
