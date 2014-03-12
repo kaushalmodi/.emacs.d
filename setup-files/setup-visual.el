@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-07 11:19:53 kmodi>
+;; Time-stamp: <2014-03-12 16:10:30 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -23,53 +23,18 @@
 ;; THEME and COLORS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defvar default-dark-theme  'zenburn)
+(defvar default-light-theme 'leuven)
+(defvar default-theme       'zenburn)
+
 ;; zenburn
 (defun zenburn ()
   "Activate zenburn theme."
   (interactive)
   (setq dark-theme t)
   ;; disable other themes before setting this theme
-  (disable-theme 'sanityinc-solarized-dark)
-  (disable-theme 'sanityinc-solarized-light)
-  (disable-theme 'soft-stone)
   (disable-theme 'leuven)
   (load-theme    'zenburn t))
-
-;; solarized-dark
-(defun light ()
-  "Activate a light color theme."
-  (interactive)
-  (setq dark-theme nil)
-  ;; disable other themes before setting this theme
-  (disable-theme 'zenburn)
-  (disable-theme 'sanityinc-solarized-dark)
-  (disable-theme 'soft-stone)
-  (disable-theme 'leuven)
-  (load-theme    'sanityinc-solarized-light))
-
-;; solarized-light
-(defun dark ()
-  "Activate a dark color theme."
-  (interactive)
-  (setq dark-theme t)
-  ;; disable other themes before setting this theme
-  (disable-theme 'zenburn)
-  (disable-theme 'sanityinc-solarized-light)
-  (disable-theme 'soft-stone)
-  (disable-theme 'leuven)
-  (load-theme    'sanityinc-solarized-dark))
-
-;; soft-stone theme
-(defun soft-stone ()
-  "Activate soft-stone theme."
-  (interactive)
-  (setq dark-theme nil)
-  ;; disable other themes before setting this theme
-  (disable-theme 'zenburn)
-  (disable-theme 'sanityinc-solarized-light)
-  (disable-theme 'sanityinc-solarized-dark)
-  (disable-theme 'leuven)
-  (load-theme    'soft-stone))
 
 ;;leuven theme
 (defun leuven ()
@@ -78,17 +43,14 @@
   (setq dark-theme nil)
   ;; disable other themes before setting this theme
   (disable-theme 'zenburn)
-  (disable-theme 'sanityinc-solarized-light)
-  (disable-theme 'sanityinc-solarized-dark)
-  (disable-theme 'soft-stone)
   (load-theme    'leuven))
 
 (setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
       font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
       )
 
-;; Set the theme
-(zenburn)
+(funcall default-theme) ;; Set the default theme
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FONT SIZE
@@ -206,7 +168,7 @@
   (set-face-attribute 'default nil :height (* font-size-pt 10))
   (set-frame-position (selected-frame) 0 0) ;; pixels x y from upper left
   (set-frame-size (selected-frame) 80 25)  ;; rows and columns w h
-  (leuven) ;; change to a light theme
+  (funcall default-light-theme) ;; change to default light theme
   (delete-other-windows)
   (setq presentation-mode-enabled t))
 
@@ -216,7 +178,7 @@
   (setq font-size-pt default-font-size-pt)
   (set-face-attribute 'default nil :height (* font-size-pt 10))
   (full-screen-left)
-  (zenburn) ;; change to the default theme
+  (funcall default-theme) ;; change to default theme
   (split-window-right)
   (setq presentation-mode-enabled nil))
 
