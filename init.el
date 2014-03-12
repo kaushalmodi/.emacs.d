@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-11 16:58:52 kmodi>
+;; Time-stamp: <2014-03-12 15:44:28 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -18,7 +18,6 @@
     anzu ;; shows total search hits in mode line, better query-replace alternative
     ;; auto-complete fuzzy
     bookmark+ ;; able to bookmark desktop sessions
-    color-theme-sanityinc-solarized
     dired+ dired-single
     drag-stuff
     etags-select etags-table ctags-update ;; ac-etags
@@ -43,7 +42,6 @@
     smart-compile
     smart-mode-line popup
     smex ;; smart M-x
-    soft-stone-theme
     stripe-buffer
     visual-regexp
     w3m ;; web-browsing in emacs
