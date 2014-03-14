@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-11 13:58:35 kmodi>
+;; Time-stamp: <2014-03-12 23:24:02 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -97,6 +97,18 @@
    (delq nil (mapcar
               (lambda (x) (and (char-equal (string-to-char x) ?.) x))
               ido-temp-list))))
+
+
+;; Open recent files with IDO,
+;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
+;; http://emacsredux.com/blog/2013/04/05/recently-visited-files/
+(require 'recentf)
+(defun ido-find-recentf ()
+  "Find a recent file with IDO."
+  (interactive)
+  (let ((file (ido-completing-read "Find recent file: " recentf-list nil t)))
+    (when file
+      (find-file file))))
 
 
 (setq setup-ido-loaded t)
