@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-26 16:20:24 kmodi>
+;; Time-stamp: <2014-03-13 11:30:51 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -9,16 +9,19 @@
       sml/line-number-format "%4l"
       sml/mode-width 'full
       sml/hidden-modes
-      '(" Guide" ;; guide-key mode
-        " hc"    ;; hardcore mode
-        " AC"    ;; auto-complete
-        " vl"    ;; global visual line mode enabled
-        " Wrap"  ;; shows up if visual-line-mode is enabled for that buffer
-        " Helm"  ;; helm-mode
-        " Omit"  ;; Omit mode in dired
-        " yas"   ;; yasnippet
-        " drag"  ;; drag-stuff-mode
-        " ARev"  ;; magit
+      '(" Guide"     ;; guide-key mode
+        " hc"        ;; hardcore mode
+        " AC"        ;; auto-complete
+        " vl"        ;; global visual line mode enabled
+        " Wrap"      ;; shows up if visual-line-mode is enabled for that buffer
+        " Helm"      ;; helm-mode
+        " Omit"      ;; omit mode in dired
+        " yas"       ;; yasnippet
+        " drag"      ;; drag-stuff-mode
+        " ARev"      ;; magit
+        " VHl"       ;; volatile highlights
+        " ctagsU"    ;; ctags update
+        " Undo-Tree" ;; undo tree
         )
       sml/replacer-regexp-list
       '(
