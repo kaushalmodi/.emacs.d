@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-05 02:27:00 Kaushal>
+;; Time-stamp: <2014-03-13 13:34:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -166,6 +166,28 @@ Note the weekly scope of the command's precision.")
       (comment-or-uncomment-region (region-beginning) (region-end))
     (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
   (next-line))
+
+;; Make `kill-whole-line' indentation aware
+;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
+(defun smart-kill-whole-line (&optional arg)
+  "Kill whole line and move back to indentation.
+Kill the whole line with function `kill-whole-line' and then move
+`back-to-indentation'."
+  (interactive "p")
+  (kill-whole-line arg)
+  (back-to-indentation))
+
+(defun smart-open-line ()
+  "Move the current line down if there are no word chars between the start of line
+and the cursor. Else, insert empty line after the current line."
+  (interactive)
+  ;; Get the substring from start of line to current cursor position
+  (setq str-before-point (buffer-substring (line-beginning-position) (point)))
+  ;; (message "%s" str-before-point)
+  (if (not (string-match "\\w" str-before-point))
+      (open-line 1)
+    (progn (move-end-of-line nil)
+           (newline-and-indent))))
 
 
 (setq setup-editing-loaded t)
