@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-01-13 15:51:02 kmodi>
+;; Time-stamp: <2014-03-13 16:44:56 kmodi>
 
 ;; Highlight Symbol at point/cursor
 ;; (require 'highlight-symbol)
@@ -14,6 +14,11 @@
 ;; region (very useful when you want to highlight a pattern accross all symbols),
 ;; 2. Put cursor on a symbol to pick the symbol to highlight.
 (require 'highlight-global)
+
+;; Volatile Highlights
+;; https://github.com/k-talo/volatile-highlights.el
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
 
 
 (setq setup-highlight-loaded t)
