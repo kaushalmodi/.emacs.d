@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-11 13:45:31 kmodi>
+;; Time-stamp: <2014-03-14 09:28:56 kmodi>
 
 ;; KEY BINDINGS
 
@@ -137,7 +137,7 @@
   (global-set-key (kbd "C-x C-r")   'rename-current-buffer-file)
   (define-key modi-map (kbd "b")    'switch-to-scratch-and-back) ;; C-x m b
   ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-  (global-set-key (kbd "C-x C-o")   'recentf-open-files)
+  (global-set-key (kbd "C-x C-o")   'ido-find-recentf)
   (define-key modi-map (kbd "l")    'load-current-file) ;; C-x m l
   (global-set-key (kbd "C-S-t")     'undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
   (global-set-key (kbd "<M-up>")    'scroll-down-dont-move-point)
@@ -176,6 +176,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Navigation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; override the binding of `C-a` for `move-beginning-of-line'
+(global-set-key (kbd "C-a") 'back-to-indentation-or-beginning-of-line)
 
 ;; Move more quickly
 (global-set-key (kbd "C-S-n")
@@ -243,6 +246,11 @@
   ;; lines must have the same number of columns of groups of non-space characters
   (global-set-key (kbd "C-x |")       'align-columns)
 
+  (global-set-key (kbd "C-k")         'kill-line)
+  (global-set-key (kbd "C-S-k")       'smart-kill-whole-line)
+  ;; override the binding of `C-o` for `open-line'
+  (global-set-key (kbd "C-o")         'smart-open-line)
+
   (define-key modi-map (kbd "x")      'eval-and-replace-last-sexp) ;; C-x m x
   (define-key modi-map (kbd "c")      'toggle-comment-on-line-or-region) ;; C-x m c
   )
@@ -255,8 +263,6 @@
   (global-set-key (kbd "<C-S-right>") 'drag-stuff-right)
   )
 
-;; Insert a newline at the current cursor location, while not moving the cursor
-(global-set-key (kbd "C-o")          'open-line)
 ;; Join the following line onto the current one
 (global-set-key (kbd "C-j")
                 (lambda ()
@@ -281,10 +287,18 @@
   (global-set-key (kbd "C-c q")      'vr/query-replace))
 
 (when (boundp 'setup-highlight-loaded)
-  (define-key modi-map (kbd "h")  'highlight-frame-toggle) ;; C-x m h
-  (define-key modi-map (kbd "H")  'clear-highlight-frame) ;; C-x m H
+  (define-key modi-map (kbd "h")     'highlight-frame-toggle) ;; C-x m h
+  (define-key modi-map (kbd "H")     'clear-highlight-frame) ;; C-x m H
   )
 
+(when (boundp 'setup-ag-loaded)
+  (define-key modi-map (kbd "a")     'ag-regexp) ;; C-x m a
+  )
+
+;; Search with google suggestions; opens results in default emacs browser
+;; If you don't hit Enter and hit Tab instead, you will get an option to search
+;; in alternative websites like Wikipedia
+(define-key modi-map (kbd "g") 'helm-google-suggest) ;; C-x m g
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Visual | Looks
@@ -292,11 +306,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key (kbd "C-x t")     'toggle-truncate-lines)
-
-(when (boundp 'setup-visual-loaded)
-  (define-key modi-map (kbd "g")  'hidden-mode-line-mode) ;; C-x m g (no mode line, no Ground)
-  (define-key modi-map (kbd "f")  'bzg-big-fringe-mode) ;; C-x m f
-  )
 
 (when (boundp 'setup-hl-line+-loaded)
   (global-set-key (kbd "C-c C-f") 'hl-line-flash) ;; flash the current line
@@ -316,6 +325,7 @@
   (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
 
   (define-key modi-map (kbd "m")        'mc/mark-all-like-this-dwim) ;; C-x m m
+  (define-key modi-map (kbd "r")        'set-rectangular-region-anchor) ;; C-x m r
   )
 
 
@@ -407,7 +417,10 @@
   ;; (key-chord-define-global "=]"   )
 
   ;; Editing
-  (key-chord-define-global "UU"   'undo)
+  (when (boundp 'setup-undo-tree-loaded)
+    (key-chord-define-global "UU"   'undo-tree-redo)
+    (key-chord-define-global "\}\}" 'undo-tree-switch-branch))
+
   (key-chord-define-global "]'"   'completion-at-point)
   (key-chord-define-global "[;"   'completion-at-point)
   (key-chord-define-global ";."   'completion-at-point)
