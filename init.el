@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-12 15:44:28 kmodi>
+;; Time-stamp: <2014-03-13 16:44:46 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -43,7 +43,9 @@
     smart-mode-line popup
     smex ;; smart M-x
     stripe-buffer
+    undo-tree ;; supercool undo visualization
     visual-regexp
+    volatile-highlights
     w3m ;; web-browsing in emacs
     web-mode
     xkcd ;; comic
@@ -87,6 +89,7 @@
 (require 'setup-smart-mode-line)
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
+(require 'setup-undo-tree)
 (require 'setup-visual-regexp)
 (require 'setup-w3m)
 (require 'setup-xkcd)
