@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-01-21 14:39:42 kmodi>
+;; Time-stamp: <2014-03-12 23:36:20 kmodi>
 
 ;; Drag Stuff
 ;; Source: https://github.com/rejeep/drag-stuff
@@ -22,6 +22,11 @@
               (forward-char 1)
               (setq drag-stuff-hax nil))))
 ;; end of solution
+
+;; Drag Stuff is incompatible with Org, because it shadows many useful Org
+;; bindings.  This doesn't do much harm, because Org has its own structural
+;; movement commands
+(add-to-list 'drag-stuff-except-modes 'org-mode)
 
 (setq drag-stuff-global-mode t)
 
