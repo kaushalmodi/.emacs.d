@@ -1,14 +1,7 @@
-;; Time-stamp: <2013-12-12 14:45:51 kmodi>
+;; Time-stamp: <2014-03-14 09:27:06 kmodi>
 
 ;; Helm Swoop
 ;; Source: https://github.com/ShingoFukuyama/helm-swoop
-
-;; ;; helm from https://github.com/emacs-helm/helm
-;; (require 'helm-config)
-;; (helm-mode 1)
-
-;; (setq helm-ff-auto-update-initial-value nil
-;;       )
 
 (require 'helm-swoop)
 
