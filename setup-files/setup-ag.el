@@ -1,12 +1,19 @@
-;; Time-stamp: <2014-03-11 16:41:30 kmodi>
+;; Time-stamp: <2014-03-13 16:43:40 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
 (require 'ag)
 
-(setq ag-arguments '("--ignore-case"
-                     ))
+;; Do not set these! It messes up the *ag* buffer. The links to files don't show
+;; up in *ag* buffer and editing in it using wgrep doesn't work too. Even on
+;; unsetting this the ag buffer gives the same problem. The only solution is to
+;; restart emacs.
+;; (setq ag-arguments '("--ignore"
+;;                      "'*#*#'"
+;;                      "--ignore"
+;;                      "'*~'"
+;;                      ))
 
 (setq ag-highlight-search t)
 
