@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-28 10:03:55 kmodi>
+;; Time-stamp: <2014-03-12 23:23:14 kmodi>
 
 ;; w3m - web browser
 
@@ -82,7 +82,7 @@ before doing the search"
   (define-key map (kbd "SPC")         'scroll-up)
   (define-key map (kbd "+")           'w3m-antenna-add-current-url)
   (define-key map (kbd "A")           'w3m-antenna)
-  (define-key map (kbd "c")           'w3m-print-this-url) ;; "print" actually copies the url
+  (define-key map (kbd "c")           'w3m-print-this-url) ;; "print" = copy
   (define-key map (kbd "C")           'w3m-print-current-url)
   (define-key map (kbd "d")           'w3m-download)
   (define-key map (kbd "D")           'w3m-download-this-url)
