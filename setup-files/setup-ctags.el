@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-11 13:04:07 kmodi>
+;; Time-stamp: <2014-03-14 14:55:46 kmodi>
 
 ;; ctags, etags
 
@@ -11,8 +11,8 @@
 (setq tags-revert-without-query t)
 ;; Do case-sensitive tag searches
 (setq tags-case-fold-search nil) ;; t=case-insensitive, nil=case-sensitive
-;; Don't warn when TAGS files are large
-(setq large-file-warning-threshold nil)
+;; Increase the warning threshold to be more than normal TAGS file sizes
+(setq large-file-warning-threshold 30000000) ;; 30MB
 
 
 ;; ;; List all directories from which you want to read the TAGS files
@@ -63,6 +63,7 @@ tag find"
 (define-key etags-select-mode-map (kbd "C-g")   'etags-select-quit)
 ;; Also quit etags-select when cursor moves to another window
 (define-key etags-select-mode-map (kbd "C-x o") 'etags-select-quit)
+(define-key etags-select-mode-map (kbd "C-x O") 'etags-select-quit)
 (define-key etags-select-mode-map (kbd "C-p")   'etags-select-previous-tag)
 (define-key etags-select-mode-map (kbd "C-n")   'etags-select-next-tag)
 ;; default etags-select bindings
@@ -143,4 +144,4 @@ tag find"
 
 ;; NOTES
 
-;; (1) Emacs reread the TAGS file during every tag find operation.
+;; (1) Emacs rereads the TAGS file during every tag find operation.
