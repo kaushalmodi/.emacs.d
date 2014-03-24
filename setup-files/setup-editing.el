@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-13 13:34:45 kmodi>
+;; Time-stamp: <2014-03-24 17:03:58 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -118,7 +118,6 @@ Note the weekly scope of the command's precision.")
 ;; Align
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Source: http://stackoverflow.com/questions/6217153/aligning-or-prettifying-code-in-emacs
-
 ;; Source: http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
 (defun align-to-equals (begin end)
   "Align region to equal signs"
@@ -139,7 +138,7 @@ Note the weekly scope of the command's precision.")
   "Align text columns"
   (interactive "r")
   ;; align-regexp syntax:  align-regexp (beg end regexp &optional group spacing repeat)
-  (align-regexp begin end "\\(\\s-+\\)[a-z=(),?':`\.]" 1 1 t)
+  (align-regexp begin end "\\(\\s-+\\)[a-z=(),?':`\.{}]" 1 1 t)
   (indent-region begin end) ;; ident the region correctly after alignment
   )
 
@@ -185,9 +184,17 @@ and the cursor. Else, insert empty line after the current line."
   (setq str-before-point (buffer-substring (line-beginning-position) (point)))
   ;; (message "%s" str-before-point)
   (if (not (string-match "\\w" str-before-point))
-      (open-line 1)
+      (progn (newline-and-indent)
+             ;; (open-line 1)
+             (previous-line)
+             (indent-relative-maybe))
     (progn (move-end-of-line nil)
            (newline-and-indent))))
+
+(defun pull-up-line ()
+  "Join the following line onto the current one (analogous to `C-e', `C-d')"
+  (interactive)
+  (join-line -1))
 
 
 (setq setup-editing-loaded t)
