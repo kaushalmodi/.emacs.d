@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-13 16:44:46 kmodi>
+;; Time-stamp: <2014-03-21 15:50:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -16,8 +16,9 @@
     ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                       ;; You need to have ag installed on your machine
     anzu ;; shows total search hits in mode line, better query-replace alternative
-    ;; auto-complete fuzzy
+    auto-complete fuzzy
     bookmark+ ;; able to bookmark desktop sessions
+    cperl-mode
     dired+ dired-single
     drag-stuff
     etags-select etags-table ctags-update ;; ac-etags
@@ -66,7 +67,7 @@
 (eval-after-load 'ido '(require 'setup-ido))
 (require 'setup-ace-jump-mode)
 (require 'setup-ag)
-;; (require 'setup-auto-complete)
+(require 'setup-auto-complete)
 (require 'setup-bookmark+)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
