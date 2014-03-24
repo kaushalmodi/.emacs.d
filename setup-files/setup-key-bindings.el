@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-14 09:28:56 kmodi>
+;; Time-stamp: <2014-03-21 15:15:13 kmodi>
 
 ;; KEY BINDINGS
 
@@ -256,18 +256,17 @@
   )
 
 (when (boundp 'setup-drag-stuff-loaded)
-  (global-set-key (kbd "C-\"")         'drag-stuff-up)
+  (global-set-key (kbd "C-\"")        'drag-stuff-up)
   (global-set-key (kbd "C-:")         'drag-stuff-up)
   (global-set-key (kbd "C-?")         'drag-stuff-down)
   (global-set-key (kbd "<C-S-left>")  'drag-stuff-left)
   (global-set-key (kbd "<C-S-right>") 'drag-stuff-right)
   )
 
-;; Join the following line onto the current one
-(global-set-key (kbd "C-j")
-                (lambda ()
-                  (interactive)
-                  (join-line -1)))
+;;
+(when (boundp 'setup-editing-loaded)
+  (global-set-key            (kbd "C-j") 'pull-up-line)
+  (define-key cperl-mode-map (kbd "C-j") 'pull-up-line))
 (global-set-key (kbd "M-j")          'comment-indent-new-line)
 (global-set-key (kbd "C-M-j")        'comment-indent-new-line)
 
@@ -452,7 +451,6 @@
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
     (key-chord-define-global "df" 'iy-go-to-char)
     (key-chord-define-global "zx" 'iy-go-to-char-backward)
-    (key-chord-define-global "bb" 'iy-go-to-char-backward)
     (key-chord-define-global "BB" 'iy-go-to-char-backward))
   )
 
@@ -467,6 +465,21 @@
   ;; (global-set-key (kbd "M-.") 'etags-select-find-tag-at-point)
   ;; (global-set-key (kbd "M-.") 'helm-etags+-select)
   )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Registers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Registers.html#Text-Registers
+(global-set-key (kbd "C-x r a") 'append-to-register)
+;;     C-x r s REG <- Copy region to register REG
+;; C-u C-x r s REG <- CUT region and move to register REG
+;;     C-x r i REG <- Insert text from register REG
+;;     C-x r a REG <- Append region to text in register REG
+;;     C-x r + REG <- Append region to text in register REG if REG already
+;;                    contains text; but increments the content of REG if the
+;;                    content is a number.
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
