@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-21 14:44:15 kmodi>
+;; Time-stamp: <2014-03-25 12:12:48 kmodi>
 
 ;; Perl
 
@@ -13,6 +13,12 @@
       cperl-continued-statement-offset 4
       cperl-indent-parens-as-block t
       cperl-tab-always-indent t)
+
+(defun my-cperl-mode-customizations()
+  (when (boundp 'setup-editing-loaded)
+    (define-key cperl-mode-map (kbd "C-j") 'pull-up-line))
+  )
+(add-hook 'cperl-mode-hook 'my-cperl-mode-customizations)
 
 
 (setq setup-perl-loaded t)
