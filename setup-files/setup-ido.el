@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-12 23:24:02 kmodi>
+;; Time-stamp: <2014-03-25 12:16:02 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -66,6 +66,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use ido everywhere, example: when searching for var name `C-h v`, searching
 ;; for function name `C-h f`, etc
+
+;; If ido-ubiquitous 1.6 is used in emacs 24.3, there will always be a
+;; compile-log buffer warnings; below defvars will prevent those.
+(defvar ido-cur-item         nil)
+(defvar ido-default-item     nil)
+(defvar predicate            nil)
+(defvar inherit-input-method nil)
+(defvar ido-cur-list         nil)
+
 (require 'ido-ubiquitous)
 (ido-ubiquitous-mode 1)
 
