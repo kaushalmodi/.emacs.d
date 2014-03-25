@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-21 15:15:13 kmodi>
+;; Time-stamp: <2014-03-25 12:13:06 kmodi>
 
 ;; KEY BINDINGS
 
@@ -263,10 +263,9 @@
   (global-set-key (kbd "<C-S-right>") 'drag-stuff-right)
   )
 
-;;
 (when (boundp 'setup-editing-loaded)
-  (global-set-key            (kbd "C-j") 'pull-up-line)
-  (define-key cperl-mode-map (kbd "C-j") 'pull-up-line))
+  (global-set-key            (kbd "C-j") 'pull-up-line))
+
 (global-set-key (kbd "M-j")          'comment-indent-new-line)
 (global-set-key (kbd "C-M-j")        'comment-indent-new-line)
 
