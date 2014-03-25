@@ -1,19 +1,47 @@
-;; Time-stamp: <2014-03-13 16:43:40 kmodi>
+;; Time-stamp: <2014-03-25 10:56:43 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
 (require 'ag)
 
-;; Do not set these! It messes up the *ag* buffer. The links to files don't show
-;; up in *ag* buffer and editing in it using wgrep doesn't work too. Even on
-;; unsetting this the ag buffer gives the same problem. The only solution is to
-;; restart emacs.
-;; (setq ag-arguments '("--ignore"
-;;                      "'*#*#'"
-;;                      "--ignore"
-;;                      "'*~'"
-;;                      ))
+;; Set default ag arguments
+(setq ag-arguments (list "--smart-case" "--nogroup" "--column"))
+;; As per https://github.com/Wilfred/ag.el/issues/41, it is mandatory
+;; to use --nogroup and --column options for ag.el compatibility.
+
+;; Add more ag arguments
+(setq ag-arguments (append '(
+                             "--follow"
+;; NOTE: It looks like the ~/.agignore is used when launching ag from emacs too.
+;;       So the ignores from agignore don't have to be set here again.
+;;                              "--ignore" "*~"
+;;                              "--ignore" "*/*~"
+;;                              "--ignore" "*/*/*~"
+;;                              "--ignore" "*/*/*/*~"
+;;                              "--ignore" "*/*/*/*/*~"
+;;                              "--ignore" "*/*/*/*/*/*~"
+;;                              "--ignore" "*/*/*/*/*/*/*~"
+;;                              "--ignore" "*/*/*/*/*/*/*/*~"
+;;                              "--ignore" "*#*#"
+;;                              "--ignore" "*/*#*#"
+;;                              "--ignore" "*/*/*#*#"
+;;                              "--ignore" "*/*/*/*#*#"
+;;                              "--ignore" "*/*/*/*/*#*#"
+;;                              "--ignore" "*/*/*/*/*/*#*#"
+;;                              "--ignore" "*/*/*/*/*/*/*#*#"
+;;                              "--ignore" "*/*/*/*/*/*/*/*#*#"
+;;                              "--ignore" ".SOS"
+;;                              "--ignore" ".snapshot"
+;;                              "--ignore" "pei_stuff"
+;;                              "--ignore" "gnuarm-4.0.2/"
+;;                              "--ignore" "png32:-"
+;;                              "--ignore" "INCA_libs/"
+;;                              "--ignore" "INCA_libs.r/"
+;;                              "--ignore" "coverage/"
+;;                              "--ignore" "opencores/"
+;;                              "--ignore" "dump/"
+                             ) ag-arguments))
 
 (setq ag-highlight-search t)
 
