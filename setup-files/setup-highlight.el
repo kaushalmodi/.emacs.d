@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-13 16:44:56 kmodi>
+;; Time-stamp: <2014-04-01 10:39:40 kmodi>
 
 ;; Highlight Symbol at point/cursor
 ;; (require 'highlight-symbol)
@@ -19,6 +19,18 @@
 ;; https://github.com/k-talo/volatile-highlights.el
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
+
+;; Auto Highlight Symbol
+;; https://github.com/emacsmirror/auto-highlight-symbol
+(require 'auto-highlight-symbol)
+;; ahs mode key bindings
+(define-key auto-highlight-symbol-mode-map (kbd "M-<left>"    ) 'ahs-backward            )
+(define-key auto-highlight-symbol-mode-map (kbd "M-<right>"   ) 'ahs-forward             )
+(define-key auto-highlight-symbol-mode-map (kbd "M-S-<left>"  ) 'ahs-backward-definition )
+(define-key auto-highlight-symbol-mode-map (kbd "M-S-<right>" ) 'ahs-forward-definition  )
+(define-key auto-highlight-symbol-mode-map (kbd "M--"         ) 'ahs-back-to-start       )
+(define-key auto-highlight-symbol-mode-map (kbd "C-x C-'"     ) 'ahs-change-range        )
+(define-key auto-highlight-symbol-mode-map (kbd "C-x C-a"     ) 'ahs-edit-mode           )
 
 
 (setq setup-highlight-loaded t)
