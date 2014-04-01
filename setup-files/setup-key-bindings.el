@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-25 12:13:06 kmodi>
+;; Time-stamp: <2014-04-01 10:37:18 kmodi>
 
 ;; KEY BINDINGS
 
@@ -287,6 +287,7 @@
 (when (boundp 'setup-highlight-loaded)
   (define-key modi-map (kbd "h")     'highlight-frame-toggle) ;; C-x m h
   (define-key modi-map (kbd "H")     'clear-highlight-frame) ;; C-x m H
+  (define-key modi-map (kbd "j")     'auto-highlight-symbol-mode) ;; C-x m j
   )
 
 (when (boundp 'setup-ag-loaded)
