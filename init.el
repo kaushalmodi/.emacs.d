@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-21 15:50:45 kmodi>
+;; Time-stamp: <2014-04-01 10:31:34 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -7,16 +7,19 @@
       custom-file         (expand-file-name "custom.el" user-emacs-directory)
       )
 
-(defvar my-packages
+;; A list of packages to ensure are installed at launch
+(setq my-packages
   '(
     ;; projectile
     ;; header2 ;; INSTR_UNCOMMENT_THIS_LINE
     ;; highlight-symbol ;; The highlight-global package does a better job
+    ;; ido-at-point ;; auto-complete package does a better job
     ace-jump-mode
     ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                       ;; You need to have ag installed on your machine
     anzu ;; shows total search hits in mode line, better query-replace alternative
     auto-complete fuzzy
+    auto-highlight-symbol
     bookmark+ ;; able to bookmark desktop sessions
     cperl-mode
     dired+ dired-single
@@ -28,7 +31,7 @@
     hardcore-mode
     helm helm-swoop
     hl-line+
-    ido-vertical-mode flx-ido ido-ubiquitous ido-at-point
+    ido-vertical-mode flx-ido ido-ubiquitous
     iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
     key-chord ;; map pairs of simultaneously pressed keys to commands
     leuven-theme ;; awesome white background theme
@@ -53,8 +56,7 @@
     yaml-mode ;; Useful for editing Octopress' _config.yml
     yasnippet
     zenburn-theme
-    )
-  "A list of packages to ensure are installed at launch.")
+    ))
 
 (load setup-packages-file) ;; Load the packages
 (load custom-file) ;; Load the emacs `M-x customize` generated file
@@ -121,6 +123,10 @@
 (require 'setup-ctags)
 (require 'setup-misc)
 ;; (require 'setup-occur) ;; not required as the helm-multi-swoop-all does awesome job
+
+;; Stuff that can't be committed publicly on github
+(require 'setup-secret) ;; INSTR_DELETE_THIS_LINE
+;;
 
 ;; NOTE: Load below ONLY after loading all the packages
 ;; region-bindings-mode has bindings for multiple-cursors, visual-regexp, anzu
