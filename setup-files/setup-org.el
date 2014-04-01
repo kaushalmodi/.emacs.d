@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-10 14:48:09 kmodi>
+;; Time-stamp: <2014-03-26 23:30:28 kmodi>
 
 ;; Org Mode
 
@@ -85,6 +85,12 @@
         ("u" "UVM/System Verilog Notes" entry (file "~/org/uvm.org")
          "\n* %?\n  Context:\n    %i\n  Entered on %U")
         ))
+
+(defun my-org-mode-customizations ()
+  ;; Remove the org mode binding that conflicts with ace-jump-mode binding
+  (define-key org-mode-map (kbd "C-c SPC") nil)
+  )
+(add-hook 'org-mode-hook 'my-org-mode-customizations)
 
 
 (setq setup-org-loaded t)
