@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-25 12:16:02 kmodi>
+;; Time-stamp: <2014-03-27 10:30:49 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -40,10 +40,10 @@
 
 (defun ido-define-keys ()
   ;; C-n/p  and up/down keys are more intuitive in vertical layout
-  (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
+  (define-key ido-completion-map (kbd "C-n")    'ido-next-match)
   (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
-  (define-key ido-completion-map (kbd "C-p") 'ido-prev-match)
-  (define-key ido-completion-map (kbd "<up>") 'ido-prev-match))
+  (define-key ido-completion-map (kbd "C-p")    'ido-prev-match)
+  (define-key ido-completion-map (kbd "<up>")   'ido-prev-match))
 (add-hook 'ido-setup-hook 'ido-define-keys)
 
 ;; ;; Use C-w to go back up a dir to better match normal usage of C-w
@@ -57,11 +57,12 @@
 ;; ;; Always rescan buffer for imenu
 ;; (set-default 'imenu-auto-rescan t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Ido at point (Replacement for auto-complete)
-;; https://github.com/katspaugh/ido-at-point
-(require 'ido-at-point)
-(ido-at-point-mode t)
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; Ido at point (Replacement for auto-complete)
+;; ;; https://github.com/katspaugh/ido-at-point
+;; (require 'ido-at-point)
+;; (ido-at-point-mode t)
+;; Update: But I found auto-complete better.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use ido everywhere, example: when searching for var name `C-h v`, searching
@@ -111,13 +112,17 @@
 ;; Open recent files with IDO,
 ;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
 ;; http://emacsredux.com/blog/2013/04/05/recently-visited-files/
+;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgc8f6b
+;; `abbreviate-file-name' abbreviates home dir to ~/ in the file list
+;; Custom abbreviations can be added to `directory-abbrev-alist'.
 (require 'recentf)
 (defun ido-find-recentf ()
-  "Find a recent file with IDO."
+  "Use ido to select a recently opened file from the `recentf-list'"
   (interactive)
-  (let ((file (ido-completing-read "Find recent file: " recentf-list nil t)))
-    (when file
-      (find-file file))))
+  (find-file
+   (ido-completing-read "Recentf open: "
+                        (mapcar 'abbreviate-file-name recentf-list)
+                        nil t)))
 
 
 (setq setup-ido-loaded t)
