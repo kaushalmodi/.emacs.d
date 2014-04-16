@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-13 01:43:22 kmodi>
+;; Time-stamp: <2014-04-04 17:08:50 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -27,23 +27,27 @@
 (defvar default-light-theme 'leuven)
 (defvar default-theme       'zenburn)
 
+(defun disable-all-themes ()
+  "disable all active themes."
+  (dolist (i custom-enabled-themes)
+    (disable-theme i)))
+
+(defadvice load-theme (before disable-themes-first activate)
+  (disable-all-themes))
+
 ;; zenburn
 (defun zenburn ()
   "Activate zenburn theme."
   (interactive)
   (setq dark-theme t)
-  ;; disable other themes before setting this theme
-  (disable-theme 'leuven)
-  (load-theme    'zenburn 'no-confirm))
+  (load-theme 'zenburn 'noconfirm))
 
 ;;leuven theme
 (defun leuven ()
   "Activate leuven theme."
   (interactive)
   (setq dark-theme nil)
-  ;; disable other themes before setting this theme
-  (disable-theme 'zenburn)
-  (load-theme    'leuven 'no-confirm))
+  (load-theme 'leuven `noconfirm))
 
 (setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
       font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
