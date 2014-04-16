@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-24 17:03:58 kmodi>
+;; Time-stamp: <2014-04-01 16:38:04 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -195,6 +195,12 @@ and the cursor. Else, insert empty line after the current line."
   "Join the following line onto the current one (analogous to `C-e', `C-d')"
   (interactive)
   (join-line -1))
+
+
+;; Enable narrowing
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-defun  'disabled nil)
+(put 'narrow-to-page   'disabled nil)
 
 
 (setq setup-editing-loaded t)
