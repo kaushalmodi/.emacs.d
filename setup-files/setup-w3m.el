@@ -1,10 +1,10 @@
-;; Time-stamp: <2014-03-12 23:23:14 kmodi>
+;; Time-stamp: <2014-05-02 11:45:26 kmodi>
 
 ;; w3m - web browser
 
-(require 'w3m)
-
 (setq browse-url-browser-function 'w3m-browse-url)
+
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 
 (defun wicked/w3m-open-current-page-in-firefox ()
   "Open the current URL in Mozilla Firefox."
