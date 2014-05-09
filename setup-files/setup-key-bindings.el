@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-01 10:37:18 kmodi>
+;; Time-stamp: <2014-05-09 11:25:32 kmodi>
 
 ;; KEY BINDINGS
 
@@ -252,7 +252,6 @@
   (global-set-key (kbd "C-o")         'smart-open-line)
 
   (define-key modi-map (kbd "x")      'eval-and-replace-last-sexp) ;; C-x m x
-  (define-key modi-map (kbd "c")      'toggle-comment-on-line-or-region) ;; C-x m c
   )
 
 (when (boundp 'setup-drag-stuff-loaded)
@@ -425,7 +424,6 @@
   (key-chord-define-global ";."   'completion-at-point)
 
   ;; Windows and buffers
-  (key-chord-define-global "OO"   'other-window)
   (key-chord-define-global "XX"   ( lambda()
                                     (interactive)
                                     (kill-buffer (current-buffer))))
@@ -472,7 +470,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Registers.html#Text-Registers
-(global-set-key (kbd "C-x r a") 'append-to-register)
 ;;     C-x r s REG <- Copy region to register REG
 ;; C-u C-x r s REG <- CUT region and move to register REG
 ;;     C-x r i REG <- Insert text from register REG
@@ -481,6 +478,33 @@
 ;;                    contains text; but increments the content of REG if the
 ;;                    content is a number.
 
+(when (boundp 'setup-iregister-loaded)
+  (define-key modi-map (kbd "i") 'iregister-text) ;; C-x m i
+  ;; If region is active then `iregister-point-or-text-to-register' command stores a
+  ;; text to any empty register, otherwise it stores a point.
+  (global-set-key (kbd "M-w") `demi/iregister-point-or-kill-ring-save-text-to-register) ;; Replace normal copy function
+  (global-set-key (kbd "C-w") 'iregister-kill-copy-to-register) ;; Replace normal 'cut' function
+
+  ;; Copy the selection and append to the latest register
+  (global-set-key (kbd "C-x r a") 'iregister-append-to-latest-register)
+  ;; Delete the selection and append to the latest register
+  (global-set-key (kbd "C-x r A") 'iregister-delete-append-to-latest-register)
+
+  ;; Assuming that there are already stored some texts (by means of `copy-to-register'
+  ;; or `iregister-copy-to-register' command) in the registers. Execute
+  ;; `iregister-text' and the minibuffer will display the text stored in some
+  ;; register.
+  ;; Key bindings when the `iregister-text minibuffer is active:
+  ;;   RET        - The selected text will be inserted
+  ;;   n          - View next text previously stored in the registers
+  ;;   p          - View previous text previously stored in the registers
+  ;;   d          - Delete current text from the register
+  ;;   q or `C-g' - To quit from the minibuffer
+  ;;   a          - Append the selected text to the current text registry
+  ;;   A          - Prepend the selected text to the current text registry
+  (global-set-key (kbd "M-n") 'iregister-jump-to-next-marker)
+  (global-set-key (kbd "M-p") 'iregister-jump-to-previous-marker)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; other
