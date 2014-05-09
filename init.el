@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-16 13:55:46 kmodi>
+;; Time-stamp: <2014-05-08 11:22:40 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -12,14 +12,13 @@
   '(
     ;; projectile
     ;; header2 ;; INSTR_UNCOMMENT_THIS_LINE
-    ;; highlight-symbol ;; The highlight-global package does a better job
-    ;; ido-at-point ;; auto-complete package does a better job
     ace-jump-mode
     ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                       ;; You need to have ag installed on your machine
     anzu ;; shows total search hits in mode line, better query-replace alternative
     auto-complete fuzzy
     auto-highlight-symbol
+    benchmark-init
     bookmark+ ;; able to bookmark desktop sessions
     cperl-mode
     dired+ dired-single
@@ -32,6 +31,7 @@
     helm helm-swoop
     hl-line+
     ido-vertical-mode flx-ido ido-ubiquitous
+    iregister ;; Interactive access to registers
     iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
     key-chord ;; map pairs of simultaneously pressed keys to commands
     leuven-theme ;; awesome white background theme
@@ -39,6 +39,8 @@
     manage-minor-mode
     markdown-mode
     multiple-cursors
+    mwe-log-commands ;; for logging commands; useful when demoing emacs
+    nlinum ;; reviews say it's better than linum
     org ;; Get the latest org-mode package from Melpa
     popwin ;; Open windows like *Help*, *Completions*, etc in minibuffer
     rainbow-delimiters
@@ -49,7 +51,7 @@
     stripe-buffer
     sublimity ;; smooth scrolling
     undo-tree ;; supercool undo visualization
-    visual-regexp visual-regexp-steroids
+    visual-regexp
     volatile-highlights
     w3m ;; web-browsing in emacs
     web-mode
@@ -61,6 +63,8 @@
 
 (load setup-packages-file) ;; Load the packages
 (load custom-file) ;; Load the emacs `M-x customize` generated file
+
+(require 'benchmark-init)
 
 ;; Set up the looks of emacs
 (require 'setup-popwin) ;; require popwin first as packages might depend on it
@@ -82,7 +86,9 @@
 (require 'setup-helm)
 (require 'setup-highlight)
 (require 'setup-hl-line+)
+(require 'setup-iregister)
 (require 'setup-key-chord)
+(require 'setup-linum)
 (require 'setup-magit)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
@@ -99,7 +105,6 @@
 (require 'setup-w3m)
 (require 'setup-xkcd)
 (require 'setup-yasnippet)
-;; (require 'setup-linum)
 ;; (require 'setup-projectile)
 
 ;; Languages
