@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-16 13:12:08 kmodi>
+;; Time-stamp: <2014-05-09 11:07:52 kmodi>
 
 ;; Sublimity
 ;; Source: https://github.com/zk-phi/sublimity
@@ -9,11 +9,13 @@
 ;; (require 'sublimity-attractive)
 
 ;; Smooth scroll configuration
-(setq sublimity-scroll-weight 10
-      sublimity-scroll-drift-length 5)
-;; Scroll is basically divided into (weight + drift-length) steps. For example,
-;; with the configuration above, 100 lines of scrolling is divided into
-;; 15 (= 10 + 5) steps
+(setq sublimity-scroll-weight 3
+      sublimity-scroll-drift-length 1)
+;; Scroll is basically divided into (weight + drift-length) steps.
+;; (setq sublimity-scroll-weight 10
+;;       sublimity-scroll-drift-length 5)
+;; For example, with the configuration above, 100 lines of scrolling is divided
+;; into 15 (= 10 + 5) steps
 ;; (17 15 14 12 11 8 7 5 4 2 1 1 1 1 1)
 ;; and it looks smoother than 1 step scroll. Note that last 5 steps are all 1
 ;; line scrolls, because drift-length is set 5.
