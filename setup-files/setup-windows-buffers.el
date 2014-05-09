@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-01 10:43:16 kmodi>
+;; Time-stamp: <2014-04-17 12:21:12 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -265,6 +265,30 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
   "Scroll other window down by 1 line without moving the point."
   (interactive)
   (scroll-other-window -1))
+
+
+;; Allow scrolling of all buffers using mouse-wheel in scroll-all-mode
+;; (by default scroll-all-mode doesn't do that)
+;; http://www.emacswiki.org/emacs/ScrollAllMode
+(defun mwheel-scroll-all-function-all (func arg)
+  (if scroll-all-mode
+      (save-selected-window
+        (walk-windows
+         (lambda (win)
+           (select-window win)
+           (condition-case nil
+               (funcall func arg)
+             (error nil)))))
+    (funcall func arg)))
+
+(defun mwheel-scroll-all-scroll-up-all (arg)
+  (mwheel-scroll-all-function-all 'scroll-up arg))
+
+(defun mwheel-scroll-all-scroll-down-all (arg)
+  (mwheel-scroll-all-function-all 'scroll-down arg))
+
+(setq mwheel-scroll-up-function   'mwheel-scroll-all-scroll-up-all)
+(setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
 
 
 (setq setup-windows-buffers-loaded t)
