@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-04 17:08:50 kmodi>
+;; Time-stamp: <2014-05-02 11:59:37 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -40,14 +40,14 @@
   "Activate zenburn theme."
   (interactive)
   (setq dark-theme t)
-  (load-theme 'zenburn 'noconfirm))
+  (load-theme 'zenburn t))
 
 ;;leuven theme
 (defun leuven ()
   "Activate leuven theme."
   (interactive)
   (setq dark-theme nil)
-  (load-theme 'leuven `noconfirm))
+  (load-theme 'leuven t))
 
 (setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
       font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
