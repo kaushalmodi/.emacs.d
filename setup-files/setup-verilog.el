@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-11 12:03:47 kmodi>
+;; Time-stamp: <2014-04-22 11:33:53 kmodi>
 
 ;; Verilog
 
@@ -17,7 +17,7 @@
          ) auto-mode-alist))
 
 ;; Verilog mode customization
-(setq verilog-indent-level            3
+(setq verilog-indent-level             3
       verilog-indent-level-module      3
       verilog-indent-level-declaration 3
       verilog-indent-level-behavioral  3
@@ -45,11 +45,19 @@
             '(lambda()
                (untabify (point-min) (point-max))
                nil))
+
   ;; ;; Make _ visible to commands like `M-d`, `M-b`, `M-f`, etc
   ;; ;; Specify the underscore character as a member of emacs’ punctuation class
   ;; (modify-syntax-entry ?_ "_")
   ;; ;; ** Problem with the above code snippet is that the syntax highlighting gets
   ;; ;; messed up. In a string like "spi_reg_abc", reg gets highlighted (which shouldn't)
+
+  ;; Source: http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
+  (font-lock-add-keywords nil
+                          '(("\\b\\(FIXME\\|TODO\\|BUG\\)\\b" 1 font-lock-warning-face t)))
+  ;; Above solution highlights those keywords anywhere in the buffer (not just
+  ;; in comments). To do the highlighting intelligently, install the fic-mode
+  ;; package -- http://www.emacswiki.org/emacs/fic-mode.el
   )
 (add-hook 'verilog-mode-hook 'my-verilog-mode-customizations)
 
