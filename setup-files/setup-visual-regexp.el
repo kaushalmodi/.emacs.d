@@ -1,9 +1,8 @@
-;; Time-stamp: <2014-04-07 10:08:55 kmodi>
+;; Time-stamp: <2014-04-25 16:23:20 kmodi>
 
 ;; Visual Regular Expression search/replace
 
 (require 'visual-regexp)
-(require 'visual-regexp-steroids)
 
 ;;
 
