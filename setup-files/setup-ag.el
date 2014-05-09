@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-25 10:56:43 kmodi>
+;; Time-stamp: <2014-05-01 18:02:32 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -84,10 +84,10 @@ If called with a prefix, prompts for flags to pass to ag."
 ;; (setq wgrep-auto-save-buffer t)
 
 ;; Default key binding when in wgrep mode
-;; (define-key wgrep-mode-map (kbd "C-c C-c") 'wgrep-finish-edit)
+;; (define-key wgrep-mode-map (kbd "C-c C-c") 'wgrep-finish-edit) ;; Apply changes to file buffers
 ;; (define-key wgrep-mode-map (kbd "C-c C-e") 'wgrep-finish-edit)
 ;; (define-key wgrep-mode-map (kbd "C-x C-s") 'wgrep-finish-edit)
-(define-key wgrep-mode-map (kbd "C-x s") 'wgrep-save-all-buffers)
+(define-key wgrep-mode-map (kbd "C-x s") 'wgrep-save-all-buffers) ;; Save the buffers that wgrep changed
 ;; (define-key wgrep-mode-map (kbd "C-c C-d") 'wgrep-mark-deletion)
 ;; (define-key wgrep-mode-map (kbd "C-c C-p") 'wgrep-toggle-readonly-area)
 ;; (define-key wgrep-mode-map (kbd "C-c C-r") 'wgrep-remove-change)
