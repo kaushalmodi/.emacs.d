@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-09 11:25:32 kmodi>
+;; Time-stamp: <2014-05-09 17:34:01 kmodi>
 
 ;; KEY BINDINGS
 
@@ -479,16 +479,16 @@
 ;;                    content is a number.
 
 (when (boundp 'setup-iregister-loaded)
-  (define-key modi-map (kbd "i") 'iregister-text) ;; C-x m i
+  (define-key modi-map (kbd "i") 'iregister-latest-text) ;; C-x m i
   ;; If region is active then `iregister-point-or-text-to-register' command stores a
   ;; text to any empty register, otherwise it stores a point.
-  (global-set-key (kbd "M-w") `demi/iregister-point-or-kill-ring-save-text-to-register) ;; Replace normal copy function
-  (global-set-key (kbd "C-w") 'iregister-kill-copy-to-register) ;; Replace normal 'cut' function
+  (global-set-key (kbd "M-w") 'iregister-point-or-text-to-register-kill-ring-save) ;; Replace normal copy function
+  (global-set-key (kbd "C-w") 'iregister-copy-to-register-kill) ;; Replace normal 'cut' function
 
   ;; Copy the selection and append to the latest register
   (global-set-key (kbd "C-x r a") 'iregister-append-to-latest-register)
   ;; Delete the selection and append to the latest register
-  (global-set-key (kbd "C-x r A") 'iregister-delete-append-to-latest-register)
+  (global-set-key (kbd "C-x r A") 'iregister-append-to-latest-register-delete)
 
   ;; Assuming that there are already stored some texts (by means of `copy-to-register'
   ;; or `iregister-copy-to-register' command) in the registers. Execute
@@ -496,6 +496,7 @@
   ;; register.
   ;; Key bindings when the `iregister-text minibuffer is active:
   ;;   RET        - The selected text will be inserted
+  ;;   l          - View the latest text stored in the registers
   ;;   n          - View next text previously stored in the registers
   ;;   p          - View previous text previously stored in the registers
   ;;   d          - Delete current text from the register
