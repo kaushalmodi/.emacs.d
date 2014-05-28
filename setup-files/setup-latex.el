@@ -1,9 +1,11 @@
-;; Time-stamp: <2013-12-02 17:06:13 kmodi>
+;; Time-stamp: <2014-05-23 17:27:51 kmodi>
 
 ;; LaTeX
 (load "auctex.el" nil t t)
-(require 'tex-mik)
 (load "preview-latex.el" nil t t)
+
+(setq LaTeX-command "latex -shell-escape")
+
 ;; Source: http://www.sigmafield.org/2009/10/03/using-doc-view-with-auto-revert-to-view-latex-pdf-output-in-emacs
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 ;; Source: http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
