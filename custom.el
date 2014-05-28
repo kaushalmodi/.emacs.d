@@ -20,7 +20,7 @@
  '(case-fold-search t nil nil "ignore case when searching; searching using an all-lowercase string will match the same strings with uppercase characters too")
  '(column-number-mode t)
  '(custom-enabled-themes (quote (zenburn)))
- '(custom-safe-themes (quote ("cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" default)))
+ '(custom-safe-themes (quote ("c2cfe2f1440d9ef4bfd3ef4cf15bfe35ff40e6d431264b1e24af64f145cffb11" "cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" default)))
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
  '(display-time-mode t)
