@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-08 11:22:40 kmodi>
+;; Time-stamp: <2014-05-23 17:41:28 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -16,6 +16,7 @@
     ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                       ;; You need to have ag installed on your machine
     anzu ;; shows total search hits in mode line, better query-replace alternative
+    auctex ;; You also need to install auctex from http://www.gnu.org/software/auctex/
     auto-complete fuzzy
     auto-highlight-symbol
     benchmark-init
@@ -115,7 +116,7 @@
 (require 'setup-markdown)
 (require 'setup-web-mode)
 (require 'setup-yaml-mode)
-;; (require 'setup-latex)
+(require 'setup-latex)
 ;; (require 'setup-tcl)
 ;; (require 'setup-hspice)
 
