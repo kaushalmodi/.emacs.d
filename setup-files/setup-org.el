@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-26 23:30:28 kmodi>
+;; Time-stamp: <2014-05-28 11:56:52 kmodi>
 
 ;; Org Mode
 
@@ -12,6 +12,7 @@
 (setq org-latex-listings 'minted)
 ;; (setq org-export-latex-listings 'minted) in org version < 8.0
 (add-to-list 'org-latex-packages-alist '("" "minted"))
+(add-to-list 'org-latex-packages-alist '("" "tikz"))
 ;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
 ;; Above will output tex files with \usepackage{minted}
 
@@ -32,6 +33,21 @@
 ;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
 ;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
 
+;; -shell-escape is required when converting a .tex file containing minted
+;; package to a .pdf
+;; Now org > tex > pdf conversion can happen with the org default
+;; `C-c C-e l p` key binding
+(setq org-latex-pdf-process '("pdflatex -shell-escape %f"))
+
+;; You can also do the org > tex > pdf conversion and open the pdf file in
+;; acroread directly using the `C-c C-e l o` key binding
+;; change the default app for opening pdf files from org
+;; Source: http://stackoverflow.com/questions/8834633/how-do-i-make-org-mode-open-pdf-files-in-evince
+(eval-after-load "org"
+  '(progn
+     ;; Change .pdf association directly within the alist
+     (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
+
 ;; customization of the minted package (applied to embedded source codes)
 ;; Source: https://code.google.com/p/minted/
 (setq org-latex-minted-options
@@ -50,12 +66,6 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
              )
-
-;; FIXME: Make the below work
-;; (setq org-latex-to-pdf-process
-;;            '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
 ;; Disallow _ and ^ characters from sub/super-scripting strings
 (setq org-export-with-sub-superscripts nil)
@@ -92,6 +102,40 @@
   )
 (add-hook 'org-mode-hook 'my-org-mode-customizations)
 
+;; Diagrammmms
+;; Source: http://pages.sachachua.com/.emacs.d/Sacha.html
+(setq org-ditaa-jar-path (concat user-emacs-directory "/ditaa/ditaa0_9.jar"))
+(setq org-plantuml-jar-path (concat user-emacs-directory "/plantuml/plantuml.7999.jar"))
+
+;; (setq org-startup-with-inline-images t)
+;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (ditaa    . t) ;; activate ditaa
+   (plantuml . t) ;; activate plantuml
+   (latex    . t) ;; activate latex
+   (dot      . t) ;; activate graphviz
+   ))
+
+(add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+
+(defun my-org-confirm-babel-evaluate (lang body)
+  (and (not (string= lang "ditaa"))    ;; don't ask for ditaa
+       (not (string= lang "plantuml")) ;; don't ask for plantuml
+       (not (string= lang "latex"))    ;; don't ask for latex
+       (not (string= lang "dot"))      ;; don't ask for graphviz
+       ))
+(setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+
 
 (setq setup-org-loaded t)
 (provide 'setup-org)
+
+;; NOTES
+;; C-c C-e l l <-- Do org > tex
+;; C-c C-e l p <-- Do org > tex > pdf using the command specified in
+;;                 `org-latex-pdf-process' list
+;; C-c C-e l o <-- Do org > tex > pdf and open the pdf file using the app
+;;                 associated with pdf files defined in `org-file-apps'
