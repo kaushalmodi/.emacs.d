@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-09 17:34:01 kmodi>
+;; Time-stamp: <2014-05-20 11:17:57 kmodi>
 
 ;; KEY BINDINGS
 
@@ -162,13 +162,15 @@
 
 (when (boundp 'setup-dired-loaded)
   ;; Change the default `C-x C-d` key binding from `ido-list-directory'
-  (global-set-key (kbd "C-x C-d") 'dired-single-magic-buffer)
-  ;; Change the default `C-x C-j` key binding from  `dired-jump'
   ;; dired magic buffer is now used instead of the default dired for the same action
-  (global-set-key (kbd "C-x C-j")
+  (global-set-key (kbd "C-x C-d")
                   (lambda()
                     (interactive)
                     (dired-single-magic-buffer default-directory)))
+  ;; Change the default `C-x C-j` key binding from `dired-jump'
+  ;; Opens dired-single-magic-buffer but asks which directory to open that dired
+  ;; buffer for
+  (global-set-key (kbd "C-x C-j") 'dired-single-magic-buffer)
   )
 
 (define-key modi-map (kbd "y")    'bury-buffer) ;; C-x m y
@@ -332,7 +334,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when (boundp 'setup-helm-loaded)
-  (global-set-key (kbd "M-i") 'helm-multi-swoop-all)
+  (global-set-key (kbd "M-i") 'helm-swoop)
+  (global-set-key (kbd "M-I") 'helm-multi-swoop-all)
   ;; (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
   ;; When doing isearch, hand the word over to helm-swoop
   (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch))
