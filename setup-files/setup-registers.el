@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-07 12:46:44 kmodi>
+;; Time-stamp: <2014-06-11 10:22:32 kmodi>
 
 ;; Source: http://stackoverflow.com/questions/12558019/shortcut-to-open-a-specific-file-in-emacs
 ;; Source: http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Registers.html#File-Registers
@@ -11,22 +11,18 @@
 (set-register ?e (cons 'file (concat user-emacs-directory
                                      "/init.el")))
 
+;; setup-key-bindings.el can be accessed using `C-x r j k`
+(set-register ?k (cons 'file (concat user-emacs-directory
+                                     "/setup-files/setup-key-bindings.el")))
+
 ;; index.html can be accessed using `C-x r j i`
 (set-register ?i (cons 'file "~/public_html/index.html" ))
 
 ;; index.html can be accessed using `C-x r j j`
 (set-register ?j (cons 'file "~/org/journal.org" ))
 
-;; setup-key-bindings.el can be accessed using `C-x r j k`
-(set-register ?k (cons 'file (concat user-emacs-directory
-                                     "/setup-files/setup-key-bindings.el")))
-
 ;; .alias can be accessed using `C-x r j t`
 (set-register ?t (cons 'file "~/.tmux.conf" ))
-
-;; .alias can be accessed using `C-x r j u`
-(set-register ?u (cons 'file "~/org/uvm_book/uvm.org" ))
-
 
 (setq setup-registers-loaded t)
 (provide 'setup-registers)
