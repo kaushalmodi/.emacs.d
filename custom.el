@@ -11,7 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(ac-ignores (quote ("/" "//" "/*" "//*" "///" "////")))
  '(ac-stop-words (quote ("/" "//" "/*" "//*" "///" "////")))
- '(after-save-hook (quote (executable-make-buffer-file-executable-if-script-p sml/generate-buffer-identification helm-swoop--clear-cache)))
+ '(after-save-hook (quote (swoop-cache-clear executable-make-buffer-file-executable-if-script-p sml/generate-buffer-identification)))
  '(ansi-color-faces-vector [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
@@ -20,7 +20,7 @@
  '(case-fold-search t nil nil "ignore case when searching; searching using an all-lowercase string will match the same strings with uppercase characters too")
  '(column-number-mode t)
  '(custom-enabled-themes (quote (zenburn)))
- '(custom-safe-themes (quote ("c2cfe2f1440d9ef4bfd3ef4cf15bfe35ff40e6d431264b1e24af64f145cffb11" "cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" default)))
+ '(custom-safe-themes (quote ("b1471d88b39cad028bd621ae7ae1e8e3e3fca2c973f0dfe3fd6658c194a542ff" "c2cfe2f1440d9ef4bfd3ef4cf15bfe35ff40e6d431264b1e24af64f145cffb11" "cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" default)))
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
  '(display-time-mode t)
@@ -51,4 +51,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(linum ((t (:inherit (shadow default) :background "#3F3F3F" :foreground "dim gray")))))
+ )
