@@ -1,22 +1,60 @@
-;; Time-stamp: <2014-05-28 11:56:52 kmodi>
+;; Time-stamp: <2014-05-30 11:25:56 kmodi>
 
 ;; Org Mode
 
 (setq org-directory "~/org")
 
 (setq org-src-fontify-natively t) ;; fontify code in code blocks
+(setq org-pretty-entities t) ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
+(setq org-pretty-entities-include-sub-superscripts nil) ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
+
+;; Previewing latex fragments in org mode
+;; Source: http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+;; (setq org-latex-create-formula-image-program 'dvipng)
+(setq org-latex-create-formula-image-program 'imagemagick) ;; Recommended to use imagemagick
+
+;; (require 'org-latex) in org version < 8.0
+;; (setq org-export-latex-listings 'minted) in org version < 8.0
+;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
 
 ;; From <ORG EL DIR>/ox-latex.el
 (require 'ox-latex)
-;; (require 'org-latex) in org version < 8.0
 (setq org-latex-listings 'minted)
-;; (setq org-export-latex-listings 'minted) in org version < 8.0
-(add-to-list 'org-latex-packages-alist '("" "minted"))
-(add-to-list 'org-latex-packages-alist '("" "tikz"))
-;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
-;; Above will output tex files with \usepackage{minted}
 
-;; While in Org mode, `C-c C-e` followed by 'l' and 'l' (twice) will generate the tex
+;; Below will output tex files with \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
+;; The org-latex-packages-alist is a list of cells of the format:
+;; ("options" "package" snippet-flag)
+;; snippet-flag is non-nil by default. So unless this flag is set to nil, that
+;; package will be used even when previewing latex fragments using the `C-c C-x C-l`
+;; org mode key binding
+(setq org-latex-packages-alist
+      '(
+        ;; % 0 paragraph indent, adds vertical space between paragraphs
+        ;; Source: http://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting
+        (""          "parskip")
+        ;; ;; Replace default font with a much crisper font
+        ;; ;; Source: http://www.khirevich.com/latex/font/
+        ;; (""          "charter")
+        ;; ("expert"    "mathdesign")
+        ;; Code blocks syntax highlighting
+        (""          "minted") ;; Comment this if org-latex-create-formula-image-program
+                               ;; is set to dvipng. minted package can't be loaded
+                               ;; when using dvipng to show latex previews
+        ;; (""          "minted" nil) ;; Uncomment this if org-latex-create-formula-image-program
+        ;;                            ;; is set to dvipng
+        ;; Graphics package for more complicated figures
+        (""          "tikz")
+        ;; Prevent tables/figures from one section to float into another section
+        ;; Source: http://tex.stackexchange.com/questions/279/how-do-i-ensure-that-figures-appear-in-the-section-theyre-associated-with
+        ("section"   "placeins")
+        ;; It doesn't seem below packages are required
+        ;; ;; Packages suggested to be added for previewing latex fragments
+        ;; ;; Source: http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+        ;; ("usenames"  "color") ;; HAD TO COMMENT IT OUT BECAUSE OF CLASH WITH placeins pkg
+        ("mathscr"   "eucal")
+        (""          "latexsym")
+        ))
+
 
 ;; In order to have that tex convert to pdf, you have to ensure that you have
 ;; minted.sty in your TEXMF folder.
@@ -33,11 +71,25 @@
 ;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
 ;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
 
-;; -shell-escape is required when converting a .tex file containing minted
+;; -shell-escape is required when converting a .tex file containing `minted'
 ;; package to a .pdf
 ;; Now org > tex > pdf conversion can happen with the org default
 ;; `C-c C-e l p` key binding
-(setq org-latex-pdf-process '("pdflatex -shell-escape %f"))
+
+;; Source: http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
+;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
+;; automatically to resolve the cross-references.
+;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape %f"))
+
+;; Run xelatex multiple times to get the cross-references right
+(setq org-latex-pdf-process '("xelatex -shell-escape %f"
+                              "xelatex -shell-escape %f"
+                              "xelatex -shell-escape %f"))
+
+;; Run pdflatex multiple times to get the cross-references right
+;; (setq org-latex-pdf-process '("pdflatex -shell-escape %f"
+                              ;; "pdflatex -shell-escape %f"
+                              ;; "pdflatex -shell-escape %f"))
 
 ;; You can also do the org > tex > pdf conversion and open the pdf file in
 ;; acroread directly using the `C-c C-e l o` key binding
@@ -52,23 +104,25 @@
 ;; Source: https://code.google.com/p/minted/
 (setq org-latex-minted-options
       '(("linenos")
-        ("numbersep" "5pt")
-        ("frame" "lines")
-        ("framesep" "2mm")
+        ("numbersep"   "5pt")
+        ("frame"       "lines")
+        ("framesep"    "2mm")
+        ;; ("fontfamily"  "zi4") ;; Required only when using pdflatex instead of xelatex
         ))
 
-(add-to-list 'org-latex-classes
-             '("article"
-               "\\documentclass[11pt,letterpaper]{article}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-             )
+;; (add-to-list 'org-latex-classes
+;;              '("article"
+;;                "\\documentclass[11pt,letterpaper]{article}"
+;;                ("\\section{%s}"        . "\\section*{%s}")
+;;                ("\\subsection{%s}"     . "\\subsection*{%s}")
+;;                ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")
+;;                ("\\paragraph{%s}"      . "\\paragraph*{%s}")
+;;                ("\\subparagraph{%s}"   . "\\subparagraph*{%s}"))
+;;              )
 
-;; Disallow _ and ^ characters from sub/super-scripting strings
-(setq org-export-with-sub-superscripts nil)
+;; Allow _ and ^ characters to sub/super-script strings but only when followed by braces
+(setq org-use-sub-superscripts         '{})
+(setq org-export-with-sub-superscripts '{})
 
 (setq org-log-done 'timestamp) ;; Insert only timestamp when closing an org TODO item
 ;; (setq org-log-done 'note) ;; Insert timestamp and note when closing an org TODO item
@@ -86,19 +140,22 @@
                           ;; while they have children that are not DONE
                           ;; Source: http://orgmode.org/manual/TODO-dependencies.html
 ;; Capture
+;; By default, org capture dialog is activated by `C-c c`
 (setq org-capture-templates
       '(
-        ("j" "Journal" entry (file+datetree "~/org/journal.org")
+        ("j" "Journal" entry (file+datetree "~/org/journal.org") ;; C-c c j
          "\n* %?\n  Entered on %U")
-        ("n" "Note" entry (file "~/org/notes.org")
+        ("n" "Note" entry (file "~/org/notes.org") ;; C-c c n
          "\n* %?\n  Context:\n    %i\n  Entered on %U")
-        ("u" "UVM/System Verilog Notes" entry (file "~/org/uvm.org")
+        ("u" "UVM/System Verilog Notes" entry (file "~/org/uvm.org") ;; C-c c u
          "\n* %?\n  Context:\n    %i\n  Entered on %U")
         ))
 
 (defun my-org-mode-customizations ()
   ;; Remove the org mode binding that conflicts with ace-jump-mode binding
   (define-key org-mode-map (kbd "C-c SPC") nil)
+  ;; Override the org-mode binding for `C-j'; use my custom global key binding
+  (define-key org-mode-map (kbd "C-j") nil)
   )
 (add-hook 'org-mode-hook 'my-org-mode-customizations)
 
@@ -139,3 +196,10 @@
 ;;                 `org-latex-pdf-process' list
 ;; C-c C-e l o <-- Do org > tex > pdf and open the pdf file using the app
 ;;                 associated with pdf files defined in `org-file-apps'
+
+;; When the cursor is on an existing link, `C-c C-l' allows you to edit the link
+;; and description parts of the link.
+
+;; C-c C-x f <-- Insert footnote
+
+;; C-c C-x C-l <-- Preview latex fragment in place; Press C-c C-c to exit that preview.
