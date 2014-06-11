@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-14 14:55:46 kmodi>
+;; Time-stamp: <2014-06-10 09:46:44 kmodi>
 
 ;; ctags, etags
 
@@ -29,16 +29,19 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; etags-table
-;; Depending on the location of the file in buffer, the respetive TAGS file is
+;; Depending on the location of the file in buffer, the respective TAGS file is
 ;; opened on doing a tag find.
 (require 'etags-table)
+
 (setq etags-table-alist
       (list
-       `(,(concat user-emacs-directory "/.*") ,(concat user-emacs-directory "/TAGS"))
+       `(,(concat user-emacs-directory "/.*") ,(concat user-emacs-directory "/TAGS")) ;; emacs config
        ))
-;; (when (boundp 'project-root) ;; add-to-list if project-root symbol is defined
-;;     (add-to-list 'etags-table-alist
-;;                  `(,(concat project-root "/.*") ,(concat project-root "/TAGS")) t))
+
+(when (boundp 'uvm-source-code-dir) ;; add-to-list if uvm-source-code-dir symbol is defined
+  (add-to-list 'etags-table-alist
+               `(,(concat uvm-source-code-dir "/.*") ,(concat uvm-source-code-dir "/TAGS")) t))
+
 (setq etags-table-search-up-depth 15) ;; Max depth to search up for a tags file.  nil means don't search.
 
 
@@ -50,7 +53,11 @@ tag find"
   (interactive)
   (when (boundp 'project-root) ;; add-to-list if project-root symbol is defined
     (add-to-list 'etags-table-alist
-                 `(,(concat project-root "/.*") ,(concat project-root "/TAGS")) t))
+                 `(,(concat project-root "/.*") ,(concat project-root "/TAGS")) t)
+    (when (boundp 'uvm-source-code-dir)
+      (add-to-list 'etags-table-alist
+                   `("/pr.*j.*/.*" ,(concat uvm-source-code-dir "/TAGS")) t))
+    )
   (etags-select-find-tag-at-point)
   )
 
@@ -126,16 +133,16 @@ tag find"
 ;;    turn on `ctags-auto-update-mode'.
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; helm-etags+
-;; Source: https://github.com/jixiuf/helm-etags-plus
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; helm-etags+
+;; ;; Source: https://github.com/jixiuf/helm-etags-plus
 
-(require 'helm-etags+)
+;; (require 'helm-etags+)
 
-;; dev suggested setting below variables to avoid the issue I posted on his
-;; github: https://github.com/jixiuf/helm-etags-plus/issues/9
-(setq find-file-visit-truename nil)
-(setq helm-etags+-follow-symlink-p nil)
+;; ;; dev suggested setting below variables to avoid the issue I posted on his
+;; ;; github: https://github.com/jixiuf/helm-etags-plus/issues/9
+;; (setq find-file-visit-truename nil)
+;; (setq helm-etags+-follow-symlink-p nil)
 
 
 (setq setup-ctags-loaded t)
