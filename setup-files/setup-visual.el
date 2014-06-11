@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-02 11:59:37 kmodi>
+;; Time-stamp: <2014-06-05 09:34:33 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -40,14 +40,18 @@
   "Activate zenburn theme."
   (interactive)
   (setq dark-theme t)
-  (load-theme 'zenburn t))
+  (load-theme 'zenburn t)
+  (set-face-attribute 'linum nil :background "#3F3F3F" :foreground "dim gray")
+  )
 
 ;;leuven theme
 (defun leuven ()
   "Activate leuven theme."
   (interactive)
   (setq dark-theme nil)
-  (load-theme 'leuven t))
+  (load-theme 'leuven t)
+  (set-face-attribute 'linum nil :background "#FFFFFF" :foreground "dim gray")
+  )
 
 (setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
       font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
@@ -135,9 +139,13 @@
   "change cursor color according to some minor modes."
   ;; set-cursor-color is somewhat costly, so we only call it when needed:
   (let ((color
-         (if buffer-read-only "yellow"
+         (if buffer-read-only
+             ;; Color when the buffer is read-only
+             (progn (if dark-theme "yellow" "dark orange"))
+           ;; Color when the buffer is writeable but overwrite mode is on
            (if overwrite-mode "red"
-             (if dark-theme "white" "dark orange")))))
+             ;; Color when the buffer is writeable but overwrite mode if off
+             (if dark-theme "white" "gray")))))
     (unless (and
              (string= color hcz-set-cursor-color-color)
              (string= (buffer-name) hcz-set-cursor-color-buffer))
