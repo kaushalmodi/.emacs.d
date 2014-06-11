@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-04 09:18:51 kmodi>
+;; Time-stamp: <2014-06-04 12:06:11 kmodi>
 
 ;; Matlab
 
@@ -13,5 +13,12 @@
 ;; (define-key matlab-shell-mode-map (kbd "C-p") 'matlab-shell-previous-matching-input-from-input)
 ;; (define-key matlab-shell-mode-map (kbd "C-n") 'matlab-shell-next-matching-input-from-input)
 
+(defun my-matlab-mode-customizations ()
+  ;; Override the matlab-mode binding for `C-j'; use my custom global key binding
+  (define-key matlab-mode-map (kbd "C-j") nil)
+  )
+(add-hook 'matlab-mode-hook 'my-matlab-mode-customizations)
 
+
+(setq setup-matlab-loaded t)
 (provide 'setup-matlab)
