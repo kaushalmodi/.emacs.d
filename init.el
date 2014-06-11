@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-23 17:41:28 kmodi>
+;; Time-stamp: <2014-06-10 09:28:03 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -12,7 +12,8 @@
   '(
     ;; projectile
     ;; header2 ;; INSTR_UNCOMMENT_THIS_LINE
-    ace-jump-mode
+    ;; helm helm-swoop ;; Replaced with swoop
+    ace-jump-mode ace-window
     ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                       ;; You need to have ag installed on your machine
     anzu ;; shows total search hits in mode line, better query-replace alternative
@@ -29,7 +30,6 @@
     fill-column-indicator
     guide-key
     hardcore-mode
-    helm helm-swoop
     hl-line+
     ido-vertical-mode flx-ido ido-ubiquitous
     iregister ;; Interactive access to registers
@@ -51,6 +51,7 @@
     smex ;; smart M-x
     stripe-buffer
     sublimity ;; smooth scrolling
+    swoop
     undo-tree ;; supercool undo visualization
     visual-regexp
     volatile-highlights
@@ -71,9 +72,14 @@
 (require 'setup-popwin) ;; require popwin first as packages might depend on it
 (require 'setup-visual)
 
+;; Stuff that can't be committed publicly on github
+(require 'setup-secret) ;; INSTR_DELETE_THIS_LINE
+;;
+
 ;; Set up extensions/packages
 (eval-after-load 'ido '(require 'setup-ido))
 (require 'setup-ace-jump-mode)
+(require 'setup-ace-window)
 (require 'setup-ag)
 (require 'setup-auto-complete)
 (require 'setup-bookmark+)
@@ -84,7 +90,6 @@
 (require 'setup-guide-key)
 (require 'setup-hardcore)
 (require 'setup-header2)
-(require 'setup-helm)
 (require 'setup-highlight)
 (require 'setup-hl-line+)
 (require 'setup-iregister)
@@ -106,6 +111,7 @@
 (require 'setup-w3m)
 (require 'setup-xkcd)
 (require 'setup-yasnippet)
+;; (require 'setup-helm) ;; Not required; replaced with swoop
 ;; (require 'setup-projectile)
 
 ;; Languages
@@ -130,11 +136,6 @@
 (require 'setup-desktop)
 (require 'setup-ctags)
 (require 'setup-misc)
-;; (require 'setup-occur) ;; not required as the helm-multi-swoop-all does awesome job
-
-;; Stuff that can't be committed publicly on github
-(require 'setup-secret) ;; INSTR_DELETE_THIS_LINE
-;;
 
 ;; NOTE: Load below ONLY after loading all the packages
 ;; region-bindings-mode has bindings for multiple-cursors, visual-regexp, anzu
