@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-17 13:10:13 kmodi>
+;; Time-stamp: <2014-05-28 16:05:30 kmodi>
 
 ;; Fill Column Indicator
 ;; Source: http://www.emacswiki.org/FillColumnIndicator
@@ -13,6 +13,7 @@
 (add-hook 'python-mode-hook     'fci-mode)
 (add-hook 'sh-mode-hook         'fci-mode)
 (add-hook 'cperl-mode-hook      'fci-mode)
+(add-hook 'org-mode-hook        'fci-mode)
 ;; (add-hook 'after-change-major-mode-hook 'fci-mode) ;; Enable fci-mode automatically for all files
 
 ;; TIP: How to know what the current major mode is?
