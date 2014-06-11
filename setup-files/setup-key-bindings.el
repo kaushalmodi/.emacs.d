@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-20 11:17:57 kmodi>
+;; Time-stamp: <2014-06-11 10:30:59 kmodi>
 
 ;; KEY BINDINGS
 
@@ -119,6 +119,9 @@
 (global-set-key (kbd "<C-mouse-4>") 'text-scale-increase) ;; C + wheel-up
 (global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease) ;; C + wheel-down
 
+;; Make Alt+mousewheel scroll the other buffer
+(global-set-key (kbd "<M-mouse-4>") 'scroll-other-window-down-dont-move-point) ;; M + wheel-up
+(global-set-key (kbd "<M-mouse-5>") 'scroll-other-window-up-dont-move-point) ;; M + wheel-down
 
 (global-set-key (kbd "C-c k")     'windmove-up) ;; switch to buffer on top
 (global-set-key (kbd "C-c j")     'windmove-down) ;; switch to buffer on bottom
@@ -153,12 +156,16 @@
 ;; Print to printer defined by env var `PRINTER'
 (define-key modi-map (kbd "p")    'ps-print-buffer-with-faces) ;; C-x m p
 
-;; Cycle the buffers in reverse order than what happens with `C-x o`
-(global-set-key (kbd "<C-tab>")   'other-window) ;; alternative shortcut for `C-x o`
-(global-set-key (kbd "C-x O")
-                (lambda ()
-                  (interactive)
-                  (other-window -1)))
+;; (global-set-key (kbd "<C-tab>")   'other-window) ;; alternative shortcut for `C-x o`
+;; ;; Cycle the buffers in reverse order than what happens with `C-x o`
+;; (global-set-key (kbd "C-x O")
+;;                 (lambda ()
+;;                   (interactive)
+;;                   (other-window -1)))
+
+(when (boundp 'setup-ace-window-loaded)
+  (global-set-key (kbd "C-x o")  'ace-window)
+  )
 
 (when (boundp 'setup-dired-loaded)
   ;; Change the default `C-x C-d` key binding from `ido-list-directory'
@@ -278,6 +285,21 @@
   ;; replace the emacs default query-replace
   (global-set-key (kbd "M-%")        'anzu-query-replace)
   (global-set-key (kbd "C-c r")      'anzu-replace-at-cursor-thing)
+
+  ;; swoop
+  (global-set-key (kbd "M-i")   'swoop)
+  (global-set-key (kbd "M-I")   'swoop-multi)
+  (global-set-key (kbd "M-o")   'swoop-pcre-regexp)
+  ;; Transition
+  ;; isearch     > press [C-o] > swoop
+  (define-key isearch-mode-map (kbd "C-o")      'swoop-from-isearch)
+  ;; swoop       > press [C-o] > swoop-multi
+  (define-key swoop-map (kbd "C-o")             'swoop-multi-from-swoop)
+  ;; Resume
+  ;; C-u M-x swoop : Use last used query
+  ;; Swoop Edit Mode
+  ;; During swoop, press [C-c C-e]
+  ;; You can edit synchronously
   )
 
 (when (boundp 'setup-visual-regexp-loaded)
@@ -295,10 +317,6 @@
   (define-key modi-map (kbd "a")     'ag-regexp) ;; C-x m a
   )
 
-;; Search with google suggestions; opens results in default emacs browser
-;; If you don't hit Enter and hit Tab instead, you will get an option to search
-;; in alternative websites like Wikipedia
-(define-key modi-map (kbd "g") 'helm-google-suggest) ;; C-x m g
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Visual | Looks
@@ -329,16 +347,18 @@
   )
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; helm-swoop package
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Commented out below; now replaced with swoop, thus not needing to install
+;; helm anymore!
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; helm-swoop package
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(when (boundp 'setup-helm-loaded)
-  (global-set-key (kbd "M-i") 'helm-swoop)
-  (global-set-key (kbd "M-I") 'helm-multi-swoop-all)
-  ;; (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-  ;; When doing isearch, hand the word over to helm-swoop
-  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch))
+;; (when (boundp 'setup-helm-loaded)
+;;   (global-set-key (kbd "M-i") 'helm-swoop)
+;;   (global-set-key (kbd "M-I") 'helm-multi-swoop-all)
+;;   ;; (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+;;   ;; When doing isearch, hand the word over to helm-swoop
+;;   (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
