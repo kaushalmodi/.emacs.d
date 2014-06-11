@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-20 14:29:15 kmodi>
+;; Time-stamp: <2014-06-03 10:27:53 kmodi>
 
 ;; Source: http://www.emacswiki.org/emacs/SearchAtPoint
 
@@ -139,6 +139,10 @@ happens within a region if one is selected."
    '(replace-eval-replacement replace-quote
                               (if (match-string 1) string-2 string-1))
    t t delimited nil nil start end))
+
+;; Swoop
+;; https://github.com/ShingoFukuyama/emacs-swoop
+(require 'swoop)
 
 
 (setq setup-search-loaded t)
