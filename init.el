@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-18 10:37:35 kmodi>
+;; Time-stamp: <2014-06-18 11:36:32 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -58,6 +58,7 @@
     volatile-highlights
     w3m ;; web-browsing in emacs
     web-mode
+    wrap-region ;; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
     xkcd ;; comic
     yaml-mode ;; Useful for editing Octopress' _config.yml
     yasnippet
@@ -110,6 +111,7 @@
 (require 'setup-undo-tree)
 (require 'setup-visual-regexp)
 (require 'setup-w3m)
+(require 'setup-wrap-region)
 (require 'setup-xkcd)
 (require 'setup-yasnippet)
 ;; (require 'setup-helm) ;; Not required; replaced with swoop
