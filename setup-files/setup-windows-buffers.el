@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-17 12:21:12 kmodi>
+;; Time-stamp: <2014-06-13 10:55:17 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -19,7 +19,7 @@
 ;; Source: http://www.emacswiki.org/emacs/RecentFiles
 (require 'recentf)
 (recentf-mode 1)
-(setq recentf-max-menu-items 1000)
+(setq recentf-max-menu-items 2000)
 
 ;; Set initial frame size and position
 ;; fills full screen of the left monitor
