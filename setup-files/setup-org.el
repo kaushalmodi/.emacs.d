@@ -1,8 +1,12 @@
-;; Time-stamp: <2014-06-18 10:29:46 kmodi>
+;; Time-stamp: <2014-06-18 16:47:25 kmodi>
 
 ;; Org Mode
 
 (setq org-directory "~/org")
+
+(setq org-agenda-archives-mode nil) ;; required in org 8.0+
+(setq org-agenda-skip-comment-trees nil) ;; required in org 8.0+
+(setq org-agenda-skip-function nil) ;; required in org 8.0+
 
 (setq org-src-fontify-natively t) ;; fontify code in code blocks
 (setq org-pretty-entities t) ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
@@ -222,6 +226,38 @@
       org-reveal-theme    "default" ;; beige blood moon night serif simple sky solarized
       org-reveal-mathjax  t ;; Use mathjax.org to render LaTeX equations
       )
+
+;; org-agenda related functions
+;; http://sachachua.com/blog/2013/01/emacs-org-task-related-keyboard-shortcuts-agenda/
+(defun sacha/org-agenda-done (&optional arg)
+  "Mark current TODO as done.
+This changes the line at point, all other lines in the agenda referring to
+the same tree node, and the headline of the tree node in the Org-mode file."
+  (interactive "P")
+  (org-agenda-todo "DONE"))
+;; Override the key definition for org-exit
+(define-key org-agenda-mode-map "x" 'sacha/org-agenda-done)
+
+(defun sacha/org-agenda-mark-done-and-add-followup ()
+  "Mark the current TODO as done and add another task after it.
+Creates it at the same level as the previous task, so it's better to use
+this with to-do items than with projects or headings."
+  (interactive)
+  (org-agenda-todo "DONE")
+  (org-agenda-switch-to)
+  (org-capture 0 "t"))
+;; Override the key definition
+(define-key org-agenda-mode-map "X" 'sacha/org-agenda-mark-done-and-add-followup)
+
+(defun sacha/org-agenda-new ()
+  "Create a new note or task at the current agenda item.
+Creates it at the same level as the previous task, so it's better to use
+this with to-do items than with projects or headings."
+  (interactive)
+  (org-agenda-switch-to)
+  (org-capture 0))
+;; New key assignment
+(define-key org-agenda-mode-map "N" 'sacha/org-agenda-new)
 
 
 (setq setup-org-loaded t)
