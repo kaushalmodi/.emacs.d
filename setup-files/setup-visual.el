@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-05 09:34:33 kmodi>
+;; Time-stamp: <2014-06-18 10:33:45 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -27,20 +27,15 @@
 (defvar default-light-theme 'leuven)
 (defvar default-theme       'zenburn)
 
-(defun disable-all-themes ()
-  "disable all active themes."
-  (dolist (i custom-enabled-themes)
-    (disable-theme i)))
-
-(defadvice load-theme (before disable-themes-first activate)
-  (disable-all-themes))
-
 ;; zenburn
 (defun zenburn ()
   "Activate zenburn theme."
   (interactive)
   (setq dark-theme t)
+  (disable-theme 'leuven)
   (load-theme 'zenburn t)
+  (when (boundp 'setup-smart-mode-line-loaded)
+    (sml/apply-theme 'dark))
   (set-face-attribute 'linum nil :background "#3F3F3F" :foreground "dim gray")
   )
 
@@ -49,16 +44,23 @@
   "Activate leuven theme."
   (interactive)
   (setq dark-theme nil)
+  (disable-theme 'zenburn)
   (load-theme 'leuven t)
+  (when (boundp 'setup-smart-mode-line-loaded)
+    (sml/apply-theme 'light))
   (set-face-attribute 'linum nil :background "#FFFFFF" :foreground "dim gray")
   )
+
+;; Load the theme ONLY after the frame has finished loading (needed especially
+;; when running emacs in daemon mode)
+;; Source: https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
+(add-to-list 'after-make-frame-functions
+             (lambda (&rest frame)
+               (funcall default-theme)))
 
 (setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
       font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
       )
-
-(funcall default-theme) ;; Set the default theme
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FONT SIZE
