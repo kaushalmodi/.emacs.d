@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-11 10:30:59 kmodi>
+;; Time-stamp: <2014-06-16 15:05:41 kmodi>
 
 ;; KEY BINDINGS
 
@@ -420,6 +420,23 @@
   ;; Alternative for `M-x'
   (key-chord-define-global ";'"   'smex)
 
+  ;; Windows and buffers
+  (key-chord-define-global "XX"   ( lambda()
+                                    (interactive)
+                                    (kill-buffer (current-buffer))))
+  (key-chord-define-global "ZZ"   'toggle-between-buffers)
+
+  ;; Navigation
+  (key-chord-define-global "m,"   'beginning-of-buffer)
+  (key-chord-define-global ",."   'end-of-buffer)
+
+  (when (boundp 'setup-navigation-loaded)
+    ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
+    ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
+    (key-chord-define-global "]'" 'iy-go-to-char)
+    (key-chord-define-global "[;" 'iy-go-to-char-backward)
+    (key-chord-define-global "BB" 'iy-go-to-char-backward))
+
   ;; Alternative for `F*' keys
   (key-chord-define-global "1q"   'goto-line)
   (key-chord-define-global "2w"   'menu-bar-mode)
@@ -442,19 +459,6 @@
     (key-chord-define-global "UU"   'undo-tree-redo)
     (key-chord-define-global "\}\}" 'undo-tree-switch-branch))
 
-  (key-chord-define-global "]'"   'completion-at-point)
-  (key-chord-define-global "[;"   'completion-at-point)
-  (key-chord-define-global ";."   'completion-at-point)
-
-  ;; Windows and buffers
-  (key-chord-define-global "XX"   ( lambda()
-                                    (interactive)
-                                    (kill-buffer (current-buffer))))
-  (key-chord-define-global "ZZ"   'toggle-between-buffers)
-
-  ;; Navigation
-  (key-chord-define-global "m,"   'beginning-of-buffer)
-  (key-chord-define-global ",."   'end-of-buffer)
 
   (key-chord-define-global "p["   'windmove-left)
   (key-chord-define-global "[]"   'windmove-right)
@@ -467,12 +471,9 @@
   (when (boundp 'setup-ace-jump-mode-loaded)
     (key-chord-define-global "l;" 'ace-jump-mode))
 
-  (when (boundp 'setup-navigation-loaded)
-    ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
-    ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-    (key-chord-define-global "df" 'iy-go-to-char)
-    (key-chord-define-global "zx" 'iy-go-to-char-backward)
-    (key-chord-define-global "BB" 'iy-go-to-char-backward))
+  (when (boundp 'setup-gtags-loaded)
+    (key-chord-define-global "??" 'ggtags-show-definition))
+
   )
 
 
