@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-18 11:27:39 kmodi>
+;; Time-stamp: <2014-06-18 16:54:52 kmodi>
 
 ;; wrap-region
 ;; https://github.com/rejeep/wrap-region.el
@@ -11,7 +11,9 @@
 
 (wrap-region-add-wrapper "`" "'") ; hit ` then region -> `region'
 
+;; Note that the '=' wrapping won't work if expand-region is active!
 (wrap-region-add-wrapper "=" "=" nil 'org-mode) ; hit $ then region -> =region= in org-mode
+
 (wrap-region-add-wrapper "*" "*" nil 'org-mode) ; hit $ then region -> *region* in org-mode
 (wrap-region-add-wrapper "/" "/" nil 'org-mode) ; hit $ then region -> /region/ in org-mode
 (wrap-region-add-wrapper "_" "_" nil 'org-mode) ; hit $ then region -> _region_ in org-mode
