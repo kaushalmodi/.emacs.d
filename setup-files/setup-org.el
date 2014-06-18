@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-30 11:25:56 kmodi>
+;; Time-stamp: <2014-06-18 10:29:46 kmodi>
 
 ;; Org Mode
 
@@ -53,8 +53,15 @@
         ;; ("usenames"  "color") ;; HAD TO COMMENT IT OUT BECAUSE OF CLASH WITH placeins pkg
         ("mathscr"   "eucal")
         (""          "latexsym")
+        ;; Prevent an image from floating to a different location
+        ;; http://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
+        (""          "float")
+        (""          "caption")
         ))
 
+;; "H" option is from the `float' package. That prevents the images from floating around.
+;; (setq org-latex-default-figure-position "htb") ;; default - figures are floating
+(setq org-latex-default-figure-position "H") ;; figures are NOT floating
 
 ;; In order to have that tex convert to pdf, you have to ensure that you have
 ;; minted.sty in your TEXMF folder.
@@ -120,6 +127,16 @@
 ;;                ("\\subparagraph{%s}"   . "\\subparagraph*{%s}"))
 ;;              )
 
+;; allow for export=>beamer by placing
+;; #+LaTeX_CLASS: beamer in org files
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass[presentation]{beamer}"
+               ("\\section{%s}"        . "\\section*{%s}")
+               ("\\subsection{%s}"     . "\\subsection*{%s}")
+               ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")))
+(require 'ox-beamer)
+
 ;; Allow _ and ^ characters to sub/super-script strings but only when followed by braces
 (setq org-use-sub-superscripts         '{})
 (setq org-export-with-sub-superscripts '{})
@@ -150,6 +167,15 @@
         ("u" "UVM/System Verilog Notes" entry (file "~/org/uvm.org") ;; C-c c u
          "\n* %?\n  Context:\n    %i\n  Entered on %U")
         ))
+
+(when (boundp 'project1-org-dir) ;; set in setup-secret.el
+  (add-to-list 'org-capture-templates
+               '("t" "Project 1 Meeting Notes" entry
+                 (file+datetree
+                  (concat project1-org-dir "/dv_meeting_notes.org")) ;; C-c c t
+                 "\n* %?\n  Entered on %U")
+               )
+  )
 
 (defun my-org-mode-customizations ()
   ;; Remove the org mode binding that conflicts with ace-jump-mode binding
@@ -185,6 +211,17 @@
        (not (string= lang "dot"))      ;; don't ask for graphviz
        ))
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+
+;; Presentations using reveal.js
+;; Download reveal.js from https://github.com/hakimel/reveal.js/
+;; Instead `ox-reveal' from MELPA
+(require 'ox-reveal)
+;; I have git clones reveal.js in my {emacs config directory}/from-git/
+(setq org-reveal-root     (concat "file://" user-emacs-directory "/from-git/reveal.js/")
+      org-reveal-hlevel   1
+      org-reveal-theme    "default" ;; beige blood moon night serif simple sky solarized
+      org-reveal-mathjax  t ;; Use mathjax.org to render LaTeX equations
+      )
 
 
 (setq setup-org-loaded t)
