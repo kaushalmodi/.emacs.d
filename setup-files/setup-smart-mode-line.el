@@ -1,11 +1,10 @@
-;; Time-stamp: <2014-03-13 11:30:51 kmodi>
+;; Time-stamp: <2014-06-17 12:26:57 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
 ;; Source: https://github.com/Bruce-Connor/smart-mode-line
 
-(setq sml/theme 'dark
-      sml/name-width 40 ;; space allocated for the buffer name in the mode-line
+(setq sml/name-width 40 ;; space allocated for the buffer name in the mode-line
       sml/line-number-format "%4l"
       sml/mode-width 'full
       sml/hidden-modes
@@ -80,6 +79,8 @@
 
 ;; Load sml with above configuration
 (sml/setup)
+(when (boundp 'setup-visual-loaded)
+  (funcall default-theme))
 
 ;; http://bruce-connor.github.io/emacs-online-documentation/Var/display-time-mode
 ;; Just setting display-time-mode to "t" does not work. You have to manually call
