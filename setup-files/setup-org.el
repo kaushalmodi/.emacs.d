@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-18 16:47:25 kmodi>
+;; Time-stamp: <2014-06-19 09:45:01 kmodi>
 
 ;; Org Mode
 
@@ -235,8 +235,6 @@ This changes the line at point, all other lines in the agenda referring to
 the same tree node, and the headline of the tree node in the Org-mode file."
   (interactive "P")
   (org-agenda-todo "DONE"))
-;; Override the key definition for org-exit
-(define-key org-agenda-mode-map "x" 'sacha/org-agenda-done)
 
 (defun sacha/org-agenda-mark-done-and-add-followup ()
   "Mark the current TODO as done and add another task after it.
@@ -246,8 +244,6 @@ this with to-do items than with projects or headings."
   (org-agenda-todo "DONE")
   (org-agenda-switch-to)
   (org-capture 0 "t"))
-;; Override the key definition
-(define-key org-agenda-mode-map "X" 'sacha/org-agenda-mark-done-and-add-followup)
 
 (defun sacha/org-agenda-new ()
   "Create a new note or task at the current agenda item.
@@ -256,8 +252,14 @@ this with to-do items than with projects or headings."
   (interactive)
   (org-agenda-switch-to)
   (org-capture 0))
-;; New key assignment
-(define-key org-agenda-mode-map "N" 'sacha/org-agenda-new)
+
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            ;; Override the key definition for org-exit
+            (define-key org-agenda-mode-map "x" 'sacha/org-agenda-done)
+            (define-key org-agenda-mode-map "X" 'sacha/org-agenda-mark-done-and-add-followup)
+            ;; New key assignment
+            (define-key org-agenda-mode-map "N" 'sacha/org-agenda-new)))
 
 
 (setq setup-org-loaded t)
