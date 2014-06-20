@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-18 11:36:32 kmodi>
+;; Time-stamp: <2014-06-20 00:47:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -14,6 +14,7 @@
     ;; header2 ;; INSTR_UNCOMMENT_THIS_LINE
     ;; helm helm-swoop ;; Replaced with swoop
     ;; etags-select etags-table ctags-update ;; Replacing these with ggtags
+    ;; zenburn-theme ;; Using my own forked version
     ace-jump-mode ace-window
     ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                       ;; You need to have ag installed on your machine
@@ -26,6 +27,7 @@
     cperl-mode
     dired+ dired-single
     drag-stuff
+    elisp-slime-nav ;; tag based code navigation for elisp; works even for compressed code
     expand-region
     fill-column-indicator
     ggtags
@@ -46,6 +48,7 @@
     org ox-reveal ;; Get the latest org-mode package from MELPA; ox-reveal for HTML slides
     popwin ;; Open windows like *Help*, *Completions*, etc in minibuffer
     rainbow-delimiters
+    rainbow-mode
     region-bindings-mode ;; complements really well with multiple-cursors
     smart-compile
     smart-mode-line popup
@@ -62,7 +65,6 @@
     xkcd ;; comic
     yaml-mode ;; Useful for editing Octopress' _config.yml
     yasnippet
-    zenburn-theme
     ))
 
 (load setup-packages-file) ;; Load the packages
@@ -88,6 +90,7 @@
 (require 'setup-bookmark+)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
+(require 'setup-elisp-slime-nav)
 (require 'setup-expand-region)
 (require 'setup-fci)
 (require 'setup-guide-key)
@@ -103,7 +106,6 @@
 (require 'setup-multiple-cursors)
 (require 'setup-org)
 (require 'setup-rainbow-delimiters)
-(require 'setup-server)
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
@@ -138,15 +140,15 @@
 (require 'setup-print)
 (require 'setup-desktop)
 (require 'setup-gtags)
-;; (require 'setup-ctags)
+(require 'setup-spell)
 (require 'setup-misc)
+;; (require 'setup-ctags)
+(require 'setup-server)
 
 ;; NOTE: Load below ONLY after loading all the packages
 ;; region-bindings-mode has bindings for multiple-cursors, visual-regexp, anzu
 (require 'setup-region-bindings-mode)
 (require 'setup-key-bindings)
-
-(funcall default-theme)
 
 
 (setq emacs-initialized t)
