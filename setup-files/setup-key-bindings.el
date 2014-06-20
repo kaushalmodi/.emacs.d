@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-20 09:31:12 kmodi>
+;; Time-stamp: <2014-06-20 09:40:23 kmodi>
 
 ;; KEY BINDINGS
 
@@ -310,9 +310,10 @@
   (global-set-key (kbd "C-c q")      'vr/query-replace))
 
 (when (boundp 'setup-highlight-loaded)
-  (define-key modi-map (kbd "h")     'highlight-frame-toggle) ;; C-x m h
-  (define-key modi-map (kbd "H")     'clear-highlight-frame) ;; C-x m H
-  (define-key modi-map (kbd "j")     'auto-highlight-symbol-mode) ;; C-x m j
+  (define-key modi-map (kbd "h")          'highlight-frame-toggle)     ;; C-x m h
+  (define-key modi-map (kbd "H")          'clear-highlight-frame)      ;; C-x m H
+  (global-set-key (kbd "C-*")             'auto-highlight-symbol-mode)
+  (global-set-key (kbd "<C-kp-multiply>") 'auto-highlight-symbol-mode)
   )
 
 (when (boundp 'setup-ag-loaded)
