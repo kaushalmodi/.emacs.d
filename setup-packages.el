@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-02-26 10:27:38 kmodi>
+;; Time-stamp: <2014-06-20 00:45:18 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -22,6 +22,10 @@
   (normal-top-level-add-subdirs-to-load-path))
 (let ((default-directory (concat user-emacs-directory "/from-git"))) ;; packages not on Melpa
   (normal-top-level-add-subdirs-to-load-path))
+
+;; add theme paths
+(add-to-list 'custom-theme-load-path
+             (concat user-emacs-directory "/from-git/zenburn-emacs/"))
 
 (require 'cl)
 (require 'package)
