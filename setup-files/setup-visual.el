@@ -1,8 +1,9 @@
-;; Time-stamp: <2014-06-18 10:33:45 kmodi>
+;; Time-stamp: <2014-06-20 00:31:45 kmodi>
 
 ;; Set up the looks of emacs
 
 (setq default-font-size-pt 10 ;; default font size
+      dark-theme           t  ;; initialize dark-theme var
       )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -36,7 +37,6 @@
   (load-theme 'zenburn t)
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'dark))
-  (set-face-attribute 'linum nil :background "#3F3F3F" :foreground "dim gray")
   )
 
 ;;leuven theme
@@ -184,7 +184,8 @@
   (set-frame-size (selected-frame) 80 25)  ;; rows and columns w h
   (funcall default-light-theme) ;; change to default light theme
   (delete-other-windows)
-  (setq presentation-mode-enabled t))
+  (setq presentation-mode-enabled t)
+  )
 
 (defun coding-zombie-mode ()
   "Revert to default coding mode."
@@ -194,7 +195,8 @@
   (full-screen-left)
   (funcall default-theme) ;; change to default theme
   (split-window-right)
-  (setq presentation-mode-enabled nil))
+  (setq presentation-mode-enabled nil)
+  )
 
 (defun toggle-presentation-mode ()
   "Toggle between presentation and default mode."
