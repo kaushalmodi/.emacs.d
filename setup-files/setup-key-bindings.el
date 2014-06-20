@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-19 13:26:00 kmodi>
+;; Time-stamp: <2014-06-20 09:31:12 kmodi>
 
 ;; KEY BINDINGS
 
@@ -392,7 +392,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when (boundp 'setup-expand-region-loaded)
-  (global-set-key (kbd "C-=") 'er/expand-region))
+  ;; bind er/expand-region to `C-\' instead of `C-=' because `=' sign clashes
+  ;; when trying to wrap a selection with `=' in org-mode using the wrap-region
+  ;; package
+  (global-set-key (kbd "C-\\") 'er/expand-region))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
