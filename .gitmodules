@@ -1,3 +1,6 @@
 [submodule "from-git/reveal.js.master"]
 	path = from-git/reveal.js.master
 	url = http://github.com/hakimel/reveal.js
+[submodule "from-git/zenburn-emacs"]
+	path = from-git/zenburn-emacs
+	url = http://github.com/kaushalmodi/zenburn-emacs
