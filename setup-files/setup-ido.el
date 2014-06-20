@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-27 10:30:49 kmodi>
+;; Time-stamp: <2014-06-19 11:55:40 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -123,6 +123,12 @@
    (ido-completing-read "Recentf open: "
                         (mapcar 'abbreviate-file-name recentf-list)
                         nil t)))
+
+;; Sometimes when using ido-switch-buffer the *Messages* buffer get in the way,
+;; so we set it to be ignored (it can be accessed using `C-h e', so there is
+;; really no need for it in the buffer list).
+;; Source: https://github.com/larstvei/dot-emacs
+(add-to-list 'ido-ignore-buffers "*Messages*")
 
 
 (setq setup-ido-loaded t)
