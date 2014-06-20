@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-16 15:05:41 kmodi>
+;; Time-stamp: <2014-06-19 13:26:00 kmodi>
 
 ;; KEY BINDINGS
 
@@ -33,7 +33,9 @@
 ;;   (global-set-key [f6]     'multi-occur-in-this-mode) ;; search the regexp in all buffers with current major mode
 ;;   (global-set-key [C-f6]   'multi-occur-in-matching-buffers) ;; search the regexp in buffers matching the regexp
 ;;   )
-;; (global-set-key [f6] )
+(when (boundp 'setup-spell-loaded)
+  (global-set-key [f6] 'flyspell-auto-correct-word) ;; auto correct the last incorrect word
+  )
 
 ;; (global-set-key [f7] )
 
