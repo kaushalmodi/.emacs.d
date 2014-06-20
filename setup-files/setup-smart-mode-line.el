@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-17 12:26:57 kmodi>
+;; Time-stamp: <2014-06-19 13:34:59 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -21,6 +21,9 @@
         " VHl"       ;; volatile highlights
         " ctagsU"    ;; ctags update
         " Undo-Tree" ;; undo tree
+        " wr"        ;; Wrap Region
+        " SliNav"    ;; elisp-slime-nav
+        " Fly"       ;; Flycheck
         )
       sml/replacer-regexp-list
       '(
