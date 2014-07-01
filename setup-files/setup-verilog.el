@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-22 11:33:53 kmodi>
+;; Time-stamp: <2014-07-01 14:16:32 kmodi>
 
 ;; Verilog
 
@@ -58,6 +58,8 @@
   ;; Above solution highlights those keywords anywhere in the buffer (not just
   ;; in comments). To do the highlighting intelligently, install the fic-mode
   ;; package -- http://www.emacswiki.org/emacs/fic-mode.el
+  (when (boundp 'setup-linum-loaded)
+    (nlinum-mode 1))
   )
 (add-hook 'verilog-mode-hook 'my-verilog-mode-customizations)
 

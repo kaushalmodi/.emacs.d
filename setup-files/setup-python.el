@@ -1,4 +1,4 @@
-;; Time-stamp: <2013-12-02 17:07:04 kmodi>
+;; Time-stamp: <2014-07-01 14:16:49 kmodi>
 
 ;;Python
 
@@ -25,5 +25,12 @@
 (setq py-split-windows-on-execute-p t)
 ; try to automagically figure out indentation
 (setq py-smart-indentation t)
+
+(defun my-python-mode-customizations()
+  (when (boundp 'setup-linum-loaded)
+    (nlinum-mode 1))
+  )
+(add-hook 'python-mode-hook 'my-python-mode-customizations)
+
 
 (provide 'setup-python)

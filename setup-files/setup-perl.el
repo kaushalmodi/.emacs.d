@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-25 12:12:48 kmodi>
+;; Time-stamp: <2014-07-01 14:17:10 kmodi>
 
 ;; Perl
 
@@ -17,6 +17,8 @@
 (defun my-cperl-mode-customizations()
   (when (boundp 'setup-editing-loaded)
     (define-key cperl-mode-map (kbd "C-j") 'pull-up-line))
+  (when (boundp 'setup-linum-loaded)
+    (nlinum-mode 1))
   )
 (add-hook 'cperl-mode-hook 'my-cperl-mode-customizations)
 

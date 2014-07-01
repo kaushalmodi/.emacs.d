@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-04 12:06:11 kmodi>
+;; Time-stamp: <2014-07-01 14:17:23 kmodi>
 
 ;; Matlab
 
@@ -16,6 +16,8 @@
 (defun my-matlab-mode-customizations ()
   ;; Override the matlab-mode binding for `C-j'; use my custom global key binding
   (define-key matlab-mode-map (kbd "C-j") nil)
+  (when (boundp 'setup-linum-loaded)
+    (nlinum-mode 1))
   )
 (add-hook 'matlab-mode-hook 'my-matlab-mode-customizations)
 
