@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-03-11 16:57:13 kmodi>
+;; Time-stamp: <2014-07-01 16:36:01 kmodi>
 
 ;; Region Bindings Mode
 ;; https://github.com/fgallina/region-bindings-mode
@@ -19,6 +19,7 @@
 
 (when (boundp 'setup-search-loaded)
   (define-key region-bindings-mode-map "]" 'anzu-query-replace) ;; normal replace in region
+  (define-key region-bindings-mode-map "i" 'swoop)
   )
 
 (when (boundp 'setup-visual-regexp-loaded)
