@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-20 00:31:45 kmodi>
+;; Time-stamp: <2014-07-01 11:31:27 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -35,6 +35,8 @@
   (setq dark-theme t)
   (disable-theme 'leuven)
   (load-theme 'zenburn t)
+  (when (boundp 'setup-linum-loaded)
+    (set-face-attribute 'linum nil :height 0.9 :background "#3F3F3F" :foreground "#6F6F6F"))
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'dark))
   )
@@ -46,9 +48,10 @@
   (setq dark-theme nil)
   (disable-theme 'zenburn)
   (load-theme 'leuven t)
+  (when (boundp 'setup-linum-loaded)
+    (set-face-attribute 'linum nil :height 0.9 :background "#FFFFFF" :foreground "dim gray"))
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'light))
-  (set-face-attribute 'linum nil :background "#FFFFFF" :foreground "dim gray")
   )
 
 ;; Load the theme ONLY after the frame has finished loading (needed especially
