@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-20 00:47:01 kmodi>
+;; Time-stamp: <2014-07-01 14:13:07 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -72,14 +72,14 @@
 
 (require 'benchmark-init)
 
+;; Stuff that can't be committed publicly on github
+(require 'setup-secret) ;; INSTR_DELETE_THIS_LINE
+;;
+
 ;; Set up the looks of emacs
 (require 'setup-popwin) ;; require popwin first as packages might depend on it
 (require 'setup-smart-mode-line)
 (require 'setup-visual)
-
-;; Stuff that can't be committed publicly on github
-(require 'setup-secret) ;; INSTR_DELETE_THIS_LINE
-;;
 
 ;; Set up extensions/packages
 (eval-after-load 'ido '(require 'setup-ido))
@@ -106,6 +106,7 @@
 (require 'setup-multiple-cursors)
 (require 'setup-org)
 (require 'setup-rainbow-delimiters)
+(require 'setup-server)
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
@@ -128,6 +129,8 @@
 (require 'setup-web-mode)
 (require 'setup-yaml-mode)
 (require 'setup-latex)
+(require 'setup-shell)
+(require 'setup-elisp)
 ;; (require 'setup-tcl)
 ;; (require 'setup-hspice)
 
@@ -143,12 +146,13 @@
 (require 'setup-spell)
 (require 'setup-misc)
 ;; (require 'setup-ctags)
-(require 'setup-server)
 
 ;; NOTE: Load below ONLY after loading all the packages
 ;; region-bindings-mode has bindings for multiple-cursors, visual-regexp, anzu
 (require 'setup-region-bindings-mode)
 (require 'setup-key-bindings)
+
+(funcall default-theme)
 
 
 (setq emacs-initialized t)
