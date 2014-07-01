@@ -1,12 +1,13 @@
-;; Time-stamp: <2014-06-19 13:34:59 kmodi>
+;; Time-stamp: <2014-07-01 14:22:01 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
 ;; Source: https://github.com/Bruce-Connor/smart-mode-line
 
-(setq sml/name-width 40 ;; space allocated for the buffer name in the mode-line
+(setq sml/name-width         40 ;; space allocated for the buffer name in the mode-line
       sml/line-number-format "%4l"
-      sml/mode-width 'full
+      sml/mode-width         'full
+      sml/theme              'automatic
       sml/hidden-modes
       '(" Guide"     ;; guide-key mode
         " hc"        ;; hardcore mode
@@ -79,9 +80,9 @@
 
 ;; It is crucial that this require line happens after the above setq block
 (require 'smart-mode-line)
+(sml/setup)
 
 ;; Load sml with above configuration
-(sml/setup)
 (when (boundp 'setup-visual-loaded)
   (funcall default-theme))
 
