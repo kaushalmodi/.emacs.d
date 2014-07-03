@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-28 16:05:30 kmodi>
+;; Time-stamp: <2014-07-03 11:11:36 kmodi>
 
 ;; Fill Column Indicator
 ;; Source: http://www.emacswiki.org/FillColumnIndicator
@@ -21,14 +21,11 @@
 
 (setq fci-handle-truncate-lines t ;; Truncate lines in fci mode
       ;;fci-handle-truncate-lines nil  ;; Do not truncate lines in fci mode
-      fci-rule-width 5
-      fci-rule-color "dim gray"
-      fci-rule-use-dashes t
-      fci-dash-pattern 0.5
+      fci-rule-width 2
+      fci-rule-use-dashes nil
+      fci-dash-pattern 0.3
       )
 
-;; You need to change the fci-rule-column to see the effect of changing
-;; the above fci-* vars on the fly.
 (setq-default fci-rule-column 80) ;; default is 70
 
 (provide 'setup-fci)
