@@ -28,9 +28,10 @@
  '(display-time-mode t)
  '(doc-view-continuous t)
  '(fci-rule-color "#383838")
- '(fringe-mode (quote (0)) nil (fringe))
+ '(fringe-mode nil nil (fringe))
  '(indent-tabs-mode nil nil nil "use spaces instead of tabs for indentation")
  '(indicate-buffer-boundaries (quote ((top . right) (bottom . right))) nil nil "show frame boundaries in the fringe; as the fringe is activated only for the right-hand side, the buffer boundaries (top, bottom) are marked on the right side")
+ '(indicate-empty-lines nil)
  '(keyboard-coding-system (quote utf-8-unix) nil nil "default EOL system = that of Unix")
  '(magit-auto-revert-mode nil)
  '(major-mode (quote text-mode) nil nil "If the default value of major-mode is nil, the major mode is taken from the previously current buffer")
@@ -53,4 +54,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(yafolding-ellipsis-face ((t (:foreground "orange" :slant italic :height 0.9))) t))
