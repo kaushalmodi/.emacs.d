@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-01 11:31:27 kmodi>
+;; Time-stamp: <2014-07-03 10:44:34 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -35,6 +35,7 @@
   (setq dark-theme t)
   (disable-theme 'leuven)
   (load-theme 'zenburn t)
+  (set-face-attribute 'fringe nil :background "#3F3F3F" :foreground "#FFFFFF")
   (when (boundp 'setup-linum-loaded)
     (set-face-attribute 'linum nil :height 0.9 :background "#3F3F3F" :foreground "#6F6F6F"))
   (when (boundp 'setup-smart-mode-line-loaded)
@@ -48,6 +49,7 @@
   (setq dark-theme nil)
   (disable-theme 'zenburn)
   (load-theme 'leuven t)
+  (set-face-attribute 'fringe nil :background "#F2F2F2" :foreground "#F7A421")
   (when (boundp 'setup-linum-loaded)
     (set-face-attribute 'linum nil :height 0.9 :background "#FFFFFF" :foreground "dim gray"))
   (when (boundp 'setup-smart-mode-line-loaded)
