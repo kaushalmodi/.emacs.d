@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-01 14:13:07 kmodi>
+;; Time-stamp: <2014-07-03 10:47:08 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -63,6 +63,7 @@
     web-mode
     wrap-region ;; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
     xkcd ;; comic
+    yafolding ;; indentation detected code folding
     yaml-mode ;; Useful for editing Octopress' _config.yml
     yasnippet
     ))
@@ -116,6 +117,7 @@
 (require 'setup-w3m)
 (require 'setup-wrap-region)
 (require 'setup-xkcd)
+(require 'setup-yafolding)
 (require 'setup-yasnippet)
 ;; (require 'setup-helm) ;; Not required; replaced with swoop
 ;; (require 'setup-projectile)
