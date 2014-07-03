@@ -37,7 +37,7 @@
  '(major-mode (quote text-mode) nil nil "If the default value of major-mode is nil, the major mode is taken from the previously current buffer")
  '(next-line-add-newlines nil nil nil "Do not auto-add newlines at the end of the file on pressing `C-n` or down arrow")
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
- '(safe-local-variable-values (quote ((eval when (require (quote rainbow-mode) nil t) (rainbow-mode 1)) (py-indent-offset . 4) (header-auto-update-enabled))))
+ '(safe-local-variable-values (quote ((lisp-backquote-indentation . t) (eval when (require (quote rainbow-mode) nil t) (rainbow-mode 1)) (py-indent-offset . 4) (header-auto-update-enabled))))
  '(save-place t nil (saveplace) "save the last cursor location for each file")
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
  '(sml/theme (quote automatic))
@@ -54,4 +54,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(stripe-hl-line ((t (:inherit nil :overline "gray" :underline "gray" :weight bold :height 1.1))))
  '(yafolding-ellipsis-face ((t (:foreground "orange" :slant italic :height 0.9))) t))
