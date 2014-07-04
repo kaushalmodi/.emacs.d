@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-01 18:02:32 kmodi>
+;; Time-stamp: <2014-07-03 20:14:03 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -99,3 +99,9 @@ If called with a prefix, prompts for flags to pass to ag."
 
 (setq setup-ag-loaded t)
 (provide 'setup-ag)
+
+;; NOTES
+;; Simply put an empty folder called `.git' at a location that you want to consider
+;; as a "project root"; even if that is not revision controlled in git.
+;; After that, if you are in any file under that path or under any of that path's
+;; sub-directories, `ag-project' or `ag-project-regexp' will work right away!

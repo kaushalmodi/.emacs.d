@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-20 09:40:23 kmodi>
+;; Time-stamp: <2014-07-03 20:14:54 kmodi>
 
 ;; KEY BINDINGS
 
@@ -33,9 +33,6 @@
 ;;   (global-set-key [f6]     'multi-occur-in-this-mode) ;; search the regexp in all buffers with current major mode
 ;;   (global-set-key [C-f6]   'multi-occur-in-matching-buffers) ;; search the regexp in buffers matching the regexp
 ;;   )
-(when (boundp 'setup-spell-loaded)
-  (global-set-key [f6] 'flyspell-auto-correct-word) ;; auto correct the last incorrect word
-  )
 
 ;; (global-set-key [f7] )
 
@@ -58,8 +55,9 @@
   (global-set-key [M-f11]  'magit-pull)
   )
 
-(when (boundp 'setup-verilog-loaded)
-  (global-set-key [f12]    'verilog-goto-defun)) ;; jump to the module definition file
+(when (boundp 'setup-spell-loaded)
+  (global-set-key [f12] 'flyspell-auto-correct-word) ;; auto correct the last incorrect word
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -317,7 +315,8 @@
   )
 
 (when (boundp 'setup-ag-loaded)
-  (define-key modi-map (kbd "a")     'ag-regexp) ;; C-x m a
+  (define-key modi-map (kbd "a") 'ag-project-regexp) ;; C-x m a
+  (define-key modi-map (kbd "g") 'ag-project-regexp) ;; C-x m g
   )
 
 
