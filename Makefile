@@ -2,7 +2,7 @@ DIR = $(shell basename `pwd`)
 TIMESTAMP = $(shell date | tr ' :' '__')
 
 tar:
-	tar cvfz emacsd_$(TIMESTAMP).tar.gz -h *.el *.elc setup-files matlab-emacs python-mode.el-6.1.1 snippets from-git plantuml ditaa
+	tar cvfz emacsd_$(TIMESTAMP).tar.gz -h *.el *.elc *.org setup-files matlab-emacs python-mode.el-6.1.1 snippets from-git plantuml ditaa
 
 clean:
 	find . -name "*.*~" | xargs \rm -f
