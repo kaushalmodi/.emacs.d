@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-03 10:47:08 kmodi>
+;; Time-stamp: <2014-07-04 16:35:17 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -22,6 +22,7 @@
     auctex ;; You also need to install auctex from http://www.gnu.org/software/auctex/
     auto-complete fuzzy
     auto-highlight-symbol
+    back-button
     benchmark-init
     bookmark+ ;; able to bookmark desktop sessions
     cperl-mode
@@ -88,6 +89,7 @@
 (require 'setup-ace-window)
 (require 'setup-ag)
 (require 'setup-auto-complete)
+(require 'setup-back-button)
 (require 'setup-bookmark+)
 (require 'setup-dired)
 (require 'setup-drag-stuff)

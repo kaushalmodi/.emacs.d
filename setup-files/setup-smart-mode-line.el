@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-01 14:22:01 kmodi>
+;; Time-stamp: <2014-07-04 16:34:09 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -25,6 +25,7 @@
         " wr"        ;; Wrap Region
         " SliNav"    ;; elisp-slime-nav
         " Fly"       ;; Flycheck
+        " back"      ;; back-button mode
         )
       sml/replacer-regexp-list
       '(
