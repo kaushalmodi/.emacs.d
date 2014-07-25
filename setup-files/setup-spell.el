@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-19 13:30:38 kmodi>
+;; Time-stamp: <2014-07-18 17:16:31 kmodi>
 
 ;; Spell check
 ;; hunspell / flyspell / ispell
@@ -17,14 +17,19 @@
 ;;    variable is effective.
 
 ;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
-(setq ispell-program-name "hunspell")
-(setq ispell-extra-args '("-d en_US"))
+(setq ispell-program-name           "hunspell"
+      ispell-extra-args             '("-d en_US")
+      flyspell-use-meta-tab         nil)
 ;; hunspell will search for a dictionary called `en_US' in the path specified by
 ;; `$DICPATH'
 
+;; Unbind the default binding associated to `C-;' in flyspell-mode
+(eval-after-load "flyspell" '(define-key flyspell-mode-map (kbd "C-;") nil))
+(eval-after-load "flyspell" '(define-key flyspell-mode-map "\M-\t"     nil))
+
 ;; https://github.com/larstvei/dot-emacs#flyspell
 (add-hook 'text-mode-hook 'turn-on-flyspell)
-(add-hook 'org-mode-hook 'turn-on-flyspell)
+(add-hook 'org-mode-hook  'turn-on-flyspell)
 
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (eval-after-load 'auto-complete
