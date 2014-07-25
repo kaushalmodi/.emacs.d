@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-04 16:35:17 kmodi>
+;; Time-stamp: <2014-07-24 21:55:54 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -26,11 +26,13 @@
     benchmark-init
     bookmark+ ;; able to bookmark desktop sessions
     cperl-mode
+    csv-nav ;; editing csv files
     dired+ dired-single
     drag-stuff
     elisp-slime-nav ;; tag based code navigation for elisp; works even for compressed code
     expand-region
     fill-column-indicator
+    fiplr ;; quick file search in a project (marked by folders like .git)
     ggtags
     guide-key
     hardcore-mode
@@ -46,7 +48,8 @@
     multiple-cursors
     mwe-log-commands ;; for logging commands; useful when demoing emacs
     nlinum ;; reviews say it's better than linum
-    org ox-reveal ;; Get the latest org-mode package from MELPA; ox-reveal for HTML slides
+    org ox-reveal htmlize ;; Get the latest org-mode package from MELPA; ox-reveal for HTML slides
+    page-break-lines ;; Convert the ^L (form feed) chars to horizontal lines
     popwin ;; Open windows like *Help*, *Completions*, etc in minibuffer
     rainbow-delimiters
     rainbow-mode
@@ -96,6 +99,7 @@
 (require 'setup-elisp-slime-nav)
 (require 'setup-expand-region)
 (require 'setup-fci)
+(require 'setup-fiplr)
 (require 'setup-guide-key)
 (require 'setup-hardcore)
 (require 'setup-header2)
@@ -103,11 +107,12 @@
 (require 'setup-hl-line+)
 (require 'setup-iregister)
 (require 'setup-key-chord)
-(require 'setup-linum)
+;; (require 'setup-linum)
 (require 'setup-magit)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-org)
+(require 'setup-page-break-lines)
 (require 'setup-rainbow-delimiters)
 (require 'setup-server)
 (require 'setup-smart-compile)
