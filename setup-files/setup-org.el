@@ -1,16 +1,18 @@
-;; Time-stamp: <2014-06-19 09:45:01 kmodi>
+;; Time-stamp: <2014-07-24 15:39:03 kmodi>
 
 ;; Org Mode
 
 (setq org-directory "~/org")
 
-(setq org-agenda-archives-mode nil) ;; required in org 8.0+
-(setq org-agenda-skip-comment-trees nil) ;; required in org 8.0+
-(setq org-agenda-skip-function nil) ;; required in org 8.0+
+(setq org-agenda-archives-mode nil ;; required in org 8.0+
+      org-agenda-skip-comment-trees nil
+      org-agenda-skip-function nil)
 
-(setq org-src-fontify-natively t) ;; fontify code in code blocks
-(setq org-pretty-entities t) ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
-(setq org-pretty-entities-include-sub-superscripts nil) ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
+(setq org-src-fontify-natively t ;; fontify code in code blocks
+      org-pretty-entities t ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
+      org-pretty-entities-include-sub-superscripts nil ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
+      org-export-with-smart-quotes t
+      org-use-speed-commands t) ;; active single key command execution when at beginning of a headline
 
 ;; Previewing latex fragments in org mode
 ;; Source: http://orgmode.org/worg/org-tutorials/org-latex-preview.html
@@ -24,6 +26,7 @@
 ;; From <ORG EL DIR>/ox-latex.el
 (require 'ox-latex)
 (setq org-latex-listings 'minted)
+;; (setq org-latex-listings 'lstlisting)
 
 ;; Below will output tex files with \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
 ;; The org-latex-packages-alist is a list of cells of the format:
@@ -41,6 +44,8 @@
         ;; (""          "charter")
         ;; ("expert"    "mathdesign")
         ;; Code blocks syntax highlighting
+        ;; (""          "listings")
+        ;; (""          "xcolor")
         (""          "minted") ;; Comment this if org-latex-create-formula-image-program
                                ;; is set to dvipng. minted package can't be loaded
                                ;; when using dvipng to show latex previews
@@ -108,6 +113,7 @@
 ;; Source: http://stackoverflow.com/questions/8834633/how-do-i-make-org-mode-open-pdf-files-in-evince
 (eval-after-load "org"
   '(progn
+     (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
      ;; Change .pdf association directly within the alist
      (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
 
@@ -116,7 +122,7 @@
 (setq org-latex-minted-options
       '(("linenos")
         ("numbersep"   "5pt")
-        ("frame"       "lines")
+        ("frame"       "none") ;; box frame is created by the mdframed package
         ("framesep"    "2mm")
         ;; ("fontfamily"  "zi4") ;; Required only when using pdflatex instead of xelatex
         ))
@@ -156,7 +162,7 @@
 (setq org-return-follows-link t) ;; Hitting <RET> while on a link follows the link
 (setq org-startup-folded (quote showeverything))
 ;; TODO
-(setq org-todo-keywords (quote ((sequence "TODO" "SOMEDAY" "DONE"))))
+(setq org-todo-keywords (quote ((sequence "TODO" "SOMEDAY" "DONE" "CANCEL"))))
 (setq org-enforce-todo-dependencies t) ;; block entries from changing state to DONE
                           ;; while they have children that are not DONE
                           ;; Source: http://orgmode.org/manual/TODO-dependencies.html
@@ -215,6 +221,7 @@
        (not (string= lang "dot"))      ;; don't ask for graphviz
        ))
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+(setq org-confirm-elisp-link-function 'yes-or-no-p)
 
 ;; Presentations using reveal.js
 ;; Download reveal.js from https://github.com/hakimel/reveal.js/
@@ -243,7 +250,7 @@ this with to-do items than with projects or headings."
   (interactive)
   (org-agenda-todo "DONE")
   (org-agenda-switch-to)
-  (org-capture 0 "t"))
+  (org-capture 0 "j"))
 
 (defun sacha/org-agenda-new ()
   "Create a new note or task at the current agenda item.
@@ -260,6 +267,24 @@ this with to-do items than with projects or headings."
             (define-key org-agenda-mode-map "X" 'sacha/org-agenda-mark-done-and-add-followup)
             ;; New key assignment
             (define-key org-agenda-mode-map "N" 'sacha/org-agenda-new)))
+
+;; org-ref - JKitchin
+;; http://kitchingroup.cheme.cmu.edu/blog/2014/05/13/Using-org-ref-for-citations-and-references/
+;; (org-babel-load-file (concat user-emacs-directory "/from-git/org-ref/org-ref.org"))
+
+;; org-show -JKitchin
+;; https://github.com/jkitchin/jmax/blob/master/org-show.org
+(require 'org-show)
+;; (define-key  org-show-mode-map  [next]        'org-show-next-slide) ;; Pg-Down
+;; (define-key  org-show-mode-map  [prior]       'org-show-previous-slide) ;; Pg-Up
+
+;; (define-key  org-show-mode-map  [f5]          'org-show-start-slideshow)
+;; (define-key  org-show-mode-map  [f6]          'org-show-execute-slide)
+;; (define-key  org-show-mode-map  (kbd "C--")   'org-show-decrease-text-size)
+;; (define-key  org-show-mode-map  (kbd "C-=")   'org-show-increase-text-size)
+;; (define-key  org-show-mode-map  (kbd "\e\eg") 'org-show-goto-slide)
+;; (define-key  org-show-mode-map  (kbd "\e\et") 'org-show-toc)
+;; (define-key  org-show-mode-map  (kbd "\e\eq") 'org-show-stop-slideshow)
 
 
 (setq setup-org-loaded t)
@@ -278,3 +303,22 @@ this with to-do items than with projects or headings."
 ;; C-c C-x f <-- Insert footnote
 
 ;; C-c C-x C-l <-- Preview latex fragment in place; Press C-c C-c to exit that preview.
+
+;; Auto-completions http://orgmode.org/manual/Completion.html
+;; \ M-TAB <- TeX symbols
+;; * M-TAB <- Headlines; useful when doing [[* Partial heading M-TAB when linking to headings
+;; #+ M-TAB <- org-mode special keywords like #+DATE, #+AUTHOR, etc
+
+;; Speed-keys are awesome! http://orgmode.org/manual/Speed-keys.html
+
+;; Easy Templates http://orgmode.org/manual/Easy-Templates.html
+;; To insert a structural element, type a ‘<’, followed by a template selector
+;; and <TAB>. Completion takes effect only when the above keystrokes are typed
+;; on a line by itself.
+;; s 	#+BEGIN_SRC ... #+END_SRC
+;; e 	#+BEGIN_EXAMPLE ... #+END_EXAMPLE
+;; l 	#+BEGIN_LaTeX ... #+END_LaTeX
+;; L 	#+LaTeX:
+;; h 	#+BEGIN_HTML ... #+END_HTML
+;; H 	#+HTML:
+;; I 	#+INCLUDE: line
