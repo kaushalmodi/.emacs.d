@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-01 14:16:32 kmodi>
+;; Time-stamp: <2014-07-23 10:47:25 kmodi>
 
 ;; Verilog
 
@@ -33,13 +33,22 @@
       verilog-auto-endcomments         t
       verilog-auto-newline             nil
       verilog-tab-to-comment           t
+      verilog-date-scientific-format   t
       )
+
+(defun my-verilog-insert-date ()
+  "Insert a stamp with date and username  "
+  (interactive)
+  (insert "// ")
+  (verilog-insert-date)
+  (insert (concat " - " (getenv "USER"))))
 
 (defun my-verilog-mode-customizations()
   ;; Unbind the backtick binding done to `electric-verilog-tick'
   ;; With binding done to electric-verilog-tick, it's not possible to type
   ;; backticks on multiple lines simultaneously in multiple-cursors mode
-  (define-key verilog-mode-map "\`" nil)
+  (define-key verilog-mode-map "\`"          nil)
+  (define-key verilog-mode-map (kbd "C-c d") 'my-verilog-insert-date)
   ;; Replace tabs with spaces when saving files in verilog-mode
   (add-hook 'local-write-file-hooks
             '(lambda()
