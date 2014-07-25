@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-07 22:32:51 kmodi>
+;; Time-stamp: <2014-07-11 17:29:40 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -330,6 +330,13 @@
          ("\\.vimrc.*\\'" . vimrc-generic-mode)
          ("\\.vim\\'" . vimrc-generic-mode)
          ) auto-mode-alist))
+
+;; Coloring regions that have ANSI color codes in them
+;; http://unix.stackexchange.com/questions/19494/how-to-colorize-text-in-emacs
+(defun ansi-color-apply-on-region-int (beg end)
+  "Colorize using the ANSI color codes."
+  (interactive "r")
+  (ansi-color-apply-on-region beg end))
 
 
 (setq setup-visual-loaded t)
