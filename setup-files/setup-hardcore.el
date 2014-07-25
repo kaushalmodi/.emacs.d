@@ -1,4 +1,4 @@
-;; Time-stamp: <2013-12-02 17:07:21 kmodi>
+;; Time-stamp: <2014-07-13 23:57:23 kmodi>
 
 ;; Hardcore mode
 
@@ -9,4 +9,6 @@
 
 (global-hardcore-mode)
 
+
+(setq setup-hardcore-loaded t)
 (provide 'setup-hardcore)
