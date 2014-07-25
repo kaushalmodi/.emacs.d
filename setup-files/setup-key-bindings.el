@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-03 20:14:54 kmodi>
+;; Time-stamp: <2014-07-23 13:18:47 kmodi>
 
 ;; KEY BINDINGS
 
@@ -151,6 +151,7 @@
   ;; Change the default `M-right` key binding from `right-word'
   ;; The same function anyways is also bound to `C-right`
   (global-set-key (kbd "<M-right>") 'scroll-other-window-up-dont-move-point)
+  (define-key modi-map (kbd "f")    'full-screen-left) ;; C-x m f
 )
 
 ;; Print to printer defined by env var `PRINTER'
@@ -395,7 +396,7 @@
   ;; bind er/expand-region to `C-\' instead of `C-=' because `=' sign clashes
   ;; when trying to wrap a selection with `=' in org-mode using the wrap-region
   ;; package
-  (global-set-key (kbd "C-\\") 'er/expand-region))
+  (global-set-key (kbd "C-\\") 'my-expand-region))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -535,6 +536,16 @@
   (global-set-key (kbd "M-n") 'iregister-jump-to-next-marker)
   (global-set-key (kbd "M-p") 'iregister-jump-to-previous-marker)
   )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fiplr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (boundp 'setup-fiplr-loaded)
+  (global-set-key (kbd "s-f s-f") 'fiplr-find-file) ;; Win-f Win-f
+  (global-set-key (kbd "s-f f")   'fiplr-find-file-other-window) ;; Win-f f
+  (global-set-key (kbd "s-f s-d") 'fiplr-find-directory)) ;; Win-f Win-d
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; other
