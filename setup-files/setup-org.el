@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-24 15:39:03 kmodi>
+;; Time-stamp: <2014-07-24 23:39:47 kmodi>
 
 ;; Org Mode
 
@@ -162,7 +162,11 @@
 (setq org-return-follows-link t) ;; Hitting <RET> while on a link follows the link
 (setq org-startup-folded (quote showeverything))
 ;; TODO
-(setq org-todo-keywords (quote ((sequence "TODO" "SOMEDAY" "DONE" "CANCEL"))))
+(setq org-todo-keywords (quote ((sequence "TODO" "SOMEDAY" "CANCELED" "DONE"))))
+(setq org-todo-keyword-faces
+      '(("TODO"     . org-warning)
+        ("SOMEDAY"  . "#FFEF9F")
+        ("CANCELED" . (:foreground "#94BFF3" :weight bold :strike-through t))))
 (setq org-enforce-todo-dependencies t) ;; block entries from changing state to DONE
                           ;; while they have children that are not DONE
                           ;; Source: http://orgmode.org/manual/TODO-dependencies.html
@@ -250,7 +254,9 @@ this with to-do items than with projects or headings."
   (interactive)
   (org-agenda-todo "DONE")
   (org-agenda-switch-to)
-  (org-capture 0 "j"))
+  (org-capture 0 "t")
+  (org-metadown 1)
+  (org-metaright 1))
 
 (defun sacha/org-agenda-new ()
   "Create a new note or task at the current agenda item.
