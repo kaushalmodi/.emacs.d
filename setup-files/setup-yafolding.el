@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-03 11:46:12 kmodi>
+;; Time-stamp: <2014-07-24 22:04:27 kmodi>
 
 ;; Yet Another Folding, Folding code blocks based on indentation.
 ;; Source: https://github.com/zenozeng/yafolding.el
@@ -8,7 +8,7 @@
 (add-hook 'prog-mode-hook
           (lambda () (yafolding-mode)))
 
-(setq yafolding-ellipsis-content ">>>>>")
+(setq yafolding-ellipsis-content ">>>folded")
 
 
 (setq setup-yafolding-loaded t)
