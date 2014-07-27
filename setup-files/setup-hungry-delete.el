@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-27 00:14:47 kmodi>
+;; Time-stamp: <2014-07-27 13:06:13 kmodi>
 
 ;; Hungry Delete
 
@@ -6,9 +6,7 @@
 
 ;; (global-hungry-delete-mode)
 
-(defun turn-on-hungry-delete-mode()
-  (interactive)
-  (hungry-delete-mode 1))
+;; `turn-on-hungry-delete-mode' is defined in the hungry-mode package
 
 (defun turn-off-hungry-delete-mode()
   (interactive)
