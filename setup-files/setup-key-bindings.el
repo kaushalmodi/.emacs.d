@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-23 13:18:47 kmodi>
+;; Time-stamp: <2014-07-26 18:36:50 kmodi>
 
 ;; KEY BINDINGS
 
@@ -242,6 +242,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key (kbd "C-x d")        'delete-region)
+(global-set-key (kbd "s-SPC")        'just-one-space) ;; Win-Space
 
 (when (boundp 'setup-editing-loaded)
   (global-set-key (kbd "C-c C-d")     'insert-current-date-time)
