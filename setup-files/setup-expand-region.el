@@ -1,12 +1,12 @@
-;; Time-stamp: <2014-07-15 14:02:30 kmodi>
+;; Time-stamp: <2014-07-27 00:11:28 kmodi>
 
-;; Popwin
+;; Expand Region
 ;; Source: https://github.com/magnars/expand-region.el
 
 (require 'expand-region)
 
 (setq expand-region-contract-fast-key "|"
-      expand-region-reset-fast-key    "<ESC>"
+      expand-region-reset-fast-key    "<ESC><ESC>"
       )
 
 (defun my-expand-region ()
