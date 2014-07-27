@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-24 21:55:54 kmodi>
+;; Time-stamp: <2014-07-27 00:15:21 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -37,6 +37,7 @@
     guide-key
     hardcore-mode
     hl-line+
+    hungry-delete
     ido-vertical-mode flx-ido ido-ubiquitous
     iregister ;; Interactive access to registers
     iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
