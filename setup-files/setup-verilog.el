@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-25 01:04:46 kmodi>
+;; Time-stamp: <2014-07-27 16:44:13 kmodi>
 
 ;; Verilog
 
@@ -97,6 +97,14 @@
 ;; (setq ffap-require-prefix t) ;; find file at point
 ;; (add-to-list 'ffap-alist '(verilog-mode . ffap-verilog) 'append)
 ;; (define-key global-map (kbd "C-S-x C-S-f") 'find-file-at-point)
+
+;; Macros saved as functions
+
+;; Regex Search Expression - \$display(\(.*?\));\(.*\)
+;; Replace Expression - `uvm_info("REPLACE_THIS_GENERIC_ID", $sformatf(\1), UVM_MEDIUM) \2
+(fset 'uvm-convert-display-to-uvm_info
+   (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([3 113 92 36 100 105 115 112 108 97 121 40 92 40 46 42 63 92 41 41 59 92 40 46 42 92 41 return 96 117 118 109 95 105 110 102 111 40 34 82 69 80 76 65 67 69 95 84 72 73 83 95 71 69 78 69 82 73 67 95 73 68 34 44 32 36 115 102 111 114 109 97 116 102 40 92 49 41 44 32 85 86 77 95 77 69 68 73 85 77 41 32 92 50 return 33] 0 "%d")) arg)))
+;;
 
 
 (setq setup-verilog-loaded t)
