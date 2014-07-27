@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-23 10:47:25 kmodi>
+;; Time-stamp: <2014-07-25 01:04:46 kmodi>
 
 ;; Verilog
 
@@ -25,7 +25,7 @@
       verilog-case-indent              2
       verilog-auto-indent-on-newline   t
       verilog-tab-always-indent        t
-      verilog-minimum-comment-distance 40
+      verilog-minimum-comment-distance 10
       verilog-indent-begin-after-if    t
       verilog-auto-lineup              `(all)
       verilog-align-ifelse             nil
