@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-26 18:36:50 kmodi>
+;; Time-stamp: <2014-07-27 16:33:33 kmodi>
 
 ;; KEY BINDINGS
 
@@ -68,7 +68,9 @@
 ;; key in tmux. So removing the `C-z` binding from emacs makes it possible to
 ;; use emacs in -nw (no window) mode in tmux if needed without any key binding
 ;; contention.
-
+(global-unset-key (kbd "<C-down-mouse-1>")) ;; it is bound to `mouse-buffer-menu'
+;; by default. It is inconvenient when that mouse menu pops up when I don't need
+;; it to. And actually I have never used that menu :P
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom key map: modi-map
