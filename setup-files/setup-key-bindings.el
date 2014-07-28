@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-27 16:33:33 kmodi>
+;; Time-stamp: <2014-07-28 11:36:02 kmodi>
 
 ;; KEY BINDINGS
 
@@ -68,9 +68,6 @@
 ;; key in tmux. So removing the `C-z` binding from emacs makes it possible to
 ;; use emacs in -nw (no window) mode in tmux if needed without any key binding
 ;; contention.
-(global-unset-key (kbd "<C-down-mouse-1>")) ;; it is bound to `mouse-buffer-menu'
-;; by default. It is inconvenient when that mouse menu pops up when I don't need
-;; it to. And actually I have never used that menu :P
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom key map: modi-map
@@ -118,8 +115,12 @@
 
 ;; Make Control+mousewheel do increase/decrease font-size
 ;; Source: http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
-(global-set-key (kbd "<C-mouse-4>") 'text-scale-increase) ;; C + wheel-up
-(global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease) ;; C + wheel-down
+(global-unset-key (kbd "<C-down-mouse-1>")) ;; it is bound to `mouse-buffer-menu'
+;; by default. It is inconvenient when that mouse menu pops up when I don't need
+;; it to. And actually I have never used that menu :P
+(global-set-key (kbd "<C-mouse-1>") 'font-size-reset) ;; C + left mouse click
+(global-set-key (kbd "<C-mouse-4>") 'font-size-incr) ;; C + wheel-up
+(global-set-key (kbd "<C-mouse-5>") 'font-size-decr) ;; C + wheel-down
 
 ;; Make Alt+mousewheel scroll the other buffer
 (global-set-key (kbd "<M-mouse-4>") 'scroll-other-window-down-dont-move-point) ;; M + wheel-up
