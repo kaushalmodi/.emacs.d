@@ -123,7 +123,7 @@
 ;;; Code:
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2014-05-31-3cd8144-vpo"
+(defconst verilog-mode-version "2014-06-25-ce9a6b8-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -10649,6 +10649,7 @@ Takes SIGS list, adds MESSAGE to front and inserts each at INDENT-PT."
       (indent-to indent-pt)
       (while sigs
 	(cond ((equal verilog-auto-arg-format 'single)
+	       (insert space)
 	       (indent-to indent-pt)
 	       (setq space "\n"))
 	      ;; verilog-auto-arg-format 'packed
