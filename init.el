@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-27 00:15:21 kmodi>
+;; Time-stamp: <2014-07-28 13:11:58 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables (symbols)
@@ -15,6 +15,8 @@
     ;; helm helm-swoop ;; Replaced with swoop
     ;; etags-select etags-table ctags-update ;; Replacing these with ggtags
     ;; zenburn-theme ;; Using my own forked version
+    ;; back-button ;; not required
+    ;; sublimity ;; smooth scrolling... not required
     ace-jump-mode ace-window
     ag wgrep wgrep-ag ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                       ;; You need to have ag installed on your machine
@@ -22,7 +24,6 @@
     auctex ;; You also need to install auctex from http://www.gnu.org/software/auctex/
     auto-complete fuzzy
     auto-highlight-symbol
-    back-button
     benchmark-init
     bookmark+ ;; able to bookmark desktop sessions
     cperl-mode
@@ -49,6 +50,7 @@
     multiple-cursors
     mwe-log-commands ;; for logging commands; useful when demoing emacs
     nlinum ;; reviews say it's better than linum
+    number ;; number manipulation
     org ox-reveal htmlize ;; Get the latest org-mode package from MELPA; ox-reveal for HTML slides
     page-break-lines ;; Convert the ^L (form feed) chars to horizontal lines
     popwin ;; Open windows like *Help*, *Completions*, etc in minibuffer
@@ -59,7 +61,6 @@
     smart-mode-line popup
     smex ;; smart M-x
     stripe-buffer
-    sublimity ;; smooth scrolling
     swoop
     undo-tree ;; supercool undo visualization
     visual-regexp
@@ -93,7 +94,6 @@
 (require 'setup-ace-window)
 (require 'setup-ag)
 (require 'setup-auto-complete)
-(require 'setup-back-button)
 (require 'setup-bookmark+)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
@@ -106,12 +106,14 @@
 (require 'setup-header2)
 (require 'setup-highlight)
 (require 'setup-hl-line+)
+(require 'setup-hungry-delete)
 (require 'setup-iregister)
 (require 'setup-key-chord)
 ;; (require 'setup-linum)
 (require 'setup-magit)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
+(require 'setup-number)
 (require 'setup-org)
 (require 'setup-page-break-lines)
 (require 'setup-rainbow-delimiters)
@@ -119,7 +121,6 @@
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
-(require 'setup-sublimity)
 (require 'setup-undo-tree)
 (require 'setup-visual-regexp)
 (require 'setup-w3m)
@@ -127,6 +128,7 @@
 (require 'setup-xkcd)
 (require 'setup-yafolding)
 (require 'setup-yasnippet)
+;; (require 'setup-sublimity) ;; Not required; makes huge code file browsing laggy
 ;; (require 'setup-helm) ;; Not required; replaced with swoop
 ;; (require 'setup-projectile)
 
