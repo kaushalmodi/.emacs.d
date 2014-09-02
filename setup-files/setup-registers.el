@@ -1,28 +1,30 @@
-;; Time-stamp: <2014-06-11 10:22:32 kmodi>
+;; Time-stamp: <2014-08-14 09:51:17 kmodi>
 
 ;; Source: http://stackoverflow.com/questions/12558019/shortcut-to-open-a-specific-file-in-emacs
 ;; Source: http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Registers.html#File-Registers
 ;; Save the frequently accessed file locations in registers for quick access
 
-;; .alias can be accessed using `C-x r j a`
-(set-register ?a (cons 'file "~/.alias" ))
 
-;; init.el can be accessed using `C-x r j e`
-(set-register ?e (cons 'file (concat user-emacs-directory
-                                     "/init.el")))
+(set-register ?e (cons 'file (concat user-emacs-directory "/init.el"))) ;; C-x r j e
 
-;; setup-key-bindings.el can be accessed using `C-x r j k`
-(set-register ?k (cons 'file (concat user-emacs-directory
-                                     "/setup-files/setup-key-bindings.el")))
+(set-register ?j (cons 'file (concat org-directory "/journal.org"))) ;; C-x r j j
 
-;; index.html can be accessed using `C-x r j i`
-(set-register ?i (cons 'file "~/public_html/index.html" ))
+(set-register ?a (cons 'file (concat user-home-directory "/.alias"))) ;; C-x r j a
+(set-register ?t (cons 'file (concat user-home-directory "/.tmux.conf"))) ;; C-x r j t
+(set-register ?i (cons 'file (concat user-home-directory "/public_html/index.html"))) ;; C-x r j i
 
-;; index.html can be accessed using `C-x r j j`
-(set-register ?j (cons 'file "~/org/journal.org" ))
 
-;; .alias can be accessed using `C-x r j t`
-(set-register ?t (cons 'file "~/.tmux.conf" ))
-
-(setq setup-registers-loaded t)
 (provide 'setup-registers)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Registers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Registers.html#Text-Registers
+;;     C-x r s REG <- Copy region to register REG
+;; C-u C-x r s REG <- CUT region and move to register REG
+;;     C-x r i REG <- Insert text from register REG
+;;     C-x r a REG <- Append region to text in register REG
+;;     C-x r + REG <- Append region to text in register REG if REG already
+;;                    contains text; but increments the content of REG if the
+;;                    content is a number.
