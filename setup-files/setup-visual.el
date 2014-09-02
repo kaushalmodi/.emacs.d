@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-11 17:29:40 kmodi>
+;; Time-stamp: <2014-08-15 17:09:11 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -24,9 +24,10 @@
 ;; THEME and COLORS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar default-dark-theme  'zenburn)
-(defvar default-light-theme 'leuven)
-(defvar default-theme       'zenburn)
+(setq default-dark-theme  'zenburn)
+(setq default-light-theme 'leuven)
+(setq default-theme       'zenburn)
+;; (setq default-theme       'leuven)
 
 ;; zenburn
 (defun zenburn ()
@@ -40,7 +41,9 @@
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'dark))
   (set-face-attribute 'fringe nil :background "#3F3F3F" :foreground "#FFFFFF")
-  )
+  (when (boundp 'setup-fci-loaded)
+    (setq fci-rule-color "#383838")
+    (fci-mode -1)))
 
 ;;leuven theme
 (defun leuven ()
@@ -54,7 +57,9 @@
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'light))
   (set-face-attribute 'fringe nil :background "#F2F2F2" :foreground "#F7A421")
-  )
+  (when (boundp 'setup-fci-loaded)
+    (setq fci-rule-color "#F2F2F2")
+    (fci-mode -1)))
 
 ;; Load the theme ONLY after the frame has finished loading (needed especially
 ;; when running emacs in daemon mode)
@@ -63,13 +68,34 @@
              (lambda (&rest frame)
                (funcall default-theme)))
 
+(add-hook 'after-init-hook
+          '(lambda()
+             ;; Frame title bar format
+             ;; If buffer-file-name exists, show it;
+             ;; else if you are in dired mode, show the directory name
+             ;; else show only the buffer name (*scratch*, *Messages*, etc)
+             ;; Append the value of PRJ_NAME env var to the above.
+             (setq frame-title-format
+                   (list '(buffer-file-name "%f"
+                                            (dired-directory dired-directory "%b"))
+                         " [" (getenv "PRJ_NAME") "]"))))
+
 (setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
       font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
       )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; FONT SIZE
+;; FONTS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (set-face-attribute 'default nil :font "Source Code Pro for Powerline" )
+;; (set-frame-font "Input Mono" nil t)
+
+;; Manually choose a fallback font for Unicdoe
+;; Source: http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
+(set-fontset-font "fontset-default" nil
+                  (font-spec :size 20 :name "Symbola"))
+
 ;; set the font size specified in default-font-size-pt symbol
 (setq font-size-pt default-font-size-pt)
 ;; The internal font size value is 10x the font size in points unit.
@@ -163,19 +189,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Frame title bar format
-;; If buffer-file-name exists, show it;
-;; else if you are in dired mode, show the directory name
-;; else show only the buffer name (*scratch*, *Messages*, etc)
-;; Append the value of PRJ_NAME env var to the above.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq frame-title-format
-      (list '(buffer-file-name "%f"
-                               (dired-directory dired-directory "%b"))
-            " [" (getenv "PRJ_NAME") "]"))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Presentation mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq presentation-mode-enabled nil)
@@ -197,7 +210,7 @@
   (interactive)
   (setq font-size-pt default-font-size-pt)
   (set-face-attribute 'default nil :height (* font-size-pt 10))
-  (full-screen-left)
+  (full-screen-center)
   (funcall default-theme) ;; change to default theme
   (split-window-right)
   (setq presentation-mode-enabled nil)
@@ -338,6 +351,40 @@
   (interactive "r")
   (ansi-color-apply-on-region beg end))
 
+;; Show long lines
+;; Source: http://stackoverflow.com/questions/6344474/how-can-i-make-emacs-highlight-lines-that-go-over-80-chars
+(require 'whitespace)
+(defun modi/show-long-lines()
+  (interactive)
+  (hi-lock-mode -1) ;; reset hi-lock mode
+  (highlight-lines-matching-regexp (concat ".\\{"
+                                           (number-to-string (+ 1 whitespace-line-column))
+                                           "\\}") "hi-yellow"))
 
-(setq setup-visual-loaded t)
+;; Key bindings
+(global-unset-key (kbd "<C-down-mouse-1>")) ;; it is bound to `mouse-buffer-menu'
+;; by default. It is inconvenient when that mouse menu pops up when I don't need
+;; it to. And actually I have never used that menu :P
+(bind-keys
+ :map modi-mode-map
+ ("<f2>"        . menu-bar-mode)
+ ;; F8 key can't be used as it launches the VNC menu
+ ;; It can though be used with shift/ctrl/alt keys
+ ("<S-f8>"      . toggle-presentation-mode)
+ ;; Make Control+mousewheel do increase/decrease font-size
+ ;; Source: http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
+ ("<C-mouse-1>" . font-size-reset) ;; C + left mouse click
+ ("<C-mouse-4>" . font-size-incr) ;; C + wheel-up
+ ("<C-mouse-5>" . font-size-decr) ;; C + wheel-down
+ ("C-x C-0"     . font-size-reset)
+ ("C-x +"       . font-size-incr)
+ ("C-x -"       . font-size-decr)
+ ("C-x t"       . toggle-truncate-lines))
+
+(key-chord-define-global "2w" 'menu-bar-mode) ;; alternative to F2
+(key-chord-define-global "8i" 'toggle-presentation-mode) ;; alternative to S-F8
+
+(bind-to-modi-map "L" modi/show-long-lines)
+
+
 (provide 'setup-visual)
