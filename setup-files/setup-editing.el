@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-01 16:38:04 kmodi>
+;; Time-stamp: <2014-09-02 00:41:35 KModi>
 
 ;; Functions related to editing text in the buffer
 
@@ -103,16 +103,6 @@ Uses `current-date-time-format' for the formatting the date/time."
        (insert (format-time-string current-date-time-format (current-time)))
        (insert "\n"))
 
-;; insert time
-(defvar current-time-format "%a %H:%M:%S"
-  "Format of date to insert with `insert-current-time' func.
-Note the weekly scope of the command's precision.")
-(defun insert-current-time ()
-  "insert the current time (1-week scope) into the current buffer."
-       (interactive)
-       (insert (format-time-string current-time-format (current-time)))
-       (insert "\n"))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Align
@@ -176,7 +166,7 @@ Kill the whole line with function `kill-whole-line' and then move
   (kill-whole-line arg)
   (back-to-indentation))
 
-(defun smart-open-line ()
+(defun modi/smart-open-line ()
   "Move the current line down if there are no word chars between the start of line
 and the cursor. Else, insert empty line after the current line."
   (interactive)
@@ -196,21 +186,57 @@ and the cursor. Else, insert empty line after the current line."
   (interactive)
   (join-line -1))
 
-
 ;; Enable narrowing
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-defun  'disabled nil)
 (put 'narrow-to-page   'disabled nil)
 
+;; zap-to-char
+;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
+(autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
 
-(setq setup-editing-loaded t)
+;; Key bindings
+(bind-keys
+ :map modi-mode-map
+ ("<f3>"    . toggle-comment-on-line-or-region)
+ ("<f4>"    . kmacro-end-or-call-macro) ;; end macro recording/call last macro
+ ("<S-f4>"  . start-kbd-macro) ;; start macro recording
+ ("<C-f4>"  . start-kbd-macro) ;; start macro recording
+ ("<f9>"    . eval-region)
+ ("C-x d"   . delete-region)
+ ("s-SPC"   . just-one-space) ;; Win-Space
+ ("C-S-d"   . duplicate-current-line-or-region)
+ ;; override the binding of `C-x =` for `what-cursor-position'
+ ("C-x ="   . align-to-equals) ;; align all = signs in selected region
+ ("C-x \\"  . align-regexp)  ;; align selected region to the entered regexp
+ ;; align multiple columns in the selected region. Of course all the selected
+ ;; lines must have the same number of columns of groups of non-space characters
+ ("C-x |"   . align-columns)
+ ("C-k"     . kill-line)
+ ("C-S-k"   . smart-kill-whole-line)
+ ;; override the binding of `C-o` for `open-line'
+ ("C-o"     . modi/smart-open-line)
+ ("C-j"     . pull-up-line)
+ ("M-j"     . comment-indent-new-line)
+  ;; Zap!
+ ("M-z"     . zap-up-to-char)
+ ("M-Z"     . zap-to-char))
+
+(bind-to-modi-map "d" insert-current-date-time)
+(bind-to-modi-map "x" eval-and-replace-last-sexp)
+
+(key-chord-define-global "3e" 'toggle-comment-on-line-or-region) ;; alternative to F3
+(key-chord-define-global "9o" 'eval-region) ;; alternative to F9
+(key-chord-define-global "^^" (λ (insert "λ")))
+
+(setq setup-editing-loaded t) ;; required in setup-perl
 (provide 'setup-editing)
 
 
 ;; TIPS
 
 ;; (1) Commented new line
-;; `M-j' or `C-M-j' - `comment-indent-new-line'
+;; `M-j' - `comment-indent-new-line'
 ;; This creates a commented new line; useful when writing multiline comments
 ;; like this one without having to manually type in the comment characters.
 
