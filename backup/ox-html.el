@@ -3068,13 +3068,12 @@ contextual information."
 		     (format " id=\"%s\""
 			     (org-export-solidify-link-text lbl))))))
       (if (not lang) (format "<pre class=\"example\"%s>\n%s</pre>" label code)
-        (progn
           (format
            "<div class=\"org-src-container\">\n%s%s\n</div>"
            (if (not caption) ""
              (format "<label class=\"org-src-name\">%s</label>"
                      (org-export-data caption info)))
-           (format "\n<pre class=\"src src-%s\"%s>%s</pre>" lang label code)))))))
+	 (format "\n<pre class=\"src src-%s\"%s>%s</pre>" lang label code))))))
 
 ;;;; Statistics Cookie
 
