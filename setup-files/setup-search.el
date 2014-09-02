@@ -1,4 +1,8 @@
-;; Time-stamp: <2014-06-03 10:27:53 kmodi>
+;; Time-stamp: <2014-08-13 14:40:23 kmodi>
+
+;; Search
+
+(setq case-fold-search t) ;; Ignore case when searching
 
 ;; Source: http://www.emacswiki.org/emacs/SearchAtPoint
 
@@ -98,18 +102,25 @@ searches all buffers."
 
 ;; Anzu mode
 ;; Source: https://github.com/syohex/emacs-anzu
-(require 'anzu)
-(global-anzu-mode +1)
-
-;; color of search count shown in the mode-line by anzu
-(set-face-attribute 'anzu-mode-line nil
-                    :foreground "lightblue" :weight 'bold)
-
-(setq anzu-mode-lighter                "" ;; String to show in the mode-line, default is " Anzu"
-      anzu-search-threshold            1000 ;; anzu stops searching after reaching 1000 matches
-      anzu-replace-to-string-separator " => "
-      )
-
+(req-package anzu
+  :require (region-bindings-mode)
+  :config
+  (progn
+    (global-anzu-mode +1)
+    ;; color of search count shown in the mode-line by anzu
+    (set-face-attribute 'anzu-mode-line nil
+                        :foreground "lightblue" :weight 'bold)
+    (setq anzu-mode-lighter                "" ;; String to show in the mode-line, default is " Anzu"
+          anzu-search-threshold            1000 ;; anzu stops searching after reaching 1000 matches
+          anzu-replace-to-string-separator " => "
+          )
+    (bind-keys
+     :map region-bindings-mode-map
+     ("]" . anzu-query-replace))
+    (bind-keys
+     :map modi-mode-map
+     ("M-%"   . anzu-query-replace) ;; replace the emacs default `query-replace'
+     ("C-c r" . anzu-replace-at-cursor-thing))))
 
 ;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
 ;; `query-replace-regexp' from replace.el
@@ -142,8 +153,37 @@ happens within a region if one is selected."
 
 ;; Swoop
 ;; https://github.com/ShingoFukuyama/emacs-swoop
-(require 'swoop)
+(req-package swoop
+  :config
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("M-i" . swoop)
+     ("M-I" . swoop-multi)
+     ("M-o" . swoop-pcre-regexp))
+    ;; Transition
+    ;; isearch     > press [C-o] > swoop
+    (define-key isearch-mode-map (kbd "C-o") 'swoop-from-isearch)
+    ;; swoop       > press [C-o] > swoop-multi
+    (define-key swoop-map (kbd "C-o")        'swoop-multi-from-swoop)
+    ;; Resume
+    ;; C-u M-x swoop : Use last used query
+    ;; Swoop Edit Mode
+    ;; During swoop, press [C-c C-e]
+    ;; You can edit synchronously
+    ))
+
+;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
+;; DEL during isearch should edit the search string, not jump back to the previous result
+(define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+
+;; Key bindings
+(bind-keys
+ :map modi-mode-map
+ ("C-S-s" . isearch-current-symbol)
+ ("C-S-r" . isearch-backward-current-symbol))
+
+(bind-to-modi-map "s" search-all-buffers)
 
 
-(setq setup-search-loaded t)
 (provide 'setup-search)
