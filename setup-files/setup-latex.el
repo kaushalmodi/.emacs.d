@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-05-23 17:27:51 kmodi>
+;; Time-stamp: <2014-08-13 11:46:17 kmodi>
 
 ;; LaTeX
 (load "auctex.el" nil t t)
@@ -15,5 +15,6 @@
       TeX-save-query nil)
 
 (setq-default TeX-master nil) ; Query for master file.
+
 
 (provide 'setup-latex)
