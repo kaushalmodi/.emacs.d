@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-01-21 10:28:53 kmodi>
+;; Time-stamp: <2014-08-13 11:26:09 kmodi>
 
 ;; server setup
 
@@ -22,9 +22,12 @@
 
 ;; start a server only if one is not already running
 ;; `server-running-p' returns "t" if a server is already running
-(when (not (server-running-p))
-  (server-start))
+(if (not (server-running-p))
+    (progn
+      (server-start))
+  (progn
+    (setq server-name "temp")
+    (server-start)))
 
 
-(setq setup-server-loaded t)
 (provide 'setup-server)
