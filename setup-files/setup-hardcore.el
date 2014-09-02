@@ -1,14 +1,15 @@
-;; Time-stamp: <2014-07-13 23:57:23 kmodi>
+;; Time-stamp: <2014-08-13 10:45:34 kmodi>
 
 ;; Hardcore mode
 
-(setq too-hardcore-backspace t)
-(setq too-hardcore-return t)
+(req-package hardcore-mode
+  :pre-load
+  (progn
+    (setq too-hardcore-backspace t
+          too-hardcore-return    t))
+  :config
+  (progn
+    (global-hardcore-mode)))
 
-(require 'hardcore-mode)
 
-(global-hardcore-mode)
-
-
-(setq setup-hardcore-loaded t)
 (provide 'setup-hardcore)

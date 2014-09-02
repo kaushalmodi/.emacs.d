@@ -1,16 +1,17 @@
-;; Time-stamp: <2014-06-19 09:29:17 kmodi>
+;; Time-stamp: <2014-08-13 10:38:11 kmodi>
 
 ;; Elisp Slime Nav
 ;; gtags/ctags like navigation into elisp source codes (even the compressed ones)
 ;; Source: https://github.com/purcell/elisp-slime-nav
 
-(require 'elisp-slime-nav)
+(req-package elisp-slime-nav
+  :config
+  (progn
+    (dolist (hook '(emacs-lisp-mode-hook
+                    ielm-mode-hook))
+      (add-hook hook 'elisp-slime-nav-mode))))
 
-(dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-  (add-hook hook 'elisp-slime-nav-mode))
 
-
-(setq setup-elisp-slime-nav-loaded t)
 (provide 'setup-elisp-slime-nav)
 
 

@@ -1,7 +1,6 @@
-;; Time-stamp: <2014-06-13 10:55:17 kmodi>
+;; Time-stamp: <2014-08-26 12:04:54 kmodi>
 
 ;; Functions to manipulate windows and buffers
-
 
 ;; Source: http://www.emacswiki.org/emacs/WinnerMode
 (winner-mode 1) ;; Enable winner mode
@@ -9,17 +8,37 @@
 ;; (and “redo”) changes in the window configuration with the key commands
 ;; ‘C-c left’ and ‘C-c right’
 
-(require 'uniquify)
-;; The library uniquify overrides Emacs’ default mechanism for making buffer
-;; names unique (using suffixes like <2>, <3> etc.) with a more sensible
-;; behaviour which use parts of the file names to make the buffer names
-;; distinguishable.
-(setq uniquify-buffer-name-style 'post-forward)
+(req-package uniquify
+  :config
+  (progn
+    ;; The library uniquify overrides Emacs’ default mechanism for making buffer
+    ;; names unique (using suffixes like <2>, <3> etc.) with a more sensible
+    ;; behaviour which use parts of the file names to make the buffer names
+    ;; distinguishable.
+    (setq uniquify-buffer-name-style 'post-forward)))
 
 ;; Source: http://www.emacswiki.org/emacs/RecentFiles
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-items 2000)
+(req-package recentf
+  :require (cl)
+  :config
+  (progn
+    (recentf-mode 1)
+    (setq recentf-max-menu-items 2000)
+    ;; TODO: Fix below function, it sort of works, not perfect
+    ;; Reopen the last killed buffer
+    ;; Source: http://stackoverflow.com/questions/10394213/emacs-reopen-previous-killed-buffer
+    (defun undo-kill-buffer ()
+      (interactive)
+      (let ((active-files (loop for buf in (buffer-list)
+                                when (buffer-file-name buf) collect it)))
+        (loop for file in recentf-list
+              unless (member file active-files) return (find-file file))))
+    ;; Customizing recentf mode map
+    (bind-keys
+     :map recentf-dialog-mode-map
+     ("/" . isearch-forward)
+     ("n" . isearch-repeat-forward)
+     ("N" . isearch-repeat-backward))))
 
 ;; Set initial frame size and position
 ;; fills full screen of the left monitor
@@ -136,10 +155,11 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
   (interactive)
   (load-file (concat user-emacs-directory "/init.el")))
 
-(defun load-current-file ()
-  "Load current file"
-  (interactive)
-  (load-file (buffer-file-name)))
+;; Replaced the use of below with xah-run-current-file
+;; (defun load-current-file ()
+;;   "Load current file"
+;;   (interactive)
+;;   (load-file (buffer-file-name)))
 
 (defun revert-buffer-no-confirm ()
     "Revert buffer without confirmation."
@@ -161,9 +181,9 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
   (message "Refreshing open files"))
 
 ;; Set the frame size to fill the left screen
-(defun full-screen-left ()
+(defun full-screen-center ()
   (interactive)
-  (set-frame-position (selected-frame) 0 0) ;; pixels x y from upper left
+  (set-frame-position (selected-frame) 1920 0) ;; pixels x y from upper left
   (set-frame-size (selected-frame) 235 63)  ;; rows and columns w h
   )
 
@@ -186,20 +206,8 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
     (if (equal (current-buffer) scratch-buffer-name)
         (switch-to-buffer (other-buffer))
       (switch-to-buffer scratch-buffer-name
-                        ;; (lisp-interaction-mode)
-                        ))))
+                        (modi-mode)))))
 
-;; TODO: Fix below function, it sort of works, not perfect
-;; Reopen the last killed buffer
-;; Source: http://stackoverflow.com/questions/10394213/emacs-reopen-previous-killed-buffer
-(require 'cl)
-(require 'recentf)
-(defun undo-kill-buffer ()
-  (interactive)
-  (let ((active-files (loop for buf in (buffer-list)
-                            when (buffer-file-name buf) collect it)))
-    (loop for file in recentf-list
-          unless (member file active-files) return (find-file file))))
 
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
 ;; This is to avoid the irritating occassions where repeated `C-g` pressing doesn't
@@ -238,10 +246,6 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;;   list instead of the selected frame's buffer list.
 
 
-;; Customizing recentf mode map
-(define-key recentf-dialog-mode-map (kbd "/") 'isearch-forward)
-(define-key recentf-dialog-mode-map (kbd "n") 'isearch-repeat-forward)
-(define-key recentf-dialog-mode-map (kbd "N") 'isearch-repeat-backward)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -267,31 +271,86 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
   (scroll-other-window -1))
 
 
-;; Allow scrolling of all buffers using mouse-wheel in scroll-all-mode
-;; (by default scroll-all-mode doesn't do that)
-;; http://www.emacswiki.org/emacs/ScrollAllMode
-(defun mwheel-scroll-all-function-all (func arg)
-  (if scroll-all-mode
-      (save-selected-window
-        (walk-windows
-         (lambda (win)
-           (select-window win)
-           (condition-case nil
-               (funcall func arg)
-             (error nil)))))
-    (funcall func arg)))
+;; Commented out this piece of code as it is giving the below error:
+;; byte-code: Wrong number of arguments: (lambda (arg)
+;; (mwheel-scroll-all-function-all (quote scroll-up) arg)), 0
+;; ;; Allow scrolling of all buffers using mouse-wheel in scroll-all-mode
+;; ;; (by default scroll-all-mode doesn't do that)
+;; ;; http://www.emacswiki.org/emacs/ScrollAllMode
+;; (defun mwheel-scroll-all-function-all (func arg)
+;;   (if scroll-all-mode
+;;       (save-selected-window
+;;         (walk-windows
+;;          (lambda (win)
+;;            (select-window win)
+;;            (condition-case nil
+;;                (funcall func arg)
+;;              (error nil)))))
+;;     (funcall func arg)))
 
-(defun mwheel-scroll-all-scroll-up-all (arg)
-  (mwheel-scroll-all-function-all 'scroll-up arg))
+;; (defun mwheel-scroll-all-scroll-up-all (arg)
+;;   (mwheel-scroll-all-function-all 'scroll-up arg))
 
-(defun mwheel-scroll-all-scroll-down-all (arg)
-  (mwheel-scroll-all-function-all 'scroll-down arg))
+;; (defun mwheel-scroll-all-scroll-down-all (arg)
+;;   (mwheel-scroll-all-function-all 'scroll-down arg))
 
-(setq mwheel-scroll-up-function   'mwheel-scroll-all-scroll-up-all)
-(setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
+;; (setq mwheel-scroll-up-function   'mwheel-scroll-all-scroll-up-all)
+;; (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
+
+(setq mwheel-scroll-up-function   'scroll-up)
+(setq mwheel-scroll-down-function 'scroll-down)
+
+;; Key bindings
+(bind-keys
+ :map modi-mode-map
+ ("<f5>"        . revert-buffer)
+ ("<S-f5>"      . revert-all-buffers)
+ ("<S-f9>"      . eshell)
+ ;; overriding the `C-x C-p binding with `mark-page' command
+ ("C-x C-p"     . show-copy-buffer-file-name)
+ ("C-x C-k"     . delete-current-buffer-file)
+ ("C-x C-r"     . rename-current-buffer-file)
+ ("C-S-t"       . undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
+ ;; Make Alt+mousewheel scroll the other buffer
+ ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ;; M + wheel up
+ ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ;; M + wheel down
+ ;; Resize windows
+ ;; Use co-located , . ; ' keys to control window size
+ ("C-,"         . shrink-window-horizontally)
+ ("C-."         . enlarge-window-horizontally)
+ ("C-;"         . shrink-window)
+ ("C-'"         . enlarge-window)
+ ("C-c k"       . windmove-up) ;; switch to buffer on top
+ ("C-c j"       . windmove-down) ;; switch to buffer on bottom
+ ("C-c h"       . windmove-left) ;; switch to buffer on left
+ ("C-c l"       . windmove-right) ;; switch to buffer on right
+ ("C-c t"       . toggle-window-split) ;; convert between horz-split <-> vert-split
+ ("C-c s"       . rotate-windows) ;; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
+ ("C-x C-b"     . ibuffer)) ;; replace buffer-menu with ibuffer
+
+;; Below bindings are made in global map and not in my minor mode as I want
+;; org mode to override those bindings
+(bind-keys
+ ("<M-up>"    . scroll-down-dont-move-point)
+ ("<M-down>"  . scroll-up-dont-move-point)
+ ;; Change the default `M-left` key binding from `left-word'
+ ;; The same function anyways is also bound to `C-left`
+ ("<M-left>"  . scroll-other-window-down-dont-move-point)
+ ;; Change the default `M-right` key binding from `right-word'
+ ;; The same function anyways is also bound to `C-right`
+ ("<M-right>" . scroll-other-window-up-dont-move-point))
+
+(bind-to-modi-map "b" switch-to-scratch-and-back)
+(bind-to-modi-map "f" full-screen-center)
+(bind-to-modi-map "y" bury-buffer)
+
+(key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
+(key-chord-define-global "ZZ" 'toggle-between-buffers)
+(key-chord-define-global "5t" 'revert-buffer) ;; alternative to F5
+(key-chord-define-global "p[" 'windmove-left)
+(key-chord-define-global "[]" 'windmove-right)
 
 
-(setq setup-windows-buffers-loaded t)
 (provide 'setup-windows-buffers)
 
 ;; TIPS
@@ -301,3 +360,10 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;; (C-l C-l) scrolls the window so that point is on the topmost screen line.
 ;; Typing a third C-l scrolls the window so that point is on the bottom-most
 ;; screen line. Each successive C-l cycles through these three positions.
+
+;; (global-set-key (kbd "<C-tab>")   'other-window) ;; alternative shortcut for `C-x o`
+;; ;; Cycle the buffers in reverse order than what happens with `C-x o`
+;; (global-set-key (kbd "C-x O")
+;;                 (lambda ()
+;;                   (interactive)
+;;                   (other-window -1)))

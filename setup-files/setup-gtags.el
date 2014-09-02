@@ -1,17 +1,15 @@
-;; Time-stamp: <2014-06-19 09:23:25 kmodi>
+;; Time-stamp: <2014-08-19 12:15:30 kmodi>
 
 ;; gtags, GNU global
 
-(require 'ggtags)
+(req-package ggtags
+  :require (verilog-mode key-chord)
+  :init
+  (progn
+    (dolist (hook '(verilog-mode-hook
+                    matlab-mode-hook))
+      (add-hook hook 'ggtags-mode))
+    (key-chord-define-global "??" 'ggtags-show-definition)))
 
-;; Turn on ggtags-mode automatically for the following mode hooks
-(add-hook 'verilog-mode-hook
-          (lambda()
-            (ggtags-mode 1)))
-(add-hook 'matlab-mode-hook
-          (lambda()
-            (ggtags-mode 1)))
 
-
-(setq setup-gtags-loaded t)
 (provide 'setup-gtags)

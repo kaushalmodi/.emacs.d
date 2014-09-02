@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-04-01 10:39:40 kmodi>
+;; Time-stamp: <2014-08-12 17:39:59 kmodi>
 
 ;; Highlight Symbol at point/cursor
 ;; (require 'highlight-symbol)
@@ -13,25 +13,39 @@
 ;; There are 2 ways to select a highlight target: 1. Mark the selection by
 ;; region (very useful when you want to highlight a pattern accross all symbols),
 ;; 2. Put cursor on a symbol to pick the symbol to highlight.
-(require 'highlight-global)
+(req-package highlight-global
+  :config
+  (progn
+    (bind-to-modi-map "h" highlight-frame-toggle)
+    (bind-to-modi-map "H" clear-highlight-frame)))
+
 
 ;; Volatile Highlights
 ;; https://github.com/k-talo/volatile-highlights.el
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
+(req-package volatile-highlights
+  :config
+  (progn
+    (volatile-highlights-mode t)))
+
 
 ;; Auto Highlight Symbol
 ;; https://github.com/emacsmirror/auto-highlight-symbol
-(require 'auto-highlight-symbol)
-;; ahs mode key bindings
-(define-key auto-highlight-symbol-mode-map (kbd "M-<left>"    ) 'ahs-backward            )
-(define-key auto-highlight-symbol-mode-map (kbd "M-<right>"   ) 'ahs-forward             )
-(define-key auto-highlight-symbol-mode-map (kbd "M-S-<left>"  ) 'ahs-backward-definition )
-(define-key auto-highlight-symbol-mode-map (kbd "M-S-<right>" ) 'ahs-forward-definition  )
-(define-key auto-highlight-symbol-mode-map (kbd "M--"         ) 'ahs-back-to-start       )
-(define-key auto-highlight-symbol-mode-map (kbd "C-x C-'"     ) 'ahs-change-range        )
-(define-key auto-highlight-symbol-mode-map (kbd "C-x C-a"     ) 'ahs-edit-mode           )
+(req-package auto-highlight-symbol
+  :config
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("C-*"             . auto-highlight-symbol-mode)
+     ("<C-kp-multiply>" . auto-highlight-symbol-mode))
+    (bind-keys
+     :map auto-highlight-symbol-mode-map
+     ("M-<left>"    . ahs-backward)
+     ("M-<right>"   . ahs-forward)
+     ("M-S-<left>"  . ahs-backward-definition)
+     ("M-S-<right>" . ahs-forward-definition)
+     ("M--"         . ahs-back-to-start)
+     ("C-x C-'"     . ahs-change-range)
+     ("C-x C-a"     . ahs-edit-mode))))
 
 
-(setq setup-highlight-loaded t)
 (provide 'setup-highlight)

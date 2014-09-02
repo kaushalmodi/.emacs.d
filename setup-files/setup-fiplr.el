@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-23 13:17:05 kmodi>
+;; Time-stamp: <2014-08-12 17:51:24 kmodi>
 
 ;; Source: https://github.com/d11wtq/fiplr
 ;; Fiplr (pronounced FIP-ler, as in Find in Project) is an Emacs package to
@@ -10,20 +10,27 @@
 ;; Sublime's Control+P.
 ;; Internally it uses Grizzl to do the fuzzy searching.
 
-(require 'fiplr)
+(req-package fiplr
+  :config
+  (progn
+    (setq fiplr-root-markers  '(".git" ".svn" ".hg" ".bzr"
+                                ".SOS"))
+    (setq fiplr-ignored-globs '((directories (".git" ".svn" ".hg" ".bzr"
+                                              ".SOS" "nobackup" "nobkp"
+                                              "INCA_libs.r"))
+                                (files (".#*" "*.*#" "*~" "*.so"
+                                        "*.jpg" "*.png" "*.gif"
+                                        "*.pdf" "*.gz" "*.zip"
+                                        "*.elc" "*.pyc"
+                                        "*.txt" "*.log" "*.out"
+                                        "GTAGS" "GRTAGS" "GPATH" "TAGS"))))
+    (bind-keys
+     :map modi-mode-map
+     ("s-f s-f" . fiplr-find-file) ;; Win-f Win-f
+     ("s-f f"   . fiplr-find-file-other-window) ;; Win-f f
+     ("s-f s-d" . fiplr-find-directory)))) ;; Win-f Win-d
 
-(setq fiplr-root-markers  '(".git" ".svn" ".hg" ".bzr"
-                            ".SOS"))
-(setq fiplr-ignored-globs '((directories (".git" ".svn" ".hg" ".bzr"
-                                          ".SOS" "nobackup" "nobkp" "INCA_libs.r"))
-                            (files (".#*" "*.*#" "*~" "*.so" "*.jpg" "*.png" "*.gif"
-                                    "*.pdf" "*.gz" "*.zip"
-                                    "*.elc" "*.pyc"
-                                    "*.txt" "*.log" "*.out"
-                                    "GTAGS" "GRTAGS" "GPATH" "TAGS"))))
 
-
-(setq setup-fiplr-loaded t)
 (provide 'setup-fiplr)
 
 ;; M-x fiplr-clear-cache <- Reset fiplr cache

@@ -1,9 +1,7 @@
-;; Time-stamp: <2014-02-18 11:01:22 kmodi>
+;; Time-stamp: <2014-08-14 11:17:12 kmodi>
 
-(require 'bookmark+)
+(req-package bookmark+
+  :commands (bmkp-desktop-jump))
 
-;;
 
-
-(setq setup-bookmark+-loaded t)
 (provide 'setup-bookmark+)

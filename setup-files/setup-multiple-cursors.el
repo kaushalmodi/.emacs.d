@@ -1,15 +1,39 @@
-;; Time-stamp: <2014-03-11 13:34:25 kmodi>
+;; Time-stamp: <2014-08-13 12:03:05 kmodi>
 
 ;; Multiple Cursors
 ;; Source: https://github.com/magnars/multiple-cursors.el
 
-(require 'multiple-cursors)
+(req-package multiple-cursors
+  :commands (mc/edit-lines
+             mc/add-cursor-on-click
+             mc/mark-all-like-this
+             mc/mark-previous-like-this
+             mc/mark-next-like-this
+             mc/mark-more-like-this-extended
+             mc/mark-all-like-this-dwim
+             set-rectangular-region-anchor)
+  :require (region-bindings-mode)
+  :init
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("C-S-c C-S-c"   . mc/edit-lines)
+     ("C->"           . mc/mark-next-like-this)
+     ("C-<"           . mc/mark-previous-like-this)
+     ("C-c C-<"       . mc/mark-all-like-this)
+     ("C-S-<mouse-1>" . mc/add-cursor-on-click))
 
-;; Key bindings for multiple cursors are saved in setup-key-bindings.el
-;; Search for `setup-multiple-cursors-loaded' there.
+    (bind-keys
+     :map region-bindings-mode-map
+     ("a" . mc/mark-all-like-this)
+     ("p" . mc/mark-previous-like-this)
+     ("n" . mc/mark-next-like-this)
+     ("m" . mc/mark-more-like-this-extended))
+
+    (bind-to-modi-map "m" mc/mark-all-like-this-dwim)
+    (bind-to-modi-map "r" set-rectangular-region-anchor)))
 
 
-(setq setup-multiple-cursors-loaded t)
 (provide 'setup-multiple-cursors)
 
 

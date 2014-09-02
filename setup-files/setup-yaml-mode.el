@@ -1,12 +1,9 @@
-;; Time-stamp: <2014-03-07 15:24:51 kmodi>
+;; Time-stamp: <2014-08-13 11:45:41 kmodi>
 
 ;; yaml-mode
 ;; Useful for configuring Octopress' _config.yml
 
-(require 'yaml-mode)
-
-;;
+(req-package yaml-mode)
 
 
-(setq setup-yaml-mode-loaded t)
 (provide 'setup-yaml-mode)

@@ -1,12 +1,9 @@
-;; Time-stamp: <2014-07-28 13:11:37 kmodi>
+;; Time-stamp: <2014-08-13 11:24:24 kmodi>
 
 ;; Number
 ;; https://github.com/chrisdone/chrisdone-emacs/blob/master/packages/number/number.el
 
-(require 'number)
-
-;;
+(req-package number)
 
 
-(setq setup-number-loaded t)
 (provide 'setup-number)

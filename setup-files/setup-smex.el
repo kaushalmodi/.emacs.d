@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-01-13 17:47:22 kmodi>
+;; Time-stamp: <2014-08-13 13:30:11 kmodi>
 
 ;; Smart M-x (smex)
 ;; Source: https://github.com/nonsequitur/smex/
@@ -8,10 +8,17 @@
 ;; `M-.` jumps to the definition of the selected command.
 ;; `C-h w` shows the key bindings for the selected command. (Via where-is.)
 
-(require 'smex)
+(req-package smex
+  :require (key-chord)
+  :init
+  (progn
+    (smex-initialize)
+    (bind-keys
+     :map modi-mode-map
+     ("M-x"         . smex)
+     ("M-X"         . smex-major-mode-commands))
+    (bind-key "C-c C-c M-x" 'execute-extended-command) ;; old M-x
+    (key-chord-define-global ";'" 'smex))) ;; Alternative for `M-x'
 
-(smex-initialize)
 
-
-(setq setup-smex-loaded t)
 (provide 'setup-smex)

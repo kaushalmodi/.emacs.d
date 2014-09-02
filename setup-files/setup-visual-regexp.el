@@ -1,11 +1,19 @@
-;; Time-stamp: <2014-04-25 16:23:20 kmodi>
+;; Time-stamp: <2014-08-13 11:34:01 kmodi>
 
 ;; Visual Regular Expression search/replace
 
-(require 'visual-regexp)
+(req-package visual-regexp
+  :require (region-bindings-mode)
+  :config
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("C-M-%" . vr/query-replace) ;; replace the emacs default query-replace-regexp
+     ("C-c q" . vr/query-replace))
 
-;;
+    (bind-keys
+     :map region-bindings-mode-map
+     ("}" . vr/query-replace))))
 
 
-(setq setup-visual-regexp-loaded t)
 (provide 'setup-visual-regexp)

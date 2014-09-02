@@ -1,9 +1,11 @@
-;; Time-stamp: <2013-12-02 17:07:00 kmodi>
+;; Time-stamp: <2014-08-13 11:45:18 kmodi>
 
 ;; Markdown / Pancake.io
 
-(autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(req-package markdown-mode
+  :commands (markdown-mode)
+  :mode (("\\.md\\'"       . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
+
 
 (provide 'setup-markdown)

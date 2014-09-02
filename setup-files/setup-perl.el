@@ -1,27 +1,27 @@
-;; Time-stamp: <2014-07-01 14:17:10 kmodi>
+;; Time-stamp: <2014-08-13 11:07:29 kmodi>
 
 ;; Perl
 
+(req-package cperl-mode
 ;; Use cperl-mode instead of the default perl-mode
-(add-to-list 'auto-mode-alist        '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("perl"                       . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("perl5"                      . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("miniperl"                   . cperl-mode))
+  :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode)
+  :interpreter (("perl"     . cperl-mode)
+                ("perl5"    . cperl-mode)
+                ("miniperl" . cperl-mode))
+  :config
+  (progn
+    (setq cperl-indent-level 3
+          cperl-close-paren-offset -3
+          cperl-continued-statement-offset 3
+          cperl-indent-parens-as-block t
+          cperl-tab-always-indent t)
 
-(setq cperl-indent-level 4
-      cperl-close-paren-offset -4
-      cperl-continued-statement-offset 4
-      cperl-indent-parens-as-block t
-      cperl-tab-always-indent t)
+    (defun my-cperl-mode-customizations()
+      (req-package setup-editing)
+      (define-key cperl-mode-map "\177"      'delete-backward-char)
+      (define-key cperl-mode-map (kbd "C-j") 'pull-up-line))
 
-(defun my-cperl-mode-customizations()
-  (when (boundp 'setup-editing-loaded)
-    (define-key cperl-mode-map (kbd "C-j") 'pull-up-line))
-  (when (boundp 'setup-linum-loaded)
-    (nlinum-mode 1))
-  )
-(add-hook 'cperl-mode-hook 'my-cperl-mode-customizations)
+    (add-hook 'cperl-mode-hook 'my-cperl-mode-customizations)))
 
 
-(setq setup-perl-loaded t)
 (provide 'setup-perl)

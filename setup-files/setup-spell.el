@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-07-18 17:16:31 kmodi>
+;; Time-stamp: <2014-08-13 12:21:26 kmodi>
 
 ;; Spell check
 ;; hunspell / flyspell / ispell
@@ -16,44 +16,50 @@
 ;; 6. Restart emacs so that when hunspell is run by ispell/flyspell, that env
 ;;    variable is effective.
 
-;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
-(setq ispell-program-name           "hunspell"
-      ispell-extra-args             '("-d en_US")
-      flyspell-use-meta-tab         nil)
 ;; hunspell will search for a dictionary called `en_US' in the path specified by
 ;; `$DICPATH'
 
-;; Unbind the default binding associated to `C-;' in flyspell-mode
-(eval-after-load "flyspell" '(define-key flyspell-mode-map (kbd "C-;") nil))
-(eval-after-load "flyspell" '(define-key flyspell-mode-map "\M-\t"     nil))
+;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
 
-;; https://github.com/larstvei/dot-emacs#flyspell
-(add-hook 'text-mode-hook 'turn-on-flyspell)
-(add-hook 'org-mode-hook  'turn-on-flyspell)
-
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-(eval-after-load 'auto-complete
-  '(ac-flyspell-workaround))
-
-;; Flyspell signals an error if there is no spell-checking tool is installed.
-;; We can advice turn-on=flyspell and flyspell-prog-mode to only try to enable
-;; flyspell if a spell-checking tool is available.
-
-(defadvice turn-on-flyspell (around check nil activate)
-  "Turns on flyspell only if a spell-checking tool is installed."
-  (when (executable-find ispell-program-name)
-    ad-do-it))
-
-(defadvice flyspell-prog-mode (around check nil activate)
-  "Turns on flyspell only if a spell-checking tool is installed."
-  (when (executable-find ispell-program-name)
-    ad-do-it))
-
-;; Save a new word to personal dictionary without asking
-(setq ispell-silently-savep t)
+(req-package ispell
+  :config
+  (progn
+    (setq ispell-program-name   "hunspell"
+          ispell-extra-args     '("-d en_US")
+          ispell-silently-savep t))) ;; Save a new word to personal dictionary without asking
 
 
-(setq setup-spell-loaded t)
+(req-package flyspell
+  :config
+  (progn
+    (setq flyspell-use-meta-tab nil)
+    ;; Stop flyspell overriding other key bindings
+    (define-key flyspell-mode-map (kbd "C-;") nil)
+    (define-key flyspell-mode-map (kbd "C-,") nil)
+    (define-key flyspell-mode-map (kbd "C-.") nil)
+    (define-key flyspell-mode-map "\M-\t"     nil)
+    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+    (eval-after-load 'auto-complete
+      '(ac-flyspell-workaround))
+    ;; https://github.com/larstvei/dot-emacs#flyspell
+    (add-hook 'text-mode-hook 'turn-on-flyspell)
+    (add-hook 'org-mode-hook  'turn-on-flyspell)
+    ;; Flyspell signals an error if there is no spell-checking tool is installed.
+    ;; We can advice turn-on=flyspell and flyspell-prog-mode to only try to enable
+    ;; flyspell if a spell-checking tool is available.
+    (defadvice turn-on-flyspell (around check nil activate)
+      "Turns on flyspell only if a spell-checking tool is installed."
+      (when (executable-find ispell-program-name)
+        ad-do-it))
+    (defadvice flyspell-prog-mode (around check nil activate)
+      "Turns on flyspell only if a spell-checking tool is installed."
+      (when (executable-find ispell-program-name)
+        ad-do-it))
+    (bind-keys
+     :map modi-mode-map
+     ("<f12>" . flyspell-auto-correct-word))))
+
+
 (provide 'setup-spell)
 
 ;; How to add a new word to the dictionary?

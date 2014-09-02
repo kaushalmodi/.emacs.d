@@ -1,11 +1,12 @@
-;; Time-stamp: <2014-01-22 14:53:07 kmodi>
+;; Time-stamp: <2014-08-13 10:46:56 kmodi>
 
 ;; header2
 
-;; Add a file header whenever a new file is created in specific modes
-(autoload 'auto-make-header "header2")
-(add-hook 'verilog-mode-hook 'auto-make-header)
+(req-package header2
+  :commands (auto-make-header)
+  :config
+  (progn
+    (add-hook 'verilog-mode-hook 'auto-make-header)))
 
 
-(setq setup-header2-loaded t)
 (provide 'setup-header2)

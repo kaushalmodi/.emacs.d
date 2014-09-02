@@ -1,12 +1,9 @@
-;; Time-stamp: <2013-12-02 17:06:06 kmodi>
+;; Time-stamp: <2014-08-13 11:30:03 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
 
-(require 'projectile)
-
-;;
+(req-package projectile)
 
 
-(setq setup-projectile-loaded t)
 (provide 'setup-projectile)

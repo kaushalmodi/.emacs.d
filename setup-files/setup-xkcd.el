@@ -1,22 +1,24 @@
-;; Time-stamp: <2014-03-02 11:11:06 kmodi>
+;; Time-stamp: <2014-08-13 09:28:02 kmodi>
 
 ;; xkcd
 
-(require 'xkcd)
+(req-package xkcd
+  :commands (xkcd)
+  :config
+  (progn
+    ;; create the xkcd directory if it doesn't exist
+    (setq xkcd-dir (concat user-emacs-directory "/xkcd"))
+    (unless (file-exists-p xkcd-dir)
+      (make-directory xkcd-dir))
+    (bind-keys
+     :map xkcd-mode-map
+    ("C-p" . xkcd-prev)
+    ("C-n" . xkcd-next)
+    ("r"   . xkcd-rand)
+    ("t"   . xkcd-alt-text)
+    ("q"   . xkcd-kill-buffer)
+    ("o"   . xkcd-open-browser)
+    ("e"   . xkcd-open-explanation-browser))))
 
-;; create the xkcd directory if it doesn't exist
-(setq xkcd-dir (concat user-emacs-directory "/xkcd"))
-(unless (file-exists-p xkcd-dir)
-  (make-directory xkcd-dir))
 
-(define-key xkcd-mode-map (kbd "C-p") 'xkcd-prev)
-(define-key xkcd-mode-map (kbd "C-n") 'xkcd-next)
-;; (define-key xkcd-mode-map (kbd "r") 'xkcd-rand)
-;; (define-key xkcd-mode-map (kbd "t") 'xkcd-alt-text)
-;; (define-key xkcd-mode-map (kbd "q") 'xkcd-kill-buffer)
-;; (define-key xkcd-mode-map (kbd "o") 'xkcd-open-browser)
-;; (define-key xkcd-mode-map (kbd "e") 'xkcd-open-explanation-browser)
-
-
-(setq setup-xkcd-loaded t)
 (provide 'setup-xkcd)
