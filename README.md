@@ -1,20 +1,23 @@
 # .emacs.d
 
-## Few unique things about my config
+## Using my emacs setup
 
-* Central place for **ALL** key bindings: setup-files/setup-key-bindings.el
-* Organized init.el into little chunks
-
-## How to use my config right away
-
-* You will need to make few edits in **only init.el** after copying it to your local space
-    - Uncomment the line(s) with tag INSTR\_UNCOMMENT\_THIS\_LINE
-    - Delete the line(s) with tag INSTR\_DELETE\_THIS\_LINE
+* You can clone my emacs setup using `git clone https://github.com/kaushalmodi/.emacs.d.git`
 * Few setup files have setup catered my personal work area so it wouldn't make sense to completely copy those setups
     - setup-files/setup-smart-mode-line.el
     - setup-files/setup-registers.el
 * If you don't like the initial frame size when emacs start, you would need to edit it in setup-files/setup-windows-buffers.el
 * If you want to change the default theme, font size, etc, you would want to edit setup-files/setup-visual.el
+
+## Key points
+
+* Using my minor mode `modi-map` to enable my custom key-bindings. Doing so allows me to force override my bindings in all major modes. If I ever need to use emacs default bindings, I can simply disable my minor mode.
+* Use of req-package in load all packages for faster load times.
+* Use of `bind-keys` allows me to review my custom bindings in a single buffer by doing `M-x describe-personal-keybindings`.
+
+## Future plan
+
+* Pack my whole emacs setup into a single org file.
 
 ## Feedback
 
