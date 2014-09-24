@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 12:29:52 kmodi>
+;; Time-stamp: <2014-09-17 11:32:58 kmodi>
 
 ;; Org Mode
 
@@ -229,6 +229,13 @@
        ))
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 (setq org-confirm-elisp-link-function 'yes-or-no-p)
+
+(defun modi/org-export-to-html-txt-pdf ()
+  "Export the org file to multiple formats."
+  (interactive)
+  (org-html-export-to-html)
+  (org-ascii-export-to-ascii)
+  (org-latex-export-to-pdf))
 
 ;; Presentations using reveal.js
 ;; Download reveal.js from https://github.com/hakimel/reveal.js/
