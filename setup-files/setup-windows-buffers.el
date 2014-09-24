@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-26 12:04:54 kmodi>
+;; Time-stamp: <2014-09-24 11:16:28 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -161,6 +161,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;;   (interactive)
 ;;   (load-file (buffer-file-name)))
 
+;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
 (defun revert-buffer-no-confirm ()
     "Revert buffer without confirmation."
     (interactive)
@@ -197,17 +198,19 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;;     (set-frame-size (selected-frame) 90 30)
 ;;     ))
 
-;; Source: http://www.emacswiki.org/emacs/RecreateScratchBuffer
-(defun switch-to-scratch-and-back ()
-  "Toggle between *scratch* buffer and the current buffer.
-     If the *scratch* buffer does not exist, create it."
+(defun modi/switch-to-scratch-and-back ()
+  "Toggle between *scratch-MODE* buffer and the current buffer.
+If a scratch buffer does not exist, create it with the major mode set to that
+of the buffer from where this function is called."
   (interactive)
-  (let ((scratch-buffer-name (get-buffer-create "*scratch*")))
-    (if (equal (current-buffer) scratch-buffer-name)
-        (switch-to-buffer (other-buffer))
-      (switch-to-buffer scratch-buffer-name
-                        (modi-mode)))))
-
+  (if (string-match "*scratch" (format "%s" (current-buffer)))
+      (switch-to-buffer (other-buffer))
+    (let ((mode-str (format "%s" major-mode)))
+      (let ((scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*"))))
+        (switch-to-buffer scratch-buffer-name)
+        (modi-mode) ;; Set my minor mode to activate my key bindings
+        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable
+        (funcall (intern mode-str))))))
 
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
 ;; This is to avoid the irritating occassions where repeated `C-g` pressing doesn't
@@ -340,7 +343,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
  ;; The same function anyways is also bound to `C-right`
  ("<M-right>" . scroll-other-window-up-dont-move-point))
 
-(bind-to-modi-map "b" switch-to-scratch-and-back)
+(bind-to-modi-map "b" modi/switch-to-scratch-and-back)
 (bind-to-modi-map "f" full-screen-center)
 (bind-to-modi-map "y" bury-buffer)
 
