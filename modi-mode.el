@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 15:32:43 kmodi>
+;; Time-stamp: <2014-09-03 13:12:06 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -35,6 +35,7 @@
   (interactive)
   (modi-mode t))
 
+;;;###autoload
 (defun turn-off-modi-mode ()
   "Turns off modi-mode."
   (interactive)
