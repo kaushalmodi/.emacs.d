@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-09-02 00:41:35 KModi>
+;; Time-stamp: <2014-09-12 09:08:41 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -194,6 +194,38 @@ and the cursor. Else, insert empty line after the current line."
 ;; zap-to-char
 ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
 (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
+
+;; indent-guide
+(req-package indent-guide
+  :config
+  (progn
+    (setq indent-guide-recursive t)
+    (setq indent-guide-char "|")
+    (defun turn-on-indent-guide ()
+      "Turn on indent-guide-mode only for specific modes."
+      (interactive)
+      (dolist (hook '(verilog-mode-hook
+                      emacs-lisp-mode-hook
+                      python-mode-hook
+                      sh-mode-hook
+                      cperl-mode-hook))
+        (add-hook hook 'indent-guide-mode)))
+    (defun turn-off-indent-guide ()
+      "Turn on indent-guide-mode only for specific modes."
+      (interactive)
+      (indent-guide-global-mode -1)
+      (dolist (hook '(verilog-mode-hook
+                      emacs-lisp-mode-hook
+                      python-mode-hook
+                      sh-mode-hook
+                      cperl-mode-hook))
+        (remove-hook hook 'indent-guide-mode)))
+    (turn-on-indent-guide)))
+
+;; "Insert" copied rectangle instead of overwriting lines as
+;; `M-x yank-rectangle` does.
+
+
 
 ;; Key bindings
 (bind-keys
