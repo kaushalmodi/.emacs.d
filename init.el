@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-09-01 23:46:21 KModi>
+;; Time-stamp: <2014-09-02 18:20:52 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -115,13 +115,13 @@
 (req-package setup-fiplr)
 (req-package setup-guide-key)
 (req-package setup-hardcore)
-;; (req-package setup-header2)
+(req-package setup-header2)
 (req-package setup-highlight)
 (req-package setup-hl-line+)
 (req-package setup-hungry-delete)
 (req-package setup-ido)
 (req-package setup-iregister)
-;; (req-package setup-linum)
+(req-package setup-linum)
 (req-package setup-magit)
 (req-package setup-manage-minor-mode)
 (req-package setup-multiple-cursors)
