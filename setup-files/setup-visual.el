@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-15 17:09:11 kmodi>
+;; Time-stamp: <2014-09-17 12:26:28 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -28,6 +28,20 @@
 (setq default-light-theme 'leuven)
 (setq default-theme       'zenburn)
 ;; (setq default-theme       'leuven)
+
+;; Ensure that the custom-theme-load-path has all the theme paths added
+;; Source: http://stackoverflow.com/a/15381087/1219634
+(require 'dash)
+(require 's)
+(-each
+   (-map
+      (lambda (item)
+      (format (concat user-emacs-directory "/elpa/%s") item))
+   (-filter
+      (lambda (item) (s-contains? "theme" item))
+      (directory-files (concat user-emacs-directory "/elpa"))))
+   (lambda (item)
+      (add-to-list 'custom-theme-load-path item)))
 
 ;; zenburn
 (defun zenburn ()
