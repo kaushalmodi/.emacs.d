@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-09-24 11:16:28 kmodi>
+;; Time-stamp: <2014-10-10 11:53:01 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -249,6 +249,48 @@ of the buffer from where this function is called."
 ;;   list instead of the selected frame's buffer list.
 
 
+;; Patched version to fix this issue:
+;; In Verilog/C/C++, comments can begin with //.
+;; Here's an example comment,
+;; //This is a comment
+;; I like to use the find-file-at-point feature. If my cursor is on the
+;; file name in `include "some_file.v".  But if my cursor is on the above
+;; example comment and if I hit C-x C-f, emacs tries to open a tentative
+;; path //This!
+;; How do I selectively prevent find-file-at-point from activating? In
+;; this case, when the major mode is verilog-mode, how do I NOT do
+;; find-file-at-point when my cursor is on a line where the first 2
+;; non-space characters are //?
+;; Source: http://emacs.stackexchange.com/questions/107/how-do-i-disable-ffap-find-file-at-point-when-the-first-two-non-space-characte
+(defun ffap-string-at-point (&optional mode)
+  (let* ((args
+          (cdr
+           (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
+               (assq 'file ffap-string-at-point-mode-alist))))
+         next-comment
+         (pt (point))
+         (beg (if (use-region-p)
+                  (region-beginning)
+                (save-excursion
+                  (skip-chars-backward (car args))
+                  (skip-chars-forward (nth 1 args) pt)
+                  (save-excursion
+                    (setq next-comment
+                          (progn (comment-search-forward (line-end-position) t)
+                                 (point))))
+                  (point))))
+         (end (if (use-region-p)
+                  (region-end)
+                (save-excursion
+                  (skip-chars-forward (car args))
+                  (skip-chars-backward (nth 2 args) pt)
+                  (point)))))
+    (when (> end next-comment)
+      (setq beg next-comment))
+    (setq ffap-string-at-point
+          (buffer-substring-no-properties
+           (setcar ffap-string-at-point-region beg)
+           (setcar (cdr ffap-string-at-point-region) end)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
