@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-10 11:53:01 kmodi>
+;; Time-stamp: <2014-10-13 12:18:08 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -364,7 +364,6 @@ of the buffer from where this function is called."
  ("C-,"         . shrink-window-horizontally)
  ("C-."         . enlarge-window-horizontally)
  ("C-;"         . shrink-window)
- ("C-'"         . enlarge-window)
  ("C-c k"       . windmove-up) ;; switch to buffer on top
  ("C-c j"       . windmove-down) ;; switch to buffer on bottom
  ("C-c h"       . windmove-left) ;; switch to buffer on left
@@ -374,8 +373,15 @@ of the buffer from where this function is called."
  ("C-x C-b"     . ibuffer)) ;; replace buffer-menu with ibuffer
 
 ;; Below bindings are made in global map and not in my minor mode as I want
-;; org mode to override those bindings
+;; other modes to override those bindings
+(unbind-key "C-'"       modi-mode-map)
+(unbind-key "<M-up>"    modi-mode-map)
+(unbind-key "<M-down>"  modi-mode-map)
+(unbind-key "<M-left>"  modi-mode-map)
+(unbind-key "<M-right>" modi-mode-map)
 (bind-keys
+ ("C-'"       . enlarge-window) ;; "C-'" enables `mc-hide-unmatched-lines-mode'
+ ;; when Multiple Cursors mode is on
  ("<M-up>"    . scroll-down-dont-move-point)
  ("<M-down>"  . scroll-up-dont-move-point)
  ;; Change the default `M-left` key binding from `left-word'
