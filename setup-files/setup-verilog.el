@@ -1,8 +1,9 @@
-;; Time-stamp: <2014-08-13 16:24:29 kmodi>
+;; Time-stamp: <2014-10-10 13:16:16 kmodi>
 
 ;; Verilog
 
 (req-package verilog-mode
+  :require (setup-editing) ;; for endless/indent-defun
   ;; Load verilog mode only when needed
   :commands (verilog-mode)
   ;; Any files that end in .v should be in verilog mode
@@ -64,6 +65,24 @@
       )
     (add-hook 'verilog-mode-hook 'my-verilog-mode-customizations)
 
+    ;; Redefine the electric-verilog-semi to call endless/indent-defun at the end
+    (defun electric-verilog-semi ()
+      "Insert `;' character and reindent the line."
+      (interactive)
+      (verilog-insert-last-command-event)
+
+      (if (or (verilog-in-comment-or-string-p)
+              (verilog-in-escaped-name-p))
+          ()
+        (save-excursion
+          (beginning-of-line)
+          (verilog-forward-ws&directives)
+          (verilog-indent-line))
+        (if (and verilog-auto-newline
+                 (not (verilog-parenthesis-depth)))
+            (electric-verilog-terminate-line)))
+      (endless/indent-defun)) ;; <--- Added this last line // 2014/10/10 - kmodi
+
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Macros saved as functions
     ;;
@@ -76,26 +95,3 @@
 
 
 (provide 'setup-verilog)
-
-
-;; Commented because it doesn't work as of now
-
-;; ;; Make _ visible to commands like `M-d`, `M-b`, `M-f`, etc
-;; ;; Specify the underscore character as a member of emacs’ punctuation class
-;; (modify-syntax-entry ?_ "_")
-;; ;; ** Problem with the above code snippet is that the syntax highlighting gets
-;; ;; messed up. In a string like "spi_reg_abc", reg gets highlighted (which shouldn't)
-
-;; (require 'ffap)
-;; (defun ffap-verilog (name)
-;;   (let ((inhibit-changing-match-data t) ;; string-match should not change match data
-;;         (ppss (syntax-ppss)))
-;;     (if (and (eq (syntax-ppss-context ppss) 'comment) ;; we are inside a comment
-;;              (= (line-number-at-pos (nth 8 ppss)) (line-number-at-pos (point))) ;; limit the match to the line starting the comment
-;;              (string-match "/[/*]\\([[:alnum:]_.]\\)+$"
-;;                            (buffer-substring-no-properties (nth 8 ppss) (point))))
-;;         ""
-;;       name)))
-;; (setq ffap-require-prefix t) ;; find file at point
-;; (add-to-list 'ffap-alist '(verilog-mode . ffap-verilog) 'append)
-;; (define-key global-map (kbd "C-S-x C-S-f") 'find-file-at-point)
