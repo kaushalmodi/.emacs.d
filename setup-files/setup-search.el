@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 14:40:23 kmodi>
+;; Time-stamp: <2014-10-09 11:21:17 kmodi>
 
 ;; Search
 
@@ -116,11 +116,29 @@ searches all buffers."
           )
     (bind-keys
      :map region-bindings-mode-map
-     ("]" . anzu-query-replace))
+     ("]" . anzu-query-replace-at-cursor-thing))
     (bind-keys
      :map modi-mode-map
      ("M-%"   . anzu-query-replace) ;; replace the emacs default `query-replace'
-     ("C-c r" . anzu-replace-at-cursor-thing))))
+     ("C-c r" . anzu-query-replace)
+     )))
+;;     ("C-c q" . anzu-query-replace-regexp))))
+
+;; Visual Regular Expression search/replace
+(req-package visual-regexp
+  :require (region-bindings-mode)
+  :config
+  (progn
+    (setq vr--feedback-limit nil)
+    (bind-keys
+     :map modi-mode-map
+     ("C-M-%" . vr/query-replace) ;; replace the emacs default query-replace-regexp
+     ("C-c q" . vr/query-replace)
+     ("C-c m" . vr/mc-mark))
+
+    (bind-keys
+     :map region-bindings-mode-map
+     ("}" . vr/query-replace))))
 
 ;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
 ;; `query-replace-regexp' from replace.el
