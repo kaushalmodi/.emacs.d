@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 12:03:05 kmodi>
+;; Time-stamp: <2014-10-13 12:26:56 kmodi>
 
 ;; Multiple Cursors
 ;; Source: https://github.com/magnars/multiple-cursors.el
@@ -15,6 +15,12 @@
   :require (region-bindings-mode)
   :init
   (progn
+    (defun toggle-mc-hide-unmatched-lines-mode ()
+      (interactive)
+      (if mc-hide-unmatched-lines-mode
+          (hum/keyboard-quit)
+        (mc-hide-unmatched-lines-mode t)))
+
     (bind-keys
      :map modi-mode-map
      ("C-S-c C-S-c"   . mc/edit-lines)
@@ -28,7 +34,10 @@
      ("a" . mc/mark-all-like-this)
      ("p" . mc/mark-previous-like-this)
      ("n" . mc/mark-next-like-this)
-     ("m" . mc/mark-more-like-this-extended))
+     ("P" . mc/cycle-backward)
+     ("N" . mc/cycle-forward)
+     ("m" . mc/mark-more-like-this-extended)
+     ("h" . toggle-mc-hide-unmatched-lines-mode))
 
     (bind-to-modi-map "m" mc/mark-all-like-this-dwim)
     (bind-to-modi-map "r" set-rectangular-region-anchor)))
