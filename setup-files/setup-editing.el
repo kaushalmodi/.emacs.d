@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-09-12 09:08:41 kmodi>
+;; Time-stamp: <2014-10-10 13:17:07 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -211,7 +211,7 @@ and the cursor. Else, insert empty line after the current line."
                       cperl-mode-hook))
         (add-hook hook 'indent-guide-mode)))
     (defun turn-off-indent-guide ()
-      "Turn on indent-guide-mode only for specific modes."
+      "Turn off indent-guide-mode only for specific modes."
       (interactive)
       (indent-guide-global-mode -1)
       (dolist (hook '(verilog-mode-hook
@@ -219,12 +219,35 @@ and the cursor. Else, insert empty line after the current line."
                       python-mode-hook
                       sh-mode-hook
                       cperl-mode-hook))
-        (remove-hook hook 'indent-guide-mode)))
-    (turn-on-indent-guide)))
+        (remove-hook hook 'indent-guide-mode)))))
+
+;; Aggressive auto indentation
+(require 'cl-lib)
+(defun endless/indent-defun ()
+  "Indent current defun.
+Do nothing if mark is active (to avoid deactivaing it), or if
+buffer is not modified (to avoid creating accidental
+modifications)."
+  (interactive)
+  (ignore-errors
+    (unless (or (region-active-p)
+                buffer-read-only
+                (null (buffer-modified-p)))
+      (let ((l (save-excursion (beginning-of-defun 1) (point)))
+            (r (save-excursion (end-of-defun 1) (point))))
+        (cl-letf (((symbol-function 'message) #'ignore))
+          (indent-region l r))))))
+
+(defun endless/activate-aggressive-indent ()
+  "Locally add `endless/indent-defun' to `post-command-hook'."
+  (add-hook 'post-command-hook
+            #'endless/indent-defun nil 'local))
+
+(add-hook 'emacs-lisp-mode-hook
+          #'endless/activate-aggressive-indent)
 
 ;; "Insert" copied rectangle instead of overwriting lines as
 ;; `M-x yank-rectangle` does.
-
 
 
 ;; Key bindings
@@ -250,7 +273,7 @@ and the cursor. Else, insert empty line after the current line."
  ("C-o"     . modi/smart-open-line)
  ("C-j"     . pull-up-line)
  ("M-j"     . comment-indent-new-line)
-  ;; Zap!
+ ;; Zap!
  ("M-z"     . zap-up-to-char)
  ("M-Z"     . zap-to-char))
 
