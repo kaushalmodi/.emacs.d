@@ -20,7 +20,6 @@
  '(column-number-mode t)
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes (quote ("6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "de594fe35e10e54f44faf0b8c037ba066900d22cc9e69faf8d238d04cf860131" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e")))
- '(custom-theme-load-path (quote ("~/.emacs.d/from-git/zenburn-emacs/" custom-theme-directory t)))
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
  '(display-time-mode t)
