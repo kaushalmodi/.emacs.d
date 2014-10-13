@@ -1,7 +1,7 @@
-;; Time-stamp: <2014-08-13 16:49:16 kmodi>
+;; Time-stamp: <2014-10-09 14:23:25 kmodi>
 
 ;; Guide Key
-;; Source: https://github.com/kbkbkbkb1/guide-key
+;; https://github.com/kai2nenobu/guide-key
 
 (req-package guide-key
   :config
