@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-15 17:12:00 kmodi>
+;; Time-stamp: <2014-10-13 09:46:26 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -10,10 +10,11 @@
   :require (rich-minority setup-visual)
   :init
   (progn
-    (setq sml/name-width         40 ;; space allocated for the buffer name in the mode-line
-          sml/line-number-format "%4l"
-          sml/mode-width         'full
-          sml/theme              'automatic
+    (setq sml/name-width            40 ;; space allocated for the buffer name in the mode-line
+          sml/line-number-format    "%4l"
+          sml/mode-width            'full
+          sml/theme                 'respectful
+          sml/no-confirm-load-theme t
           sml/replacer-regexp-list
           '(
             ("^~/org/" ":Org:")
