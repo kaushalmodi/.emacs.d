@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 11:28:43 kmodi>
+;; Time-stamp: <2014-10-01 16:44:44 kmodi>
 
 ;; Undo Tree
 ;; http://www.dr-qubit.org/emacs.php
@@ -41,8 +41,7 @@
      ("<prior>"   . undo-tree-visualizer-scroll-down) ;; default
      ;; quit/abort visualizer
      ("q"         . undo-tree-visualizer-quit)) ;; default
-    (key-chord-define-global "UU"   'undo-tree-redo)
-    (key-chord-define-global "\}\}" 'undo-tree-switch-branch)))
+    (key-chord-define-global "UU"   'undo-tree-redo)))
 
 
 (provide 'setup-undo-tree)
