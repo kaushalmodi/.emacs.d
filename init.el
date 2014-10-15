@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-13 10:09:59 kmodi>
+;; Time-stamp: <2014-10-14 11:50:34 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -34,8 +34,10 @@
         cperl-mode
         csv-nav ;; editing csv files
         dired+ dired-single
+        discover-my-major ;; Discover key bindings for the major mode
         drag-stuff
         eimp ;; required by org-show
+        elfeed
         elisp-slime-nav ;; tag based code navigation for elisp; works even for compressed code
         expand-region
         fill-column-indicator
@@ -110,7 +112,9 @@
 (req-package setup-bookmark+)
 (req-package setup-buffer-move)
 (req-package setup-dired)
+(req-package setup-discover-my-major)
 (req-package setup-drag-stuff)
+(req-package setup-elfeed)
 (req-package setup-elisp-slime-nav)
 (req-package setup-expand-region)
 (req-package setup-fci)
