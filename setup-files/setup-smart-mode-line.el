@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-13 09:46:26 kmodi>
+;; Time-stamp: <2014-10-24 10:52:29 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -17,12 +17,13 @@
           sml/no-confirm-load-theme t
           sml/replacer-regexp-list
           '(
-            ("^~/org/" ":Org:")
-            ("^~/\\.emacs\\.d/" ":ED:")
-            ("^~/.*box/uvm/.*examples/" ":UVM_EX:")
-            (":UVM_EX:\\([a-z0-9_]\\{2\\}\\).+/"
-             (lambda (string) (concat ":UVM_EX:"
-                                      (match-string 1 string)
+            ("^~/org/"                          ":Org:")
+            ("^~/\\.emacs\\.d/"                 ":ED:")
+            ("^~/.*box/uvm/uvm_examples/"       ":UVM_EX:")
+            ("^~/.*box/uvm/adsim_uvm_examples/" ":AD_UVM_EX:")
+            (":\\(.*_EX\\):\\([a-z0-9_]\\{3\\}\\).*?/"
+             (lambda (string) (concat ":\\1:"
+                                      (match-string 2 string)
                                       ":") ) )
             ;; Prefix with first 2 letters and last letter of project name
             ;; To distinguish between projects that could have same first 3 letters
@@ -39,7 +40,7 @@
                                       ":" (upcase (match-string 4 string)) ":"
                                       ) ) )
             (":\\(.*\\):DIG:tb/"                        ":\\1:TB:" )
-            (":\\(.*\\):TB:uvm/"                        ":\\1:UVM:" )
+            (":\\(.*\\):TB:agents/"                     ":\\1:AGT:" )
             (":\\(.*\\):TB:patterns/"                   ":\\1:PAT:" )
             (":\\(.*\\):DIG:design_code/"               ":\\1:DSGN:")
             (":\\(.*\\):DSGN:rtl/"                      ":\\1:RTL:" )
