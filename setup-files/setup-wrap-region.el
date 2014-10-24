@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 11:35:31 kmodi>
+;; Time-stamp: <2014-10-24 10:57:53 kmodi>
 
 ;; wrap-region
 ;; https://github.com/rejeep/wrap-region.el
@@ -11,13 +11,13 @@
                     org-mode-hook))
       (add-hook hook 'wrap-region-mode))
 
-    (wrap-region-add-wrapper "`" "'") ; hit ` then region -> `region'
+    (wrap-region-add-wrapper "`" "'") ; select region, hit ` then region -> `region'
 
-    (wrap-region-add-wrapper "=" "=" nil 'org-mode) ; hit $ then region -> =region= in org-mode
-    (wrap-region-add-wrapper "*" "*" nil 'org-mode) ; hit $ then region -> *region* in org-mode
-    (wrap-region-add-wrapper "/" "/" nil 'org-mode) ; hit $ then region -> /region/ in org-mode
-    (wrap-region-add-wrapper "_" "_" nil 'org-mode) ; hit $ then region -> _region_ in org-mode
-    (wrap-region-add-wrapper "+" "+" nil 'org-mode))) ; hit $ then region -> +region+ in org-mode
+    (wrap-region-add-wrapper "=" "=" nil 'org-mode) ; select region, hit = then region -> =region= in org-mode
+    (wrap-region-add-wrapper "*" "*" nil 'org-mode) ; select region, hit * then region -> *region* in org-mode
+    (wrap-region-add-wrapper "/" "/" nil 'org-mode) ; select region, hit / then region -> /region/ in org-mode
+    (wrap-region-add-wrapper "_" "_" nil 'org-mode) ; select region, hit _ then region -> _region_ in org-mode
+    (wrap-region-add-wrapper "+" "+" nil 'org-mode))) ; select region, hit + then region -> +region+ in org-mode
 
 
 (provide 'setup-wrap-region)
