@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-10 13:17:07 kmodi>
+;; Time-stamp: <2014-10-23 10:45:48 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -43,18 +43,6 @@
 ;; Duplication
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Duplicate only the current line
-;; Source: http://stackoverflow.com/questions/88399/how-do-i-duplicate-a-whole-line-in-emacs
-(defun duplicate-line()
-  (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (open-line 1)
-  (next-line 1)
-  (yank))
-
-;; This method replaces the above method
 ;; Duplicate current line or region
 ;; Source: http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
 (defun duplicate-current-line-or-region (arg)
@@ -98,10 +86,10 @@ See help of `format-time-string' for possible replacements")
 (defun insert-current-date-time ()
   "insert the current date and time into current buffer.
 Uses `current-date-time-format' for the formatting the date/time."
-       (interactive)
-       (insert "==========\n")
-       (insert (format-time-string current-date-time-format (current-time)))
-       (insert "\n"))
+  (interactive)
+  (insert "==========\n")
+  (insert (format-time-string current-date-time-format (current-time)))
+  (insert "\n"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -249,21 +237,58 @@ modifications)."
 ;; "Insert" copied rectangle instead of overwriting lines as
 ;; `M-x yank-rectangle` does.
 
+;; Copy the selected region with file name, starting and ending line numbers
+;; Source: http://stackoverflow.com/questions/12165205/how-to-copy-paste-a-region-from-emacs-buffer-with-line-file-reference
+(defun copy-with-linenum (beg end)
+  (interactive "r")
+  (save-excursion
+    (goto-char end)
+    (skip-chars-backward "\n \t")
+    (setq end (point))
+    (let* ((chunk (buffer-substring beg end)))
+      (setq chunk (concat
+                   (format    ",-------- #%-d -- %s ---\n| "
+                              (line-number-at-pos beg)
+                              (or (buffer-file-name) (buffer-name))
+                              )
+                   (replace-regexp-in-string "\n" "\n| " chunk)
+                   (format "\n`-------- #%-d --"
+                           (line-number-at-pos end))))
+      (kill-new chunk)))
+  (deactivate-mark))
+
+(defun copy-with-linenum-unicode (beg end)
+  (interactive "r")
+  (save-excursion
+    (goto-char end)
+    (skip-chars-backward "\n \t")
+    (setq end (point))
+    (let* ((chunk (buffer-substring beg end)))
+      (setq chunk (concat
+                   (format "╭──────── #%-d ─ %s ──\n│ "
+                           (line-number-at-pos beg)
+                           (or (buffer-file-name) (buffer-name))
+                           )
+                   (replace-regexp-in-string "\n" "\n│ " chunk)
+                   (format "\n╰──────── #%-d ─"
+                           (line-number-at-pos end))))
+      (kill-new chunk)))
+  (deactivate-mark))
 
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
  ("<f3>"    . toggle-comment-on-line-or-region)
- ("<f4>"    . kmacro-end-or-call-macro) ;; end macro recording/call last macro
- ("<S-f4>"  . start-kbd-macro) ;; start macro recording
- ("<C-f4>"  . start-kbd-macro) ;; start macro recording
+ ("<f4>"    . kmacro-end-or-call-macro) ; end macro recording/call last macro
+ ("<S-f4>"  . start-kbd-macro) ; start macro recording
+ ("<C-f4>"  . start-kbd-macro) ; start macro recording
  ("<f9>"    . eval-region)
  ("C-x d"   . delete-region)
  ("s-SPC"   . just-one-space) ;; Win-Space
  ("C-S-d"   . duplicate-current-line-or-region)
  ;; override the binding of `C-x =` for `what-cursor-position'
- ("C-x ="   . align-to-equals) ;; align all = signs in selected region
- ("C-x \\"  . align-regexp)  ;; align selected region to the entered regexp
+ ("C-x ="   . align-to-equals) ; align all = signs in selected region
+ ("C-x \\"  . align-regexp)  ; align selected region to the entered regexp
  ;; align multiple columns in the selected region. Of course all the selected
  ;; lines must have the same number of columns of groups of non-space characters
  ("C-x |"   . align-columns)
@@ -277,14 +302,20 @@ modifications)."
  ("M-z"     . zap-up-to-char)
  ("M-Z"     . zap-to-char))
 
+(require 'region-bindings-mode)
+(bind-keys
+ :map region-bindings-mode-map
+ ("c" . copy-with-linenum)
+ ("C" . copy-with-linenum-unicode))
+
 (bind-to-modi-map "d" insert-current-date-time)
 (bind-to-modi-map "x" eval-and-replace-last-sexp)
 
-(key-chord-define-global "3e" 'toggle-comment-on-line-or-region) ;; alternative to F3
-(key-chord-define-global "9o" 'eval-region) ;; alternative to F9
+(key-chord-define-global "3e" 'toggle-comment-on-line-or-region) ; alternative to F3
+(key-chord-define-global "9o" 'eval-region) ; alternative to F9
 (key-chord-define-global "^^" (λ (insert "λ")))
 
-(setq setup-editing-loaded t) ;; required in setup-perl
+(setq setup-editing-loaded t) ; required in setup-perl
 (provide 'setup-editing)
 
 
