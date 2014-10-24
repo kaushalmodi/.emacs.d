@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 15:15:43 kmodi>
+;; Time-stamp: <2014-10-24 09:58:48 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; Source: http://www.emacswiki.org/emacs-en/dired-single.el
@@ -7,6 +7,7 @@
   :defer t
   :config
   (progn
+    (setq diredp-hide-details-initially-flag nil) ; http://irreal.org/blog/?p=3341
     (req-package dired-single)
     (req-package dired+)
     (req-package dired-x
