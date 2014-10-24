@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-14 13:23:57 kmodi>
+;; Time-stamp: <2014-10-22 11:04:10 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
@@ -22,6 +22,16 @@
     (add-hook 'elfeed-new-entry-hook
               (elfeed-make-tagger :before "4 weeks ago"
                                   :remove 'unread))
+    ;; Mark all as read
+    (defun elfeed-mark-all-as-read ()
+      (interactive)
+      (mark-whole-buffer)
+      (elfeed-search-untag-all-unread))
+
+    (bind-keys
+     :map elfeed-search-mode-map
+     ("R" . elfeed-mark-all-as-read))
+
     (bind-to-modi-map ";" elfeed)))
 
 
