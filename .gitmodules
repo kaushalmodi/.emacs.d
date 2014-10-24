@@ -4,3 +4,6 @@
 [submodule "from-git/zenburn-emacs"]
 	path = from-git/zenburn-emacs
 	url = http://github.com/kaushalmodi/zenburn-emacs
+[submodule "from-git/org-reveal"]
+	path = from-git/org-reveal
+	url = https://github.com/yjwen/org-reveal
