@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-10 09:08:44 kmodi>
+;; Time-stamp: <2014-10-16 10:05:23 kmodi>
 
 ;; Org Mode
 
@@ -145,13 +145,13 @@
     ;; Source: http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
     ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
     ;; automatically to resolve the cross-references.
-    (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
+    ;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
 
     ;; Run xelatex multiple times to get the cross-references right
-    ;; (setq org-latex-pdf-process '("xelatex -shell-escape %f"
-    ;;                               "xelatex -shell-escape %f"
-    ;;                               "xelatex -shell-escape %f"
-    ;;                               "xelatex -shell-escape %f"))
+    (setq org-latex-pdf-process '("xelatex -shell-escape %f"
+                                  "xelatex -shell-escape %f"
+                                  "xelatex -shell-escape %f"
+                                  "xelatex -shell-escape %f"))
 
     ;; Run pdflatex multiple times to get the cross-references right
     ;; (setq org-latex-pdf-process '("pdflatex -shell-escape %f"
@@ -238,8 +238,8 @@
 
 ;; Presentations using reveal.js
 ;; Download reveal.js from https://github.com/hakimel/reveal.js/
-;; Instead `ox-reveal' from MELPA
 (req-package ox-reveal
+  :load-path "from-git/org-reveal"
   :config
   (progn
     ;; I have git clones reveal.js in my {emacs config directory}/from-git/
