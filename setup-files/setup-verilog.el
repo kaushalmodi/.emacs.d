@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-10 13:16:16 kmodi>
+;; Time-stamp: <2014-10-20 19:47:18 kmodi>
 
 ;; Verilog
 
@@ -81,8 +81,8 @@
         (if (and verilog-auto-newline
                  (not (verilog-parenthesis-depth)))
             (electric-verilog-terminate-line)))
-      (endless/indent-defun)) ;; <--- Added this last line // 2014/10/10 - kmodi
-
+      ;; (endless/indent-defun) ;; <--- Added this last line // 2014/10/10 - kmodi
+      )
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Macros saved as functions
     ;;
