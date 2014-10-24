@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-13 11:03:42 kmodi>
+;; Time-stamp: <2014-10-23 14:13:44 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -11,6 +11,30 @@
      ,@body))
 (key-chord-define-global "^^" (λ (insert "λ")))
 
+(defmacro ==e243 (&rest body)
+  `(when (and (version<= "24.3.0" emacs-version )
+              (version<= emacs-version "24.3.99"))
+     ,@body))
+
+(defmacro >=e244 (&rest body)
+  "The BODY can contain both 'if' (emacs version at least 24.4) and
+'else' (emacs version older than 24.4) blocks."
+  `(if (version<= "24.4" emacs-version)
+       ,@body))
+
+;; Alias ^ as a function to calculate exponents
+;; (^ 2 15) `C-x C-e' -> 32768
+(defalias '^ 'expt)
+
+;; Source https://github.com/Wilfred/ag.el
+(defun modi/get-symbol-at-point ()
+  "If there's an active selection, return that.
+Otherwise, get the symbol at point, as a string."
+  (cond ((use-region-p)
+         (buffer-substring-no-properties (region-beginning) (region-end)))
+        ((symbol-at-point)
+         (substring-no-properties
+          (symbol-name (symbol-at-point))))))
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
