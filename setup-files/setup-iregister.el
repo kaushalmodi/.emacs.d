@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 09:58:19 kmodi>
+;; Time-stamp: <2014-10-23 09:01:56 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
@@ -7,17 +7,16 @@
   :config
   (progn
     (bind-keys
-     :map modi-mode-map
-    ;; If region is active then `iregister-point-or-text-to-register' command stores a
-    ;; text to any empty register, otherwise it stores a point.
-    ("M-w"     . iregister-point-or-text-to-register-kill-ring-save) ;; Replace normal copy function
-    ("C-w"     . iregister-copy-to-register-kill) ;; Replace normal 'cut' function
-    ;; Copy the selection and append to the latest register
-    ("C-x r a" . iregister-append-to-latest-register)
-    ;; Delete the selection and append to the latest register
-    ("C-x r A" . iregister-append-to-latest-register-delete)
-    ("M-n"     . iregister-jump-to-next-marker)
-    ("M-p"     . iregister-jump-to-previous-marker))
+     ;; If region is active then `iregister-point-or-text-to-register' command stores a
+     ;; text to any empty register, otherwise it stores a point.
+     ("M-w"     . iregister-point-or-text-to-register-kill-ring-save) ;; Replace normal copy function
+     ("C-w"     . iregister-copy-to-register-kill) ;; Replace normal 'cut' function
+     ;; Copy the selection and append to the latest register
+     ("C-x r a" . iregister-append-to-latest-register)
+     ;; Delete the selection and append to the latest register
+     ("C-x r A" . iregister-append-to-latest-register-delete)
+     ("M-n"     . iregister-jump-to-next-marker)
+     ("M-p"     . iregister-jump-to-previous-marker))
     ;; Assuming that there are already stored some texts (by means of `copy-to-register'
     ;; or `iregister-copy-to-register' command) in the registers. Execute
     ;; `iregister-text' and the minibuffer will display the text stored in some
