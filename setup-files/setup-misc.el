@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-14 12:13:28 kmodi>
+;; Time-stamp: <2014-10-22 14:52:43 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -23,6 +23,10 @@
          ("\\.setup\\'" . shell-script-mode)
          ("\\.cfg\\'"   . shell-script-mode)
          ) auto-mode-alist))
+
+;; Load newer version of .el and .elc if both are available
+(>=e244
+ (setq load-prefer-newer t))
 
 ;; Execute the script in current buffer
 ;; Source: http://ergoemacs.org/emacs/elisp_run_current_file.html
@@ -87,10 +91,21 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; The emacs-quitting feature is useful whether or not my minor map is loaded
 ;; So bind the keys globally instead of to the minor mode map.
 (if desktop-save-mode
-  (bind-keys
-   ("C-x C-c" . save-desktop-save-buffers-kill-emacs)
-   ("C-x M-c" . tv-stop-emacs))
+    (bind-keys
+     ("C-x C-c" . save-desktop-save-buffers-kill-emacs)
+     ("C-x M-c" . tv-stop-emacs))
   (bind-key "C-x C-c" 'tv-stop-emacs))
+
+;; Source: http://endlessparentheses.com/sweet-new-features-in-24-4.html
+;; Hook `eval-expression-minibuffer-setup-hook' is run by ;; `eval-expression'
+;; on entering the minibuffer.
+;; Below enables ElDoc inside the `eval-expression' minibuffer.
+;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
+(>=e244
+ (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
+
+;; Turn on ElDoc mode in emacs-lisp-mode
+(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 
 
 (provide 'setup-misc)
