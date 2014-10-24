@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-14 11:50:34 kmodi>
+;; Time-stamp: <2014-10-24 15:00:59 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -14,80 +14,83 @@
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
       '(
-        ;; projectile
         ;; header2
         ;; helm helm-swoop ;; Replaced with swoop
         ;; etags-select etags-table ctags-update ;; Replacing these with ggtags
         ;; zenburn-theme ;; Using my own forked version
         ;; workgroups2 ;; tested but unstable at the time of testing
+        ;; fiplr ; quick file search in a project (marked by folders like .git)
+        ;; ox-reveal ;; Using branch 8.2.7c from github; used to export to HTML slides
         ace-jump-mode
+        ace-jump-zap
         ace-window
-        ag wgrep wgrep-ag s ;; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
-        ;; You need to have ag installed on your machine
-        anzu ;; shows total search hits in mode line, better query-replace alternative
-        auctex ;; You also need to install auctex from http://www.gnu.org/software/auctex/
+        ag wgrep wgrep-ag s ; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
+                                        ; You need to have ag installed on your machine
+        anzu   ; shows total search hits in mode line, better query-replace alternative
+        auctex ; You also need to install auctex from http://www.gnu.org/software/auctex/
         auto-complete fuzzy
         auto-highlight-symbol
         benchmark-init
-        bookmark+ ;; able to bookmark desktop sessions
+        bookmark+ ; able to bookmark desktop sessions
         buffer-move
         cperl-mode
-        csv-nav ;; editing csv files
+        csv-nav ; editing csv files
         dired+ dired-single
-        discover-my-major ;; Discover key bindings for the major mode
+        discover-my-major ; Discover key bindings for the major mode
         drag-stuff
-        eimp ;; required by org-show
+        eimp ; required by org-show
         elfeed
-        elisp-slime-nav ;; tag based code navigation for elisp; works even for compressed code
+        elisp-slime-nav ; tag based code navigation for elisp; works even for compressed code
         expand-region
+        eww-lnum ; jump to links in eww buffer ace-jump style
         fill-column-indicator
-        fiplr ;; quick file search in a project (marked by folders like .git)
         ggtags
         guide-key
         hardcore-mode
         hl-line+
         hungry-delete
         ido-vertical-mode flx-ido ido-ubiquitous
-        iregister ;; Interactive access to registers
-        iy-go-to-char ;; Go to next char which is similar to "f" and "t" in vim
-        key-chord ;; map pairs of simultaneously pressed keys to commands
-        leuven-theme ;; awesome white background theme
-        magit ;; for git management
+        iregister ; Interactive access to registers
+        iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
+        key-chord ; map pairs of simultaneously pressed keys to commands
+        leuven-theme ; awesome white background theme
+        magit ; for git management
         manage-minor-mode
         markdown-mode
         multiple-cursors
-        mwe-log-commands ;; for logging commands; useful when demoing emacs
-        nlinum ;; reviews say it's better than linum
-        number ;; number manipulation
-        org ox-reveal htmlize poporg ;; Get the latest org-mode package from MELPA
-        ;; ox-reveal for HTML slides
-        ;; poporg to edit comments from any other mode in org mode
-        page-break-lines ;; Convert the ^L (form feed) chars to horizontal lines
-        popwin ;; Open windows like *Help*, *Completions*, etc in minibuffer
+        mwe-log-commands ; for logging commands; useful when demoing emacs
+        nlinum ; reviews say it's better than linum
+        number ; number manipulation
+        org htmlize poporg ; Get the latest org-mode package from MELPA
+                                        ; poporg to edit comments from any other mode in org mode
+        page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
+        popwin ; Open windows like *Help*, *Completions*, etc in minibuffer
+        projectile ;; Better than fiplr
         rainbow-delimiters
         rainbow-mode
-        region-bindings-mode ;; complements really well with multiple-cursors
-        req-package ;; optimize package loading
+        region-bindings-mode ; complements really well with multiple-cursors
+        req-package ; optimize package loading
         smart-compile
         smart-mode-line popup rich-minority
-        smex ;; smart M-x
+        smex ; smart M-x
         stripe-buffer
         swoop
-        undo-tree ;; supercool undo visualization
+        undo-tree ; supercool undo visualization
         visual-regexp
         volatile-highlights
-        w3m ;; web-browsing in emacs
+        w3m ; web-browsing in emacs
         web-mode
-        wrap-region ;; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
-        xkcd ;; comic
-        yafolding ;; indentation detected code folding
-        yaml-mode ;; Useful for editing Octopress' _config.yml
+        wrap-region ; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
+        xkcd ; comic
+        yafolding ; indentation detected code folding
+        yaml-mode ; Useful for editing Octopress' _config.yml
         yasnippet
         ))
 
 (load custom-file) ;; Load the emacs `M-x customize` generated file
 (load setup-packages-file) ;; Load the packages
 
+(require 'defuns)
 (require 'benchmark-init)
 (require 'req-package)
 
@@ -95,7 +98,6 @@
 (req-package setup-key-chord)
 (req-package modi-mode)
 (req-package temp-mode)
-(req-package defuns)
 
 (require 'setup-secret nil t) ;; No error if not found
 
@@ -106,6 +108,7 @@
 
 ;; Set up extensions/packages
 (req-package setup-ace-jump-mode)
+(req-package setup-ace-jump-zap)
 (req-package setup-ace-window)
 (req-package setup-ag)
 (req-package setup-auto-complete)
@@ -115,10 +118,12 @@
 (req-package setup-discover-my-major)
 (req-package setup-drag-stuff)
 (req-package setup-elfeed)
+(>=e244
+ (req-package setup-eww)  ;; if emacs version >= 24.4
+ (req-package setup-w3m)) ;; if emacs version <= 24.3
 (req-package setup-elisp-slime-nav)
 (req-package setup-expand-region)
 (req-package setup-fci)
-(req-package setup-fiplr)
 (req-package setup-guide-key)
 (req-package setup-hardcore)
 (req-package setup-header2)
@@ -127,7 +132,7 @@
 (req-package setup-hungry-delete)
 (req-package setup-ido)
 (req-package setup-iregister)
-(req-package setup-linum)
+;; (req-package setup-linum)
 (req-package setup-magit)
 (req-package setup-manage-minor-mode)
 (req-package setup-multiple-cursors)
@@ -135,6 +140,7 @@
 (req-package setup-org)
 (req-package setup-page-break-lines)
 (req-package setup-poporg)
+(req-package setup-projectile)
 (req-package setup-rainbow-delimiters)
 (req-package setup-rainbow-mode)
 (req-package setup-server)
@@ -142,14 +148,13 @@
 (req-package setup-smex)
 (req-package setup-stripe-buffer)
 (req-package setup-undo-tree)
-(req-package setup-w3m)
 (req-package setup-wrap-region)
 (req-package setup-xkcd)
 (req-package setup-yafolding)
 (req-package setup-yasnippet)
+;; (req-package setup-fiplr)
 ;; (req-package setup-workgroups2)
 ;; (req-package setup-helm) ;; Not required; replaced with swoop
-;; (req-package setup-projectile)
 
 ;; Languages
 (req-package setup-verilog)
@@ -172,11 +177,12 @@
 (req-package setup-gtags)
 (req-package setup-spell)
 (req-package setup-desktop)
-;; (req-package setup-ctags) ;; Using gtags instead
+(req-package setup-image)
+;; (req-package setup-ctags) ; Using gtags instead
 
-(req-package setup-misc) ;; This package must be the last required package
+(req-package setup-misc) ; This package must be the last required package
 
-(req-package-finish) ;; Start loading packages in right order
+(req-package-finish) ; Start loading packages in right order
 (global-modi-mode t)
 (funcall default-theme)
 
