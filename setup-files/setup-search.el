@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-09 11:21:17 kmodi>
+;; Time-stamp: <2014-10-23 09:33:12 kmodi>
 
 ;; Search
 
@@ -56,27 +56,6 @@
       (isearch-yank-regexp
        (concat "\\_<" (regexp-quote sym) "\\_>")))))
 
-(defun isearch-current-symbol (&optional partialp)
-  "Incremental search forward with symbol under point.
-
-    Prefixed with \\[universal-argument] will find all partial
-    matches."
-  (interactive "P")
-  (let ((start (point)))
-    (isearch-forward-regexp nil 1)
-    (isearch-yank-symbol partialp)))
-
-(defun isearch-backward-current-symbol (&optional partialp)
-  "Incremental search backward with symbol under point.
-
-    Prefixed with \\[universal-argument] will find all partial
-    matches."
-  (interactive "P")
-  (let ((start (point)))
-    (isearch-backward-regexp nil 1)
-    (isearch-yank-symbol partialp)))
-
-
 ;; Search for the highlighted string in ALL buffers `search-all-buffers'
 ;; Source: http://stackoverflow.com/questions/2641211/emacs-interactively-search-open-buffers
 (require 'cl)
@@ -96,7 +75,12 @@ searches all buffers."
    (if (member prefix '(4 (4)))
        (buffer-list)
      (remove-if
-      (lambda (b) (some (lambda (rx) (string-match rx  (file-name-nondirectory (buffer-file-name b)))) search-all-buffers-ignored-files))
+      (lambda (b)
+        (some
+         (lambda (rx) (string-match rx
+                                    (file-name-nondirectory
+                                     (buffer-file-name b))))
+         search-all-buffers-ignored-files))
       (remove-if-not 'buffer-file-name (buffer-list))))
    regexp))
 
@@ -194,12 +178,6 @@ happens within a region if one is selected."
 ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
 ;; DEL during isearch should edit the search string, not jump back to the previous result
 (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
-
-;; Key bindings
-(bind-keys
- :map modi-mode-map
- ("C-S-s" . isearch-current-symbol)
- ("C-S-r" . isearch-backward-current-symbol))
 
 (bind-to-modi-map "s" search-all-buffers)
 
