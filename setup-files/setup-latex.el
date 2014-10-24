@@ -1,8 +1,11 @@
-;; Time-stamp: <2014-08-13 11:46:17 kmodi>
+;; Time-stamp: <2014-10-18 13:00:27 kmodi>
 
 ;; LaTeX
 (load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+
+;; preview-latex doesn't work in emacs 24.4 (also doesn't seem like it's needed)
+(==e243
+ (load "preview-latex.el" nil t t))
 
 (setq LaTeX-command "latex -shell-escape")
 
