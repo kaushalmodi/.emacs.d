@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-12 17:39:59 kmodi>
+;; Time-stamp: <2014-10-23 09:47:57 kmodi>
 
 ;; Highlight Symbol at point/cursor
 ;; (require 'highlight-symbol)
@@ -46,6 +46,28 @@
      ("M--"         . ahs-back-to-start)
      ("C-x C-'"     . ahs-change-range)
      ("C-x C-a"     . ahs-edit-mode))))
+
+(>=e244
+ ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
+ ;; highlight color automatically
+;;;###autoload
+ (defun hi-lock-face-buffer (regexp)
+   "Interactively, prompt for REGEXP using `read-regexp'. Uses the
+   next face from `hi-lock-face-defaults' without prompting.
+
+Use Font lock mode, if enabled, to highlight REGEXP.  Otherwise, use
+overlays for highlighting.  If overlays are used, the highlighting
+will not update as you type."
+   (interactive
+    (list
+     (hi-lock-regexp-okay
+      ;; (read-regexp "Regexp to highlight" 'regexp-history-last))))
+      (read-from-minibuffer "Regexp to highlight: " (modi/get-symbol-at-point)))))
+   (let* ((hi-lock-auto-select-face t)
+          (face (hi-lock-read-face-name)))
+     (or (facep face) (setq face 'hi-yellow))
+     (unless hi-lock-mode (hi-lock-mode 1))
+     (hi-lock-set-pattern regexp face))))
 
 
 (provide 'setup-highlight)
