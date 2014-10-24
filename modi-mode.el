@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-09-03 13:12:06 kmodi>
+;; Time-stamp: <2014-10-23 09:10:04 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -56,6 +56,13 @@
 USAGE: (bind-to-modi-map \"f\" full-screen-center)
 "
   `(bind-key (concat ,modi/pseudo-map-prefix ,key) ',fn modi-mode-map))
+
+(defun unbind-from-modi-map (key)
+  "Unbind a function from the `modi-mode-map'
+USAGE: (unbind-from-modi-map \"C-x m f\")
+"
+  (interactive "kUnset key from modi-mode-map: ")
+  (define-key modi-mode-map key nil))
 
 
 (provide 'modi-mode)
