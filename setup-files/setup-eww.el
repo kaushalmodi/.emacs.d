@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-24 15:20:07 kmodi>
+;; Time-stamp: <2014-10-24 16:20:41 kmodi>
 
 ;; Eww
 ;; Emacs browser (needs emacs 24.4 or higher)
@@ -53,8 +53,9 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
       ("<backtab>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
       ("<backspace>" . eww-back-url)
       ("C-d"         . eww-add-bookmark) ; Add bookmark
-      ("C-f"         . eww-forward-url)
       ("C-w"         . eww-copy-page-url)
+      ("\<"          . eww-back-url)
+      ("\>"          . eww-forward-url)
       ("/"           . highlight-regexp))
      (bind-keys
       :map eww-text-map ; For single line text fields
