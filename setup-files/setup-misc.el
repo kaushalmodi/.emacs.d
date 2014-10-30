@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-22 14:52:43 kmodi>
+;; Time-stamp: <2014-10-29 11:59:46 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -134,7 +134,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; `C-x 5 0` Kills the emacsclient frame
 
 ;; (6)
-;; `C-q' is boudn to `quoted-insert'
+;; `C-q' is bound to `quoted-insert'
 ;; Example: Pressing `C-q C-l' inserts the `^l' character (form feed):  
 
 ;; (7)
