@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-10-20 19:47:18 kmodi>
+;; Time-stamp: <2014-10-29 09:49:34 kmodi>
 
 ;; Verilog
 
 (req-package verilog-mode
-  :require (setup-editing) ;; for endless/indent-defun
+  :require (setup-editing outshine) ; setup-editing for endless/indent-defun
   ;; Load verilog mode only when needed
   :commands (verilog-mode)
   ;; Any files that end in .v should be in verilog mode
@@ -62,6 +62,10 @@
       ;; Above solution highlights those keywords anywhere in the buffer (not just
       ;; in comments). To do the highlighting intelligently, install the fic-mode
       ;; package -- http://www.emacswiki.org/emacs/fci-mode.el
+
+      ;; ;; Enable orgstruct mode
+      ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
+      ;; (turn-on-orgstruct++)
       )
     (add-hook 'verilog-mode-hook 'my-verilog-mode-customizations)
 
