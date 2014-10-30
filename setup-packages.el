@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-06-20 00:45:18 kmodi>
+;; Time-stamp: <2014-10-29 11:50:23 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -31,9 +31,10 @@
 (require 'package)
 ;; Add melpa package source when using package list
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
+             '("melpa" . "http://melpa.org/packages/") t)
+;; Commented out Marmalade -- 2014/10/29
+;; (add-to-list 'package-archives
+;; '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 (package-initialize) ;; Load emacs packages and activate them
 
