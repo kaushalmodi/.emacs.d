@@ -1,17 +1,17 @@
-;; Time-stamp: <2014-10-13 12:26:56 kmodi>
+;; Time-stamp: <2014-10-30 11:28:13 kmodi>
 
 ;; Multiple Cursors
 ;; Source: https://github.com/magnars/multiple-cursors.el
 
 (req-package multiple-cursors
-  :commands (mc/edit-lines
-             mc/add-cursor-on-click
-             mc/mark-all-like-this
-             mc/mark-previous-like-this
-             mc/mark-next-like-this
-             mc/mark-more-like-this-extended
-             mc/mark-all-like-this-dwim
-             set-rectangular-region-anchor)
+  ;; :commands (mc/edit-lines
+  ;;            mc/add-cursor-on-click
+  ;;            mc/mark-all-like-this
+  ;;            mc/mark-previous-like-this
+  ;;            mc/mark-next-like-this
+  ;;            mc/mark-more-like-this-extended
+  ;;            mc/mark-all-like-this-dwim
+  ;;            set-rectangular-region-anchor)
   :require (region-bindings-mode)
   :init
   (progn
