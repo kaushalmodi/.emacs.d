@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-24 15:00:59 kmodi>
+;; Time-stamp: <2014-10-30 18:49:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -54,6 +54,7 @@
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
         key-chord ; map pairs of simultaneously pressed keys to commands
         leuven-theme ; awesome white background theme
+        linum-relative
         magit ; for git management
         manage-minor-mode
         markdown-mode
@@ -63,6 +64,8 @@
         number ; number manipulation
         org htmlize poporg ; Get the latest org-mode package from MELPA
                                         ; poporg to edit comments from any other mode in org mode
+        outshine outorg navi-mode ; org-mode like structure in other major modes
+        paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
         popwin ; Open windows like *Help*, *Completions*, etc in minibuffer
         projectile ;; Better than fiplr
@@ -132,13 +135,16 @@
 (req-package setup-hungry-delete)
 (req-package setup-ido)
 (req-package setup-iregister)
-;; (req-package setup-linum)
+(req-package setup-linum)
 (req-package setup-magit)
 (req-package setup-manage-minor-mode)
 (req-package setup-multiple-cursors)
 (req-package setup-number)
 (req-package setup-org)
+(req-package setup-orgstruct)
+(req-package setup-outshine)
 (req-package setup-page-break-lines)
+(req-package setup-paradox)
 (req-package setup-poporg)
 (req-package setup-projectile)
 (req-package setup-rainbow-delimiters)
