@@ -1,15 +1,67 @@
-;; Time-stamp: <2014-08-13 15:30:54 kmodi>
+;; Time-stamp: <2014-10-30 11:31:17 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
 (req-package iy-go-to-char
-  :require (key-chord)
+  :require (key-chord multiple-cursors)
   :config
   (progn
-    ;; Note that repeatedly calling the `iy-go-tochar' key-chords without first
+    (setq iy-go-to-char-continue-when-repeating t)
+    (setq iy-go-to-char-use-key-backward t)
+    (setq iy-go-to-char-key-backward ?\,)
+    (setq iy-go-to-char-use-key-forward t)
+    (setq iy-go-to-char-key-forward ?\.)
+    ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-    (key-chord-define-global "]'" 'iy-go-to-char)
-    (key-chord-define-global "[;" 'iy-go-to-char-backward)))
+    (key-chord-define-global "]'"  'iy-go-to-char)
+    (key-chord-define-global "}\"" 'iy-go-to-or-up-to-continue)
+    (key-chord-define-global "[;"  'iy-go-to-char-backward)
+    (key-chord-define-global "{:"  'iy-go-to-or-up-to-continue-backward)
+    ;; To make `iy-go-to-char' works better with `multiple-cursors', add
+    ;; `iy-go-to-char-start-pos' to `mc/cursor-specific-vars' when mc is loaded:
+    (eval-after-load 'multiple-cursors
+      '(add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos))))
+;; iy-go-to-char
+;; Except repeating the char key, followings keys are defined before
+;; quitting the search (which can be disabled by setting
+;; `iy-go-to-char-override-local-map' to nil):
+;;
+;;    X   -- where X is the char to be searched. Repeating it will search
+;;           forward the char. Can be disabled through
+;;           `iy-go-to-char-continue-when-repeating'
+;;
+;;    ;   -- search forward the char, customizable:
+;;           `iy-go-to-char-key-forward', `iy-go-to-char-use-key-forward'
+;;
+;;    ,   -- search backward the char, customizable:
+;;           `iy-go-to-char-key-backward', `iy-go-to-char-use-key-backward'
+;;
+;;    C-g -- quit
+;;
+;;    C-s -- start `isearch-forward' using char as initial search
+;;           string
+;;
+;;    C-r -- start `isearch-backward' using char as initial search
+;;           string
+;;
+;;    C-w -- quit and kill region between start and current point.  If region is
+;;           activated before search, then use the original mark instead of the
+;;           start position.
+;;
+;;    M-w -- quit and save region between start and current point.  If region is
+;;           activated before search, use the mark instead of start position.
+;;
+;; All other keys will quit the search.  Then the key event is
+;; intepreted in the original environment before search.
+;;
+;; if the search quits because of error or using "C-g", point is set
+;; back to the start position.  Otherwise, point is not changed and the
+;; start position is set as marker.  So you can use "C-x C-x" back to
+;; that position.
+
+;; `iy-go-to-char-backward' search backward by default.  Also the search can
+;; cross lines.  To continue search last char, use `iy-go-to-char-continue' and
+;; `iy-go-to-char-continue-backward'.
 
 
 ;; Make C-a toggle between beginning of line and indentation
