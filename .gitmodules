@@ -9,4 +9,4 @@
 	url = https://github.com/yjwen/org-reveal
 [submodule "from-git/zop-to-char"]
 	path = from-git/zop-to-char
-	url = https://github.com/thierryvolpiatto/zop-to-char
+	url = http://www.github.com/kaushalmodi/zop-to-char
