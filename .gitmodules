@@ -7,3 +7,6 @@
 [submodule "from-git/org-reveal"]
 	path = from-git/org-reveal
 	url = https://github.com/yjwen/org-reveal
+[submodule "from-git/zop-to-char"]
+	path = from-git/zop-to-char
+	url = https://github.com/thierryvolpiatto/zop-to-char
