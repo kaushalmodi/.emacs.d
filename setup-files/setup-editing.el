@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-23 10:45:48 kmodi>
+;; Time-stamp: <2014-10-30 23:23:07 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -183,6 +183,17 @@ and the cursor. Else, insert empty line after the current line."
 ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
 (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
 
+;; zop-to-char
+;; Source: https://github.com/thierryvolpiatto/zop-to-char
+(req-package zop-to-char
+  :load-path "from-git/zop-to-char"
+  :config
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("M-z" . zop-up-to-char)
+     ("M-Z" . zop-to-char))))
+
 ;; indent-guide
 (req-package indent-guide
   :config
@@ -299,8 +310,9 @@ modifications)."
  ("C-j"     . pull-up-line)
  ("M-j"     . comment-indent-new-line)
  ;; Zap!
- ("M-z"     . zap-up-to-char)
- ("M-Z"     . zap-to-char))
+ ;; ("M-z"     . zap-up-to-char)
+ ;; ("M-Z"     . zap-to-char))
+ )
 
 (require 'region-bindings-mode)
 (bind-keys
