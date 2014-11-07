@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-16 10:05:23 kmodi>
+;; Time-stamp: <2014-11-07 10:48:46 kmodi>
 
 ;; Org Mode
 
@@ -238,7 +238,7 @@
 
 ;; Presentations using reveal.js
 ;; Download reveal.js from https://github.com/hakimel/reveal.js/
-(req-package ox-reveal
+(use-package ox-reveal
   :load-path "from-git/org-reveal"
   :config
   (progn
@@ -290,8 +290,8 @@ this with to-do items than with projects or headings."
 
 ;; org-show -JKitchin
 ;; https://github.com/jkitchin/jmax/blob/master/org-show.org
-(req-package org-show
-  :commands (org-show))
+;; (use-package org-show
+;; :load-path "from-git/org-show")
 ;; (define-key  org-show-mode-map  [next]        'org-show-next-slide) ;; Pg-Down
 ;; (define-key  org-show-mode-map  [prior]       'org-show-previous-slide) ;; Pg-Up
 
@@ -302,6 +302,24 @@ this with to-do items than with projects or headings."
 ;; (define-key  org-show-mode-map  (kbd "\e\eg") 'org-show-goto-slide)
 ;; (define-key  org-show-mode-map  (kbd "\e\et") 'org-show-toc)
 ;; (define-key  org-show-mode-map  (kbd "\e\eq") 'org-show-stop-slideshow)
+
+;; epresent
+(req-package epresent)
+
+;; org-tree-slide
+(use-package org-tree-slide
+  :load-path "from-git/org-tree-slide"
+  :config
+  (progn
+    (setq org-tree-slide-slide-in-effect nil)
+    (bind-keys
+     :map org-tree-slide-mode-map
+     ("p" . org-tree-slide-move-previous-tree)
+     ("n" . org-tree-slide-move-next-tree)
+     ("q" . org-tree-slide-mode))
+    (bind-keys
+     ("<C-S-f8>" . org-tree-slide-mode))
+    ))
 
 ;; Key bindings
 (bind-keys
@@ -691,7 +709,7 @@ INFO is a plist used as a communication channel."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (when (plist-get info :time-stamp-file)
        (format-time-string
-	 (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
+        (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
      (format
       (if (org-html-html5-p info)
 	  (org-html-close-tag "meta" " charset=\"%s\"" info)
@@ -699,29 +717,29 @@ INFO is a plist used as a communication channel."
 	 "meta" " http-equiv=\"Content-Type\" content=\"text/html;charset=%s\""
 	 info))
       charset) "\n"
-     (org-html-close-tag "meta" " name=\"generator\" content=\"Org-mode\"" info)
-     "\n"
-     (and (org-string-nw-p author)
-	  (concat
-	   (org-html-close-tag "meta"
-			       (format " name=\"author\" content=\"%s\""
-				       (funcall protect-string author))
-			       info)
-	   "\n"))
-     (and (org-string-nw-p description)
-	  (concat
-	   (org-html-close-tag "meta"
-			       (format " name=\"description\" content=\"%s\"\n"
-				       (funcall protect-string description))
-			       info)
-	   "\n"))
-     (and (org-string-nw-p keywords)
-	  (concat
-	   (org-html-close-tag "meta"
-			       (format " name=\"keywords\" content=\"%s\""
-				       (funcall protect-string keywords))
-			       info)
-	   "\n")))))
+      (org-html-close-tag "meta" " name=\"generator\" content=\"Org-mode\"" info)
+      "\n"
+      (and (org-string-nw-p author)
+           (concat
+            (org-html-close-tag "meta"
+                                (format " name=\"author\" content=\"%s\""
+                                        (funcall protect-string author))
+                                info)
+            "\n"))
+      (and (org-string-nw-p description)
+           (concat
+            (org-html-close-tag "meta"
+                                (format " name=\"description\" content=\"%s\"\n"
+                                        (funcall protect-string description))
+                                info)
+            "\n"))
+      (and (org-string-nw-p keywords)
+           (concat
+            (org-html-close-tag "meta"
+                                (format " name=\"keywords\" content=\"%s\""
+                                        (funcall protect-string keywords))
+                                info)
+            "\n")))))
 
 ;; Rename the use of "Listings" term in HTML exports
 (defun org-html-list-of-listings (info)
@@ -811,7 +829,7 @@ Unless NOERROR is non-nil, throw an error if link not found."
         (match-string-no-properties 1)))))
 
 ;; Patched `org-ascii-link' function from `org-ascii.el'
-;; Supports LINK TYPES added using `org-add-link-type'.
+;; Supports LINK TYPES added using `org-add-link-type' to ascii exports as well.
 (setq org-ascii-links-to-notes nil)
 (defun org-ascii-link (link desc info)
   "Transcode a LINK object from Org to ASCII.
@@ -857,6 +875,13 @@ INFO is a plist holding contextual information."
 	(concat
 	 (format "[%s]" desc)
 	 (unless org-ascii-links-to-notes (format " (%s)" raw-link))))))))
+
+;; Source: http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+;; Pressing `C-x C-s' while editing org source code blocks saves and exits
+;; the edit.
+(eval-after-load 'org-src
+  '(define-key org-src-mode-map
+     "\C-x\C-s" #'org-edit-src-exit))
 
 
 (provide 'setup-org)
