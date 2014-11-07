@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-30 18:49:51 kmodi>
+;; Time-stamp: <2014-11-07 13:09:42 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -14,20 +14,18 @@
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
       '(
-        ;; header2
         ;; helm helm-swoop ;; Replaced with swoop
         ;; etags-select etags-table ctags-update ;; Replacing these with ggtags
         ;; zenburn-theme ;; Using my own forked version
         ;; workgroups2 ;; tested but unstable at the time of testing
         ;; fiplr ; quick file search in a project (marked by folders like .git)
-        ;; ox-reveal ;; Using branch 8.2.7c from github; used to export to HTML slides
+        ;; ox-reveal ;; Using branch 'stable' from github; used to export to HTML slides
         ace-jump-mode
         ace-jump-zap
         ace-window
         ag wgrep wgrep-ag s ; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                                         ; You need to have ag installed on your machine
         anzu   ; shows total search hits in mode line, better query-replace alternative
-        auctex ; You also need to install auctex from http://www.gnu.org/software/auctex/
         auto-complete fuzzy
         auto-highlight-symbol
         benchmark-init
@@ -47,6 +45,7 @@
         ggtags
         guide-key
         hardcore-mode
+        header2
         hl-line+
         hungry-delete
         ido-vertical-mode flx-ido ido-ubiquitous
@@ -60,6 +59,7 @@
         markdown-mode
         multiple-cursors
         mwe-log-commands ; for logging commands; useful when demoing emacs
+        neotree
         nlinum ; reviews say it's better than linum
         number ; number manipulation
         org htmlize poporg ; Get the latest org-mode package from MELPA
@@ -76,6 +76,7 @@
         smart-compile
         smart-mode-line popup rich-minority
         smex ; smart M-x
+        smyx-theme ; dark theme
         stripe-buffer
         swoop
         undo-tree ; supercool undo visualization
@@ -129,7 +130,7 @@
 (req-package setup-fci)
 (req-package setup-guide-key)
 (req-package setup-hardcore)
-(req-package setup-header2)
+(req-package setup-header2 nil t) ;; No error if not found
 (req-package setup-highlight)
 (req-package setup-hl-line+)
 (req-package setup-hungry-delete)
@@ -139,6 +140,7 @@
 (req-package setup-magit)
 (req-package setup-manage-minor-mode)
 (req-package setup-multiple-cursors)
+(req-package setup-neotree)
 (req-package setup-number)
 (req-package setup-org)
 (req-package setup-orgstruct)
