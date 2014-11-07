@@ -1,10 +1,10 @@
-;; Time-stamp: <2014-08-31 17:50:19 KModi>
+;; Time-stamp: <2014-11-07 12:30:24 kmodi>
 
 ;; YASnippet
 
 (req-package yasnippet
   ;; :commands (yas-expand yas-insert-snippet yas-new-snippet yas-visit-snippet-file)
-  ;; :require (verilog-mode)
+  :idle t
   :init
   (progn
     (setq yas-prompt-functions '(yas-ido-prompt
