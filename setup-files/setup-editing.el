@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-30 23:23:07 kmodi>
+;; Time-stamp: <2014-11-07 12:18:01 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -248,43 +248,59 @@ modifications)."
 ;; "Insert" copied rectangle instead of overwriting lines as
 ;; `M-x yank-rectangle` does.
 
-;; Copy the selected region with file name, starting and ending line numbers
 ;; Source: http://stackoverflow.com/questions/12165205/how-to-copy-paste-a-region-from-emacs-buffer-with-line-file-reference
-(defun copy-with-linenum (beg end)
-  (interactive "r")
-  (save-excursion
-    (goto-char end)
-    (skip-chars-backward "\n \t")
-    (setq end (point))
-    (let* ((chunk (buffer-substring beg end)))
-      (setq chunk (concat
-                   (format    ",-------- #%-d -- %s ---\n| "
-                              (line-number-at-pos beg)
-                              (or (buffer-file-name) (buffer-name))
-                              )
-                   (replace-regexp-in-string "\n" "\n| " chunk)
-                   (format "\n`-------- #%-d --"
-                           (line-number-at-pos end))))
-      (kill-new chunk)))
-  (deactivate-mark))
+(defun copy-with-linenum (beg end use-unicode)
+  "Copy the selected region with file name, starting and ending
+line numbers, date and user name.
 
-(defun copy-with-linenum-unicode (beg end)
-  (interactive "r")
-  (save-excursion
-    (goto-char end)
-    (skip-chars-backward "\n \t")
-    (setq end (point))
-    (let* ((chunk (buffer-substring beg end)))
-      (setq chunk (concat
-                   (format "╭──────── #%-d ─ %s ──\n│ "
-                           (line-number-at-pos beg)
-                           (or (buffer-file-name) (buffer-name))
-                           )
-                   (replace-regexp-in-string "\n" "\n│ " chunk)
-                   (format "\n╰──────── #%-d ─"
-                           (line-number-at-pos end))))
-      (kill-new chunk)))
-  (deactivate-mark))
+When called with a prefix like `C-u', it will use unicode characters
+instead of ASCII characters for adorning the copied snippet."
+  (interactive "r\nP")
+  (let* ((chars-start-of-code-block ",--------")
+         (chars-end-of-code-block   "`--------")
+         (chars-n-dash              "--")
+         (chars-m-dash              "---")
+         (chars-pipe                "|"))
+    (save-excursion
+      (when use-unicode
+        ( setq chars-start-of-code-block "╭────────"
+               chars-end-of-code-block   "╰────────"
+               chars-n-dash              "─"
+               chars-m-dash              "──"
+               chars-pipe                "│" ))
+      (goto-char end)
+      (skip-chars-backward "\n \t")
+      (setq end (point))
+      (let* ((chunk (buffer-substring beg end)))
+        (setq chunk (concat
+                     (format "%s #%-d %s %s %s\n%s "
+                             chars-start-of-code-block
+                             (line-number-at-pos beg)
+                             chars-n-dash
+                             (or (buffer-file-name) (buffer-name))
+                             chars-m-dash
+                             chars-pipe)
+                     (replace-regexp-in-string "\n"
+                                               (format "\n%s "
+                                                       chars-pipe)
+                                               chunk)
+                     (format "\n%s #%-d %s %s %s %s"
+                             chars-end-of-code-block
+                             (line-number-at-pos end)
+                             chars-n-dash
+                             (format-time-string "%Y/%m/%d")
+                             chars-n-dash
+                             (getenv "USER"))))
+        (kill-new chunk)))
+    (deactivate-mark)))
+
+(with-eval-after-load 'region-bindings-mode
+  (bind-keys
+   :map region-bindings-mode-map
+   ;; When region is selected, pressing `c' will copy the region
+   ;; with ASCII character adornment. Pressing `C-u c' will copy
+   ;; with Unicode character adornment.
+   ("c" . copy-with-linenum)))
 
 ;; Key bindings
 (bind-keys
@@ -314,20 +330,17 @@ modifications)."
  ;; ("M-Z"     . zap-to-char))
  )
 
-(require 'region-bindings-mode)
-(bind-keys
- :map region-bindings-mode-map
- ("c" . copy-with-linenum)
- ("C" . copy-with-linenum-unicode))
-
 (bind-to-modi-map "d" insert-current-date-time)
 (bind-to-modi-map "x" eval-and-replace-last-sexp)
+;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
+;; default binding `C-x =' with something else.
+(bind-to-modi-map "=" what-cursor-position)
 
 (key-chord-define-global "3e" 'toggle-comment-on-line-or-region) ; alternative to F3
 (key-chord-define-global "9o" 'eval-region) ; alternative to F9
 (key-chord-define-global "^^" (λ (insert "λ")))
 
-(setq setup-editing-loaded t) ; required in setup-perl
+
 (provide 'setup-editing)
 
 
