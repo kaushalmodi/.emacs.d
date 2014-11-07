@@ -17,12 +17,11 @@
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
-   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
+   ["#282828" "#FAB1AB" "#D1FA71" "#FFA600" "#7b68ee" "#dc8cc3" "#96D9F1" "#F7F7F7"])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
  '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
  '(bzg-big-fringe-mode nil t)
  '(column-number-mode t)
- '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
     ("6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "de594fe35e10e54f44faf0b8c037ba066900d22cc9e69faf8d238d04cf860131" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e")))
@@ -30,7 +29,7 @@
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
  '(display-time-mode t)
  '(doc-view-continuous t)
- '(fci-rule-color "#383838")
+ '(fci-rule-color "#151515")
  '(fringe-mode nil nil (fringe))
  '(global-hi-lock-mode t)
  '(guide-key-mode t)
@@ -41,6 +40,7 @@
  '(keyboard-coding-system (quote utf-8-unix) nil nil "default EOL system = that of Unix")
  '(magit-auto-revert-mode nil)
  '(major-mode (quote text-mode) nil nil "If the default value of major-mode is nil, the major mode is taken from the previously current buffer")
+ '(menu-bar-mode nil)
  '(next-line-add-newlines nil nil nil "Do not auto-add newlines at the end of the file on pressing `C-n` or down arrow")
  '(org-confirm-elisp-link-not-regexp "\\(.*switch\\-to\\-buffer.*\\|org-show\\)")
  '(org-export-headline-levels 4)
@@ -49,7 +49,11 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((eval define-key temp-mode-map
+    ((eval when
+           (fboundp
+            (quote rainbow-mode))
+           (rainbow-mode 1))
+     (eval define-key temp-mode-map
            (kbd "<f10>")
            (quote dv-docs-ci))
      (temp-mode . t)
@@ -138,5 +142,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "unknown" :family "Fantasque Sans Mono"))))
  '(stripe-hl-line ((t (:inherit nil :overline "gray" :underline "gray" :weight bold :height 1.1))))
  '(yafolding-ellipsis-face ((t (:foreground "deep sky blue" :slant italic :weight bold :height 1.1))) t))
