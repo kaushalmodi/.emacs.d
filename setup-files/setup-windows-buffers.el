@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-13 12:18:08 kmodi>
+;; Time-stamp: <2014-11-07 08:51:26 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -249,50 +249,6 @@ of the buffer from where this function is called."
 ;;   list instead of the selected frame's buffer list.
 
 
-;; Patched version to fix this issue:
-;; In Verilog/C/C++, comments can begin with //.
-;; Here's an example comment,
-;; //This is a comment
-;; I like to use the find-file-at-point feature. If my cursor is on the
-;; file name in `include "some_file.v".  But if my cursor is on the above
-;; example comment and if I hit C-x C-f, emacs tries to open a tentative
-;; path //This!
-;; How do I selectively prevent find-file-at-point from activating? In
-;; this case, when the major mode is verilog-mode, how do I NOT do
-;; find-file-at-point when my cursor is on a line where the first 2
-;; non-space characters are //?
-;; Source: http://emacs.stackexchange.com/questions/107/how-do-i-disable-ffap-find-file-at-point-when-the-first-two-non-space-characte
-(defun ffap-string-at-point (&optional mode)
-  (let* ((args
-          (cdr
-           (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
-               (assq 'file ffap-string-at-point-mode-alist))))
-         next-comment
-         (pt (point))
-         (beg (if (use-region-p)
-                  (region-beginning)
-                (save-excursion
-                  (skip-chars-backward (car args))
-                  (skip-chars-forward (nth 1 args) pt)
-                  (save-excursion
-                    (setq next-comment
-                          (progn (comment-search-forward (line-end-position) t)
-                                 (point))))
-                  (point))))
-         (end (if (use-region-p)
-                  (region-end)
-                (save-excursion
-                  (skip-chars-forward (car args))
-                  (skip-chars-backward (nth 2 args) pt)
-                  (point)))))
-    (when (> end next-comment)
-      (setq beg next-comment))
-    (setq ffap-string-at-point
-          (buffer-substring-no-properties
-           (setcar ffap-string-at-point-region beg)
-           (setcar (cdr ffap-string-at-point-region) end)))))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scroll without moving the point/cursor
 (defun scroll-up-dont-move-point ()
@@ -345,12 +301,13 @@ of the buffer from where this function is called."
 (setq mwheel-scroll-up-function   'scroll-up)
 (setq mwheel-scroll-down-function 'scroll-down)
 
+;; Ediff
+;; Split windows horizontally in ediff (instead of vertically)
+(setq ediff-split-window-function #'split-window-horizontally)
+
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
- ("<f5>"        . revert-buffer)
- ("<S-f5>"      . revert-all-buffers)
- ("<S-f9>"      . eshell)
  ;; overriding the `C-x C-p binding with `mark-page' command
  ("C-x C-p"     . show-copy-buffer-file-name)
  ("C-x C-k"     . delete-current-buffer-file)
@@ -380,6 +337,9 @@ of the buffer from where this function is called."
 (unbind-key "<M-left>"  modi-mode-map)
 (unbind-key "<M-right>" modi-mode-map)
 (bind-keys
+ ("<f5>"      . revert-buffer)
+ ("<S-f5>"    . revert-all-buffers)
+ ("<S-f9>"    . eshell)
  ("C-'"       . enlarge-window) ;; "C-'" enables `mc-hide-unmatched-lines-mode'
  ;; when Multiple Cursors mode is on
  ("<M-up>"    . scroll-down-dont-move-point)
@@ -394,6 +354,7 @@ of the buffer from where this function is called."
 (bind-to-modi-map "b" modi/switch-to-scratch-and-back)
 (bind-to-modi-map "f" full-screen-center)
 (bind-to-modi-map "y" bury-buffer)
+(bind-to-modi-map "+" balance-windows)
 
 (key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
 (key-chord-define-global "ZZ" 'toggle-between-buffers)
