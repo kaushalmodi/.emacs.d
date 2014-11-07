@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-24 10:52:29 kmodi>
+;; Time-stamp: <2014-11-06 09:06:33 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -84,6 +84,7 @@
             " Fly"       ;; Flycheck
             " PgLn"      ;; page-line-break
             " GG"        ;; ggtags
+            " ElDoc"     ;; eldoc
             )))
   :config
   (progn
