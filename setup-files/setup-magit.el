@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-15 09:31:43 kmodi>
+;; Time-stamp: <2014-11-07 13:22:40 kmodi>
 
 ;; magit
 ;; Source: https://github.com/magit/magit
@@ -33,3 +33,14 @@
 
 
 (provide 'setup-magit)
+
+;; |---------+----------------------------------|
+;; | Binding | Description                      |
+;; |---------+----------------------------------|
+;; | j n     | Jump to Untracked section        |
+;; | j u     | Jump to Unstaged section         |
+;; | j s     | Jump to Staged section           |
+;; | j p     | Jump to Unpushed section         |
+;; | M-p     | Jump to previous sibling section |
+;; | M-n     | Jump to next sibling section     |
+;; |---------+----------------------------------|
