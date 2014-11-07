@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-23 09:01:56 kmodi>
+;; Time-stamp: <2014-10-31 11:36:44 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
@@ -15,8 +15,9 @@
      ("C-x r a" . iregister-append-to-latest-register)
      ;; Delete the selection and append to the latest register
      ("C-x r A" . iregister-append-to-latest-register-delete)
-     ("M-n"     . iregister-jump-to-next-marker)
-     ("M-p"     . iregister-jump-to-previous-marker))
+     ;; ("M-n"     . iregister-jump-to-next-marker)
+     ;; ("M-p"     . iregister-jump-to-previous-marker)
+     )
     ;; Assuming that there are already stored some texts (by means of `copy-to-register'
     ;; or `iregister-copy-to-register' command) in the registers. Execute
     ;; `iregister-text' and the minibuffer will display the text stored in some
