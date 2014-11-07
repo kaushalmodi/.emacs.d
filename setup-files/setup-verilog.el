@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-29 09:49:34 kmodi>
+;; Time-stamp: <2014-11-07 14:08:23 kmodi>
 
 ;; Verilog
 
@@ -22,15 +22,15 @@
           verilog-indent-level-behavioral  3
           verilog-indent-level-directive   3
           verilog-case-indent              2
+          verilog-auto-newline             nil
           verilog-auto-indent-on-newline   t
           verilog-tab-always-indent        t
           verilog-minimum-comment-distance 10
           verilog-indent-begin-after-if    t
-          verilog-auto-lineup              `(all)
+          verilog-auto-lineup              'all
           verilog-align-ifelse             nil
           ;; verilog-align-ifelse             t
           verilog-auto-endcomments         t
-          verilog-auto-newline             nil
           verilog-tab-to-comment           t
           verilog-date-scientific-format   t)
 
