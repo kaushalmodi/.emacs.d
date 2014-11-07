@@ -1,8 +1,8 @@
-;; Time-stamp: <2014-10-30 18:46:29 kmodi>
+;; Time-stamp: <2014-11-07 10:33:26 kmodi>
 
 ;; Set up the looks of emacs
 
-(setq default-font-size-pt 10 ;; default font size
+(setq default-font-size-pt 12 ;; default font size
       dark-theme           t  ;; initialize dark-theme var
       )
 
@@ -24,9 +24,9 @@
 ;; THEME and COLORS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq default-dark-theme  'zenburn)
 (setq default-light-theme 'leuven)
-(setq default-theme       'zenburn)
+;; (setq default-theme       'zenburn)
+(setq default-theme       'smyx)
 ;; (setq default-theme       'leuven)
 
 ;; zenburn
@@ -35,6 +35,7 @@
   (interactive)
   (setq dark-theme t)
   (disable-theme 'leuven)
+  (disable-theme 'smyx)
   (load-theme 'zenburn t)
   (eval-after-load 'linum
     '(set-face-attribute 'linum nil :height 0.9 :background "#3F3F3F" :foreground "#6F6F6F"))
@@ -45,12 +46,30 @@
     (setq fci-rule-color "#383838")
     (fci-mode -1)))
 
+;; smyx
+(defun smyx ()
+  "Activate smyx theme."
+  (interactive)
+  (setq dark-theme t)
+  (disable-theme 'leuven)
+  (disable-theme 'zenburn)
+  (load-theme 'smyx t)
+  (eval-after-load 'linum
+    '(set-face-attribute 'linum nil :height 0.9 :background "#282828" :foreground "#6F6F6F"))
+  (when (boundp 'setup-smart-mode-line-loaded)
+    (sml/apply-theme 'dark))
+  (set-face-attribute 'fringe nil :background "#282828" :foreground "#FFFFFF")
+  (when (boundp 'setup-fci-loaded)
+    (setq fci-rule-color "#383838")
+    (fci-mode -1)))
+
 ;;leuven theme
 (defun leuven ()
   "Activate leuven theme."
   (interactive)
   (setq dark-theme nil)
   (disable-theme 'zenburn)
+  (disable-theme 'smyx)
   (load-theme 'leuven t)
   (eval-after-load 'linum
     '(set-face-attribute 'linum nil :height 0.9 :background "#FFFFFF" :foreground "dim gray"))
@@ -361,6 +380,30 @@
                                            (number-to-string (+ 1 whitespace-line-column))
                                            "\\}") "hi-yellow"))
 
+;; Source: http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+(defun endless/narrow-or-widen-dwim (p)
+  "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
+Intelligently means: region, org-src-block, org-subtree, or defun,
+whichever applies first.
+Narrowing to org-src-block actually calls `org-edit-src-code'.
+
+With prefix P, don't widen, just narrow even if buffer is already
+narrowed."
+  (interactive "P")
+  (declare (interactive-only))
+  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning) (region-end)))
+        ((derived-mode-p 'org-mode)
+         ;; `org-edit-src-code' is not a real narrowing command.
+         ;; Remove this first conditional if you don't want it.
+         (cond ((ignore-errors (org-edit-src-code))
+                (delete-other-windows))
+               ((org-at-block-p)
+                (org-narrow-to-block))
+               (t (org-narrow-to-subtree))))
+        (t (narrow-to-defun))))
+
 ;; Key bindings
 (global-unset-key (kbd "<C-down-mouse-1>")) ;; it is bound to `mouse-buffer-menu'
 ;; by default. It is inconvenient when that mouse menu pops up when I don't need
@@ -379,7 +422,9 @@
  ("C-x C-0"     . font-size-reset)
  ("C-x +"       . font-size-incr)
  ("C-x -"       . font-size-decr)
- ("C-x t"       . toggle-truncate-lines))
+ ("C-x t"       . toggle-truncate-lines)
+ ;; This line actually replaces Emacs' entire narrowing keymap.
+ ("C-x n"       . endless/narrow-or-widen-dwim))
 
 (key-chord-define-global "2w" 'menu-bar-mode) ;; alternative to F2
 (key-chord-define-global "8i" 'toggle-presentation-mode) ;; alternative to S-F8
