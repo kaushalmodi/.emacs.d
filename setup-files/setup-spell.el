@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 12:21:26 kmodi>
+;; Time-stamp: <2014-11-07 11:42:53 kmodi>
 
 ;; Spell check
 ;; hunspell / flyspell / ispell
@@ -26,8 +26,7 @@
   (progn
     (setq ispell-program-name   "hunspell"
           ispell-extra-args     '("-d en_US")
-          ispell-silently-savep t))) ;; Save a new word to personal dictionary without asking
-
+          ispell-silently-savep t))) ; Save a new word to personal dictionary without asking
 
 (req-package flyspell
   :config
