@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 12:18:01 kmodi>
+;; Time-stamp: <2014-11-17 14:35:30 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -293,6 +293,17 @@ instead of ASCII characters for adorning the copied snippet."
                              (getenv "USER"))))
         (kill-new chunk)))
     (deactivate-mark)))
+
+;; How to position the cursor after the end of line; useful for copying/killing
+;; rectangles have lines of varying lengths.
+;; Source: http://emacs.stackexchange.com/a/3661/115
+(req-package rectangle-utils
+  :require (region-bindings-mode)
+  :config
+  (progn
+    (bind-keys
+     :map region-bindings-mode-map
+     ("|" . extend-rectangle-to-end))))
 
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
