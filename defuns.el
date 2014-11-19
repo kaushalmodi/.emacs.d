@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-23 14:13:44 kmodi>
+;; Time-stamp: <2014-11-12 11:31:11 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -35,6 +35,14 @@ Otherwise, get the symbol at point, as a string."
         ((symbol-at-point)
          (substring-no-properties
           (symbol-name (symbol-at-point))))))
+
+(defmacro remove-from-alist-matching-car (alist car-of-list-to-delete)
+  "For ALIST, remove a list from it whose `car' matches CAR-OF-LIST-TO-DELETE."
+  `(let* ((to-delete nil))
+     (dolist (item ,alist)
+       (when (eq ',car-of-list-to-delete (car item))
+         (setq to-delete item)))
+     (setq ,alist (delete to-delete ,alist))))
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
