@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 13:09:42 kmodi>
+;; Time-stamp: <2014-11-19 11:33:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -46,6 +46,7 @@
         guide-key
         hardcore-mode
         header2
+        help-fns+
         hl-line+
         hungry-delete
         ido-vertical-mode flx-ido ido-ubiquitous
@@ -71,6 +72,7 @@
         projectile ;; Better than fiplr
         rainbow-delimiters
         rainbow-mode
+        rectangle-utils
         region-bindings-mode ; complements really well with multiple-cursors
         req-package ; optimize package loading
         smart-compile
@@ -82,7 +84,6 @@
         undo-tree ; supercool undo visualization
         visual-regexp
         volatile-highlights
-        w3m ; web-browsing in emacs
         web-mode
         wrap-region ; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
         xkcd ; comic
