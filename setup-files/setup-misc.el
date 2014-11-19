@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-06 16:22:45 kmodi>
+;; Time-stamp: <2014-11-19 14:57:22 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -71,9 +71,50 @@ If the file is emacs lisp, run the byte compiled version if exist."
 (bind-to-modi-map "p" ps-print-buffer-with-faces)
 (bind-to-modi-map "l" xah-run-current-file)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Help Functions +
+(req-package help-fns+
+  :config
+  (progn
+    (bind-keys
+     :map help-map
+     ("c"   . describe-key-briefly)
+     ("C-c" . describe-command))))
+
+(req-package calc
+  :commands (calc quick-calc)
+  :init
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("C-`" . quick-calc)))
+  :config
+  (progn
+    ;; Make alog10(0.3) give the antilog(base 10) in quick-calc
+    ;; Same as exp10(0.3)
+    (defalias 'calcFunc-alog10 'calcFunc-exp10)
+
+    (defun calcFunc-dbv (x)
+      "Return 20*log10(abs(x))
+       Usage in quick-calc: dbv(2)"
+      (math-mul 20 (calcFunc-log10 (math-abs x))))
+
+    (defun calcFunc-dbp (x)
+      "Return 10*log10(abs(x))
+       Usage in quick-calc: dbp(2)"
+      (math-mul 10 (calcFunc-log10 (math-abs x))))
+
+    (defun calcFunc-dbinv (x)
+      "Return 10^(x/20)
+       Usage in quick-calc: dbinv(6)"
+      (calcFunc-alog10 (math-div x 20)))
+
+    (defun calcFunc-dbinvp (x)
+      "Return 10^(x/10)
+       Usage in quick-calc: dbinvp(3)"
+      (calcFunc-alog10 (math-div x 10)))))
+
+
 ;; Unset keys
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
 ;; suspend-frame can be called using `C-x C-z` too. And `C-z` is used as prefix
 ;; key in tmux. So removing the `C-z` binding from emacs makes it possible to
@@ -153,6 +194,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; | d e     | Engineering notation |
 ;; | &       | 1/x                  |
 ;; | H L     | log10                |
+;; | H E     | exp10 or alog10      |
 ;; | g       | Grouping on/off      |
 ;; |---------+----------------------|
 ;;
