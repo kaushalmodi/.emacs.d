@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-14 09:51:17 kmodi>
+;; Time-stamp: <2014-11-13 13:07:37 kmodi>
 
 ;; Source: http://stackoverflow.com/questions/12558019/shortcut-to-open-a-specific-file-in-emacs
 ;; Source: http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Registers.html#File-Registers
@@ -12,6 +12,8 @@
 (set-register ?a (cons 'file (concat user-home-directory "/.alias"))) ;; C-x r j a
 (set-register ?t (cons 'file (concat user-home-directory "/.tmux.conf"))) ;; C-x r j t
 (set-register ?i (cons 'file (concat user-home-directory "/public_html/index.html"))) ;; C-x r j i
+
+(set-register ?v (cons 'file (concat user-home-directory "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf"))) ;; C-x r j v
 
 
 (provide 'setup-registers)
