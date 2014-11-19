@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-31 11:10:26 kmodi>
+;; Time-stamp: <2014-11-19 12:24:04 kmodi>
 
 ;; Neotree
 ;; https://github.com/chrisdone/chrisdone-emacs/blob/master/packages/neotree/neotree.el
@@ -11,6 +11,13 @@
                                         ;  file and jump to node.
     (setq-default neo-dont-be-alone t) ; Don't allow neotree to be the only open
                                         ; window
+    ;; https://github.com/jaypei/emacs-neotree/issues/58
+    ;; `neo-persist-show' has to be set to `nil' to prevent the "Attempt to
+    ;; delete minibuffer or sole ordinary window." error when hitting `TAB'
+    ;; in the minibuffer. TAB > ido-complete > ido-completion-help > popwin >
+    ;; delete-other-windows > activates the defadvice set in neotree.el.
+    ;;   Setting below var to nil doesn't activate that defadvice.
+    (setq-default neo-persist-show nil)
     )
   :config
   (progn
