@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 08:51:26 kmodi>
+;; Time-stamp: <2014-11-13 16:14:43 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -24,21 +24,53 @@
   (progn
     (recentf-mode 1)
     (setq recentf-max-menu-items 2000)
-    ;; TODO: Fix below function, it sort of works, not perfect
-    ;; Reopen the last killed buffer
-    ;; Source: http://stackoverflow.com/questions/10394213/emacs-reopen-previous-killed-buffer
-    (defun undo-kill-buffer ()
-      (interactive)
-      (let ((active-files (loop for buf in (buffer-list)
-                                when (buffer-file-name buf) collect it)))
-        (loop for file in recentf-list
-              unless (member file active-files) return (find-file file))))
+
+    ;; ;; TODO: Fix below function, it sort of works, not perfect
+    ;; ;; Reopen the last killed buffer
+    ;; ;; Source: http://stackoverflow.com/questions/10394213/emacs-reopen-previous-killed-buffer
+    ;; ;; UPDATE: The `reopen-killed-file' function works better than this.
+    ;; (defun undo-kill-buffer ()
+    ;;   (interactive)
+    ;;   (let ((active-files (loop for buf in (buffer-list)
+    ;;                             when (buffer-file-name buf) collect it)))
+    ;;     (loop for file in recentf-list
+    ;;           unless (member file active-files) return (find-file file))))
+
     ;; Customizing recentf mode map
     (bind-keys
      :map recentf-dialog-mode-map
      ("/" . isearch-forward)
      ("n" . isearch-repeat-forward)
      ("N" . isearch-repeat-backward))))
+
+(req-package windmove
+  :require (key-chord)
+  :config
+  (progn
+    (setq windmove-wrap-around t) ; default = nil
+    (windmove-default-keybindings) ; Bind windmove nav to S-left/right/up/down
+    (key-chord-define-global "p[" 'windmove-left)
+    (key-chord-define-global "[]" 'windmove-right)))
+
+;; Source: http://emacs.stackexchange.com/a/3334/115
+;; Reopen Killed File
+(defvar killed-file-list nil
+  "List of recently killed files.")
+
+(defun add-file-to-killed-file-list ()
+  "If buffer is associated with a file name, add that file to the
+`killed-file-list' when killing the buffer."
+  (when buffer-file-name
+    (push buffer-file-name killed-file-list)))
+
+(add-hook 'kill-buffer-hook #'add-file-to-killed-file-list)
+
+(defun reopen-killed-file ()
+  "Reopen the most recently killed file, if one exists."
+  (interactive)
+  (if killed-file-list
+      (find-file (pop killed-file-list))
+    (message "No recently killed file found to reopen.")))
 
 ;; Set initial frame size and position
 ;; fills full screen of the left monitor
@@ -140,14 +172,26 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 
 ;; Display the file path of the file in current buffer and also copy it to the kill-ring
 ;; Source: http://camdez.com/blog/2013/11/14/emacs-show-buffer-file-name/
-(defun show-copy-buffer-file-name ()
-  "Show the full path to the current file in the minibuffer and also copy it."
-  (interactive)
-  (let ((file-name (buffer-file-name)))
-    (if file-name
+(defun show-copy-buffer-file-name (arg)
+  "Show the full path to the current file in the minibuffer and also copy it.
+Prefixed with one `universal argument', copy only the file name (not the full path).
+Prefixed with two `universal argument's, copy the full path without env var replacement."
+  (interactive "p")
+  (let* ((file-name-full (buffer-file-name))
+         file-name)
+    (if file-name-full
         (progn
-          (message file-name)
-          (kill-new file-name))
+          (require 'cl-lib)
+          (cl-case arg
+            (4 (setq file-name (concat (file-name-base file-name-full) ; C-u
+                                       (file-name-extension file-name-full :period))))
+            (16 (setq file-name file-name-full)) ; C-u C-u
+            (t (setq file-name (replace-regexp-in-string ; no prefix
+                                (concat "/proj.*?_" (getenv "USER"))
+                                "${PRJ_USER}"
+                                file-name-full))))
+          (kill-new file-name)
+          (message file-name))
       (error "Buffer not visiting a file"))))
 
 (defun reload-init ()
@@ -163,22 +207,22 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 
 ;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
 (defun revert-buffer-no-confirm ()
-    "Revert buffer without confirmation."
-    (interactive)
-    (revert-buffer t t))
+  "Revert buffer without confirmation."
+  (interactive)
+  (revert-buffer t t))
 
 ;; Revert All Buffers
 (defun revert-all-buffers ()
-   "Refreshes all open buffers from their respective files"
-   (interactive)
-   (let* ((list (buffer-list))
-          (buffer (car list)))
-     (while buffer
-       (when (and (buffer-file-name buffer) (not (buffer-modified-p buffer)))
-         (set-buffer buffer)
-         (revert-buffer t t t))
-       (setq list (cdr list))
-       (setq buffer (car list))))
+  "Refreshes all open buffers from their respective files"
+  (interactive)
+  (let* ((list (buffer-list))
+         (buffer (car list)))
+    (while buffer
+      (when (and (buffer-file-name buffer) (not (buffer-modified-p buffer)))
+        (set-buffer buffer)
+        (revert-buffer t t t))
+      (setq list (cdr list))
+      (setq buffer (car list))))
   (message "Refreshing open files"))
 
 ;; Set the frame size to fill the left screen
@@ -209,7 +253,7 @@ of the buffer from where this function is called."
       (let ((scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*"))))
         (switch-to-buffer scratch-buffer-name)
         (modi-mode) ;; Set my minor mode to activate my key bindings
-        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable
+        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable ; ;
         (funcall (intern mode-str))))))
 
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
@@ -312,7 +356,8 @@ of the buffer from where this function is called."
  ("C-x C-p"     . show-copy-buffer-file-name)
  ("C-x C-k"     . delete-current-buffer-file)
  ("C-x C-r"     . rename-current-buffer-file)
- ("C-S-t"       . undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
+ ("C-S-t"       . reopen-killed-file) ;; same shortcut as for reopening closed tabs in browsers
+ ;; ("C-S-t"       . undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
  ;; Make Alt+mousewheel scroll the other buffer
  ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ;; M + wheel up
  ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ;; M + wheel down
@@ -321,10 +366,6 @@ of the buffer from where this function is called."
  ("C-,"         . shrink-window-horizontally)
  ("C-."         . enlarge-window-horizontally)
  ("C-;"         . shrink-window)
- ("C-c k"       . windmove-up) ;; switch to buffer on top
- ("C-c j"       . windmove-down) ;; switch to buffer on bottom
- ("C-c h"       . windmove-left) ;; switch to buffer on left
- ("C-c l"       . windmove-right) ;; switch to buffer on right
  ("C-c t"       . toggle-window-split) ;; convert between horz-split <-> vert-split
  ("C-c s"       . rotate-windows) ;; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
  ("C-x C-b"     . ibuffer)) ;; replace buffer-menu with ibuffer
@@ -359,9 +400,6 @@ of the buffer from where this function is called."
 (key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
 (key-chord-define-global "ZZ" 'toggle-between-buffers)
 (key-chord-define-global "5t" 'revert-buffer) ;; alternative to F5
-(key-chord-define-global "p[" 'windmove-left)
-(key-chord-define-global "[]" 'windmove-right)
-
 
 (provide 'setup-windows-buffers)
 
