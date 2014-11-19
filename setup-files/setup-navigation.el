@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-03 09:31:59 kmodi>
+;; Time-stamp: <2014-11-12 11:29:20 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -122,6 +122,14 @@ point reaches the beginning or end of the buffer, stop there."
 ;; non-space characters are //?
 ;; Source: http://emacs.stackexchange.com/questions/107/how-do-i-disable-ffap-find-file-at-point-when-the-first-two-non-space-characte
 (require 'ffap)
+
+;; Patch `ffap-string-at-point-mode-alist' to support file paths with curly braces:
+;; ${PRJ_USER}/somefile.txt
+;; Delete a list from `ffap-string-at-point-mode-alist' whose `car' is `file'
+;; and then add a new list `(file ..)' that supports the curly braces.
+(remove-from-alist-matching-car ffap-string-at-point-mode-alist file)
+(add-to-list 'ffap-string-at-point-mode-alist '(file "--:\\\\$\\{\\}+<>@-Z_[:alpha:]~*?" "<@" "@>;.,!:"))
+
 (defun ffap-string-at-point (&optional mode)
   (let* ((args
           (cdr
