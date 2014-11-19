@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-19 12:15:30 kmodi>
+;; Time-stamp: <2014-11-19 10:19:17 kmodi>
 
 ;; gtags, GNU global
 
@@ -6,8 +6,10 @@
   :require (verilog-mode key-chord)
   :init
   (progn
+    (setq ggtags-navigation-mode-lighter nil)
     (dolist (hook '(verilog-mode-hook
-                    matlab-mode-hook))
+                    matlab-mode-hook
+                    c-mode-hook))
       (add-hook hook 'ggtags-mode))
     (key-chord-define-global "??" 'ggtags-show-definition)))
 
