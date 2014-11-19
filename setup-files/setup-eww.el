@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-24 16:20:41 kmodi>
+;; Time-stamp: <2014-11-17 11:09:31 kmodi>
 
 ;; Eww
 ;; Emacs browser (needs emacs 24.4 or higher)
@@ -16,6 +16,9 @@
      ;; (setq eww-form-checkbox-symbol          "☐") ; Unicode hex 2610
      (setq eww-form-checkbox-selected-symbol "[X]")
      ;; (setq eww-form-checkbox-selected-symbol "☑") ; Unicode hex 2611
+     ;; Improve the contract of pages like Google results
+     ;; http://emacs.stackexchange.com/q/2955/115
+     (setq shr-color-visible-luminance-min 80) ; default = 40
 
      (defun modi/eww-open-file-with-notify (file)
        "Open a file in eww and add `file-notify' watch for it."
@@ -50,6 +53,7 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
       ("h"           . eww-list-histories) ; View history
       ("q"           . modi/eww-quit)
       ("r"           . eww-reload) ; Reload
+      ("R"           . eww-reload) ; Reload
       ("<backtab>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
       ("<backspace>" . eww-back-url)
       ("C-d"         . eww-add-bookmark) ; Add bookmark
