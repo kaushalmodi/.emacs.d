@@ -1,10 +1,9 @@
-;; Time-stamp: <2014-11-07 12:30:24 kmodi>
+;; Time-stamp: <2014-11-17 10:13:46 kmodi>
 
 ;; YASnippet
 
 (req-package yasnippet
   ;; :commands (yas-expand yas-insert-snippet yas-new-snippet yas-visit-snippet-file)
-  :idle t
   :init
   (progn
     (setq yas-prompt-functions '(yas-ido-prompt
