@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 13:52:39 kmodi>
+;; Time-stamp: <2014-11-14 10:35:05 kmodi>
 ;;
 ;; LaTeX
 ;;
@@ -23,6 +23,19 @@
 
 ;; Source: http://www.sigmafield.org/2009/10/03/using-doc-view-with-auto-revert-to-view-latex-pdf-output-in-emacs
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+
+;; pdf-tools
+;; To install:
+;; - git clone https://github.com/politza/pdf-tools
+;; - source autogen.sh
+;; - ./configure --prefix=$HOME/usr_local
+;;   - poppler-glib ( http://poppler.freedesktop.org/ ) is required
+;; - make
+;; - make install-package
+(req-package pdf-tools
+  :config
+  (progn
+    (pdf-tools-install)))
 
 ;; Source: http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
 (setq TeX-PDF-mode t
