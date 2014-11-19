@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-15 16:53:08 kmodi>
+;; Time-stamp: <2014-11-19 11:10:31 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -24,6 +24,13 @@
       "Override the projectile-defined function so that `ag' is always used for
 getting a list of all files in a project."
       projectile-ag-command)
+    (setq projectile-ignored-projects `(,(concat (getenv "HOME") "/"))) ; Don't consider my home dir as a project
+    (defun projectile-cache-files-find-file-hook ()
+      "Function for caching files with `find-file-hook'."
+      (when (and projectile-enable-caching
+                 (projectile-project-p)
+                 (not (member (projectile-project-p) (projectile-ignored-projects))))
+        (projectile-cache-current-file)))
     ;; (setq projectile-enable-caching nil)
     (setq projectile-enable-caching t) ; Enable caching, otherwise
                                         ; `projectile-find-file' is really slow
