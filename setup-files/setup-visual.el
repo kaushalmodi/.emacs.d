@@ -1,6 +1,10 @@
-;; Time-stamp: <2014-11-07 10:33:26 kmodi>
+;; Time-stamp: <2014-11-19 12:52:41 kmodi>
 
 ;; Set up the looks of emacs
+
+;; Highlight closing parentheses; show the name of the body being closed with
+;; the closing parentheses in the minibuffer.
+(show-paren-mode +1)
 
 (setq default-font-size-pt 12 ;; default font size
       dark-theme           t  ;; initialize dark-theme var
