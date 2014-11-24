@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-17 14:35:30 kmodi>
+;; Time-stamp: <2014-11-22 03:00:36 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -301,9 +301,18 @@ instead of ASCII characters for adorning the copied snippet."
   :require (region-bindings-mode)
   :config
   (progn
+    (defun modi/extend-rectangle-to-end(beg end)
+      "Make `extend-rectangle-to-end' work for read-only buffers too."
+      (interactive "r")
+      (let* (original-read-only-state buffer-read-only)
+        (when original-read-only-state
+          (read-only-mode -1)) ; Force the buffer to be writable
+        (extend-rectangle-to-end beg end)
+        (when original-read-only-state
+          (read-only-mode +1)))) ; Revert the buffer back to its read-only state
     (bind-keys
      :map region-bindings-mode-map
-     ("|" . extend-rectangle-to-end))))
+     ("|" . modi/extend-rectangle-to-end))))
 
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
