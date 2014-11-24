@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 12:08:51 kmodi>
+;; Time-stamp: <2014-11-24 11:38:11 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -45,12 +45,19 @@
     ;; sort ido filelist by mtime instead of alphabetically
     ;; source: http://www.emacswiki.org/emacs/InteractivelyDoThings
     (defun ido-sort-mtime ()
-      (setq ido-temp-list
-            (sort ido-temp-list
-                  (lambda (a b)
-                    (time-less-p
-                     (sixth (file-attributes (concat ido-current-directory b)))
-                     (sixth (file-attributes (concat ido-current-directory a)))))))
+      ;; Sort the list only when the File gid is non-zero;
+      ;; otherwise the sort function errors out.
+      ;; (message "Current dir: %s File GID: %s File Attributes: %s"
+      ;;          ido-current-directory
+      ;;          (fourth (file-attributes ido-current-directory))
+      ;;          (file-attributes ido-current-directory))
+      (when (not (= (fourth (file-attributes ido-current-directory)) 0))
+        (setq ido-temp-list
+              (sort ido-temp-list
+                    (lambda (a b)
+                      (time-less-p
+                       (sixth (file-attributes (concat ido-current-directory b)))
+                       (sixth (file-attributes (concat ido-current-directory a))))))))
       (ido-to-end  ;; move . files to end (again)
        (delq nil (mapcar
                   (lambda (x) (and (char-equal (string-to-char x) ?.) x))
@@ -92,19 +99,24 @@
                 ido-exit 'refresh)
           (exit-minibuffer))))
     (defun ido-define-keys ()
-      ;; C-n/p  and up/down keys are more intuitive in vertical layout
+      (unbind-key "C-a" ido-completion-map)
       (bind-keys
        :map ido-completion-map
+       ;; C-n/p  and up/down keys are more intuitive in vertical layout
        ("C-n"    . ido-next-match)
        ("<down>" . ido-next-match)
        ("C-p"    . ido-prev-match)
        ("<up>"   . ido-prev-match)
-       ("C-b"    . endless/ido-bury-buffer-at-head)))
+       ("C-f"    . ido-magic-forward-char)
+       ("C-b"    . ido-magic-backward-char)
+       ("C-i"    . ido-toggle-ignore)
+       ("C-S-b"  . endless/ido-bury-buffer-at-head)))
     (add-hook 'ido-setup-hook 'ido-define-keys)
     (bind-keys
      :map modi-mode-map
      ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-     ("C-x C-o"     . ido-find-recentf))))
+     ("C-x C-o"     . ido-find-recentf))
+    ))
 
 
 (provide 'setup-ido)
