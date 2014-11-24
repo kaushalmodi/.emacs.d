@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-19 14:57:22 kmodi>
+;; Time-stamp: <2014-11-20 14:28:22 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -111,7 +111,11 @@ If the file is emacs lisp, run the byte compiled version if exist."
     (defun calcFunc-dbinvp (x)
       "Return 10^(x/10)
        Usage in quick-calc: dbinvp(3)"
-      (calcFunc-alog10 (math-div x 10)))))
+      (calcFunc-alog10 (math-div x 10)))
+
+    (defun calcFunc-atan (x)
+      "Return arctan in radians."
+      (math-mul (calcFunc-arctan x) (math-div (math-pi) 180)))))
 
 
 ;; Unset keys
