@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-12 11:31:11 kmodi>
+;; Time-stamp: <2014-11-25 13:04:10 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -43,6 +43,14 @@ Otherwise, get the symbol at point, as a string."
        (when (eq ',car-of-list-to-delete (car item))
          (setq to-delete item)))
      (setq ,alist (delete to-delete ,alist))))
+
+;; Kill emacs when running in daemon mode or not
+;; Source: http://lists.gnu.org/archive/html/emacs-devel/2011-11/msg00348.html
+(defun tv-stop-emacs ()
+  (interactive)
+  (if (daemonp)
+      (save-buffers-kill-emacs)
+    (save-buffers-kill-terminal)))
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
