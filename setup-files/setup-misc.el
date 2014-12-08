@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-20 14:28:22 kmodi>
+;; Time-stamp: <2014-11-25 13:03:58 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -124,22 +124,6 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; key in tmux. So removing the `C-z` binding from emacs makes it possible to
 ;; use emacs in -nw (no window) mode in tmux if needed without any key binding
 ;; contention.
-
-;; Kill emacs when running in daemon mode or not
-;; Source: http://lists.gnu.org/archive/html/emacs-devel/2011-11/msg00348.html
-(defun tv-stop-emacs ()
-  (interactive)
-  (if (daemonp)
-      (save-buffers-kill-emacs)
-    (save-buffers-kill-terminal)))
-
-;; The emacs-quitting feature is useful whether or not my minor map is loaded
-;; So bind the keys globally instead of to the minor mode map.
-(if desktop-save-mode
-    (bind-keys
-     ("C-x C-c" . save-desktop-save-buffers-kill-emacs)
-     ("C-x M-c" . tv-stop-emacs))
-  (bind-key "C-x C-c" 'tv-stop-emacs))
 
 ;; Source: http://endlessparentheses.com/sweet-new-features-in-24-4.html
 ;; Hook `eval-expression-minibuffer-setup-hook' is run by ;; `eval-expression'
