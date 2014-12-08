@@ -1844,21 +1844,21 @@ INFO is a plist holding contextual information.  See
 			   "-"))))
 	     (if (and (not desc)
 		      (org-export-numbered-headline-p destination info))
-                 (format "\\ref{%s}" label)
-               (format "\\hyperref[%s]{%s}" label
-                       (or desc
-                           (org-export-data
-                            (org-element-property :title destination) info))))))
+		 (format "\\ref{%s}" label)
+	       (format "\\hyperref[%s]{%s}" label
+		       (or desc
+			   (org-export-data
+			    (org-element-property :title destination) info))))))
           ;; Fuzzy link points to a target.  Do as above.
-          (otherwise
-           (let ((path (org-export-solidify-link-text path)))
-             (if (not desc) (format "\\ref{%s}" path)
-               (format "\\hyperref[%s]{%s}" path desc)))))))
+	  (otherwise
+	   (let ((path (org-export-solidify-link-text path)))
+	     (if (not desc) (format "\\ref{%s}" path)
+	       (format "\\hyperref[%s]{%s}" path desc)))))))
      ;; Coderef: replace link with the reference name or the
      ;; equivalent line number.
      ((string= type "coderef")
       (format (org-export-get-coderef-format path desc)
-              (org-export-resolve-coderef path info)))
+	      (org-export-resolve-coderef path info)))
      ;; Link type is handled by a special function.
      ((functionp (setq protocol (nth 2 (assoc type org-link-protocols))))
       (funcall protocol (org-link-unescape path) desc 'latex))
