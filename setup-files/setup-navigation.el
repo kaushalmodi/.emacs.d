@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-12 11:29:20 kmodi>
+;; Time-stamp: <2014-12-05 11:37:28 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -185,22 +185,28 @@ point reaches the beginning or end of the buffer, stop there."
  ;; NOTE: `C-[` key combination is the same as pressing the meta key Esc|Alt
  ;; Do NOT reconfigure that key combination.
  ("C-}" . forward-paragraph)
- ("M-}" . forward-paragraph) ;; default key-binding for `forward-paragraph'
  ("M-]" . forward-paragraph)
  ("C-{" . backward-paragraph)
- ("M-{" . backward-paragraph) ;; default key-binding for `backward-paragraph'
  ("M-[" . backward-paragraph)
  ;; Toggle Follow-mode
  ("C-c f" . follow-mode))
- ;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Follow-Mode.html
- ;; Follow-mode is a minor mode that makes 2 or more windows, all showing the same
- ;; buffer/file, scroll as a single tall virtual window. To use Follow mode, go
- ;; to a frame with just one window, split it into two side-by-side windows using
- ;; C-x 3, and then type M-x follow-mode. From then on, you can edit the buffer
- ;; in either of the windows, or scroll either one; the other window follows it.
- ;; In Follow mode, if you move point outside the portion visible in one window
- ;; and into the portion visible in the other window, that selects the other
- ;; window again, treating the two as if they were parts of one large window.
+;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Follow-Mode.html
+;; Follow-mode is a minor mode that makes 2 or more windows, all showing the same
+;; buffer/file, scroll as a single tall virtual window. To use Follow mode, go
+;; to a frame with just one window, split it into two side-by-side windows using
+;; C-x 3, and then type M-x follow-mode. From then on, you can edit the buffer
+;; in either of the windows, or scroll either one; the other window follows it.
+;; In Follow mode, if you move point outside the portion visible in one window
+;; and into the portion visible in the other window, that selects the other
+;; window again, treating the two as if they were parts of one large window.
+
+;; The `M-}' and `M-{' bindings are useful in Ibuffer and dired to move to
+;; next and previous marked items respectively. So bind them in global map so
+;; that those major modes and override the below bindings.
+(bind-keys
+ ("M-}" . forward-paragraph) ;; default key-binding for `forward-paragraph'
+ ("M-{" . backward-paragraph) ;; default key-binding for `backward-paragraph'
+ )
 
 (key-chord-define-global "1q" 'goto-line) ;; alternative for F1
 (key-chord-define-global "m," 'beginning-of-buffer)
