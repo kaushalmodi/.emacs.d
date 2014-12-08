@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-19 12:50:38 kmodi>
+;; Time-stamp: <2014-11-25 13:03:46 kmodi>
 
 ;; Desktop save and restore
 
@@ -80,7 +80,15 @@
 
     (bind-keys
      :map modi-mode-map
-     ("<S-f2>" . desktop-save-in-desktop-dir))))
+     ("<S-f2>" . desktop-save-in-desktop-dir))
+
+    ;; The emacs-quitting feature is useful whether or not my minor map is loaded
+    ;; So bind the keys globally instead of to the minor mode map.
+    (if desktop-save-mode
+        (bind-keys
+         ("C-x C-c" . save-desktop-save-buffers-kill-emacs)
+         ("C-x M-c" . tv-stop-emacs))
+      (bind-key "C-x C-c" 'tv-stop-emacs))))
 
 
 (provide 'setup-desktop)
