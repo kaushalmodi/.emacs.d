@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-13 16:14:43 kmodi>
+;; Time-stamp: <2014-11-25 12:57:33 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -218,12 +218,27 @@ Prefixed with two `universal argument's, copy the full path without env var repl
   (let* ((list (buffer-list))
          (buffer (car list)))
     (while buffer
+      ;; (message "test: %s %s %s %s"
+      ;;          buffer
+      ;;          (buffer-file-name buffer)
+      ;;          (buffer-modified-p buffer)
+      ;;          (file-exists-p (format "%s" (buffer-file-name buffer))))
+
+      ;; Revert only buffers containing files which are not modified
+      ;; Don't try to revert buffers like *Messages*
       (when (and (buffer-file-name buffer) (not (buffer-modified-p buffer)))
-        (set-buffer buffer)
-        (revert-buffer t t t))
+        (if (file-exists-p (format "%s" (buffer-file-name  buffer)))
+            ;; if the file exists, revert the buffer
+            (progn
+              (set-buffer buffer)
+              (revert-buffer t t t))
+          ;; if the file doesn't exist, kill the buffer
+          (let (kill-buffer-query-functions) ; no query done when killing buffer
+            (kill-buffer buffer)
+            (message "Killed buffer of non-existing file: %s" (buffer-file-name buffer)))))
       (setq list (cdr list))
-      (setq buffer (car list))))
-  (message "Refreshing open files"))
+      (setq buffer (car list)))
+    (message "Refreshing open files")))
 
 ;; Set the frame size to fill the left screen
 (defun full-screen-center ()
