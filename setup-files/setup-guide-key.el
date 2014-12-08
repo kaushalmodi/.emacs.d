@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-29 18:56:38 kmodi>
+;; Time-stamp: <2014-12-08 08:46:11 kmodi>
 
 ;; Guide Key
 ;; https://github.com/kai2nenobu/guide-key
@@ -14,7 +14,6 @@
                                          ;; "C-x 5"   ; commands that operate in other frame (window)
                                          ;; "C-x m"   ; my custom pseudo map
                                          "C-c"
-                                         ;; "C-c p"   ; projectile
                                          ;; "C-c C-c"
                                          ;; "C-c C-t" ; verilog-mode insert blocks
                                          ;; "C-c p"   ; projectile
