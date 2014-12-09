@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-19 11:33:30 kmodi>
+;; Time-stamp: <2014-12-09 09:00:05 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -21,7 +21,6 @@
         ;; fiplr ; quick file search in a project (marked by folders like .git)
         ;; ox-reveal ;; Using branch 'stable' from github; used to export to HTML slides
         ace-jump-mode
-        ace-jump-zap
         ace-window
         ag wgrep wgrep-ag s ; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
                                         ; You need to have ag installed on your machine
@@ -47,6 +46,7 @@
         hardcore-mode
         header2
         help-fns+
+        hl-anything
         hl-line+
         hungry-delete
         ido-vertical-mode flx-ido ido-ubiquitous
@@ -113,7 +113,6 @@
 
 ;; Set up extensions/packages
 (req-package setup-ace-jump-mode)
-(req-package setup-ace-jump-zap)
 (req-package setup-ace-window)
 (req-package setup-ag)
 (req-package setup-auto-complete)
