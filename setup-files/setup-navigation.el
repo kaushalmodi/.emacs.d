@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-05 11:37:28 kmodi>
+;; Time-stamp: <2014-12-10 11:25:36 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -168,6 +168,16 @@ point reaches the beginning or end of the buffer, stop there."
            (setcar ffap-string-at-point-region beg)
            (setcar (cdr ffap-string-at-point-region) end)))))
 
+;; Inspired for this question on emacs.SE: http://emacs.stackexchange.com/q/4271/115
+(defun modi/forward-word-begin(arg)
+  "Move forward a word and end up with the point being at the beginning of the
+next word.  Move point forward ARG words (backward if ARG is negative).
+If ARG is omitted or nil, move point forward one word."
+  (interactive "p")
+  (forward-word arg)
+  (forward-word 1)
+  (backward-word 1))
+
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
@@ -188,6 +198,8 @@ point reaches the beginning or end of the buffer, stop there."
  ("M-]" . forward-paragraph)
  ("C-{" . backward-paragraph)
  ("M-[" . backward-paragraph)
+ ("M-f" . modi/forward-word-begin)
+ ("M-F" . forward-word)
  ;; Toggle Follow-mode
  ("C-c f" . follow-mode))
 ;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Follow-Mode.html
