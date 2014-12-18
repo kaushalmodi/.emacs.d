@@ -24,7 +24,7 @@
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
-    ("f9ef8a4ea611ded71db6b76dda77a49be9b5bcf25bf804a257bccfe32c897091" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "de594fe35e10e54f44faf0b8c037ba066900d22cc9e69faf8d238d04cf860131" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e")))
+    ("ef43b291f7e96826d3d9bae61434a93020d0f529d609bc8be5b331980e8448d7" "f9ef8a4ea611ded71db6b76dda77a49be9b5bcf25bf804a257bccfe32c897091" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "de594fe35e10e54f44faf0b8c037ba066900d22cc9e69faf8d238d04cf860131" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e")))
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
  '(display-time-mode t)
@@ -100,7 +100,7 @@
  '(save-place t nil (saveplace) "save the last cursor location for each file")
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
  '(sml/theme (quote automatic))
- '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-background "#2B2B2B" t)
  '(vc-annotate-color-map
    (quote
     ((20 . "#BC8383")
@@ -120,8 +120,8 @@
      (300 . "#7CB8BB")
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
-     (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3")
+     (360 . "#DC8CC3"))) t)
+ '(vc-annotate-very-old-color "#DC8CC3" t)
  '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error")
  '(visual-line-fringe-indicators (quote (nil nil)))
  '(vr/default-feedback-limit 200)
