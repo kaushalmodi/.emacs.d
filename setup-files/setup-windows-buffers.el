@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-25 12:57:33 kmodi>
+;; Time-stamp: <2014-12-16 15:31:12 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -257,18 +257,27 @@ Prefixed with two `universal argument's, copy the full path without env var repl
 ;;     (set-frame-size (selected-frame) 90 30)
 ;;     ))
 
-(defun modi/switch-to-scratch-and-back ()
+(defun modi/switch-to-scratch-and-back (arg)
   "Toggle between *scratch-MODE* buffer and the current buffer.
 If a scratch buffer does not exist, create it with the major mode set to that
-of the buffer from where this function is called."
-  (interactive)
-  (if (string-match "*scratch" (format "%s" (current-buffer)))
-      (switch-to-buffer (other-buffer))
-    (let ((mode-str (format "%s" major-mode)))
-      (let ((scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*"))))
+of the buffer from where this function is called.
+
+Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passed."
+  (interactive "p")
+  (let* (mode-str scratch-buffer-name)
+    (if (string-match "*scratch" (format "%s" (current-buffer)))
+        (switch-to-buffer (other-buffer))
+      (progn
+        (if (eq arg 4)
+            (progn
+              (setq mode-str "org-mode")
+              (setq scratch-buffer-name (get-buffer-create "*scratch*")))
+          (progn
+            (setq mode-str (format "%s" major-mode))
+            (setq scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*")))))
         (switch-to-buffer scratch-buffer-name)
-        (modi-mode) ;; Set my minor mode to activate my key bindings
-        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable ; ;
+        (modi-mode) ; Set my minor mode to activate my key bindings
+                                        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable ; ;
         (funcall (intern mode-str))))))
 
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
