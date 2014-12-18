@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-22 03:00:36 kmodi>
+;; Time-stamp: <2014-12-15 13:33:48 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -293,6 +293,10 @@ instead of ASCII characters for adorning the copied snippet."
                              (getenv "USER"))))
         (kill-new chunk)))
     (deactivate-mark)))
+
+;; Convert the decimal values in the whole buffer to 16-bit 2's complement hex
+(fset 'modi/convert-dec-to-twos-comp-16-bit-hex
+      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([escape 58 40 114 101 97 100 45 111 110 108 121 45 109 111 100 101 32 45 49 41 return 109 44 19 45 return 67108896 2 97 67108896 40 6 32 40 94 32 50 32 49 54 41 32 5 41 24 109 120 return 24 104 33554435 33554435 40 102 111 114 109 97 116 32 34 37 88 34 5 41 24 109 120 return] 0 "%d")) arg)))
 
 ;; How to position the cursor after the end of line; useful for copying/killing
 ;; rectangles have lines of varying lengths.
