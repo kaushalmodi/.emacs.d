@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-19 12:52:41 kmodi>
+;; Time-stamp: <2014-12-13 17:19:31 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -33,6 +33,21 @@
 (setq default-theme       'smyx)
 ;; (setq default-theme       'leuven)
 
+;; Source: http://emacs.stackexchange.com/a/5343/115
+(defun modi/blend-fringe ()
+  "Set the fringe foreground and background color to that of the theme."
+  (set-face-attribute 'fringe nil
+                      :foreground (face-foreground 'default)
+                      :background (face-background 'default)))
+
+(defun modi/blend-linum ()
+  "Set the linum foreground and background color to that of the theme."
+  (eval-after-load 'linum
+    '(set-face-attribute 'linum nil
+                         :height 0.9
+                         :foreground (face-foreground 'default)
+                         :background (face-background 'default))))
+
 ;; zenburn
 (defun zenburn ()
   "Activate zenburn theme."
@@ -41,11 +56,10 @@
   (disable-theme 'leuven)
   (disable-theme 'smyx)
   (load-theme 'zenburn t)
-  (eval-after-load 'linum
-    '(set-face-attribute 'linum nil :height 0.9 :background "#3F3F3F" :foreground "#6F6F6F"))
+  (modi/blend-linum)
+  (modi/blend-fringe)
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'dark))
-  (set-face-attribute 'fringe nil :background "#3F3F3F" :foreground "#FFFFFF")
   (when (boundp 'setup-fci-loaded)
     (setq fci-rule-color "#383838")
     (fci-mode -1)))
@@ -58,11 +72,10 @@
   (disable-theme 'leuven)
   (disable-theme 'zenburn)
   (load-theme 'smyx t)
-  (eval-after-load 'linum
-    '(set-face-attribute 'linum nil :height 0.9 :background "#282828" :foreground "#6F6F6F"))
+  (modi/blend-linum)
+  (modi/blend-fringe)
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'dark))
-  (set-face-attribute 'fringe nil :background "#282828" :foreground "#FFFFFF")
   (when (boundp 'setup-fci-loaded)
     (setq fci-rule-color "#383838")
     (fci-mode -1)))
@@ -75,11 +88,10 @@
   (disable-theme 'zenburn)
   (disable-theme 'smyx)
   (load-theme 'leuven t)
-  (eval-after-load 'linum
-    '(set-face-attribute 'linum nil :height 0.9 :background "#FFFFFF" :foreground "dim gray"))
+  (modi/blend-linum)
+  (modi/blend-fringe)
   (when (boundp 'setup-smart-mode-line-loaded)
     (sml/apply-theme 'light))
-  (set-face-attribute 'fringe nil :background "#F2F2F2" :foreground "#F7A421")
   (when (boundp 'setup-fci-loaded)
     (setq fci-rule-color "#F2F2F2")
     (fci-mode -1)))
