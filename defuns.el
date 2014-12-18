@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-25 13:04:10 kmodi>
+;; Time-stamp: <2014-12-18 10:51:05 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -51,6 +51,14 @@ Otherwise, get the symbol at point, as a string."
   (if (daemonp)
       (save-buffers-kill-emacs)
     (save-buffers-kill-terminal)))
+
+;; `with-eval-after-load' macro was introduced in emacs 24.4
+;; Below code makes this macro compatible with older versions of emacsen
+;; Source: http://www.lunaryorn.com/2013/06/25/introducing-with-eval-after-load.html
+(unless (fboundp 'with-eval-after-load)
+  (defmacro with-eval-after-load (file &rest body)
+    `(eval-after-load ,file
+       `(funcall (function ,(lambda () ,@body))))))
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
