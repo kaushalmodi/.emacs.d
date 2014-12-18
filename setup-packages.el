@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-29 11:50:23 kmodi>
+;; Time-stamp: <2014-12-17 10:53:58 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -24,8 +24,8 @@
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; add theme paths
-(add-to-list 'custom-theme-load-path
-             (concat user-emacs-directory "/from-git/zenburn-emacs/"))
+(add-to-list 'custom-theme-load-path (concat user-emacs-directory "/from-git/zenburn-emacs/"))
+(add-to-list 'custom-theme-load-path (concat user-emacs-directory "/from-git/smyx/"))
 
 (require 'cl)
 (require 'package)
