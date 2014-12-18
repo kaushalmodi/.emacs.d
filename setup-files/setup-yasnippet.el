@@ -1,10 +1,10 @@
-;; Time-stamp: <2014-11-17 10:13:46 kmodi>
+;; Time-stamp: <2014-12-17 08:52:12 kmodi>
 
 ;; YASnippet
 
 (req-package yasnippet
-  ;; :commands (yas-expand yas-insert-snippet yas-new-snippet yas-visit-snippet-file)
-  :init
+  :mode ("\\.yasnippet\\'" . snippet-mode)
+  :config
   (progn
     (setq yas-prompt-functions '(yas-ido-prompt
                                  yas-completing-prompt)
@@ -26,7 +26,7 @@ $0")
      ("s-y i"   . yas-insert-snippet)
      ("s-y n"   . yas-new-snippet)
      ("s-y v"   . yas-visit-snippet-file)))
-  :config
+  :idle
   (progn
     ;; (yas-global-mode 1)
     (yas-reload-all)
