@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-09 09:00:05 kmodi>
+;; Time-stamp: <2014-12-17 23:31:57 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -14,12 +14,13 @@
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
       '(
-        ;; helm helm-swoop ;; Replaced with swoop
-        ;; etags-select etags-table ctags-update ;; Replacing these with ggtags
-        ;; zenburn-theme ;; Using my own forked version
-        ;; workgroups2 ;; tested but unstable at the time of testing
+        ;; helm helm-swoop ; Replaced with swoop
+        ;; etags-select etags-table ctags-update ; Replacing these with ggtags
+        ;; zenburn-theme ; Using my own forked version
+        ;; smyx-theme ; dark theme; Using my own forked version
+        ;; workgroups2 ; tested but unstable at the time of testing
         ;; fiplr ; quick file search in a project (marked by folders like .git)
-        ;; ox-reveal ;; Using branch 'stable' from github; used to export to HTML slides
+        ;; ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         ace-jump-mode
         ace-window
         ag wgrep wgrep-ag s ; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
@@ -78,7 +79,6 @@
         smart-compile
         smart-mode-line popup rich-minority
         smex ; smart M-x
-        smyx-theme ; dark theme
         stripe-buffer
         swoop
         undo-tree ; supercool undo visualization
@@ -184,6 +184,7 @@
 (req-package setup-print)
 (req-package setup-gtags)
 (req-package setup-spell)
+(req-package setup-calc)
 (req-package setup-desktop)
 (req-package setup-image)
 ;; (req-package setup-ctags) ; Using gtags instead
