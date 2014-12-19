@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-13 17:19:31 kmodi>
+;; Time-stamp: <2014-12-19 11:31:01 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -45,7 +45,7 @@
   (eval-after-load 'linum
     '(set-face-attribute 'linum nil
                          :height 0.9
-                         :foreground (face-foreground 'default)
+                         :foreground "dim gray"
                          :background (face-background 'default))))
 
 ;; zenburn
