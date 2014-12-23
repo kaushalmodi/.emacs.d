@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-15 13:33:48 kmodi>
+;; Time-stamp: <2014-12-23 12:34:08 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -318,13 +318,63 @@ instead of ASCII characters for adorning the copied snippet."
      :map region-bindings-mode-map
      ("|" . modi/extend-rectangle-to-end))))
 
+;; Source: http://ergoemacs.org/emacs/modernization_upcase-word.html
+(defun xah-cycle-letter-case (arg)
+  "Cycle the letter case of the selected region or the current word.
+Cycles from 'lower' -> 'Capitalize' -> 'UPPER' -> 'lower' -> ..
+
+        C-u M-x xah-cycle-letter-case -> Force convert to upper case.
+    C-u C-u M-x xah-cycle-letter-case -> Force convert to lower case.
+C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
+  (require 'cl-lib)
+  (interactive "p")
+  (let (p1 p2
+           (deactivate-mark nil)
+           (case-fold-search nil))
+    (if (use-region-p)
+        (setq p1 (region-beginning)
+              p2 (region-end))
+      (let ((bds (bounds-of-thing-at-point 'word)))
+        (setq p1 (car bds)
+              p2 (cdr bds))))
+
+    (cl-case arg
+      (4  (put this-command 'state "Capitalize")) ; Force convert to upper case
+      (16 (put this-command 'state "UPPER"))      ; Force convert to lower case
+      (64 (put this-command 'state "lower"))      ; Force capitalize
+      (t (when (not (eq last-command this-command))
+           (save-excursion
+             (goto-char p1)
+             (cond
+              ((looking-at "[[:lower:]][[:lower:]]") (put this-command 'state "lower"))
+              ((looking-at "[[:upper:]][[:upper:]]") (put this-command 'state "UPPER"))
+              ((looking-at "[[:upper:]][[:lower:]]") (put this-command 'state "Capitalize"))
+              ((looking-at "[[:lower:]]")            (put this-command 'state "lower"))
+              ((looking-at "[[:upper:]]")            (put this-command 'state "UPPER"))
+              (t                                     (put this-command 'state "lower")))))))
+
+    (cl-case (string-to-char (get this-command 'state)) ; `string-to-char' returns first character in string
+      ;; Capitalize -> UPPER
+      (?C (put this-command 'state "UPPER")
+          (upcase-region p1 p2))
+      ;; UPPER -> lower
+      (?U (put this-command 'state "lower")
+          (downcase-region p1 p2))
+      ;; Default: lower -> Capitalize
+      (t (put this-command 'state "Capitalize")
+         (upcase-initials-region p1 p2)))))
+(defun modi/upcase ()     (interactive) (xah-cycle-letter-case 4))
+(defun modi/downcase ()   (interactive) (xah-cycle-letter-case 16))
+(defun modi/capitalize () (interactive) (xah-cycle-letter-case 64))
+
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
    :map region-bindings-mode-map
    ;; When region is selected, pressing `c' will copy the region
    ;; with ASCII character adornment. Pressing `C-u c' will copy
    ;; with Unicode character adornment.
-   ("c" . copy-with-linenum)))
+   ("c" . copy-with-linenum)
+   ("~" . xah-cycle-letter-case)))
 
 ;; Key bindings
 (bind-keys
@@ -349,6 +399,10 @@ instead of ASCII characters for adorning the copied snippet."
  ("C-o"     . modi/smart-open-line)
  ("C-j"     . pull-up-line)
  ("M-j"     . comment-indent-new-line)
+ ("M-C"     . xah-cycle-letter-case)
+ ("M-c"     . modi/capitalize)
+ ("C-x C-u" . modi/upcase)
+ ("C-x C-l" . modi/downcase)
  ;; Zap!
  ;; ("M-z"     . zap-up-to-char)
  ;; ("M-Z"     . zap-to-char))
