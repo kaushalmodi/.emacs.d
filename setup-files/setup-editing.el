@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-23 12:34:08 kmodi>
+;; Time-stamp: <2014-12-23 12:55:38 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -339,30 +339,30 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
               p2 (cdr bds))))
 
     (cl-case arg
-      (4  (put this-command 'state "Capitalize")) ; Force convert to upper case
-      (16 (put this-command 'state "UPPER"))      ; Force convert to lower case
-      (64 (put this-command 'state "lower"))      ; Force capitalize
+      (4  (put this-command 'next-state "UPPER"))      ; Force convert to upper case
+      (16 (put this-command 'next-state "lower"))      ; Force convert to lower case
+      (64 (put this-command 'next-state "Capitalize")) ; Force capitalize
       (t (when (not (eq last-command this-command))
            (save-excursion
              (goto-char p1)
              (cond
-              ((looking-at "[[:lower:]][[:lower:]]") (put this-command 'state "lower"))
-              ((looking-at "[[:upper:]][[:upper:]]") (put this-command 'state "UPPER"))
-              ((looking-at "[[:upper:]][[:lower:]]") (put this-command 'state "Capitalize"))
-              ((looking-at "[[:lower:]]")            (put this-command 'state "lower"))
-              ((looking-at "[[:upper:]]")            (put this-command 'state "UPPER"))
-              (t                                     (put this-command 'state "lower")))))))
+              ;; lower -> Capitalize
+              ((looking-at "[[:lower:]]")            (put this-command 'next-state "Capitalize"))
+              ;; Capitalize -> UPPER
+              ((looking-at "[[:upper:]][[:lower:]]") (put this-command 'next-state "UPPER"))
+              ;; Default: UPPER -> lower
+              (t                                     (put this-command 'next-state "lower")))))))
 
-    (cl-case (string-to-char (get this-command 'state)) ; `string-to-char' returns first character in string
-      ;; Capitalize -> UPPER
-      (?C (put this-command 'state "UPPER")
-          (upcase-region p1 p2))
-      ;; UPPER -> lower
-      (?U (put this-command 'state "lower")
-          (downcase-region p1 p2))
-      ;; Default: lower -> Capitalize
-      (t (put this-command 'state "Capitalize")
-         (upcase-initials-region p1 p2)))))
+    (cl-case (string-to-char (get this-command 'next-state)) ; `string-to-char' returns first character in string
+      (?U (upcase-region p1 p2)
+          ;; UPPER -> lower
+          (put this-command 'next-state "lower"))
+      (?l (downcase-region p1 p2)
+          ;; lower -> Capitalize
+          (put this-command 'next-state "Capitalize"))
+      (t (upcase-initials-region p1 p2)
+         ;; Capitalize -> UPPER
+         (put this-command 'next-state "UPPER")))))
 (defun modi/upcase ()     (interactive) (xah-cycle-letter-case 4))
 (defun modi/downcase ()   (interactive) (xah-cycle-letter-case 16))
 (defun modi/capitalize () (interactive) (xah-cycle-letter-case 64))
