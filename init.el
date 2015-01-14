@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-17 23:31:57 kmodi>
+;; Time-stamp: <2015-01-13 19:54:08 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -171,6 +171,8 @@
 (req-package setup-matlab)
 (req-package setup-markdown)
 (req-package setup-web-mode)
+(req-package setup-shell)
+(req-package setup-elisp)
 (req-package setup-yaml-mode)
 (req-package setup-latex)
 (req-package setup-spice)
