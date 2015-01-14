@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-23 12:55:38 kmodi>
+;; Time-stamp: <2015-01-14 15:01:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -15,33 +15,6 @@
 (setq time-stamp-line-limit 20)
 (add-hook 'write-file-hooks 'time-stamp)
 
-
-;; Now using the drag-stuff package instead
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; Moving lines up and down
-;; ;; Source: http://www.whattheemacsd.com/
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (defun move-line-down ()
-;;   (interactive)
-;;   (let ((col (current-column)))
-;;     (save-excursion
-;;       (forward-line)
-;;       (transpose-lines 1))
-;;     (forward-line)
-;;     (move-to-column col)))
-
-;; (defun move-line-up ()
-;;   (interactive)
-;;   (let ((col (current-column)))
-;;     (save-excursion
-;;       (forward-line)
-;;       (transpose-lines -1))
-;;     (move-to-column col)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Duplication
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Duplicate current line or region
 ;; Source: http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
@@ -170,7 +143,8 @@ and the cursor. Else, insert empty line after the current line."
            (newline-and-indent))))
 
 (defun pull-up-line ()
-  "Join the following line onto the current one (analogous to `C-e', `C-d')"
+  "Join the following line onto the current one (analogous to `C-e', `C-d') or
+`C-u M-^' or `C-u M-x join-line'"
   (interactive)
   (join-line -1))
 
@@ -179,9 +153,19 @@ and the cursor. Else, insert empty line after the current line."
 (put 'narrow-to-defun  'disabled nil)
 (put 'narrow-to-page   'disabled nil)
 
-;; zap-to-char
-;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
-(autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
+;; Enable setting goal column
+;; Source: http://emacsblog.org/2007/03/17/quick-tip-set-goal-column/
+(put 'set-goal-column  'disabled nil)
+;;     C-x C-n <- Set goal column
+;; C-u C-x C-n <- Unset goal column
+
+;; ;; zap-to-char
+;; ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
+;; (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
+;; (bind-keys
+;;  :map modi-mode-map
+;;  ("M-z" . zap-up-to-char)
+;;  ("M-Z" . zap-to-char))
 
 ;; zop-to-char
 ;; Source: https://github.com/thierryvolpiatto/zop-to-char
@@ -239,14 +223,10 @@ modifications)."
 
 (defun endless/activate-aggressive-indent ()
   "Locally add `endless/indent-defun' to `post-command-hook'."
-  (add-hook 'post-command-hook
-            #'endless/indent-defun nil 'local))
+  (add-hook 'post-command-hook #'endless/indent-defun nil 'local))
 
-(add-hook 'emacs-lisp-mode-hook
-          #'endless/activate-aggressive-indent)
+(add-hook 'emacs-lisp-mode-hook #'endless/activate-aggressive-indent)
 
-;; "Insert" copied rectangle instead of overwriting lines as
-;; `M-x yank-rectangle` does.
 
 ;; Source: http://stackoverflow.com/questions/12165205/how-to-copy-paste-a-region-from-emacs-buffer-with-line-file-reference
 (defun copy-with-linenum (beg end use-unicode)
@@ -379,10 +359,8 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
- ("<f3>"    . toggle-comment-on-line-or-region)
- ("<f4>"    . kmacro-end-or-call-macro) ; end macro recording/call last macro
- ("<S-f4>"  . start-kbd-macro) ; start macro recording
- ("<C-f4>"  . start-kbd-macro) ; start macro recording
+ ;; override the binding of `M-;' for `comment-dwim'
+ ("M-;"     . toggle-comment-on-line-or-region)
  ("<f9>"    . eval-region)
  ("C-x d"   . delete-region)
  ("s-SPC"   . just-one-space) ;; Win-Space
@@ -403,9 +381,6 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
  ("M-c"     . modi/capitalize)
  ("C-x C-u" . modi/upcase)
  ("C-x C-l" . modi/downcase)
- ;; Zap!
- ;; ("M-z"     . zap-up-to-char)
- ;; ("M-Z"     . zap-to-char))
  )
 
 (bind-to-modi-map "d" insert-current-date-time)
@@ -414,8 +389,7 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 ;; default binding `C-x =' with something else.
 (bind-to-modi-map "=" what-cursor-position)
 
-(key-chord-define-global "3e" 'toggle-comment-on-line-or-region) ; alternative to F3
-(key-chord-define-global "9o" 'eval-region) ; alternative to F9
+(key-chord-define-global "3e" 'toggle-comment-on-line-or-region)
 (key-chord-define-global "^^" (λ (insert "λ")))
 
 
@@ -431,3 +405,6 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 
 ;; (2) Undo
 ;; `C-_' or `C-/'
+
+;; (3) Toggle read-only-mode; toggles buffers between editable and read-only states.
+;; `C-x C-q' or `M-x read-only-mode'
