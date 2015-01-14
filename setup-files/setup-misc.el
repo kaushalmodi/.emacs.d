@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-17 23:33:30 kmodi>
+;; Time-stamp: <2015-01-07 16:02:58 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -97,6 +97,9 @@ If the file is emacs lisp, run the byte compiled version if exist."
 
 ;; Turn on ElDoc mode in emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+
+;; Turn off dir local variables
+(setq enable-dir-local-variables nil)
 
 
 (provide 'setup-misc)
