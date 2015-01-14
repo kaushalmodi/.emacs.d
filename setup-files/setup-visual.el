@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-19 11:31:01 kmodi>
+;; Time-stamp: <2015-01-05 15:21:17 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -36,17 +36,18 @@
 ;; Source: http://emacs.stackexchange.com/a/5343/115
 (defun modi/blend-fringe ()
   "Set the fringe foreground and background color to that of the theme."
-  (set-face-attribute 'fringe nil
-                      :foreground (face-foreground 'default)
-                      :background (face-background 'default)))
+  (eval-after-load 'faces
+    (set-face-attribute 'fringe nil
+                        :foreground (face-foreground 'default)
+                        :background (face-background 'default))))
 
-(defun modi/blend-linum ()
-  "Set the linum foreground and background color to that of the theme."
-  (eval-after-load 'linum
-    '(set-face-attribute 'linum nil
-                         :height 0.9
-                         :foreground "dim gray"
-                         :background (face-background 'default))))
+  (defun modi/blend-linum ()
+    "Set the linum foreground and background color to that of the theme."
+    (eval-after-load 'linum
+      '(set-face-attribute 'linum nil
+                           :height 0.9
+                           :foreground "dim gray"
+                           :background (face-background 'default))))
 
 ;; zenburn
 (defun zenburn ()
