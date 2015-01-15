@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-18 10:51:05 kmodi>
+;; Time-stamp: <2015-01-15 12:38:42 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -59,6 +59,20 @@ Otherwise, get the symbol at point, as a string."
   (defmacro with-eval-after-load (file &rest body)
     `(eval-after-load ,file
        `(funcall (function ,(lambda () ,@body))))))
+
+;; Source: http://oremacs.com/2015/01/14/repeatable-commands/
+(defun def-rep-command (alist)
+  "Return a lambda that calls the first function of ALIST.
+It sets the transient map to all functions of ALIST."
+  (lexical-let ((keymap (make-sparse-keymap))
+                (func (cdar alist)))
+    (mapc (lambda (x)
+            (define-key keymap (car x) (cdr x)))
+          alist)
+    (lambda (arg)
+      (interactive "p")
+      (funcall func arg)
+      (set-transient-map keymap t))))
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
