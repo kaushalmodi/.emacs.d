@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-05 15:21:17 kmodi>
+;; Time-stamp: <2015-01-15 12:58:43 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -143,19 +143,19 @@
 ;; font sizes for the text outside the buffer, example in mode-line.
 ;; Below functions change the font size in those areas too.
 
-(defun font-size-incr ()
+(defun font-size-incr (arg)
   "Increase font size by 1 pt"
-  (interactive)
-  (setq font-size-pt (+ font-size-pt 1))
+  (interactive "p")
+  (setq font-size-pt (+ font-size-pt arg))
   (set-face-attribute 'default nil :height (* font-size-pt 10)))
 
-(defun font-size-decr ()
+(defun font-size-decr (arg)
   "Decrease font size by 1 pt"
-  (interactive)
-  (setq font-size-pt (- font-size-pt 1))
+  (interactive "p")
+  (setq font-size-pt (- font-size-pt arg))
   (set-face-attribute 'default nil :height (* font-size-pt 10)))
 
-(defun font-size-reset ()
+(defun font-size-reset (&optional arg)
   "Reset font size to default-font-size-pt"
   (interactive)
   (setq font-size-pt default-font-size-pt)
@@ -425,6 +425,19 @@ narrowed."
 (global-unset-key (kbd "<C-down-mouse-1>")) ;; it is bound to `mouse-buffer-menu'
 ;; by default. It is inconvenient when that mouse menu pops up when I don't need
 ;; it to. And actually I have never used that menu :P
+
+;; Source: http://oremacs.com/2015/01/14/repeatable-commands/
+;; Usage: C-x + - + 0 - - - - + + 0
+;; Usage: C-x - - 0 + - + - - - - + + 0
+(define-key modi-mode-map (kbd "C-x +") (def-rep-command
+                                          '(("+" . font-size-incr)
+                                            ("-" . font-size-decr)
+                                            ("0" . font-size-reset))))
+(define-key modi-mode-map (kbd "C-x -") (def-rep-command
+                                          '(("-" . font-size-decr)
+                                            ("+" . font-size-incr)
+                                            ("0" . font-size-reset))))
+
 (bind-keys
  :map modi-mode-map
  ("<f2>"        . menu-bar-mode)
@@ -437,8 +450,6 @@ narrowed."
  ("<C-mouse-4>" . font-size-incr) ;; C + wheel-up
  ("<C-mouse-5>" . font-size-decr) ;; C + wheel-down
  ("C-x C-0"     . font-size-reset)
- ("C-x +"       . font-size-incr)
- ("C-x -"       . font-size-decr)
  ("C-x t"       . toggle-truncate-lines)
  ;; This line actually replaces Emacs' entire narrowing keymap.
  ("C-x n"       . endless/narrow-or-widen-dwim))
