@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-14 15:01:45 kmodi>
+;; Time-stamp: <2015-01-15 14:25:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -109,7 +109,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; Toggle comment on current line or selected region
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
-(defun toggle-comment-on-line-or-region ()
+(defun toggle-comment-on-line-or-region (&optional arg)
   "comment or uncomment current line or selected region , and go to the next line"
   (interactive)
   (if (region-active-p)
@@ -389,7 +389,18 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 ;; default binding `C-x =' with something else.
 (bind-to-modi-map "=" what-cursor-position)
 
-(key-chord-define-global "3e" 'toggle-comment-on-line-or-region)
+;; Usage: Quickly press 3 two times consecutively; that will toggle comment
+;;        on the current line or region and proceed the cursor to the next line.
+;;        Now each consecutive pressing of 3, will toggle the comment on that
+;;        line and proceed to the next line.
+;;
+;;        33 3 3 3 3 3
+;;
+;;        Press any other key to quit this behavior of pressing 3 commenting the lines.
+(key-chord-define-global "33" (def-rep-command
+                                `(("3" . toggle-comment-on-line-or-region)
+                                  ("p" . previous-line)
+                                  ("n" . next-line))))
 (key-chord-define-global "^^" (λ (insert "λ")))
 
 
