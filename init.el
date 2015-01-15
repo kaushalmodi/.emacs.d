@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-13 19:54:08 kmodi>
+;; Time-stamp: <2015-01-15 11:13:28 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -18,8 +18,6 @@
         ;; etags-select etags-table ctags-update ; Replacing these with ggtags
         ;; zenburn-theme ; Using my own forked version
         ;; smyx-theme ; dark theme; Using my own forked version
-        ;; workgroups2 ; tested but unstable at the time of testing
-        ;; fiplr ; quick file search in a project (marked by folders like .git)
         ;; ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         ace-jump-mode
         ace-window
@@ -104,8 +102,6 @@
 (req-package modi-mode)
 (req-package temp-mode)
 
-(require 'setup-secret nil t) ;; No error if not found
-
 ;; Set up the looks of emacs
 (req-package setup-popwin) ;; require popwin first as packages might depend on it
 (req-package setup-smart-mode-line)
@@ -114,7 +110,8 @@
 ;; Set up extensions/packages
 (req-package setup-ace-jump-mode)
 (req-package setup-ace-window)
-(req-package setup-ag)
+(when (executable-find "ag")
+  (req-package setup-ag))
 (req-package setup-auto-complete)
 (req-package setup-bookmark+)
 (req-package setup-buffer-move)
@@ -137,7 +134,8 @@
 (req-package setup-ido)
 (req-package setup-iregister)
 (req-package setup-linum)
-(req-package setup-magit)
+(when (executable-find "git")
+  (req-package setup-magit))
 (req-package setup-manage-minor-mode)
 (req-package setup-multiple-cursors)
 (req-package setup-neotree)
@@ -168,7 +166,8 @@
 (req-package setup-verilog)
 (req-package setup-perl)
 (req-package setup-python)
-(req-package setup-matlab)
+(when (executable-find "matlab")
+  (req-package setup-matlab))
 (req-package setup-markdown)
 (req-package setup-web-mode)
 (req-package setup-shell)
@@ -184,8 +183,10 @@
 (req-package setup-navigation)
 (req-package setup-search)
 (req-package setup-print)
-(req-package setup-gtags)
-(req-package setup-spell)
+(when (executable-find "global")
+  (req-package setup-gtags))
+(when (executable-find "hunspell")
+  (req-package setup-spell))
 (req-package setup-calc)
 (req-package setup-desktop)
 (req-package setup-image)
@@ -196,6 +197,11 @@
 (req-package-finish) ; Start loading packages in right order
 (global-modi-mode t)
 (funcall default-theme)
+
+;; require `secrets' but don't trigger error if not found
+(if (daemonp)
+    (add-hook 'window-setup-hook (lambda () (require 'secrets "secrets.el.gpg" t)))
+  (require 'secrets "secrets.el.gpg" t))
 
 (setq emacs-initialized t)
 
