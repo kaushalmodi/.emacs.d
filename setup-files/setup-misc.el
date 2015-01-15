@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-07 16:02:58 kmodi>
+;; Time-stamp: <2015-01-15 11:27:16 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -52,14 +52,22 @@ If the file is emacs lisp, run the byte compiled version if exist."
          (fName (buffer-file-name))
          (fSuffix (file-name-extension fName))
          (progName (cdr (assoc fSuffix suffixMap)))
-         (cmdStr (concat progName " \""   fName "\"")))
+         (cmdStr (concat progName " \""   fName "\""))
+         IsGPG)
 
     (when (buffer-modified-p)
       (when (y-or-n-p "Buffer modified. Do you want to save first?")
         (save-buffer) ) )
 
+    (when (string-equal fSuffix "gpg")
+      (setq IsGPG t)
+      (setq fName (replace-regexp-in-string "\.gpg$" "" fName))
+      (setq fSuffix (file-name-extension fName)))
+
     (if (string-equal fSuffix "el") ; special case for emacs lisp
-        (load (file-name-sans-extension fName))
+        (if IsGPG
+            (load (buffer-file-name)) ; special case for .el.gpg files
+          (load (file-name-sans-extension fName)))
       (if progName
           (progn
             ;; (view-echo-area-messages)
