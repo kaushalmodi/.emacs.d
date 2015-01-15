@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-16 15:31:12 kmodi>
+;; Time-stamp: <2015-01-15 11:32:02 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -305,7 +305,6 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
 (defun toggle-between-buffers ()
   "Toggle between 2 buffers"
   (interactive)
-  ;; (switch-to-buffer (other-buffer (current-buffer) 1)))
   (switch-to-buffer (other-buffer)))
 ;; (other-buffer &optional BUFFER VISIBLE-OK FRAME)
 ;; - Return most recently selected buffer other than BUFFER. Ignore the argument
