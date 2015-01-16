@@ -19,7 +19,7 @@
  '(ansi-color-names-vector
    ["#282828" "#FAB1AB" "#D1FA71" "#FFA600" "#7b68ee" "#dc8cc3" "#96D9F1" "#F7F7F7"])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
- '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
+ '(bmkp-last-as-first-bookmark-file "/home/kmodi/.emacs.d/bookmarks")
  '(bzg-big-fringe-mode nil t)
  '(column-number-mode t)
  '(custom-safe-themes
