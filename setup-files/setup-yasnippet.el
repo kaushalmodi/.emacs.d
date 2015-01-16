@@ -1,9 +1,8 @@
-;; Time-stamp: <2014-12-17 08:52:12 kmodi>
+;; Time-stamp: <2015-01-16 10:08:25 kmodi>
 
 ;; YASnippet
 
-(req-package yasnippet
-  :mode ("\\.yasnippet\\'" . snippet-mode)
+(use-package yasnippet
   :config
   (progn
     (setq yas-prompt-functions '(yas-ido-prompt
