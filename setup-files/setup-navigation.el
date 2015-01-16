@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-10 11:25:36 kmodi>
+;; Time-stamp: <2015-01-15 22:59:03 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -198,8 +198,8 @@ If ARG is omitted or nil, move point forward one word."
  ("M-]" . forward-paragraph)
  ("C-{" . backward-paragraph)
  ("M-[" . backward-paragraph)
- ("M-f" . modi/forward-word-begin)
- ("M-F" . forward-word)
+ ("M-f" . forward-word)
+ ("M-F" . modi/forward-word-begin)
  ;; Toggle Follow-mode
  ("C-c f" . follow-mode))
 ;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Follow-Mode.html
