@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-15 11:13:28 kmodi>
+;; Time-stamp: <2015-01-16 10:17:42 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -79,6 +79,7 @@
         smex ; smart M-x
         stripe-buffer
         swoop
+        tiny
         undo-tree ; supercool undo visualization
         visual-regexp
         volatile-highlights
@@ -92,6 +93,14 @@
 
 (load custom-file) ;; Load the emacs `M-x customize` generated file
 (load setup-packages-file) ;; Load the packages
+
+;; Enable transparent, automatic encryption/decryption
+(require 'epa-file)
+(epa-file-enable)
+;; Now visit anything.gpg and it will encrypt it when you save the buffer.
+;; Put this line at the top of an anything.gpg file to prevent it from
+;; asking for the password on each save
+;; -*- epa-file-encrypt-to: ("kaushal.modi@gmail.com") -*-
 
 (require 'defuns)
 (require 'benchmark-init)
@@ -153,6 +162,7 @@
 (req-package setup-smart-compile)
 (req-package setup-smex)
 (req-package setup-stripe-buffer)
+(req-package setup-tiny)
 (req-package setup-undo-tree)
 (req-package setup-wrap-region)
 (req-package setup-xkcd)
@@ -194,14 +204,14 @@
 
 (req-package setup-misc) ; This package must be the last required package
 
-(req-package-finish) ; Start loading packages in right order
-(global-modi-mode t)
-(funcall default-theme)
-
 ;; require `secrets' but don't trigger error if not found
 (if (daemonp)
     (add-hook 'window-setup-hook (lambda () (require 'secrets "secrets.el.gpg" t)))
   (require 'secrets "secrets.el.gpg" t))
+
+(req-package-finish) ; Start loading packages in right order
+(global-modi-mode t)
+(funcall default-theme)
 
 (setq emacs-initialized t)
 
