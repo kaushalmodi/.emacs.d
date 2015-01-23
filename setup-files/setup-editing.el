@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-15 14:25:45 kmodi>
+;; Time-stamp: <2015-01-23 09:16:31 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -94,7 +94,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   )
 
 
-;; http://stackoverflow.com/questions/3035337/in-emacs-can-you-evaluate-an-emacs-lisp-expression-and-replace-it-with-the-resul
+;; http://stackoverflow.com/a/3035574/1219634
 (defun eval-and-replace-last-sexp ()
   "Replace an emacs lisp expression (s-expression aka sexp) with its result"
   (interactive)
@@ -103,7 +103,6 @@ Uses `current-date-time-format' for the formatting the date/time."
     (insert (format "%s" value))))
 ;; How to use: Put the cursor at the end of an expression like (+ 1 2) and
 ;; `M-x eval-and-replace-last-sexp`
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Toggle comment on current line or selected region
@@ -142,11 +141,26 @@ and the cursor. Else, insert empty line after the current line."
     (progn (move-end-of-line nil)
            (newline-and-indent))))
 
-(defun pull-up-line ()
+;; http://emacs.stackexchange.com/q/7519/115
+(defun modi/pull-up-line ()
   "Join the following line onto the current one (analogous to `C-e', `C-d') or
-`C-u M-^' or `C-u M-x join-line'"
+`C-u M-^' or `C-u M-x join-line'.
+
+If the current line is a comment and the pulled-up line is also a comment,
+remove the comment characters from that line."
   (interactive)
-  (join-line -1))
+  (join-line -1)
+  ;; If the current line is a comment
+  (when (nth 4 (syntax-ppss))
+    ;; Remove the comment prefix chars from the pulled-up line if present
+    (save-excursion
+      ;; Delete all comment-start and space characters
+      (while (looking-at (concat "\\s<" ; comment-start char as per syntax table
+                                 "\\|" (substring comment-start 0 1) ; first char of `comment-start'
+                                 "\\|" "\\s-")) ; extra spaces
+        (delete-forward-char 1))
+      (insert-char ? ) ; insert space
+      )))
 
 ;; Enable narrowing
 (put 'narrow-to-region 'disabled nil)
@@ -347,6 +361,23 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 (defun modi/downcase ()   (interactive) (xah-cycle-letter-case 16))
 (defun modi/capitalize () (interactive) (xah-cycle-letter-case 64))
 
+;; http://www.emacswiki.org/emacs/SortWords
+;; http://emacs.stackexchange.com/a/7550/115
+(defun sort-words (reverse beg end)
+  "Sort words in region alphabetically, in REVERSE if negative.
+Prefixed with negative \\[universal-argument], sorts in reverse.
+
+The variable `sort-fold-case' determines whether alphabetic case
+affects the sort order. See `sort-regexp-fields'.
+
+Temporarily consider - and _ characters as part of the word when sorting."
+  (interactive "*P\nr")
+  (let ((temp-table (copy-syntax-table text-mode-syntax-table)))
+    (with-syntax-table temp-table
+      (modify-syntax-entry ?- "w" temp-table)
+      (modify-syntax-entry ?_ "w" temp-table)
+      (sort-regexp-fields reverse "\\w+" "\\&" beg end))))
+
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
    :map region-bindings-mode-map
@@ -356,6 +387,12 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
    ("c" . copy-with-linenum)
    ("~" . xah-cycle-letter-case)))
 
+;; Unicode
+(bind-to-modi-map-noquote ">"   (λ (insert-char ?☛))) ; C-x 8 RET 261b RET, pointing hand
+(bind-to-modi-map-noquote "SPC" (λ (insert-char ?​)))  ; C-x 8 RET 200b RET, zero width white space
+(bind-to-modi-map-noquote "\\"  (λ (insert-char ?▮))) ; C-x 8 RET 9646 RET, black vertical rectangle
+(bind-to-modi-map-noquote "|"   (λ (insert-char ?▯))) ; C-x 8 RET 9647 RET, white vertical rectangle
+
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
@@ -363,7 +400,7 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
  ("M-;"     . toggle-comment-on-line-or-region)
  ("<f9>"    . eval-region)
  ("C-x d"   . delete-region)
- ("s-SPC"   . just-one-space) ;; Win-Space
+ ("s-SPC"   . just-one-space) ; Win-Space
  ("C-S-d"   . duplicate-current-line-or-region)
  ;; override the binding of `C-x =` for `what-cursor-position'
  ("C-x ="   . align-to-equals) ; align all = signs in selected region
@@ -375,20 +412,24 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
  ("C-S-k"   . smart-kill-whole-line)
  ;; override the binding of `C-o` for `open-line'
  ("C-o"     . modi/smart-open-line)
- ("C-j"     . pull-up-line)
+ ("C-j"     . modi/pull-up-line)
  ("M-j"     . comment-indent-new-line)
- ("M-C"     . xah-cycle-letter-case)
- ("M-c"     . modi/capitalize)
  ("C-x C-u" . modi/upcase)
- ("C-x C-l" . modi/downcase)
- )
+ ("C-x C-l" . modi/downcase))
 
-(bind-to-modi-map "d" insert-current-date-time)
+(hydra-create "M-c"
+  '(("c"   modi/capitalize       "Capitalize")     ; M-c c
+    ("u"   modi/upcase           "UPCASE")         ; M-c u
+    ("l"   modi/downcase         "downcase")       ; M-c l
+    ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
+  modi-mode-map)
+
 (bind-to-modi-map "x" eval-and-replace-last-sexp)
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
 ;; default binding `C-x =' with something else.
 (bind-to-modi-map "=" what-cursor-position)
 
+;; Source: http://oremacs.com/2015/01/14/repeatable-commands/
 ;; Usage: Quickly press 3 two times consecutively; that will toggle comment
 ;;        on the current line or region and proceed the cursor to the next line.
 ;;        Now each consecutive pressing of 3, will toggle the comment on that
@@ -401,6 +442,7 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
                                 `(("3" . toggle-comment-on-line-or-region)
                                   ("p" . previous-line)
                                   ("n" . next-line))))
+
 (key-chord-define-global "^^" (λ (insert "λ")))
 
 
