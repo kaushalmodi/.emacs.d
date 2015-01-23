@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-25 13:03:46 kmodi>
+;; Time-stamp: <2015-01-17 22:52:06 kmodi>
 
 ;; Desktop save and restore
 
@@ -15,21 +15,17 @@
     ;; for lists specify the len of the maximal saved data also
     (setq desktop-globals-to-save
           (append '((comint-input-ring . 50)
-                    (compile-history . 30)
                     desktop-missing-file-warning
                     (dired-regexp-history . 20)
                     (extended-command-history . 30)
                     (face-name-history . 20)
                     (file-name-history . 100)
-                    (grep-find-history . 30)
-                    (grep-history . 30)
                     (ido-buffer-history . 100)
                     (ido-last-directory-list . 100)
                     (ido-work-directory-list . 100)
                     (ido-work-file-list . 100)
                     (magit-read-rev-history . 50)
                     (minibuffer-history . 50)
-                    (org-clock-history . 50)
                     (org-refile-history . 50)
                     (org-tags-history . 50)
                     (query-replace-history . 60)
@@ -41,6 +37,11 @@
                     (shell-command-history . 50)
                     tags-file-name
                     tags-table-list)))
+
+    ;; Don't save .gpg files. Restoring those files in emacsclients causes
+    ;; a problem as the password prompt appears before the frame is loaded.
+    (setq desktop-files-not-to-save (concat desktop-files-not-to-save
+                                            "\\|\\(\\.gpg$\\)"))
 
     ;; Patch `desktop-restore-file-buffer'.
     ;; DON'T throw any warnings; especially "Note: file is write protected" when
