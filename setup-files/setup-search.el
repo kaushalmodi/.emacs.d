@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-23 09:33:12 kmodi>
+;; Time-stamp: <2015-01-20 14:17:44 kmodi>
 
 ;; Search
 
@@ -130,7 +130,7 @@ searches all buffers."
   "Exchange string-1 and string-2 interactively.
 The user is prompted at each instance like query-replace. Exchanging
 happens within a region if one is selected."
- (interactive
+  (interactive
    (let ((common
 	  (query-replace-read-args
 	   (concat "Query replace"
@@ -153,26 +153,30 @@ happens within a region if one is selected."
                               (if (match-string 1) string-2 string-1))
    t t delimited nil nil start end))
 
-;; Swoop
-;; https://github.com/ShingoFukuyama/emacs-swoop
-(req-package swoop
+;; Helm Swoop
+(req-package helm-swoop
+  :require (ido ido-ubiquitous)
   :config
   (progn
+    ;; Disable helm
+    (defun modi/disable-helm-enable-ido ()
+      (interactive)
+      (helm-mode -1)
+      (ido-mode 1)
+      (ido-ubiquitous-mode 1))
+    (modi/disable-helm-enable-ido)
     (bind-keys
      :map modi-mode-map
-     ("M-i" . swoop)
-     ("M-I" . swoop-multi)
-     ("M-o" . swoop-pcre-regexp))
+     ("M-i" . helm-swoop)
+     ("M-I" . helm-multi-swoop-all))
     ;; Transition
-    ;; isearch     > press [C-o] > swoop
-    (define-key isearch-mode-map (kbd "C-o") 'swoop-from-isearch)
-    ;; swoop       > press [C-o] > swoop-multi
-    (define-key swoop-map (kbd "C-o")        'swoop-multi-from-swoop)
-    ;; Resume
-    ;; C-u M-x swoop : Use last used query
-    ;; Swoop Edit Mode
-    ;; During swoop, press [C-c C-e]
-    ;; You can edit synchronously
+    ;; isearch     > press [M-i] > helm-swoop
+    (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+    ;; helm-swoop  > press [M-i] > helm-multi-swoop-all
+    (setq helm-swoop-split-direction 'split-window-vertically)
+    (setq helm-swoop-speed-or-color nil) ; If nil, boosts speed in exchange for color
+    ;; While doing `helm-swoop` press `C-c C-e` to edit mode, apply changes to
+    ;; original buffer by `C-x C-s`
     ))
 
 ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
