@@ -1,16 +1,59 @@
-;; Time-stamp: <2015-01-13 19:55:03 kmodi>
+;; Time-stamp: <2015-01-23 12:26:16 kmodi>
 
 ;; Emacs Lisp Mode
 
-(defun my/edebug-defun ()
+;; Solution to toggle debug on a function whether it is defined inside or
+;; outside a `use-package' wrapper
+;; http://emacs.stackexchange.com/q/7643/115
+
+;; Edebug defun
+(defvar modi/fns-in-edebug nil
+  "List of functions for which `edebug' is instrumented.")
+
+(defun modi/toggle-edebug-defun ()
   (interactive)
-  (eval-defun :edebug))
+  (let ((fn (which-function)))
+    (save-excursion
+      (search-backward-regexp (concat "(\\s-*defun\\s-+" fn))
+      (mark-sexp)
+      (narrow-to-region (point) (mark))
+      (if (member fn modi/fns-in-edebug)
+          ;; If the function is already being edebugged, uninstrument it
+          (progn
+            (setq modi/fns-in-edebug (delete fn modi/fns-in-edebug))
+            (eval-region (point) (mark))
+            (message "Edebug disabled: %s" fn))
+        ;; If the function is not being edebugged, instrument it
+        (progn
+          (add-to-list 'modi/fns-in-edebug fn)
+          (edebug-defun)
+          (message "Edebug: %s" fn)))
+      (widen))))
+
+;; Debug on entry
+(defvar modi/fns-in-debug nil
+  "List of functions for which `debug-on-entry' is instrumented.")
+
+(defun modi/toggle-debug-defun ()
+  (interactive)
+  (let ((fn (which-function)))
+    (if (member fn modi/fns-in-debug)
+        ;; If the function is already being debugged, cancel its debug on entry
+        (progn
+          (setq modi/fns-in-debug (delete fn modi/fns-in-debug))
+          (cancel-debug-on-entry (intern fn))
+          (message "Debug-on-entry disabled: %s" fn))
+      ;; If the function is not being debugged, debug it on entry
+      (progn
+        (add-to-list 'modi/fns-in-debug fn)
+        (debug-on-entry (intern fn))
+        (message "Debug-on-entry: %s" fn)))))
 
 ;; edebug
 (bind-keys
  :map modi-mode-map
- ("<f7>" . my/edebug-defun) ; add edebug instrumentation
- ("<S-f7>" . eval-defun)) ; remove edebug instrumentation
+ ("<f7>"   . modi/toggle-edebug-defun) ; toggle edebug instrumentation
+ ("<S-f7>" . modi/toggle-debug-defun)) ; enable/cancel debug-on-entry
 
 
 (provide 'setup-elisp)
