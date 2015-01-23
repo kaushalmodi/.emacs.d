@@ -1,7 +1,7 @@
-;; Time-stamp: <2014-08-13 11:24:24 kmodi>
+;; Time-stamp: <2015-01-21 14:19:14 kmodi>
 
 ;; Number
-;; https://github.com/chrisdone/chrisdone-emacs/blob/master/packages/number/number.el
+;; https://github.com/chrisdone/number
 
 (req-package number)
 
