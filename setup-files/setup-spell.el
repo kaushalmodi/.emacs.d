@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 11:42:53 kmodi>
+;; Time-stamp: <2015-01-21 23:50:48 kmodi>
 
 ;; Spell check
 ;; hunspell / flyspell / ispell
@@ -37,12 +37,14 @@
     (define-key flyspell-mode-map (kbd "C-,") nil)
     (define-key flyspell-mode-map (kbd "C-.") nil)
     (define-key flyspell-mode-map "\M-\t"     nil)
+
     (add-hook 'prog-mode-hook 'flyspell-prog-mode)
     (eval-after-load 'auto-complete
       '(ac-flyspell-workaround))
     ;; https://github.com/larstvei/dot-emacs#flyspell
     (add-hook 'text-mode-hook 'turn-on-flyspell)
     (add-hook 'org-mode-hook  'turn-on-flyspell)
+
     ;; Flyspell signals an error if there is no spell-checking tool is installed.
     ;; We can advice turn-on=flyspell and flyspell-prog-mode to only try to enable
     ;; flyspell if a spell-checking tool is available.
@@ -54,9 +56,10 @@
       "Turns on flyspell only if a spell-checking tool is installed."
       (when (executable-find ispell-program-name)
         ad-do-it))
+
     (bind-keys
      :map modi-mode-map
-     ("<f12>" . flyspell-auto-correct-word))))
+     ("<f12>" . flyspell-auto-correct-previous-word))))
 
 
 (provide 'setup-spell)
@@ -66,6 +69,6 @@
 ;; 2. Press `i' to add the word to the dictionary
 ;; 3. Done!
 
-;; If the word does not auto-correct properly, call the function `flyspell-auto-correct-word'
-;; repeatedly till you find the right match. It is easy if a key is bound to
-;; call that function.
+;; If the word does not auto-correct properly, call the function
+;; `flyspell-auto-correct-previous-word' repeatedly till you find the
+;; right match. It is easy if a key is bound to call that function.
