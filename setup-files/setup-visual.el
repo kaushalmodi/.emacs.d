@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-15 12:58:43 kmodi>
+;; Time-stamp: <2015-01-21 16:10:23 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -6,8 +6,8 @@
 ;; the closing parentheses in the minibuffer.
 (show-paren-mode +1)
 
-(setq default-font-size-pt 12 ;; default font size
-      dark-theme           t  ;; initialize dark-theme var
+(setq default-font-size-pt 12 ; default font size
+      dark-theme           t  ; initialize dark-theme var
       )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -41,13 +41,13 @@
                         :foreground (face-foreground 'default)
                         :background (face-background 'default))))
 
-  (defun modi/blend-linum ()
-    "Set the linum foreground and background color to that of the theme."
-    (eval-after-load 'linum
-      '(set-face-attribute 'linum nil
-                           :height 0.9
-                           :foreground "dim gray"
-                           :background (face-background 'default))))
+(defun modi/blend-linum ()
+  "Set the linum foreground and background color to that of the theme."
+  (eval-after-load 'linum
+    '(set-face-attribute 'linum nil
+                         :height 0.9
+                         :foreground "dim gray"
+                         :background (face-background 'default))))
 
 ;; zenburn
 (defun zenburn ()
@@ -100,9 +100,7 @@
 ;; Load the theme ONLY after the frame has finished loading (needed especially
 ;; when running emacs in daemon mode)
 ;; Source: https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
-(add-to-list 'after-make-frame-functions
-             (lambda (&rest frame)
-               (funcall default-theme)))
+(add-hook 'window-setup-hook (λ (funcall default-theme)))
 
 (add-hook 'after-init-hook
           '(lambda()
@@ -127,40 +125,32 @@
 ;; (set-face-attribute 'default nil :font "Source Code Pro for Powerline" )
 ;; (set-frame-font "Input Mono" nil t)
 
-;; Manually choose a fallback font for Unicdoe
+;; Manually choose a fallback font for Unicode
 ;; Source: http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
 (set-fontset-font "fontset-default" nil
                   (font-spec :size 20 :name "Symbola"))
 
-;; set the font size specified in default-font-size-pt symbol
-(setq font-size-pt default-font-size-pt)
-;; The internal font size value is 10x the font size in points unit.
-;; So a 10pt font size is equal to 100 in internal font size value.
-(set-face-attribute 'default nil :height (* font-size-pt 10))
+(defun modi/font-size-adj (&optional arg)
+  "The default C-x C-0/-/= bindings do an excellent job of font resizing.
+They, though, do not change the font sizes for the text outside the buffer,
+example in mode-line. Below function changees the font size in those areas too.
 
-;; Below custom function are not required usually as the default C-x C-0/-/=
-;; bindings do excellent job. The default binding though does not change the
-;; font sizes for the text outside the buffer, example in mode-line.
-;; Below functions change the font size in those areas too.
-
-(defun font-size-incr (arg)
-  "Increase font size by 1 pt"
+M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
+                               decreases font size by NUM points if NUM is -ve
+                               resets    font size if NUM is 0."
   (interactive "p")
-  (setq font-size-pt (+ font-size-pt arg))
+  (if (= arg 0)
+      (setq font-size-pt default-font-size-pt)
+    (setq font-size-pt (+ font-size-pt arg)))
+  ;; The internal font size value is 10x the font size in points unit.
+  ;; So a 10pt font size is equal to 100 in internal font size value.
   (set-face-attribute 'default nil :height (* font-size-pt 10)))
 
-(defun font-size-decr (arg)
-  "Decrease font size by 1 pt"
-  (interactive "p")
-  (setq font-size-pt (- font-size-pt arg))
-  (set-face-attribute 'default nil :height (* font-size-pt 10)))
+(defun modi/font-size-incr ()  (interactive) (modi/font-size-adj +1))
+(defun modi/font-size-decr ()  (interactive) (modi/font-size-adj -1))
+(defun modi/font-size-reset () (interactive) (modi/font-size-adj 0))
 
-(defun font-size-reset (&optional arg)
-  "Reset font size to default-font-size-pt"
-  (interactive)
-  (setq font-size-pt default-font-size-pt)
-  (set-face-attribute 'default nil :height (* font-size-pt 10)))
-
+(modi/font-size-reset)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LINE TRUNCATION / VISUAL LINE MODE
@@ -182,8 +172,8 @@
 
 ;; Enable/Disable visual-line mode in specific major modes. Enabling visual
 ;; line mode does word wrapping only at word boundaries
-(add-hook 'sh-mode-hook      'turn-off-visual-line-mode) ;; e.g. sim.setup file
-(add-hook 'org-mode-hook     'turn-on-visual-line-mode)
+(add-hook 'sh-mode-hook       'turn-off-visual-line-mode) ;; e.g. sim.setup file
+(add-hook 'org-mode-hook      'turn-on-visual-line-mode)
 (add-hook 'markdown-mode-hook 'turn-on-visual-line-mode)
 
 (defun turn-off-visual-line-mode ()
@@ -319,9 +309,9 @@
   (if (not bzg-big-fringe-mode)
       (progn
         (set-fringe-style nil)
-      (custom-set-faces
-       '(fringe ((t (:background "#4F4F4F")))))
-      (turn-on-fci-mode))
+        (custom-set-faces
+         '(fringe ((t (:background "#4F4F4F")))))
+        (turn-on-fci-mode))
     (progn
       (set-fringe-mode
        (/ (- (frame-pixel-width)
@@ -360,18 +350,18 @@
 ;; Source: http://stackoverflow.com/questions/4236808/syntax-highlight-a-vimrc-file-in-emacs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-generic-mode 'vimrc-generic-mode
-    '()
-    '()
-    '(("^[\t ]*:?\\(!\\|ab\\|map\\|unmap\\)[^\r\n\"]*\"[^\r\n\"]*\\(\"[^\r\n\"]*\"[^\r\n\"]*\\)*$"
-       (0 font-lock-warning-face))
-      ("\\(^\\|[\t ]\\)\\(\".*\\)$"
-      (2 font-lock-comment-face))
-      ("\"\\([^\n\r\"\\]\\|\\.\\)*\""
-       (0 font-lock-string-face)))
-    '("/vimrc\\'" "\\.vim\\(rc\\)?\\'")
-    '((lambda ()
-        (modify-syntax-entry ?\" ".")))
-    "Generic mode for Vim configuration files.")
+  '()
+  '()
+  '(("^[\t ]*:?\\(!\\|ab\\|map\\|unmap\\)[^\r\n\"]*\"[^\r\n\"]*\\(\"[^\r\n\"]*\"[^\r\n\"]*\\)*$"
+     (0 font-lock-warning-face))
+    ("\\(^\\|[\t ]\\)\\(\".*\\)$"
+     (2 font-lock-comment-face))
+    ("\"\\([^\n\r\"\\]\\|\\.\\)*\""
+     (0 font-lock-string-face)))
+  '("/vimrc\\'" "\\.vim\\(rc\\)?\\'")
+  '((lambda ()
+      (modify-syntax-entry ?\" ".")))
+  "Generic mode for Vim configuration files.")
 
 (setq auto-mode-alist
       (append
@@ -426,17 +416,13 @@ narrowed."
 ;; by default. It is inconvenient when that mouse menu pops up when I don't need
 ;; it to. And actually I have never used that menu :P
 
-;; Source: http://oremacs.com/2015/01/14/repeatable-commands/
-;; Usage: C-x + - + 0 - - - - + + 0
-;; Usage: C-x - - 0 + - + - - - - + + 0
-(define-key modi-mode-map (kbd "C-x +") (def-rep-command
-                                          '(("+" . font-size-incr)
-                                            ("-" . font-size-decr)
-                                            ("0" . font-size-reset))))
-(define-key modi-mode-map (kbd "C-x -") (def-rep-command
-                                          '(("-" . font-size-decr)
-                                            ("+" . font-size-incr)
-                                            ("0" . font-size-reset))))
+;; Usage: C-x _ - _ 0 - - - - _ _ 0
+;; Usage: C-x - - 0 _ - _ - - - - _ _ 0
+(hydra-create "C-x"
+  '(("_"   modi/font-size-incr  "Increase font size")
+    ("-"   modi/font-size-decr  "Decrease font size")
+    ("C-0" modi/font-size-reset "Reset font to default size"))
+  modi-mode-map)
 
 (bind-keys
  :map modi-mode-map
@@ -446,16 +432,15 @@ narrowed."
  ("<S-f8>"      . toggle-presentation-mode)
  ;; Make Control+mousewheel do increase/decrease font-size
  ;; Source: http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
- ("<C-mouse-1>" . font-size-reset) ;; C + left mouse click
- ("<C-mouse-4>" . font-size-incr) ;; C + wheel-up
- ("<C-mouse-5>" . font-size-decr) ;; C + wheel-down
- ("C-x C-0"     . font-size-reset)
+ ("<C-mouse-1>" . modi/font-size-reset) ; C + left mouse click
+ ("<C-mouse-4>" . modi/font-size-incr) ; C + wheel-up
+ ("<C-mouse-5>" . modi/font-size-decr) ; C + wheel-down
  ("C-x t"       . toggle-truncate-lines)
  ;; This line actually replaces Emacs' entire narrowing keymap.
  ("C-x n"       . endless/narrow-or-widen-dwim))
 
-(key-chord-define-global "2w" 'menu-bar-mode) ;; alternative to F2
-(key-chord-define-global "8i" 'toggle-presentation-mode) ;; alternative to S-F8
+(key-chord-define-global "2w" 'menu-bar-mode) ; alternative to F2
+(key-chord-define-global "8i" 'toggle-presentation-mode) ; alternative to S-F8
 
 (bind-to-modi-map "L" modi/show-long-lines)
 
