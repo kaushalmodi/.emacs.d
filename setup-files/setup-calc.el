@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-17 23:33:51 kmodi>
+;; Time-stamp: <2015-01-16 16:45:42 kmodi>
 
 ;; Calculator
 
@@ -40,7 +40,14 @@
 
     (defun calcFunc-atan (x)
       "Return arctan in radians."
-      (math-mul (calcFunc-arctan x) (math-div (math-pi) 180)))))
+      (math-mul (calcFunc-arctan x) (math-div (math-pi) 180)))
+
+    (defun calcFunc-next2pow (x)
+      "Return the next 2's power index. If the input is 7, output is 3
+because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
+      (calcFunc-ceil (math-div (calcFunc-log10 x) (calcFunc-log10 2))))
+
+    ))
 
 
 (provide 'setup-calc)
@@ -60,7 +67,7 @@
 ;; | O d 6              | Convert to hex (show -ve's in 2's complement) |
 ;; | d 0                | Convert to dec                                |
 ;; | d 2                | Convert to bin                                |
-;; | O d 2              | Convert to hex (show -ve's in 2's complement) |
+;; | O d 2              | Convert to bin (show -ve's in 2's complement) |
 ;; | n                  | Negate e.g. convert 5 to -5                   |
 ;; |--------------------+-----------------------------------------------|
 ;;
