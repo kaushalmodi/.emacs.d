@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-24 11:38:11 kmodi>
+;; Time-stamp: <2015-01-22 09:08:42 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -51,17 +51,18 @@
       ;;          ido-current-directory
       ;;          (fourth (file-attributes ido-current-directory))
       ;;          (file-attributes ido-current-directory))
-      (when (not (= (fourth (file-attributes ido-current-directory)) 0))
-        (setq ido-temp-list
-              (sort ido-temp-list
-                    (lambda (a b)
-                      (time-less-p
-                       (sixth (file-attributes (concat ido-current-directory b)))
-                       (sixth (file-attributes (concat ido-current-directory a))))))))
-      (ido-to-end  ;; move . files to end (again)
-       (delq nil (mapcar
-                  (lambda (x) (and (char-equal (string-to-char x) ?.) x))
-                  ido-temp-list))))
+      (when (file-exists-p ido-current-directory) ; only if the current directory exists
+        (when (not (= (fourth (file-attributes ido-current-directory)) 0))
+          (setq ido-temp-list
+                (sort ido-temp-list
+                      (lambda (a b)
+                        (time-less-p
+                         (sixth (file-attributes (concat ido-current-directory b)))
+                         (sixth (file-attributes (concat ido-current-directory a))))))))
+        (ido-to-end  ;; move . files to end (again)
+         (delq nil (mapcar
+                    (lambda (x) (and (char-equal (string-to-char x) ?.) x))
+                    ido-temp-list)))))
     (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
     (add-hook 'ido-make-dir-list-hook  'ido-sort-mtime)
     ;; Open recent files with IDO,
