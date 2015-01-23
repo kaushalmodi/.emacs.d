@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 13:22:40 kmodi>
+;; Time-stamp: <2015-01-23 08:54:18 kmodi>
 
 ;; magit
 ;; Source: https://github.com/magit/magit
@@ -18,6 +18,8 @@
   (progn
     (setq magit-completing-read-function 'magit-ido-completing-read)
     (setq magit-auto-revert-mode nil)
+    (setq magit-expand-staged-on-commit t) ; Very useful, for example:
+                                        ; Doing `j s` auto expands the staged
     (setq magit-repo-dirs '( "~/.emacs.d"))
     (setq magit-diff-options '("--ignore-space-change"))
     (magit-auto-revert-mode -1) ;; Disable magit auto revert
@@ -44,3 +46,7 @@
 ;; | M-p     | Jump to previous sibling section |
 ;; | M-n     | Jump to next sibling section     |
 ;; |---------+----------------------------------|
+
+;; Tip: Adding prefix to above jump commands also expands those sections and
+;; brings that section to the top of the buffer.
+;;   So `C-u j s' is analogous to doing `j s C-l C-l 4`
