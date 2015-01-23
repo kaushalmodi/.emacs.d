@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 09:43:38 kmodi>
+;; Time-stamp: <2015-01-23 10:22:02 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -50,6 +50,7 @@
         hl-line+
         hungry-delete
         hydra
+        ibuffer-projectile
         ido-vertical-mode flx-ido ido-ubiquitous
         iregister ; Interactive access to registers
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
@@ -146,6 +147,7 @@
 (req-package setup-highlight)
 (req-package setup-hl-line+)
 (req-package setup-hungry-delete)
+(req-package setup-ibuffer)
 (req-package setup-ido)
 (req-package setup-iregister)
 (req-package setup-linum)
