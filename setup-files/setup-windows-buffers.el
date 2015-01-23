@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-22 16:14:46 kmodi>
+;; Time-stamp: <2015-01-23 10:07:39 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -415,8 +415,7 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
  ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
  ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ; M + wheel down
  ("C-c t"       . toggle-window-split) ; convert between horz-split <-> vert-split
- ("C-c s"       . rotate-windows) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
- ("C-x C-b"     . ibuffer)) ; replace buffer-menu with ibuffer
+ ("C-c s"       . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; Source: http://stackoverflow.com/a/26629984/1219634
