@@ -1,6 +1,7 @@
-;; Time-stamp: <2014-08-13 15:05:48 kmodi>
+;; Time-stamp: <2015-01-16 11:06:43 kmodi>
 
 ;; Hungry Delete
+;; https://github.com/nflath/hungry-delete
 
 (req-package hungry-delete
   :config
