@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-15 22:59:03 kmodi>
+;; Time-stamp: <2015-01-22 00:03:53 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -108,6 +108,16 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (ignore-errors (backward-char 5)))
 
+(defun forward-word-fast ()
+  "Faster `M-f'"
+  (interactive)
+  (ignore-errors (forward-word 5)))
+
+(defun backward-word-fast ()
+  "Faster `M-b'"
+  (interactive)
+  (ignore-errors (backward-word 5)))
+
 ;; Patched version to fix this issue:
 ;; In Verilog/C/C++, comments can begin with //.
 ;; Here's an example comment,
@@ -178,30 +188,46 @@ If ARG is omitted or nil, move point forward one word."
   (forward-word 1)
   (backward-word 1))
 
+;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
+;; A three-headed hydra for jumping between "errors", useful for
+;; e.g. `occur', `rgrep' and the like.
+;; http://www.masteringemacs.org/article/searching-buffers-occur-mode
+;; "Another useful feature (of occur) is its support for the compilation mode
+;; commands next/previous-error (M-g M-n and M-g M-p respectively), as
+;; they enable you to cycle through the list of occur matches from
+;; within the source buffer itself."
+(hydra-create "M-g"
+  '(("g" first-error    "first")
+    ("n" next-error     "next")
+    ("p" previous-error "prev"))
+  modi-mode-map)
+
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
- ("<f1>" . goto-line)
+ ("<f1>"   . goto-line)
  ;; override the binding of `C-a` for `move-beginning-of-line'
- ("C-a" . back-to-indentation-or-beginning-of-line)
+ ("C-a"    . back-to-indentation-or-beginning-of-line)
  ;; Move faster
- ("C-S-n" . next-line-fast)
- ("C-S-p" . previous-line-fast)
- ("C-S-f" . forward-char-fast)
- ("C-S-b" . backward-char-fast)
+ ("C-S-n"  . next-line-fast)
+ ("C-S-p"  . previous-line-fast)
+ ("C-S-f"  . forward-char-fast)
+ ("C-S-b"  . backward-char-fast)
+ ("M-f"    . forward-word)
+ ("M-F"    . forward-word-fast)
+ ("M-b"    . backward-word)
+ ("M-B"    . backward-word-fast)
  ;; Scroll down; does the same as `M-v'. It makes scrolling up and down quick
  ;; as the `scroll-up' is bound to `C-v'.
- ("C-S-v" . scroll-down)
- ;; NOTE: `C-[` key combination is the same as pressing the meta key Esc|Alt
+ ("C-S-v"  . scroll-down)
+ ;; !WARN! `C-[` key combination is the same as pressing the meta key Esc|Alt
  ;; Do NOT reconfigure that key combination.
- ("C-}" . forward-paragraph)
- ("M-]" . forward-paragraph)
- ("C-{" . backward-paragraph)
- ("M-[" . backward-paragraph)
- ("M-f" . forward-word)
- ("M-F" . modi/forward-word-begin)
+ ("C-}"    . forward-paragraph)
+ ("M-]"    . forward-paragraph)
+ ("C-{"    . backward-paragraph)
+ ("M-["    . backward-paragraph)
  ;; Toggle Follow-mode
- ("C-c f" . follow-mode))
+ ("C-c f"  . follow-mode))
 ;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Follow-Mode.html
 ;; Follow-mode is a minor mode that makes 2 or more windows, all showing the same
 ;; buffer/file, scroll as a single tall virtual window. To use Follow mode, go
