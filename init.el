@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-16 10:17:42 kmodi>
+;; Time-stamp: <2015-01-23 09:21:11 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -14,7 +14,6 @@
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
       '(
-        ;; helm helm-swoop ; Replaced with swoop
         ;; etags-select etags-table ctags-update ; Replacing these with ggtags
         ;; zenburn-theme ; Using my own forked version
         ;; smyx-theme ; dark theme; Using my own forked version
@@ -40,14 +39,17 @@
         expand-region
         eww-lnum ; jump to links in eww buffer ace-jump style
         fill-column-indicator
+        gist
         ggtags
         guide-key
         hardcore-mode
         header2
+        helm helm-swoop
         help-fns+
         hl-anything
         hl-line+
         hungry-delete
+        hydra
         ido-vertical-mode flx-ido ido-ubiquitous
         iregister ; Interactive access to registers
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
@@ -78,7 +80,7 @@
         smart-mode-line popup rich-minority
         smex ; smart M-x
         stripe-buffer
-        swoop
+        sx
         tiny
         undo-tree ; supercool undo visualization
         visual-regexp
@@ -111,6 +113,9 @@
 (req-package modi-mode)
 (req-package temp-mode)
 
+(req-package gist)
+(req-package hydra)
+
 ;; Set up the looks of emacs
 (req-package setup-popwin) ;; require popwin first as packages might depend on it
 (req-package setup-smart-mode-line)
@@ -124,6 +129,7 @@
 (req-package setup-auto-complete)
 (req-package setup-bookmark+)
 (req-package setup-buffer-move)
+(req-package setup-de-ansi)
 (req-package setup-dired)
 (req-package setup-discover-my-major)
 (req-package setup-drag-stuff)
@@ -170,7 +176,6 @@
 (req-package setup-yasnippet)
 ;; (req-package setup-fiplr)
 ;; (req-package setup-workgroups2)
-;; (req-package setup-helm) ;; Not required; replaced with swoop
 
 ;; Languages
 (req-package setup-verilog)
@@ -181,6 +186,7 @@
 (req-package setup-markdown)
 (req-package setup-web-mode)
 (req-package setup-shell)
+(req-package setup-sx)
 (req-package setup-elisp)
 (req-package setup-yaml-mode)
 (req-package setup-latex)
@@ -206,7 +212,7 @@
 
 ;; require `secrets' but don't trigger error if not found
 (if (daemonp)
-    (add-hook 'window-setup-hook (lambda () (require 'secrets "secrets.el.gpg" t)))
+    (add-hook 'window-setup-hook (λ (require 'secrets "secrets.el.gpg" t)))
   (require 'secrets "secrets.el.gpg" t))
 
 (req-package-finish) ; Start loading packages in right order
