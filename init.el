@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 09:21:11 kmodi>
+;; Time-stamp: <2015-01-23 09:43:38 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -168,6 +168,7 @@
 (req-package setup-smart-compile)
 (req-package setup-smex)
 (req-package setup-stripe-buffer)
+(req-package setup-sx)
 (req-package setup-tiny)
 (req-package setup-undo-tree)
 (req-package setup-wrap-region)
@@ -186,7 +187,6 @@
 (req-package setup-markdown)
 (req-package setup-web-mode)
 (req-package setup-shell)
-(req-package setup-sx)
 (req-package setup-elisp)
 (req-package setup-yaml-mode)
 (req-package setup-latex)
