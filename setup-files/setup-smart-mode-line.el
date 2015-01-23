@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-08 16:19:03 kmodi>
+;; Time-stamp: <2015-01-20 10:42:02 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -68,24 +68,25 @@
           column-number-mode t ;; show column # in mode-line
           )
     (setq rm-excluded-modes
-          '(" Guide"        ;; guide-key mode
-            " hc"           ;; hardcore mode
-            " AC"           ;; auto-complete
-            " vl"           ;; global visual line mode enabled
-            " Wrap"         ;; shows up if visual-line-mode is enabled for that buffer
-            " Omit"         ;; omit mode in dired
-            " yas"          ;; yasnippet
-            " drag"         ;; drag-stuff-mode
-            " VHl"          ;; volatile highlights
-            " ctagsU"       ;; ctags update
-            " Undo-Tree"    ;; undo tree
-            " wr"           ;; Wrap Region
-            " SliNav"       ;; elisp-slime-nav
-            " Fly"          ;; Flycheck
-            " PgLn"         ;; page-line-break
-            " GG"           ;; ggtags
-            " ElDoc"        ;; eldoc
-            " hl-highlight" ;; hl-anything
+          '(" Guide"        ; guide-key mode
+            " hc"           ; hardcore mode
+            " AC"           ; auto-complete
+            " vl"           ; global visual line mode enabled
+            " Wrap"         ; shows up if visual-line-mode is enabled for that buffer
+            " Omit"         ; omit mode in dired
+            " yas"          ; yasnippet
+            " drag"         ; drag-stuff-mode
+            " VHl"          ; volatile highlights
+            " ctagsU"       ; ctags update
+            " Undo-Tree"    ; undo tree
+            " wr"           ; Wrap Region
+            " SliNav"       ; elisp-slime-nav
+            " Fly"          ; Flycheck
+            " PgLn"         ; page-line-break
+            " GG"           ; ggtags
+            " ElDoc"        ; eldoc
+            " hl-highlight" ; hl-anything
+            " Helm"         ; Helm
             )))
   :config
   (progn
