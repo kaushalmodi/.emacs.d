@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-15 11:32:02 kmodi>
+;; Time-stamp: <2015-01-22 16:14:46 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -24,17 +24,6 @@
   (progn
     (recentf-mode 1)
     (setq recentf-max-menu-items 2000)
-
-    ;; ;; TODO: Fix below function, it sort of works, not perfect
-    ;; ;; Reopen the last killed buffer
-    ;; ;; Source: http://stackoverflow.com/questions/10394213/emacs-reopen-previous-killed-buffer
-    ;; ;; UPDATE: The `reopen-killed-file' function works better than this.
-    ;; (defun undo-kill-buffer ()
-    ;;   (interactive)
-    ;;   (let ((active-files (loop for buf in (buffer-list)
-    ;;                             when (buffer-file-name buf) collect it)))
-    ;;     (loop for file in recentf-list
-    ;;           unless (member file active-files) return (find-file file))))
 
     ;; Customizing recentf mode map
     (bind-keys
@@ -72,17 +61,17 @@
       (find-file (pop killed-file-list))
     (message "No recently killed file found to reopen.")))
 
-;; Set initial frame size and position
-;; fills full screen of the left monitor
-(setq initial-frame-alist
-      '((top    . 1)
-        (left   . 1)
-        (width  . 235)
-        (height . 63)))
-;; (add-to-list 'default-frame-alist '(left   . 0))
-;; (add-to-list 'default-frame-alist '(top    . 0))
-;; (add-to-list 'default-frame-alist '(height . 63))
-;; (add-to-list 'default-frame-alist '(width  . 235))
+;; ;; Set initial frame size and position
+;; ;; fills full screen of the left monitor
+;; (setq initial-frame-alist
+;;       '((top    . 1)
+;;         (left   . 1)
+;;         (width  . 235)
+;;         (height . 63)))
+;; ;; (add-to-list 'default-frame-alist '(left   . 0))
+;; ;; (add-to-list 'default-frame-alist '(top    . 0))
+;; ;; (add-to-list 'default-frame-alist '(height . 63))
+;; ;; (add-to-list 'default-frame-alist '(width  . 235))
 
 ;; Source: http://www.whattheemacsd.com/
 (defun toggle-window-split ()
@@ -243,9 +232,8 @@ Prefixed with two `universal argument's, copy the full path without env var repl
 ;; Set the frame size to fill the left screen
 (defun full-screen-center ()
   (interactive)
-  (set-frame-position (selected-frame) 1920 0) ;; pixels x y from upper left
-  (set-frame-size (selected-frame) 235 63)  ;; rows and columns w h
-  )
+  (set-frame-position (selected-frame) 1920 0)   ; pixels x y from upper left
+  (set-frame-size     (selected-frame) 210  63)) ; rows and columns w h
 
 ;; Set the emacs frame/window size at startup
 ;; `boundp` returns t if SYMBOL's value is not void. This prevents the frame to
@@ -338,6 +326,49 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
   (interactive)
   (scroll-other-window -1))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Move window splitters / Resize windows
+;; Source: https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
+
+(defun hydra-move-splitter-left ()
+  "Move window splitter left."
+  (interactive)
+  (let ((windmove-wrap-around nil))
+    (if (windmove-find-other-window 'right)
+        (shrink-window-horizontally 1)
+      (enlarge-window-horizontally 1))))
+
+(defun hydra-move-splitter-right ()
+  "Move window splitter right."
+  (interactive)
+  (let ((windmove-wrap-around nil))
+    (if (windmove-find-other-window 'right)
+        (enlarge-window-horizontally 1)
+      (shrink-window-horizontally 1))))
+
+(defun hydra-move-splitter-up ()
+  "Move window splitter up."
+  (interactive)
+  (let ((windmove-wrap-around nil))
+    (if (windmove-find-other-window 'up)
+        (enlarge-window 1)
+      (shrink-window 1))))
+
+(defun hydra-move-splitter-down ()
+  "Move window splitter down."
+  (interactive)
+  (let ((windmove-wrap-around nil))
+    (if (windmove-find-other-window 'up)
+        (shrink-window 1)
+      (enlarge-window 1))))
+
+(hydra-create "C-M-]"
+  '(("]"  hydra-move-splitter-right "→")
+    ("["  hydra-move-splitter-left  "←")
+    ("p"  hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
+    ("\\" hydra-move-splitter-down  "↓")
+    ("="  balance-windows           "Balance"))
+  modi-mode-map)
 
 ;; Commented out this piece of code as it is giving the below error:
 ;; byte-code: Wrong number of arguments: (lambda (arg)
@@ -379,23 +410,21 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
  ("C-x C-p"     . show-copy-buffer-file-name)
  ("C-x C-k"     . delete-current-buffer-file)
  ("C-x C-r"     . rename-current-buffer-file)
- ("C-S-t"       . reopen-killed-file) ;; same shortcut as for reopening closed tabs in browsers
- ;; ("C-S-t"       . undo-kill-buffer) ;; same shortcut as for reopening closed tabs in browsers
+ ("C-S-t"       . reopen-killed-file) ; same shortcut as for reopening closed tabs in browsers
  ;; Make Alt+mousewheel scroll the other buffer
- ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ;; M + wheel up
- ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ;; M + wheel down
- ;; Resize windows
- ;; Use co-located , . ; ' keys to control window size
- ("C-,"         . shrink-window-horizontally)
- ("C-."         . enlarge-window-horizontally)
- ("C-;"         . shrink-window)
- ("C-c t"       . toggle-window-split) ;; convert between horz-split <-> vert-split
- ("C-c s"       . rotate-windows) ;; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
- ("C-x C-b"     . ibuffer)) ;; replace buffer-menu with ibuffer
+ ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
+ ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ; M + wheel down
+ ("C-c t"       . toggle-window-split) ; convert between horz-split <-> vert-split
+ ("C-c s"       . rotate-windows) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
+ ("C-x C-b"     . ibuffer)) ; replace buffer-menu with ibuffer
+
+;; Bind a function to execute when middle clicking a buffer name in mode line
+;; Source: http://stackoverflow.com/a/26629984/1219634
+(bind-key "<mode-line> <mouse-2>"   'show-copy-buffer-file-name        mode-line-buffer-identification-keymap)
+(bind-key "<mode-line> <S-mouse-2>" (λ (show-copy-buffer-file-name 4)) mode-line-buffer-identification-keymap)
 
 ;; Below bindings are made in global map and not in my minor mode as I want
-;; other modes to override those bindings
-(unbind-key "C-'"       modi-mode-map)
+;; other modes to override those bindings.
 (unbind-key "<M-up>"    modi-mode-map)
 (unbind-key "<M-down>"  modi-mode-map)
 (unbind-key "<M-left>"  modi-mode-map)
@@ -404,16 +433,16 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
  ("<f5>"      . revert-buffer)
  ("<S-f5>"    . revert-all-buffers)
  ("<S-f9>"    . eshell)
- ("C-'"       . enlarge-window) ;; "C-'" enables `mc-hide-unmatched-lines-mode'
- ;; when Multiple Cursors mode is on
  ("<M-up>"    . scroll-down-dont-move-point)
  ("<M-down>"  . scroll-up-dont-move-point)
  ;; Change the default `M-left` key binding from `left-word'
  ;; The same function anyways is also bound to `C-left`
  ("<M-left>"  . scroll-other-window-down-dont-move-point)
+ ("<S-prior>" . scroll-other-window-down-dont-move-point) ; S-PgUp
  ;; Change the default `M-right` key binding from `right-word'
  ;; The same function anyways is also bound to `C-right`
- ("<M-right>" . scroll-other-window-up-dont-move-point))
+ ("<M-right>" . scroll-other-window-up-dont-move-point)
+ ("<S-next>"  . scroll-other-window-up-dont-move-point)) ; S-PgDown
 
 (bind-to-modi-map "b" modi/switch-to-scratch-and-back)
 (bind-to-modi-map "f" full-screen-center)
