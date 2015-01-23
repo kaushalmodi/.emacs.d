@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 10:48:46 kmodi>
+;; Time-stamp: <2015-01-22 09:25:47 kmodi>
 
 ;; Org Mode
 
@@ -794,9 +794,9 @@ of listings as a string, or nil if it is empty."
 (setq org-html-postamble-format
       '(("en" "Exported using <div style=\"display: inline\" class=\"creator\">%c</div> on <div style=\"display: inline\"class=\"date\">%d</div> by %e.")))
 
-;; (setq org-html-htmlize-output-type 'inline-css) ;; default
+;; (setq org-html-htmlize-output-type 'inline-css) ; default
 (setq org-html-htmlize-output-type 'css)
-;; (setq org-html-htmlize-font-prefix "") ;; default
+;; (setq org-html-htmlize-font-prefix "") ; default
 (setq org-html-htmlize-font-prefix "org-")
 
 ;; Implementing Markdown style link IDs in org-mode
@@ -882,6 +882,13 @@ INFO is a plist holding contextual information."
 (eval-after-load 'org-src
   '(define-key org-src-mode-map
      "\C-x\C-s" #'org-edit-src-exit))
+
+;; ;; Enable org export to odt (OpenDocument Text)
+;; ;; It is disabled by default in org 8.x
+;; ;; The .odt files can be opened directly in MS Word.
+;; ;; http://stackoverflow.com/a/22990257/1219634
+;; (eval-after-load "org"
+;;   '(require 'ox-odt nil t))
 
 
 (provide 'setup-org)
