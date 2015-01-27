@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-22 09:08:42 kmodi>
+;; Time-stamp: <2015-01-27 14:42:19 kmodi>
 
 ;; Interactively Do Things
 ;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -6,11 +6,12 @@
 
 ;; If ido-ubiquitous 1.6 is used in emacs 24.3, there will always be a
 ;; compile-log buffer warnings; below defvars will prevent those.
-(defvar ido-cur-item         nil)
-(defvar ido-default-item     nil)
-(defvar predicate            nil)
-(defvar inherit-input-method nil)
-(defvar ido-cur-list         nil)
+(defvar ido-cur-item               nil)
+(defvar ido-default-item           nil)
+(defvar predicate                  nil)
+(defvar inherit-input-method       nil)
+(defvar ido-cur-list               nil)
+(defvar ido-context-switch-command nil)
 
 (req-package ido
   :require (flx-ido ido-vertical-mode ido-ubiquitous recentf)
@@ -78,10 +79,10 @@
        (ido-completing-read "Recentf open: "
                             (mapcar 'abbreviate-file-name recentf-list)
                             nil t)))
-    ;; Be able to bury buffers from ido
-    ;; Source: http://endlessparentheses.com/Ido-Bury-Buffer.html
     (defun endless/ido-bury-buffer-at-head ()
-      "Bury the buffer at the head of `ido-matches'."
+      "Bury the buffer at the head of `ido-matches'.
+Source: http://endlessparentheses.com/Ido-Bury-Buffer.html
+This is merged into emacs 25.0."
       (interactive)
       (let ((enable-recursive-minibuffers t)
             (buf (ido-name (car ido-matches)))
@@ -110,14 +111,15 @@
        ("<up>"   . ido-prev-match)
        ("C-f"    . ido-magic-forward-char)
        ("C-b"    . ido-magic-backward-char)
-       ("C-i"    . ido-toggle-ignore)
-       ("C-S-b"  . endless/ido-bury-buffer-at-head)))
+       ("C-i"    . ido-toggle-ignore))
+      (>=e250
+       (bind-key "C-S-b" 'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
+       (bind-key "C-S-b" 'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0
     (add-hook 'ido-setup-hook 'ido-define-keys)
     (bind-keys
      :map modi-mode-map
      ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-     ("C-x C-o"     . ido-find-recentf))
-    ))
+     ("C-x C-o"     . ido-find-recentf))))
 
 
 (provide 'setup-ido)
