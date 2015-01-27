@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 10:07:39 kmodi>
+;; Time-stamp: <2015-01-23 14:13:08 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -229,11 +229,11 @@ Prefixed with two `universal argument's, copy the full path without env var repl
       (setq buffer (car list)))
     (message "Refreshing open files")))
 
-;; Set the frame size to fill the left screen
+;; Set the frame fill the center screen
 (defun full-screen-center ()
   (interactive)
-  (set-frame-position (selected-frame) 1920 0)   ; pixels x y from upper left
-  (set-frame-size     (selected-frame) 210  63)) ; rows and columns w h
+  (set-frame-position (selected-frame) 1910 0)   ; pixels x y from upper left
+  (set-frame-size     (selected-frame) 210  60)) ; width, height
 
 ;; Set the emacs frame/window size at startup
 ;; `boundp` returns t if SYMBOL's value is not void. This prevents the frame to
@@ -278,7 +278,6 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
-
 ;; Source: http://www.emacswiki.org/emacs/FullScreen
 (defun toggle-fullscreen ()
   "Toggle full screen on X11"
@@ -287,7 +286,6 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
     (set-frame-parameter
      nil 'fullscreen
      (when (not (frame-parameter nil 'fullscreen)) 'fullboth))))
-
 
 ;; Source: http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
@@ -451,6 +449,7 @@ Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passe
 (key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
 (key-chord-define-global "ZZ" 'toggle-between-buffers)
 (key-chord-define-global "5t" 'revert-buffer) ;; alternative to F5
+
 
 (provide 'setup-windows-buffers)
 
