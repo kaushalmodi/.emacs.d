@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 08:54:18 kmodi>
+;; Time-stamp: <2015-01-27 13:53:20 kmodi>
 
 ;; magit
 ;; Source: https://github.com/magit/magit
@@ -18,8 +18,7 @@
   (progn
     (setq magit-completing-read-function 'magit-ido-completing-read)
     (setq magit-auto-revert-mode nil)
-    (setq magit-expand-staged-on-commit t) ; Very useful, for example:
-                                        ; Doing `j s` auto expands the staged
+    (setq magit-expand-staged-on-commit nil) ; default = nil
     (setq magit-repo-dirs '( "~/.emacs.d"))
     (setq magit-diff-options '("--ignore-space-change"))
     (magit-auto-revert-mode -1) ;; Disable magit auto revert
