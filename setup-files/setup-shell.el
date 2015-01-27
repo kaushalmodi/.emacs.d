@@ -1,6 +1,13 @@
-;; Time-stamp: <2015-01-22 01:59:32 kmodi>
+;; Time-stamp: <2015-01-27 15:14:42 kmodi>
 
 ;; Shell Script Mode
+
+(req-package shell-script-mode
+  :mode (("\\.alias\\'"   . shell-script-mode)
+         ("\\.setup.*\\'" . shell-script-mode)
+         ("\\.gpms\\'"    . shell-script-mode)
+         ("\\.cfg\\'"     . shell-script-mode)
+         ("\\.*csh\\'"    . shell-script-mode)))
 
 (defun my/tcsh-set-indent-functions ()
   (when (buffer-file-name) ; do this only if the buffer is a file
