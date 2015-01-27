@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-21 16:10:23 kmodi>
+;; Time-stamp: <2015-01-23 15:48:27 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -256,8 +256,7 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 ;; FIXME: Make this activate only if one window is open
 ;; See http://bzg.fr/emacs-hide-mode-line.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar-local hidden-mode-line-mode nil)
-
+;; (defvar-local hidden-mode-line-mode nil)
 (define-minor-mode hidden-mode-line-mode
   "Minor mode to hide the mode-line in the current buffer."
   :init-value nil
@@ -291,46 +290,6 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
       (setq header-line-format mode-line-format)
     (setq header-line-format nil))
   (force-mode-line-update))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Big Fringe (Minor Mode)
-;; (works only when one window is open)
-;; FIXME: Make this activate only if one window is open
-;; http://bzg.fr/emacs-strip-tease.html
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar bzg-big-fringe-mode nil)
-(define-minor-mode bzg-big-fringe-mode
-  "Minor mode to hide the mode-line in the current buffer."
-  :init-value nil
-  :global t
-  :variable bzg-big-fringe-mode
-  :group 'editing-basics
-  (if (not bzg-big-fringe-mode)
-      (progn
-        (set-fringe-style nil)
-        (custom-set-faces
-         '(fringe ((t (:background "#4F4F4F")))))
-        (turn-on-fci-mode))
-    (progn
-      (set-fringe-mode
-       (/ (- (frame-pixel-width)
-             (* 100 (frame-char-width)))
-          2))
-      (custom-set-faces
-       '(fringe ((t (:background "#3F3F3F")))))
-      (turn-off-fci-mode)
-      )))
-
-;; ;; Now activate this global minor mode
-;; (bzg-big-fringe-mode 1)
-
-;; Use a minimal cursor
-;; (setq cursor-type 'hbar)
-
-;; ;; Get rid of the indicators in the fringe
-;; (mapcar (lambda(fb) (set-fringe-bitmap-face fb 'org-hide))
-;;         fringe-bitmaps)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
