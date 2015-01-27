@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 12:26:16 kmodi>
+;; Time-stamp: <2015-01-27 14:18:55 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -48,6 +48,9 @@
         (add-to-list 'modi/fns-in-debug fn)
         (debug-on-entry (intern fn))
         (message "Debug-on-entry: %s" fn)))))
+
+;; Turn on ElDoc mode in emacs-lisp-mode
+(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 
 ;; edebug
 (bind-keys
