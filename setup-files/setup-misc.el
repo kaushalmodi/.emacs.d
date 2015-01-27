@@ -1,14 +1,8 @@
-;; Time-stamp: <2015-01-15 11:27:16 kmodi>
+;; Time-stamp: <2015-01-27 14:18:39 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
 (fset 'yes-or-no-p 'y-or-n-p) ;; Use y or n instead of yes or no
-
-;; Enable conversion of the selected region to upper case using `C-x C-u`
-(put 'upcase-region 'disabled nil)
-
-;; Enable conversion of the selected region to lower case using `C-x C-l`
-(put 'downcase-region 'disabled nil)
 
 ;; Do not make mouse wheel accelerate its action (example: scrolling)
 (setq mouse-wheel-progressive-speed nil)
@@ -16,13 +10,15 @@
 ;; Quitting emacs via `C-x C-c` or the GUI 'X' button
 (setq confirm-kill-emacs 'y-or-n-p)
 
-;; Enable shell-script mode for these files automatically
-(setq auto-mode-alist
-      (append
-       '(
-         ("\\.setup\\'" . shell-script-mode)
-         ("\\.cfg\\'"   . shell-script-mode)
-         ) auto-mode-alist))
+;; Clipboard
+;; after copy Ctrl+c in X11 apps, you can paste by 'yank' in emacs"
+(>=e250
+ (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
+ (setq x-select-enable-clipboard t)) ; if older
+;; after mouse selection in X11, you can paste by 'yank' in emacs"
+(>=e250
+ (setq select-enable-primary t)  ; if emacs 25.0 or newer
+ (setq x-select-enable-primary t)) ; if older
 
 ;; Load newer version of .el and .elc if both are available
 (>=e244
@@ -74,10 +70,10 @@ If the file is emacs lisp, run the byte compiled version if exist."
             (message "Running…")
             (shell-command cmdStr "*xah-run-current-file output*" ))
         (message "No recognized program file suffix for this file.")))))
+(bind-to-modi-map "l" xah-run-current-file)
 
 ;; Print to printer defined by env var `PRINTER'
 (bind-to-modi-map "p" ps-print-buffer-with-faces)
-(bind-to-modi-map "l" xah-run-current-file)
 
 ;; Help Functions +
 (req-package help-fns+
@@ -102,9 +98,6 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
 (>=e244
  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
-
-;; Turn on ElDoc mode in emacs-lisp-mode
-(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 
 ;; Turn off dir local variables
 (setq enable-dir-local-variables nil)
