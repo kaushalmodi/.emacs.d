@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 15:26:27 kmodi>
+;; Time-stamp: <2015-01-27 15:59:50 kmodi>
 
 ;; Eww
 ;; Emacs browser (needs emacs 24.4 or higher)
@@ -19,6 +19,15 @@
          ;; Improve the contract of pages like Google results
          ;; http://emacs.stackexchange.com/q/2955/115
          (setq shr-color-visible-luminance-min 80) ; default = 40
+
+         ;; Override the default definition of `eww-search-words'
+         (defun eww-search-words (&optional beg end)
+           "Search the web for the text between the point and marker.
+See the `eww-search-prefix' variable for the search engine used."
+           (interactive "r")
+           (if (region-active-p)
+               (eww (buffer-substring beg end))
+             (eww (modi/get-symbol-at-point))))
 
          (defun modi/eww-open-file-with-notify (file)
            "Open a file in eww and add `file-notify' watch for it."
@@ -49,32 +58,39 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
 
          (bind-keys
           :map eww-mode-map
-          ("g"           . eww) ; Go to URL
+          ("G"           . eww) ; Go to URL
+          ("g"           . eww-reload) ; Reload
           ("h"           . eww-list-histories) ; View history
           ("q"           . modi/eww-quit)
           ("r"           . eww-reload) ; Reload
-          ("R"           . eww-reload) ; Reload
+          ("p"           . shr-previous-link)
           ("<backtab>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
+          ("n"           . shr-next-link)
+          ("<tab>"       . shr-next-link)
+          ("N"           . eww-next-url)
+          ("P"           . eww-previous-url)
           ("<backspace>" . eww-back-url)
           ("C-d"         . eww-add-bookmark) ; Add bookmark
           ("C-w"         . eww-copy-page-url)
           ("\<"          . eww-back-url)
           ("\>"          . eww-forward-url)
           ("/"           . highlight-regexp))
+         (>=e "25.0"
+              (bind-key "R" 'eww-readable eww-mode-map))
          (bind-keys
           :map eww-text-map ; For single line text fields
           ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
-          ("<C-return>" . eww-submit) ; S-TAB Jump to previous link on the page
-          )
+          ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
          (bind-keys
           :map eww-textarea-map ; For multi-line text boxes
           ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
-          ("<C-return>" . eww-submit) ; S-TAB Jump to previous link on the page
-          )
+          ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
          (bind-keys
           :map eww-checkbox-map
-          ("<down-mouse-1>" . eww-toggle-checkbox)
-          )
+          ("<down-mouse-1>" . eww-toggle-checkbox))
+         (bind-keys
+          :map modi-mode-map
+          ("M-s M-w" . eww-search-words))
          (key-chord-define-global       "-=" 'eww)
          (key-chord-define eww-mode-map "XX" 'modi/eww-quit)
 
