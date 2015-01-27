@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-20 14:17:44 kmodi>
+;; Time-stamp: <2015-01-26 14:52:49 kmodi>
 
 ;; Search
 
@@ -104,9 +104,7 @@ searches all buffers."
     (bind-keys
      :map modi-mode-map
      ("M-%"   . anzu-query-replace) ;; replace the emacs default `query-replace'
-     ("C-c r" . anzu-query-replace)
-     )))
-;;     ("C-c q" . anzu-query-replace-regexp))))
+     ("C-c r" . anzu-query-replace))))
 
 ;; Visual Regular Expression search/replace
 (req-package visual-regexp
@@ -116,9 +114,13 @@ searches all buffers."
     (setq vr--feedback-limit nil)
     (bind-keys
      :map modi-mode-map
-     ("C-M-%" . vr/query-replace) ;; replace the emacs default query-replace-regexp
-     ("C-c q" . vr/query-replace)
-     ("C-c m" . vr/mc-mark))
+     ("C-M-%"   . vr/query-replace) ;; replace the emacs default query-replace-regexp
+     ("C-c q"   . vr/query-replace))
+
+    ;; Don't bind `C-c C-q' in modi-mode-map to prevent that from overriding
+    ;; the default org-mode binding to `org-set-tags'
+    (bind-keys
+     ("C-c C-q" . vr/mc-mark))
 
     (bind-keys
      :map region-bindings-mode-map
