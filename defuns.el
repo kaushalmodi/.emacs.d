@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-15 12:38:42 kmodi>
+;; Time-stamp: <2015-01-27 14:09:57 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -20,6 +20,12 @@
   "The BODY can contain both 'if' (emacs version at least 24.4) and
 'else' (emacs version older than 24.4) blocks."
   `(if (version<= "24.4" emacs-version)
+       ,@body))
+
+(defmacro >=e250 (&rest body)
+  "The BODY can contain both 'if' (emacs version at least 25.0) and
+'else' (emacs version older than 25.0) blocks."
+  `(if (version<= "25.0" emacs-version)
        ,@body))
 
 ;; Alias ^ as a function to calculate exponents
