@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-26 14:52:49 kmodi>
+;; Time-stamp: <2015-01-27 14:33:54 kmodi>
 
 ;; Search
 
@@ -156,6 +156,7 @@ happens within a region if one is selected."
    t t delimited nil nil start end))
 
 ;; Helm Swoop
+(defvar helm-swoop-last-prefix-number nil) ; Fix free variable warning
 (req-package helm-swoop
   :require (ido ido-ubiquitous)
   :config
