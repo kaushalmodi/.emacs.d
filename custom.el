@@ -130,9 +130,7 @@
         (make-local-variable
          (quote bookmark-make-record-function))
         (quote bmkp-make-w3m-record))))) t)
- '(which-function-mode nil)
- '(x-select-enable-clipboard t nil nil "after copy Ctrl+c in X11 apps, you can paste by 'yank' in emacs")
- '(x-select-enable-primary t nil nil "after mouse selection in X11, you can paste by 'yank' in emacs"))
+ '(which-function-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
