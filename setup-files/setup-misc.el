@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 14:18:39 kmodi>
+;; Time-stamp: <2015-01-27 15:26:20 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -12,17 +12,17 @@
 
 ;; Clipboard
 ;; after copy Ctrl+c in X11 apps, you can paste by 'yank' in emacs"
-(>=e250
- (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
- (setq x-select-enable-clipboard t)) ; if older
+(>=e "25.0"
+     (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
+     (setq x-select-enable-clipboard t)) ; if older
 ;; after mouse selection in X11, you can paste by 'yank' in emacs"
-(>=e250
- (setq select-enable-primary t)  ; if emacs 25.0 or newer
- (setq x-select-enable-primary t)) ; if older
+(>=e "25.0"
+     (setq select-enable-primary t)  ; if emacs 25.0 or newer
+     (setq x-select-enable-primary t)) ; if older
 
 ;; Load newer version of .el and .elc if both are available
-(>=e244
- (setq load-prefer-newer t))
+(>=e "24.4"
+     (setq load-prefer-newer t))
 
 ;; Execute the script in current buffer
 ;; Source: http://ergoemacs.org/emacs/elisp_run_current_file.html
@@ -96,8 +96,8 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; on entering the minibuffer.
 ;; Below enables ElDoc inside the `eval-expression' minibuffer.
 ;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
-(>=e244
- (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
+(>=e "24.4"
+     (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
 
 ;; Turn off dir local variables
 (setq enable-dir-local-variables nil)

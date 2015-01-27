@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-26 10:56:04 kmodi>
+;; Time-stamp: <2015-01-27 15:27:00 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -135,9 +135,9 @@
 (req-package setup-discover-my-major)
 (req-package setup-drag-stuff)
 (req-package setup-elfeed)
-(>=e244
- (req-package setup-eww)  ;; if emacs version >= 24.4
- (req-package setup-w3m)) ;; if emacs version <= 24.3
+(>=e "24.4"
+     (req-package setup-eww)  ;; if emacs version >= 24.4
+     (req-package setup-w3m)) ;; if emacs version <= 24.3
 (req-package setup-elisp-slime-nav)
 (req-package setup-expand-region)
 (req-package setup-fci)

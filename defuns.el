@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 14:09:57 kmodi>
+;; Time-stamp: <2015-01-27 15:28:20 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -11,21 +11,15 @@
      ,@body))
 (key-chord-define-global "^^" (λ (insert "λ")))
 
-(defmacro ==e243 (&rest body)
-  `(when (and (version<= "24.3.0" emacs-version )
-              (version<= emacs-version "24.3.99"))
-     ,@body))
+(defmacro >=e (V &rest body)
+  "The BODY can contain both
+'if'   (emacs version at least version V) and
+'else' (emacs version older than V) blocks.
 
-(defmacro >=e244 (&rest body)
-  "The BODY can contain both 'if' (emacs version at least 24.4) and
-'else' (emacs version older than 24.4) blocks."
-  `(if (version<= "24.4" emacs-version)
-       ,@body))
-
-(defmacro >=e250 (&rest body)
-  "The BODY can contain both 'if' (emacs version at least 25.0) and
-'else' (emacs version older than 25.0) blocks."
-  `(if (version<= "25.0" emacs-version)
+Usage: (>=e \"25.0\"
+            (defun-compatible-with-25.0)
+            (defun-not-compatible-in-older-version))"
+  `(if (version<= ,V emacs-version)
        ,@body))
 
 ;; Alias ^ as a function to calculate exponents
