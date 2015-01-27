@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 09:16:31 kmodi>
+;; Time-stamp: <2015-01-27 14:06:50 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -172,6 +172,11 @@ remove the comment characters from that line."
 (put 'set-goal-column  'disabled nil)
 ;;     C-x C-n <- Set goal column
 ;; C-u C-x C-n <- Unset goal column
+
+;; Enable conversion of the selected region to upper case using `C-x C-u`
+(put 'upcase-region   'disabled nil)
+;; Enable conversion of the selected region to lower case using `C-x C-l`
+(put 'downcase-region 'disabled nil)
 
 ;; ;; zap-to-char
 ;; ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
