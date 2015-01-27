@@ -16,3 +16,6 @@
 [submodule "from-git/smyx"]
 	path = from-git/smyx
 	url = https://www.github.com/kaushalmodi/smyx
+[submodule "from-git/sunshine.el"]
+	path = from-git/sunshine.el
+	url = https://github.com/aaronbieber/sunshine.el

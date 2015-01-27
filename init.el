@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 10:22:02 kmodi>
+;; Time-stamp: <2015-01-26 10:56:04 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -103,7 +103,7 @@
 ;; Now visit anything.gpg and it will encrypt it when you save the buffer.
 ;; Put this line at the top of an anything.gpg file to prevent it from
 ;; asking for the password on each save
-;; -*- epa-file-encrypt-to: ("kaushal.modi@gmail.com") -*-
+;; -*- epa-file-encrypt-to: ("<MY_EMAIL>") -*-
 
 (require 'defuns)
 (require 'benchmark-init)
@@ -170,6 +170,7 @@
 (req-package setup-smart-compile)
 (req-package setup-smex)
 (req-package setup-stripe-buffer)
+(req-package setup-sunshine)
 (req-package setup-sx)
 (req-package setup-tiny)
 (req-package setup-undo-tree)
@@ -214,12 +215,17 @@
 
 ;; require `secrets' but don't trigger error if not found
 (if (daemonp)
-    (add-hook 'window-setup-hook (λ (require 'secrets "secrets.el.gpg" t)))
+    (add-hook 'window-setup-hook
+              (λ (require 'secrets "secrets.el.gpg" t)))
   (require 'secrets "secrets.el.gpg" t))
 
 (req-package-finish) ; Start loading packages in right order
+
+(require 'setup-big-fringe)
 (global-modi-mode t)
-(funcall default-theme)
+
+(when (bound-and-true-p emacs-initialized)
+  (funcall default-theme))
 
 (setq emacs-initialized t)
 
