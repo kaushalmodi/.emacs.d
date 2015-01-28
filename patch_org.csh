@@ -1,17 +1,18 @@
 #!/bin/tcsh -f
 
-set org_dir = `find . -type d -name "org-2*"`
+set org_dirs = `find . -type d -name "org-2*"`
 
-cd ${org_dir}
-set org_dir = `pwd`
+foreach dir (${org_dirs})
+    cd ${dir}
 
-# Make backup of org files that need to be patched
-mv ox-latex.el ox-latex.elbkp
+    # Make backup of org files that need to be patched
+    mv ox-latex.el ox-latex.elbkp
 
-# Remove the compiled versions of those files
-rm ox-latex.elc
+    # Remove the compiled versions of those files
+    rm ox-latex.elc
 
-# Copy the patched version from backup
-cp ~/.emacs.d/backup/ox-latex.el .
+    # Copy the patched version from backup
+    \cp -f ${HOME}/.emacs.d/backup/ox-latex.el .
 
-cd -
+    cd -
+end
