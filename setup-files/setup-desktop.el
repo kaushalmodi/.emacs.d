@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-17 22:52:06 kmodi>
+;; Time-stamp: <2015-01-28 09:23:41 kmodi>
 
 ;; Desktop save and restore
 
@@ -10,6 +10,12 @@
   (progn
     (desktop-save-mode 1)
 
+    (setq desktop-base-file-name (concat ".emacs_"
+                                         emacs-version-short
+                                         ".desktop"))
+    (setq desktop-base-lock-name (concat ".emacs_"
+                                         emacs-version-short
+                                         ".desktop.lock"))
     ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-sessions.el
     ;; save a bunch of variables to the desktop file
     ;; for lists specify the len of the maximal saved data also
