@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 14:06:50 kmodi>
+;; Time-stamp: <2015-01-27 16:16:21 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -438,11 +438,13 @@ Temporarily consider - and _ characters as part of the word when sorting."
 ;; Usage: Quickly press 3 two times consecutively; that will toggle comment
 ;;        on the current line or region and proceed the cursor to the next line.
 ;;        Now each consecutive pressing of 3, will toggle the comment on that
-;;        line and proceed to the next line.
+;;        line and proceed to the next line. Pressing `p' or `n' will simply
+;;        navigate the cursor to the next or previous line without commenting
+;;        or uncommenting anything.
 ;;
-;;        33 3 3 3 3 3
+;;        33 3 3 3 3 3 n n n 3 3 p 3 n
 ;;
-;;        Press any other key to quit this behavior of pressing 3 commenting the lines.
+;;        Press any other key (other than 3, p or n) to quit this behavior.
 (key-chord-define-global "33" (def-rep-command
                                 `(("3" . toggle-comment-on-line-or-region)
                                   ("p" . previous-line)
