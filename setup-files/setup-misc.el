@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 15:26:20 kmodi>
+;; Time-stamp: <2015-01-28 12:02:38 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -23,6 +23,14 @@
 ;; Load newer version of .el and .elc if both are available
 (>=e "24.4"
      (setq load-prefer-newer t))
+
+;; url
+;; Solve the issue with `sx.el' when using that package simultaneously in
+;; different emacs versions
+(setq url-configuration-directory (locate-user-emacs-file
+                                   (concat "url_"
+                                           emacs-version-short
+                                           "/") "url/"))
 
 ;; Execute the script in current buffer
 ;; Source: http://ergoemacs.org/emacs/elisp_run_current_file.html
