@@ -1,7 +1,7 @@
-;; Time-stamp: <2015-01-23 09:43:08 kmodi>
+;; Time-stamp: <2015-01-28 11:30:43 kmodi>
 
 ;; StackExchange Mode
-;; http://www.emacswiki.org/emacs/sx.el
+;; https://github.com/vermiculus/sx.el
 
 (req-package sx)
 
