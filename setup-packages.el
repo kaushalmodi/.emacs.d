@@ -1,7 +1,10 @@
-;; Time-stamp: <2014-12-17 10:53:58 kmodi>
+;; Time-stamp: <2015-01-27 17:16:38 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
+
+(require 'cl)
+(require 'package)
 
 (defun prepend-path ( my-path )
   (setq load-path (cons (expand-file-name my-path) load-path)))
@@ -12,14 +15,16 @@
 (prepend-path user-emacs-directory)
 (prepend-path (concat user-emacs-directory "/setup-files"))
 
-;; create the elpa directory if it doesn't exist
-(setq elpa-dir (concat user-emacs-directory "/elpa"))
-(unless (file-exists-p elpa-dir)
-  (make-directory elpa-dir))
+;; Create the package install directory if it doesn't exist
+(setq package-user-dir (concat user-emacs-directory "/elpa_"
+                               emacs-version-short)) ; default = ~/.emacs.d/elpa
+(unless (file-exists-p package-user-dir)
+  (make-directory package-user-dir))
 
-;; add all subdirectories under elpa to the load-path
-(let ((default-directory (concat user-emacs-directory "/elpa")))
+;; add all sub directories under package install dir to the load-path
+(let ((default-directory package-user-dir))
   (normal-top-level-add-subdirs-to-load-path))
+;; add all sub directories under from-git/ to the load-path
 (let ((default-directory (concat user-emacs-directory "/from-git"))) ;; packages not on Melpa
   (normal-top-level-add-subdirs-to-load-path))
 
@@ -27,14 +32,9 @@
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "/from-git/zenburn-emacs/"))
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "/from-git/smyx/"))
 
-(require 'cl)
-(require 'package)
 ;; Add melpa package source when using package list
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
-;; Commented out Marmalade -- 2014/10/29
-;; (add-to-list 'package-archives
-;; '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 (package-initialize) ;; Load emacs packages and activate them
 
