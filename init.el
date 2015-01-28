@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 15:27:00 kmodi>
+;; Time-stamp: <2015-01-28 12:03:58 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -9,7 +9,11 @@
       user-emacs-directory (concat user-home-directory "/.emacs.d")
       org-directory        (concat user-home-directory "/org")
       setup-packages-file  (expand-file-name "setup-packages.el" user-emacs-directory)
-      custom-file          (expand-file-name "custom.el" user-emacs-directory))
+      custom-file          (expand-file-name "custom.el" user-emacs-directory)
+      emacs-version-short  (replace-regexp-in-string
+                            "\\([0-9]+\\)\\.\\([0-9]+\\).*"
+                            "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
+
 
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
@@ -30,7 +34,7 @@
         buffer-move
         cperl-mode
         csv-nav ; editing csv files
-        dired+ dired-single
+        dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
         drag-stuff
         eimp ; required by org-show
@@ -162,6 +166,7 @@
 (req-package setup-outshine)
 (req-package setup-page-break-lines)
 (req-package setup-paradox)
+(req-package setup-pcache)
 (req-package setup-poporg)
 (req-package setup-projectile)
 (req-package setup-rainbow-delimiters)
