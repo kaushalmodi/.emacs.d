@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 15:25:55 kmodi>
+;; Time-stamp: <2015-01-29 10:58:23 kmodi>
 
 ;; Highlight Symbol at point/cursor
 ;; (require 'highlight-symbol)
@@ -24,6 +24,7 @@
 (req-package hl-anything
   :config
   (progn
+    (hl-highlight-mode +1)
     (bind-to-modi-map "h" hl-highlight-thingatpt-global)
     (bind-to-modi-map "H" hl-unhighlight-all-global)))
 
