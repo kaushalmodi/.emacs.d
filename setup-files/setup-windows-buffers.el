@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 14:13:08 kmodi>
+;; Time-stamp: <2015-01-28 13:52:57 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -232,8 +232,9 @@ Prefixed with two `universal argument's, copy the full path without env var repl
 ;; Set the frame fill the center screen
 (defun full-screen-center ()
   (interactive)
-  (set-frame-position (selected-frame) 1910 0)   ; pixels x y from upper left
-  (set-frame-size     (selected-frame) 210  60)) ; width, height
+  (let ((frame-resize-pixelwise t))
+    (set-frame-position (selected-frame) 1910 0)   ; pixels x y from upper left
+    (set-frame-size     (selected-frame) 1894 1096 :pixelwise))) ; width, height
 
 ;; Set the emacs frame/window size at startup
 ;; `boundp` returns t if SYMBOL's value is not void. This prevents the frame to
