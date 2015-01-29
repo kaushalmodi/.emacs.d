@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-23 15:48:27 kmodi>
+;; Time-stamp: <2015-01-28 13:54:45 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -9,6 +9,8 @@
 (setq default-font-size-pt 12 ; default font size
       dark-theme           t  ; initialize dark-theme var
       )
+
+(setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MENU/TOOL/SCROLL BARS
@@ -383,9 +385,35 @@ narrowed."
     ("C-0" modi/font-size-reset "Reset font to default size"))
   modi-mode-map)
 
+;; Toggle menu bar
+;; Below bkp/ vars are used to restore the original frame size after disabling
+;; menu bar
+(defvar bkp/frame-height-pixel nil)
+(defvar bkp/frame-width-pixel nil)
+(defun modi/toggle-menu-bar ()
+  "Toggle the menu bar. Also restore the original frame size when disabling the
+menu bar."
+  (interactive)
+  (let ((frame-resize-pixelwise t))
+    (if menu-bar-mode
+        (progn ; if menu bar is visible before toggle
+          (menu-bar-mode -1))
+      (progn ; if menu bar is hidden before toggle
+        (setq bkp/frame-height-pixel (frame-pixel-height))
+        ;; `frame-pixel-width' is returning a value higher by 2 char widths in
+        ;; pixels compared to that set using `set-frame-size'. So the below
+        ;; adjustment has to be made.
+        (setq bkp/frame-width-pixel  (- (frame-pixel-width) (* 2 (frame-char-width))))
+        (menu-bar-mode +1)))
+    (when (not menu-bar-mode) ; restore frame size if menu bar is hidden after toggle
+      (set-frame-size (selected-frame)
+                      bkp/frame-width-pixel
+                      bkp/frame-height-pixel
+                      :pixelwise))))
+
 (bind-keys
  :map modi-mode-map
- ("<f2>"        . menu-bar-mode)
+ ("<f2>"        . modi/toggle-menu-bar)
  ;; F8 key can't be used as it launches the VNC menu
  ;; It can though be used with shift/ctrl/alt keys
  ("<S-f8>"      . toggle-presentation-mode)
