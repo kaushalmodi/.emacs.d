@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-29 10:58:23 kmodi>
+;; Time-stamp: <2015-02-03 12:34:51 kmodi>
 
 ;; Highlight Symbol at point/cursor
 ;; (require 'highlight-symbol)
@@ -25,8 +25,25 @@
   :config
   (progn
     (hl-highlight-mode +1)
-    (bind-to-modi-map "h" hl-highlight-thingatpt-global)
-    (bind-to-modi-map "H" hl-unhighlight-all-global)))
+
+    (defun my/hl-anything (&optional arg)
+      "Wrapper function to call functions to highlight the thing at point either
+globally or locally (when called with prefix `C-u')."
+      (interactive "p")
+      (if (eq arg 4)
+          (hl-highlight-thingatpt-local)
+        (hl-highlight-thingatpt-global)))
+
+    (defun my/unhl-anything (&optional arg)
+      "Wrapper function to call functions to unhighlight all either
+globally or locally (when called with prefix `C-u')."
+      (interactive "p")
+      (if (eq arg 4)
+          (hl-unhighlight-all-local)
+        (hl-unhighlight-all-global)))
+
+    (bind-to-modi-map "h" my/hl-anything)
+    (bind-to-modi-map "H" my/unhl-anything)))
 
 ;; Volatile Highlights
 ;; https://github.com/k-talo/volatile-highlights.el
