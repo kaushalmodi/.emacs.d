@@ -1,21 +1,18 @@
-;; Time-stamp: <2015-01-27 15:14:42 kmodi>
+;; Time-stamp: <2015-01-30 08:47:09 kmodi>
 
 ;; Shell Script Mode
 
-(req-package shell-script-mode
+(use-package shell-script-mode
   :mode (("\\.alias\\'"   . shell-script-mode)
          ("\\.setup.*\\'" . shell-script-mode)
          ("\\.gpms\\'"    . shell-script-mode)
          ("\\.cfg\\'"     . shell-script-mode)
-         ("\\.*csh\\'"    . shell-script-mode)))
+         ("\\.*csh.*\\'"  . shell-script-mode)
+         ("crontab.*\\'"  . shell-script-mode)))
 
 (defun my/tcsh-set-indent-functions ()
   (when (buffer-file-name) ; do this only if the buffer is a file
-    (when (or (string-match ".*\\.alias" (buffer-file-name))
-              (string-match ".*\\.setup.*" (buffer-file-name))
-              (string-match ".*\\.gpms" (buffer-file-name))
-              (string-match ".*\\.cfg" (buffer-file-name))
-              (string-match ".*csh$" (file-name-extension (buffer-file-name))))
+    (when (string-match ".*csh" (format "%s" sh-shell))
       (require 'csh-mode) ; https://github.com/Tux/tcsh/blob/master/csh-mode.el
       (setq-local indent-line-function   'csh-indent-line)
       (setq-local indent-region-function 'csh-indent-region))))
