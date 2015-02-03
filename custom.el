@@ -30,6 +30,7 @@
  '(fringe-mode nil nil (fringe))
  '(global-hi-lock-mode t)
  '(guide-key-mode t)
+ '(hl-highlight-mode t)
  '(indent-guide-global-mode nil)
  '(indent-tabs-mode nil nil nil "use spaces instead of tabs for indentation")
  '(indicate-buffer-boundaries (quote ((top . right) (bottom . right))) nil nil "show frame boundaries in the fringe; as the fringe is activated only for the right-hand side, the buffer boundaries (top, bottom) are marked on the right side")
