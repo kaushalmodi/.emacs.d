@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-21 14:26:19 kmodi>
+;; Time-stamp: <2015-02-02 09:31:10 kmodi>
 
 ;; Neotree
 ;; https://github.com/jaypei/emacs-neotree
@@ -30,6 +30,8 @@
                 (lambda () (setq neo-persist-show nil)))
       (add-hook 'popwin:after-popup-hook
                 (lambda () (setq neo-persist-show t))))
+
+    (setq neo-theme 'nerd) ; 'classic, 'nerd, 'ascii, 'arrow
 
     (defun modi/neotree-go-up-dir ()
       (interactive)
