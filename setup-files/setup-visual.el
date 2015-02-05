@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-28 13:54:45 kmodi>
+;; Time-stamp: <2015-02-04 10:53:52 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -135,7 +135,7 @@
 (defun modi/font-size-adj (&optional arg)
   "The default C-x C-0/-/= bindings do an excellent job of font resizing.
 They, though, do not change the font sizes for the text outside the buffer,
-example in mode-line. Below function changees the font size in those areas too.
+example in mode-line. Below function changes the font size in those areas too.
 
 M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
                                decreases font size by NUM points if NUM is -ve
