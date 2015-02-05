@@ -1,0 +1,10 @@
+*.json
+emacsd_*.tar.gz
+auto-save-list/
+archive/
+temp/
+ac-dict-bkp/
+var_*/
+image-dired/
+xkcd/
+thumbs/
