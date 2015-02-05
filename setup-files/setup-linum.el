@@ -1,8 +1,6 @@
-;; Time-stamp: <2014-10-30 19:03:21 kmodi>
+;; Time-stamp: <2015-02-04 16:21:50 kmodi>
 
-;; Linum Relative
-(req-package linum-relative
-  :require (linum)
+(req-package linum
   :config
   (progn
     (defun modi/turn-on-linum ()
@@ -19,7 +17,7 @@
                       html-mode-hook
                       css-mode-hook
                       makefile-gmake-mode-hook))
-        (add-hook hook 'linum-mode)))
+        (add-hook hook #'linum-mode)))
 
     (defun modi/turn-off-linum ()
       "Unhook linum mode from various major modes."
@@ -35,9 +33,16 @@
                       html-mode-hook
                       css-mode-hook
                       makefile-gmake-mode-hook))
-        (remove-hook hook 'linum-mode)))
+        (remove-hook hook #'linum-mode)))
 
     (modi/turn-on-linum)
+    ;; (modi/turn-off-linum)
+    ))
+
+;; Linum Relative
+(req-package linum-relative
+  :config
+  (progn
     (setq linum-relative-current-symbol "")
     ;; The symbol you want to show on the current line, by default it is 0.
     ;; You can use any string like \"->\". If this variable is empty string,
