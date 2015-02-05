@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-12 23:52:13 kmodi>
+;; Time-stamp: <2015-02-05 14:13:57 kmodi>
 
 ;; Region Bindings Mode
 ;; https://github.com/fgallina/region-bindings-mode
@@ -8,7 +8,16 @@
 (req-package region-bindings-mode
   :config
   (progn
-    (region-bindings-mode-enable)))
+    (region-bindings-mode-enable)
+
+    (defun modi/disable-rbm-deactivate-mark ()
+      (interactive)
+      (region-bindings-mode -1)
+      (deactivate-mark))
+
+    (bind-keys
+     :map region-bindings-mode-map
+     ("<C-SPC>" . modi/disable-rbm-deactivate-mark))))
 
 
 (provide 'setup-region-bindings-mode)
