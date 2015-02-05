@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-28 12:03:58 kmodi>
+;; Time-stamp: <2015-02-05 14:42:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -7,13 +7,14 @@
 ;; Global variables (symbols)
 (setq user-home-directory  (getenv "HOME")
       user-emacs-directory (concat user-home-directory "/.emacs.d")
-      org-directory        (concat user-home-directory "/org")
-      setup-packages-file  (expand-file-name "setup-packages.el" user-emacs-directory)
-      custom-file          (expand-file-name "custom.el" user-emacs-directory)
       emacs-version-short  (replace-regexp-in-string
                             "\\([0-9]+\\)\\.\\([0-9]+\\).*"
-                            "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
-
+                            "\\1_\\2" emacs-version) ; 25.0.50.1 -> 25_0
+      org-directory        (concat user-home-directory "/org")
+      setup-packages-file  (expand-file-name "setup-packages.el" user-emacs-directory)
+      custom-file          (expand-file-name (concat "custom_"
+                                                     emacs-version-short
+                                                     ".el") user-emacs-directory))
 
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
@@ -100,14 +101,6 @@
 
 (load custom-file) ;; Load the emacs `M-x customize` generated file
 (load setup-packages-file) ;; Load the packages
-
-;; Enable transparent, automatic encryption/decryption
-(require 'epa-file)
-(epa-file-enable)
-;; Now visit anything.gpg and it will encrypt it when you save the buffer.
-;; Put this line at the top of an anything.gpg file to prevent it from
-;; asking for the password on each save
-;; -*- epa-file-encrypt-to: ("<MY_EMAIL>") -*-
 
 (require 'defuns)
 (require 'benchmark-init)
