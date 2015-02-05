@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 14:18:55 kmodi>
+;; Time-stamp: <2015-02-04 15:08:46 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -22,11 +22,15 @@
           (progn
             (setq modi/fns-in-edebug (delete fn modi/fns-in-edebug))
             (eval-region (point) (mark))
+            (setq eval-expression-print-length 12)
+            (setq eval-expression-print-level  4)
             (message "Edebug disabled: %s" fn))
         ;; If the function is not being edebugged, instrument it
         (progn
           (add-to-list 'modi/fns-in-edebug fn)
           (edebug-defun)
+          (setq eval-expression-print-length nil)
+          (setq eval-expression-print-level  nil)
           (message "Edebug: %s" fn)))
       (widen))))
 
