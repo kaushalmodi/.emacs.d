@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-28 12:02:38 kmodi>
+;; Time-stamp: <2015-02-05 13:11:07 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -148,3 +148,9 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;;
 ;; (8) How to know what the current major mode is?
 ;; Do `M-:`, type the following `(message "%s" major-mode)` and press Return.
+;;
+;; (9) Put this line at the top of an anything.gpg file to prevent it from
+;; asking for the password on each save
+;; -*- epa-file-encrypt-to: ("<MY_EMAIL>") -*-
+;;
+;;
