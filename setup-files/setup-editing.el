@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 16:16:21 kmodi>
+;; Time-stamp: <2015-02-04 11:05:51 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -108,13 +108,24 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; Toggle comment on current line or selected region
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
-(defun toggle-comment-on-line-or-region (&optional arg)
-  "comment or uncomment current line or selected region , and go to the next line"
-  (interactive)
-  (if (region-active-p)
-      (comment-or-uncomment-region (region-beginning) (region-end))
-    (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-  (next-line))
+;; http://endlessparentheses.com/implementing-comment-line.html
+(defun endless/comment-line-or-region (n)
+  "Comment or uncomment current line and proceed to the next line.
+With positive prefix, apply to N lines including current one.
+With negative prefix, apply to -N lines above.
+If region is active, apply to active region instead."
+  (interactive "p")
+  (if (use-region-p)
+      (comment-or-uncomment-region
+       (region-beginning) (region-end))
+    (let ((range
+           (list (line-beginning-position)
+                 (goto-char (line-end-position n)))))
+      (comment-or-uncomment-region
+       (apply #'min range)
+       (apply #'max range)))
+    (forward-line 1)
+    (back-to-indentation)))
 
 ;; Make `kill-whole-line' indentation aware
 ;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
@@ -402,7 +413,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
 (bind-keys
  :map modi-mode-map
  ;; override the binding of `M-;' for `comment-dwim'
- ("M-;"     . toggle-comment-on-line-or-region)
+ ("M-;"     . endless/comment-line-or-region)
  ("<f9>"    . eval-region)
  ("C-x d"   . delete-region)
  ("s-SPC"   . just-one-space) ; Win-Space
@@ -422,12 +433,14 @@ Temporarily consider - and _ characters as part of the word when sorting."
  ("C-x C-u" . modi/upcase)
  ("C-x C-l" . modi/downcase))
 
-(hydra-create "M-c"
-  '(("c"   modi/capitalize       "Capitalize")     ; M-c c
-    ("u"   modi/upcase           "UPCASE")         ; M-c u
-    ("l"   modi/downcase         "downcase")       ; M-c l
-    ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
-  modi-mode-map)
+(bind-key "M-c"
+          (defhydra hydra-change-case()
+            "change-case"
+            ("c"   modi/capitalize       "Capitalize")     ; M-c c
+            ("u"   modi/upcase           "UPCASE")         ; M-c u
+            ("l"   modi/downcase         "downcase")       ; M-c l
+            ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
+          modi-mode-map)
 
 (bind-to-modi-map "x" eval-and-replace-last-sexp)
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
@@ -435,20 +448,25 @@ Temporarily consider - and _ characters as part of the word when sorting."
 (bind-to-modi-map "=" what-cursor-position)
 
 ;; Source: http://oremacs.com/2015/01/14/repeatable-commands/
-;; Usage: Quickly press 3 two times consecutively; that will toggle comment
-;;        on the current line or region and proceed the cursor to the next line.
-;;        Now each consecutive pressing of 3, will toggle the comment on that
+;; Usage: Quickly pressing `j' twice will toggle comment on the current line or
+;;        region and proceed the cursor to the next line.
+;;        Now each consecutive pressing of `j', will toggle the comment on that
 ;;        line and proceed to the next line. Pressing `p' or `n' will simply
 ;;        navigate the cursor to the next or previous line without commenting
 ;;        or uncommenting anything.
 ;;
-;;        33 3 3 3 3 3 n n n 3 3 p 3 n
+;;        jj j j j j j n n n j j p j n
 ;;
-;;        Press any other key (other than 3, p or n) to quit this behavior.
-(key-chord-define-global "33" (def-rep-command
-                                `(("3" . toggle-comment-on-line-or-region)
-                                  ("p" . previous-line)
-                                  ("n" . next-line))))
+;;        Numeric prefixes are supported too:
+;;
+;;        jj 5j 7j 2j j 7n n n j j p j n
+;;
+;;        Press any other key (other than j, p or n) to quit this behavior.
+(key-chord-define-global "jj" (defhydra hydra-comment()
+                                "comment and navigate"
+                                ("j" endless/comment-line-or-region "toggle comment")
+                                ("p" previous-line "go to previous line")
+                                ("n" next-line "go to next line")))
 
 (key-chord-define-global "^^" (λ (insert "λ")))
 
