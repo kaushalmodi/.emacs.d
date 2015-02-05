@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-11-07 14:08:23 kmodi>
+;; Time-stamp: <2015-02-04 14:09:45 kmodi>
 
 ;; Verilog
 
@@ -7,12 +7,10 @@
   ;; Load verilog mode only when needed
   :commands (verilog-mode)
   ;; Any files that end in .v should be in verilog mode
-  :mode (("\\.[st]*v[h]*\\'" . verilog-mode) ;; .v, .sv, .svh, .tv
-         ("\\.vp\\'"         . verilog-mode)
-         ("\\.psl\\'"        . verilog-mode)
-         ("\\.h\\'"          . verilog-mode)
-         ("\\.f\\'"          . verilog-mode)
-         ("\\.vinc\\'"       . verilog-mode))
+  :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ;; .v, .sv, .svh, .tv, .vp
+         ("\\.psl\\'"         . verilog-mode)
+         ("\\.h\\'"           . verilog-mode)
+         ("\\.vinc\\'"        . verilog-mode))
   :config
   (progn
     ;; Verilog mode customization
