@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-28 13:52:57 kmodi>
+;; Time-stamp: <2015-02-04 16:00:18 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -251,19 +251,19 @@ Prefixed with two `universal argument's, copy the full path without env var repl
 If a scratch buffer does not exist, create it with the major mode set to that
 of the buffer from where this function is called.
 
-Open a regular scratch buffer in `org-mode' if universal argument `C-u' is passed."
+    C-u COMMAND -> Open a regular scratch buffer in `org-mode'
+C-u C-u COMMAND -> Open a regular scratch buffer in `emacs-elisp-mode'"
+  (require 'cl-lib)
   (interactive "p")
   (let* (mode-str scratch-buffer-name)
     (if (string-match "*scratch" (format "%s" (current-buffer)))
         (switch-to-buffer (other-buffer))
       (progn
-        (if (eq arg 4)
-            (progn
-              (setq mode-str "org-mode")
-              (setq scratch-buffer-name (get-buffer-create "*scratch*")))
-          (progn
-            (setq mode-str (format "%s" major-mode))
-            (setq scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*")))))
+        (cl-case arg
+          (4  (setq mode-str "org-mode"))
+          (16 (setq mode-str "emacs-lisp-mode"))
+          (t  (setq mode-str (format "%s" major-mode))))
+        (setq scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*")))
         (switch-to-buffer scratch-buffer-name)
         (modi-mode) ; Set my minor mode to activate my key bindings
                                         ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable ; ;
