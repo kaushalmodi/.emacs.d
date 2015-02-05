@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 11:55:08 kmodi>
+;; Time-stamp: <2015-02-03 16:22:38 kmodi>
 ;;
 ;; LaTeX
 ;;
@@ -32,6 +32,9 @@
 ;; - make -s
 ;; - make install-package
 (req-package pdf-tools
+  :require (pdf-view pdf-history pdf-sync pdf-cache pdf-links
+                     pdf-misc pdf-occur pdf-util pdf-annot pdf-info
+                     pdf-isearch pdf-outline)
   :config
   (progn
     (pdf-tools-install)))
