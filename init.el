@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-05 14:42:01 kmodi>
+;; Time-stamp: <2015-02-06 15:36:25 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -200,6 +200,7 @@
 (req-package setup-navigation)
 (req-package setup-search)
 (req-package setup-print)
+(req-package setup-pdf)
 (when (executable-find "global")
   (req-package setup-gtags))
 (when (executable-find "hunspell")
