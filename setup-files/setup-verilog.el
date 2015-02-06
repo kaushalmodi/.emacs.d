@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-06 17:13:16 kmodi>
+;; Time-stamp: <2015-02-06 17:28:17 kmodi>
 
 ;; Verilog
 
@@ -59,7 +59,7 @@
                                  font-lock-warning-face t)))
       ;; Above solution highlights those keywords anywhere in the buffer (not just
       ;; in comments). To do the highlighting intelligently, install the fic-mode
-      ;; package -- http://www.emacswiki.org/emacs/fci-mode.el
+      ;; package - https://github.com/lewang/fic-mode
 
       ;; ;; Enable orgstruct mode
       ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
