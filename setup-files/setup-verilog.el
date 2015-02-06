@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-04 14:09:45 kmodi>
+;; Time-stamp: <2015-02-06 17:13:16 kmodi>
 
 ;; Verilog
 
@@ -67,24 +67,29 @@
       )
     (add-hook 'verilog-mode-hook 'my-verilog-mode-customizations)
 
-    ;; Redefine the electric-verilog-semi to call endless/indent-defun at the end
-    (defun electric-verilog-semi ()
-      "Insert `;' character and reindent the line."
+    ;; Tweak the verilog-mode indentation to skip the lines that begin with
+    ;; "<optional-white-space>// *" in order to not break any `outline-mode'
+    ;; or `outshine' functionality.
+    ;; Source: http://emacs.stackexchange.com/a/8033/115
+    (defun my/verilog-selective-indent (&rest args)
+      "Return t if the current line starts with '// *'.
+If the line matches '// *' delete any preceding white space too."
       (interactive)
-      (verilog-insert-last-command-event)
+      (save-excursion
+        (beginning-of-line)
+        (let ((match (looking-at "^[[:blank:]]*// \\*")))
+          (when match
+            (delete-horizontal-space))
+          match)))
+    ;; Advise the indentation behavior of `indent-region' done using `C-M-\'
+    (advice-add 'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
+    ;; Advise the indentation done by hitting `TAB'
+    (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
 
-      (if (or (verilog-in-comment-or-string-p)
-              (verilog-in-escaped-name-p))
-          ()
-        (save-excursion
-          (beginning-of-line)
-          (verilog-forward-ws&directives)
-          (verilog-indent-line))
-        (if (and verilog-auto-newline
-                 (not (verilog-parenthesis-depth)))
-            (electric-verilog-terminate-line)))
-      ;; (endless/indent-defun) ;; <--- Added this last line // 2014/10/10 - kmodi
-      )
+    ;; Uncomment the lines for which the advice needs to be removed
+    ;; (advice-remove 'verilog-indent-line-relative #'my/verilog-selective-indent)
+    ;; (advice-remove 'verilog-indent-line          #'my/verilog-selective-indent)
+
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Macros saved as functions
     ;;
