@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-04 11:05:51 kmodi>
+;; Time-stamp: <2015-02-09 16:49:44 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -416,7 +416,6 @@ Temporarily consider - and _ characters as part of the word when sorting."
  ("M-;"     . endless/comment-line-or-region)
  ("<f9>"    . eval-region)
  ("C-x d"   . delete-region)
- ("s-SPC"   . just-one-space) ; Win-Space
  ("C-S-d"   . duplicate-current-line-or-region)
  ;; override the binding of `C-x =` for `what-cursor-position'
  ("C-x ="   . align-to-equals) ; align all = signs in selected region
@@ -433,13 +432,12 @@ Temporarily consider - and _ characters as part of the word when sorting."
  ("C-x C-u" . modi/upcase)
  ("C-x C-l" . modi/downcase))
 
-(bind-key "M-c"
-          (defhydra hydra-change-case()
-            "change-case"
-            ("c"   modi/capitalize       "Capitalize")     ; M-c c
-            ("u"   modi/upcase           "UPCASE")         ; M-c u
-            ("l"   modi/downcase         "downcase")       ; M-c l
-            ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
+(bind-key "M-c" (defhydra hydra-change-case()
+                  "change-case"
+                  ("c"   modi/capitalize       "Capitalize")     ; M-c c
+                  ("u"   modi/upcase           "UPCASE")         ; M-c u
+                  ("l"   modi/downcase         "downcase")       ; M-c l
+                  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
           modi-mode-map)
 
 (bind-to-modi-map "x" eval-and-replace-last-sexp)
