@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-05 13:11:07 kmodi>
+;; Time-stamp: <2015-02-09 14:38:35 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -84,13 +84,11 @@ If the file is emacs lisp, run the byte compiled version if exist."
 (bind-to-modi-map "p" ps-print-buffer-with-faces)
 
 ;; Help Functions +
-(req-package help-fns+
-  :config
-  (progn
-    (bind-keys
-     :map help-map
-     ("c"   . describe-key-briefly)
-     ("C-c" . describe-command))))
+(require 'help-fns+)
+(bind-keys
+ :map help-map
+ ("c"   . describe-key-briefly)
+ ("C-c" . describe-command))
 
 ;; Unset keys
 (global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
@@ -109,6 +107,33 @@ If the file is emacs lisp, run the byte compiled version if exist."
 
 ;; Turn off dir local variables
 (setq enable-dir-local-variables nil)
+
+;; Toggles
+;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
+(autoload 'dired-toggle-read-only "dired" nil t)
+(key-chord-define-global
+ "qq"
+ (defhydra hydra-toggle (:color blue)
+   "toggle"
+   ("b"     modi/toggle-menu-bar     "menu bar")
+   ("c"     xah-cycle-letter-case    "letter case" :color red)
+   ("d"     toggle-debug-on-error    "debug on error")
+   ("e"     modi/toggle-edebug-defun "edebug")
+   ("E"     modi/toggle-debug-defun  "debug on entry")
+   ("f"     auto-fill-mode           "auto fill mode")
+   ("g"     indent-guide-mode        "indent guide")
+   ("i"     fci-mode                 "fci mode")
+   ("l"     linum-mode               "linum mode")
+   ("m"     modi-mode                "modi mode")
+   ("n"     neotree-toggle           "neotree" :color red)
+   ("p"     presentation-mode        "presentation")
+   ("t"     toggle-truncate-lines    "truncate" :color red)
+   ("r"     dired-toggle-read-only   "read only") ; generalized `read-only-mode'
+   ("s"     toggle-window-split      "split horz/vert" :color red)
+   ("v"     recenter-top-bottom      "recenter" :color red)
+   ("w"     whitespace-mode          "whitespace" :color red)
+   ("<f11>" toggle-frame-maximized   "fullscreen")
+   ("q"     nil                      "cancel" :color blue)))
 
 
 (provide 'setup-misc)
