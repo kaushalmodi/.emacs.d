@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 12:57:59 kmodi>
+;; Time-stamp: <2015-02-09 15:52:55 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -248,6 +248,8 @@ If ARG is omitted or nil, move point forward one word."
   ;; undo/redo
   ("u"        undo-tree-undo               "undo")
   ("C-r"      undo-tree-redo               "redo")
+  ;; misc
+  ("<SPC>"    ace-jump-mode                "ace jump" :color blue)
   ;; quit
   ("q"        nil                          "quit"))
 
