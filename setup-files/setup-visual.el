@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-04 10:53:52 kmodi>
+;; Time-stamp: <2015-02-09 13:57:23 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -219,37 +219,27 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Presentation mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq presentation-mode-enabled nil)
-
-(defun presentation-mode ()
-  "Set frame size, theme and fonts suitable for presentation."
-  (interactive)
-  (setq font-size-pt 13)
-  (set-face-attribute 'default nil :height (* font-size-pt 10))
-  (set-frame-position (selected-frame) 0 0) ;; pixels x y from upper left
-  (set-frame-size (selected-frame) 80 25)  ;; rows and columns w h
-  (funcall default-light-theme) ;; change to default light theme
-  (delete-other-windows)
-  (setq presentation-mode-enabled t)
-  )
-
-(defun coding-zombie-mode ()
-  "Revert to default coding mode."
-  (interactive)
-  (setq font-size-pt default-font-size-pt)
-  (set-face-attribute 'default nil :height (* font-size-pt 10))
-  (full-screen-center)
-  (funcall default-theme) ;; change to default theme
-  (split-window-right)
-  (setq presentation-mode-enabled nil)
-  )
-
-(defun toggle-presentation-mode ()
-  "Toggle between presentation and default mode."
-  (interactive)
-  (if presentation-mode-enabled
-      (coding-zombie-mode)
-    (presentation-mode)))
+(define-minor-mode presentation-mode
+  "Minor mode to change to light theme with bigger fonts for better readability
+during presentations."
+  :init-value nil
+  :lighter    " Prez"
+  :global     t
+  (if presentation-mode
+      ;; Enable presentation mode
+      (progn
+        (modi/font-size-adj +3)
+        (set-frame-size (selected-frame) 80 25) ; rows and columns w h
+        (funcall default-light-theme) ; change to default light theme
+        (delete-other-windows))
+    ;; Disable presentation mode
+    (progn
+      (modi/font-size-reset)
+      (full-screen-center)
+      (funcall default-theme)
+      (split-window-right)
+      (other-window 1)
+      (toggle-between-buffers))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -258,7 +248,6 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 ;; FIXME: Make this activate only if one window is open
 ;; See http://bzg.fr/emacs-hide-mode-line.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (defvar-local hidden-mode-line-mode nil)
 (define-minor-mode hidden-mode-line-mode
   "Minor mode to hide the mode-line in the current buffer."
   :init-value nil
@@ -377,13 +366,16 @@ narrowed."
 ;; by default. It is inconvenient when that mouse menu pops up when I don't need
 ;; it to. And actually I have never used that menu :P
 
-;; Usage: C-x _ - _ 0 - - - - _ _ 0
-;; Usage: C-x - - 0 _ - _ - - - - _ _ 0
-(hydra-create "C-x"
-  '(("_"   modi/font-size-incr  "Increase font size")
-    ("-"   modi/font-size-decr  "Decrease font size")
-    ("C-0" modi/font-size-reset "Reset font to default size"))
-  modi-mode-map)
+;; Usage: C-x - _ - 0 _ _ _ _ - - 0
+;; Usage: C-x _ _ 0 - _ - _ _ _ _ - - 0
+(defhydra hydra-font-resize
+    (nil "C-x" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
+  "font-resize"
+  ("-"   modi/font-size-decr  "Decrease")
+  ("_"   modi/font-size-incr  "Increase")
+  ("="   modi/font-size-incr  "Increase" :bind nil)
+  ("C-0" modi/font-size-reset "Reset to default size")
+  ("0"   modi/font-size-reset "Reset to default size" :bind nil))
 
 ;; Toggle menu bar
 ;; Below bkp/ vars are used to restore the original frame size after disabling
@@ -416,7 +408,7 @@ menu bar."
  ("<f2>"        . modi/toggle-menu-bar)
  ;; F8 key can't be used as it launches the VNC menu
  ;; It can though be used with shift/ctrl/alt keys
- ("<S-f8>"      . toggle-presentation-mode)
+ ("<S-f8>"      . presentation-mode)
  ;; Make Control+mousewheel do increase/decrease font-size
  ;; Source: http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
  ("<C-mouse-1>" . modi/font-size-reset) ; C + left mouse click
