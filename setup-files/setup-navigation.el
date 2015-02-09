@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-22 00:03:53 kmodi>
+;; Time-stamp: <2015-02-09 12:57:59 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -188,6 +188,69 @@ If ARG is omitted or nil, move point forward one word."
   (forward-word 1)
   (backward-word 1))
 
+;; Source: http://oremacs.com/2015/02/05/amaranth-hydra/
+(req-package setup-iregister) ; To get the defalias definitions
+(defun hydra-vi/pre ()
+  (set-cursor-color "#e52b50"))
+(defun hydra-vi/post ()
+  "`hcz-set-cursor-color-color' variable is set in `setup-visual.el'"
+  (set-cursor-color hcz-set-cursor-color-color))
+(defun hydra-vi/end-of-buffer (&optional arg)
+  (interactive "P")
+  (let* ((numeric-arg (if (consp arg) (car arg) arg))
+         (pos-arg (if (and arg (< numeric-arg 0)) (- 0 numeric-arg) numeric-arg)))
+    (if arg
+        (goto-line pos-arg) ; go to a line if argument is specified
+      (goto-char (point-max))))) ; end of buffer
+(defun hydra-vi/beginning-of-buffer (&optional arg)
+  (interactive "P")
+  (let* ((numeric-arg (if (consp arg) (car arg) arg))
+         (pos-arg (if (and arg (< numeric-arg 0)) (- 0 numeric-arg) numeric-arg)))
+    (if arg
+        (goto-line pos-arg) ; go to a line if argument is specified
+      (goto-char (point-min))))) ; beginning of buffer
+
+(defhydra hydra-vi
+    (nil "C-:"
+         :bind  (lambda (key cmd) (bind-key key cmd modi-mode-map))
+         :pre   hydra-vi/pre
+         :post  hydra-vi/post
+         :color amaranth)
+  "vi"
+  ;; basic navigation
+  ("l"        forward-char nil)
+  ("h"        backward-char nil)
+  ("j"        next-line nil)
+  ("k"        previous-line nil)
+  ;; mark
+  ("m"        set-mark-command             "mark")
+  ("C-o"      (set-mark-command 4)         "jump to prev location")
+  ;; beginning/end of line
+  ("a"        move-beginning-of-line       "beg of line")
+  ("^"        back-to-indentation          "first non-blank char of line")
+  ("$"        move-end-of-line             "end of line")
+  ;; word navigation
+  ("e"        forward-word                 "end of word")
+  ("w"        modi/forward-word-begin      "beginning of next word")
+  ("b"        backward-word                "beginning of word")
+  ;; page scrolling
+  ("<prior>"  scroll-down-command          "page up")
+  ("<next>"   scroll-up-command            "page down")
+  ;; delete/cut/copy/paste
+  ("x"        delete-forward-char          "delete char")
+  ("d"        my/iregister-cut             "cut/del")
+  ("y"        my/iregister-copy            "copy")
+  ("p"        yank                         "paste" :color blue)
+  ;; beginning/end of buffer and go to line
+  ("g"        hydra-vi/beginning-of-buffer "beginning  of buffer/goto line")
+  ("G"        hydra-vi/end-of-buffer       "end of buffer/goto line")
+  ("<return>" goto-line                    "goto line")
+  ;; undo/redo
+  ("u"        undo-tree-undo               "undo")
+  ("C-r"      undo-tree-redo               "redo")
+  ;; quit
+  ("q"        nil                          "quit"))
+
 ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
 ;; A three-headed hydra for jumping between "errors", useful for
 ;; e.g. `occur', `rgrep' and the like.
@@ -196,11 +259,12 @@ If ARG is omitted or nil, move point forward one word."
 ;; commands next/previous-error (M-g M-n and M-g M-p respectively), as
 ;; they enable you to cycle through the list of occur matches from
 ;; within the source buffer itself."
-(hydra-create "M-g"
-  '(("g" first-error    "first")
-    ("n" next-error     "next")
-    ("p" previous-error "prev"))
-  modi-mode-map)
+(defhydra hydra-nav-error
+    (nil "M-g" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
+  "nav-error"
+  ("g" first-error    "first")
+  ("n" next-error     "next")
+  ("p" previous-error "prev"))
 
 ;; Key bindings
 (bind-keys
