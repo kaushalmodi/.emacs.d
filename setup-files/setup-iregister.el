@@ -1,7 +1,12 @@
-;; Time-stamp: <2014-10-31 11:36:44 kmodi>
+;; Time-stamp: <2015-02-09 11:58:46 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
+
+(defalias 'my/iregister-copy        'iregister-point-or-text-to-register-kill-ring-save)
+(defalias 'my/iregister-cut         'iregister-copy-to-register-kill)
+(defalias 'my/iregister-copy-append 'iregister-append-to-latest-register)
+(defalias 'my/iregister-cut-append  'iregister-append-to-latest-register-delete)
 
 (req-package iregister
   :config
@@ -9,12 +14,12 @@
     (bind-keys
      ;; If region is active then `iregister-point-or-text-to-register' command stores a
      ;; text to any empty register, otherwise it stores a point.
-     ("M-w"     . iregister-point-or-text-to-register-kill-ring-save) ;; Replace normal copy function
-     ("C-w"     . iregister-copy-to-register-kill) ;; Replace normal 'cut' function
+     ("M-w"     . my/iregister-copy) ;; Replace normal copy function
+     ("C-w"     . my/iregister-cut) ;; Replace normal 'cut' function
      ;; Copy the selection and append to the latest register
-     ("C-x r a" . iregister-append-to-latest-register)
+     ("C-x r a" . my/iregister-copy-append)
      ;; Delete the selection and append to the latest register
-     ("C-x r A" . iregister-append-to-latest-register-delete)
+     ("C-x r A" . my/iregister-cut-append)
      ;; ("M-n"     . iregister-jump-to-next-marker)
      ;; ("M-p"     . iregister-jump-to-previous-marker)
      )
