@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 14:50:21 kmodi>
+;; Time-stamp: <2015-02-09 17:16:49 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -135,6 +135,42 @@ If the file is emacs lisp, run the byte compiled version if exist."
    ("w"     whitespace-mode              "whitespace" :color red)
    ("<f11>" toggle-frame-maximized       "fullscreen")
    ("q"     nil                          "cancel" :color blue)))
+
+;; Launcher
+(defhydra hydra-freq (:color blue)
+  "open"
+  ("a" (find-file
+        (concat user-home-directory
+                "/.alias"))                                    ".alias")
+  ("e" (find-file
+        (concat user-emacs-directory
+                "/init.el"))                                   "init.el")
+  ("i" (find-file
+        (concat user-home-directory
+                "/public_html/index.html"))                    "index.html")
+  ("j" (find-file
+        (concat org-directory
+                "/journal.org"))                               "org journal")
+  ("t" (find-file
+        (concat user-home-directory
+                "/.tmux.conf"))                                ".tmux.conf")
+  ("v" (find-file
+        (concat user-home-directory
+                "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")) "IEEE-SV"))
+(bind-key "<s-SPC>"
+          (defhydra hydra-launch (:color blue)
+            "launch"
+            ("a"       ag-regexp-cwd                         "ag here") ; ag in current dir
+            ("b"       bookmark-jump                         "bookmark")
+            ("c"       org-capture                           "org capture")
+            ("d"       dired-single-magic-buffer-current-dir "dired")
+            ("e"       (eww (browse-url-url-at-point))       "eww") ; browse in eww
+            ("f"       browse-url-firefox                    "firefox")
+            ("m"       man                                   "man")
+            ("s"       shell                                 "shell")
+            ("<s-SPC>" hydra-freq/body                       "freq files")
+            ("<SPC>"   ace-jump-mode                         "ace jump")
+            ("q"       nil                                   "cancel")))
 
 
 (provide 'setup-misc)
