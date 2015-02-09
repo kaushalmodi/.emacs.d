@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 14:38:35 kmodi>
+;; Time-stamp: <2015-02-09 14:50:21 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -115,25 +115,26 @@ If the file is emacs lisp, run the byte compiled version if exist."
  "qq"
  (defhydra hydra-toggle (:color blue)
    "toggle"
-   ("b"     modi/toggle-menu-bar     "menu bar")
-   ("c"     xah-cycle-letter-case    "letter case" :color red)
-   ("d"     toggle-debug-on-error    "debug on error")
-   ("e"     modi/toggle-edebug-defun "edebug")
-   ("E"     modi/toggle-debug-defun  "debug on entry")
-   ("f"     auto-fill-mode           "auto fill mode")
-   ("g"     indent-guide-mode        "indent guide")
-   ("i"     fci-mode                 "fci mode")
-   ("l"     linum-mode               "linum mode")
-   ("m"     modi-mode                "modi mode")
-   ("n"     neotree-toggle           "neotree" :color red)
-   ("p"     presentation-mode        "presentation")
-   ("t"     toggle-truncate-lines    "truncate" :color red)
-   ("r"     dired-toggle-read-only   "read only") ; generalized `read-only-mode'
-   ("s"     toggle-window-split      "split horz/vert" :color red)
-   ("v"     recenter-top-bottom      "recenter" :color red)
-   ("w"     whitespace-mode          "whitespace" :color red)
-   ("<f11>" toggle-frame-maximized   "fullscreen")
-   ("q"     nil                      "cancel" :color blue)))
+   ("b"     modi/toggle-menu-bar         "menu bar")
+   ("c"     xah-cycle-letter-case        "letter case" :color red)
+   ("d"     toggle-debug-on-error        "debug on error")
+   ("e"     modi/toggle-edebug-defun     "edebug")
+   ("E"     modi/toggle-debug-defun      "debug on entry")
+   ("f"     auto-fill-mode               "auto fill mode")
+   ("g"     indent-guide-mode            "indent guide")
+   ("i"     fci-mode                     "fci mode")
+   ("l"     linum-mode                   "linum mode")
+   ("m"     modi-mode                    "modi mode")
+   ("n"     endless/narrow-or-widen-dwim "narrow/widen")
+   ("N"     neotree-toggle               "neotree" :color red)
+   ("p"     presentation-mode            "presentation")
+   ("t"     toggle-truncate-lines        "truncate" :color red)
+   ("r"     dired-toggle-read-only       "read only") ; generalized `read-only-mode'
+   ("s"     toggle-window-split          "split horz/vert" :color red)
+   ("v"     recenter-top-bottom          "recenter" :color red)
+   ("w"     whitespace-mode              "whitespace" :color red)
+   ("<f11>" toggle-frame-maximized       "fullscreen")
+   ("q"     nil                          "cancel" :color blue)))
 
 
 (provide 'setup-misc)
