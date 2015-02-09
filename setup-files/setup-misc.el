@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 17:16:49 kmodi>
+;; Time-stamp: <2015-02-09 17:26:06 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -167,7 +167,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
             ("e"       (eww (browse-url-url-at-point))       "eww") ; browse in eww
             ("f"       browse-url-firefox                    "firefox")
             ("m"       man                                   "man")
-            ("s"       shell                                 "shell")
+            ("s"       shell-command                         "shell cmd")
             ("<s-SPC>" hydra-freq/body                       "freq files")
             ("<SPC>"   ace-jump-mode                         "ace jump")
             ("q"       nil                                   "cancel")))
