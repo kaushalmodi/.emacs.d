@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-06 15:36:25 kmodi>
+;; Time-stamp: <2015-02-09 14:36:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -210,7 +210,8 @@
 (req-package setup-image)
 ;; (req-package setup-ctags) ; Using gtags instead
 
-(req-package setup-misc) ; This package must be the last required package
+(req-package-finish) ; Start loading packages in right order
+
 
 ;; require `secrets' but don't trigger error if not found
 (if (daemonp)
@@ -218,9 +219,11 @@
               (λ (require 'secrets "secrets.el.gpg" t)))
   (require 'secrets "secrets.el.gpg" t))
 
-(req-package-finish) ; Start loading packages in right order
-
 (require 'setup-big-fringe)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'setup-misc) ; This MUST be the last required package
+
 (global-modi-mode t)
 
 (when (bound-and-true-p emacs-initialized)
