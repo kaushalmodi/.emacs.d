@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-04 16:00:18 kmodi>
+;; Time-stamp: <2015-02-09 14:08:26 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -279,15 +279,6 @@ C-u C-u COMMAND -> Open a regular scratch buffer in `emacs-elisp-mode'"
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
-;; Source: http://www.emacswiki.org/emacs/FullScreen
-(defun toggle-fullscreen ()
-  "Toggle full screen on X11"
-  (interactive)
-  (when (eq window-system 'x)
-    (set-frame-parameter
-     nil 'fullscreen
-     (when (not (frame-parameter nil 'fullscreen)) 'fullboth))))
-
 ;; Source: http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
   "Toggle between 2 buffers"
@@ -361,13 +352,14 @@ C-u C-u COMMAND -> Open a regular scratch buffer in `emacs-elisp-mode'"
         (shrink-window 1)
       (enlarge-window 1))))
 
-(hydra-create "C-M-]"
-  '(("]"  hydra-move-splitter-right "→")
-    ("["  hydra-move-splitter-left  "←")
-    ("p"  hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
-    ("\\" hydra-move-splitter-down  "↓")
-    ("="  balance-windows           "Balance"))
-  modi-mode-map)
+(defhydra hydra-win-resize
+    (nil "C-M-]" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
+  "win-resize"
+  ("]"  hydra-move-splitter-right "→")
+  ("["  hydra-move-splitter-left  "←")
+  ("p"  hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
+  ("\\" hydra-move-splitter-down  "↓")
+  ("="  balance-windows           "Balance" :bind nil))
 
 ;; Commented out this piece of code as it is giving the below error:
 ;; byte-code: Wrong number of arguments: (lambda (arg)
@@ -445,7 +437,6 @@ C-u C-u COMMAND -> Open a regular scratch buffer in `emacs-elisp-mode'"
 (bind-to-modi-map "b" modi/switch-to-scratch-and-back)
 (bind-to-modi-map "f" full-screen-center)
 (bind-to-modi-map "y" bury-buffer)
-(bind-to-modi-map "+" balance-windows)
 
 (key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
 (key-chord-define-global "ZZ" 'toggle-between-buffers)
