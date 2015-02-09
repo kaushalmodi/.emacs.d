@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 13:57:23 kmodi>
+;; Time-stamp: <2015-02-09 14:48:09 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -419,7 +419,7 @@ menu bar."
  ("C-x n"       . endless/narrow-or-widen-dwim))
 
 (key-chord-define-global "2w" 'menu-bar-mode) ; alternative to F2
-(key-chord-define-global "8i" 'toggle-presentation-mode) ; alternative to S-F8
+(key-chord-define-global "8i" 'presentation-mode) ; alternative to S-F8
 
 (bind-to-modi-map "L" modi/show-long-lines)
 
