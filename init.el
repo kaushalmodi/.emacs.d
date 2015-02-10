@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 13:26:06 kmodi>
+;; Time-stamp: <2015-02-10 14:16:06 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -22,7 +22,6 @@
         ;; etags-select etags-table ctags-update ; Replacing these with ggtags
         ;; zenburn-theme ; Using my own forked version
         ;; smyx-theme ; dark theme; Using my own forked version
-        ;; ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         ace-jump-mode
         ace-window
         ag wgrep wgrep-ag s ; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
@@ -72,6 +71,7 @@
         number ; number manipulation
         org htmlize poporg ; Get the latest org-mode package from MELPA
                                         ; poporg to edit comments from any other mode in org mode
+        ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         outshine outorg navi-mode ; org-mode like structure in other major modes
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
