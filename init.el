@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 14:36:51 kmodi>
+;; Time-stamp: <2015-02-10 13:26:06 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -102,6 +102,7 @@
 (load custom-file) ;; Load the emacs `M-x customize` generated file
 (load setup-packages-file) ;; Load the packages
 
+(require 'cl-lib)
 (require 'defuns)
 (require 'benchmark-init)
 (require 'req-package)
@@ -147,7 +148,6 @@
 (req-package setup-ibuffer)
 (req-package setup-ido)
 (req-package setup-iregister)
-(req-package setup-linum)
 (when (executable-find "git")
   (req-package setup-magit))
 (req-package setup-manage-minor-mode)
@@ -212,12 +212,18 @@
 
 (req-package-finish) ; Start loading packages in right order
 
-
 ;; require `secrets' but don't trigger error if not found
 (if (daemonp)
     (add-hook 'window-setup-hook
-              (λ (require 'secrets "secrets.el.gpg" t)))
-  (require 'secrets "secrets.el.gpg" t))
+              (λ (message ">> Daemon mode")
+                ;; It is mandatory to load linum AFTER the frames are set up
+                ;; Else, I get "*ERROR*: Invalid face: linum"
+                (require 'setup-linum)
+                (require 'secrets "secrets.el.gpg" t)))
+  (progn
+    (message ">> Non daemon mode")
+    (require 'setup-linum)
+    (require 'secrets "secrets.el.gpg" t)))
 
 (require 'setup-big-fringe)
 
@@ -227,6 +233,7 @@
 (global-modi-mode t)
 
 (when (bound-and-true-p emacs-initialized)
+  (req-package-finish)
   (funcall default-theme))
 
 (setq emacs-initialized t)
