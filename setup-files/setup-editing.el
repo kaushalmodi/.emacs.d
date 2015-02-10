@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 16:49:44 kmodi>
+;; Time-stamp: <2015-02-10 11:25:13 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -235,7 +235,6 @@ remove the comment characters from that line."
         (remove-hook hook 'indent-guide-mode)))))
 
 ;; Aggressive auto indentation
-(require 'cl-lib)
 (defun endless/indent-defun ()
   "Indent current defun.
 Do nothing if mark is active (to avoid deactivaing it), or if
@@ -458,13 +457,21 @@ Temporarily consider - and _ characters as part of the word when sorting."
 ;;        Numeric prefixes are supported too:
 ;;
 ;;        jj 5j 7j 2j j 7n n n j j p j n
-;;
-;;        Press any other key (other than j, p or n) to quit this behavior.
-(key-chord-define-global "jj" (defhydra hydra-comment()
-                                "comment and navigate"
-                                ("j" endless/comment-line-or-region "toggle comment")
-                                ("p" previous-line "go to previous line")
-                                ("n" next-line "go to next line")))
+(key-chord-define-global "jj"
+                         (defhydra hydra-comment(:color red)
+                           "comment mode"
+                           ("j"   endless/comment-line-or-region "toggle comment")
+                           ("p"   previous-line                  "prev line")
+                           ("n"   next-line                      "next line")
+                           ("{"   backward-paragraph             "backward para")
+                           ("P"   backward-paragraph             "backward para")
+                           ("}"   forward-paragraph              "forward para")
+                           ("N"   forward-paragraph              "forward para")
+                           ("m"   set-mark-command               "set mark")
+                           ("d"   mark-defun                     "mark defun")
+                           ("s b" backward-sexp                  "backward sexp")
+                           ("s f" forward-sexp                   "forward sexp")
+                           ("q"   nil                            "cancel" :color blue)))
 
 (key-chord-define-global "^^" (λ (insert "λ")))
 
