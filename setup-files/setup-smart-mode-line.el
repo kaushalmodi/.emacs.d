@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-20 10:42:02 kmodi>
+;; Time-stamp: <2015-02-10 10:19:52 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -91,7 +91,6 @@
   :config
   (progn
     (sml/setup)
-    (funcall default-theme) ;; setup-visual required
 
     ;; http://bruce-connor.github.io/emacs-online-documentation/Var/display-time-mode
     ;; Just doing `(setq display-time-mode t)' does not work..
@@ -100,5 +99,4 @@
     (display-time-mode 1)))
 
 
-(setq setup-smart-mode-line-loaded t) ;; required.. in setup-visual
 (provide 'setup-smart-mode-line)
