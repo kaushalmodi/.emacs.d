@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 13:19:15 kmodi>
+;; Time-stamp: <2015-02-10 15:10:49 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -145,6 +145,9 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("e" (find-file
         (concat user-emacs-directory
                 "/init.el"))                                   "init.el")
+  ("g" (find-file
+        (concat user-home-directory
+                "/scripts/gpms/.gpms"))                        ".gpms")
   ("i" (find-file
         (concat user-home-directory
                 "/public_html/index.html"))                    "index.html")
