@@ -1,10 +1,9 @@
-;; Time-stamp: <2015-02-10 11:12:03 kmodi>
+;; Time-stamp: <2015-02-10 13:34:20 kmodi>
 
 ;; Fill Column Indicator
 ;; Source: http://www.emacswiki.org/FillColumnIndicator
 
 (req-package fill-column-indicator
-  :defer t
   :config
   (progn
 
@@ -19,7 +18,7 @@
                       sh-mode-hook
                       cperl-mode-hook
                       org-mode-hook))
-        (add-hook hook 'fci-mode)))
+        (add-hook hook #'fci-mode)))
 
     (defun modi/turn-off-fci-mode ()
       "Turn off fci-mode only for specific modes."
@@ -30,7 +29,8 @@
                       sh-mode-hook
                       cperl-mode-hook
                       org-mode-hook))
-        (remove-hook hook 'fci-mode)))
+        (remove-hook hook #'fci-mode)))
+
     (modi/turn-on-fci-mode)
     ;; Enable fci-mode automatically for all files
     ;; (add-hook 'after-change-major-mode-hook 'fci-mode)
@@ -43,5 +43,4 @@
     (setq-default fci-rule-column 80))) ;; default is 70
 
 
-(setq setup-fci-loaded t) ;; required.. used in setup-visual
 (provide 'setup-fci)
