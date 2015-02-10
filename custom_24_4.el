@@ -15,21 +15,16 @@
     (executable-make-buffer-file-executable-if-script-p)))
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   ["#282828" "#FAB1AB" "#D1FA71" "#FFA600" "#7b68ee" "#dc8cc3" "#96D9F1" "#F7F7F7"])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
  '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
  '(bzg-big-fringe-mode nil)
  '(column-number-mode t)
- '(custom-safe-themes
-   (quote
-    ("a3a2d8d41fce8dc3b48af3a5b083ccae94c38ea82ca19ab1336bc40859402313" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(custom-safe-themes (quote (default)))
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
  '(desktop-restore-frames nil)
  '(display-time-mode t)
  '(doc-view-continuous t)
- '(fci-rule-color "#151515")
  '(fringe-mode nil nil (fringe))
  '(global-hi-lock-mode t)
  '(guide-key-mode t)
