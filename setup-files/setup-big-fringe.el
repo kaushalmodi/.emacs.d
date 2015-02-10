@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 09:59:54 kmodi>
+;; Time-stamp: <2015-02-10 12:40:11 kmodi>
 
 ;; Big Fringe (Minor Mode)
 ;; http://bzg.fr/emacs-strip-tease.html
@@ -32,7 +32,7 @@
         (setq fringe-indicator-alist bkp/fringe-indicator-alist)
         (setq indicate-buffer-boundaries '((top . right) (bottom . right)))
         (modi/turn-on-fci-mode)
-        (modi/set-linum 'nlinum)
+        (modi/set-linum modi/linum-fn-default)
         (winner-undo)))))
 
 ;; ;; Now activate this global minor mode
