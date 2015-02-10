@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-09-26 10:19:00 kmodi>
+;; Time-stamp: <2015-02-10 11:12:03 kmodi>
 
 ;; Fill Column Indicator
 ;; Source: http://www.emacswiki.org/FillColumnIndicator
@@ -7,6 +7,7 @@
   :defer t
   :config
   (progn
+
     (defun modi/turn-on-fci-mode ()
       "Turn on fci-mode only for specific modes.
     As truncation is enabled only in fci-mode, truncation will be activated
@@ -19,6 +20,7 @@
                       cperl-mode-hook
                       org-mode-hook))
         (add-hook hook 'fci-mode)))
+
     (defun modi/turn-off-fci-mode ()
       "Turn off fci-mode only for specific modes."
       (interactive)
