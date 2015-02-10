@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 15:28:20 kmodi>
+;; Time-stamp: <2015-02-10 11:12:10 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -60,19 +60,13 @@ Otherwise, get the symbol at point, as a string."
     `(eval-after-load ,file
        `(funcall (function ,(lambda () ,@body))))))
 
-;; Source: http://oremacs.com/2015/01/14/repeatable-commands/
-(defun def-rep-command (alist)
-  "Return a lambda that calls the first function of ALIST.
-It sets the transient map to all functions of ALIST."
-  (lexical-let ((keymap (make-sparse-keymap))
-                (func (cdar alist)))
-    (mapc (lambda (x)
-            (define-key keymap (car x) (cdr x)))
-          alist)
-    (lambda (arg)
-      (interactive "p")
-      (funcall func arg)
-      (set-transient-map keymap t))))
+;; Source: http://emacs.stackexchange.com/a/5343/115
+(with-eval-after-load 'faces
+  (defun modi/blend-fringe ()
+    "Set the fringe foreground and background color to that of the theme."
+    (set-face-attribute 'fringe nil
+                        :foreground (face-foreground 'default)
+                        :background (face-background 'default))))
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
