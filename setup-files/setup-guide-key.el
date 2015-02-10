@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-12-08 08:46:11 kmodi>
+;; Time-stamp: <2015-02-10 15:20:42 kmodi>
 
 ;; Guide Key
 ;; https://github.com/kai2nenobu/guide-key
@@ -19,8 +19,6 @@
                                          ;; "C-c p"   ; projectile
                                          ;; "C-c p 4" ; projectile
                                          "C-q"
-                                         "s-f"     ; fiplr
-                                         "s-w"     ; workgroups2
                                          "M-#"     ; outshine
                                          )
           guide-key/highlight-command-regexp "rectangle"
