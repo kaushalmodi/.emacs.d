@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-22 09:25:47 kmodi>
+;; Time-stamp: <2015-02-10 14:16:27 kmodi>
 
 ;; Org Mode
 
@@ -239,7 +239,7 @@
 ;; Presentations using reveal.js
 ;; Download reveal.js from https://github.com/hakimel/reveal.js/
 (use-package ox-reveal
-  :load-path "from-git/org-reveal"
+  ;; :load-path "from-git/org-reveal"
   :config
   (progn
     ;; I have git clones reveal.js in my {emacs config directory}/from-git/
