@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-02 10:34:33 kmodi>
+;; Time-stamp: <2015-02-10 16:07:15 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -48,12 +48,46 @@ getting a list of all files in a project."
     ;; (setq projectile-mode-line '(:eval (format " Projectile[%s]" (projectile-project-name))))
     (setq projectile-mode-line " Prj")
 
-    (bind-keys
-     :map modi-mode-map
-     ("s-f s-f" . projectile-find-file)) ;; Win-f Win-f
+    (defhydra hydra-projectile-other-window (:color blue)
+      "projectile-other-window"
+      ("b"  projectile-switch-to-buffer-other-window "buffer")
+      ("d"  projectile-find-dir-other-window         "dir")
+      ("f"  projectile-find-file-dwim-other-window   "file")
+      ("q"  nil                                      nil :color blue))
+
+    (bind-key "s-f"
+              (defhydra hydra-projectile (:color blue)
+                "projectile"
+                ("a"   projectile-ag                      "ag")
+                ("b"   projectile-switch-to-buffer        "buffer")
+                ("d"   projectile-find-dir                "dir")
+                ("s-f" projectile-find-file-dwim          "file")
+                ("f"   projectile-find-file-dwim          nil)
+                ("F"   projectile-find-file-in-directory  "Find file in dir")
+                ("g"   ggtags-update-tags                 "gtags")
+                ("s-g" ggtags-update-tags                 nil)
+                ("i"   projectile-invalidate-cache        "invalidate")
+                ("I"   projectile-ibuffer                 "Ibuffer")
+                ("K"   projectile-kill-buffers            "Kill all buffers")
+                ("s-k" projectile-kill-buffers            "Kill all buffers")
+                ("m"   projectile-multi-occur             "multi-occur")
+                ("o"   projectile-multi-occur             "multi-occur")
+                ("s-p" projectile-switch-project          "switch")
+                ("p"   projectile-switch-project          nil)
+                ("s"   projectile-switch-project          nil)
+                ("r"   projectile-recentf                 "recent")
+                ("z"   projectile-cache-current-file      "cache current")
+                ("`"   hydra-projectile-other-window/body "other window")
+                ("q"   nil                                nil :color blue))
+              modi-mode-map)
+
 
     ;; Globally enable Projectile
     (projectile-global-mode)))
 
 
 (provide 'setup-projectile)
+
+;; Do "touch ${PRJ_HOME}/.projectile" when updating a project. If the time stamp of
+;; the ".projectile" is newer than that of the project cache then the existing
+;; cache will be invalidated and recreated.
