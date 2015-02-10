@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 14:48:09 kmodi>
+;; Time-stamp: <2015-02-10 13:18:41 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -35,22 +35,6 @@
 (setq default-theme       'smyx)
 ;; (setq default-theme       'leuven)
 
-;; Source: http://emacs.stackexchange.com/a/5343/115
-(defun modi/blend-fringe ()
-  "Set the fringe foreground and background color to that of the theme."
-  (eval-after-load 'faces
-    (set-face-attribute 'fringe nil
-                        :foreground (face-foreground 'default)
-                        :background (face-background 'default))))
-
-(defun modi/blend-linum ()
-  "Set the linum foreground and background color to that of the theme."
-  (eval-after-load 'linum
-    '(set-face-attribute 'linum nil
-                         :height 0.9
-                         :foreground "dim gray"
-                         :background (face-background 'default))))
-
 ;; zenburn
 (defun zenburn ()
   "Activate zenburn theme."
@@ -59,11 +43,13 @@
   (disable-theme 'leuven)
   (disable-theme 'smyx)
   (load-theme 'zenburn t)
-  (modi/blend-linum)
-  (modi/blend-fringe)
-  (when (boundp 'setup-smart-mode-line-loaded)
+  (with-eval-after-load 'faces
+    (modi/blend-fringe))
+  (with-eval-after-load 'linum
+    (modi/blend-linum))
+  (with-eval-after-load 'smart-mode-line
     (sml/apply-theme 'dark))
-  (when (boundp 'setup-fci-loaded)
+  (with-eval-after-load 'fill-column-indicator
     (setq fci-rule-color "#383838")
     (fci-mode -1)))
 
@@ -75,11 +61,13 @@
   (disable-theme 'leuven)
   (disable-theme 'zenburn)
   (load-theme 'smyx t)
-  (modi/blend-linum)
-  (modi/blend-fringe)
-  (when (boundp 'setup-smart-mode-line-loaded)
+  (with-eval-after-load 'faces
+    (modi/blend-fringe))
+  (with-eval-after-load 'linum
+    (modi/blend-linum))
+  (with-eval-after-load 'smart-mode-line
     (sml/apply-theme 'dark))
-  (when (boundp 'setup-fci-loaded)
+  (with-eval-after-load 'fill-column-indicator
     (setq fci-rule-color "#383838")
     (fci-mode -1)))
 
@@ -91,11 +79,13 @@
   (disable-theme 'zenburn)
   (disable-theme 'smyx)
   (load-theme 'leuven t)
-  (modi/blend-linum)
-  (modi/blend-fringe)
-  (when (boundp 'setup-smart-mode-line-loaded)
+  (with-eval-after-load 'faces
+    (modi/blend-fringe))
+  (with-eval-after-load 'linum
+    (modi/blend-linum))
+  (with-eval-after-load 'smart-mode-line
     (sml/apply-theme 'light))
-  (when (boundp 'setup-fci-loaded)
+  (with-eval-after-load 'fill-column-indicator
     (setq fci-rule-color "#F2F2F2")
     (fci-mode -1)))
 
@@ -219,27 +209,38 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Presentation mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define-minor-mode presentation-mode
+(defvar prez-mode-enabled-once nil
+  "Flag to indicate if prez-mode has been enabled at least once.")
+
+(define-minor-mode prez-mode
   "Minor mode to change to light theme with bigger fonts for better readability
 during presentations."
   :init-value nil
   :lighter    " Prez"
-  :global     t
-  (if presentation-mode
-      ;; Enable presentation mode
+  (if prez-mode
+      ;; Enable prez mode
       (progn
-        (modi/font-size-adj +3)
+        (set-face-attribute 'default nil :height (* (+ 3 default-font-size-pt) 10))
         (set-frame-size (selected-frame) 80 25) ; rows and columns w h
-        (funcall default-light-theme) ; change to default light theme
-        (delete-other-windows))
-    ;; Disable presentation mode
+        (delete-other-windows)
+        (setq prez-mode-enabled-once t))
+    ;; Disable prez mode
     (progn
-      (modi/font-size-reset)
-      (full-screen-center)
-      (funcall default-theme)
-      (split-window-right)
-      (other-window 1)
-      (toggle-between-buffers))))
+      (when prez-mode-enabled-once
+        (modi/font-size-reset)
+        (full-screen-center)
+        (split-window-right)
+        (other-window 1)
+        (toggle-between-buffers)))))
+(defun turn-on-prez-mode ()
+  "Turns on prez-mode."
+  (interactive)
+  (prez-mode t))
+(defun turn-off-prez-mode ()
+  "Turns off prez-mode."
+  (interactive)
+  (prez-mode -1))
+(define-globalized-minor-mode global-prez-mode prez-mode turn-on-prez-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -374,6 +375,7 @@ narrowed."
   ("-"   modi/font-size-decr  "Decrease")
   ("_"   modi/font-size-incr  "Increase")
   ("="   modi/font-size-incr  "Increase" :bind nil)
+  ("+"   modi/font-size-incr  "Increase" :bind nil)
   ("C-0" modi/font-size-reset "Reset to default size")
   ("0"   modi/font-size-reset "Reset to default size" :bind nil))
 
@@ -408,7 +410,7 @@ menu bar."
  ("<f2>"        . modi/toggle-menu-bar)
  ;; F8 key can't be used as it launches the VNC menu
  ;; It can though be used with shift/ctrl/alt keys
- ("<S-f8>"      . presentation-mode)
+ ("<S-f8>"      . prez-mode)
  ;; Make Control+mousewheel do increase/decrease font-size
  ;; Source: http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
  ("<C-mouse-1>" . modi/font-size-reset) ; C + left mouse click
@@ -419,7 +421,7 @@ menu bar."
  ("C-x n"       . endless/narrow-or-widen-dwim))
 
 (key-chord-define-global "2w" 'menu-bar-mode) ; alternative to F2
-(key-chord-define-global "8i" 'presentation-mode) ; alternative to S-F8
+(key-chord-define-global "8i" 'prez-mode) ; alternative to S-F8
 
 (bind-to-modi-map "L" modi/show-long-lines)
 
