@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 17:26:06 kmodi>
+;; Time-stamp: <2015-02-10 13:19:15 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -123,11 +123,11 @@ If the file is emacs lisp, run the byte compiled version if exist."
    ("f"     auto-fill-mode               "auto fill mode")
    ("g"     indent-guide-mode            "indent guide")
    ("i"     fci-mode                     "fci mode")
-   ("l"     linum-mode                   "linum mode")
+   ("l"     modi/toggle-linum            "linum mode")
    ("m"     modi-mode                    "modi mode")
    ("n"     endless/narrow-or-widen-dwim "narrow/widen")
    ("N"     neotree-toggle               "neotree" :color red)
-   ("p"     presentation-mode            "presentation")
+   ("p"     prez-mode                    "presentation")
    ("t"     toggle-truncate-lines        "truncate" :color red)
    ("r"     dired-toggle-read-only       "read only") ; generalized `read-only-mode'
    ("s"     toggle-window-split          "split horz/vert" :color red)
