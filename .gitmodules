@@ -19,3 +19,6 @@
 [submodule "from-git/sunshine.el"]
 	path = from-git/sunshine.el
 	url = https://github.com/aaronbieber/sunshine.el
+[submodule "from-git/unfill"]
+	path = from-git/unfill
+	url = https://github.com/kaushalmodi/unfill

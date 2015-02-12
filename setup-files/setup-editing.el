@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 09:36:06 kmodi>
+;; Time-stamp: <2015-02-12 17:28:02 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -390,6 +390,10 @@ Temporarily consider - and _ characters as part of the word when sorting."
       (modify-syntax-entry ?_ "w" temp-table)
       (sort-regexp-fields reverse "\\w+" "\\&" beg end))))
 
+;; Forked version of https://github.com/purcell/unfill
+(req-package unfill
+  :load-path "from-git/unfill")
+
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
    :map region-bindings-mode-map
@@ -410,7 +414,6 @@ Temporarily consider - and _ characters as part of the word when sorting."
  :map modi-mode-map
  ;; override the binding of `M-;' for `comment-dwim'
  ("M-;"     . endless/comment-line-or-region)
- ("<f9>"    . eval-region)
  ("C-x d"   . delete-region)
  ("C-S-d"   . duplicate-current-line-or-region)
  ;; override the binding of `C-x =` for `what-cursor-position'
@@ -425,16 +428,20 @@ Temporarily consider - and _ characters as part of the word when sorting."
  ("C-o"     . modi/smart-open-line)
  ("C-j"     . modi/pull-up-line)
  ("M-j"     . comment-indent-new-line)
- ("C-x C-u" . modi/upcase)
- ("C-x C-l" . modi/downcase))
+ ("<f9>"    . eval-region))
 
-(bind-key "M-c" (defhydra hydra-change-case()
-                  "change-case"
-                  ("c"   modi/capitalize       "Capitalize")     ; M-c c
-                  ("u"   modi/upcase           "UPCASE")         ; M-c u
-                  ("l"   modi/downcase         "downcase")       ; M-c l
-                  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
-          modi-mode-map)
+(defhydra hydra-change-case()
+  "change-case"
+  ("c"   modi/capitalize       "Capitalize")     ; M-c c
+  ("u"   modi/upcase           "UPCASE")         ; M-c u
+  ("l"   modi/downcase         "downcase")       ; M-c l
+  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
+
+(bind-keys
+ :map modi-mode-map
+ ("C-x C-u" . modi/upcase)
+ ("C-x C-l" . modi/downcase)
+ ("M-c"     . hydra-change-case/body))
 
 (bind-to-modi-map "x" eval-and-replace-last-sexp)
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
