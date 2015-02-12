@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 16:42:01 kmodi>
+;; Time-stamp: <2015-02-11 14:00:42 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -66,8 +66,8 @@ If called with a prefix, prompts for flags to pass to ag."
 with REGEXP defaulting to the symbol under point.
 
 If called with a prefix, prompts for flags to pass to ag."
-      (interactive (list (read-from-minibuffer "Search regexp: " (ag/dwim-at-point))
-                         (read-directory-name "Directory: ")))
+      (interactive
+       (list (read-from-minibuffer "Search regexp: " (ag/dwim-at-point))))
       (ag/search string (file-name-directory (buffer-file-name)) :regexp t))
 
     (bind-keys
