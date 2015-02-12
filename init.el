@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 14:16:06 kmodi>
+;; Time-stamp: <2015-02-12 10:11:53 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -64,6 +64,7 @@
         magit ; for git management
         manage-minor-mode
         markdown-mode
+        multi-term
         multiple-cursors
         mwe-log-commands ; for logging commands; useful when demoing emacs
         neotree
@@ -170,6 +171,7 @@
 (req-package setup-stripe-buffer)
 (req-package setup-sunshine)
 (req-package setup-sx)
+(req-package setup-term)
 (req-package setup-tiny)
 (req-package setup-undo-tree)
 (req-package setup-wrap-region)
@@ -212,18 +214,18 @@
 
 (req-package-finish) ; Start loading packages in right order
 
+(require 'setup-work nil t)
+
 ;; require `secrets' but don't trigger error if not found
 (if (daemonp)
     (add-hook 'window-setup-hook
               (λ (message ">> Daemon mode")
                 ;; It is mandatory to load linum AFTER the frames are set up
                 ;; Else, I get "*ERROR*: Invalid face: linum"
-                (require 'setup-linum)
-                (require 'secrets "secrets.el.gpg" t)))
+                (require 'setup-linum)))
   (progn
     (message ">> Non daemon mode")
-    (require 'setup-linum)
-    (require 'secrets "secrets.el.gpg" t)))
+    (require 'setup-linum)))
 
 (require 'setup-big-fringe)
 
