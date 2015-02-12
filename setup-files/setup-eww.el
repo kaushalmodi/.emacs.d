@@ -1,11 +1,11 @@
-;; Time-stamp: <2015-02-11 15:32:55 kmodi>
+;; Time-stamp: <2015-02-12 16:15:59 kmodi>
 
 ;; Eww
 ;; Emacs browser (needs emacs 24.4 or higher)
 
 (>=e "24.4"
      (req-package eww
-       :require (eww-lnum key-chord filenotify)
+       :require (key-chord filenotify)
        :config
        (progn
          (setq modi/eww-file-notify-descriptors-list (quote nil))
@@ -25,7 +25,7 @@
            "Search the web for the text between the point and marker.
 See the `eww-search-prefix' variable for the search engine used."
            (interactive "r")
-           (if (region-active-p)
+           (if (use-region-p)
                (eww (buffer-substring beg end))
              (eww (modi/get-symbol-at-point))))
 
@@ -91,6 +91,25 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
              (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
          ;;
 
+         ;; eww-lnum
+         (req-package eww-lnum
+           :config
+           (bind-keys
+            :map eww-mode-map
+            ("f" . eww-lnum-follow)
+            ("F" . eww-lnum-universal)))
+
+         ;; org-eww
+         ;; Copy text from html page for pasting in org mode file/buffer
+         ;; e.g. Copied HTML hyperlinks get converted to [[link][desc]] for org mode.
+         ;; http://emacs.stackexchange.com/a/8191/115
+         (req-package org-eww
+           :load-path "from-git/org-mode/contrib/lisp/"
+           :config
+           (bind-keys
+            :map eww-mode-map
+            ("o" . org-eww-copy-for-org-mode)))
+
          (bind-keys
           :map eww-mode-map
           ("G"           . eww) ; Go to URL
@@ -111,7 +130,7 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
           ("\>"          . eww-forward-url)
           ("/"           . highlight-regexp))
          (>=e "25.0"
-              (bind-key "R" 'eww-readable eww-mode-map))
+              (bind-key "R" #'eww-readable eww-mode-map))
          (bind-keys
           :map eww-text-map ; For single line text fields
           ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
@@ -127,16 +146,9 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
           :map modi-mode-map
           ("M-s M-w" . eww-search-words)
           ("M-s M-l" . modi/eww-copy-link-first-search-result))
-         (key-chord-define-global       "-=" 'eww)
-         (key-chord-define eww-mode-map "XX" 'modi/eww-quit)
-
-         ;; eww-lnum
-         (eval-after-load "eww"
-           '(progn
-              (bind-keys
-               :map eww-mode-map
-               ("f" . eww-lnum-follow)
-               ("F" . eww-lnum-universal)))))))
+         (key-chord-define-global       "-=" #'eww)
+         (key-chord-define eww-mode-map "XX" #'modi/eww-quit)
+         )))
 
 
 (provide 'setup-eww)
