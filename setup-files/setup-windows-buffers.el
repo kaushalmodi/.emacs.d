@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-11 17:26:33 kmodi>
+;; Time-stamp: <2015-02-12 11:32:08 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -406,10 +406,21 @@ Example: M-644 M-x modi/set-file-permissions."
     (message "%s" cmd)
     (shell-command cmd)))
 
+(defun modi/toggle-one-window ()
+  "Toggles the frame state between deleting all windows other than
+the current window and the windows state prior to that.
+
+`winner' is required for this function."
+  (interactive)
+  (if (one-window-p)
+      (winner-undo)
+    (delete-other-windows)))
+
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
  ;; overriding the `C-x C-p binding with `mark-page' command
+ ("C-x 1"       . modi/toggle-one-window) ; default binding to `delete-other-windows'
  ("C-x C-p"     . show-copy-buffer-file-name)
  ("C-x C-k"     . delete-current-buffer-file)
  ("C-x C-r"     . rename-current-buffer-file)
