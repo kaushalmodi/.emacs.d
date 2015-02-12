@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 14:08:26 kmodi>
+;; Time-stamp: <2015-02-11 17:26:33 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -266,7 +266,7 @@ C-u C-u COMMAND -> Open a regular scratch buffer in `emacs-elisp-mode'"
         (setq scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*")))
         (switch-to-buffer scratch-buffer-name)
         (modi-mode) ; Set my minor mode to activate my key bindings
-                                        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable ; ;
+                                        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable ; ; ; ; ; ; ; ; ;
         (funcall (intern mode-str))))))
 
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
@@ -393,6 +393,18 @@ C-u C-u COMMAND -> Open a regular scratch buffer in `emacs-elisp-mode'"
 ;; Ediff
 ;; Split windows horizontally in ediff (instead of vertically)
 (setq ediff-split-window-function #'split-window-horizontally)
+
+(defun modi/set-file-permissions (perm)
+  "Change permissions of the file in current buffer.
+Example: M-644 M-x modi/set-file-permissions."
+  (interactive "p")
+  (when (<= perm 1)
+    (setq perm 644))
+  (let ((cmd (concat "chmod "
+                     (format "%s " perm)
+                     (buffer-file-name))))
+    (message "%s" cmd)
+    (shell-command cmd)))
 
 ;; Key bindings
 (bind-keys
