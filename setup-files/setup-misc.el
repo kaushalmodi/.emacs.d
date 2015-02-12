@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 15:10:49 kmodi>
+;; Time-stamp: <2015-02-12 10:05:22 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -111,30 +111,33 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
 (autoload 'dired-toggle-read-only "dired" nil t)
-(key-chord-define-global
- "qq"
- (defhydra hydra-toggle (:color blue)
-   "toggle"
-   ("b"     modi/toggle-menu-bar         "menu bar")
-   ("c"     xah-cycle-letter-case        "letter case" :color red)
-   ("d"     toggle-debug-on-error        "debug on error")
-   ("e"     modi/toggle-edebug-defun     "edebug")
-   ("E"     modi/toggle-debug-defun      "debug on entry")
-   ("f"     auto-fill-mode               "auto fill mode")
-   ("g"     indent-guide-mode            "indent guide")
-   ("i"     fci-mode                     "fci mode")
-   ("l"     modi/toggle-linum            "linum mode")
-   ("m"     modi-mode                    "modi mode")
-   ("n"     endless/narrow-or-widen-dwim "narrow/widen")
-   ("N"     neotree-toggle               "neotree" :color red)
-   ("p"     prez-mode                    "presentation")
-   ("t"     toggle-truncate-lines        "truncate" :color red)
-   ("r"     dired-toggle-read-only       "read only") ; generalized `read-only-mode'
-   ("s"     toggle-window-split          "split horz/vert" :color red)
-   ("v"     recenter-top-bottom          "recenter" :color red)
-   ("w"     whitespace-mode              "whitespace" :color red)
-   ("<f11>" toggle-frame-maximized       "fullscreen")
-   ("q"     nil                          "cancel" :color blue)))
+(defhydra hydra-toggle (:color blue)
+  "toggle"
+  ("b"     modi/toggle-menu-bar         "menu bar")
+  ("c"     xah-cycle-letter-case        "letter case" :color red)
+  ("d"     toggle-debug-on-error        "debug on error")
+  ("e"     modi/toggle-edebug-defun     "edebug")
+  ("E"     modi/toggle-debug-defun      "debug on entry")
+  ("f"     auto-fill-mode               "auto fill")
+  ("g"     indent-guide-mode            "indent guide")
+  ("i"     fci-mode                     "fci")
+  ("k"     key-chord-mode               "key chord" :color red)
+  ("l"     modi/toggle-linum            "linum")
+  ("m"     modi-mode                    "modi mode")
+  ("n"     endless/narrow-or-widen-dwim "narrow/widen")
+  ("N"     neotree-toggle               "neotree")
+  ("p"     prez-mode                    "presentation")
+  ("r"     dired-toggle-read-only       "read only") ; generalized `read-only-mode'
+  ("s"     toggle-window-split          "split horz/vert" :color red)
+  ("t"     toggle-truncate-lines        "truncate" :color red)
+  ("s-t"   toggle-theme                 "theme")
+  ("T"     toggle-theme                 "theme")
+  ("v"     recenter-top-bottom          "recenter" :color red)
+  ("<SPC>" whitespace-mode              "whitespace" :color red)
+  ("<f11>" toggle-frame-maximized       "fullscreen")
+  ("q"     nil                          "cancel" :color blue))
+(key-chord-define-global "qq"  #'hydra-toggle/body)
+(bind-key                "s-t" #'hydra-toggle/body modi-mode-map)
 
 ;; Launcher
 (defhydra hydra-freq (:color blue)
@@ -165,15 +168,25 @@ If the file is emacs lisp, run the byte compiled version if exist."
             "launch"
             ("a"       ag-regexp-cwd                         "ag here") ; ag in current dir
             ("b"       bookmark-jump                         "bookmark")
-            ("c"       org-capture                           "org capture")
-            ("d"       dired-single-magic-buffer-current-dir "dired")
-            ("e"       (eww (browse-url-url-at-point))       "eww") ; browse in eww
+            ("c"       calc                                  "calc")
+            ("d"       ediff-buffers                         "ediff")
+            ("D"       dired-single-magic-buffer-current-dir "dired")
+            ("e e"     eww                                   "eww")
+            ("e l"     modi/eww-im-feeling-lucky             "eww lucky")
+            ("e u"     (eww (browse-url-url-at-point))       "eww current url")
             ("f"       browse-url-firefox                    "firefox")
             ("m"       man                                   "man")
+            ("n"       neotree-toggle                        "neotree")
+            ("o"       org-capture                           "org capture")
+            ("p"       paradox-list-packages                 "packages")
+            ;; chmod usage: s-SPC 644 P, s-SPC 400 P
+            ("P"       modi/set-file-permissions             "chmod")
             ("s"       shell-command                         "shell cmd")
+            ("w"       sunshine-quick-forecast               "weather (quick)")
+            ("W"       sunshine-forecast                     "weather (full)")
             ("<s-SPC>" hydra-freq/body                       "freq files")
             ("<SPC>"   ace-jump-mode                         "ace jump")
-            ("q"       nil                                   "cancel")))
+            ("q"       nil                                   "cancel" :color blue)))
 
 
 (provide 'setup-misc)
