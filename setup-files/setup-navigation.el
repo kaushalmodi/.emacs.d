@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-09 15:52:55 kmodi>
+;; Time-stamp: <2015-02-11 14:04:00 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -178,7 +178,7 @@ point reaches the beginning or end of the buffer, stop there."
            (setcar ffap-string-at-point-region beg)
            (setcar (cdr ffap-string-at-point-region) end)))))
 
-;; Inspired for this question on emacs.SE: http://emacs.stackexchange.com/q/4271/115
+;; Inspired from this emacs.SE question: http://emacs.stackexchange.com/q/4271/115
 (defun modi/forward-word-begin(arg)
   "Move forward a word and end up with the point being at the beginning of the
 next word.  Move point forward ARG words (backward if ARG is negative).
@@ -272,8 +272,6 @@ If ARG is omitted or nil, move point forward one word."
 (bind-keys
  :map modi-mode-map
  ("<f1>"   . goto-line)
- ;; override the binding of `C-a` for `move-beginning-of-line'
- ("C-a"    . back-to-indentation-or-beginning-of-line)
  ;; Move faster
  ("C-S-n"  . next-line-fast)
  ("C-S-p"  . previous-line-fast)
@@ -307,9 +305,11 @@ If ARG is omitted or nil, move point forward one word."
 ;; The `M-}' and `M-{' bindings are useful in Ibuffer and dired to move to
 ;; next and previous marked items respectively. So bind them in global map so
 ;; that those major modes and override the below bindings.
+;; Allow the `term-mode-map' to override the binding to `C-a'
 (bind-keys
- ("M-}" . forward-paragraph) ;; default key-binding for `forward-paragraph'
- ("M-{" . backward-paragraph) ;; default key-binding for `backward-paragraph'
+ ("C-a" . back-to-indentation-or-beginning-of-line) ; default binding for `move-beginning-of-line'
+ ("M-}" . forward-paragraph) ;; default binding for `forward-paragraph'
+ ("M-{" . backward-paragraph) ;; default binding for `backward-paragraph'
  )
 
 (key-chord-define-global "1q" 'goto-line) ;; alternative for F1
