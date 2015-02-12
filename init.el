@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 10:11:53 kmodi>
+;; Time-stamp: <2015-02-12 17:31:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -214,9 +214,9 @@
 
 (req-package-finish) ; Start loading packages in right order
 
+;; require `setup-work' but don't trigger error if not found
 (require 'setup-work nil t)
 
-;; require `secrets' but don't trigger error if not found
 (if (daemonp)
     (add-hook 'window-setup-hook
               (λ (message ">> Daemon mode")
