@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 11:32:08 kmodi>
+;; Time-stamp: <2015-02-12 12:34:15 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -406,6 +406,9 @@ Example: M-644 M-x modi/set-file-permissions."
     (message "%s" cmd)
     (shell-command cmd)))
 
+(defvar modi/toggle-one-window--buffer-name nil
+  "Variable to store the name of the buffer for which the `modi/toggle-one-window'
+function is called.")
 (defun modi/toggle-one-window ()
   "Toggles the frame state between deleting all windows other than
 the current window and the windows state prior to that.
@@ -413,8 +416,16 @@ the current window and the windows state prior to that.
 `winner' is required for this function."
   (interactive)
   (if (one-window-p)
-      (winner-undo)
-    (delete-other-windows)))
+      (progn
+        (winner-undo)
+        (when modi/toggle-one-window--buffer-name
+          ;; This is required because `winner-undo' does not always take you
+          ;; back to the same buffer; it does take you back to the same
+          ;; window configuration.
+          (switch-to-buffer modi/toggle-one-window--buffer-name)))
+    (progn
+      (setq modi/toggle-one-window--buffer-name (buffer-name))
+      (delete-other-windows))))
 
 ;; Key bindings
 (bind-keys
