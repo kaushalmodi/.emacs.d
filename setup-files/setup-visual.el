@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 13:18:41 kmodi>
+;; Time-stamp: <2015-02-12 09:50:54 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -30,10 +30,9 @@
 ;; THEME and COLORS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq default-dark-theme  'smyx)
 (setq default-light-theme 'leuven)
-;; (setq default-theme       'zenburn)
-(setq default-theme       'smyx)
-;; (setq default-theme       'leuven)
+(setq default-theme       default-dark-theme)
 
 ;; zenburn
 (defun zenburn ()
@@ -89,6 +88,13 @@
     (setq fci-rule-color "#F2F2F2")
     (fci-mode -1)))
 
+(defun toggle-theme ()
+  "Toggles theme between the default light and default dark themes."
+  (interactive)
+  (if dark-theme
+      (funcall default-light-theme)
+    (funcall default-dark-theme)))
+
 ;; Load the theme ONLY after the frame has finished loading (needed especially
 ;; when running emacs in daemon mode)
 ;; Source: https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
@@ -142,7 +148,7 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 (defun modi/font-size-decr ()  (interactive) (modi/font-size-adj -1))
 (defun modi/font-size-reset () (interactive) (modi/font-size-adj 0))
 
-(modi/font-size-reset)
+(modi/font-size-reset) ; Initialize font-size-pt var to the default value
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LINE TRUNCATION / VISUAL LINE MODE
