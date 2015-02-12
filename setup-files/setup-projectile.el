@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-11 09:09:46 kmodi>
+;; Time-stamp: <2015-02-12 17:56:13 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -56,34 +56,34 @@ getting a list of all files in a project."
       ("g"  projectile-find-file-dwim-other-window   "file dwim")
       ("q"  nil                                      nil :color blue))
 
-    (bind-key "s-f"
-              (defhydra hydra-projectile (:color blue)
-                "projectile"
-                ("a"   projectile-ag                      "ag")
-                ("b"   projectile-switch-to-buffer        "buffer")
-                ("d"   projectile-find-dir                "dir")
-                ("s-f" projectile-find-file               "file")
-                ("f"   projectile-find-file-dwim          "file dwim")
-                ("F"   projectile-find-file-in-directory  "Find file in dir")
-                ("g"   ggtags-update-tags                 "gtags")
-                ("s-g" ggtags-update-tags                 nil)
-                ("i"   projectile-invalidate-cache        "invalidate")
-                ("I"   projectile-ibuffer                 "Ibuffer")
-                ("K"   projectile-kill-buffers            "Kill all buffers")
-                ("s-k" projectile-kill-buffers            "Kill all buffers")
-                ("m"   projectile-multi-occur             "multi-occur")
-                ("o"   projectile-multi-occur             "multi-occur")
-                ("s-p" projectile-switch-project          "switch")
-                ("p"   projectile-switch-project          nil)
-                ("s"   projectile-switch-project          nil)
-                ("r"   projectile-recentf                 "recent")
-                ("z"   projectile-cache-current-file      "cache current")
-                ("`"   hydra-projectile-other-window/body "other window")
-                ("q"   nil                                nil :color blue))
-              modi-mode-map)
+    (defhydra hydra-projectile (:color blue)
+      "projectile"
+      ("a"   projectile-ag                      "ag")
+      ("b"   projectile-switch-to-buffer        "buffer")
+      ("d"   projectile-find-dir                "dir")
+      ("s-f" projectile-find-file               "file")
+      ("f"   projectile-find-file-dwim          "file dwim")
+      ("F"   projectile-find-file-in-directory  "Find file in dir")
+      ("g"   ggtags-update-tags                 "gtags")
+      ("s-g" ggtags-update-tags                 nil)
+      ("i"   projectile-invalidate-cache        "invalidate")
+      ("I"   projectile-ibuffer                 "Ibuffer")
+      ("K"   projectile-kill-buffers            "Kill all buffers")
+      ("s-k" projectile-kill-buffers            "Kill all buffers")
+      ("m"   projectile-multi-occur             "multi-occur")
+      ("o"   projectile-multi-occur             "multi-occur")
+      ("s-p" projectile-switch-project          "switch")
+      ("p"   projectile-switch-project          nil)
+      ("s"   projectile-switch-project          nil)
+      ("r"   projectile-recentf                 "recent")
+      ("x"   projectile-remove-known-project    "remove")
+      ("X"   projectile-cleanup-known-projects  "cleanup")
+      ("z"   projectile-cache-current-file      "cache current")
+      ("`"   hydra-projectile-other-window/body "other window")
+      ("q"   nil                                nil :color blue))
 
+    (bind-key "s-f" #'hydra-projectile/body  modi-mode-map)
 
-    ;; Globally enable Projectile
     (projectile-global-mode)))
 
 
