@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-27 15:59:50 kmodi>
+;; Time-stamp: <2015-02-11 15:32:55 kmodi>
 
 ;; Eww
 ;; Emacs browser (needs emacs 24.4 or higher)
@@ -29,13 +29,47 @@ See the `eww-search-prefix' variable for the search engine used."
                (eww (buffer-substring beg end))
              (eww (modi/get-symbol-at-point))))
 
+         (defun modi/eww-go-to-first-search-result (search-term)
+           "Navigate to the first search result in the *eww* buffer.
+
+This function is not for interactive use."
+           (eww search-term)
+           (switch-to-buffer-other-window "*eww*") ; don't reuse the current window
+           ;; The while loop will keep on repeating every 0.1 seconds till the
+           ;; result of `(search-forward-regexp " +1 +" nil :noerror)' is non-nil
+           (catch 'break
+             (while t
+               (goto-char (point-min)) ; go to the top of the buffer
+               (search-forward-regexp "[0-9]+ +results" nil :noerror) ; go to the start of results
+               (when (search-forward-regexp " +1 +" nil :noerror) ; go to the first result
+                 (throw 'break nil))
+               (sleep-for 0.1))) ; 0.1 second wait
+           (shr-next-link)) ; go to the result hyperlink
+
+         (defun modi/eww-copy-link-first-search-result (search-term)
+           "Copy the link to the first search result."
+           (interactive "sSearch term: ")
+           (modi/eww-go-to-first-search-result search-term)
+           ;; Copy the actual link instead of redirection link by calling
+           ;; `shr-copy-url' twice
+           (dotimes (i 2) (shr-copy-url))
+           (kill-buffer "*eww*")) ; kill *eww* buffer
+
+         (defun modi/eww-im-feeling-lucky (search-term)
+           "Navigate to the first search result directly."
+           (interactive "sSearch term (I'm Feeling Lucky!): ")
+           (modi/eww-go-to-first-search-result search-term)
+           (eww-follow-link))
+
+         ;; Auto-refreshing *eww* buffer
+         ;; http://emacs.stackexchange.com/a/2566/115
          (defun modi/eww-open-file-with-notify (file)
            "Open a file in eww and add `file-notify' watch for it."
            (interactive "fFile: ")
            (eww-open-file file)
            (file-notify-add-watch file
                                   '(change attribute-change)
-                                  'modi/eww-notify-callback))
+                                  #'modi/eww-notify-callback))
 
          (defun modi/eww-notify-callback (event)
            "On getting triggered, switch to the *eww* buffer,
@@ -55,6 +89,7 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
            (quit-window :kill)
            (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
              (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
+         ;;
 
          (bind-keys
           :map eww-mode-map
@@ -90,7 +125,8 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
           ("<down-mouse-1>" . eww-toggle-checkbox))
          (bind-keys
           :map modi-mode-map
-          ("M-s M-w" . eww-search-words))
+          ("M-s M-w" . eww-search-words)
+          ("M-s M-l" . modi/eww-copy-link-first-search-result))
          (key-chord-define-global       "-=" 'eww)
          (key-chord-define eww-mode-map "XX" 'modi/eww-quit)
 
