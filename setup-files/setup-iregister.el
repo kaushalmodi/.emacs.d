@@ -1,28 +1,78 @@
-;; Time-stamp: <2015-02-09 11:58:46 kmodi>
+;; Time-stamp: <2015-02-11 17:13:25 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
 
-(defalias 'my/iregister-copy        'iregister-point-or-text-to-register-kill-ring-save)
-(defalias 'my/iregister-cut         'iregister-copy-to-register-kill)
-(defalias 'my/iregister-copy-append 'iregister-append-to-latest-register)
-(defalias 'my/iregister-cut-append  'iregister-append-to-latest-register-delete)
+(defalias 'my/iregister-copy           'iregister-point-or-text-to-register-kill-ring-save)
+(defalias 'my/iregister-cut            'iregister-copy-to-register-kill)
+(defalias 'my/iregister-copy-append    'iregister-append-to-latest-register)
+(defalias 'my/iregister-delete-append  'iregister-append-to-latest-register-delete)
 
 (req-package iregister
   :config
   (progn
+
+    (defun my/iregister-copy-append-sep (start end &optional separator)
+      (interactive "r\nsSeparator: ")
+      (if (region-active-p)
+          (let ((selection (buffer-substring-no-properties start end)))
+            (if iregister-last-used-register
+                (with-temp-buffer
+                  (if (string-match "\\n" separator)
+                      (newline)
+                    (insert separator))
+                  (insert selection)
+                  (append-to-register iregister-last-used-register
+                                      (point-min) (point-max)))
+              (message "No registers has been used within iregister.el.")))
+        (message "!Region is not active.")))
+
+    (defun my/iregister-delete-append-sep (start end &optional separator)
+      (interactive "r\nsSeparator: ")
+      (if (region-active-p)
+          (let ((selection (buffer-substring-no-properties start end)))
+            (if iregister-last-used-register
+                (with-temp-buffer
+                  (if (string-match "\\n" separator)
+                      (newline)
+                    (insert separator))
+                  (insert selection)
+                  (append-to-register iregister-last-used-register
+                                      (point-min) (point-max))
+                  (when (equal delete-flag '(4))
+                    (delete-region start end)))
+              (message "No registers has been used within iregister.el.")))
+        (message "!Region is not active.")))
+
+    (defhydra hydra-append (:color blue)
+      "append"
+      ;; Copy the selection and append to the latest register
+      ("."     my/iregister-copy-append                   "Rcopy-nil-r")
+      ("s" (lambda (beg end)
+             (interactive "r")
+             (my/iregister-copy-append-sep beg end " "))  "Rcopy-SPC-r")
+      ("n" (lambda (beg end)
+             (interactive "r")
+             (my/iregister-copy-append-sep beg end "\n")) "Rcopy-newl-r")
+      ;; Delete the selection and append to the latest register
+      ("x."     my/iregister-delete-append                  "Rdel-nil-r")
+      ("xs" (lambda (beg end)
+              (interactive "r")
+              (my/iregister-delete-append-sep beg end " ")) "Rdel-SPC-r")
+      ("xn" (lambda (beg end)
+              (interactive "r")
+              (my/iregister-delete-append-sep beg end "\n"))"Rdel-newl-r"))
+
     (bind-keys
      ;; If region is active then `iregister-point-or-text-to-register' command stores a
      ;; text to any empty register, otherwise it stores a point.
-     ("M-w"     . my/iregister-copy) ;; Replace normal copy function
-     ("C-w"     . my/iregister-cut) ;; Replace normal 'cut' function
-     ;; Copy the selection and append to the latest register
-     ("C-x r a" . my/iregister-copy-append)
-     ;; Delete the selection and append to the latest register
-     ("C-x r A" . my/iregister-cut-append)
+     ("M-w"     . my/iregister-copy) ; Replace normal copy function
+     ("C-w"     . my/iregister-cut) ; Replace normal 'cut' function
+     ("C-x r a" . hydra-append/body)
      ;; ("M-n"     . iregister-jump-to-next-marker)
      ;; ("M-p"     . iregister-jump-to-previous-marker)
      )
+
     ;; Assuming that there are already stored some texts (by means of `copy-to-register'
     ;; or `iregister-copy-to-register' command) in the registers. Execute
     ;; `iregister-text' and the minibuffer will display the text stored in some
