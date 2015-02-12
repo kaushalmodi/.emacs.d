@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-11 12:28:50 kmodi>
+;; Time-stamp: <2015-02-12 11:41:41 kmodi>
 
 ;; multi-term
 ;; Source: http://www.emacswiki.org/emacs/multi-term.el
@@ -15,20 +15,9 @@
     ;; make a local copy of this var each time a new term buffer is opened or
     ;; `term-mode' is called again.
 
-    ;; Canonical Lisp: \"^[^> \\n]*>+:? *\" (Lucid, franz, kcl, T, cscheme, oaklisp)
-    ;; Lucid Common Lisp: \"^\\\\(>\\\\|\\\\(->\\\\)+\\\\) *\"
-    ;; franz: \"^\\\\(->\\\\|<[0-9]*>:\\\\) *\"
-    ;; kcl: \"^>+ *\"
-    ;; shell: \"^[^#$%>\\n]*[#$%>] *\"
-    ;; T: \"^>+ *\"
-
     ;; multi-term
     (setq multi-term-buffer-name "term")
     (setq multi-term-program (getenv "SHELL"))
-
-    (bind-keys
-     :map term-mode-map
-     ("C-a" . term-bol))
 
     (setq term-bind-key-alist
           '(("C-c C-c" . term-interrupt-subjob) ; default
@@ -53,8 +42,8 @@
             ("M-DEL"   . term-send-backward-kill-word)
             ("M-r"     . term-send-reverse-search-history) ; default
             ("M-,"     . term-send-raw) ; default
-            ("M-."     . comint-dynamic-complete)) ; default
-          )))
+            ("M-."     . comint-dynamic-complete))) ; default
+    ))
 
 
 (provide 'setup-term)
