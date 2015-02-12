@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 14:48:46 kmodi>
+;; Time-stamp: <2015-02-12 18:02:12 kmodi>
 
 ;; Highlight Symbol at point/cursor
 ;; (require 'highlight-symbol)
@@ -44,13 +44,16 @@ globally or locally (when called with prefix `C-u')."
 
     (defhydra hydra-hl-anything (:color red)
       "hl-anything"
-      ("h" my/hl-anything       "hl-global")
-      ("H" (my/hl-anything 4)   "hl-local")
-      ("u" my/unhl-anything     "unhl-global" :color blue)
-      ("U" (my/unhl-anything 4) "unhl-local"  :color blue)
-      ("n" hl-find-next-thing   "next")
-      ("p" hl-find-prev-thing   "prev")
-      ("q" nil                  "cancel" :color blue))
+      ("h" my/hl-anything             "hl-global")
+      ("H" (my/hl-anything 4)         "hl-local")
+      ("u" my/unhl-anything           "unhl-global" :color blue)
+      ("U" (my/unhl-anything 4)       "unhl-local" :color blue)
+      ("n" hl-find-next-thing         "next")
+      ("p" hl-find-prev-thing         "prev")
+      ("s" hl-save-highlights         "save" :color blue)
+      ("r" hl-restore-highlights      "restore" :color blue)
+      ("t" hl-global-highlight-on/off "toggle")
+      ("q" nil                        "cancel" :color blue))
 
     (bind-to-modi-map "h" hydra-hl-anything/body)))
 
