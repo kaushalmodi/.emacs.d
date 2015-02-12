@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 16:07:15 kmodi>
+;; Time-stamp: <2015-02-11 09:09:46 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -52,7 +52,8 @@ getting a list of all files in a project."
       "projectile-other-window"
       ("b"  projectile-switch-to-buffer-other-window "buffer")
       ("d"  projectile-find-dir-other-window         "dir")
-      ("f"  projectile-find-file-dwim-other-window   "file")
+      ("f"  projectile-find-file-other-window        "file")
+      ("g"  projectile-find-file-dwim-other-window   "file dwim")
       ("q"  nil                                      nil :color blue))
 
     (bind-key "s-f"
@@ -61,8 +62,8 @@ getting a list of all files in a project."
                 ("a"   projectile-ag                      "ag")
                 ("b"   projectile-switch-to-buffer        "buffer")
                 ("d"   projectile-find-dir                "dir")
-                ("s-f" projectile-find-file-dwim          "file")
-                ("f"   projectile-find-file-dwim          nil)
+                ("s-f" projectile-find-file               "file")
+                ("f"   projectile-find-file-dwim          "file dwim")
                 ("F"   projectile-find-file-in-directory  "Find file in dir")
                 ("g"   ggtags-update-tags                 "gtags")
                 ("s-g" ggtags-update-tags                 nil)
