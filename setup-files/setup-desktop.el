@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-28 09:23:41 kmodi>
+;; Time-stamp: <2015-02-11 09:29:35 kmodi>
 
 ;; Desktop save and restore
 
@@ -79,11 +79,11 @@
               buf)
           nil)))
 
-    (defun save-desktop-save-buffers-kill-emacs ()
+    (defun save-desktop-save-buffers-stop-emacs ()
       "Save buffers and current desktop every time when quitting emacs."
       (interactive)
       (desktop-save-in-desktop-dir)
-      (save-buffers-kill-emacs))
+      (tv-stop-emacs))
 
     (bind-keys
      :map modi-mode-map
@@ -93,9 +93,9 @@
     ;; So bind the keys globally instead of to the minor mode map.
     (if desktop-save-mode
         (bind-keys
-         ("C-x C-c" . save-desktop-save-buffers-kill-emacs)
-         ("C-x M-c" . tv-stop-emacs))
-      (bind-key "C-x C-c" 'tv-stop-emacs))))
+         ("C-x C-c" . save-desktop-save-buffers-stop-emacs)
+         ("C-x M-c" . tv-stop-emacs)) ; quit without saving desktop
+      (bind-key "C-x C-c" #'tv-stop-emacs))))
 
 
 (provide 'setup-desktop)
