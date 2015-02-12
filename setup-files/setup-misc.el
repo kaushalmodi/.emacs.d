@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 10:05:22 kmodi>
+;; Time-stamp: <2015-02-12 11:30:30 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -126,6 +126,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("m"     modi-mode                    "modi mode")
   ("n"     endless/narrow-or-widen-dwim "narrow/widen")
   ("N"     neotree-toggle               "neotree")
+  ("o"     modi/toggle-one-window       "one window")
   ("p"     prez-mode                    "presentation")
   ("r"     dired-toggle-read-only       "read only") ; generalized `read-only-mode'
   ("s"     toggle-window-split          "split horz/vert" :color red)
