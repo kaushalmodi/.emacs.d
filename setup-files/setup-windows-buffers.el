@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 12:34:15 kmodi>
+;; Time-stamp: <2015-02-13 12:22:10 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -251,23 +251,21 @@ Prefixed with two `universal argument's, copy the full path without env var repl
 If a scratch buffer does not exist, create it with the major mode set to that
 of the buffer from where this function is called.
 
-    C-u COMMAND -> Open a regular scratch buffer in `org-mode'
-C-u C-u COMMAND -> Open a regular scratch buffer in `emacs-elisp-mode'"
-  (require 'cl-lib)
-  (interactive "p")
-  (let* (mode-str scratch-buffer-name)
-    (if (string-match "*scratch" (format "%s" (current-buffer)))
-        (switch-to-buffer (other-buffer))
-      (progn
-        (cl-case arg
-          (4  (setq mode-str "org-mode"))
-          (16 (setq mode-str "emacs-lisp-mode"))
-          (t  (setq mode-str (format "%s" major-mode))))
-        (setq scratch-buffer-name (get-buffer-create (concat "*scratch-" mode-str "*")))
-        (switch-to-buffer scratch-buffer-name)
-        (modi-mode) ; Set my minor mode to activate my key bindings
-                                        ; Source: http://stackoverflow.com/questions/7539615/emacs-how-do-i-set-a-major-mode-stored-in-a-variable ; ; ; ; ; ; ; ; ;
-        (funcall (intern mode-str))))))
+    C-u COMMAND -> Open/switch to a scratch buffer in `org-mode'
+C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
+  (interactive "P")
+  (if (and (null arg)
+           (string-match "\*scratch" (buffer-name)))
+      (switch-to-buffer (other-buffer))
+    (let (mode-str)
+      (cl-case (car arg)
+        (4  (setq mode-str "org-mode"))
+        (16 (setq mode-str "emacs-lisp-mode"))
+        (t  (setq mode-str (format "%s" major-mode))))
+      (switch-to-buffer (get-buffer-create
+                         (concat "*scratch-" mode-str "*")))
+      (modi-mode) ; Set my minor mode to activate my key bindings
+      (funcall (intern mode-str))))) ; http://stackoverflow.com/a/7539787/1219634
 
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
 ;; This is to avoid the irritating occassions where repeated `C-g` pressing doesn't
