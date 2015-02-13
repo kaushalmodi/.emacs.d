@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 17:28:02 kmodi>
+;; Time-stamp: <2015-02-13 17:15:00 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -392,7 +392,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
 
 ;; Forked version of https://github.com/purcell/unfill
 (req-package unfill
-  :load-path "from-git/unfill")
+  :load-path "from-git/unfill/")
 
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
@@ -448,7 +448,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
 ;; default binding `C-x =' with something else.
 (bind-to-modi-map "=" what-cursor-position)
 
-;; Source: http://oremacs.com/2015/01/14/repeatable-commands/
+;; Comment Commander
 ;; Usage: Quickly pressing `j' twice will toggle comment on the current line or
 ;;        region and proceed the cursor to the next line.
 ;;        Now each consecutive pressing of `j', will toggle the comment on that
@@ -461,21 +461,22 @@ Temporarily consider - and _ characters as part of the word when sorting."
 ;;        Numeric prefixes are supported too:
 ;;
 ;;        jj 5j 7j 2j j 7n n n j j p j n
-(key-chord-define-global "jj"
-                         (defhydra hydra-comment(:color red)
-                           "comment mode"
-                           ("j"   endless/comment-line-or-region "toggle comment")
-                           ("p"   previous-line                  "prev line")
-                           ("n"   next-line                      "next line")
-                           ("{"   backward-paragraph             "backward para")
-                           ("P"   backward-paragraph             "backward para")
-                           ("}"   forward-paragraph              "forward para")
-                           ("N"   forward-paragraph              "forward para")
-                           ("m"   set-mark-command               "set mark")
-                           ("d"   mark-defun                     "mark defun")
-                           ("s b" backward-sexp                  "backward sexp")
-                           ("s f" forward-sexp                   "forward sexp")
-                           ("q"   nil                            "cancel" :color blue)))
+(defhydra hydra-comment (:color red)
+  "comment"
+  ("j"   endless/comment-line-or-region "toggle comment")
+  ("p"   previous-line                  "prev line")
+  ("n"   next-line                      "next line")
+  ("{"   backward-paragraph             "backward para")
+  ("P"   backward-paragraph             "backward para")
+  ("}"   forward-paragraph              "forward para")
+  ("N"   forward-paragraph              "forward para")
+  ("m"   set-mark-command               "set mark")
+  ("f"   mark-defun                     "mark defun")
+  ("k"   smart-kill-whole-line          "kill line")
+  ("s b" backward-sexp                  "backward sexp")
+  ("s f" forward-sexp                   "forward sexp")
+  ("q"   nil                            "cancel" :color blue))
+(key-chord-define-global "jj" #'hydra-comment/body)
 
 (key-chord-define-global "^^" (λ (insert "λ")))
 
