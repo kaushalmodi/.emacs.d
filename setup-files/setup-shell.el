@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-06 10:48:29 kmodi>
+;; Time-stamp: <2015-02-13 11:41:58 kmodi>
 
 ;; Shell Script Mode
 
@@ -20,6 +20,12 @@
 
 ;; Also set the csh indent functions in conf mode (for files like .tmux.conf )
 (add-hook 'conf-space-mode-hook #'my/tcsh-set-indent-functions)
+
+;; Don't display async command execution windows
+;; http://emacs.stackexchange.com/a/5554/115
+(add-to-list 'display-buffer-alist
+             (cons "\\*Async Shell Command\\*.*"
+                   (cons #'display-buffer-no-window nil)))
 
 
 (provide 'setup-shell)
