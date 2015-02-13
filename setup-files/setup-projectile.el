@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 17:56:13 kmodi>
+;; Time-stamp: <2015-02-13 15:06:15 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -60,14 +60,14 @@ getting a list of all files in a project."
       "projectile"
       ("a"   projectile-ag                      "ag")
       ("b"   projectile-switch-to-buffer        "buffer")
+      ("c"   projectile-invalidate-cache        "cache clear")
       ("d"   projectile-find-dir                "dir")
       ("s-f" projectile-find-file               "file")
-      ("f"   projectile-find-file-dwim          "file dwim")
-      ("F"   projectile-find-file-in-directory  "Find file in dir")
+      ("ff"  projectile-find-file-dwim          "file dwim")
+      ("fd"  projectile-find-file-in-directory  "find file in dir")
       ("g"   ggtags-update-tags                 "gtags")
       ("s-g" ggtags-update-tags                 nil)
-      ("i"   projectile-invalidate-cache        "invalidate")
-      ("I"   projectile-ibuffer                 "Ibuffer")
+      ("i"   projectile-ibuffer                 "Ibuffer")
       ("K"   projectile-kill-buffers            "Kill all buffers")
       ("s-k" projectile-kill-buffers            "Kill all buffers")
       ("m"   projectile-multi-occur             "multi-occur")
@@ -83,6 +83,7 @@ getting a list of all files in a project."
       ("q"   nil                                nil :color blue))
 
     (bind-key "s-f" #'hydra-projectile/body  modi-mode-map)
+    (bind-key "s-p" #'hydra-projectile/body  modi-mode-map)
 
     (projectile-global-mode)))
 
