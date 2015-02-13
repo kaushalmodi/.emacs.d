@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-11 17:13:25 kmodi>
+;; Time-stamp: <2015-02-13 09:56:55 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
@@ -24,7 +24,8 @@
                   (insert selection)
                   (append-to-register iregister-last-used-register
                                       (point-min) (point-max)))
-              (message "No registers has been used within iregister.el.")))
+              (message "No registers has been used within iregister.el."))
+            (deactivate-mark))
         (message "!Region is not active.")))
 
     (defun my/iregister-delete-append-sep (start end &optional separator)
@@ -41,7 +42,8 @@
                                       (point-min) (point-max))
                   (when (equal delete-flag '(4))
                     (delete-region start end)))
-              (message "No registers has been used within iregister.el.")))
+              (message "No registers has been used within iregister.el."))
+            (deactivate-mark))
         (message "!Region is not active.")))
 
     (defhydra hydra-append (:color blue)
