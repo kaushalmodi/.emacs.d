@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 16:15:59 kmodi>
+;; Time-stamp: <2015-02-13 14:52:27 kmodi>
 
 ;; Eww
 ;; Emacs browser (needs emacs 24.4 or higher)
@@ -20,6 +20,13 @@
          ;; http://emacs.stackexchange.com/q/2955/115
          (setq shr-color-visible-luminance-min 80) ; default = 40
 
+         ;; Auto-rename new eww buffers
+         ;; http://ergoemacs.org/emacs/emacs_eww_web_browser.html
+         (defun xah-rename-eww-hook ()
+           "Rename eww browser's buffer so sites open in new page."
+           (rename-buffer "eww" t))
+         (add-hook 'eww-mode-hook #'xah-rename-eww-hook)
+
          ;; Override the default definition of `eww-search-words'
          (defun eww-search-words (&optional beg end)
            "Search the web for the text between the point and marker.
@@ -33,27 +40,30 @@ See the `eww-search-prefix' variable for the search engine used."
            "Navigate to the first search result in the *eww* buffer.
 
 This function is not for interactive use."
+           (while (string-match "eww" (buffer-name))
+             (bury-buffer))
            (eww search-term)
-           (switch-to-buffer-other-window "*eww*") ; don't reuse the current window
            ;; The while loop will keep on repeating every 0.1 seconds till the
            ;; result of `(search-forward-regexp " +1 +" nil :noerror)' is non-nil
            (catch 'break
              (while t
                (goto-char (point-min)) ; go to the top of the buffer
-               (search-forward-regexp "[0-9]+ +results" nil :noerror) ; go to the start of results
-               (when (search-forward-regexp " +1 +" nil :noerror) ; go to the first result
+               (search-forward-regexp "[0-9]+\\s-+results" nil :noerror) ; go to the start of results
+               (when (search-forward-regexp "\\s-+1\\s-+" nil :noerror) ; go to the first result
                  (throw 'break nil))
                (sleep-for 0.1))) ; 0.1 second wait
-           (shr-next-link)) ; go to the result hyperlink
+           (forward-char 5)) ; locate the point safely on the first result link
 
          (defun modi/eww-copy-link-first-search-result (search-term)
            "Copy the link to the first search result."
            (interactive "sSearch term: ")
-           (modi/eww-go-to-first-search-result search-term)
-           ;; Copy the actual link instead of redirection link by calling
-           ;; `shr-copy-url' twice
-           (dotimes (i 2) (shr-copy-url))
-           (kill-buffer "*eww*")) ; kill *eww* buffer
+           (let ((eww-buffer-name))
+             (modi/eww-go-to-first-search-result search-term)
+             (setq eww-buffer-name (rename-buffer "*eww-temp*" t))
+             ;; Copy the actual link instead of redirection link by calling
+             ;; `shr-copy-url' twice
+             (dotimes (i 2) (shr-copy-url))
+             (kill-buffer eww-buffer-name))) ; kill the eww buffer
 
          (defun modi/eww-im-feeling-lucky (search-term)
            "Navigate to the first search result directly."
@@ -130,7 +140,10 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
           ("\>"          . eww-forward-url)
           ("/"           . highlight-regexp))
          (>=e "25.0"
-              (bind-key "R" #'eww-readable eww-mode-map))
+              (bind-key "R" #'eww-readable eww-mode-map)
+              ;; Refresh the page with `eww-reload' or `g' to switch back to
+              ;; the default view
+              )
          (bind-keys
           :map eww-text-map ; For single line text fields
           ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
