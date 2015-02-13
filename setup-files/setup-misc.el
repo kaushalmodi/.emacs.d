@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 14:21:14 kmodi>
+;; Time-stamp: <2015-02-13 17:25:02 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -162,7 +162,8 @@ If the file is emacs lisp, run the byte compiled version if exist."
                 "/.tmux.conf"))                                ".tmux.conf")
   ("v" (find-file
         (concat user-home-directory
-                "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")) "IEEE-SV"))
+                "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")) "IEEE-SV")
+  ("q" nil                                                     "cancel" :color blue))
 
 (defhydra hydra-launch (:color blue)
   "launch"
@@ -171,9 +172,9 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("c"       calc                                  "calc")
   ("d"       ediff-buffers                         "ediff")
   ("D"       dired-single-magic-buffer-current-dir "dired")
-  ("e e"     eww                                   "eww")
-  ("e l"     modi/eww-im-feeling-lucky             "eww lucky")
-  ("e u"     (eww (browse-url-url-at-point))       "eww current url")
+  ("ee"      eww                                   "eww")
+  ("el"      modi/eww-im-feeling-lucky             "eww lucky")
+  ("eu"      (eww (browse-url-url-at-point))       "open url in eww")
   ("f"       browse-url-firefox                    "firefox")
   ("m"       man                                   "man")
   ("n"       neotree-toggle                        "neotree")
@@ -181,16 +182,81 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("p"       paradox-list-packages                 "packages")
   ;; chmod usage: s-SPC 644 P, s-SPC 400 P
   ("P"       modi/set-file-permissions             "chmod")
-  ("s"       shell-command                         "shell cmd")
+  ("sa"      async-shell-command                   "async shell cmd")
+  ("ss"      shell-command                         "shell cmd")
   ("w"       sunshine-quick-forecast               "weather (quick)")
   ("W"       sunshine-forecast                     "weather (full)")
   ("<s-SPC>" hydra-freq/body                       "freq files")
   ("<SPC>"   ace-jump-mode                         "ace jump")
+  (":"       eval-expression                       "eval")
   ("q"       nil                                   "cancel" :color blue))
 
 (key-chord-define-global "qq"      #'hydra-toggle/body)
 (bind-key                "s-t"     #'hydra-toggle/body modi-mode-map)
 (bind-key                "<s-SPC>" #'hydra-launch/body)
+
+;; Vi-mode
+;; http://oremacs.com/2015/02/05/amaranth-hydra/
+(req-package setup-iregister) ; To get the defalias definitions
+(defun hydra-vi/pre ()
+  (set-cursor-color "#e52b50"))
+(defun hydra-vi/post ()
+  "`hcz-set-cursor-color-color' variable is set in `setup-visual.el'"
+  (set-cursor-color hcz-set-cursor-color-color))
+(defun hydra-vi/end-of-buffer (&optional arg)
+  (interactive "P")
+  (let* ((numeric-arg (if (consp arg) (car arg) arg))
+         (pos-arg (if (and arg (< numeric-arg 0)) (- 0 numeric-arg) numeric-arg)))
+    (if arg
+        (goto-line pos-arg) ; go to a line if argument is specified
+      (goto-char (point-max))))) ; end of buffer
+(defun hydra-vi/beginning-of-buffer (&optional arg)
+  (interactive "P")
+  (let* ((numeric-arg (if (consp arg) (car arg) arg))
+         (pos-arg (if (and arg (< numeric-arg 0)) (- 0 numeric-arg) numeric-arg)))
+    (if arg
+        (goto-line pos-arg) ; go to a line if argument is specified
+      (goto-char (point-min))))) ; beginning of buffer
+
+(defhydra hydra-vi (:pre hydra-vi/pre :post  hydra-vi/post :color amaranth)
+  "vi"
+  ;; basic navigation
+  ("l"        forward-char                 nil)
+  ("h"        backward-char                nil)
+  ("j"        next-line                    nil)
+  ("k"        previous-line                nil)
+  ;; mark
+  ("m"        set-mark-command             "mark")
+  ("C-o"      (set-mark-command 4)         "jump to prev location")
+  ;; beginning/end of line
+  ("a"        back-to-indentation-or-beginning-of-line "beg of line/indentation")
+  ("^"        back-to-indentation-or-beginning-of-line "beg of line/indentation")
+  ("$"        move-end-of-line             "end of line")
+  ;; word navigation
+  ("e"        forward-word                 "end of word")
+  ("w"        modi/forward-word-begin      "beg of next word")
+  ("b"        backward-word                "beg of word")
+  ;; page scrolling
+  ("<prior>"  scroll-down-command          "page up")
+  ("<next>"   scroll-up-command            "page down")
+  ;; delete/cut/copy/paste
+  ("x"        delete-forward-char          "del char")
+  ("d"        my/iregister-cut             "cut/del")
+  ("D"        smart-kill-whole-line        "cut/del line")
+  ("y"        my/iregister-copy            "copy")
+  ("p"        yank                         "paste" :color blue)
+  ;; beginning/end of buffer and go to line
+  ("g"        hydra-vi/beginning-of-buffer "beg of buffer/goto line")
+  ("G"        hydra-vi/end-of-buffer       "end of buffer/goto line")
+  ("<return>" goto-line                    "goto line")
+  ;; undo/redo
+  ("u"        undo-tree-undo               "undo")
+  ("C-r"      undo-tree-redo               "redo")
+  ;; misc
+  ("<SPC>"    ace-jump-mode                "ace jump" :color blue)
+  ;; quit
+  ("q"        nil                          "quit" :color blue))
+(bind-key "C-:" #'hydra-vi/body modi-mode-map)
 
 
 (provide 'setup-misc)
