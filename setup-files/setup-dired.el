@@ -1,23 +1,38 @@
-;; Time-stamp: <2014-10-24 09:58:48 kmodi>
+;; Time-stamp: <2015-02-13 10:38:21 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
-;; Source: http://www.emacswiki.org/emacs-en/dired-single.el
+;; http://www.emacswiki.org/emacs-en/dired-single.el
+;; http://truongtx.me/2013/04/24/dired-as-default-file-manager-1-introduction
 
 (req-package dired
   :defer t
   :config
   (progn
+    (setq dired-recursive-deletes 'always)
+    (setq dired-recursive-copies 'always)
+    ;; Set this variable to non-nil, Dired will try to guess a default
+    ;; target directory. This means: if there is a dired buffer
+    ;; displayed in the next window, use its current subdir, instead
+    ;; of the current subdir of this dired buffer. The target is used
+    ;; in the prompt for file copy, rename etc.
+    (setq dired-dwim-target t)
+    (setq delete-by-moving-to-trash t
+          trash-directory (concat "/tmp/trash/"
+                                  (getenv "USER")
+                                  "/emacs/"))
+
     (setq diredp-hide-details-initially-flag nil) ; http://irreal.org/blog/?p=3341
+    ;; detail toggling is bound to `(' in dired-mode by default
+
     (req-package dired-single)
     (req-package dired+)
     (req-package dired-x
       :config
       (progn
         (setq dired-omit-verbose nil)
-        ;; ;; hide backup, autosave, *.*~ files
-        ;; ;; omit mode can be toggled using `M-o' in dired buffer
-        ;; (setq-default dired-omit-files-p t)))
-        (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))))
+        ;; hide backup, autosave, *.*~ files
+        ;; omit mode can be toggled using `M-o' in dired buffer
+        (setq-default dired-omit-mode t)))
 
     (defun rename-dired-buffer-name ()
       "Rename the dired buffer name to distinguish it from file buffers.
