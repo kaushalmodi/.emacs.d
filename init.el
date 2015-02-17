@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 17:31:45 kmodi>
+;; Time-stamp: <2015-02-16 11:59:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -115,7 +115,10 @@
 (req-package temp-mode)
 
 (req-package gist)
-(req-package hydra)
+(req-package hydra
+  :config
+  (progn
+    (hydra-add-font-lock)))
 
 ;; Set up the looks of emacs
 (req-package setup-popwin) ;; require popwin first as packages might depend on it
