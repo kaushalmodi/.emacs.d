@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 14:16:27 kmodi>
+;; Time-stamp: <2015-02-16 11:49:34 kmodi>
 
 ;; Org Mode
 
@@ -308,7 +308,7 @@ this with to-do items than with projects or headings."
 
 ;; org-tree-slide
 (use-package org-tree-slide
-  :load-path "from-git/org-tree-slide"
+  ;; :load-path "from-git/org-tree-slide"
   :config
   (progn
     (setq org-tree-slide-slide-in-effect nil)

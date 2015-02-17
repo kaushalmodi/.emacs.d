@@ -72,6 +72,7 @@
         number ; number manipulation
         org htmlize poporg ; Get the latest org-mode package from MELPA
                                         ; poporg to edit comments from any other mode in org mode
+        org-tree-slide
         ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         outshine outorg navi-mode ; org-mode like structure in other major modes
         paradox ; package menu improvements
