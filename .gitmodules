@@ -22,3 +22,6 @@
 [submodule "from-git/unfill"]
 	path = from-git/unfill
 	url = https://github.com/kaushalmodi/unfill
+[submodule "from-git/transpose-frame"]
+	path = from-git/transpose-frame
+	url = https://github.com/emacsmirror/transpose-frame

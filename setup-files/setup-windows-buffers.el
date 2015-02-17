@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-13 12:22:10 kmodi>
+;; Time-stamp: <2015-02-16 16:12:23 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -100,6 +100,17 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
+
+;; Better alternative to `toggle-window-split', `transpose-frame'
+;; Converts between horz-split <-> vert-split. In addition it also rotates
+;; the windows around in the frame when you have 3 or more windows.
+(req-package transpose-frame
+  :load-path "from-git/transpose-frame/"
+  :config
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("C-c t" . transpose-frame))))
 
 ;; Source: http://www.whattheemacsd.com/
 (defun rotate-windows ()
@@ -351,7 +362,7 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
       (enlarge-window 1))))
 
 (defhydra hydra-win-resize
-    (nil "C-M-]" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
+  (nil "C-M-]" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
   "win-resize"
   ("]"  hydra-move-splitter-right "→")
   ("["  hydra-move-splitter-left  "←")
@@ -437,7 +448,6 @@ the current window and the windows state prior to that.
  ;; Make Alt+mousewheel scroll the other buffer
  ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
  ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ; M + wheel down
- ("C-c t"       . toggle-window-split) ; convert between horz-split <-> vert-split
  ("C-c s"       . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
