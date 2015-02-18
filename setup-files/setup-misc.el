@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-16 16:12:58 kmodi>
+;; Time-stamp: <2015-02-17 19:31:13 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -138,9 +138,11 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("<SPC>" whitespace-mode              "whitespace" :color red)
   ("<f11>" toggle-frame-maximized       "fullscreen")
   ("q"     nil                          "cancel" :color blue))
+(key-chord-define-global "qq"  #'hydra-toggle/body)
+(bind-key                "s-t" #'hydra-toggle/body modi-mode-map)
 
 ;; Launcher
-(defhydra hydra-freq (:color blue)
+(defhydra hydra-launch-freq (:color blue)
   "open"
   ("a" (find-file
         (concat user-home-directory
@@ -164,7 +166,6 @@ If the file is emacs lisp, run the byte compiled version if exist."
         (concat user-home-directory
                 "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")) "IEEE-SV")
   ("q" nil                                                     "cancel" :color blue))
-
 (defhydra hydra-launch (:color blue)
   "launch"
   ("a"       ag-regexp-cwd                         "ag here") ; ag in current dir
@@ -186,14 +187,11 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("ss"      shell-command                         "shell cmd")
   ("w"       sunshine-quick-forecast               "weather (quick)")
   ("W"       sunshine-forecast                     "weather (full)")
-  ("<s-SPC>" hydra-freq/body                       "freq files")
+  ("<s-SPC>" hydra-launch-freq/body                "freq files")
   ("<SPC>"   ace-jump-mode                         "ace jump")
   (":"       eval-expression                       "eval")
   ("q"       nil                                   "cancel" :color blue))
-
-(key-chord-define-global "qq"      #'hydra-toggle/body)
-(bind-key                "s-t"     #'hydra-toggle/body modi-mode-map)
-(bind-key                "<s-SPC>" #'hydra-launch/body)
+(bind-key "<s-SPC>" #'hydra-launch/body)
 
 ;; Vi-mode
 ;; http://oremacs.com/2015/02/05/amaranth-hydra/
