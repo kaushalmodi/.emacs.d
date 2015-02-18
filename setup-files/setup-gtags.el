@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-17 16:13:20 kmodi>
+;; Time-stamp: <2015-02-17 20:57:24 kmodi>
 
 ;; gtags, GNU global
 
 (req-package ggtags
-  :require (verilog-mode key-chord)
+  :require (key-chord)
   :config
   (progn
 

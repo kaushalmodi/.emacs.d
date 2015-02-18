@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-17 19:24:06 kmodi>
+;; Time-stamp: <2015-02-17 20:58:39 kmodi>
 
 ;; Hydra
 ;; https://github.com/abo-abo/hydra
 
-(use-package hydra
+(req-package hydra
   ;; :load-path "from-git/hydra"
   :config
   (progn

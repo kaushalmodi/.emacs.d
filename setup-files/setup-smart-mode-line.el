@@ -1,9 +1,8 @@
-;; Time-stamp: <2015-02-17 18:03:58 kmodi>
+;; Time-stamp: <2015-02-17 20:53:47 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
-;; Source: https://github.com/Bruce-Connor/smart-mode-line
-
+;; https://github.com/Bruce-Connor/smart-mode-line
 
 ;; It is crucial that this require line happens after the above setq block
 (req-package smart-mode-line

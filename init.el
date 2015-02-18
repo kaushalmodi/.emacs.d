@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-17 19:36:57 kmodi>
+;; Time-stamp: <2015-02-17 20:58:05 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -112,11 +112,11 @@
 (require 'benchmark-init)
 (require 'req-package)
 
-(use-package setup-region-bindings-mode)
-(use-package setup-key-chord)
-(use-package setup-hydra)
-(use-package modi-mode)
-(use-package temp-mode)
+(req-package setup-region-bindings-mode)
+(req-package setup-key-chord)
+(req-package setup-hydra)
+(req-package modi-mode)
+(req-package temp-mode)
 
 (use-package gist)
 
