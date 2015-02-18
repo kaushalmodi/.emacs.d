@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 13:34:20 kmodi>
+;; Time-stamp: <2015-02-17 11:29:34 kmodi>
 
 ;; Fill Column Indicator
 ;; Source: http://www.emacswiki.org/FillColumnIndicator
@@ -7,28 +7,26 @@
   :config
   (progn
 
+    (defvar modi/fci-mode-hooks '(verilog-mode-hook
+                                  emacs-lisp-mode-hook
+                                  python-mode-hook
+                                  sh-mode-hook
+                                  cperl-mode-hook
+                                  org-mode-hook)
+      "List of hooks of major modes in which fci mode should be enabled.")
+
     (defun modi/turn-on-fci-mode ()
       "Turn on fci-mode only for specific modes.
     As truncation is enabled only in fci-mode, truncation will be activated
     only in the below modes"
       (interactive)
-      (dolist (hook '(verilog-mode-hook
-                      emacs-lisp-mode-hook
-                      python-mode-hook
-                      sh-mode-hook
-                      cperl-mode-hook
-                      org-mode-hook))
+      (dolist (hook modi/fci-mode-hooks)
         (add-hook hook #'fci-mode)))
 
     (defun modi/turn-off-fci-mode ()
       "Turn off fci-mode only for specific modes."
       (interactive)
-      (dolist (hook '(verilog-mode-hook
-                      emacs-lisp-mode-hook
-                      python-mode-hook
-                      sh-mode-hook
-                      cperl-mode-hook
-                      org-mode-hook))
+      (dolist (hook modi/fci-mode-hooks)
         (remove-hook hook #'fci-mode)))
 
     (modi/turn-on-fci-mode)
