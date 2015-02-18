@@ -1,10 +1,12 @@
-;; Time-stamp: <2015-02-04 15:08:46 kmodi>
+;; Time-stamp: <2015-02-18 16:44:45 kmodi>
 
 ;; Emacs Lisp Mode
 
 ;; Solution to toggle debug on a function whether it is defined inside or
 ;; outside a `use-package' wrapper
 ;; http://emacs.stackexchange.com/q/7643/115
+
+(require 'which-func)
 
 ;; Edebug defun
 (defvar modi/fns-in-edebug nil
