@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-16 11:59:51 kmodi>
+;; Time-stamp: <2015-02-17 19:36:57 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -11,10 +11,12 @@
                             "\\([0-9]+\\)\\.\\([0-9]+\\).*"
                             "\\1_\\2" emacs-version) ; 25.0.50.1 -> 25_0
       org-directory        (concat user-home-directory "/org")
-      setup-packages-file  (expand-file-name "setup-packages.el" user-emacs-directory)
-      custom-file          (expand-file-name (concat "custom_"
-                                                     emacs-version-short
-                                                     ".el") user-emacs-directory))
+      setup-packages-file  (expand-file-name
+                            "setup-packages.el"
+                            user-emacs-directory)
+      custom-file          (expand-file-name
+                            (concat "custom_" emacs-version-short ".el")
+                            user-emacs-directory))
 
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
@@ -44,6 +46,7 @@
         eww-lnum ; jump to links in eww buffer ace-jump style
         fill-column-indicator
         gist
+        git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+
         ggtags
         guide-key
         hardcore-mode
@@ -109,16 +112,13 @@
 (require 'benchmark-init)
 (require 'req-package)
 
-(req-package setup-region-bindings-mode)
-(req-package setup-key-chord)
-(req-package modi-mode)
-(req-package temp-mode)
+(use-package setup-region-bindings-mode)
+(use-package setup-key-chord)
+(use-package setup-hydra)
+(use-package modi-mode)
+(use-package temp-mode)
 
-(req-package gist)
-(req-package hydra
-  :config
-  (progn
-    (hydra-add-font-lock)))
+(use-package gist)
 
 ;; Set up the looks of emacs
 (req-package setup-popwin) ;; require popwin first as packages might depend on it
@@ -144,6 +144,7 @@
 (req-package setup-elisp-slime-nav)
 (req-package setup-expand-region)
 (req-package setup-fci)
+(req-package setup-git-gutter)
 (req-package setup-guide-key)
 (req-package setup-hardcore)
 (req-package setup-header2 nil t) ;; No error if not found
