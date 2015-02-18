@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-17 19:31:13 kmodi>
+;; Time-stamp: <2015-02-18 16:37:16 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -79,9 +79,6 @@ If the file is emacs lisp, run the byte compiled version if exist."
             (shell-command cmdStr "*xah-run-current-file output*" ))
         (message "No recognized program file suffix for this file.")))))
 (bind-to-modi-map "l" xah-run-current-file)
-
-;; Print to printer defined by env var `PRINTER'
-(bind-to-modi-map "p" ps-print-buffer-with-faces)
 
 ;; Help Functions +
 (require 'help-fns+)
