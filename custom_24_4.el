@@ -35,7 +35,6 @@
  '(indicate-empty-lines nil)
  '(keyboard-coding-system (quote utf-8-unix) nil nil "default EOL system = that of Unix")
  '(magit-auto-revert-mode nil)
- '(major-mode (quote text-mode) nil nil "If the default value of major-mode is nil, the major mode is taken from the previously current buffer")
  '(menu-bar-mode nil)
  '(next-line-add-newlines nil nil nil "Do not auto-add newlines at the end of the file on pressing `C-n` or down arrow")
  '(org-confirm-elisp-link-not-regexp "\\(.*switch\\-to\\-buffer.*\\|org-show\\)")
@@ -128,8 +127,7 @@
        (set
         (make-local-variable
          (quote bookmark-make-record-function))
-        (quote bmkp-make-w3m-record))))) t)
- '(which-function-mode nil))
+        (quote bmkp-make-w3m-record))))) t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
