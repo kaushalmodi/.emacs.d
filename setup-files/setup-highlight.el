@@ -1,24 +1,6 @@
-;; Time-stamp: <2015-02-12 18:02:12 kmodi>
+;; Time-stamp: <2015-02-18 10:24:37 kmodi>
 
-;; Highlight Symbol at point/cursor
-;; (require 'highlight-symbol)
-;; NOTE: highlight-symbol package is no longer required. The highlight-global
-;; package does a very good job!
-
-;; ;; Highlight Global
-;; ;; Source: https://github.com/glen-dai/highlight-global
-;; ;; Unlike highlight-symbol which does highlighting only in the current buffer,
-;; ;; this package highlights all matches accross ALL buffers. Multiple highlights
-;; ;; are supported. Different highlights show in different faces.
-;; ;; There are 2 ways to select a highlight target:
-;; ;; 1. Mark the selection by region (very useful when you want to
-;; ;;    highlight a pattern across all symbols),
-;; ;; 2. Put cursor on a symbol to pick the symbol to highlight.
-;; (req-package highlight-global
-;;   :config
-;;   (progn
-;;     (bind-to-modi-map "h" highlight-frame-toggle)
-;;     (bind-to-modi-map "H" clear-highlight-frame)))
+;; Highlight stuff
 
 ;; Highlight Anything
 (req-package hl-anything
@@ -64,7 +46,6 @@ globally or locally (when called with prefix `C-u')."
   (progn
     (volatile-highlights-mode t)))
 
-
 ;; Auto Highlight Symbol
 ;; https://github.com/emacsmirror/auto-highlight-symbol
 (req-package auto-highlight-symbol
@@ -87,7 +68,6 @@ globally or locally (when called with prefix `C-u')."
 (>=e "24.4"
      ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
      ;; highlight color automatically
-;;;###autoload
      (defun hi-lock-face-buffer (regexp)
        "Interactively, prompt for REGEXP using `read-regexp'. Uses the
    next face from `hi-lock-face-defaults' without prompting.
