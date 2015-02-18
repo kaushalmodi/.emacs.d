@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-17 20:58:05 kmodi>
+;; Time-stamp: <2015-02-18 10:50:17 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -104,8 +104,8 @@
         yasnippet
         ))
 
-(load custom-file) ;; Load the emacs `M-x customize` generated file
-(load setup-packages-file) ;; Load the packages
+(load custom-file) ; Load the emacs `M-x customize` generated file
+(load setup-packages-file) ; Load the packages
 
 (require 'cl-lib)
 (require 'defuns)
