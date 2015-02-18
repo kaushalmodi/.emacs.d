@@ -1,88 +1,8 @@
-;; Time-stamp: <2015-01-27 14:33:54 kmodi>
+;; Time-stamp: <2015-02-18 00:06:02 kmodi>
 
 ;; Search
 
 (setq case-fold-search t) ;; Ignore case when searching
-
-;; Source: http://www.emacswiki.org/emacs/SearchAtPoint
-
-(defun isearch-yank-regexp (regexp)
-  "Pull REGEXP into search regexp."
-  (let ((isearch-regexp nil)) ;; Dynamic binding of global.
-    (isearch-yank-string regexp))
-  (isearch-search-and-update))
-
-(defun isearch-yank-symbol (&optional partialp backward)
-  "Put symbol at current point into search string.
-
-    If PARTIALP is non-nil, find all partial matches."
-  (interactive "P")
-
-  (let (from to bound sym)
-    (setq sym
-                                        ; this block taken directly from find-tag-default
-                                        ; we couldn't use the function because we need the internal from and to values
-          (when (or (progn
-                      ;; Look at text around `point'.
-                      (save-excursion
-                        (skip-syntax-backward "w_") (setq from (point)))
-                      (save-excursion
-                        (skip-syntax-forward "w_") (setq to (point)))
-                      (> to from))
-                    ;; Look between `line-beginning-position' and `point'.
-                    (save-excursion
-                      (and (setq bound (line-beginning-position))
-                           (skip-syntax-backward "^w_" bound)
-                           (> (setq to (point)) bound)
-                           (skip-syntax-backward "w_")
-                           (setq from (point))))
-                    ;; Look between `point' and `line-end-position'.
-                    (save-excursion
-                      (and (setq bound (line-end-position))
-                           (skip-syntax-forward "^w_" bound)
-                           (< (setq from (point)) bound)
-                           (skip-syntax-forward "w_")
-                           (setq to (point)))))
-            (buffer-substring-no-properties from to)))
-    (cond ((null sym)
-           (message "No symbol at point"))
-          ((null backward)
-           (goto-char (1+ from)))
-          (t
-           (goto-char (1- to))))
-    (isearch-search)
-    (if partialp
-        (isearch-yank-string sym)
-      (isearch-yank-regexp
-       (concat "\\_<" (regexp-quote sym) "\\_>")))))
-
-;; Search for the highlighted string in ALL buffers `search-all-buffers'
-;; Source: http://stackoverflow.com/questions/2641211/emacs-interactively-search-open-buffers
-(require 'cl)
-(defcustom search-all-buffers-ignored-files (list (rx-to-string '(and bos (or ".bash_history" "TAGS") eos)))
-  "Files to ignore when searching buffers via \\[search-all-buffers]."
-  :type 'editable-list)
-
-(require 'grep)
-(defun search-all-buffers (regexp prefix)
-  "Searches file-visiting buffers for occurence of REGEXP.  With
-prefix > 1 (i.e., if you type C-u \\[search-all-buffers]),
-searches all buffers."
-  (interactive (list (grep-read-regexp)
-                     current-prefix-arg))
-  (message "Regexp is %s; prefix is %s" regexp prefix)
-  (multi-occur
-   (if (member prefix '(4 (4)))
-       (buffer-list)
-     (remove-if
-      (lambda (b)
-        (some
-         (lambda (rx) (string-match rx
-                                    (file-name-nondirectory
-                                     (buffer-file-name b))))
-         search-all-buffers-ignored-files))
-      (remove-if-not 'buffer-file-name (buffer-list))))
-   regexp))
 
 ;; Anzu mode
 ;; Source: https://github.com/syohex/emacs-anzu
@@ -91,20 +11,20 @@ searches all buffers."
   :config
   (progn
     (global-anzu-mode +1)
-    ;; color of search count shown in the mode-line by anzu
-    (set-face-attribute 'anzu-mode-line nil
-                        :foreground "lightblue" :weight 'bold)
-    (setq anzu-mode-lighter                "" ;; String to show in the mode-line, default is " Anzu"
-          anzu-search-threshold            1000 ;; anzu stops searching after reaching 1000 matches
-          anzu-replace-to-string-separator " => "
-          )
-    (bind-keys
-     :map region-bindings-mode-map
-     ("]" . anzu-query-replace-at-cursor-thing))
+
+    (set-face-attribute 'anzu-mode-line nil :foreground "lightblue" :weight 'bold)
+    (setq anzu-mode-lighter                "")
+    (setq anzu-search-threshold            1000)
+    (setq anzu-replace-to-string-separator " => ")
+
     (bind-keys
      :map modi-mode-map
-     ("M-%"   . anzu-query-replace) ;; replace the emacs default `query-replace'
-     ("C-c r" . anzu-query-replace))))
+     ("M-%"   . anzu-query-replace) ; override binding for `query-replace'
+     ("C-c r" . anzu-query-replace))
+
+    (bind-keys
+     :map region-bindings-mode-map
+     ("]" . anzu-query-replace-at-cursor-thing))))
 
 ;; Visual Regular Expression search/replace
 (req-package visual-regexp
@@ -112,15 +32,12 @@ searches all buffers."
   :config
   (progn
     (setq vr--feedback-limit nil)
+
     (bind-keys
      :map modi-mode-map
-     ("C-M-%"   . vr/query-replace) ;; replace the emacs default query-replace-regexp
-     ("C-c q"   . vr/query-replace))
-
-    ;; Don't bind `C-c C-q' in modi-mode-map to prevent that from overriding
-    ;; the default org-mode binding to `org-set-tags'
-    (bind-keys
-     ("C-c C-q" . vr/mc-mark))
+     ("C-M-%" . vr/query-replace) ; override binding for `query-replace-regexp'
+     ("C-c q" . vr/query-replace)
+     ("C-c M" . vr/mc-mark))
 
     (bind-keys
      :map region-bindings-mode-map
@@ -148,7 +65,6 @@ happens within a region if one is selected."
 	       (region-beginning))
 	   (if (and transient-mark-mode mark-active)
 	       (region-end)))))
-
   (perform-replace
    (concat "\\(" string-1 "\\)\\|" string-2)
    '(replace-eval-replacement replace-quote
@@ -182,11 +98,10 @@ happens within a region if one is selected."
     ;; original buffer by `C-x C-s`
     ))
 
-;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
-;; DEL during isearch should edit the search string, not jump back to the previous result
+;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
+;; DEL during isearch should edit the search string, not jump back to
+;; the previous result
 (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
-
-(bind-to-modi-map "s" search-all-buffers)
 
 
 (provide 'setup-search)
