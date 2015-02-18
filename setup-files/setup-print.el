@@ -1,37 +1,70 @@
-;; Time-stamp: <2014-01-28 18:20:18 kmodi>
+;; Time-stamp: <2015-02-18 17:06:38 kmodi>
 
 ;; Printing
-;; Source: http://www.opensource.apple.com/source/emacs/emacs-41/emacs/lisp/ps-print.el
 ;; http://www.emacswiki.org/emacs/PsPrintPackage-23
 
-;; Don't set the fonts if emacs is launched in terminal mode or no-window mode,
-;; using "emacs -nw". In that case the value of `window-system' is nil.
-;; Source: http://stackoverflow.com/questions/5795451/how-to-detect-that-emacs-is-in-terminal-mode
-(if window-system
-    (set-fontset-font nil '(#x0250 . #x02af) (font-spec :family "DejaVu Sans Mono")))
+(req-package ps-print
+  :config
+  (progn
+    ;; Print configuration
+    (setq ps-paper-type             'letter)
+    (setq ps-print-color-p          'black-white)
+    (setq ps-font-family            'Courier)
+    (setq ps-font-size              8.5) ; default = 8.5
+    (setq ps-landscape-mode         nil)
+    (setq ps-number-of-columns      1)
 
-(setq ps-paper-type 'letter
-      ps-print-color-p 'black-white
-      ;; ps-multibyte-buffer 'bdf-font ; default = nil
-      ps-font-family 'Courier
-      ps-font-size 8.5 ; default = 8.5
-      ps-landscape-mode nil
-      ps-number-of-columns 1
-      ps-print-header 1
-      ps-print-header-frame nil
-      ps-print-only-one-header 1
-      ps-header-font-family 'Courier
-      ps-header-title-font-size 8.5
-      ps-header-font-size 8.0
-      ;; ps-header-lines 1 ; show only buffer name and page number
-      ps-header-lines 2 ; show buffer name, page number, path to file, date
-      ;; ps-header-lines 3 ; show buffer name, page number, path to file, date and time
-      ps-line-number 1
-      ps-line-number-font 'Courier
-      ps-line-number-font-size 8.0
-      ;; ps-line-number-color '(0.0 0.0 0.0) ; black
-      ;; ps-line-number-color '(1.0 1.0 1.0) ; white
-      ps-line-number-color '(0.65 0.65 0.65) ; gray
-      )
+    ;; Header configuration
+    (setq ps-print-header           1)
+    (setq ps-print-header-frame     nil)
+    (setq ps-print-only-one-header  1)
+    (setq ps-header-font-family     'Courier)
+    (setq ps-header-title-font-size 8.5)
+    (setq ps-header-font-size       8.0)
+    (setq ps-header-lines           2 )
+    ;; |-----------------+------------------------------------------------------------|
+    ;; | ps-header-lines | Description                                                |
+    ;; |-----------------+------------------------------------------------------------|
+    ;; |               1 | Show buffer name, page number                              |
+    ;; |               2 | Show buffer name, page number, path to file, date          |
+    ;; |               3 | Show buffer name, page number, path to file, date and time |
+    ;; |-----------------+------------------------------------------------------------|
+
+    ;; Line number configuration
+    (setq ps-line-number           1)
+    (setq ps-line-number-font      'Courier)
+    (setq ps-line-number-font-size 8.0)
+    (setq ps-line-number-color     '(0.65 0.65 0.65)) ; gray
+    ;; ps-line-number-color '(0.0 0.0 0.0) ; black
+    ;; ps-line-number-color '(1.0 1.0 1.0) ; white
+
+    (when (executable-find "ps2pdf")
+      (defun modi/pdf-print-buffer-with-faces (&optional filename)
+        "Print file in the current buffer as pdf, including font, color, and
+underline information.  This command works only if you are using a window system,
+so it has a way to determine color values.
+
+C-u COMMAND prompts user where to save the Postscript file (which is then
+converted to PDF at the same location."
+        (interactive (list (if current-prefix-arg
+                               (ps-print-preprint 4)
+                             (concat (file-name-sans-extension (buffer-file-name))
+                                     ".ps"))))
+        (ps-print-with-faces (point-min) (point-max) filename)
+        (shell-command (concat "ps2pdf " filename))
+        (delete-file filename)
+        (message "Deleted %s" filename)
+        (message "Wrote %s" (concat (file-name-sans-extension filename) ".pdf")))
+      (bind-to-modi-map "p" modi/pdf-print-buffer-with-faces))
+
+    ;; Print to printer defined by env var `PRINTER'
+    (bind-to-modi-map "P" ps-print-buffer-with-faces)))
+
 
 (provide 'setup-print)
+
+;; To export the file as a syntax hightlighted .ps from emacs
+;;   `C-u M-x ps-print-buffer-with-faces` and save that file with any name when
+;; prompted for the output file name
+;; !! If you don't use <C-u> in the above command, emacs will print
+;;    it directly to the default printer !!
