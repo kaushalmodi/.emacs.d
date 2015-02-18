@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-17 20:58:39 kmodi>
+;; Time-stamp: <2015-02-18 13:01:12 kmodi>
 
 ;; Hydra
 ;; https://github.com/abo-abo/hydra
@@ -7,7 +7,7 @@
   ;; :load-path "from-git/hydra"
   :config
   (progn
-    (setq hydra-lv nil)
+    ;; (setq hydra-lv nil)
     (hydra-add-font-lock)))
 
 
