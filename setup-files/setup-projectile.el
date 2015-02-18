@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-13 15:06:15 kmodi>
+;; Time-stamp: <2015-02-17 15:50:16 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -22,20 +22,25 @@
                                         )))
   :config
   (progn
+
     (defun projectile-get-ext-command ()
       "Override the projectile-defined function so that `ag' is always used for
 getting a list of all files in a project."
       projectile-ag-command)
+
     ;; Make the file list creation faster by NOT calling `projectile-get-sub-projects-files'
     (defun projectile-get-repo-files ()
       (projectile-files-via-ext-command (projectile-get-ext-command)))
+
     (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/")) ; Don't consider my home dir as a project
+
     (defun projectile-cache-files-find-file-hook ()
       "Function for caching files with `find-file-hook'."
       (when (and projectile-enable-caching
                  (projectile-project-p)
                  (not (member (projectile-project-p) projectile-ignored-projects)))
         (projectile-cache-current-file)))
+
     ;; (setq projectile-enable-caching nil)
     (setq projectile-enable-caching t) ; Enable caching, otherwise
                                         ; `projectile-find-file' is really slow
@@ -47,6 +52,22 @@ getting a list of all files in a project."
     ;; Customize the Projectile mode-line lighter
     ;; (setq projectile-mode-line '(:eval (format " Projectile[%s]" (projectile-project-name))))
     (setq projectile-mode-line " Prj")
+
+    (defun projectile-project-name ()
+      "Return project name."
+      (let ((project-root
+             (condition-case nil
+                 (projectile-project-root)
+               (error default-directory)))
+            project-name)
+        (setq project-name (file-name-nondirectory
+                            (directory-file-name project-root)))
+        (while (string-match "\\(sos_\\|\\bsrc\\b\\)" project-name)
+          (setq project-root (replace-regexp-in-string
+                              "\\(.*\\)/.+/*$" "\\1" project-root))
+          (setq project-name (file-name-nondirectory
+                              (directory-file-name project-root))))
+        project-name))
 
     (defhydra hydra-projectile-other-window (:color blue)
       "projectile-other-window"
