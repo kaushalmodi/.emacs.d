@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-18 10:50:17 kmodi>
+;; Time-stamp: <2015-02-18 13:18:13 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -104,10 +104,12 @@
         yasnippet
         ))
 
+(require 'cl)
+(require 'cl-lib)
+
 (load custom-file) ; Load the emacs `M-x customize` generated file
 (load setup-packages-file) ; Load the packages
 
-(require 'cl-lib)
 (require 'defuns)
 (require 'benchmark-init)
 (require 'req-package)
@@ -164,7 +166,6 @@
 (req-package setup-orgstruct)
 (req-package setup-outshine)
 (req-package setup-page-break-lines)
-(req-package setup-paradox)
 (req-package setup-pcache)
 (req-package setup-poporg)
 (req-package setup-projectile)
