@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-18 00:06:02 kmodi>
+;; Time-stamp: <2015-02-19 13:14:10 kmodi>
 
 ;; Search
 
@@ -102,6 +102,37 @@ happens within a region if one is selected."
 ;; DEL during isearch should edit the search string, not jump back to
 ;; the previous result
 (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+
+;; Search for the highlighted string in ALL buffers `search-all-buffers'
+;; http://stackoverflow.com/a/2642655/1219634
+(require 'grep)
+(defcustom search-all-buffers-ignored-files (list (rx-to-string
+                                                   '(and bos
+                                                         (or ".bash_history"
+                                                             "TAGS")
+                                                         eos)))
+  "Files to ignore when searching buffers via \\[search-all-buffers]."
+  :type 'editable-list)
+(defun search-all-buffers (regexp prefix)
+  "Searches file-visiting buffers for occurence of REGEXP.  With
+prefix > 1 (i.e., if you type C-u \\[search-all-buffers]),
+searches all buffers."
+  (interactive (list (grep-read-regexp)
+                     current-prefix-arg))
+  (message "Regexp is %s; prefix is %s" regexp prefix)
+  (multi-occur
+   (if (member prefix '(4 (4)))
+       (buffer-list)
+     (remove-if
+      (lambda (b)
+        (some
+         (lambda (rx)
+           (string-match rx (file-name-nondirectory
+                             (buffer-file-name b))))
+         search-all-buffers-ignored-files))
+      (remove-if-not 'buffer-file-name (buffer-list))))
+   regexp))
+(bind-to-modi-map "s" search-all-buffers)
 
 
 (provide 'setup-search)
