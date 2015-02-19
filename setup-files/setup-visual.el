@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-12 09:50:54 kmodi>
+;; Time-stamp: <2015-02-19 12:08:53 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -376,14 +376,17 @@ narrowed."
 ;; Usage: C-x - _ - 0 _ _ _ _ - - 0
 ;; Usage: C-x _ _ 0 - _ - _ _ _ _ - - 0
 (defhydra hydra-font-resize
-    (nil "C-x" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
+  (nil "C-x"
+       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+       :color red)
   "font-resize"
   ("-"   modi/font-size-decr  "Decrease")
   ("_"   modi/font-size-incr  "Increase")
   ("="   modi/font-size-incr  "Increase" :bind nil)
   ("+"   modi/font-size-incr  "Increase" :bind nil)
   ("C-0" modi/font-size-reset "Reset to default size")
-  ("0"   modi/font-size-reset "Reset to default size" :bind nil))
+  ("0"   modi/font-size-reset "Reset to default size" :bind nil)
+  ("q"   nil                  "cancel" :color blue))
 
 ;; Toggle menu bar
 ;; Below bkp/ vars are used to restore the original frame size after disabling
