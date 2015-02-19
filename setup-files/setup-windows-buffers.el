@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-16 16:12:23 kmodi>
+;; Time-stamp: <2015-02-19 12:06:48 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -362,13 +362,16 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
       (enlarge-window 1))))
 
 (defhydra hydra-win-resize
-  (nil "C-M-]" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
+  (nil "C-M-]"
+       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+       :color red)
   "win-resize"
   ("]"  hydra-move-splitter-right "→")
   ("["  hydra-move-splitter-left  "←")
   ("p"  hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
   ("\\" hydra-move-splitter-down  "↓")
-  ("="  balance-windows           "Balance" :bind nil))
+  ("="  balance-windows           "Balance" :bind nil)
+  ("q"  nil                       "cancel" :color blue))
 
 ;; Commented out this piece of code as it is giving the below error:
 ;; byte-code: Wrong number of arguments: (lambda (arg)
