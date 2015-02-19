@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-17 15:50:16 kmodi>
+;; Time-stamp: <2015-02-19 12:17:45 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -69,15 +69,15 @@ getting a list of all files in a project."
                               (directory-file-name project-root))))
         project-name))
 
-    (defhydra hydra-projectile-other-window (:color blue)
+    (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
       ("b"  projectile-switch-to-buffer-other-window "buffer")
       ("d"  projectile-find-dir-other-window         "dir")
       ("f"  projectile-find-file-other-window        "file")
       ("g"  projectile-find-file-dwim-other-window   "file dwim")
-      ("q"  nil                                      nil :color blue))
+      ("q"  nil                                      "cancel" :color blue))
 
-    (defhydra hydra-projectile (:color blue)
+    (defhydra hydra-projectile (:color teal)
       "projectile"
       ("a"   projectile-ag                      "ag")
       ("b"   projectile-switch-to-buffer        "buffer")
@@ -101,7 +101,7 @@ getting a list of all files in a project."
       ("X"   projectile-cleanup-known-projects  "cleanup")
       ("z"   projectile-cache-current-file      "cache current")
       ("`"   hydra-projectile-other-window/body "other window")
-      ("q"   nil                                nil :color blue))
+      ("q"   nil                                "cancel" :color blue))
 
     (bind-key "s-f" #'hydra-projectile/body  modi-mode-map)
     (bind-key "s-p" #'hydra-projectile/body  modi-mode-map)
