@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-13 17:24:31 kmodi>
+;; Time-stamp: <2015-02-19 12:24:20 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -197,11 +197,14 @@ If ARG is omitted or nil, move point forward one word."
 ;; they enable you to cycle through the list of occur matches from
 ;; within the source buffer itself."
 (defhydra hydra-nav-error
-    (nil "M-g" :bind (lambda (key cmd) (bind-key key cmd modi-mode-map)))
+  (nil "M-g"
+       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+       :color pink)
   "nav-error"
   ("g" first-error    "first")
   ("n" next-error     "next")
-  ("p" previous-error "prev"))
+  ("p" previous-error "prev")
+  ("q" nil            "cancel"))
 
 ;; Key bindings
 (bind-keys
