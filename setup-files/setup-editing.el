@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-13 17:15:00 kmodi>
+;; Time-stamp: <2015-02-19 15:39:03 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -35,20 +35,14 @@ there's a region, all lines that region covers will be duplicated."
         (setq end (point)))
       (goto-char (+ origin (* (length region) arg) arg)))))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Managing white spaces and empty newlines
 ;; Delete trailing white space in lines and empty new lines at the end of file
 ;; at the time of saving
 ;; This is very useful for macro definitions in Verilog as for multi-line
 ;; macros, NO space is allowed after line continuation character "\"
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; DATE AND TIME
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; insert date and time
 (defvar current-date-time-format "%a %b %d %H:%M:%S %Z %Y"
   "Format of date to insert with `insert-current-date-time' func
@@ -61,12 +55,9 @@ Uses `current-date-time-format' for the formatting the date/time."
   (insert (format-time-string current-date-time-format (current-time)))
   (insert "\n"))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Align
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Source: http://stackoverflow.com/questions/6217153/aligning-or-prettifying-code-in-emacs
-;; Source: http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
+;; http://stackoverflow.com/questions/6217153/aligning-or-prettifying-code-in-emacs
+;; http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
 (defun align-to-equals (begin end)
   "Align region to equal signs"
   (interactive "r")
@@ -87,9 +78,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   (interactive "r")
   ;; align-regexp syntax:  align-regexp (beg end regexp &optional group spacing repeat)
   (align-regexp begin end "\\(\\s-+\\)[a-z=(),?':`\.{}]" 1 1 t)
-  (indent-region begin end) ;; ident the region correctly after alignment
-  )
-
+  (indent-region begin end)) ;; indent the region correctly after alignment
 
 ;; http://stackoverflow.com/a/3035574/1219634
 (defun eval-and-replace-last-sexp ()
@@ -101,9 +90,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; How to use: Put the cursor at the end of an expression like (+ 1 2) and
 ;; `M-x eval-and-replace-last-sexp`
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Toggle comment on current line or selected region
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
 ;; http://endlessparentheses.com/implementing-comment-line.html
 (defun endless/comment-line-or-region (n)
@@ -176,7 +163,7 @@ remove the comment characters from that line."
 (put 'narrow-to-page   'disabled nil)
 
 ;; Enable setting goal column
-;; Source: http://emacsblog.org/2007/03/17/quick-tip-set-goal-column/
+;; http://emacsblog.org/2007/03/17/quick-tip-set-goal-column/
 (put 'set-goal-column  'disabled nil)
 ;;     C-x C-n <- Set goal column
 ;; C-u C-x C-n <- Unset goal column
@@ -211,25 +198,24 @@ remove the comment characters from that line."
   (progn
     (setq indent-guide-recursive t)
     (setq indent-guide-char "|")
+
+    (defvar modi/indent-guide-mode-hooks '(verilog-mode-hook
+                                           emacs-lisp-mode-hook
+                                           python-mode-hook
+                                           sh-mode-hook
+                                           cperl-mode-hook)
+      "List of hooks of major modes in which indent-guide-mode should be enabled.")
     (defun turn-on-indent-guide ()
       "Turn on indent-guide-mode only for specific modes."
       (interactive)
-      (dolist (hook '(verilog-mode-hook
-                      emacs-lisp-mode-hook
-                      python-mode-hook
-                      sh-mode-hook
-                      cperl-mode-hook))
-        (add-hook hook 'indent-guide-mode)))
+      (dolist (hook modi/indent-guide-mode-hooks)
+        (add-hook hook #'indent-guide-mode)))
     (defun turn-off-indent-guide ()
       "Turn off indent-guide-mode only for specific modes."
       (interactive)
       (indent-guide-global-mode -1)
-      (dolist (hook '(verilog-mode-hook
-                      emacs-lisp-mode-hook
-                      python-mode-hook
-                      sh-mode-hook
-                      cperl-mode-hook))
-        (remove-hook hook 'indent-guide-mode)))))
+      (dolist (hook modi/indent-guide-mode-hooks)
+        (remove-hook hook #'indent-guide-mode)))))
 
 ;; Aggressive auto indentation
 (defun endless/indent-defun ()
@@ -246,15 +232,12 @@ modifications)."
             (r (save-excursion (end-of-defun 1) (point))))
         (cl-letf (((symbol-function 'message) #'ignore))
           (indent-region l r))))))
-
 (defun endless/activate-aggressive-indent ()
   "Locally add `endless/indent-defun' to `post-command-hook'."
   (add-hook 'post-command-hook #'endless/indent-defun nil 'local))
-
 (add-hook 'emacs-lisp-mode-hook #'endless/activate-aggressive-indent)
 
-
-;; Source: http://stackoverflow.com/questions/12165205/how-to-copy-paste-a-region-from-emacs-buffer-with-line-file-reference
+;; http://stackoverflow.com/q/12165205/1219634
 (defun copy-with-linenum (beg end use-unicode)
   "Copy the selected region with file name, starting and ending
 line numbers, date and user name.
@@ -306,7 +289,7 @@ instead of ASCII characters for adorning the copied snippet."
 
 ;; How to position the cursor after the end of line; useful for copying/killing
 ;; rectangles have lines of varying lengths.
-;; Source: http://emacs.stackexchange.com/a/3661/115
+;; http://emacs.stackexchange.com/a/3661/115
 (req-package rectangle-utils
   :require (region-bindings-mode)
   :config
@@ -324,7 +307,7 @@ instead of ASCII characters for adorning the copied snippet."
      :map region-bindings-mode-map
      ("|" . modi/extend-rectangle-to-end))))
 
-;; Source: http://ergoemacs.org/emacs/modernization_upcase-word.html
+;; http://ergoemacs.org/emacs/modernization_upcase-word.html
 (defun xah-cycle-letter-case (arg)
   "Cycle the letter case of the selected region or the current word.
 Cycles from 'lower' -> 'Capitalize' -> 'UPPER' -> 'lower' -> ..
@@ -430,12 +413,13 @@ Temporarily consider - and _ characters as part of the word when sorting."
  ("M-j"     . comment-indent-new-line)
  ("<f9>"    . eval-region))
 
-(defhydra hydra-change-case()
+(defhydra hydra-change-case(:color red)
   "change-case"
-  ("c"   modi/capitalize       "Capitalize")     ; M-c c
-  ("u"   modi/upcase           "UPCASE")         ; M-c u
-  ("l"   modi/downcase         "downcase")       ; M-c l
-  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")) ; M-c M-c
+  ("c"   modi/capitalize       "Capitalize")
+  ("u"   modi/upcase           "UPCASE")
+  ("l"   modi/downcase         "downcase")
+  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")
+  ("q"   nil                   "cancel" :color blue))
 
 (bind-keys
  :map modi-mode-map
