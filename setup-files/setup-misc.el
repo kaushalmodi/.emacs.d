@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-18 16:37:16 kmodi>
+;; Time-stamp: <2015-02-19 12:19:10 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -108,7 +108,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
 (autoload 'dired-toggle-read-only "dired" nil t)
-(defhydra hydra-toggle (:color blue)
+(defhydra hydra-toggle (:color teal)
   "toggle"
   ("b"     modi/toggle-menu-bar         "menu bar")
   ("c"     xah-cycle-letter-case        "letter case" :color red)
@@ -139,7 +139,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
 (bind-key                "s-t" #'hydra-toggle/body modi-mode-map)
 
 ;; Launcher
-(defhydra hydra-launch-freq (:color blue)
+(defhydra hydra-launch-freq (:color teal)
   "open"
   ("a" (find-file
         (concat user-home-directory
@@ -163,7 +163,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
         (concat user-home-directory
                 "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")) "IEEE-SV")
   ("q" nil                                                     "cancel" :color blue))
-(defhydra hydra-launch (:color blue)
+(defhydra hydra-launch (:color teal)
   "launch"
   ("a"       ag-regexp-cwd                         "ag here") ; ag in current dir
   ("b"       bookmark-jump                         "bookmark")
