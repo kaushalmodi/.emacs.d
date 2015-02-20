@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-19 12:19:10 kmodi>
+;; Time-stamp: <2015-02-20 14:45:23 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -167,9 +167,12 @@ If the file is emacs lisp, run the byte compiled version if exist."
   "launch"
   ("a"       ag-regexp-cwd                         "ag here") ; ag in current dir
   ("b"       bookmark-jump                         "bookmark")
-  ("c"       calc                                  "calc")
-  ("d"       ediff-buffers                         "ediff")
+  ("c"       quick-calc                            "quick-calc")
+  ("C"       calc                                  "calc")
+  ("s-c"     rpn-calc                              "rpn-calc")
   ("D"       dired-single-magic-buffer-current-dir "dired")
+  ("d"       ediff-buffers                         "ediff")
+  ("ed"      ediff-buffers                         "ediff")
   ("ee"      eww                                   "eww")
   ("el"      modi/eww-im-feeling-lucky             "eww lucky")
   ("eu"      (eww (browse-url-url-at-point))       "open url in eww")
