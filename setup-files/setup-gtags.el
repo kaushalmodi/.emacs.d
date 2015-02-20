@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-17 20:57:24 kmodi>
+;; Time-stamp: <2015-02-19 17:13:56 kmodi>
 
 ;; gtags, GNU global
 
@@ -57,6 +57,7 @@
            ;; else return the whole `(buffer-substring beg end)'
            (buffer-substring beg end)))))
 
+    (bind-key "M-." #'ggtags-find-definition ggtags-mode-map)
     (key-chord-define-global "??" 'ggtags-show-definition)))
 
 
