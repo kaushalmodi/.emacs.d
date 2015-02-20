@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 15:20:42 kmodi>
+;; Time-stamp: <2015-02-20 11:22:47 kmodi>
 
 ;; Guide Key
 ;; https://github.com/kai2nenobu/guide-key
@@ -18,16 +18,16 @@
                                          ;; "C-c C-t" ; verilog-mode insert blocks
                                          ;; "C-c p"   ; projectile
                                          ;; "C-c p 4" ; projectile
-                                         "C-q"
-                                         "M-#"     ; outshine
-                                         )
-          guide-key/highlight-command-regexp "rectangle"
-          ;; guide-key can highlight commands which match a specified regular expression.
-          ;; Key bindings following "C-x r" are rectangle family and register family.
-          ;; Below setting highlights only rectangle family commands.
-          guide-key/idle-delay 1 ;; delay before the guide shows up, default is 1 second
-          guide-key/popup-window-position 'bottom) ;; show guide key popup at bottom
-    (guide-key-mode 1)))  ; Enable guide-key-mode
+                                         "M-#" ; outshine
+                                         "C-h"
+                                         ))
+    (setq guide-key/highlight-command-regexp "rectangle")
+    ;; guide-key can highlight commands which match a specified regular expression.
+    ;; Key bindings following "C-x r" are rectangle family and register family.
+    ;; Below setting highlights only rectangle family commands.
+    (setq guide-key/idle-delay 1) ; delay before the guide shows up, default is 1 second
+    (setq guide-key/popup-window-position 'bottom) ; show guide key popup at bottom
+    (guide-key-mode 1))) ; Enable guide-key-mode
 
 
 (provide 'setup-guide-key)
