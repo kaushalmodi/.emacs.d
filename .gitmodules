@@ -25,3 +25,6 @@
 [submodule "from-git/transpose-frame"]
 	path = from-git/transpose-frame
 	url = https://github.com/emacsmirror/transpose-frame
+[submodule "from-git/rpn-calc"]
+	path = from-git/rpn-calc
+	url = https://github.com/kaushalmodi/rpn-calc

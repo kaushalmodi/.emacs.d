@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-16 16:45:42 kmodi>
+;; Time-stamp: <2015-02-20 14:27:22 kmodi>
 
 ;; Calculator
 
@@ -48,6 +48,44 @@ because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
       (calcFunc-ceil (math-div (calcFunc-log10 x) (calcFunc-log10 2))))
 
     ))
+
+(req-package rpn-calc
+  :load-path "from-git/rpn-calc"
+  :config
+  (progn
+
+    (defvar rpn-calc--wrap-region-mode-state nil
+      "Variable to store the value of `wrap-region-mode'")
+
+    (define-minor-mode rpn-calc
+      "quick RPN calculator for hackers"
+      :init-value nil
+      :keymap rpn-calc-map
+      (cond (rpn-calc
+             (setq rpn-calc--wrap-region-mode-state wrap-region-mode)
+             (wrap-region-mode -1)
+             (setq rpn-calc--stack    nil
+                   rpn-calc--buffer (current-buffer)
+                   rpn-calc--temp-buffer (get-buffer-create " *rpn-calc*")
+                   rpn-calc--saved-minor-modes
+                   (mapcar (lambda (mode) (when mode (prog1 mode (funcall mode -1))))
+                           rpn-calc-incompatible-minor-modes)
+                   rpn-calc--popup
+                   (popup-create (point) 60 10 :selection-face 'popup-menu-selection-face))
+             (add-hook 'post-command-hook 'rpn-calc--post-command-hook)
+             (add-hook 'pre-command-hook 'rpn-calc--pre-command-hook)
+             (rpn-calc--post-command-hook))
+            (t
+             (wrap-region-mode rpn-calc--wrap-region-mode-state)
+             (remove-hook 'post-command-hook 'rpn-calc--post-command-hook)
+             (remove-hook 'pre-command-hook 'rpn-calc--pre-command-hook)
+             (popup-delete rpn-calc--popup)
+             (mapc 'funcall rpn-calc-incompatible-minor-modes)
+             (kill-buffer rpn-calc--temp-buffer))))
+
+    (bind-keys
+     :map modi-mode-map
+     ("C-~" . rpn-calc))))
 
 
 (provide 'setup-calc)
