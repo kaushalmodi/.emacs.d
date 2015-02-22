@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-13 10:38:21 kmodi>
+;; Time-stamp: <2015-02-21 20:03:24 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
@@ -65,7 +65,22 @@ It added extra strings at the front and back of the default dired buffer name."
      ;; Change the default `C-x C-j` key binding from `dired-jump'
      ;; Opens dired-single-magic-buffer but asks which directory to open that
      ;; dired buffer for.
-     ("C-x C-j" . dired-single-magic-buffer))))
+     ("C-x C-j" . dired-single-magic-buffer))
+
+    ;; http://oremacs.com/2015/02/21/hydra-docstring-sexp
+    (defhydra hydra-dired-marked (dired-mode-map "" :color pink)
+      "
+Number of marked items: %(length (dired-get-marked-files))
+"
+      ("m"   dired-mark             "mark")
+      ("u"   dired-unmark           "unmark")
+      ("U"   dired-unmark-all-marks "unmark ALL")
+      ("t"   dired-toggle-marks     "toggle marks")
+      ("N"   dired-next-marked-file "next marked")
+      ("M-}" dired-next-marked-file "next marked")
+      ("P"   dired-prev-marked-file "prev marked")
+      ("M-}" dired-prev-marked-file "prev marked")
+      ("C-g" nil                    "cancel" :color blue))))
 
 
 (provide 'setup-dired)
