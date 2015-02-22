@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-20 14:45:23 kmodi>
+;; Time-stamp: <2015-02-21 19:31:43 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -185,6 +185,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("P"       modi/set-file-permissions             "chmod")
   ("sa"      async-shell-command                   "async shell cmd")
   ("ss"      shell-command                         "shell cmd")
+  ("se"      (sx-tab-newest nil "emacs")           "emacs SE")
   ("w"       sunshine-quick-forecast               "weather (quick)")
   ("W"       sunshine-forecast                     "weather (full)")
   ("<s-SPC>" hydra-launch-freq/body                "freq files")
