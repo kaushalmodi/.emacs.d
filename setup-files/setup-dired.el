@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-21 20:03:24 kmodi>
+;; Time-stamp: <2015-02-21 20:08:41 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
@@ -76,10 +76,10 @@ Number of marked items: %(length (dired-get-marked-files))
       ("u"   dired-unmark           "unmark")
       ("U"   dired-unmark-all-marks "unmark ALL")
       ("t"   dired-toggle-marks     "toggle marks")
+      ("P"   dired-prev-marked-file "prev marked")
+      ("M-{" dired-prev-marked-file "prev marked")
       ("N"   dired-next-marked-file "next marked")
       ("M-}" dired-next-marked-file "next marked")
-      ("P"   dired-prev-marked-file "prev marked")
-      ("M-}" dired-prev-marked-file "prev marked")
       ("C-g" nil                    "cancel" :color blue))))
 
 
