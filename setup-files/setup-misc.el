@@ -1,8 +1,11 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-02-23 12:35:36 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
 (fset 'yes-or-no-p 'y-or-n-p) ;; Use y or n instead of yes or no
+
+(setq delete-by-moving-to-trash t)
+(setq trash-directory (concat "/tmp/trash/" (getenv "USER") "/emacs/"))
 
 ;; Do not make mouse wheel accelerate its action (example: scrolling)
 (setq mouse-wheel-progressive-speed nil)
