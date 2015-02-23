@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-02-23 15:19:04 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -71,35 +71,46 @@ getting a list of all files in a project."
 
     (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
-      ("b"  projectile-switch-to-buffer-other-window "buffer")
-      ("d"  projectile-find-dir-other-window         "dir")
       ("f"  projectile-find-file-other-window        "file")
       ("g"  projectile-find-file-dwim-other-window   "file dwim")
+      ("d"  projectile-find-dir-other-window         "dir")
+      ("b"  projectile-switch-to-buffer-other-window "buffer")
       ("q"  nil                                      "cancel" :color blue))
 
     (defhydra hydra-projectile (:color teal)
-      "projectile"
-      ("a"   projectile-ag                      "ag")
-      ("b"   projectile-switch-to-buffer        "buffer")
-      ("c"   projectile-invalidate-cache        "cache clear")
-      ("d"   projectile-find-dir                "dir")
-      ("s-f" projectile-find-file               "file")
-      ("ff"  projectile-find-file-dwim          "file dwim")
-      ("fd"  projectile-find-file-in-directory  "find file in dir")
-      ("g"   ggtags-update-tags                 "gtags")
+      "
+     PROJECTILE
+
+     Find File            Search/Tags          Buffers                Cache
+------------------------------------------------------------------------------------------
+_s-f_: file            _a_: ag              _i_: Ibuffer           _c_: cache clear
+_ff_: file dwim       _g_: update gtags    _b_: switch to buffer  _x_: remove known project
+_fd_: file curr dir   _o_: multi-occur     _s-k_: Kill all buffers  _X_: cleanup non-existing
+_r_: recent file                                                 _z_: cache current
+_d_: dir
+
+"
+      ("a"   projectile-ag                      nil)
+      ("b"   projectile-switch-to-buffer        nil)
+      ("c"   projectile-invalidate-cache        nil)
+      ("d"   projectile-find-dir                nil)
+      ("s-f" projectile-find-file               nil)
+      ("ff"  projectile-find-file-dwim          nil)
+      ("fd"  projectile-find-file-in-directory  nil)
+      ("g"   ggtags-update-tags                 nil)
       ("s-g" ggtags-update-tags                 nil)
-      ("i"   projectile-ibuffer                 "Ibuffer")
-      ("K"   projectile-kill-buffers            "Kill all buffers")
-      ("s-k" projectile-kill-buffers            "Kill all buffers")
-      ("m"   projectile-multi-occur             "multi-occur")
-      ("o"   projectile-multi-occur             "multi-occur")
-      ("s-p" projectile-switch-project          "switch")
+      ("i"   projectile-ibuffer                 nil)
+      ("K"   projectile-kill-buffers            nil)
+      ("s-k" projectile-kill-buffers            nil)
+      ("m"   projectile-multi-occur             nil)
+      ("o"   projectile-multi-occur             nil)
+      ("s-p" projectile-switch-project          "switch project")
       ("p"   projectile-switch-project          nil)
       ("s"   projectile-switch-project          nil)
-      ("r"   projectile-recentf                 "recent")
-      ("x"   projectile-remove-known-project    "remove")
-      ("X"   projectile-cleanup-known-projects  "cleanup")
-      ("z"   projectile-cache-current-file      "cache current")
+      ("r"   projectile-recentf                 nil)
+      ("x"   projectile-remove-known-project    nil)
+      ("X"   projectile-cleanup-known-projects  nil)
+      ("z"   projectile-cache-current-file      nil)
       ("`"   hydra-projectile-other-window/body "other window")
       ("q"   nil                                "cancel" :color blue))
 
