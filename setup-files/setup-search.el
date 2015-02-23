@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:13:52 kmodi>
+;; Time-stamp: <2015-02-23 13:07:44 kmodi>
 
 ;; Search
 
@@ -94,7 +94,7 @@ happens within a region if one is selected."
      ("M-I" . helm-multi-swoop-all))
     ;; Transition
     ;; isearch     > press [M-i] > helm-swoop
-    (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+    (define-key isearch-mode-map (kbd "M-i") #'helm-swoop-from-isearch)
     ;; helm-swoop  > press [M-i] > helm-multi-swoop-all
     (setq helm-swoop-split-direction 'split-window-vertically)
     (setq helm-swoop-speed-or-color nil) ; If nil, boosts speed in exchange for color
@@ -105,7 +105,7 @@ happens within a region if one is selected."
 ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
 ;; DEL during isearch should edit the search string, not jump back to
 ;; the previous result
-(define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+(define-key isearch-mode-map [remap isearch-delete-char] #'isearch-del-char)
 
 ;; Search for the highlighted string in ALL buffers `search-all-buffers'
 ;; http://stackoverflow.com/a/2642655/1219634
