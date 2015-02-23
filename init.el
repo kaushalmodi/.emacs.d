@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:54:03 kmodi>
+;; Time-stamp: <2015-02-23 12:09:10 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -154,7 +154,6 @@
 (use-package setup-git-gutter)
 (use-package setup-guide-key)
 (use-package setup-hardcore)
-(use-package setup-header2 nil t) ;; No error if not found
 (use-package setup-highlight)
 (use-package setup-hl-line+)
 (use-package setup-hungry-delete)
@@ -224,7 +223,7 @@
 ;; (use-package setup-ctags) ; Using gtags instead
 
 ;; require `setup-work' but don't trigger error if not found
-(use-package setup-work nil t)
+(require 'setup-work nil t)
 
 (if (daemonp)
     (add-hook 'window-setup-hook
