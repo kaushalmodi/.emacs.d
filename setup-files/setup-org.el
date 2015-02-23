@@ -1,80 +1,78 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-02-23 18:07:10 kmodi>
 
 ;; Org Mode
 
-(setq org-agenda-archives-mode nil ;; required in org 8.0+
-      org-agenda-skip-comment-trees nil
-      org-agenda-skip-function nil
-      org-src-fontify-natively t ;; fontify code in code blocks
-      org-pretty-entities t ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
-      org-pretty-entities-include-sub-superscripts nil ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
-      org-export-with-smart-quotes t
-      ;; active single key command execution when at beginning of a headline
-      org-use-speed-commands t
-      ;; Allow _ and ^ characters to sub/super-script strings but only when followed by braces
-      org-use-sub-superscripts         '{}
-      org-export-with-sub-superscripts '{}
-      ;; Insert only timestamp when closing an org TODO item
-      org-log-done 'timestamp
-      ;; org-log-done 'note ;; Insert timestamp and note when closing an org TODO item
-      ;; Source:http://orgmode.org/manual/Closing-items.html
-      org-hide-leading-stars  t ;; hidden leading stars
-      org-agenda-files (concat org-directory "/agenda.files")
-      org-blank-before-new-entry (quote ((heading) (plain-list-item))) ;; prevent auto blank lines
-      org-completion-use-ido t ;; use ido for auto completion
-      org-return-follows-link t ;; Hitting <RET> while on a link follows the link
-      org-startup-folded (quote showeverything)
-      org-todo-keywords (quote ((sequence "TODO" "SOMEDAY" "CANCELED" "DONE")))
-      org-todo-keyword-faces
+(setq org-agenda-archives-mode nil) ; required in org 8.0+
+(setq org-agenda-skip-comment-trees nil)
+(setq org-agenda-skip-function nil)
+(setq org-src-fontify-natively t) ; fontify code in code blocks
+;; Display entities like \tilde, \alpha, etc in UTF-8 characters
+(setq org-pretty-entities t
+      org-pretty-entities-include-sub-superscripts nil)
+(setq org-export-with-smart-quotes t)
+;; active single key command execution when at beginning of a headline
+(setq org-use-speed-commands t)
+;; Allow _ and ^ characters to sub/super-script strings but only when followed by braces
+(setq org-use-sub-superscripts         '{}
+      org-export-with-sub-superscripts '{})
+(setq org-log-done 'timestamp) ; Insert only timestamp when closing an org TODO item
+;; (setq org-log-done 'note) ; Insert timestamp and note when closing an org TODO item
+;; http://orgmode.org/manual/Closing-items.html
+(setq org-hide-leading-stars  t) ; hidden leading stars
+(setq org-blank-before-new-entry (quote ((heading) (plain-list-item)))) ; prevent auto blank lines
+(setq org-completion-use-ido t) ; use ido for auto completion
+(setq org-return-follows-link t) ; Hitting <RET> while on a link follows the link
+(setq org-startup-folded (quote showeverything))
+(setq org-todo-keywords (quote ((sequence "TODO" "SOMEDAY" "CANCELED" "DONE"))))
+(setq org-todo-keyword-faces
       '(("TODO"     . org-warning)
         ("SOMEDAY"  . "#FFEF9F")
-        ("CANCELED" . (:foreground "#94BFF3" :weight bold :strike-through t)))
-      ;; block entries from changing state to DONE while they have children
-      ;; that are not DONE
-      ;; Source: http://orgmode.org/manual/TODO-dependencies.html
-      org-enforce-todo-dependencies t
-      ;; Capture
-      ;; By default, org capture dialog is activated by `C-c c`
-      org-capture-templates
-      '(
-        ("j" "Journal" entry ;; C-c c j
+        ("CANCELED" . (:foreground "#94BFF3" :weight bold :strike-through t))))
+;; block entries from changing state to DONE while they have children
+;; that are not DONE
+;; http://orgmode.org/manual/TODO-dependencies.html
+(setq org-enforce-todo-dependencies t)
+
+;; Capture
+(setq org-capture-templates
+      '(("j" "Journal" entry ; `org-capture' binding + j
          (file+datetree (concat org-directory "/journal.org"))
          "\n* %?\n  Entered on %U")
-        ("n" "Note" entry ;; C-c c n
+        ("n" "Note" entry ; `org-capture' binding + n
          (file (concat org-directory "/notes.org"))
          "\n* %?\n  Context:\n    %i\n  Entered on %U")
-        ("u" "UVM/System Verilog Notes" ;; C-c c u
+        ("u" "UVM/System Verilog Notes" ; `org-capture' binding + u
          entry (file (concat org-directory "/uvm.org"))
          "\n* %?\n  Context:\n    %i\n  Entered on %U")))
 
-(when (boundp 'project1-org-dir) ;; set in setup-secret.el
+(setq org-agenda-files (expand-file-name "agenda.files" org-directory))
+
+(when (boundp 'project1-org-dir) ; set in setup-work.el
   (add-to-list 'org-capture-templates
                '("t" "Project 1 Meeting Notes" entry
                  (file+datetree
-                  (concat project1-org-dir "/dv_meeting_notes.org")) ;; C-c c t
+                  (concat project1-org-dir "/dv_meeting_notes.org"))
                  "\n* %?\n  Entered on %U")))
 
 ;; change the default app for opening pdf files from org
-;; Source: http://stackoverflow.com/questions/8834633/how-do-i-make-org-mode-open-pdf-files-in-evince
-(eval-after-load "org"
-  '(progn
-     (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
-     (add-to-list 'org-src-lang-modes '("dot"           . graphviz-dot))
-     ;; Change .pdf association directly within the alist
-     (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
+;; http://stackoverflow.com/a/9116029/1219634
+(with-eval-after-load 'org
+  (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
+  (add-to-list 'org-src-lang-modes '("dot"           . graphviz-dot))
+  ;; Change .pdf association directly within the alist
+  (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s"))
 
 ;; (require 'org-latex) in org version < 8.0
 ;; (setq org-export-latex-listings 'minted) in org version < 8.0
 ;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
 
-;; From <ORG EL DIR>/ox-latex.el
 (use-package ox-latex
   :config
   (progn
     ;; Previewing latex fragments in org mode
-    ;; Source: http://orgmode.org/worg/org-tutorials/org-latex-preview.html
-    ;; (setq org-latex-create-formula-image-program 'dvipng) ;; NOT Recommended
-    (setq org-latex-create-formula-image-program 'imagemagick) ;; Recommended
+    ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+    ;; (setq org-latex-create-formula-image-program 'dvipng) ; NOT Recommended
+    (setq org-latex-create-formula-image-program 'imagemagick) ; Recommended
     (setq org-latex-listings 'minted)
     ;; (setq org-latex-listings 'lstlisting)
 
@@ -90,17 +88,17 @@
             ;; Source: http://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting
             (""          "parskip")
             ;; ;; Replace default font with a much crisper font
-            ;; ;; Source: http://www.khirevich.com/latex/font/
+            ;; ;; http://www.khirevich.com/latex/font/
             ;; (""          "charter")
             ;; ("expert"    "mathdesign")
             ;; Code blocks syntax highlighting
             ;; (""          "listings")
             ;; (""          "xcolor")
-            (""          "minted") ;; Comment this if org-latex-create-formula-image-program
+            (""          "minted") ; Comment this if org-latex-create-formula-image-program
             ;; is set to dvipng. minted package can't be loaded
             ;; when using dvipng to show latex previews
-            ;; (""          "minted" nil) ;; Uncomment this if org-latex-create-formula-image-program
-            ;;                            ;; is set to dvipng
+            ;; (""          "minted" nil) ; Uncomment this if org-latex-create-formula-image-program
+            ;;                            ; is set to dvipng
             ;; Graphics package for more complicated figures
             (""          "tikz")
             ;; Prevent tables/figures from one section to float into another section
@@ -108,8 +106,8 @@
             ("section"   "placeins")
             ;; It doesn't seem below packages are required
             ;; ;; Packages suggested to be added for previewing latex fragments
-            ;; ;; Source: http://orgmode.org/worg/org-tutorials/org-latex-preview.html
-            ;; ("usenames"  "color") ;; HAD TO COMMENT IT OUT BECAUSE OF CLASH WITH placeins pkg
+            ;; ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+            ;; ("usenames"  "color") ; HAD TO COMMENT IT OUT BECAUSE OF CLASH WITH placeins pkg
             ("mathscr"   "eucal")
             (""          "latexsym")
             ;; Prevent an image from floating to a different location
@@ -119,8 +117,8 @@
             ))
 
     ;; "H" option is from the `float' package. That prevents the images from floating around.
-    ;; (setq org-latex-default-figure-position "htb") ;; default - figures are floating
-    (setq org-latex-default-figure-position "H") ;; figures are NOT floating
+    ;; (setq org-latex-default-figure-position "htb") ; default - figures are floating
+    (setq org-latex-default-figure-position "H") ; figures are NOT floating
 
     ;; In order to have that tex convert to pdf, you have to ensure that you have
     ;; minted.sty in your TEXMF folder.
@@ -163,20 +161,20 @@
     (setq org-latex-minted-options
           '(("linenos")
             ("numbersep"   "5pt")
-            ("frame"       "none") ;; box frame is created by the mdframed package
+            ("frame"       "none") ; box frame is created by the mdframed package
             ("framesep"    "2mm")
-            ;; ("fontfamily"  "zi4") ;; Required only when using pdflatex instead of xelatex
+            ;; ("fontfamily"  "zi4") ; Required only when using pdflatex instead of xelatex
             ))))
 
-    ;; (add-to-list 'org-latex-classes
-    ;;              '("article"
-    ;;                "\\documentclass[11pt,letterpaper]{article}"
-    ;;                ("\\section{%s}"        . "\\section*{%s}")
-    ;;                ("\\subsection{%s}"     . "\\subsection*{%s}")
-    ;;                ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")
-    ;;                ("\\paragraph{%s}"      . "\\paragraph*{%s}")
-    ;;                ("\\subparagraph{%s}"   . "\\subparagraph*{%s}"))
-    ;;              )
+;; (add-to-list 'org-latex-classes
+;;              '("article"
+;;                "\\documentclass[11pt,letterpaper]{article}"
+;;                ("\\section{%s}"        . "\\section*{%s}")
+;;                ("\\subsection{%s}"     . "\\subsection*{%s}")
+;;                ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")
+;;                ("\\paragraph{%s}"      . "\\paragraph*{%s}")
+;;                ("\\subparagraph{%s}"   . "\\subparagraph*{%s}"))
+;;              )
 
 ;; You can also do the org > tex > pdf conversion and open the pdf file in
 ;; acroread directly using the `C-c C-e l o` key binding
@@ -215,16 +213,16 @@
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
-   (ditaa    . t) ;; activate ditaa
-   (plantuml . t) ;; activate plantuml
-   (latex    . t) ;; activate latex
-   (dot      . t))) ;; activate graphviz
+   (ditaa    . t) ; activate ditaa
+   (plantuml . t) ; activate plantuml
+   (latex    . t) ; activate latex
+   (dot      . t))) ; activate graphviz
 
 (defun my-org-confirm-babel-evaluate (lang body)
-  (and (not (string= lang "ditaa"))    ;; don't ask for ditaa
-       (not (string= lang "plantuml")) ;; don't ask for plantuml
-       (not (string= lang "latex"))    ;; don't ask for latex
-       (not (string= lang "dot"))      ;; don't ask for graphviz
+  (and (not (string= lang "ditaa"))    ; don't ask for ditaa
+       (not (string= lang "plantuml")) ; don't ask for plantuml
+       (not (string= lang "latex"))    ; don't ask for latex
+       (not (string= lang "dot"))      ; don't ask for graphviz
        ))
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 (setq org-confirm-elisp-link-function 'yes-or-no-p)
@@ -242,11 +240,11 @@
   ;; :load-path "from-git/org-reveal"
   :config
   (progn
-    ;; I have git clones reveal.js in my {emacs config directory}/from-git/
+    ;; I have git cloned reveal.js in my {emacs config directory}/from-git/
     (setq org-reveal-root     (concat "file://" user-emacs-directory "/from-git/reveal.js/")
           org-reveal-hlevel   1
-          org-reveal-theme    "default" ;; beige blood moon night serif simple sky solarized
-          org-reveal-mathjax  t))) ;; Use mathjax.org to render LaTeX equations
+          org-reveal-theme    "default" ; beige blood moon night serif simple sky solarized
+          org-reveal-mathjax  t))) ; Use mathjax.org to render LaTeX equations
 
 ;; org-agenda related functions
 ;; http://sachachua.com/blog/2013/01/emacs-org-task-related-keyboard-shortcuts-agenda/
@@ -292,8 +290,8 @@ this with to-do items than with projects or headings."
 ;; https://github.com/jkitchin/jmax/blob/master/org-show.org
 ;; (use-package org-show
 ;; :load-path "from-git/org-show")
-;; (define-key  org-show-mode-map  [next]        'org-show-next-slide) ;; Pg-Down
-;; (define-key  org-show-mode-map  [prior]       'org-show-previous-slide) ;; Pg-Up
+;; (define-key  org-show-mode-map  [next]        'org-show-next-slide) ; Pg-Down
+;; (define-key  org-show-mode-map  [prior]       'org-show-previous-slide) ; Pg-Up
 
 ;; (define-key  org-show-mode-map  [f5]          'org-show-start-slideshow)
 ;; (define-key  org-show-mode-map  [f6]          'org-show-execute-slide)
@@ -318,8 +316,7 @@ this with to-do items than with projects or headings."
      ("n" . org-tree-slide-move-next-tree)
      ("q" . org-tree-slide-mode))
     (bind-keys
-     ("<C-S-f8>" . org-tree-slide-mode))
-    ))
+     ("<C-S-f8>" . org-tree-slide-mode))))
 
 ;; Key bindings
 (bind-keys
@@ -527,13 +524,13 @@ add it to `before-save-hook'."
           ;;         or [[FILE.png][FILE.png]] or [[FILE.jpg][FILE.jpg]]
           (while (search-forward-regexp
                   (concat "^\\s-*\\[\\["
-                          "\\(" modi/org-html-fancybox-img-file-prefix-regexp ":\\)*" ;; 1=file: 2=file
-                          "\\(.*?\\)" ;; 3=img-highrez
-                          "\\." modi/org-html-fancybox-img-file-regexp ;; 4=img-highrez-ext
+                          "\\(" modi/org-html-fancybox-img-file-prefix-regexp ":\\)*" ; 1=file: 2=file
+                          "\\(.*?\\)" ; 3=img-highrez
+                          "\\." modi/org-html-fancybox-img-file-regexp ; 4=img-highrez-ext
                           "\\]\\s-*\\[*"
-                          "\\(" modi/org-html-fancybox-img-file-prefix-regexp ":\\)*" ;; 5=file: 6=file
-                          "\\(.*?\\)" ;; 7=img-thumb
-                          "\\.*" modi/org-html-fancybox-img-file-regexp "*" ;; 8=img-thumb-ext
+                          "\\(" modi/org-html-fancybox-img-file-prefix-regexp ":\\)*" ; 5=file: 6=file
+                          "\\(.*?\\)" ; 7=img-thumb
+                          "\\.*" modi/org-html-fancybox-img-file-regexp "*" ; 8=img-thumb-ext
                           "\\]*"
                           "\\]")
                   nil 'noerror)
@@ -786,11 +783,16 @@ of listings as a string, or nil if it is empty."
                 :rules "groups"
                 :frame "hsides"
                 :align "center"
-                :class "table-striped")) ;; this class requires bootstrap.css ( http://getbootstrap.com )
-      ;; '(:border "2" :cellspacing "0" :cellpadding "6" :rules "groups" :frame "hsides"))
+                :class "table-striped") ; this class requires bootstrap.css ( http://getbootstrap.com )
+      ;; '(:border "2"
+      ;;           :cellspacing "0"
+      ;;           :cellpadding "6"
+      ;;           :rules "groups"
+      ;;           :frame "hsides")
+      )
 
 ;; Customize the HTML postamble
-(setq org-html-postamble t) ;; default value = 'auto
+(setq org-html-postamble t) ; default value = 'auto
 (setq org-html-postamble-format
       '(("en" "Exported using <div style=\"display: inline\" class=\"creator\">%c</div> on <div style=\"display: inline\"class=\"date\">%d</div> by %e.")))
 
@@ -876,12 +878,11 @@ INFO is a plist holding contextual information."
 	 (format "[%s]" desc)
 	 (unless org-ascii-links-to-notes (format " (%s)" raw-link))))))))
 
-;; Source: http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 ;; Pressing `C-x C-s' while editing org source code blocks saves and exits
 ;; the edit.
-(eval-after-load 'org-src
-  '(define-key org-src-mode-map
-     "\C-x\C-s" #'org-edit-src-exit))
+(with-eval-after-load 'org-src
+  (define-key org-src-mode-map "\C-x\C-s" #'org-edit-src-exit))
 
 ;; ;; Enable org export to odt (OpenDocument Text)
 ;; ;; It is disabled by default in org 8.x
