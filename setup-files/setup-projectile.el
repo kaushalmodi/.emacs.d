@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 16:07:31 kmodi>
+;; Time-stamp: <2015-02-23 16:40:22 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -79,7 +79,7 @@ getting a list of all files in a project."
 
     (defhydra hydra-projectile (:color teal)
       "
-     PROJECTILE
+     PROJECTILE: %(projectile-project-root)
 
      Find File            Search/Tags          Buffers                Cache
 ------------------------------------------------------------------------------------------
