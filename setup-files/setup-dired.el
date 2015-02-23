@@ -1,10 +1,11 @@
-;; Time-stamp: <2015-02-23 12:45:40 kmodi>
+;; Time-stamp: <2015-02-23 13:09:53 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
 ;; http://truongtx.me/2013/04/24/dired-as-default-file-manager-1-introduction
 
 (use-package dired
+  :defer t
   :config
   (progn
     (setq dired-recursive-deletes 'always)
