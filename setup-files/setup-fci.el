@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-17 11:29:34 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Fill Column Indicator
 ;; Source: http://www.emacswiki.org/FillColumnIndicator
 
-(req-package fill-column-indicator
+(use-package fill-column-indicator
   :config
   (progn
 

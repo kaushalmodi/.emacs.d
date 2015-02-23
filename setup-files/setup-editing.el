@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-19 15:39:03 kmodi>
+;; Time-stamp: <2015-02-23 11:17:14 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -183,7 +183,7 @@ remove the comment characters from that line."
 
 ;; zop-to-char
 ;; Source: https://github.com/thierryvolpiatto/zop-to-char
-(req-package zop-to-char
+(use-package zop-to-char
   :load-path "from-git/zop-to-char"
   :config
   (progn
@@ -193,7 +193,7 @@ remove the comment characters from that line."
      ("M-Z" . zop-to-char))))
 
 ;; indent-guide
-(req-package indent-guide
+(use-package indent-guide
   :config
   (progn
     (setq indent-guide-recursive t)
@@ -290,8 +290,7 @@ instead of ASCII characters for adorning the copied snippet."
 ;; How to position the cursor after the end of line; useful for copying/killing
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
-(req-package rectangle-utils
-  :require (region-bindings-mode)
+(use-package rectangle-utils
   :config
   (progn
     (defun modi/extend-rectangle-to-end(beg end)
@@ -303,9 +302,10 @@ instead of ASCII characters for adorning the copied snippet."
         (extend-rectangle-to-end beg end)
         (when original-read-only-state
           (read-only-mode +1)))) ; Revert the buffer back to its read-only state
-    (bind-keys
-     :map region-bindings-mode-map
-     ("|" . modi/extend-rectangle-to-end))))
+    (when (featurep 'region-bindings-mode)
+      (bind-keys
+       :map region-bindings-mode-map
+       ("|" . modi/extend-rectangle-to-end)))))
 
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
 (defun xah-cycle-letter-case (arg)
@@ -315,7 +315,6 @@ Cycles from 'lower' -> 'Capitalize' -> 'UPPER' -> 'lower' -> ..
         C-u M-x xah-cycle-letter-case -> Force convert to upper case.
     C-u C-u M-x xah-cycle-letter-case -> Force convert to lower case.
 C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
-  (require 'cl-lib)
   (interactive "p")
   (let (p1 p2
            (deactivate-mark nil)
@@ -374,7 +373,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
       (sort-regexp-fields reverse "\\w+" "\\&" beg end))))
 
 ;; Forked version of https://github.com/purcell/unfill
-(req-package unfill
+(use-package unfill
   :load-path "from-git/unfill/")
 
 (with-eval-after-load 'region-bindings-mode

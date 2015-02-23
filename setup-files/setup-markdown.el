@@ -1,8 +1,8 @@
-;; Time-stamp: <2014-08-13 11:45:18 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Markdown / Pancake.io
 
-(req-package markdown-mode
+(use-package markdown-mode
   :commands (markdown-mode)
   :mode (("\\.md\\'"       . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))

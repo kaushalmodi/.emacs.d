@@ -1,14 +1,14 @@
-;; Time-stamp: <2015-02-11 14:00:42 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
-(req-package ag
+(use-package ag
   :config
   (progn
     ;; wgrep-ag : To allow editing in *ag* buffer
     ;; https://github.com/mhayashi1120/Emacs-wgrep
-    (req-package wgrep-ag
+    (use-package wgrep-ag
       :commands (wgrep-ag-setup)
       :config
       (progn

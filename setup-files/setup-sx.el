@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-01-28 11:30:43 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; StackExchange Mode
 ;; https://github.com/vermiculus/sx.el
 
-(req-package sx)
+(use-package sx)
 
 
 (provide 'setup-sx)

@@ -1,11 +1,10 @@
-;; Time-stamp: <2015-01-27 13:53:20 kmodi>
+;; Time-stamp: <2015-02-23 11:02:49 kmodi>
 
 ;; magit
 ;; Source: https://github.com/magit/magit
 
-(req-package magit
+(use-package magit
   :commands (magit-status)
-  :requires (key-chord)
   :init
   (progn
     (bind-keys
@@ -13,14 +12,15 @@
      ("<f11>"   . magit-status)
      ("<S-f11>" . magit-push)
      ("<M-f11>" . magit-pull))
-    (key-chord-define-global "-[" 'magit-status)) ;; alternative for F11
+    (when (featurep 'key-chord)
+      (key-chord-define-global "-[" 'magit-status))) ; alternative for F11
   :config
   (progn
-    (setq magit-completing-read-function 'magit-ido-completing-read)
-    (setq magit-auto-revert-mode nil)
-    (setq magit-expand-staged-on-commit nil) ; default = nil
-    (setq magit-repo-dirs '( "~/.emacs.d"))
-    (setq magit-diff-options '("--ignore-space-change"))
+    (setq magit-completing-read-function #'magit-ido-completing-read)
+    (setq magit-auto-revert-mode         nil)
+    (setq magit-expand-staged-on-commit  nil) ; default = nil
+    (setq magit-repo-dirs                `( ,user-emacs-directory))
+    (setq magit-diff-options             '("--ignore-space-change"))
     (magit-auto-revert-mode -1) ;; Disable magit auto revert
     ;; While in "*magit..*" buffer on doing Commit (`c c'), the
     ;; ".. COMMIT_EDITMSG" buffer opens and reuses the "*magit .." window.

@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-01-28 09:28:36 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Pcache
 
-(req-package pcache
+(use-package pcache
   :config
   (progn
     (setq pcache-directory

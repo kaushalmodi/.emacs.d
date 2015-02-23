@@ -1,8 +1,8 @@
-;; Time-stamp: <2014-08-12 23:49:34 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Matlab
 
-(req-package matlab-load
+(use-package matlab-load
   :load-path "matlab-emacs")
 
 

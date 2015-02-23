@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-09 10:08:17 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Drag Stuff
 ;; Source: https://github.com/rejeep/drag-stuff
 
-(req-package drag-stuff
+(use-package drag-stuff
   :config
   (progn
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

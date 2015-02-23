@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-23 10:46:52 kmodi>
+;; Time-stamp: <2014-10-31 12:59:00 kmodi>
 
 (require 'image-mode)
 
@@ -21,8 +21,8 @@
              \\(?:\\(?:#[^\r\n]*[\r\n]\\)?[0-9]\\)+\
              \\)\\{2\\}" . pbm)
         ("\\`GIF8[79]a" . gif)
-        ;; ("\\`\x89PNG\r\n\x1a\n" . png) ;; Uncomment this (and comment the below line) to enable inline png images in org-mode
-        ("\\`\x89PNG\r\n\x1a\n" . imagemagick) ; png
+        ("\\`\x89PNG\r\n\x1a\n" . png) ;; Uncomment this (and comment the below line) to enable inline png images in org-mode
+        ;; ("\\`\x89PNG\r\n\x1a\n" . imagemagick) ; png
         ("\\`[\t\n\r ]*#define \\([a-z0-9_]+\\)_width [0-9]+\n\
              #define \\1_height [0-9]+\n\\(\
              #define \\1_x_hot [0-9]+\n\

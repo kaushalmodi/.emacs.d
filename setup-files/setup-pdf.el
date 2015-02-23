@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-06 18:50:53 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; PDF
 
@@ -12,7 +12,7 @@
 ;;   + poppler-glib ( http://poppler.freedesktop.org/ ) is REQUIRED
 ;; - make -s
 ;; - make install-package
-(req-package pdf-tools
+(use-package pdf-tools
   :config
   (progn
 

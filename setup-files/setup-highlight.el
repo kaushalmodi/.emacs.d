@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-18 10:24:37 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Highlight stuff
 
 ;; Highlight Anything
-(req-package hl-anything
+(use-package hl-anything
   :config
   (progn
     (hl-highlight-mode +1)
@@ -41,14 +41,14 @@ globally or locally (when called with prefix `C-u')."
 
 ;; Volatile Highlights
 ;; https://github.com/k-talo/volatile-highlights.el
-(req-package volatile-highlights
+(use-package volatile-highlights
   :config
   (progn
     (volatile-highlights-mode t)))
 
 ;; Auto Highlight Symbol
 ;; https://github.com/emacsmirror/auto-highlight-symbol
-(req-package auto-highlight-symbol
+(use-package auto-highlight-symbol
   :config
   (progn
     (bind-keys

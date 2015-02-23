@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-12 17:51:24 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Source: https://github.com/d11wtq/fiplr
 ;; Fiplr (pronounced FIP-ler, as in Find in Project) is an Emacs package to
@@ -10,7 +10,7 @@
 ;; Sublime's Control+P.
 ;; Internally it uses Grizzl to do the fuzzy searching.
 
-(req-package fiplr
+(use-package fiplr
   :config
   (progn
     (setq fiplr-root-markers  '(".git" ".svn" ".hg" ".bzr"

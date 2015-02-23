@@ -1,10 +1,9 @@
-;; Time-stamp: <2014-08-12 18:05:08 kmodi>
+;; Time-stamp: <2015-02-23 10:57:49 kmodi>
 
 ;; Ace Jump
-;; Source: http://www.emacswiki.org/emacs/AceJump
+;; http://www.emacswiki.org/emacs/AceJump
 
-(req-package ace-jump-mode
-  :require key-chord
+(use-package ace-jump-mode
   :init
   (progn
     (bind-keys
@@ -12,8 +11,10 @@
      ;; Important to use my minor mode map as I want my bindings to override
      ;; bindings in other major modes (esp org-mode)
      ("C-c SPC" . ace-jump-mode))
-    ;; Alternate binding for `ace-jump-mode'
-    (key-chord-define-global "l;" 'ace-jump-mode)))
+    (when (featurep 'key-chord)
+      ;; Alternate binding for `ace-jump-mode'
+      (key-chord-define-global "l;" 'ace-jump-mode))))
+
 
 (provide 'setup-ace-jump-mode)
 

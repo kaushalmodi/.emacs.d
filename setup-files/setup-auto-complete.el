@@ -1,8 +1,8 @@
-;; Time-stamp: <2014-08-13 12:01:22 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Auto complete
 
-(req-package auto-complete-config
+(use-package auto-complete-config
   :config
   (progn
     (setq ac-stop-words (quote ("/" "//" "/*" "//*" "///" "////"))

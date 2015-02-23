@@ -1,14 +1,17 @@
-;; Time-stamp: <2015-02-19 12:06:48 kmodi>
+;; Time-stamp: <2015-02-23 10:58:54 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
 ;; Source: http://www.emacswiki.org/emacs/WinnerMode
-(winner-mode 1) ;; Enable winner mode
+(use-package winner
+  :config
+  (progn
+    (winner-mode 1)))
 ;; Winner Mode is a global minor mode. When activated, it allows to “undo”
 ;; (and “redo”) changes in the window configuration with the key commands
 ;; ‘C-c left’ and ‘C-c right’
 
-(req-package uniquify
+(use-package uniquify
   :config
   (progn
     ;; The library uniquify overrides Emacs’ default mechanism for making buffer
@@ -18,8 +21,7 @@
     (setq uniquify-buffer-name-style 'post-forward)))
 
 ;; Source: http://www.emacswiki.org/emacs/RecentFiles
-(req-package recentf
-  :require (cl)
+(use-package recentf
   :config
   (progn
     (recentf-mode 1)
@@ -32,14 +34,14 @@
      ("n" . isearch-repeat-forward)
      ("N" . isearch-repeat-backward))))
 
-(req-package windmove
-  :require (key-chord)
+(use-package windmove
   :config
   (progn
     (setq windmove-wrap-around t) ; default = nil
     (windmove-default-keybindings) ; Bind windmove nav to S-left/right/up/down
-    (key-chord-define-global "p[" 'windmove-left)
-    (key-chord-define-global "[]" 'windmove-right)))
+    (when (featurep 'key-chord)
+      (key-chord-define-global "p[" 'windmove-left)
+      (key-chord-define-global "[]" 'windmove-right))))
 
 ;; Source: http://emacs.stackexchange.com/a/3334/115
 ;; Reopen Killed File
@@ -104,7 +106,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;; Better alternative to `toggle-window-split', `transpose-frame'
 ;; Converts between horz-split <-> vert-split. In addition it also rotates
 ;; the windows around in the frame when you have 3 or more windows.
-(req-package transpose-frame
+(use-package transpose-frame
   :load-path "from-git/transpose-frame/"
   :config
   (progn
@@ -181,7 +183,6 @@ Prefixed with two `universal argument's, copy the full path without env var repl
          file-name)
     (if file-name-full
         (progn
-          (require 'cl-lib)
           (cl-case arg
             (4 (setq file-name (concat (file-name-base file-name-full) ; C-u
                                        (file-name-extension file-name-full :period))))
@@ -483,9 +484,10 @@ the current window and the windows state prior to that.
 (bind-to-modi-map "f" full-screen-center)
 (bind-to-modi-map "y" bury-buffer)
 
-(key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
-(key-chord-define-global "ZZ" 'toggle-between-buffers)
-(key-chord-define-global "5t" 'revert-buffer) ;; alternative to F5
+(when (featurep 'key-chord)
+  (key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
+  (key-chord-define-global "ZZ" 'toggle-between-buffers)
+  (key-chord-define-global "5t" 'revert-buffer)) ; alternative to F5
 
 
 (provide 'setup-windows-buffers)

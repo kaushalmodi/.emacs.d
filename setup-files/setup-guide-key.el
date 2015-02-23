@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-20 11:22:47 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Guide Key
 ;; https://github.com/kai2nenobu/guide-key
 
-(req-package guide-key
+(use-package guide-key
   :config
   (progn
     (setq guide-key/recursive-key-sequence-flag t)

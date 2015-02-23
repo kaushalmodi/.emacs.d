@@ -1,8 +1,8 @@
-;; Time-stamp: <2014-08-13 15:09:55 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;;Python
 
-(req-package python-mode
+(use-package python-mode
   :config
   (progn
     ;; ; use IPython

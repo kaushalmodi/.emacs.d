@@ -1,6 +1,6 @@
-;; Time-stamp: <2015-01-16 19:14:13 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
-(req-package de-ansi
+(use-package de-ansi
   :config
   (progn
     (bind-to-modi-map "d" de-ansify)))

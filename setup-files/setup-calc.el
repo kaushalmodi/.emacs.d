@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-02-20 14:27:22 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Calculator
 
-(req-package calc
+(use-package calc
   :commands (calc quick-calc)
   :init
   (progn
@@ -49,7 +49,7 @@ because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
 
     ))
 
-(req-package rpn-calc
+(use-package rpn-calc
   :load-path "from-git/rpn-calc"
   :config
   (progn

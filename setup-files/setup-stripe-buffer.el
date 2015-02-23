@@ -1,15 +1,14 @@
-;; Time-stamp: <2014-08-13 11:27:54 kmodi>
+;; Time-stamp: <2015-02-23 11:28:52 kmodi>
 
 ;; Stripe Mode
-;; Source: https://github.com/sabof/stripe-buffer/blob/master/README.md
+;; https://github.com/sabof/stripe-buffer
 
-(req-package stripe-buffer
-  :require (cl-lib)
+(use-package stripe-buffer
   :config
   (progn
-    (add-hook 'package-menu-mode-hook 'stripe-listify-buffer)     ;; stripify package list
-    (add-hook 'dired-mode-hook        'stripe-listify-buffer)     ;; stripify dired
-    (add-hook 'org-mode-hook          'turn-on-stripe-table-mode))) ;; stripify tables in org-mode
+    (add-hook 'package-menu-mode-hook #'stripe-listify-buffer)       ; stripify package list
+    (add-hook 'dired-mode-hook        #'stripe-listify-buffer)       ; stripify dired
+    (add-hook 'org-mode-hook          #'turn-on-stripe-table-mode))) ; stripify tables in org-mode
 
 
 (provide 'setup-stripe-buffer)

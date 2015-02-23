@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-08-13 15:05:20 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Yet Another Folding, Folding code blocks based on indentation.
 ;; Source: https://github.com/zenozeng/yafolding.el
 
-(req-package yafolding
+(use-package yafolding
   :config
   (progn
     (add-hook 'prog-mode-hook 'yafolding-mode)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-13 01:13:50 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; ctags, etags
 
@@ -18,7 +18,7 @@
 ;; etags-table
 ;; Depending on the location of the file in buffer, the respective TAGS file is
 ;; opened on doing a tag find.
-(req-package etags-table
+(use-package etags-table
   :config
   (progn
     (setq etags-table-alist
@@ -51,7 +51,7 @@ tag find"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; etags-select
 ;; Source: http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags/
-(req-package etags-select
+(use-package etags-select
   :config
   (progn
     (bin-keys
@@ -77,7 +77,7 @@ tag find"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ctags-update
 ;; Source: https://github.com/jixiuf/helm-etags-plus
-(req-package ctags-update
+(use-package ctags-update
   :commands (turn-on-ctags-auto-update-mode)
   :config
   (progn

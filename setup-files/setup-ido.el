@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-01-27 15:24:39 kmodi>
+;; Time-stamp: <2015-02-23 11:40:40 kmodi>
 
 ;; Interactively Do Things
-;; Source: http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
-;; Source: https://github.com/magnars/.emacs.d/blob/master/setup-ido.el
+;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
+;; https://github.com/magnars/.emacs.d/blob/master/setup-ido.el
 
 ;; If ido-ubiquitous 1.6 is used in emacs 24.3, there will always be a
 ;; compile-log buffer warnings; below defvars will prevent those.
@@ -13,39 +13,52 @@
 (defvar ido-cur-list               nil)
 (defvar ido-context-switch-command nil)
 
-(req-package ido
-  :require (flx-ido ido-vertical-mode ido-ubiquitous recentf)
+(use-package ido
   :init
   (progn
-    (setq ido-enable-flex-matching t ;; enable fuzzy search
-          ido-everywhere t
-          ido-create-new-buffer 'always ;; create a new buffer if no buffer matches substring
-          ido-file-extensions-order '(".sv" ".v" ".svh" ".tv" ".m" ".c" ".cpp" ".el")
-          ;;  customize the order in which files are sorted when Ido displays them in
-          ;; the minibuffer. There are certain file extensions I use more than others,
-          ;; so I tell Ido to emphasize those
-          ido-use-filename-at-point 'guess ;; find file at point using ido
-          ;; look into other directories if the entered filename doesn't exist
-          ;; in current directory ido-auto-merge-work-directories-length -1
-          ;; do NOT look into other directories if the entered filename doesn't
-          ;; exist in current directory
-          ido-auto-merge-work-directories-length 0))
+    (setq ido-enable-flex-matching  t) ; enable fuzzy search
+    (setq ido-everywhere            t)
+    (setq ido-create-new-buffer     'always) ; create a new buffer if no buffer matches substring
+    (setq ido-file-extensions-order '(".sv" ".v" ".svh" ".tv" ".m" ".c" ".cpp" ".el"))
+    ;;  customize the order in which files are sorted when Ido displays them in
+    ;; the minibuffer. There are certain file extensions I use more than others,
+    ;; so I tell Ido to emphasize those
+    (setq ido-use-filename-at-point 'guess) ; find file at point using ido
+    ;; look into other directories if the entered filename doesn't exist
+    ;; in current directory ido-auto-merge-work-directories-length -1
+    ;; do NOT look into other directories if the entered filename doesn't
+    ;; exist in current directory
+    (setq ido-auto-merge-work-directories-length 0))
   :config
   (progn
     (ido-mode 1)
+
     ;; Use flx-ido for better flex matching between words
-    (flx-ido-mode 1)
-    (setq ido-use-faces nil) ;; disable ido faces to see flx highlights
-    (ido-vertical-mode 1) ;; flx-ido looks better with ido-vertical-mode
-    (ido-ubiquitous-mode 1)
+    (use-package flx-ido
+      :config
+      (progn
+        (flx-ido-mode 1)
+        (setq ido-use-faces nil))) ; disable ido faces to see flx highlights
+
+    (use-package ido-vertical-mode
+      :config
+      (progn
+        (ido-vertical-mode 1))) ; flx-ido looks better with ido-vertical-mode
+
+    (use-package ido-ubiquitous
+      :config
+      (progn
+        (ido-ubiquitous-mode 1)))
+
     ;; Sometimes when using ido-switch-buffer the *Messages* buffer get in the way,
     ;; so we set it to be ignored (it can be accessed using `C-h e', so there is
     ;; really no need for it in the buffer list).
     ;; Source: https://github.com/larstvei/dot-emacs
     (add-to-list 'ido-ignore-buffers "*Messages*")
-    ;; sort ido filelist by mtime instead of alphabetically
-    ;; source: http://www.emacswiki.org/emacs/InteractivelyDoThings
-    (defun ido-sort-mtime ()
+
+    ;; Sort ido filelist by mtime instead of alphabetically
+    ;; http://www.emacswiki.org/emacs/InteractivelyDoThings
+    (defun modi/ido-sort-mtime ()
       ;; Sort the list only when the File gid is non-zero;
       ;; otherwise the sort function errors out.
       ;; (message "Current dir: %s File GID: %s File Attributes: %s"
@@ -60,25 +73,32 @@
                         (time-less-p
                          (sixth (file-attributes (concat ido-current-directory b)))
                          (sixth (file-attributes (concat ido-current-directory a))))))))
-        (ido-to-end  ;; move . files to end (again)
+        (ido-to-end  ; move . files to end (again)
          (delq nil (mapcar
                     (lambda (x) (and (char-equal (string-to-char x) ?.) x))
                     ido-temp-list)))))
-    (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
-    (add-hook 'ido-make-dir-list-hook  'ido-sort-mtime)
+    (add-hook 'ido-make-file-list-hook #'modi/ido-sort-mtime)
+    (add-hook 'ido-make-dir-list-hook  #'modi/ido-sort-mtime)
+
     ;; Open recent files with IDO,
     ;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
     ;; http://emacsredux.com/blog/2013/04/05/recently-visited-files/
     ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgc8f6b
     ;; `abbreviate-file-name' abbreviates home dir to ~/ in the file list
     ;; Custom abbreviations can be added to `directory-abbrev-alist'.
-    (defun ido-find-recentf ()
-      "Use ido to select a recently opened file from the `recentf-list'"
-      (interactive)
-      (find-file
-       (ido-completing-read "Recentf open: "
-                            (mapcar 'abbreviate-file-name recentf-list)
-                            nil t)))
+    (with-eval-after-load 'recentf
+      (defun ido-find-recentf ()
+        "Use ido to select a recently opened file from the `recentf-list'"
+        (interactive)
+        (find-file
+         (ido-completing-read "Recentf open: "
+                              (mapcar 'abbreviate-file-name recentf-list)
+                              nil t)))
+      (bind-keys
+       :map modi-mode-map
+       ;; overriding the `C-x C-o` binding with `delete-blank-lines'
+       ("C-x C-o" . ido-find-recentf)))
+
     (defun endless/ido-bury-buffer-at-head ()
       "Bury the buffer at the head of `ido-matches'.
 Source: http://endlessparentheses.com/Ido-Bury-Buffer.html
@@ -100,6 +120,7 @@ This is merged into emacs 25.0."
                 ido-text-init ido-text
                 ido-exit 'refresh)
           (exit-minibuffer))))
+
     (defun ido-define-keys ()
       (unbind-key "C-a" ido-completion-map)
       (bind-keys
@@ -113,13 +134,9 @@ This is merged into emacs 25.0."
        ("C-b"    . ido-magic-backward-char)
        ("C-i"    . ido-toggle-ignore))
       (>=e "25.0"
-           (bind-key "C-S-b" 'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
-           (bind-key "C-S-b" 'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0
-    (add-hook 'ido-setup-hook 'ido-define-keys)
-    (bind-keys
-     :map modi-mode-map
-     ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-     ("C-x C-o"     . ido-find-recentf))))
+           (bind-key "C-S-b" #'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
+           (bind-key "C-S-b" #'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0
+    (add-hook 'ido-setup-hook #'ido-define-keys)))
 
 
 (provide 'setup-ido)

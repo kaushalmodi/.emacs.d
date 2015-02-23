@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-10-24 15:12:58 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Ace Window
 ;; Source: https://github.com/abo-abo/ace-window
 
-(req-package ace-window
+(use-package ace-window
   :config
   (progn
     (bind-keys

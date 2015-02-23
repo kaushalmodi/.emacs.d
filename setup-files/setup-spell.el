@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-21 23:50:48 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Spell check
 ;; hunspell / flyspell / ispell
@@ -21,14 +21,14 @@
 
 ;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
 
-(req-package ispell
+(use-package ispell
   :config
   (progn
     (setq ispell-program-name   "hunspell"
           ispell-extra-args     '("-d en_US")
           ispell-silently-savep t))) ; Save a new word to personal dictionary without asking
 
-(req-package flyspell
+(use-package flyspell
   :config
   (progn
     (setq flyspell-use-meta-tab nil)

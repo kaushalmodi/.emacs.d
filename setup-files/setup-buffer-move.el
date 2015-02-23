@@ -1,6 +1,6 @@
-;; Time-stamp: <2014-08-19 09:45:52 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
-(req-package buffer-move
+(use-package buffer-move
   :config
   (progn
     (bind-to-modi-map "," buf-move-left)

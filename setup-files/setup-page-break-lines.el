@@ -1,6 +1,6 @@
-;; Time-stamp: <2014-08-13 11:25:26 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
-(req-package page-break-lines
+(use-package page-break-lines
   :config
   (progn
     (setq page-break-lines-modes

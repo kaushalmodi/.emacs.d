@@ -1,25 +1,25 @@
-;; Time-stamp: <2015-02-03 15:34:31 kmodi>
+;; Time-stamp: <2015-02-23 11:20:23 kmodi>
 
 ;; Perl
 
-(req-package cperl-mode
-  :require (isend-mode)
+(use-package cperl-mode
   :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode) ; cperl-mode instead of perl-mode
   :interpreter (("perl"     . cperl-mode)
                 ("perl5"    . cperl-mode)
                 ("miniperl" . cperl-mode))
   :config
   (progn
-    (setq cperl-indent-level 3
-          cperl-close-paren-offset -3
-          cperl-continued-statement-offset 3
-          cperl-indent-parens-as-block t
-          cperl-tab-always-indent t)
+    (setq cperl-indent-level               3)
+    (setq cperl-close-paren-offset         -3)
+    (setq cperl-continued-statement-offset 3)
+    (setq cperl-indent-parens-as-block     t)
+    (setq cperl-tab-always-indent          t)
 
-    (defun my-cperl-mode-customizations()
-      (req-package setup-editing)
-      (define-key cperl-mode-map "\177"      'delete-backward-char)
-      (define-key cperl-mode-map (kbd "C-j") 'pull-up-line))
+    (with-eval-after-load 'setup-editing
+      (defun my-cperl-mode-customizations()
+        (define-key cperl-mode-map "\177"      #'delete-backward-char)
+        (define-key cperl-mode-map (kbd "C-j") #'pull-up-line))
+      (add-hook 'cperl-mode-hook #'my-cperl-mode-customizations))
 
     ;; Source: http://stackoverflow.com/a/13632665/1219634
     ;; Debugging Perl scripts using `isend-mode'
@@ -38,23 +38,24 @@
     ;; - Hit =C-RET= in the perl buffer to send the current line to the
     ;;   interpreter in the ansi-term buffer. If a region is active, all
     ;;   lines spanning the region will be sent.
+    (use-package isend-mode
+      :config
+      (progn
 
-    (defun isend--perl (buf-name)
-      "Prepend 'x ' to normal perl instructions.
+        (defun isend--perl (buf-name)
+          "Prepend 'x ' to normal perl instructions.
 Leave 'print' instructions untouched."
-      (with-current-buffer buf-name
-        (goto-char (point-min))
-        (unless (looking-at "[[:space:]]*print")
-          (insert "x ")))
-      (insert-buffer-substring buf-name))
+          (with-current-buffer buf-name
+            (goto-char (point-min))
+            (unless (looking-at "[[:space:]]*print")
+              (insert "x ")))
+          (insert-buffer-substring buf-name))
 
-    (defun isend-default-perl-setup ()
-      (when (eq major-mode 'cperl-mode)
-        (set (make-local-variable 'isend-send-line-function) #'isend--perl)))
+        (defun isend-default-perl-setup ()
+          (when (eq major-mode 'cperl-mode)
+            (set (make-local-variable 'isend-send-line-function) #'isend--perl)))
 
-    (add-hook 'isend-mode-hook #'isend-default-perl-setup)
-
-    (add-hook 'cperl-mode-hook #'my-cperl-mode-customizations)))
+        (add-hook 'isend-mode-hook #'isend-default-perl-setup)))))
 
 
 (provide 'setup-perl)

@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-18 00:03:39 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Number
 ;; https://github.com/chrisdone/number
 
-(req-package number
+(use-package number
   :config
   (progn
     (defhydra hydra-math (:color blue)

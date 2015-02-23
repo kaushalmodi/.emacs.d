@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-08-25 10:39:30 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; poporg
 ;; poporg is a small Emacs Lisp project to help editing program strings and
@@ -8,7 +8,7 @@
 
 ;; README: https://github.com/QBobWatson/poporg
 
-(req-package poporg
+(use-package poporg
   :commands (poporg-dwim)
   :init
   (progn

@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-10-14 11:53:17 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Discover-My-Major
 ;; Source: https://github.com/steckerhalter/discover-my-major
 
-(req-package discover-my-major
+(use-package discover-my-major
   :init
   (progn
     (bind-keys

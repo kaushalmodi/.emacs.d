@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-18 17:06:38 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Printing
 ;; http://www.emacswiki.org/emacs/PsPrintPackage-23
 
-(req-package ps-print
+(use-package ps-print
   :config
   (progn
     ;; Print configuration

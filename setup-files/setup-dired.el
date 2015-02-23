@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-02-21 20:08:41 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
 ;; http://truongtx.me/2013/04/24/dired-as-default-file-manager-1-introduction
 
-(req-package dired
+(use-package dired
   :defer t
   :config
   (progn
@@ -24,9 +24,9 @@
     (setq diredp-hide-details-initially-flag nil) ; http://irreal.org/blog/?p=3341
     ;; detail toggling is bound to `(' in dired-mode by default
 
-    (req-package dired-single)
-    (req-package dired+)
-    (req-package dired-x
+    (use-package dired-single)
+    (use-package dired+)
+    (use-package dired-x
       :config
       (progn
         (setq dired-omit-verbose nil)

@@ -1,27 +1,27 @@
-;; Time-stamp: <2015-02-19 12:24:20 kmodi>
+;; Time-stamp: <2015-02-23 11:07:43 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
-(req-package iy-go-to-char
-  :require (key-chord multiple-cursors)
+(use-package iy-go-to-char
   :config
   (progn
     (setq iy-go-to-char-continue-when-repeating t)
-    (setq iy-go-to-char-use-key-backward t)
-    (setq iy-go-to-char-key-backward ?\,)
-    (setq iy-go-to-char-use-key-forward t)
-    (setq iy-go-to-char-key-forward ?\.)
+    (setq iy-go-to-char-use-key-backward        t)
+    (setq iy-go-to-char-key-backward            ?\,)
+    (setq iy-go-to-char-use-key-forward         t)
+    (setq iy-go-to-char-key-forward             ?\.)
     ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-    (key-chord-define-global "]'"  'iy-go-to-char)
-    (key-chord-define-global "}\"" 'iy-go-to-or-up-to-continue)
-    (key-chord-define-global "[;"  'iy-go-to-char-backward)
-    (key-chord-define-global "{:"  'iy-go-to-or-up-to-continue-backward)
+    (when (featurep 'key-chord)
+      (key-chord-define-global "]'"  #'iy-go-to-char)
+      (key-chord-define-global "}\"" #'iy-go-to-or-up-to-continue)
+      (key-chord-define-global "[;"  #'iy-go-to-char-backward)
+      (key-chord-define-global "{:"  #'iy-go-to-or-up-to-continue-backward))
     ;; To make `iy-go-to-char' works better with `multiple-cursors', add
     ;; `iy-go-to-char-start-pos' to `mc/cursor-specific-vars' when mc is loaded:
-    (eval-after-load 'multiple-cursors
-      '(add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos))))
-;; iy-go-to-char
+    (with-eval-after-load 'multiple-cursors
+      (add-to-list 'mc/cursor-specific-vars #'iy-go-to-char-start-pos))))
+
 ;; Except repeating the char key, followings keys are defined before
 ;; quitting the search (which can be disabled by setting
 ;; `iy-go-to-char-override-local-map' to nil):
@@ -250,9 +250,10 @@ If ARG is omitted or nil, move point forward one word."
  ("M-{" . backward-paragraph) ;; default binding for `backward-paragraph'
  )
 
-(key-chord-define-global "1q" 'goto-line) ;; alternative for F1
-(key-chord-define-global "m," 'beginning-of-buffer)
-(key-chord-define-global ",." 'end-of-buffer)
+(when (featurep 'key-chord)
+  (key-chord-define-global "1q" #'goto-line) ; alternative for F1
+  (key-chord-define-global "m," #'beginning-of-buffer)
+  (key-chord-define-global ",." #'end-of-buffer))
 
 
 (provide 'setup-navigation)

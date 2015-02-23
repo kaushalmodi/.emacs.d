@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-10-24 10:57:53 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; wrap-region
 ;; https://github.com/rejeep/wrap-region.el
 
-(req-package wrap-region
+(use-package wrap-region
   :config
   (progn
     ;; Enable wrap-region in the following major modes

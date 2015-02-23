@@ -1,9 +1,8 @@
-;; Time-stamp: <2015-02-18 13:28:11 kmodi>
+;; Time-stamp: <2015-02-23 11:10:01 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
-(req-package eww
-  :require (key-chord filenotify)
+(use-package eww
   :config
   (progn
     (setq modi/eww-file-notify-descriptors-list (quote nil))
@@ -71,36 +70,36 @@ This function is not for interactive use."
 
     ;; Auto-refreshing *eww* buffer
     ;; http://emacs.stackexchange.com/a/2566/115
-    (defun modi/eww-open-file-with-notify (file)
-      "Open a file in eww and add `file-notify' watch for it."
-      (interactive "fFile: ")
-      (eww-open-file file)
-      (file-notify-add-watch file
-                             '(change attribute-change)
-                             #'modi/eww-notify-callback))
+    (with-eval-after-load 'filenotify
+      (defun modi/eww-open-file-with-notify (file)
+        "Open a file in eww and add `file-notify' watch for it."
+        (interactive "fFile: ")
+        (eww-open-file file)
+        (file-notify-add-watch file
+                               '(change attribute-change)
+                               #'modi/eww-notify-callback))
 
-    (defun modi/eww-notify-callback (event)
-      "On getting triggered, switch to the *eww* buffer,
+      (defun modi/eww-notify-callback (event)
+        "On getting triggered, switch to the *eww* buffer,
 reload and switch back to the working buffer. Also save
 the `file-notify-descriptor' of the triggering event."
-      (let* ((working-buffer (buffer-name)))
-        (switch-to-buffer-other-window "*eww*")
-        (eww-reload)
-        (switch-to-buffer-other-window working-buffer))
-      ;; `(car event)' will return the event descriptor
-      (add-to-list 'modi/eww-file-notify-descriptors-list (car event)))
+        (let* ((working-buffer (buffer-name)))
+          (switch-to-buffer-other-window "*eww*")
+          (eww-reload)
+          (switch-to-buffer-other-window working-buffer))
+        ;; `(car event)' will return the event descriptor
+        (add-to-list 'modi/eww-file-notify-descriptors-list (car event)))
 
-    (defun modi/eww-quit ()
-      "When quitting `eww', also remove any saved file-notify descriptors
+      (defun modi/eww-quit ()
+        "When quitting `eww', also remove any saved file-notify descriptors
 specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
-      (interactive)
-      (quit-window :kill)
-      (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
-        (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
-    ;;
+        (interactive)
+        (quit-window :kill)
+        (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
+          (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list)))))
 
     ;; eww-lnum
-    (req-package eww-lnum
+    (use-package eww-lnum
       :config
       (bind-keys
        :map eww-mode-map
@@ -111,8 +110,8 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
     ;; Copy text from html page for pasting in org mode file/buffer
     ;; e.g. Copied HTML hyperlinks get converted to [[link][desc]] for org mode.
     ;; http://emacs.stackexchange.com/a/8191/115
-    (req-package org-eww
-      :load-path "from-git/org-mode/contrib/lisp/"
+    (use-package org-eww
+      :load-path "from-git/org-mode/contrib/lisp"
       :config
       (bind-keys
        :map eww-mode-map
@@ -157,9 +156,9 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
      :map modi-mode-map
      ("M-s M-w" . eww-search-words)
      ("M-s M-l" . modi/eww-copy-link-first-search-result))
-    (key-chord-define-global       "-=" #'eww)
-    (key-chord-define eww-mode-map "XX" #'modi/eww-quit)
-    ))
+    (when (featurep 'key-chord)
+      (key-chord-define-global       "-=" #'eww)
+      (key-chord-define eww-mode-map "XX" #'modi/eww-quit))))
 
 
 (provide 'setup-eww)

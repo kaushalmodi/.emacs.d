@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-05 14:44:48 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Sunshine - weather forecast
 ;; Source: https://github.com/aaronbieber/sunshine.el
 
-(req-package sunshine
+(use-package sunshine
   :config
   (progn
     (setq sunshine-location "27278,USA")

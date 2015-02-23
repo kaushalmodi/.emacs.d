@@ -1,6 +1,6 @@
-;; Time-stamp: <2015-01-16 00:34:34 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
-(req-package tiny
+(use-package tiny
   :config
   (progn
     (key-chord-define-global "]\\" 'tiny-expand)))

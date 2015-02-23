@@ -1,20 +1,21 @@
-;; Time-stamp: <2015-01-23 10:20:50 kmodi>
+;; Time-stamp: <2015-02-23 11:15:53 kmodi>
 
 ;; Ibuffer
 
-(req-package ibuffer
-  :require (projectile ibuffer-projectile)
+(use-package ibuffer
   :config
   (progn
     (setq ibuffer-default-sorting-mode 'major-mode)
 
-    (defun my/ibuffer-customization ()
-      ;; ibuffer-projectile setup
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic) ; first do alphabetic sort
-        (ibuffer-do-sort-by-major-mode) ; then do major-mode sort
-        ))
+    (use-package ibuffer-projectile
+      :config
+      (progn
+        (defun my/ibuffer-customization ()
+          ;; ibuffer-projectile setup
+          (ibuffer-projectile-set-filter-groups)
+          (unless (eq ibuffer-sorting-mode 'alphabetic)
+            (ibuffer-do-sort-by-alphabetic) ; first do alphabetic sort
+            (ibuffer-do-sort-by-major-mode))))) ; then do major-mode sort
 
     ;; ibuffer-projectile setup
     (add-hook 'ibuffer-hook #'my/ibuffer-customization)

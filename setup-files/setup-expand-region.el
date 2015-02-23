@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-12-08 09:14:58 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Expand Region
 ;; Source: https://github.com/magnars/expand-region.el
 
-(req-package expand-region
+(use-package expand-region
   :init
   (progn
     (setq expand-region-contract-fast-key "|"

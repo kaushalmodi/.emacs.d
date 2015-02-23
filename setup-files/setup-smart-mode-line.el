@@ -1,12 +1,11 @@
-;; Time-stamp: <2015-02-17 20:53:47 kmodi>
+;; Time-stamp: <2015-02-23 11:31:32 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
 ;; https://github.com/Bruce-Connor/smart-mode-line
 
 ;; It is crucial that this require line happens after the above setq block
-(req-package smart-mode-line
-  :require (rich-minority setup-visual)
+(use-package smart-mode-line
   :init
   (progn
     (setq sml/name-width            40) ; space allocated for the buffer name in the mode-line
@@ -58,30 +57,34 @@
     ;; customize the date and time display format in mode-line
     (setq display-time-format               "%l:%M %b %d %a" )
     (setq display-time-default-load-average nil ) ; do NOT show average system load time
-    (setq line-number-mode   t ) ; show line # in mode-line
-    (setq column-number-mode t ) ; show column # in mode-line
-    (setq rm-excluded-modes
-          '(" Guide"        ; guide-key mode
-            " hc"           ; hardcore mode
-            " AC"           ; auto-complete
-            " vl"           ; global visual line mode enabled
-            " Wrap"         ; shows up if visual-line-mode is enabled for that buffer
-            " Omit"         ; omit mode in dired
-            " yas"          ; yasnippet
-            " drag"         ; drag-stuff-mode
-            " VHl"          ; volatile highlights
-            " ctagsU"       ; ctags update
-            " Undo-Tree"    ; undo tree
-            " wr"           ; Wrap Region
-            " SliNav"       ; elisp-slime-nav
-            " Fly"          ; Flycheck
-            " PgLn"         ; page-line-break
-            " ElDoc"        ; eldoc
-            " hl-highlight" ; hl-anything
-            " Helm"         ; Helm
-            )))
+    (setq line-number-mode   t) ; show line # in mode-line
+    (setq column-number-mode t)) ; show column # in mode-line
   :config
   (progn
+    (use-package rich-minority
+      :config
+      (progn
+        (setq rm-excluded-modes
+              '(" Guide"        ; guide-key mode
+                " hc"           ; hardcore mode
+                " AC"           ; auto-complete
+                " vl"           ; global visual line mode enabled
+                " Wrap"         ; shows up if visual-line-mode is enabled for that buffer
+                " Omit"         ; omit mode in dired
+                " yas"          ; yasnippet
+                " drag"         ; drag-stuff-mode
+                " VHl"          ; volatile highlights
+                " ctagsU"       ; ctags update
+                " Undo-Tree"    ; undo tree
+                " wr"           ; Wrap Region
+                " SliNav"       ; elisp-slime-nav
+                " Fly"          ; Flycheck
+                " PgLn"         ; page-line-break
+                " ElDoc"        ; eldoc
+                " hl-highlight" ; hl-anything
+                " Helm"         ; Helm
+                ))))
+
     (sml/setup)
 
     ;; http://bruce-connor.github.io/emacs-online-documentation/Var/display-time-mode

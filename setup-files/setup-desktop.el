@@ -1,11 +1,11 @@
-;; Time-stamp: <2015-02-11 09:29:35 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Desktop save and restore
 
 ;; Type ‘M-x session-save’, or ‘M-x session-restore’ whenever you want to save
 ;; or restore a desktop. Restored desktops are deleted from disk.
 
-(req-package desktop
+(use-package desktop
   :config
   (progn
     (desktop-save-mode 1)

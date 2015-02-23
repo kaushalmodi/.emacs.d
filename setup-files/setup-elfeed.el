@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-10-22 11:04:10 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
 
-(req-package elfeed
+(use-package elfeed
   :init
   (progn
     (setq elfeed-feeds

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-19 13:14:10 kmodi>
+;; Time-stamp: <2015-02-23 11:13:52 kmodi>
 
 ;; Search
 
@@ -6,8 +6,7 @@
 
 ;; Anzu mode
 ;; Source: https://github.com/syohex/emacs-anzu
-(req-package anzu
-  :require (region-bindings-mode)
+(use-package anzu
   :config
   (progn
     (global-anzu-mode +1)
@@ -22,13 +21,13 @@
      ("M-%"   . anzu-query-replace) ; override binding for `query-replace'
      ("C-c r" . anzu-query-replace))
 
-    (bind-keys
-     :map region-bindings-mode-map
-     ("]" . anzu-query-replace-at-cursor-thing))))
+    (when (featurep 'region-bindings-mode)
+      (bind-keys
+       :map region-bindings-mode-map
+       ("]" . anzu-query-replace-at-cursor-thing)))))
 
 ;; Visual Regular Expression search/replace
-(req-package visual-regexp
-  :require (region-bindings-mode)
+(use-package visual-regexp
   :config
   (progn
     (setq vr--feedback-limit nil)
@@ -36,53 +35,58 @@
     (bind-keys
      :map modi-mode-map
      ("C-M-%" . vr/query-replace) ; override binding for `query-replace-regexp'
-     ("C-c q" . vr/query-replace)
-     ("C-c M" . vr/mc-mark))
+     ("C-c q" . vr/query-replace))
 
-    (bind-keys
-     :map region-bindings-mode-map
-     ("}" . vr/query-replace))))
+    (when (featurep 'multiple-cursors)
+      (bind-keys
+       :map modi-mode-map
+       ("C-c M" . vr/mc-mark)))
 
-;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
-;; `query-replace-regexp' from replace.el
-(defun query-exchange (string-1 string-2 &optional delimited start end)
-  "Exchange string-1 and string-2 interactively.
+    (when (featurep 'region-bindings-mode)
+      (bind-keys
+       :map region-bindings-mode-map
+       ("}" . vr/query-replace)))))
+
+  ;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
+  ;; `query-replace-regexp' from replace.el
+  (defun query-exchange (string-1 string-2 &optional delimited start end)
+    "Exchange string-1 and string-2 interactively.
 The user is prompted at each instance like query-replace. Exchanging
 happens within a region if one is selected."
-  (interactive
-   (let ((common
-	  (query-replace-read-args
-	   (concat "Query replace"
-		   (if current-prefix-arg " word" "")
-		   " regexp"
-		   (if (and transient-mark-mode mark-active) " in region" ""))
-	   t)))
-     (list (nth 0 common) (nth 1 common) (nth 2 common)
-	   ;; These are done separately here
-	   ;; so that command-history will record these expressions
-	   ;; rather than the values they had this time.
-	   (if (and transient-mark-mode mark-active)
-	       (region-beginning))
-	   (if (and transient-mark-mode mark-active)
-	       (region-end)))))
-  (perform-replace
-   (concat "\\(" string-1 "\\)\\|" string-2)
-   '(replace-eval-replacement replace-quote
-                              (if (match-string 1) string-2 string-1))
-   t t delimited nil nil start end))
+    (interactive
+     (let ((common
+            (query-replace-read-args
+             (concat "Query replace"
+                     (if current-prefix-arg " word" "")
+                     " regexp"
+                     (if (and transient-mark-mode mark-active) " in region" ""))
+             t)))
+       (list (nth 0 common) (nth 1 common) (nth 2 common)
+             ;; These are done separately here
+             ;; so that command-history will record these expressions
+             ;; rather than the values they had this time.
+             (if (and transient-mark-mode mark-active)
+                 (region-beginning))
+             (if (and transient-mark-mode mark-active)
+                 (region-end)))))
+    (perform-replace
+     (concat "\\(" string-1 "\\)\\|" string-2)
+     '(replace-eval-replacement replace-quote
+                                (if (match-string 1) string-2 string-1))
+     t t delimited nil nil start end))
 
 ;; Helm Swoop
 (defvar helm-swoop-last-prefix-number nil) ; Fix free variable warning
-(req-package helm-swoop
-  :require (ido ido-ubiquitous)
+(use-package helm-swoop
   :config
   (progn
     ;; Disable helm
-    (defun modi/disable-helm-enable-ido ()
-      (interactive)
-      (helm-mode -1)
-      (ido-mode 1)
-      (ido-ubiquitous-mode 1))
+    (with-eval-after-load 'setup-ido
+      (defun modi/disable-helm-enable-ido ()
+        (interactive)
+        (helm-mode -1)
+        (ido-mode 1)
+        (ido-ubiquitous-mode 1)))
     (modi/disable-helm-enable-ido)
     (bind-keys
      :map modi-mode-map

@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-19 12:17:45 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
 
-(req-package projectile
+(use-package projectile
   :init
   (progn
     (setq projectile-ag-command (concat "\\ag " ; used unaliased version of `ag': \ag

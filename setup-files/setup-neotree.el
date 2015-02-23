@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-02 09:31:10 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Neotree
 ;; https://github.com/jaypei/emacs-neotree
 
-(req-package neotree
+(use-package neotree
   :init
   (progn
     (setq-default neo-smart-open t) ;  every time when the neotree window is

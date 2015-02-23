@@ -12,7 +12,7 @@
 ## Key points
 
 * Using my minor mode `modi-map` to enable my custom key-bindings. Doing so allows me to force override my bindings in all major modes. If I ever need to use emacs default bindings, I can simply disable my minor mode.
-* Use of req-package in load all packages for faster load times.
+* Use of `use-package` in load all packages for faster load times.
 * Use of `bind-keys` allows me to review my custom bindings in a single buffer by doing `M-x describe-personal-keybindings`.
 
 ## Future plan

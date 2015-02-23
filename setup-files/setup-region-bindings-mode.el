@@ -1,11 +1,11 @@
-;; Time-stamp: <2015-02-17 20:58:13 kmodi>
+;; Time-stamp: <2015-02-23 10:51:03 kmodi>
 
 ;; Region Bindings Mode
 ;; https://github.com/fgallina/region-bindings-mode
 ;; Minor mode that enables the ability of having a custom keys for working with
 ;; regions. This is a pretty good way to keep the global bindings clean.
 
-(req-package region-bindings-mode
+(use-package region-bindings-mode
   :config
   (progn
     (region-bindings-mode-enable)

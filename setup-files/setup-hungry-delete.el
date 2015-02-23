@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-01-16 11:06:43 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Hungry Delete
 ;; https://github.com/nflath/hungry-delete
 
-(req-package hungry-delete
+(use-package hungry-delete
   :config
   (progn
     (setq hungry-delete-chars-to-skip " \t\r\f\v")

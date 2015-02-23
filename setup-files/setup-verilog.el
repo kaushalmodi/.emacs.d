@@ -1,19 +1,14 @@
-;; Time-stamp: <2015-02-06 17:28:17 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Verilog
 
-(req-package verilog-mode
-  :require (setup-editing outshine) ; setup-editing for endless/indent-defun
-  ;; Load verilog mode only when needed
-  :commands (verilog-mode)
-  ;; Any files that end in .v should be in verilog mode
+(use-package verilog-mode
   :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ;; .v, .sv, .svh, .tv, .vp
          ("\\.psl\\'"         . verilog-mode)
          ("\\.h\\'"           . verilog-mode)
          ("\\.vinc\\'"        . verilog-mode))
   :config
   (progn
-    ;; Verilog mode customization
     (setq verilog-indent-level             3
           verilog-indent-level-module      3
           verilog-indent-level-declaration 3
@@ -44,9 +39,9 @@
       ;; With binding done to electric-verilog-tick, it's not possible to type
       ;; backticks on multiple lines simultaneously in multiple-cursors mode
       (define-key verilog-mode-map "\`"          nil)
-      (define-key verilog-mode-map (kbd "C-c d") 'my-verilog-insert-date)
+      (define-key verilog-mode-map (kbd "C-c d") #'my-verilog-insert-date)
       ;; Replace tabs with spaces when saving files in verilog-mode
-      ;; Source: http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
+      ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
       ;; Note that keeping that `nil' in the argument is crucial; otherwise emacs
       ;; with stay stuck with the "Saving file .." message and the file won't be
       ;; saved.
@@ -65,12 +60,12 @@
       ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
       ;; (turn-on-orgstruct++)
       )
-    (add-hook 'verilog-mode-hook 'my-verilog-mode-customizations)
+    (add-hook 'verilog-mode-hook #'my-verilog-mode-customizations)
 
     ;; Tweak the verilog-mode indentation to skip the lines that begin with
     ;; "<optional-white-space>// *" in order to not break any `outline-mode'
     ;; or `outshine' functionality.
-    ;; Source: http://emacs.stackexchange.com/a/8033/115
+    ;; http://emacs.stackexchange.com/a/8033/115
     (defun my/verilog-selective-indent (&rest args)
       "Return t if the current line starts with '// *'.
 If the line matches '// *' delete any preceding white space too."

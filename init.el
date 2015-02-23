@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-18 13:18:13 kmodi>
+;; Time-stamp: <2015-02-23 11:54:03 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -86,7 +86,6 @@
         rainbow-mode
         rectangle-utils
         region-bindings-mode ; complements really well with multiple-cursors
-        req-package ; optimize package loading
         smart-compile
         smart-mode-line popup rich-minority
         smex ; smart M-x
@@ -94,6 +93,7 @@
         sx
         tiny
         undo-tree ; supercool undo visualization
+        use-package ; optimize package loading
         visual-regexp
         volatile-highlights
         web-mode
@@ -104,144 +104,144 @@
         yasnippet
         ))
 
+;; Basic requires
 (require 'cl)
 (require 'cl-lib)
 
-(load custom-file) ; Load the emacs `M-x customize` generated file
+(load custom-file)         ; Load the emacs `M-x customize` generated file
 (load setup-packages-file) ; Load the packages
 
-(require 'defuns)
-(require 'benchmark-init)
-(require 'req-package)
+(require 'use-package)
 
-(req-package setup-region-bindings-mode)
-(req-package setup-key-chord)
-(req-package setup-hydra)
-(req-package modi-mode)
-(req-package temp-mode)
+(use-package benchmark-init)
+
+(use-package defuns)
+(use-package modi-mode)
+(use-package temp-mode)
+
+(use-package setup-region-bindings-mode)
+(use-package setup-key-chord)
+(use-package setup-hydra)
+;; End of basic requires
 
 (use-package gist)
 
 ;; Set up the looks of emacs
-(req-package setup-popwin) ;; require popwin first as packages might depend on it
-(req-package setup-smart-mode-line)
-(req-package setup-visual)
+(use-package setup-popwin) ; require popwin first as packages might depend on it
+(use-package setup-smart-mode-line)
+(use-package setup-visual)
 
 ;; Set up extensions/packages
-(req-package setup-ace-jump-mode)
-(req-package setup-ace-window)
+(use-package setup-ace-jump-mode)
+(use-package setup-ace-window)
 (when (executable-find "ag")
-  (req-package setup-ag))
-(req-package setup-auto-complete)
-(req-package setup-bookmark+)
-(req-package setup-buffer-move)
-(req-package setup-de-ansi)
-(req-package setup-dired)
-(req-package setup-discover-my-major)
-(req-package setup-drag-stuff)
-(req-package setup-elfeed)
+  (use-package setup-ag))
+(use-package setup-auto-complete)
+(use-package setup-big-fringe)
+(use-package setup-bookmark+)
+(use-package setup-buffer-move)
+(use-package setup-de-ansi)
+(use-package setup-dired)
+(use-package setup-discover-my-major)
+(use-package setup-drag-stuff)
+(use-package setup-elfeed)
 (>=e "24.4"
-     (req-package setup-eww)  ;; if emacs version >= 24.4
-     (req-package setup-w3m)) ;; if emacs version <= 24.3
-(req-package setup-elisp-slime-nav)
-(req-package setup-expand-region)
-(req-package setup-fci)
-(req-package setup-git-gutter)
-(req-package setup-guide-key)
-(req-package setup-hardcore)
-(req-package setup-header2 nil t) ;; No error if not found
-(req-package setup-highlight)
-(req-package setup-hl-line+)
-(req-package setup-hungry-delete)
-(req-package setup-ibuffer)
-(req-package setup-ido)
-(req-package setup-iregister)
+     (use-package setup-eww)  ; if emacs version >= 24.4
+     (use-package setup-w3m)) ; if emacs version <= 24.3
+(use-package setup-elisp-slime-nav)
+(use-package setup-expand-region)
+(use-package setup-fci)
+(use-package setup-git-gutter)
+(use-package setup-guide-key)
+(use-package setup-hardcore)
+(use-package setup-header2 nil t) ;; No error if not found
+(use-package setup-highlight)
+(use-package setup-hl-line+)
+(use-package setup-hungry-delete)
+(use-package setup-ibuffer)
+(use-package setup-ido)
+(use-package setup-iregister)
 (when (executable-find "git")
-  (req-package setup-magit))
-(req-package setup-manage-minor-mode)
-(req-package setup-multiple-cursors)
-(req-package setup-neotree)
-(req-package setup-number)
-(req-package setup-org)
-(req-package setup-orgstruct)
-(req-package setup-outshine)
-(req-package setup-page-break-lines)
-(req-package setup-pcache)
-(req-package setup-poporg)
-(req-package setup-projectile)
-(req-package setup-rainbow-delimiters)
-(req-package setup-rainbow-mode)
-(req-package setup-server)
-(req-package setup-smart-compile)
-(req-package setup-smex)
-(req-package setup-stripe-buffer)
-(req-package setup-sunshine)
-(req-package setup-sx)
-(req-package setup-term)
-(req-package setup-tiny)
-(req-package setup-undo-tree)
-(req-package setup-wrap-region)
-(req-package setup-xkcd)
-(req-package setup-yafolding)
-(req-package setup-yasnippet)
-;; (req-package setup-fiplr)
-;; (req-package setup-workgroups2)
+  (use-package setup-magit))
+(use-package setup-manage-minor-mode)
+(use-package setup-multiple-cursors)
+(use-package setup-neotree)
+(use-package setup-number)
+(use-package setup-org)
+(use-package setup-orgstruct)
+(use-package setup-outshine)
+(use-package setup-page-break-lines)
+(use-package setup-pcache)
+(use-package setup-poporg)
+(use-package setup-projectile)
+(use-package setup-rainbow-delimiters)
+(use-package setup-rainbow-mode)
+(use-package setup-server)
+(use-package setup-smart-compile)
+(use-package setup-smex)
+(use-package setup-stripe-buffer)
+(use-package setup-sunshine)
+(use-package setup-sx)
+(use-package setup-term)
+(use-package setup-tiny)
+(use-package setup-undo-tree)
+(use-package setup-wrap-region)
+(use-package setup-xkcd)
+(use-package setup-yafolding)
+(use-package setup-yasnippet)
+;; (use-package setup-fiplr)
+;; (use-package setup-workgroups2)
 
 ;; Languages
-(req-package setup-verilog)
-(req-package setup-perl)
-(req-package setup-python)
+(use-package setup-verilog)
+(use-package setup-perl)
+(use-package setup-python)
 (when (executable-find "matlab")
-  (req-package setup-matlab))
-(req-package setup-markdown)
-(req-package setup-web-mode)
-(req-package setup-shell)
-(req-package setup-elisp)
-(req-package setup-yaml-mode)
-(req-package setup-latex)
-(req-package setup-spice)
-;; (req-package setup-tcl)
+  (use-package setup-matlab))
+(use-package setup-markdown)
+(use-package setup-web-mode)
+(use-package setup-shell)
+(use-package setup-elisp)
+(use-package setup-yaml-mode)
+(use-package setup-latex)
+(use-package setup-spice)
+;; (use-package setup-tcl)
 
-(req-package setup-editing)
-(req-package setup-windows-buffers)
-(req-package setup-registers)
-(req-package setup-navigation)
-(req-package setup-search)
-(req-package setup-print)
-(req-package setup-pdf)
+(use-package setup-editing)
+(use-package setup-windows-buffers)
+(use-package setup-registers)
+(use-package setup-navigation)
+(use-package setup-search)
+(use-package setup-print)
+(use-package setup-pdf)
 (when (executable-find "global")
-  (req-package setup-gtags))
+  (use-package setup-gtags))
 (when (executable-find "hunspell")
-  (req-package setup-spell))
-(req-package setup-calc)
-(req-package setup-desktop)
-(req-package setup-image)
-;; (req-package setup-ctags) ; Using gtags instead
-
-(req-package-finish) ; Start loading packages in right order
+  (use-package setup-spell))
+(use-package setup-calc)
+(use-package setup-desktop)
+(use-package setup-image)
+;; (use-package setup-ctags) ; Using gtags instead
 
 ;; require `setup-work' but don't trigger error if not found
-(require 'setup-work nil t)
+(use-package setup-work nil t)
 
 (if (daemonp)
     (add-hook 'window-setup-hook
               (λ (message ">> Daemon mode")
                 ;; It is mandatory to load linum AFTER the frames are set up
                 ;; Else, I get "*ERROR*: Invalid face: linum"
-                (require 'setup-linum)))
+                (use-package setup-linum)))
   (progn
     (message ">> Non daemon mode")
-    (require 'setup-linum)))
-
-(require 'setup-big-fringe)
+    (use-package setup-linum)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'setup-misc) ; This MUST be the last required package
+(use-package setup-misc) ; This MUST be the last required package
 
 (global-modi-mode t)
 
 (when (bound-and-true-p emacs-initialized)
-  (req-package-finish)
   (funcall default-theme))
 
 (setq emacs-initialized t)

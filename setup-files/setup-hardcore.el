@@ -1,8 +1,8 @@
-;; Time-stamp: <2014-08-13 10:45:34 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Hardcore mode
 
-(req-package hardcore-mode
+(use-package hardcore-mode
   :pre-load
   (progn
     (setq too-hardcore-backspace t

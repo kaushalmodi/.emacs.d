@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-10-28 16:43:02 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; hl-line+
 ;; Source: http://www.emacswiki.org/emacs/hl-line%2B.el
 
-(req-package hl-line+
+(use-package hl-line+
   :config
   (progn
     (toggle-hl-line-when-idle 1) ; Highlight line only when idle

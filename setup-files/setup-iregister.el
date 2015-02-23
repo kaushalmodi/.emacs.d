@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-19 12:26:57 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
@@ -8,7 +8,7 @@
 (defalias 'my/iregister-copy-append    'iregister-append-to-latest-register)
 (defalias 'my/iregister-delete-append  'iregister-append-to-latest-register-delete)
 
-(req-package iregister
+(use-package iregister
   :config
   (progn
 

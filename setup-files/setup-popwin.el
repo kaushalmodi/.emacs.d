@@ -1,4 +1,4 @@
-;; Time-stamp: <2014-10-13 12:59:03 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Popwin
 ;; Source: https://github.com/m2ym/popwin-el
@@ -7,7 +7,7 @@
 ;; Windows of such temporary buffers will be shown as a popup window, and you
 ;; can close them smoothly by typing `C-g' in anytime.
 
-(req-package popwin
+(use-package popwin
   :init
   (progn
     ;; Special Display Config

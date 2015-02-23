@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-16 11:49:34 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Org Mode
 
@@ -68,7 +68,7 @@
 ;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
 
 ;; From <ORG EL DIR>/ox-latex.el
-(req-package ox-latex
+(use-package ox-latex
   :config
   (progn
     ;; Previewing latex fragments in org mode
@@ -181,7 +181,7 @@
 ;; You can also do the org > tex > pdf conversion and open the pdf file in
 ;; acroread directly using the `C-c C-e l o` key binding
 
-(req-package ox-beamer
+(use-package ox-beamer
   :commands (org-beamer-export-as-latex
              org-beamer-export-to-latex
              org-beamer-export-to-pdf)
@@ -304,7 +304,7 @@ this with to-do items than with projects or headings."
 ;; (define-key  org-show-mode-map  (kbd "\e\eq") 'org-show-stop-slideshow)
 
 ;; epresent
-(req-package epresent)
+(use-package epresent)
 
 ;; org-tree-slide
 (use-package org-tree-slide

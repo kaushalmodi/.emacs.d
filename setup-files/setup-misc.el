@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-21 19:31:43 kmodi>
+;; Time-stamp: <2015-02-23 11:42:33 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -196,7 +196,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
 
 ;; Vi-mode
 ;; http://oremacs.com/2015/02/05/amaranth-hydra/
-(req-package setup-iregister) ; To get the defalias definitions
+(use-package setup-iregister) ; To get the defalias definitions
 (defun hydra-vi/pre ()
   (set-cursor-color "#e52b50"))
 (defun hydra-vi/post ()

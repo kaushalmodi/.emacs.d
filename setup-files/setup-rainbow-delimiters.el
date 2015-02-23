@@ -1,9 +1,9 @@
-;; Time-stamp: <2014-08-13 09:35:52 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Rainbow Delimiters
 ;; http://www.emacswiki.org/emacs/RainbowDelimiters
 
-(req-package rainbow-delimiters
+(use-package rainbow-delimiters
   :config
   (progn
     ;; Enable in all programming-related modes

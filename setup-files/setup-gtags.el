@@ -1,9 +1,8 @@
-;; Time-stamp: <2015-02-19 17:13:56 kmodi>
+;; Time-stamp: <2015-02-23 11:04:50 kmodi>
 
 ;; gtags, GNU global
 
-(req-package ggtags
-  :require (key-chord)
+(use-package ggtags
   :config
   (progn
 
@@ -58,7 +57,8 @@
            (buffer-substring beg end)))))
 
     (bind-key "M-." #'ggtags-find-definition ggtags-mode-map)
-    (key-chord-define-global "??" 'ggtags-show-definition)))
+    (when (featurep 'key-chord)
+      (key-chord-define-global "??" #'ggtags-show-definition))))
 
 
 (provide 'setup-gtags)

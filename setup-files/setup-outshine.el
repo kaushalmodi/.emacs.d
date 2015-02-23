@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-15 15:40:00 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -7,7 +7,7 @@
 ;; Above needs to be set using Customize so that it is set BEFORE the
 ;; `outline' (not `outshine') library is loaded.
 
-(req-package outshine
+(use-package outshine
   :config
   (progn
     (setq outshine-use-speed-commands t)

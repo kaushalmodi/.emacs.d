@@ -1,8 +1,8 @@
-;; Time-stamp: <2014-08-13 09:28:02 kmodi>
+;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; xkcd
 
-(req-package xkcd
+(use-package xkcd
   :commands (xkcd)
   :config
   (progn
