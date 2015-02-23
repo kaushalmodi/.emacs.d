@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 12:35:36 kmodi>
+;; Time-stamp: <2015-02-23 17:27:16 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -199,11 +199,15 @@ If the file is emacs lisp, run the byte compiled version if exist."
 
 ;; Vi-mode
 ;; http://oremacs.com/2015/02/05/amaranth-hydra/
-(use-package setup-iregister) ; To get the defalias definitions
+(defvar hydra-vi/init-pos nil
+  "Variable to store the cursor location at the time of entering `hydra-vi' body")
 (defun hydra-vi/pre ()
+  (setq hydra-vi/init-pos (point))
   (set-cursor-color "#e52b50"))
 (defun hydra-vi/post ()
-  "`hcz-set-cursor-color-color' variable is set in `setup-visual.el'"
+  (interactive)
+  (goto-char hydra-vi/init-pos)
+  ;; `hcz-set-cursor-color-color' variable is set in `setup-visual.el'
   (set-cursor-color hcz-set-cursor-color-color))
 (defun hydra-vi/end-of-buffer (&optional arg)
   (interactive "P")
@@ -220,44 +224,44 @@ If the file is emacs lisp, run the byte compiled version if exist."
         (goto-line pos-arg) ; go to a line if argument is specified
       (goto-char (point-min))))) ; beginning of buffer
 
-(defhydra hydra-vi (:pre hydra-vi/pre :post  hydra-vi/post :color amaranth)
+(defhydra hydra-vi (:body-pre hydra-vi/pre :color amaranth)
   "vi"
   ;; basic navigation
-  ("l"        forward-char                 nil)
-  ("h"        backward-char                nil)
-  ("j"        next-line                    nil)
-  ("k"        previous-line                nil)
+  ("l"        forward-char                  nil)
+  ("h"        backward-char                 nil)
+  ("j"        next-line                     nil)
+  ("k"        previous-line                 nil)
   ;; mark
-  ("m"        set-mark-command             "mark")
-  ("C-o"      (set-mark-command 4)         "jump to prev location")
+  ("m"        set-mark-command              "mark")
+  ("C-o"      (set-mark-command 4)          "jump to prev location")
   ;; beginning/end of line
   ("a"        back-to-indentation-or-beginning-of-line "beg of line/indentation")
   ("^"        back-to-indentation-or-beginning-of-line "beg of line/indentation")
-  ("$"        move-end-of-line             "end of line")
+  ("$"        move-end-of-line              "end of line")
   ;; word navigation
-  ("e"        forward-word                 "end of word")
-  ("w"        modi/forward-word-begin      "beg of next word")
-  ("b"        backward-word                "beg of word")
+  ("e"        forward-word                  "end of word")
+  ("w"        modi/forward-word-begin       "beg of next word")
+  ("b"        backward-word                 "beg of word")
   ;; page scrolling
-  ("<prior>"  scroll-down-command          "page up")
-  ("<next>"   scroll-up-command            "page down")
+  ("<prior>"  scroll-down-command           "page up")
+  ("<next>"   scroll-up-command             "page down")
   ;; delete/cut/copy/paste
-  ("x"        delete-forward-char          "del char")
-  ("d"        my/iregister-cut             "cut/del")
-  ("D"        smart-kill-whole-line        "cut/del line")
-  ("y"        my/iregister-copy            "copy")
-  ("p"        yank                         "paste" :color blue)
+  ("x"        delete-forward-char           "del char")
+  ("d"        my/iregister-cut              "cut/del")
+  ("D"        smart-kill-whole-line         "cut/del line")
+  ("y"        my/iregister-copy             "copy")
+  ("p"        yank                          "paste")
   ;; beginning/end of buffer and go to line
-  ("g"        hydra-vi/beginning-of-buffer "beg of buffer/goto line")
-  ("G"        hydra-vi/end-of-buffer       "end of buffer/goto line")
-  ("<return>" goto-line                    "goto line")
+  ("g"        hydra-vi/beginning-of-buffer  "beg of buffer/goto line")
+  ("G"        hydra-vi/end-of-buffer        "end of buffer/goto line")
+  ("<return>" goto-line                     "goto line")
   ;; undo/redo
-  ("u"        undo-tree-undo               "undo")
-  ("C-r"      undo-tree-redo               "redo")
+  ("u"        undo-tree-undo                "undo")
+  ("C-r"      undo-tree-redo                "redo")
   ;; misc
-  ("<SPC>"    ace-jump-mode                "ace jump" :color blue)
-  ;; quit
-  ("q"        nil                          "quit" :color blue))
+  ("<SPC>"    ace-jump-mode                 "ace jump")
+  ;; exit points
+  ("q"        hydra-vi/post                 "cancel" :color blue))
 (bind-key "C-:" #'hydra-vi/body modi-mode-map)
 
 
