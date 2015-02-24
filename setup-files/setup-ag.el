@@ -1,9 +1,14 @@
-;; Time-stamp: <2015-02-24 00:44:44 kmodi>
+;; Time-stamp: <2015-02-24 13:00:42 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
 (use-package ag
+  :commands (ag-project-regexp ag-regexp-cwd ag-regexp)
+  :init
+  (progn
+    (bind-to-modi-map "a" ag-project-regexp)
+    (bind-to-modi-map "g" ag-project-regexp))
   :config
   (progn
     ;; wgrep-ag : To allow editing in *ag* buffer
@@ -76,10 +81,7 @@ If called with a prefix, prompts for flags to pass to ag."
      ("/" . isearch-forward)
      ("n" . isearch-repeat-forward)
      ("N" . isearch-repeat-backward)
-     ("q" . ag-kill-buffers))
-
-    (bind-to-modi-map "a" ag-project-regexp)
-    (bind-to-modi-map "g" ag-project-regexp)))
+     ("q" . ag-kill-buffers))))
 
 
 (provide 'setup-ag)
