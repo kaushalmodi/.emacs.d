@@ -1,30 +1,30 @@
-[submodule "from-git/reveal.js.master"]
-	path = from-git/reveal.js.master
+[submodule "elisp/reveal.js.master"]
+	path = elisp/reveal.js.master
 	url = http://github.com/hakimel/reveal.js
-[submodule "from-git/zenburn-emacs"]
-	path = from-git/zenburn-emacs
+[submodule "elisp/zenburn-emacs"]
+	path = elisp/zenburn-emacs
 	url = http://github.com/kaushalmodi/zenburn-emacs
-[submodule "from-git/org-reveal"]
-	path = from-git/org-reveal
+[submodule "elisp/org-reveal"]
+	path = elisp/org-reveal
 	url = https://github.com/yjwen/org-reveal
-[submodule "from-git/zop-to-char"]
-	path = from-git/zop-to-char
+[submodule "elisp/zop-to-char"]
+	path = elisp/zop-to-char
 	url = http://www.github.com/kaushalmodi/zop-to-char
-[submodule "from-git/org-tree-slide"]
-	path = from-git/org-tree-slide
+[submodule "elisp/org-tree-slide"]
+	path = elisp/org-tree-slide
 	url = https://www.github.com/kaushalmodi/org-tree-slide
-[submodule "from-git/smyx"]
-	path = from-git/smyx
+[submodule "elisp/smyx"]
+	path = elisp/smyx
 	url = https://www.github.com/kaushalmodi/smyx
-[submodule "from-git/sunshine.el"]
-	path = from-git/sunshine.el
+[submodule "elisp/sunshine.el"]
+	path = elisp/sunshine.el
 	url = https://github.com/aaronbieber/sunshine.el
-[submodule "from-git/unfill"]
-	path = from-git/unfill
+[submodule "elisp/unfill"]
+	path = elisp/unfill
 	url = https://github.com/kaushalmodi/unfill
-[submodule "from-git/transpose-frame"]
-	path = from-git/transpose-frame
+[submodule "elisp/transpose-frame"]
+	path = elisp/transpose-frame
 	url = https://github.com/emacsmirror/transpose-frame
-[submodule "from-git/rpn-calc"]
-	path = from-git/rpn-calc
+[submodule "elisp/rpn-calc"]
+	path = elisp/rpn-calc
 	url = https://github.com/kaushalmodi/rpn-calc
