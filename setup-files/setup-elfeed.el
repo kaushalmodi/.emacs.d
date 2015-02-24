@@ -1,10 +1,11 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-02-23 22:30:36 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
 
 (use-package elfeed
-  :init
+  :commands (elfeed)
+  :config
   (progn
     (setq elfeed-feeds
           '(;; emacs
