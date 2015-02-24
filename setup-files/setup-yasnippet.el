@@ -1,8 +1,14 @@
-;; Time-stamp: <2015-01-16 10:08:25 kmodi>
+;; Time-stamp: <2015-02-24 00:14:19 kmodi>
 
 ;; YASnippet
 
 (use-package yasnippet
+  :bind (("s-y s-y" . yas-expand)
+         ("s-y y"   . yas-expand)
+         ("s-y e"   . yas-expand)
+         ("s-y i"   . yas-insert-snippet)
+         ("s-y n"   . yas-new-snippet)
+         ("s-y v"   . yas-visit-snippet-file))
   :config
   (progn
     (setq yas-prompt-functions '(yas-ido-prompt
@@ -15,23 +21,13 @@
 # expand-env: ((yas-indent-line 'auto) (yas-also-auto-indent-first-line t) (yas-wrap-around-region t))}
 # --
 $0")
-    (define-key yas-minor-mode-map (kbd "TAB") nil)
-    (define-key yas-minor-mode-map [(tab)] nil)
-    (bind-keys
-     :map modi-mode-map
-     ("s-y s-y" . yas-expand)
-     ("s-y y"   . yas-expand)
-     ("s-y e"   . yas-expand)
-     ("s-y i"   . yas-insert-snippet)
-     ("s-y n"   . yas-new-snippet)
-     ("s-y v"   . yas-visit-snippet-file)))
-  :idle
-  (progn
-    ;; (yas-global-mode 1)
-    (yas-reload-all)
+
     (dolist (hook '(verilog-mode-hook
                     emacs-lisp-mode-hook))
-      (add-hook hook 'yas-minor-mode))))
+      (add-hook hook #'yas-minor-mode))
+
+    (define-key yas-minor-mode-map (kbd "TAB") nil)
+    (define-key yas-minor-mode-map [(tab)] nil)))
 
 
 (provide 'setup-yasnippet)
