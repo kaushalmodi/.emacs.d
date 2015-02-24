@@ -1,11 +1,21 @@
-;; Time-stamp: <2015-02-23 13:09:53 kmodi>
+;; Time-stamp: <2015-02-23 23:28:13 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
 ;; http://truongtx.me/2013/04/24/dired-as-default-file-manager-1-introduction
 
-(use-package dired
-  :defer t
+(use-package dired-single
+  :commands (dired dired-single-magic-buffer-current-dir dired-single-magic-buffer)
+  :init
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ;; Change the default `C-x C-d` key binding from `ido-list-directory'
+     ("C-x C-d" . dired-single-magic-buffer-current-dir)
+     ;; Change the default `C-x C-j` key binding from `dired-jump'
+     ;; Opens dired-single-magic-buffer but asks which directory to open that
+     ;; dired buffer for.
+     ("C-x C-j" . dired-single-magic-buffer)))
   :config
   (progn
     (setq dired-recursive-deletes 'always)
@@ -33,32 +43,14 @@
         ;; omit mode can be toggled using `M-o' in dired buffer
         (setq-default dired-omit-mode t)))
 
-    (use-package dired-single
-      :config
-      (progn
-        (defun dired-single-magic-buffer-current-dir ()
-          "Open a single magic dired buffer for the current buffer directory."
-          (interactive)
-          (dired-single-magic-buffer default-directory))
+    (defun dired-single-magic-buffer-current-dir ()
+      "Open a single magic dired buffer for the current buffer directory."
+      (interactive)
+      (dired-single-magic-buffer default-directory))
 
-        (defun dired-single-up-directory ()
-          (interactive)
-          (dired-single-buffer ".."))
-
-        (bind-keys
-         :map dired-mode-map
-         ("<return>"         . dired-single-buffer)
-         ("<double-mouse-1>" . dired-single-buffer-mouse)
-         ("^"                . dired-single-up-directory))
-
-        (bind-keys
-         :map modi-mode-map
-         ;; Change the default `C-x C-d` key binding from `ido-list-directory'
-         ("C-x C-d" . dired-single-magic-buffer-current-dir)
-         ;; Change the default `C-x C-j` key binding from `dired-jump'
-         ;; Opens dired-single-magic-buffer but asks which directory to open that
-         ;; dired buffer for.
-         ("C-x C-j" . dired-single-magic-buffer))))
+    (defun dired-single-up-directory ()
+      (interactive)
+      (dired-single-buffer ".."))
 
     (defun rename-dired-buffer-name ()
       "Rename the dired buffer name to distinguish it from file buffers.
@@ -67,6 +59,12 @@ It added extra strings at the front and back of the default dired buffer name."
         (if (not (string-match "/$" name))
             (rename-buffer (concat "*Dired* " name "/") t))))
     (add-hook 'dired-mode-hook #'rename-dired-buffer-name)
+
+    (bind-keys
+     :map dired-mode-map
+     ("<return>"         . dired-single-buffer)
+     ("<double-mouse-1>" . dired-single-buffer-mouse)
+     ("^"                . dired-single-up-directory))
 
     ;; http://oremacs.com/2015/02/21/hydra-docstring-sexp
     (defhydra hydra-dired-marked (dired-mode-map "" :color pink)
