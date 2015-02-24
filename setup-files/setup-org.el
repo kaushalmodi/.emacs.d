@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 10:18:58 kmodi>
+;; Time-stamp: <2015-02-24 10:39:03 kmodi>
 
 ;; Org Mode
 
@@ -90,12 +90,10 @@
     ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
 
     (org-babel-do-load-languages
-     'org-babel-load-languages
-     '(
-       (ditaa    . t)   ; activate ditaa
-       (plantuml . t)   ; activate plantuml
-       (latex    . t)   ; activate latex
-       (dot      . t))) ; activate graphviz
+     'org-babel-load-languages '((ditaa    . t)   ; activate ditaa
+                                 (plantuml . t)   ; activate plantuml
+                                 (latex    . t)   ; activate latex
+                                 (dot      . t))) ; activate graphviz
 
     (defun my-org-confirm-babel-evaluate (lang body)
       (and (not (string= lang "ditaa"))    ; don't ask for ditaa
@@ -174,6 +172,11 @@ this with to-do items than with projects or headings."
     (use-package org-tree-slide
       :load-path "elisp/org-tree-slide"
       :commands (org-tree-slide-mode)
+      :init
+      (progn
+        (bind-keys
+         :map modi-mode-map
+         ("<C-S-f8>" . org-tree-slide-mode)))
       :config
       (progn
         (setq org-tree-slide-slide-in-effect nil)
@@ -181,10 +184,7 @@ this with to-do items than with projects or headings."
          :map org-tree-slide-mode-map
          ("p" . org-tree-slide-move-previous-tree)
          ("n" . org-tree-slide-move-next-tree)
-         ("q" . org-tree-slide-mode))
-        (bind-keys
-         :map modi-mode-map
-         ("<C-S-f8>" . org-tree-slide-mode))))
+         ("q" . org-tree-slide-mode))))
 
     (use-package ox
       :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
@@ -372,6 +372,15 @@ this with to-do items than with projects or headings."
             (setq org-reveal-theme    "default") ; beige blood moon night serif simple sky solarized
             (setq org-reveal-mathjax  t))) ; Use mathjax.org to render LaTeX equations
 
+        ;; ODT export
+        ;; The .odt files can be opened directly in MS Word.
+        ;; http://stackoverflow.com/a/22990257/1219634
+        ;; odt export is disabled by default in org 8.x
+        ;; Comment out the ":disabled t" line below to enable it.
+        (use-package ox-odt
+          :disabled t
+          )
+
         (defun modi/org-export-to-html-txt-pdf ()
           "Export the org file to multiple formats."
           (interactive)
@@ -415,13 +424,6 @@ this with to-do items than with projects or headings."
     ;; the edit.
     (with-eval-after-load 'org-src
       (bind-key "C-x C-s" #'org-edit-src-exit org-src-mode-map))
-
-    ;; ;; Enable org export to odt (OpenDocument Text)
-    ;; ;; It is disabled by default in org 8.x
-    ;; ;; The .odt files can be opened directly in MS Word.
-    ;; ;; http://stackoverflow.com/a/22990257/1219634
-    ;; (eval-after-load "org"
-    ;;   '(require 'ox-odt nil t))
     ))
 
 
