@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 17:27:16 kmodi>
+;; Time-stamp: <2015-02-23 22:33:34 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -111,7 +111,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
 (autoload 'dired-toggle-read-only "dired" nil t)
-(defhydra hydra-toggle (:color teal)
+(defhydra hydra-toggle (:color blue)
   "toggle"
   ("b"     modi/toggle-menu-bar         "menu bar")
   ("c"     xah-cycle-letter-case        "letter case" :color red)
@@ -131,6 +131,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("p"     prez-mode                    "presentation")
   ("r"     dired-toggle-read-only       "read only") ; generalized `read-only-mode'
   ("s"     transpose-frame              "split horz/vert" :color red)
+  ("S"     stripe-buffer-mode           "stripe buffer")
   ("t"     toggle-truncate-lines        "truncate" :color red)
   ("s-t"   toggle-theme                 "theme")
   ("T"     toggle-theme                 "theme")
