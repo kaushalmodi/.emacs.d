@@ -1,7 +1,9 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-02-24 09:05:21 kmodi>
 
 (use-package de-ansi
-  :config
+  :load-path "elisp/de-ansi"
+  :commands (de-ansify)
+  :init
   (progn
     (bind-to-modi-map "d" de-ansify)))
 

@@ -1,8 +1,9 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-02-24 09:00:09 kmodi>
 
 ;; Verilog
 
 (use-package verilog-mode
+  :load-path "elisp/verilog-mode"
   :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ;; .v, .sv, .svh, .tv, .vp
          ("\\.psl\\'"         . verilog-mode)
          ("\\.h\\'"           . verilog-mode)
