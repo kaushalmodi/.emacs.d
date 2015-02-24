@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 12:09:10 kmodi>
+;; Time-stamp: <2015-02-24 00:20:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -124,8 +124,6 @@
 (use-package setup-hydra)
 ;; End of basic requires
 
-(use-package gist)
-
 ;; Set up the looks of emacs
 (use-package setup-popwin) ; require popwin first as packages might depend on it
 (use-package setup-smart-mode-line)
@@ -151,6 +149,7 @@
 (use-package setup-elisp-slime-nav)
 (use-package setup-expand-region)
 (use-package setup-fci)
+(use-package setup-gist)
 (use-package setup-git-gutter)
 (use-package setup-guide-key)
 (use-package setup-hardcore)
