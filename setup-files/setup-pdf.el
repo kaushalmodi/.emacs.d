@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-02-23 23:42:34 kmodi>
 
 ;; PDF
 
@@ -13,6 +13,8 @@
 ;; - make -s
 ;; - make install-package
 (use-package pdf-tools
+  :mode "\\.pdf\\'"
+  :commands (pdf-tools-install my/pdf-tools-install)
   :config
   (progn
 
