@@ -1,9 +1,10 @@
-;; Time-stamp: <2015-02-24 10:39:03 kmodi>
+;; Time-stamp: <2015-02-24 13:02:16 kmodi>
 
 ;; Org Mode
 
 (use-package org
-  :config
+  :defer t
+  :idle
   (progn
 
     (setq org-agenda-archives-mode nil) ; required in org 8.0+
