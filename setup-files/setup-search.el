@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 13:07:44 kmodi>
+;; Time-stamp: <2015-02-23 23:39:15 kmodi>
 
 ;; Search
 
@@ -78,6 +78,15 @@ happens within a region if one is selected."
 ;; Helm Swoop
 (defvar helm-swoop-last-prefix-number nil) ; Fix free variable warning
 (use-package helm-swoop
+  :commands (helm-swoop helm-multi-swoop-all helm-swoop-from-isearch)
+  :init
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("M-i" . helm-swoop)
+     ("M-I" . helm-multi-swoop-all))
+    ;; isearch > press [M-i] > helm-swoop
+    (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map))
   :config
   (progn
     ;; Disable helm
@@ -86,18 +95,11 @@ happens within a region if one is selected."
         (interactive)
         (helm-mode -1)
         (ido-mode 1)
-        (ido-ubiquitous-mode 1)))
-    (modi/disable-helm-enable-ido)
-    (bind-keys
-     :map modi-mode-map
-     ("M-i" . helm-swoop)
-     ("M-I" . helm-multi-swoop-all))
-    ;; Transition
-    ;; isearch     > press [M-i] > helm-swoop
-    (define-key isearch-mode-map (kbd "M-i") #'helm-swoop-from-isearch)
-    ;; helm-swoop  > press [M-i] > helm-multi-swoop-all
+        (ido-ubiquitous-mode 1))
+      (modi/disable-helm-enable-ido))
     (setq helm-swoop-split-direction 'split-window-vertically)
     (setq helm-swoop-speed-or-color nil) ; If nil, boosts speed in exchange for color
+    ;; helm-swoop  > press [M-i] > helm-multi-swoop-all
     ;; While doing `helm-swoop` press `C-c C-e` to edit mode, apply changes to
     ;; original buffer by `C-x C-s`
     ))
