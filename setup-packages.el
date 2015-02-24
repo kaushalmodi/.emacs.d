@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 08:50:37 kmodi>
+;; Time-stamp: <2015-02-24 09:20:51 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -13,6 +13,7 @@
 
 (prepend-path user-emacs-directory)
 (prepend-path (concat user-emacs-directory "/setup-files"))
+(prepend-path (concat user-emacs-directory "/elisp"))
 
 ;; Create the package install directory if it doesn't exist
 (setq package-user-dir (concat user-emacs-directory "/elpa_"
@@ -22,9 +23,6 @@
 
 ;; add all sub directories under package install dir to the load-path
 (let ((default-directory package-user-dir))
-  (normal-top-level-add-subdirs-to-load-path))
-;; add all sub directories under elisp/ to the load-path
-(let ((default-directory (concat user-emacs-directory "/elisp")))
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; add theme paths
