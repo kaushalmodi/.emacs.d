@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 08:48:20 kmodi>
+;; Time-stamp: <2015-02-24 08:50:37 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -24,7 +24,7 @@
 (let ((default-directory package-user-dir))
   (normal-top-level-add-subdirs-to-load-path))
 ;; add all sub directories under elisp/ to the load-path
-(let ((default-directory (concat user-emacs-directory "/elisp"))) ; packages not on Melpa
+(let ((default-directory (concat user-emacs-directory "/elisp")))
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; add theme paths
