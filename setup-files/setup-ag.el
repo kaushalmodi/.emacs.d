@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-02-24 00:44:44 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -12,7 +12,7 @@
       :commands (wgrep-ag-setup)
       :config
       (progn
-        (add-hook 'ag-mode-hook 'wgrep-ag-setup)
+        (add-hook 'ag-mode-hook #'wgrep-ag-setup)
         (bind-keys
          :map wgrep-mode-map
          ("C-x s" . wgrep-save-all-buffers)
