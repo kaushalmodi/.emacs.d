@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-02-24 11:36:32 kmodi>
 
 ;; Highlight stuff
 
@@ -85,6 +85,18 @@ will not update as you type."
          (or (facep face) (setq face 'hi-yellow))
          (unless hi-lock-mode (hi-lock-mode 1))
          (hi-lock-set-pattern regexp face))))
+
+;; hl-line+
+(use-package hl-line+
+  :config
+  (progn
+    (toggle-hl-line-when-idle 1) ; Highlight line only when idle
+    (setq hl-line-flash-show-period 3) ; Number of seconds for `hl-line-flash' to highlight the line
+
+    ;; Below bindings are made in global map and not in my minor mode as I want
+    ;; other modes to override those bindings
+    (bind-keys
+     ("C-c C-f" . hl-line-flash))))
 
 
 (provide 'setup-highlight)

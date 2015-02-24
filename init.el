@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 00:20:30 kmodi>
+;; Time-stamp: <2015-02-24 11:38:40 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -154,7 +154,6 @@
 (use-package setup-guide-key)
 (use-package setup-hardcore)
 (use-package setup-highlight)
-(use-package setup-hl-line+)
 (use-package setup-hungry-delete)
 (use-package setup-ibuffer)
 (use-package setup-ido)

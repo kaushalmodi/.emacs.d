@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 22:33:34 kmodi>
+;; Time-stamp: <2015-02-24 11:37:59 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -181,6 +181,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("el"      modi/eww-im-feeling-lucky             "eww lucky")
   ("eu"      (eww (browse-url-url-at-point))       "open url in eww")
   ("f"       browse-url-firefox                    "firefox")
+  ("h"       hl-line-flash                         "highlight curr line")
   ("m"       man                                   "man")
   ("n"       neotree-toggle                        "neotree")
   ("o"       org-capture                           "org capture")
