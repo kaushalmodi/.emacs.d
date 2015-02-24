@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 00:39:55 kmodi>
+;; Time-stamp: <2015-02-24 08:48:20 kmodi>
 
 ;; Org Mode
 
@@ -237,11 +237,11 @@
 ;; Presentations using reveal.js
 ;; Download reveal.js from https://github.com/hakimel/reveal.js/
 (use-package ox-reveal
-  ;; :load-path "from-git/org-reveal"
+  ;; :load-path "elisp/org-reveal"
   :idle
   (progn
-    ;; I have git cloned reveal.js in my {emacs config directory}/from-git/
-    (setq org-reveal-root     (concat "file://" user-emacs-directory "/from-git/reveal.js/")
+    ;; I have git cloned reveal.js in my {emacs config directory}/elisp/
+    (setq org-reveal-root     (concat "file://" user-emacs-directory "/elisp/reveal.js/")
           org-reveal-hlevel   1
           org-reveal-theme    "default" ; beige blood moon night serif simple sky solarized
           org-reveal-mathjax  t))) ; Use mathjax.org to render LaTeX equations
@@ -283,12 +283,12 @@ this with to-do items than with projects or headings."
 
 ;; org-ref - JKitchin
 ;; http://kitchingroup.cheme.cmu.edu/blog/2014/05/13/Using-org-ref-for-citations-and-references/
-;; (org-babel-load-file (concat user-emacs-directory "/from-git/org-ref/org-ref.org"))
+;; (org-babel-load-file (concat user-emacs-directory "/elisp/org-ref/org-ref.org"))
 
 ;; org-show -JKitchin
 ;; https://github.com/jkitchin/jmax/blob/master/org-show.org
 ;; (use-package org-show
-;; :load-path "from-git/org-show")
+;; :load-path "elisp/org-show")
 ;; (define-key  org-show-mode-map  [next]        'org-show-next-slide) ; Pg-Down
 ;; (define-key  org-show-mode-map  [prior]       'org-show-previous-slide) ; Pg-Up
 
@@ -306,7 +306,7 @@ this with to-do items than with projects or headings."
 
 ;; org-tree-slide
 (use-package org-tree-slide
-  :load-path "from-git/org-tree-slide"
+  :load-path "elisp/org-tree-slide"
   :commands (org-tree-slide-mode)
   :config
   (progn

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 10:58:54 kmodi>
+;; Time-stamp: <2015-02-24 08:48:21 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -107,7 +107,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;; Converts between horz-split <-> vert-split. In addition it also rotates
 ;; the windows around in the frame when you have 3 or more windows.
 (use-package transpose-frame
-  :load-path "from-git/transpose-frame/"
+  :load-path "elisp/transpose-frame/"
   :config
   (progn
     (bind-keys

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-18 13:29:10 kmodi>
+;; Time-stamp: <2015-02-24 08:48:20 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -23,15 +23,15 @@
 ;; add all sub directories under package install dir to the load-path
 (let ((default-directory package-user-dir))
   (normal-top-level-add-subdirs-to-load-path))
-;; add all sub directories under from-git/ to the load-path
-(let ((default-directory (concat user-emacs-directory "/from-git"))) ; packages not on Melpa
+;; add all sub directories under elisp/ to the load-path
+(let ((default-directory (concat user-emacs-directory "/elisp"))) ; packages not on Melpa
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; add theme paths
 (add-to-list 'custom-theme-load-path
-             (concat user-emacs-directory "/from-git/zenburn-emacs/"))
+             (concat user-emacs-directory "/elisp/zenburn-emacs/"))
 (add-to-list 'custom-theme-load-path
-             (concat user-emacs-directory "/from-git/smyx/"))
+             (concat user-emacs-directory "/elisp/smyx/"))
 
 ;; Add melpa package source when using package list
 (add-to-list 'package-archives

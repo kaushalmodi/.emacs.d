@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 12:18:00 kmodi>
+;; Time-stamp: <2015-02-24 08:48:21 kmodi>
 
 ;; Calculator
 
@@ -50,7 +50,7 @@ because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
     ))
 
 (use-package rpn-calc
-  :load-path "from-git/rpn-calc"
+  :load-path "elisp/rpn-calc"
   :config
   (progn
     (bind-keys

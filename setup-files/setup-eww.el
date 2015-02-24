@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 00:32:04 kmodi>
+;; Time-stamp: <2015-02-24 08:48:20 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -124,7 +124,7 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
     ;; e.g. Copied HTML hyperlinks get converted to [[link][desc]] for org mode.
     ;; http://emacs.stackexchange.com/a/8191/115
     (use-package org-eww
-      :load-path "from-git/org-mode/contrib/lisp"
+      :load-path "elisp/org-mode/contrib/lisp"
       :commands (org-eww-copy-for-org-mode)
       :init
       (bind-keys

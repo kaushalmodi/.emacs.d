@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-02-23 11:54:15 kmodi>
+;; Time-stamp: <2015-02-24 08:48:21 kmodi>
 
 ;; Hydra
 ;; https://github.com/abo-abo/hydra
 
 (use-package hydra
-  ;; :load-path "from-git/hydra"
+  ;; :load-path "elisp/hydra"
   :config
   (progn
     ;; (setq hydra-lv nil)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:17:14 kmodi>
+;; Time-stamp: <2015-02-24 08:48:21 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -184,7 +184,7 @@ remove the comment characters from that line."
 ;; zop-to-char
 ;; Source: https://github.com/thierryvolpiatto/zop-to-char
 (use-package zop-to-char
-  :load-path "from-git/zop-to-char"
+  :load-path "elisp/zop-to-char"
   :config
   (progn
     (bind-keys
@@ -374,7 +374,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
 
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
-  :load-path "from-git/unfill/")
+  :load-path "elisp/unfill/")
 
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
