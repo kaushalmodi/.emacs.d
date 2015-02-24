@@ -31,3 +31,6 @@
 [submodule "elisp/org-mode"]
 	path = elisp/org-mode
 	url = http://repo.or.cz/r/org-mode.git
+[submodule "software/reveal.js"]
+	path = software/reveal.js
+	url = http://github.com/hakimel/reveal.js
