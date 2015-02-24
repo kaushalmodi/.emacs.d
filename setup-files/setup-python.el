@@ -1,8 +1,10 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-02-23 22:35:49 kmodi>
 
 ;;Python
 
 (use-package python-mode
+  :mode "\\.py\\'"
+  :interpreter "python"
   :config
   (progn
     ;; ; use IPython
