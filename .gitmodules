@@ -28,3 +28,6 @@
 [submodule "elisp/rpn-calc"]
 	path = elisp/rpn-calc
 	url = https://github.com/kaushalmodi/rpn-calc
+[submodule "elisp/org-mode"]
+	path = elisp/org-mode
+	url = http://repo.or.cz/r/org-mode.git
