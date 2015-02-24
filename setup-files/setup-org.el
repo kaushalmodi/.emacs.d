@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 08:48:20 kmodi>
+;; Time-stamp: <2015-02-24 09:16:24 kmodi>
 
 ;; Org Mode
 
@@ -204,8 +204,12 @@
 
 ;; Diagrams
 ;; http://pages.sachachua.com/.emacs.d/Sacha.html
-(setq org-ditaa-jar-path (concat user-emacs-directory "/ditaa/ditaa0_9.jar"))
-(setq org-plantuml-jar-path (concat user-emacs-directory "/plantuml/plantuml.7999.jar"))
+(setq org-ditaa-jar-path (expand-file-name
+                          "ditaa.jar"
+                          (concat user-emacs-directory "/software")))
+(setq org-plantuml-jar-path (expand-file-name
+                             "plantuml.jar"
+                             (concat user-emacs-directory "/software")))
 
 ;; (setq org-startup-with-inline-images t)
 ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
