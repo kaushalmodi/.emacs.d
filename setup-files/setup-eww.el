@@ -1,8 +1,19 @@
-;; Time-stamp: <2015-02-23 11:10:01 kmodi>
+;; Time-stamp: <2015-02-24 00:32:04 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
 (use-package eww
+  :commands (eww eww-search-words
+                 modi/eww-copy-link-first-search-result
+                 modi/eww-im-feeling-lucky)
+  :init
+  (progn
+    (bind-keys
+     :map modi-mode-map
+     ("M-s M-w" . eww-search-words)
+     ("M-s M-l" . modi/eww-copy-link-first-search-result))
+    (when (featurep 'key-chord)
+      (key-chord-define-global "-=" #'eww)))
   :config
   (progn
     (setq modi/eww-file-notify-descriptors-list (quote nil))
@@ -96,11 +107,13 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
         (interactive)
         (quit-window :kill)
         (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
-          (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list)))))
+          (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
+      (key-chord-define eww-mode-map "XX" #'modi/eww-quit))
 
     ;; eww-lnum
     (use-package eww-lnum
-      :config
+      :commands (eww-lnum-follow eww-lnum-universal)
+      :init
       (bind-keys
        :map eww-mode-map
        ("f" . eww-lnum-follow)
@@ -112,7 +125,8 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
     ;; http://emacs.stackexchange.com/a/8191/115
     (use-package org-eww
       :load-path "from-git/org-mode/contrib/lisp"
-      :config
+      :commands (org-eww-copy-for-org-mode)
+      :init
       (bind-keys
        :map eww-mode-map
        ("o" . org-eww-copy-for-org-mode)))
@@ -151,14 +165,7 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
      ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
     (bind-keys
      :map eww-checkbox-map
-     ("<down-mouse-1>" . eww-toggle-checkbox))
-    (bind-keys
-     :map modi-mode-map
-     ("M-s M-w" . eww-search-words)
-     ("M-s M-l" . modi/eww-copy-link-first-search-result))
-    (when (featurep 'key-chord)
-      (key-chord-define-global       "-=" #'eww)
-      (key-chord-define eww-mode-map "XX" #'modi/eww-quit))))
+     ("<down-mouse-1>" . eww-toggle-checkbox))))
 
 
 (provide 'setup-eww)
