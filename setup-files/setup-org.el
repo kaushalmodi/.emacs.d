@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 18:07:10 kmodi>
+;; Time-stamp: <2015-02-24 00:39:55 kmodi>
 
 ;; Org Mode
 
@@ -67,7 +67,7 @@
 ;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
 
 (use-package ox-latex
-  :config
+  :idle
   (progn
     ;; Previewing latex fragments in org mode
     ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
@@ -200,10 +200,10 @@
   (local-unset-key (kbd "<s-f10>"))
   (local-unset-key (kbd "<S-f10>"))
   (local-unset-key (kbd "<C-f10>")))
-(add-hook 'org-mode-hook 'my-org-mode-customizations)
+(add-hook 'org-mode-hook #'my-org-mode-customizations)
 
-;; Diagrammmms
-;; Source: http://pages.sachachua.com/.emacs.d/Sacha.html
+;; Diagrams
+;; http://pages.sachachua.com/.emacs.d/Sacha.html
 (setq org-ditaa-jar-path (concat user-emacs-directory "/ditaa/ditaa0_9.jar"))
 (setq org-plantuml-jar-path (concat user-emacs-directory "/plantuml/plantuml.7999.jar"))
 
@@ -213,9 +213,9 @@
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
-   (ditaa    . t) ; activate ditaa
-   (plantuml . t) ; activate plantuml
-   (latex    . t) ; activate latex
+   (ditaa    . t)   ; activate ditaa
+   (plantuml . t)   ; activate plantuml
+   (latex    . t)   ; activate latex
    (dot      . t))) ; activate graphviz
 
 (defun my-org-confirm-babel-evaluate (lang body)
@@ -238,7 +238,7 @@
 ;; Download reveal.js from https://github.com/hakimel/reveal.js/
 (use-package ox-reveal
   ;; :load-path "from-git/org-reveal"
-  :config
+  :idle
   (progn
     ;; I have git cloned reveal.js in my {emacs config directory}/from-git/
     (setq org-reveal-root     (concat "file://" user-emacs-directory "/from-git/reveal.js/")
@@ -275,12 +275,11 @@ this with to-do items than with projects or headings."
   (org-capture 0))
 
 (add-hook 'org-agenda-mode-hook
-          (lambda ()
-            ;; Override the key definition for org-exit
-            (define-key org-agenda-mode-map "x" 'sacha/org-agenda-done)
-            (define-key org-agenda-mode-map "X" 'sacha/org-agenda-mark-done-and-add-followup)
-            ;; New key assignment
-            (define-key org-agenda-mode-map "N" 'sacha/org-agenda-new)))
+          (λ (bind-keys
+              :map org-agenda-mode-map
+              ("x" . sacha/org-agenda-done)
+              ("X" . sacha/org-agenda-mark-done-and-add-followup)
+              ("N" . sacha/org-agenda-new))))
 
 ;; org-ref - JKitchin
 ;; http://kitchingroup.cheme.cmu.edu/blog/2014/05/13/Using-org-ref-for-citations-and-references/
@@ -302,11 +301,13 @@ this with to-do items than with projects or headings."
 ;; (define-key  org-show-mode-map  (kbd "\e\eq") 'org-show-stop-slideshow)
 
 ;; epresent
-(use-package epresent)
+(use-package epresent
+  :commands (epresent-run))
 
 ;; org-tree-slide
 (use-package org-tree-slide
-  ;; :load-path "from-git/org-tree-slide"
+  :load-path "from-git/org-tree-slide"
+  :commands (org-tree-slide-mode)
   :config
   (progn
     (setq org-tree-slide-slide-in-effect nil)
@@ -316,6 +317,7 @@ this with to-do items than with projects or headings."
      ("n" . org-tree-slide-move-next-tree)
      ("q" . org-tree-slide-mode))
     (bind-keys
+     :map modi-mode-map
      ("<C-S-f8>" . org-tree-slide-mode))))
 
 ;; Key bindings
@@ -611,195 +613,196 @@ add it to `before-save-hook'."
               (insert "#+ATTR_HTML: :class fancybox")
               (forward-line 2))))))))
 
-
 ;; Fix the issue of fci-mode and html export
-(require 'ox-html)
-(defun org-html-fontify-code (code lang)
-  "Color CODE with htmlize library.
+(use-package ox-html
+  :idle
+  (progn
+    (defun org-html-fontify-code (code lang)
+      "Color CODE with htmlize library.
 CODE is a string representing the source code to colorize.  LANG
 is the language used for CODE, as a string, or nil."
-  (when code
-    (cond
-     ;; Case 1: No lang.  Possibly an example block.
-     ((not lang)
-      ;; Simple transcoding.
-      (org-html-encode-plain-text code))
-     ;; Case 2: No htmlize or an inferior version of htmlize
-     ((not (and (require 'htmlize nil t) (fboundp 'htmlize-region-for-paste)))
-      ;; Emit a warning.
-      (message "Cannot fontify src block (htmlize.el >= 1.34 required)")
-      ;; Simple transcoding.
-      (org-html-encode-plain-text code))
-     (t
-      ;; Map language
-      (setq lang (or (assoc-default lang org-src-lang-modes) lang))
-      (let* ((lang-mode (and lang (intern (format "%s-mode" lang)))))
-	(cond
-	 ;; Case 1: Language is not associated with any Emacs mode
-	 ((not (functionp lang-mode))
-	  ;; Simple transcoding.
-	  (org-html-encode-plain-text code))
-	 ;; Case 2: Default.  Fontify code.
-	 (t
-	  ;; htmlize
-	  (setq code (with-temp-buffer
-		       ;; Switch to language-specific mode.
-		       (funcall lang-mode)
+      (when code
+        (cond
+         ;; Case 1: No lang.  Possibly an example block.
+         ((not lang)
+          ;; Simple transcoding.
+          (org-html-encode-plain-text code))
+         ;; Case 2: No htmlize or an inferior version of htmlize
+         ((not (and (require 'htmlize nil t) (fboundp 'htmlize-region-for-paste)))
+          ;; Emit a warning.
+          (message "Cannot fontify src block (htmlize.el >= 1.34 required)")
+          ;; Simple transcoding.
+          (org-html-encode-plain-text code))
+         (t
+          ;; Map language
+          (setq lang (or (assoc-default lang org-src-lang-modes) lang))
+          (let* ((lang-mode (and lang (intern (format "%s-mode" lang)))))
+            (cond
+             ;; Case 1: Language is not associated with any Emacs mode
+             ((not (functionp lang-mode))
+              ;; Simple transcoding.
+              (org-html-encode-plain-text code))
+             ;; Case 2: Default.  Fontify code.
+             (t
+              ;; htmlize
+              (setq code (with-temp-buffer
+                           ;; Switch to language-specific mode.
+                           (funcall lang-mode)
           ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                       (when (require 'fill-column-indicator nil 'noerror)
-                         (fci-mode -1))
+                           (when (require 'fill-column-indicator nil 'noerror)
+                             (fci-mode -1))
           ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-		       (insert code)
-		       ;; Fontify buffer.
-		       (font-lock-fontify-buffer)
-		       ;; Remove formatting on newline characters.
-		       (save-excursion
-			 (let ((beg (point-min))
-			       (end (point-max)))
-			   (goto-char beg)
-			   (while (progn (end-of-line) (< (point) end))
-			     (put-text-property (point) (1+ (point)) 'face nil)
-			     (forward-char 1))))
-		       (org-src-mode)
-		       (set-buffer-modified-p nil)
-		       ;; Htmlize region.
-		       (org-html-htmlize-region-for-paste
-			(point-min) (point-max))))
-	  ;; Strip any enclosing <pre></pre> tags.
-	  (let* ((beg (and (string-match "\\`<pre[^>]*>\n*" code) (match-end 0)))
-		 (end (and beg (string-match "</pre>\\'" code))))
-	    (if (and beg end) (substring code beg end) code)))))))))
+                           (insert code)
+                           ;; Fontify buffer.
+                           (font-lock-fontify-buffer)
+                           ;; Remove formatting on newline characters.
+                           (save-excursion
+                             (let ((beg (point-min))
+                                   (end (point-max)))
+                               (goto-char beg)
+                               (while (progn (end-of-line) (< (point) end))
+                                 (put-text-property (point) (1+ (point)) 'face nil)
+                                 (forward-char 1))))
+                           (org-src-mode)
+                           (set-buffer-modified-p nil)
+                           ;; Htmlize region.
+                           (org-html-htmlize-region-for-paste
+                            (point-min) (point-max))))
+              ;; Strip any enclosing <pre></pre> tags.
+              (let* ((beg (and (string-match "\\`<pre[^>]*>\n*" code) (match-end 0)))
+                     (end (and beg (string-match "</pre>\\'" code))))
+                (if (and beg end) (substring code beg end) code)))))))))
 
-;; Remove HTML tags from the title string; otherwise the tags show up
-;; verbatim in browser tabs3
-(defun org-html--build-meta-info (info)
-  "Return meta tags for exported document.
+    ;; Remove HTML tags from the title string; otherwise the tags show up
+    ;; verbatim in browser tabs3
+    (defun org-html--build-meta-info (info)
+      "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
-  (let ((protect-string
-	 (lambda (str)
-	   (replace-regexp-in-string
-	    "\"" "&quot;" (org-html-encode-plain-text str))))
-	(title (org-export-data (plist-get info :title) info))
-	(author (and (plist-get info :with-author)
-		     (let ((auth (plist-get info :author)))
-		       (and auth
-			    ;; Return raw Org syntax, skipping non
-			    ;; exportable objects.
-			    (org-element-interpret-data
-			     (org-element-map auth
-				 (cons 'plain-text org-element-all-objects)
-			       'identity info))))))
-	(description (plist-get info :description))
-	(keywords (plist-get info :keywords))
-	(charset (or (and org-html-coding-system
-			  (fboundp 'coding-system-get)
-			  (coding-system-get org-html-coding-system
-					     'mime-charset))
-		     "iso-8859-1")))
-    (concat
+      (let ((protect-string
+             (lambda (str)
+               (replace-regexp-in-string
+                "\"" "&quot;" (org-html-encode-plain-text str))))
+            (title (org-export-data (plist-get info :title) info))
+            (author (and (plist-get info :with-author)
+                         (let ((auth (plist-get info :author)))
+                           (and auth
+                                ;; Return raw Org syntax, skipping non
+                                ;; exportable objects.
+                                (org-element-interpret-data
+                                 (org-element-map auth
+                                     (cons 'plain-text org-element-all-objects)
+                                   'identity info))))))
+            (description (plist-get info :description))
+            (keywords (plist-get info :keywords))
+            (charset (or (and org-html-coding-system
+                              (fboundp 'coding-system-get)
+                              (coding-system-get org-html-coding-system
+                                                 'mime-charset))
+                         "iso-8859-1")))
+        (concat
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;; (format "<title>%s</title>\n" title) ;; ORIGINAL
-     ;; Remove HTML tags from `title' string
-     (format "<title>%s</title>\n"
-             (replace-regexp-in-string ".*\\(<.*>\\).*" ""
-                                       title :fixedcase :literal 1))
+         ;; (format "<title>%s</title>\n" title) ;; ORIGINAL
+         ;; Remove HTML tags from `title' string
+         (format "<title>%s</title>\n"
+                 (replace-regexp-in-string ".*\\(<.*>\\).*" ""
+                                           title :fixedcase :literal 1))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     (when (plist-get info :time-stamp-file)
-       (format-time-string
-        (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
-     (format
-      (if (org-html-html5-p info)
-	  (org-html-close-tag "meta" " charset=\"%s\"" info)
-	(org-html-close-tag
-	 "meta" " http-equiv=\"Content-Type\" content=\"text/html;charset=%s\""
-	 info))
-      charset) "\n"
-      (org-html-close-tag "meta" " name=\"generator\" content=\"Org-mode\"" info)
-      "\n"
-      (and (org-string-nw-p author)
-           (concat
-            (org-html-close-tag "meta"
-                                (format " name=\"author\" content=\"%s\""
-                                        (funcall protect-string author))
-                                info)
-            "\n"))
-      (and (org-string-nw-p description)
-           (concat
-            (org-html-close-tag "meta"
-                                (format " name=\"description\" content=\"%s\"\n"
-                                        (funcall protect-string description))
-                                info)
-            "\n"))
-      (and (org-string-nw-p keywords)
-           (concat
-            (org-html-close-tag "meta"
-                                (format " name=\"keywords\" content=\"%s\""
-                                        (funcall protect-string keywords))
-                                info)
-            "\n")))))
+         (when (plist-get info :time-stamp-file)
+           (format-time-string
+            (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
+         (format
+          (if (org-html-html5-p info)
+              (org-html-close-tag "meta" " charset=\"%s\"" info)
+            (org-html-close-tag
+             "meta" " http-equiv=\"Content-Type\" content=\"text/html;charset=%s\""
+             info))
+          charset) "\n"
+          (org-html-close-tag "meta" " name=\"generator\" content=\"Org-mode\"" info)
+          "\n"
+          (and (org-string-nw-p author)
+               (concat
+                (org-html-close-tag "meta"
+                                    (format " name=\"author\" content=\"%s\""
+                                            (funcall protect-string author))
+                                    info)
+                "\n"))
+          (and (org-string-nw-p description)
+               (concat
+                (org-html-close-tag "meta"
+                                    (format " name=\"description\" content=\"%s\"\n"
+                                            (funcall protect-string description))
+                                    info)
+                "\n"))
+          (and (org-string-nw-p keywords)
+               (concat
+                (org-html-close-tag "meta"
+                                    (format " name=\"keywords\" content=\"%s\""
+                                            (funcall protect-string keywords))
+                                    info)
+                "\n")))))
 
-;; Rename the use of "Listings" term in HTML exports
-(defun org-html-list-of-listings (info)
-  "Build a list of listings.
+    ;; Rename the use of "Listings" term in HTML exports
+    (defun org-html-list-of-listings (info)
+      "Build a list of listings.
 INFO is a plist used as a communication channel.  Return the list
 of listings as a string, or nil if it is empty."
-  (let ((lol-entries (org-export-collect-listings info)))
-    (when lol-entries
-      (concat "<div id=\"list-of-listings\">\n"
-	      (format "<h%d>%s</h%d>\n"
-		      org-html-toplevel-hlevel
-		      (org-html--translate "Code Snippets" info)
-		      org-html-toplevel-hlevel)
-	      "<div id=\"text-list-of-listings\">\n<ul>\n"
-	      (let ((count 0)
-		    (initial-fmt (format "<span class=\"listing-number\">%s</span>"
-					 (org-html--translate "Code Snippet %d:" info))))
-		(mapconcat
-		 (lambda (entry)
-		   (let ((label (org-element-property :name entry))
-			 (title (org-trim
-				 (org-export-data
-				  (or (org-export-get-caption entry t)
-				      (org-export-get-caption entry))
-				  info))))
-		     (concat
-		      "<li>"
-		      (if (not label)
-			  (concat (format initial-fmt (incf count)) " " title)
-			(format "<a href=\"#%s\">%s %s</a>"
-				(org-export-solidify-link-text label)
-				(format initial-fmt (incf count))
-				title))
-		      "</li>")))
-		 lol-entries "\n"))
-	      "\n</ul>\n</div>\n</div>"))))
+      (let ((lol-entries (org-export-collect-listings info)))
+        (when lol-entries
+          (concat "<div id=\"list-of-listings\">\n"
+                  (format "<h%d>%s</h%d>\n"
+                          org-html-toplevel-hlevel
+                          (org-html--translate "Code Snippets" info)
+                          org-html-toplevel-hlevel)
+                  "<div id=\"text-list-of-listings\">\n<ul>\n"
+                  (let ((count 0)
+                        (initial-fmt (format "<span class=\"listing-number\">%s</span>"
+                                             (org-html--translate "Code Snippet %d:" info))))
+                    (mapconcat
+                     (lambda (entry)
+                       (let ((label (org-element-property :name entry))
+                             (title (org-trim
+                                     (org-export-data
+                                      (or (org-export-get-caption entry t)
+                                          (org-export-get-caption entry))
+                                      info))))
+                         (concat
+                          "<li>"
+                          (if (not label)
+                              (concat (format initial-fmt (incf count)) " " title)
+                            (format "<a href=\"#%s\">%s %s</a>"
+                                    (org-export-solidify-link-text label)
+                                    (format initial-fmt (incf count))
+                                    title))
+                          "</li>")))
+                     lol-entries "\n"))
+                  "\n</ul>\n</div>\n</div>"))))
 
-;; Center align the tables when exporting to HTML
-;; Note: This aligns the whole table, not the table columns
-(setq org-html-table-default-attributes
-      '(:border "2"
-                :cellspacing "0"
-                :cellpadding "6"
-                :rules "groups"
-                :frame "hsides"
-                :align "center"
-                :class "table-striped") ; this class requires bootstrap.css ( http://getbootstrap.com )
-      ;; '(:border "2"
-      ;;           :cellspacing "0"
-      ;;           :cellpadding "6"
-      ;;           :rules "groups"
-      ;;           :frame "hsides")
-      )
+    ;; Center align the tables when exporting to HTML
+    ;; Note: This aligns the whole table, not the table columns
+    (setq org-html-table-default-attributes
+          '(:border "2"
+                    :cellspacing "0"
+                    :cellpadding "6"
+                    :rules "groups"
+                    :frame "hsides"
+                    :align "center"
+                    :class "table-striped") ; this class requires bootstrap.css ( http://getbootstrap.com )
+          ;; '(:border "2"
+          ;;           :cellspacing "0"
+          ;;           :cellpadding "6"
+          ;;           :rules "groups"
+          ;;           :frame "hsides")
+          )
 
-;; Customize the HTML postamble
-(setq org-html-postamble t) ; default value = 'auto
-(setq org-html-postamble-format
-      '(("en" "Exported using <div style=\"display: inline\" class=\"creator\">%c</div> on <div style=\"display: inline\"class=\"date\">%d</div> by %e.")))
+    ;; Customize the HTML postamble
+    (setq org-html-postamble t) ; default value = 'auto
+    (setq org-html-postamble-format
+          '(("en" "Exported using <div style=\"display: inline\" class=\"creator\">%c</div> on <div style=\"display: inline\"class=\"date\">%d</div> by %e.")))
 
-;; (setq org-html-htmlize-output-type 'inline-css) ; default
-(setq org-html-htmlize-output-type 'css)
-;; (setq org-html-htmlize-font-prefix "") ; default
-(setq org-html-htmlize-font-prefix "org-")
+    ;; (setq org-html-htmlize-output-type 'inline-css) ; default
+    (setq org-html-htmlize-output-type 'css)
+    ;; (setq org-html-htmlize-font-prefix "") ; default
+    (setq org-html-htmlize-font-prefix "org-")))
 
 ;; Implementing Markdown style link IDs in org-mode
 ;; Source: http://emacs.stackexchange.com/questions/594/how-to-implement-markdown-style-link-ids-in-org-mode
@@ -882,7 +885,7 @@ INFO is a plist holding contextual information."
 ;; Pressing `C-x C-s' while editing org source code blocks saves and exits
 ;; the edit.
 (with-eval-after-load 'org-src
-  (define-key org-src-mode-map "\C-x\C-s" #'org-edit-src-exit))
+  (bind-key "C-x C-s" #'org-edit-src-exit org-src-mode-map))
 
 ;; ;; Enable org export to odt (OpenDocument Text)
 ;; ;; It is disabled by default in org 8.x
