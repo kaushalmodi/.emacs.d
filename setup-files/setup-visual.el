@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-19 12:08:53 kmodi>
+;; Time-stamp: <2015-02-24 00:26:45 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -97,29 +97,26 @@
 
 ;; Load the theme ONLY after the frame has finished loading (needed especially
 ;; when running emacs in daemon mode)
-;; Source: https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
+;; https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
 (add-hook 'window-setup-hook (λ (funcall default-theme)))
 
 (add-hook 'after-init-hook
-          '(lambda()
-             ;; Frame title bar format
-             ;; If buffer-file-name exists, show it;
-             ;; else if you are in dired mode, show the directory name
-             ;; else show only the buffer name (*scratch*, *Messages*, etc)
-             ;; Append the value of PRJ_NAME env var to the above.
-             (setq frame-title-format
+          ;; Frame title bar format
+          ;; If buffer-file-name exists, show it;
+          ;; else if you are in dired mode, show the directory name
+          ;; else show only the buffer name (*scratch*, *Messages*, etc)
+          ;; Append the value of PRJ_NAME env var to the above.
+          (λ (setq frame-title-format
                    (list '(buffer-file-name "%f"
                                             (dired-directory dired-directory "%b"))
                          " [" (getenv "PRJ_NAME") "]"))))
 
-(setq global-font-lock-mode t ;; enable font-lock or syntax highlighting globally
-      font-lock-maximum-decoration t ;; use the maximum decoration level available for color highlighting
-      )
+;; enable font-lock or syntax highlighting globally
+(setq global-font-lock-mode t)
+;; use the maximum decoration level available for color highlighting
+(setq font-lock-maximum-decoration t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FONTS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; (set-face-attribute 'default nil :font "Source Code Pro for Powerline" )
 ;; (set-frame-font "Input Mono" nil t)
 
