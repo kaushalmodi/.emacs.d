@@ -12,7 +12,7 @@
 	url = http://www.github.com/kaushalmodi/zop-to-char
 [submodule "from-git/org-tree-slide"]
 	path = from-git/org-tree-slide
-	url = https://github.com/takaxp/org-tree-slide
+	url = https://www.github.com/kaushalmodi/org-tree-slide
 [submodule "from-git/smyx"]
 	path = from-git/smyx
 	url = https://www.github.com/kaushalmodi/smyx
