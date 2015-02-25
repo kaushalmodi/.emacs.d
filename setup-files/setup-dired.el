@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 23:28:13 kmodi>
+;; Time-stamp: <2015-02-25 12:47:33 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
@@ -33,6 +33,40 @@
         ;; detail toggling is bound to `(' in dired-mode by default
         (setq diredp-hide-details-initially-flag nil)
         (setq diredp-hide-details-last-state     nil)
+
+        ;; Privilege indicator faces
+        ;; (set-face-attribute 'diredp-dir-priv nil
+        ;;                     :foreground "#7474FFFFFFFF" :background "#2C2C2C2C2C2C")
+        (set-face-attribute 'diredp-dir-priv nil
+                            :foreground "#7474FFFFFFFF" :background "#2C2C2C2C2C2C")
+        ;; (set-face-attribute 'diredp-exec-priv nil
+        ;;                     :background "#4F4F3B3B2121")
+        (set-face-attribute 'diredp-exec-priv nil
+                            :foreground "dodger blue" :background nil)
+        ;; (set-face-attribute 'diredp-other-priv nil
+        ;;                     :background "#111117175555")
+        (set-face-attribute 'diredp-other-priv nil
+                            :background "#111117175555")
+        ;; (set-face-attribute 'diredp-write-priv nil
+        ;;                     :background "#25258F8F2929")
+        (set-face-attribute 'diredp-write-priv nil
+                            :foreground "#25258F8F2929" :background nil)
+        ;; (set-face-attribute 'diredp-read-priv nil
+        ;;                     :background "#999932325555")
+        (set-face-attribute 'diredp-read-priv nil
+                            :foreground "#999932325555" :background nil)
+        ;; (set-face-attribute 'diredp-no-priv nil
+        ;;                     :background "#2C2C2C2C2C2C")
+        (set-face-attribute 'diredp-no-priv nil
+                            :foreground "#2C2C2C2C2C2C" :background nil)
+        ;; (set-face-attribute 'diredp-rare-priv nil
+        ;;                     :foreground "Green" :background "#FFFF00008080")
+        (set-face-attribute 'diredp-rare-priv nil
+                            :foreground "Green" :background "#FFFF00008080")
+        ;; (set-face-attribute 'diredp-link-priv nil
+        ;;                     :foreground "#00007373FFFF")
+        (set-face-attribute 'diredp-link-priv nil
+                            :foreground "#00007373FFFF")
         ))
 
     (use-package dired-x
@@ -59,6 +93,7 @@ It added extra strings at the front and back of the default dired buffer name."
         (if (not (string-match "/$" name))
             (rename-buffer (concat "*Dired* " name "/") t))))
     (add-hook 'dired-mode-hook #'rename-dired-buffer-name)
+    (add-hook 'dired-mode-hook (λ (toggle-truncate-lines 1))) ; enable truncation
 
     (bind-keys
      :map dired-mode-map
