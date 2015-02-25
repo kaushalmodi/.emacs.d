@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 15:28:27 kmodi>
+;; Time-stamp: <2015-02-25 11:11:31 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -83,10 +83,11 @@ _s-f_: file            _a_: ag              ^^_i_: Ibuffer           _c_: cache 
               " -g ''") ; get file names matching the regex ''
       "Ag command to be used by projectile to generate file cache.")
 
-    (defun projectile-get-ext-command ()
-      "Override the projectile-defined function so that `ag' is always used for
+    (when (executable-find "ag")
+      (defun projectile-get-ext-command ()
+        "Override the projectile-defined function so that `ag' is always used for
 getting a list of all files in a project."
-      projectile-ag-command)
+        projectile-ag-command))
 
     ;; Make the file list creation faster by NOT calling `projectile-get-sub-projects-files'
     (defun projectile-get-repo-files ()
