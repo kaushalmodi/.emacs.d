@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 11:37:59 kmodi>
+;; Time-stamp: <2015-02-24 15:50:26 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -37,29 +37,30 @@
 
 ;; Execute the script in current buffer
 ;; Source: http://ergoemacs.org/emacs/elisp_run_current_file.html
-(defun xah-run-current-file ()
+(defun xah-run-current-file (&optional eval-init)
   "Execute the current file.
-For example, if the current buffer is the file xx.py,
-then it'll call “python xx.py” in a shell.
-The file can be php, perl, python, ruby, javascript, bash, ocaml, vb, elisp.
-File suffix is used to determine what program to run.
+For example, if the current buffer is the file xx.py, then it'll call
+“python xx.py” in a shell. The file can be php, perl, python, ruby,
+javascript, bash, ocaml, vb, elisp.  File suffix is used to determine
+what program to run.
 
 If the file is modified, ask if you want to save first.
 
-If the file is emacs lisp, run the byte compiled version if exist."
-  (interactive)
-  (let* (
-         (suffixMap
-          `(
-            ("py"  . "python")
-            ("rb"  . "ruby")
-            ("sh"  . "bash")
-            ("csh" . "tcsh")
-            ("pl"  . "perl")))
-         (fName (buffer-file-name))
-         (fSuffix (file-name-extension fName))
+If the file is emacs lisp, run the byte compiled version if exist.
+
+If universal arg is used, load the `init.el'."
+  (interactive "P")
+  (let* ((suffixMap `(("py"  . "python")
+                      ("rb"  . "ruby")
+                      ("sh"  . "bash")
+                      ("csh" . "tcsh")
+                      ("pl"  . "perl")))
+         (fName    (if eval-init
+                       (concat user-emacs-directory "/init.el")
+                     (buffer-file-name)))
+         (fSuffix  (file-name-extension fName))
          (progName (cdr (assoc fSuffix suffixMap)))
-         (cmdStr (concat progName " \""   fName "\""))
+         (cmdStr   (concat progName " \""   fName "\""))
          IsGPG)
 
     (when (buffer-modified-p)
@@ -182,6 +183,8 @@ If the file is emacs lisp, run the byte compiled version if exist."
   ("eu"      (eww (browse-url-url-at-point))       "open url in eww")
   ("f"       browse-url-firefox                    "firefox")
   ("h"       hl-line-flash                         "highlight curr line")
+  ("l"       xah-run-current-file                  "run/load current")
+  ("L"       (xah-run-current-file 4)              "load init")
   ("m"       man                                   "man")
   ("n"       neotree-toggle                        "neotree")
   ("o"       org-capture                           "org capture")
