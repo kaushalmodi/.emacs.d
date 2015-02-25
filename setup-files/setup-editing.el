@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 08:48:21 kmodi>
+;; Time-stamp: <2015-02-24 19:41:00 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -386,10 +386,17 @@ Temporarily consider - and _ characters as part of the word when sorting."
    ("~" . xah-cycle-letter-case)))
 
 ;; Unicode
-(bind-to-modi-map-noquote ">"   (λ (insert-char ?☛))) ; C-x 8 RET 261b RET, pointing hand
-(bind-to-modi-map-noquote "SPC" (λ (insert-char ?​)))  ; C-x 8 RET 200b RET, zero width white space
-(bind-to-modi-map-noquote "\\"  (λ (insert-char ?▮))) ; C-x 8 RET 9646 RET, black vertical rectangle
-(bind-to-modi-map-noquote "|"   (λ (insert-char ?▯))) ; C-x 8 RET 9647 RET, white vertical rectangle
+(defhydra hydra-unicode (:color blue)
+  "unicode"
+  (">"   (insert-char ?☛) "☛") ; C-x 8 RET 261b RET, pointing hand
+  ("SPC" (insert-char ?​)  "0-width space") ; C-x 8 RET 200b RET, zero width space
+  ("\\"  (insert-char ?▮) "▮") ; C-x 8 RET 9646 RET, black vertical rectangle
+  ("|"   (insert-char ?▯) "▯") ; C-x 8 RET 9647 RET, white vertical rectangle
+  ("dd"  (insert-char ?“) "“") ; curved double quotes open
+  ("df"  (insert-char ?”) "”") ; curved double quotes close
+  ("q"   nil              "cancel"))
+(bind-key "s-u" #'hydra-unicode/body modi-mode-map)
+(key-chord-define-global "jk" #'hydra-unicode/body)
 
 ;; Key bindings
 (bind-keys
