@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 19:41:00 kmodi>
+;; Time-stamp: <2015-02-25 13:37:26 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -184,17 +184,17 @@ remove the comment characters from that line."
 ;; zop-to-char
 ;; Source: https://github.com/thierryvolpiatto/zop-to-char
 (use-package zop-to-char
-  :load-path "elisp/zop-to-char"
-  :config
-  (progn
-    (bind-keys
-     :map modi-mode-map
-     ("M-z" . zop-up-to-char)
-     ("M-Z" . zop-to-char))))
+    :load-path "elisp/zop-to-char"
+    :config
+    (progn
+      (bind-keys
+       :map modi-mode-map
+       ("M-z" . zop-up-to-char)
+       ("M-Z" . zop-to-char))))
 
 ;; indent-guide
 (use-package indent-guide
-  :config
+    :config
   (progn
     (setq indent-guide-recursive t)
     (setq indent-guide-char "|")
@@ -287,25 +287,80 @@ instead of ASCII characters for adorning the copied snippet."
 (fset 'modi/convert-dec-to-twos-comp-16-bit-hex
       (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([escape 58 40 114 101 97 100 45 111 110 108 121 45 109 111 100 101 32 45 49 41 return 109 44 19 45 return 67108896 2 97 67108896 40 6 32 40 94 32 50 32 49 54 41 32 5 41 24 109 120 return 24 104 33554435 33554435 40 102 111 114 109 97 116 32 34 37 88 34 5 41 24 109 120 return] 0 "%d")) arg)))
 
+;; RECTANGLE
+
 ;; How to position the cursor after the end of line; useful for copying/killing
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 (use-package rectangle-utils
-  :config
-  (progn
-    (defun modi/extend-rectangle-to-end(beg end)
-      "Make `extend-rectangle-to-end' work for read-only buffers too."
-      (interactive "r")
-      (let* (original-read-only-state buffer-read-only)
-        (when original-read-only-state
-          (read-only-mode -1)) ; Force the buffer to be writable
-        (extend-rectangle-to-end beg end)
-        (when original-read-only-state
-          (read-only-mode +1)))) ; Revert the buffer back to its read-only state
-    (when (featurep 'region-bindings-mode)
-      (bind-keys
-       :map region-bindings-mode-map
-       ("|" . modi/extend-rectangle-to-end)))))
+    :commands (modi/extend-rectangle-to-end)
+    :init
+    (progn
+      (when (featurep 'region-bindings-mode)
+        (bind-keys
+         :map region-bindings-mode-map
+         ("|" . modi/extend-rectangle-to-end))))
+    :config
+    (progn
+      (defun modi/extend-rectangle-to-end(beg end)
+        "Make `extend-rectangle-to-end' work for read-only buffers too."
+        (interactive "r")
+        (let* (original-read-only-state buffer-read-only)
+          (when original-read-only-state
+            (read-only-mode -1)) ; Force the buffer to be writable
+          (extend-rectangle-to-end beg end)
+          (when original-read-only-state
+            (read-only-mode +1)))))) ; Revert the buffer back to its read-only state
+
+(defun copy-rectangle-as-kill-then-delete (start end)
+  "Copy the region-rectangle and save it as the last killed one.
+Then delete the rectangle, which will replaced the deleted region with blank
+spaces."
+  (interactive "r")
+  (setq killed-rectangle (extract-rectangle start end))
+  (delete-rectangle start end)
+  (setq deactivate-mark t)
+  (if (called-interactively-p 'interactive)
+      (indicate-copied-region (length (car killed-rectangle)))))
+
+;; http://oremacs.com/2015/02/25/rectangle-hydra/
+(defun ora-ex-point-mark ()
+  (interactive)
+  (if rectangle-mark-mode
+      (exchange-point-and-mark)
+    (let ((mk (mark)))
+      (rectangle-mark-mode 1)
+      (goto-char mk))))
+
+(defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+                           :color pink
+                           :post (deactivate-mark))
+  "
+
+  ^_p_^     _d_   delete   _s_tring     |\\     _,,,--,,_
+_b_   _f_   _k_   cut      _r_eset      /,`.-'`'   ._  \-;;,_
+  ^_n_^     _w_   copy     e_x_change  |,4-  ) )_   .;.(  `'-'
+^^^^        _y_   paste    _e_xtend   '---''(_/._)-'(_\_)
+^^^^        ^ ^
+"
+  ("b"   backward-char                      nil)
+  ("f"   forward-char                       nil)
+  ("p"   previous-line                      nil)
+  ("n"   next-line                          nil)
+  ("w"   copy-rectangle-as-kill             nil)
+  ("k"   kill-rectangle                     nil)
+  ("K"   copy-rectangle-as-kill-then-delete nil)
+  ("y"   yank-rectangle                     nil)
+  ("d"   delete-rectangle                   nil)
+  ("s"   string-rectangle                   nil)
+  ("t"   string-rectangle                   nil)
+  ("x"   ora-ex-point-mark                  nil)
+  ("r"   (if (region-active-p)
+             (deactivate-mark)
+           (rectangle-mark-mode 1))         nil)
+  ("e"   modi/extend-rectangle-to-end       nil)
+  ("q"   nil                                nil))
+(bind-key "C-x SPC" #'hydra-rectangle/body modi-mode-map)
 
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
 (defun xah-cycle-letter-case (arg)
@@ -334,12 +389,12 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
            (save-excursion
              (goto-char p1)
              (cond
-              ;; lower -> Capitalize
-              ((looking-at "[[:lower:]]")            (put this-command 'next-state "Capitalize"))
-              ;; Capitalize -> UPPER
-              ((looking-at "[[:upper:]][[:lower:]]") (put this-command 'next-state "UPPER"))
-              ;; Default: UPPER -> lower
-              (t                                     (put this-command 'next-state "lower")))))))
+               ;; lower -> Capitalize
+               ((looking-at "[[:lower:]]")            (put this-command 'next-state "Capitalize"))
+               ;; Capitalize -> UPPER
+               ((looking-at "[[:upper:]][[:lower:]]") (put this-command 'next-state "UPPER"))
+               ;; Default: UPPER -> lower
+               (t                                     (put this-command 'next-state "lower")))))))
 
     (cl-case (string-to-char (get this-command 'next-state)) ; `string-to-char' returns first character in string
       (?U (upcase-region p1 p2)
@@ -374,7 +429,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
 
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
-  :load-path "elisp/unfill/")
+    :load-path "elisp/unfill/")
 
 (with-eval-after-load 'region-bindings-mode
   (bind-keys
