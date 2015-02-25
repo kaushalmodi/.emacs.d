@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 08:48:21 kmodi>
+;; Time-stamp: <2015-02-24 15:54:17 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -173,11 +173,12 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
                    name (file-name-nondirectory new-name)))))))
 
 ;; Display the file path of the file in current buffer and also copy it to the kill-ring
-;; Source: http://camdez.com/blog/2013/11/14/emacs-show-buffer-file-name/
+;; http://camdez.com/blog/2013/11/14/emacs-show-buffer-file-name/
 (defun show-copy-buffer-file-name (arg)
   "Show the full path to the current file in the minibuffer and also copy it.
-Prefixed with one `universal argument', copy only the file name (not the full path).
-Prefixed with two `universal argument's, copy the full path without env var replacement."
+
+    C-u COMMAND -> Copy only the file name (not the full path).
+C-u C-u COMMAND -> Copy the full path without env var replacement."
   (interactive "p")
   (let* ((file-name-full (buffer-file-name))
          file-name)
@@ -195,18 +196,7 @@ Prefixed with two `universal argument's, copy the full path without env var repl
           (message file-name))
       (error "Buffer not visiting a file"))))
 
-(defun reload-init ()
-  "Do load-file of the emacs config file"
-  (interactive)
-  (load-file (concat user-emacs-directory "/init.el")))
-
-;; Replaced the use of below with xah-run-current-file
-;; (defun load-current-file ()
-;;   "Load current file"
-;;   (interactive)
-;;   (load-file (buffer-file-name)))
-
-;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+;; http://www.emacswiki.org/emacs-en/download/misc-cmds.el
 (defun revert-buffer-no-confirm ()
   "Revert buffer without confirmation."
   (interactive)
@@ -282,7 +272,7 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
 ;; This is to avoid the irritating occassions where repeated `C-g` pressing doesn't
 ;; edit the mini-buffer as cursor focus has moved out of it.
-;; Source: http://stackoverflow.com/questions/3022880/how-can-i-prevent-the-mini-buffer-from-displaying-previous-commands-in-emacs
+;; http://stackoverflow.com/a/3024055/1219634
 (defun stop-using-minibuffer ()
   "kill the minibuffer"
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
