@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-06 15:35:17 kmodi>
+;; Time-stamp: <2015-02-25 12:44:35 kmodi>
 ;;
 ;; LaTeX
 ;;
@@ -14,18 +14,21 @@
 ;; 4. make
 ;; 5. make install
 
-(prepend-path (concat user-emacs-directory "/auctex"))
+(defvar auctex-install-dir (concat user-emacs-directory "/auctex")
+  "AucTeX install directory.")
 
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+(when (file-exists-p auctex-install-dir)
+  (prepend-path auctex-install-dir)
+  (load "auctex.el" nil t t)
+  (load "preview-latex.el" nil t t))
 
 (setq LaTeX-command "latex -shell-escape")
 
-;; Source: http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
-(setq TeX-PDF-mode t
-      TeX-auto-save t
-      TeX-parse-self t
-      TeX-save-query nil)
+;;http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
+(setq TeX-PDF-mode   t)
+(setq TeX-auto-save  t)
+(setq TeX-parse-self t)
+(setq TeX-save-query nil)
 
 (setq-default TeX-master nil) ; Query for master file.
 
