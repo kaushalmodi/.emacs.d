@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-04 15:03:00 kmodi>
+;; Time-stamp: <2015-02-25 14:42:31 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -18,7 +18,7 @@
 (define-minor-mode modi-mode
   "A minor mode so that my key settings override annoying major modes."
   :init-value nil
-  :lighter    " km²"
+  :lighter    " μ"
   :keymap     modi-mode-map)
 
 (defadvice load (after give-my-keybindings-priority)
