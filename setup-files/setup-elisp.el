@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-18 16:44:45 kmodi>
+;; Time-stamp: <2015-02-25 13:41:46 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -6,7 +6,7 @@
 ;; outside a `use-package' wrapper
 ;; http://emacs.stackexchange.com/q/7643/115
 
-(require 'which-func)
+(use-package which-func)
 
 ;; Edebug defun
 (defvar modi/fns-in-edebug nil
@@ -57,6 +57,15 @@
 
 ;; Turn on ElDoc mode in emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+
+;; Change the default indentation function for `emacs-lisp-mode' to
+;; `common-lisp-indent-function'
+;; Improves the indentation of blocks like:
+;; (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+;;                            :color pink
+;;                            :post (deactivate-mark))
+(add-hook 'emacs-lisp-mode-hook
+          (λ (setq-local lisp-indent-function 'common-lisp-indent-function)))
 
 ;; edebug
 (bind-keys

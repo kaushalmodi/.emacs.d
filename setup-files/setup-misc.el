@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 15:50:26 kmodi>
+;; Time-stamp: <2015-02-25 13:55:46 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -229,7 +229,8 @@ If universal arg is used, load the `init.el'."
         (goto-line pos-arg) ; go to a line if argument is specified
       (goto-char (point-min))))) ; beginning of buffer
 
-(defhydra hydra-vi (:body-pre hydra-vi/pre :color amaranth)
+(defhydra hydra-vi (:body-pre hydra-vi/pre
+                    :color    amaranth)
   "vi"
   ;; basic navigation
   ("l"        forward-char                  nil)
