@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 18:55:13 kmodi>
+;; Time-stamp: <2015-02-24 23:43:21 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -21,14 +21,16 @@
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
       '(
-        ;; etags-select etags-table ctags-update ; Replacing these with ggtags
-        ;; zenburn-theme ; Using my own forked version
-        ;; smyx-theme ; dark theme; Using my own forked version
+        ;; etags-select etags-table ctags-update ; < ggtags
+        ;; zenburn-theme ; < forked version
+        ;; smyx-theme ; < forked version
+        ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
         ace-jump-mode
         ace-window
-        ag wgrep wgrep-ag s ; ag > ack > grep, wgrep+wgrep-ag allow editing files directly in ag buffer
-                                        ; You need to have ag installed on your machine
-        anzu   ; shows total search hits in mode line, better query-replace alternative
+        ag wgrep wgrep-ag s ; ag > ack > grep
+                                        ;wgrep+wgrep-ag allow editing files
+                                        ;directly in ag buffer
+        anzu   ; shows total search hits in mode line, > query-replace
         auto-complete fuzzy
         auto-highlight-symbol
         benchmark-init
@@ -36,6 +38,7 @@
         buffer-move
         cperl-mode
         csv-nav ; editing csv files
+        diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
         drag-stuff
@@ -46,7 +49,6 @@
         eww-lnum ; jump to links in eww buffer ace-jump style
         fill-column-indicator
         gist
-        git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+
         ggtags
         guide-key
         hardcore-mode
@@ -150,7 +152,6 @@
 (use-package setup-expand-region)
 (use-package setup-fci)
 (use-package setup-gist)
-(use-package setup-git-gutter)
 (use-package setup-guide-key)
 (use-package setup-hardcore)
 (use-package setup-highlight)
@@ -159,7 +160,9 @@
 (use-package setup-ido)
 (use-package setup-iregister)
 (when (executable-find "git")
-  (use-package setup-magit))
+  (use-package setup-magit)
+  ;; (use-package setup-git-gutter)
+  (use-package setup-diff-hl))
 (use-package setup-manage-minor-mode)
 (use-package setup-multiple-cursors)
 (use-package setup-neotree)
