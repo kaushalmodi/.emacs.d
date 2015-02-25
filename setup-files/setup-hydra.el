@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 08:48:21 kmodi>
+;; Time-stamp: <2015-02-24 19:38:12 kmodi>
 
 ;; Hydra
 ;; https://github.com/abo-abo/hydra
@@ -8,6 +8,11 @@
   :config
   (progn
     ;; (setq hydra-lv nil)
+    (set-face-attribute 'hydra-face-red      nil :foreground "Red"        :bold t)
+    (set-face-attribute 'hydra-face-blue     nil :foreground "RoyalBlue3" :bold t)
+    (set-face-attribute 'hydra-face-amaranth nil :foreground "#e52b50"    :bold t)
+    (set-face-attribute 'hydra-face-pink     nil :foreground "HotPink1"   :bold t)
+    (set-face-attribute 'hydra-face-teal     nil :foreground "#367588"    :bold t)
     (hydra-add-font-lock)))
 
 
