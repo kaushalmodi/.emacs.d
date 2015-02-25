@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 13:02:16 kmodi>
+;; Time-stamp: <2015-02-24 15:35:50 kmodi>
 
 ;; Org Mode
 
@@ -313,7 +313,8 @@ this with to-do items than with projects or headings."
             ;; ox-html patches
             (load (expand-file-name
                    "ox-html-patches.el"
-                   (concat user-emacs-directory "/elisp/patches")))
+                   (concat user-emacs-directory "/elisp/patches"))
+                  nil :nomessage)
 
             (use-package ox-html-fancybox
               :load-path "elisp/ox-html-fancybox")
