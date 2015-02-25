@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 00:26:45 kmodi>
+;; Time-stamp: <2015-02-25 12:47:17 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -12,24 +12,18 @@
 
 (setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MENU/TOOL/SCROLL BARS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Turn off mouse interface early in startup to avoid momentary display
-(if (fboundp 'menu-bar-mode) (menu-bar-mode -1)) ;; do not show the menu bar with File|Edit|Options|...
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1)) ;; do not show the tool bar with icons on the top
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) ;; disable the scroll bars
+(if (fboundp 'menu-bar-mode)   (menu-bar-mode -1)) ; do not show the menu bar with File|Edit|Options|...
+(if (fboundp 'tool-bar-mode)   (tool-bar-mode -1)) ; do not show the tool bar with icons on the top
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) ; disable the scroll bars
 
-(setq inhibit-startup-message t ;; No splash screen at startup
-      scroll-step 1 ;; scroll 1 line at a time
-      tooltip-mode nil ;; disable tooltip appearance on mouse hover
+(setq inhibit-startup-message t ; No splash screen at startup
+      scroll-step 1 ; scroll 1 line at a time
+      tooltip-mode nil ; disable tooltip appearance on mouse hover
       )
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; THEME and COLORS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (setq default-dark-theme  'smyx)
 (setq default-light-theme 'leuven)
 (setq default-theme       default-dark-theme)
@@ -121,7 +115,7 @@
 ;; (set-frame-font "Input Mono" nil t)
 
 ;; Manually choose a fallback font for Unicode
-;; Source: http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
+;; http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
 (set-fontset-font "fontset-default" nil
                   (font-spec :size 20 :name "Symbola"))
 
@@ -147,45 +141,37 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 
 (modi/font-size-reset) ; Initialize font-size-pt var to the default value
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LINE TRUNCATION / VISUAL LINE MODE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Do `M-x toggle-truncate-lines` to toggle truncation mode.
 
-;; Do `M-x toggle-truncate-lines` to jump in and out of truncation mode.
+;; Line truncation has to be enabled for the visual-line-mode to be effective.
 
-(setq
- ;; NOTE: Line truncation has to be enabled for the visual-line-mode to be effective
- ;; But here you see that truncation is disabled by default. It is enabled
- ;; ONLY in specific modes in which the fci-mode is enabled (setup-fci.el)
- truncate-lines nil ;; enable line wrapping. This setting does NOT apply to windows split using `C-x 3`
- truncate-partial-width-windows nil ;; enable line wrapping in windows split using `C-x 3`
- visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow) ;; Turn on line wrapping fringe indicators in Visual Line Mode
- )
+;; Disable truncation. This setting does NOT apply to windows split using `C-x 3`
+(setq truncate-lines nil)
+;; Disable truncation in windows split using `C-x 3` too.
+(setq truncate-partial-width-windows nil)
+;; Turn on line wrapping fringe indicators in Visual Line Mode
+(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 
-;; (global-visual-line-mode 1) ;; Enable wrapping lines at word boundaries
-(global-visual-line-mode -1) ;; Disable wrapping lines at word boundaries
+;; (global-visual-line-mode 1) ; Enable wrapping lines at word boundaries
+(global-visual-line-mode -1) ; Disable wrapping lines at word boundaries
 
 ;; Enable/Disable visual-line mode in specific major modes. Enabling visual
 ;; line mode does word wrapping only at word boundaries
-(add-hook 'sh-mode-hook       'turn-off-visual-line-mode) ;; e.g. sim.setup file
-(add-hook 'org-mode-hook      'turn-on-visual-line-mode)
-(add-hook 'markdown-mode-hook 'turn-on-visual-line-mode)
-
 (defun turn-off-visual-line-mode ()
   (interactive)
   (visual-line-mode -1))
-
 (defun turn-on-visual-line-mode ()
   (interactive)
   (visual-line-mode 1))
+(add-hook 'sh-mode-hook       #'turn-off-visual-line-mode)
+(add-hook 'org-mode-hook      #'turn-on-visual-line-mode)
+(add-hook 'markdown-mode-hook #'turn-on-visual-line-mode)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CURSOR
-;; Change cursor color according to mode: read-only buffer / overwrite /
-;; regular (insert) mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(blink-cursor-mode -1) ;; Don't blink the cursor, it's distracting!
+;; Change cursor color according to mode:
+;;   read-only buffer / overwrite / regular (insert) mode
+(blink-cursor-mode -1) ; Don't blink the cursor, it's distracting!
 
 (defvar hcz-set-cursor-color-color "")
 (defvar hcz-set-cursor-color-buffer "")
@@ -205,13 +191,9 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
              (string= (buffer-name) hcz-set-cursor-color-buffer))
       (set-cursor-color (setq hcz-set-cursor-color-color color))
       (setq hcz-set-cursor-color-buffer (buffer-name)))))
+(add-hook 'post-command-hook #'hcz-set-cursor-color-according-to-mode)
 
-(add-hook 'post-command-hook 'hcz-set-cursor-color-according-to-mode)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Presentation mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar prez-mode-enabled-once nil
   "Flag to indicate if prez-mode has been enabled at least once.")
 
@@ -245,13 +227,10 @@ during presentations."
   (prez-mode -1))
 (define-globalized-minor-mode global-prez-mode prez-mode turn-on-prez-mode)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hidden Mode Line Mode (Minor Mode)
 ;; (works only when one window is open)
 ;; FIXME: Make this activate only if one window is open
 ;; See http://bzg.fr/emacs-hide-mode-line.html
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-minor-mode hidden-mode-line-mode
   "Minor mode to hide the mode-line in the current buffer."
   :init-value nil
@@ -273,11 +252,8 @@ during presentations."
 ;; ;; Activate hidden-mode-line-mode
 ;; (hidden-mode-line-mode 1)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Show mode line in header
 ;; http://bzg.fr/emacs-strip-tease.html
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Careful: you need to deactivate hidden-mode-line-mode
 (defun mode-line-in-header ()
   (interactive)
@@ -286,23 +262,16 @@ during presentations."
     (setq header-line-format nil))
   (force-mode-line-update))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enable / Disable Fringe
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun enable-fringe ()
   (interactive)
   (fringe-mode '(nil . nil) ))
-
 (defun disable-fringe ()
   (interactive)
   (fringe-mode '(0 . 0) ))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Generic mode to syntax highlight .vimrc files (I know, blasphemy!)
-;; Source: http://stackoverflow.com/questions/4236808/syntax-highlight-a-vimrc-file-in-emacs
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; http://stackoverflow.com/a/4238738/1219634
 (define-generic-mode 'vimrc-generic-mode
   '()
   '()
@@ -317,31 +286,35 @@ during presentations."
       (modify-syntax-entry ?\" ".")))
   "Generic mode for Vim configuration files.")
 
-(setq auto-mode-alist
-      (append
-       '(
-         ("\\.vimrc.*\\'" . vimrc-generic-mode)
-         ("\\.vim\\'" . vimrc-generic-mode)
-         ) auto-mode-alist))
+(setq auto-mode-alist (append '(("\\.vimrc.*\\'" . vimrc-generic-mode)
+                                ("\\.vim\\'"     . vimrc-generic-mode))
+                              auto-mode-alist))
 
 ;; Coloring regions that have ANSI color codes in them
-;; http://unix.stackexchange.com/questions/19494/how-to-colorize-text-in-emacs
+;; http://unix.stackexchange.com/a/19505/57923
 (defun ansi-color-apply-on-region-int (beg end)
   "Colorize using the ANSI color codes."
   (interactive "r")
   (ansi-color-apply-on-region beg end))
 
 ;; Show long lines
-;; Source: http://stackoverflow.com/questions/6344474/how-can-i-make-emacs-highlight-lines-that-go-over-80-chars
-(require 'whitespace)
-(defun modi/show-long-lines()
-  (interactive)
-  (hi-lock-mode -1) ;; reset hi-lock mode
-  (highlight-lines-matching-regexp (concat ".\\{"
-                                           (number-to-string (+ 1 whitespace-line-column))
-                                           "\\}") "hi-yellow"))
+;; http://stackoverflow.com/a/6346547/1219634
+(use-package whitespace
+  :commands (modi/show-long-lines)
+  :init
+  (progn
+    (bind-to-modi-map "L" modi/show-long-lines))
+  :config
+  (progn
+    (defun modi/show-long-lines()
+      (interactive)
+      (let ((hi-lock-mode -1)) ; reset hi-lock mode
+        (highlight-lines-matching-regexp
+         (concat ".\\{"
+                 (number-to-string (+ 1 whitespace-line-column))
+                 "\\}") "hi-yellow")))))
 
-;; Source: http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun endless/narrow-or-widen-dwim (p)
   "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
 Intelligently means: region, org-src-block, org-subtree, or defun,
@@ -365,10 +338,10 @@ narrowed."
                (t (org-narrow-to-subtree))))
         (t (narrow-to-defun))))
 
-;; Key bindings
-(global-unset-key (kbd "<C-down-mouse-1>")) ;; it is bound to `mouse-buffer-menu'
-;; by default. It is inconvenient when that mouse menu pops up when I don't need
-;; it to. And actually I have never used that menu :P
+(global-unset-key (kbd "<C-down-mouse-1>"))
+;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
+;; inconvenient when that mouse menu pops up when I don't need it
+;; to. And actually I have never used that menu :P
 
 ;; Usage: C-x - _ - 0 _ _ _ _ - - 0
 ;; Usage: C-x _ _ 0 - _ - _ _ _ _ - - 0
@@ -418,7 +391,7 @@ menu bar."
  ;; It can though be used with shift/ctrl/alt keys
  ("<S-f8>"      . prez-mode)
  ;; Make Control+mousewheel do increase/decrease font-size
- ;; Source: http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
+ ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
  ("<C-mouse-1>" . modi/font-size-reset) ; C + left mouse click
  ("<C-mouse-4>" . modi/font-size-incr) ; C + wheel-up
  ("<C-mouse-5>" . modi/font-size-decr) ; C + wheel-down
@@ -428,8 +401,6 @@ menu bar."
 
 (key-chord-define-global "2w" 'menu-bar-mode) ; alternative to F2
 (key-chord-define-global "8i" 'prez-mode) ; alternative to S-F8
-
-(bind-to-modi-map "L" modi/show-long-lines)
 
 
 (provide 'setup-visual)
