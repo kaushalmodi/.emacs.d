@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 13:41:46 kmodi>
+;; Time-stamp: <2015-02-26 13:14:49 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -6,17 +6,21 @@
 ;; outside a `use-package' wrapper
 ;; http://emacs.stackexchange.com/q/7643/115
 
-(use-package which-func)
-
 ;; Edebug defun
 (defvar modi/fns-in-edebug nil
   "List of functions for which `edebug' is instrumented.")
 
+(defvar modi/fns-regexp (concat "(\\s-*"
+                                "\\(defun\\|defmacro\\)\\s-+"
+                                "\\([a-zA-Z0-9\-/]+\\)\\b")
+  "Regexp to find defun or defmacro definition.")
+
 (defun modi/toggle-edebug-defun ()
   (interactive)
-  (let ((fn (which-function)))
+  (let (fn)
     (save-excursion
-      (search-backward-regexp (concat "(\\s-*defun\\s-+" fn))
+      (search-backward-regexp modi/fns-regexp)
+      (setq fn (match-string 2))
       (mark-sexp)
       (narrow-to-region (point) (mark))
       (if (member fn modi/fns-in-edebug)
@@ -42,7 +46,10 @@
 
 (defun modi/toggle-debug-defun ()
   (interactive)
-  (let ((fn (which-function)))
+  (let (fn)
+    (save-excursion
+      (search-backward-regexp modi/fns-regexp)
+      (setq fn (match-string 2)))
     (if (member fn modi/fns-in-debug)
         ;; If the function is already being debugged, cancel its debug on entry
         (progn
