@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 13:37:26 kmodi>
+;; Time-stamp: <2015-02-26 12:33:55 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -337,11 +337,10 @@ spaces."
                            :post (deactivate-mark))
   "
 
-  ^_p_^     _d_   delete   _s_tring     |\\     _,,,--,,_
-_b_   _f_   _k_   cut      _r_eset      /,`.-'`'   ._  \-;;,_
-  ^_n_^     _w_   copy     e_x_change  |,4-  ) )_   .;.(  `'-'
-^^^^        _y_   paste    _e_xtend   '---''(_/._)-'(_\_)
-^^^^        ^ ^
+  ^_p_^     _d_   delete   _s_tring          |\\     _,,,--,,_
+_b_   _f_   _k_   cut      _r_eset           /,`.-'`'   ._  \-;;,_
+  ^_n_^     _w_   copy     e_x_change       |,4-  ) )_   .;.(  `'-'
+^^^^        _y_   paste    _e_xtend        '---''(_/._)-'(_\_)
 "
   ("b"   backward-char                      nil)
   ("f"   forward-char                       nil)
