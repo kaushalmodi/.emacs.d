@@ -133,11 +133,3 @@
         (make-local-variable
          (quote bookmark-make-record-function))
         (quote bmkp-make-w3m-record))))) t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(italic ((t (:inherit nil :slant italic))))
- '(stripe-hl-line ((t (:inherit nil :overline "gray" :underline "gray" :weight bold :height 1.1))))
- '(yafolding-ellipsis-face ((t (:foreground "deep sky blue" :slant italic :weight bold :height 1.1))) t))
