@@ -1,13 +1,21 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-02-26 08:18:21 kmodi>
 
 ;; Yet Another Folding, Folding code blocks based on indentation.
 ;; Source: https://github.com/zenozeng/yafolding.el
 
 (use-package yafolding
-  :config
+    :config
   (progn
-    (add-hook 'prog-mode-hook 'yafolding-mode)
-    (setq yafolding-ellipsis-content ">>>folded")))
+    (setq yafolding-ellipsis-content ">>>folded")
+
+    ;; faces
+    (set-face-attribute 'yafolding-ellipsis-face nil
+                        :foreground "deep sky blue"
+                        :slant      'italic
+                        :weight     'bold
+                        :height     1.1)
+
+    (add-hook 'prog-mode-hook #'yafolding-mode)))
 
 
 (provide 'setup-yafolding)
