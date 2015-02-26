@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 12:47:17 kmodi>
+;; Time-stamp: <2015-02-26 08:31:55 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -6,9 +6,12 @@
 ;; the closing parentheses in the minibuffer.
 (show-paren-mode +1)
 
-(setq default-font-size-pt 12 ; default font size
-      dark-theme           t  ; initialize dark-theme var
-      )
+(defvar default-font-size-pt 13
+  "Default font size in points.")
+
+(defvar dark-theme t
+  "Variable to store the nature of theme whether it is light or dark.
+This variable is to be updated when changing themes.")
 
 (setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
 
@@ -27,6 +30,11 @@
 (setq default-dark-theme  'smyx)
 (setq default-light-theme 'leuven)
 (setq default-theme       default-dark-theme)
+
+;; Make the italics show as actual italics. For some unknown reason, the below
+;; is needed to render the italics in org-mode. The issue could be related to
+;; the fonts in use. But having this doesn't hurt regardless.
+(set-face-attribute 'italic nil :inherit nil :slant 'italic)
 
 ;; zenburn
 (defun zenburn ()
