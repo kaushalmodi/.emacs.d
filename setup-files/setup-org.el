@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 15:02:00 kmodi>
+;; Time-stamp: <2015-02-26 16:44:47 kmodi>
 
 ;; Org Mode
 
@@ -37,7 +37,9 @@
       ;; http://orgmode.org/manual/TODO-dependencies.html
       (setq org-enforce-todo-dependencies t)
 
-      ;; Capture
+      ;; CAPTURE
+      ;; http://orgmode.org/manual/Template-elements.html
+      ;; http://orgmode.org/manual/Template-expansion.html
       (setq org-capture-templates
             '(("j" "Journal" entry ; `org-capture' binding + j
                (file+datetree (concat org-directory "/journal.org"))
