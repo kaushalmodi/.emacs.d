@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 14:04:10 kmodi>
+;; Time-stamp: <2015-02-26 15:02:00 kmodi>
 
 ;; Org Mode
 
@@ -144,6 +144,15 @@ this with to-do items than with projects or headings."
        ("C-c a" . org-agenda)
        ("C-c b" . org-iswitchb)
        ("C-c c" . org-capture))
+
+      ;; Make `org-return' repeat the number passed through the argument
+      (defun modi/org-return-no-indent (&optional n)
+        (interactive "p")
+        (dotimes (cnt n)
+          (org-return nil)))
+      (bind-keys
+       :map org-mode-map
+       ("C-m" . modi/org-return-no-indent))
 
       ;; org-ref - JKitchin
       ;; http://kitchingroup.cheme.cmu.edu/blog/2014/05/13/Using-org-ref-for-citations-and-references/

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 12:33:55 kmodi>
+;; Time-stamp: <2015-02-26 14:54:18 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -121,20 +121,28 @@ Kill the whole line with function `kill-whole-line' and then move
   (kill-whole-line arg)
   (back-to-indentation))
 
-(defun modi/smart-open-line ()
-  "Move the current line down if there are no word chars between the start of line
-and the cursor. Else, insert empty line after the current line."
-  (interactive)
-  ;; Get the substring from start of line to current cursor position
-  (setq str-before-point (buffer-substring (line-beginning-position) (point)))
-  ;; (message "%s" str-before-point)
-  (if (not (string-match "\\w" str-before-point))
-      (progn (newline-and-indent)
-             ;; (open-line 1)
-             (previous-line)
-             (indent-relative-maybe))
-    (progn (move-end-of-line nil)
-           (newline-and-indent))))
+(defun modi/smart-open-line (&optional n)
+  "Move the current line down if there are no word chars between the start of
+line and the cursor. Else, insert empty line after the current line."
+  (interactive "p")
+  (if (eq major-mode 'org-mode)
+      (dotimes (cnt n)
+        (org-open-line 1))
+    ;; Get the substring from start of line to current cursor position
+    (let ((str-before-point (buffer-substring (line-beginning-position) (point))))
+      ;; (message "%s" str-before-point)
+      (if (not (string-match "\\w" str-before-point))
+          (progn
+            (dotimes (cnt n)
+              (newline-and-indent))
+            ;; (open-line 1)
+            (previous-line n)
+            (indent-relative-maybe))
+        (progn
+          (move-end-of-line nil)
+          (dotimes (cnt n)
+            (newline-and-indent))
+          (previous-line (- n 1)))))))
 
 ;; http://emacs.stackexchange.com/q/7519/115
 (defun modi/pull-up-line ()
