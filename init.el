@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 23:43:21 kmodi>
+;; Time-stamp: <2015-02-27 15:05:32 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -216,7 +216,8 @@
 (use-package setup-pdf)
 (when (executable-find "global")
   (use-package setup-gtags))
-(when (executable-find "hunspell")
+(when (or (executable-find "aspell")
+          (executable-find "hunspell"))
   (use-package setup-spell))
 (use-package setup-calc)
 (use-package setup-desktop)
