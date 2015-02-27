@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 15:52:06 kmodi>
+;; Time-stamp: <2015-02-27 13:30:52 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -76,7 +76,8 @@ Don't add “Revision Control” heading to TOC."
                 (setq n (1+ n))))))))
 
     ;; Start `outline-mode' for `prog-mode's
-    (dolist (hook '(prog-mode-hook))
+    (dolist (hook '(verilog-mode-hook
+                    emacs-lisp-mode-hook))
       (add-hook hook #'outline-minor-mode)
       (add-hook hook (λ (add-hook 'local-write-file-hooks
                                   #'modi/outline-table-of-contents))))
