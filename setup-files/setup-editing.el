@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 14:54:18 kmodi>
+;; Time-stamp: <2015-02-27 11:34:00 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -125,7 +125,7 @@ Kill the whole line with function `kill-whole-line' and then move
   "Move the current line down if there are no word chars between the start of
 line and the cursor. Else, insert empty line after the current line."
   (interactive "p")
-  (if (eq major-mode 'org-mode)
+  (if (derived-mode-p 'org-mode)
       (dotimes (cnt n)
         (org-open-line 1))
     ;; Get the substring from start of line to current cursor position
