@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 16:44:47 kmodi>
+;; Time-stamp: <2015-02-27 13:59:49 kmodi>
 
 ;; Org Mode
 
@@ -406,6 +406,10 @@ this with to-do items than with projects or headings."
             ;; Replace include pdf files with images when exporting
             (use-package org-include-img-from-pdf
                 :load-path "elisp/org-include-img-from-pdf")
+
+            ;; Auto extract images from zip files
+            (use-package org-include-img-from-archive
+                :load-path "elisp/org-include-img-from-archive")
             ))
 
       ;; Support markdown-style link ids
