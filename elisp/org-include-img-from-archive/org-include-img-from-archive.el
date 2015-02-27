@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 13:52:09 kmodi>
+;; Time-stamp: <2015-02-27 16:17:39 kmodi>
 
 ;; http://stackoverflow.com/q/28697108/1219634
 
@@ -81,3 +81,11 @@ add it to `before-save-hook'."
 
 
 (provide 'org-include-img-from-archive)
+
+
+;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=19963
+;; It should be legal for a parent folder to contain a file and a folder having
+;; the exact same name. But emacs doesn't allow that.
+
+;; So for time being, for a file `zippedimg.zip', the contents are unzipped to
+;; `zippedimg_zip'.
