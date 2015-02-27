@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 16:17:39 kmodi>
+;; Time-stamp: <2015-02-27 17:39:43 kmodi>
 
 ;; http://stackoverflow.com/q/28697108/1219634
 
@@ -6,11 +6,20 @@
 ;;   #+TITLE: Image from archive
 ;;   #+STARTUP: inlineimages
 ;;
-;;   #+NAME: fig:myimage
+;;   #+NAME: fig:image
 ;;   #+HEADER: :extractfromarchive t
 ;;   # The below caption line is optional
-;;   #+CAPTION: My image myimage.png inside ./zippedimg.zip
-;;   [[./zippedimg_zip/myimage.png]]
+;;   #+CAPTION: My image image.png inside ./zippedimg.zip
+;;   [[./zippedimg_zip/image.png]]
+
+;; In the above example, the user has `zippedimg.zip' file containing
+;; `image.png'. But when specifying the image path it is specified as
+;; `./zippedimg_zip/image.png'; note that the . is replaced with an _
+;; in the zip file name.
+
+;; The reason is that a `FILE.EXT' archive is extracted to `FILE_EXT' folder
+;; as you can't have a file and a folder with the exact same name in the same
+;; folder.
 
 ;; Execute the `modi/org-include-img-from-archive' function just before saving the file
 (add-hook 'before-save-hook #'modi/org-include-img-from-archive)
@@ -19,8 +28,8 @@
 (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive)
 
 (defun modi/org-include-img-from-archive (&rest ignore)
-  "Extract image files from the archive files. Only .zip files are supported
-as of now.
+  "Extract image files from the archive files.
+** Only .zip files are supported as of now.
 
 Only looks at #HEADER: lines that have \":extractfromarchive t\".
 This function does nothing if not in org-mode, so you can safely
@@ -32,12 +41,15 @@ add it to `before-save-hook'."
       (while (search-forward-regexp
               "^\\s-*#\\+HEADER:.*\\s-:extractfromarchive\\s-+t"
               nil :noerror)
-        (let (;; only .zip supported as of now
-              (search-expr "\\[\\[\\(.*?\\)_zip/\\(.*?\\)\\([^/]+\\..*\\)\\]\\]")
-              arc-file
-              path-in-arc-file
-              img-file img-file-full-path
-              dest-dir dest-dir-full-path
+        (let ((search-expr (concat "\\[\\[" ; [[
+                                   "\\(file\\:\\)*" ; optional 'file:'
+                                   "\\(.*/\\)\\(.*\\)_\\(.*?\\)" ; ./optional-dir/ARC-FILE_EXT
+                                   "/\\(.*?\\)" ; optional image file dir in archive
+                                   "\\([^/]+\\..*\\)" ; image file name
+                                   "\\]\\]")) ; ]]
+              arc-file-base arc-file-ext arc-file-full-path
+              path-in-arc-file img-file img-file-full-path
+              dest-dir-full-path
               cmd)
           ;; Keep on going on to the next line till it finds a line with
           ;; `[[./path/to/zip-file/path/inside/zip/to/the/image]]'
@@ -46,46 +58,40 @@ add it to `before-save-hook'."
                    (or (not (looking-at search-expr))
                        (eobp))))
           (when (looking-at search-expr)
-            (setq arc-file (expand-file-name
-                            (concat (match-string-no-properties 1) ".zip")))
-            (setq path-in-arc-file (match-string-no-properties 2))
-            (setq img-file (match-string-no-properties 3))
-            (setq dest-dir (concat "./" (file-name-base arc-file)
-                                   "_zip/" path-in-arc-file))
-            (setq dest-dir-full-path (concat (file-name-sans-extension arc-file)
-                                             "_zip/" path-in-arc-file))
-            (setq img-file-full-path (expand-file-name img-file dest-dir))
-            ;; (message (concat "arc-file: %s\npath-in-arc-file: %s\n"
+            (setq arc-file-base (match-string-no-properties 3))
+            (setq arc-file-ext  (match-string-no-properties 4))
+            (setq arc-file-full-path (expand-file-name
+                                      (concat arc-file-base "." arc-file-ext)
+                                      (match-string-no-properties 2)))
+            (setq path-in-arc-file (match-string-no-properties 5))
+            (setq img-file (match-string-no-properties 6))
+            (setq dest-dir-full-path
+                  (concat (file-name-sans-extension arc-file-full-path) "_"
+                          arc-file-ext "/" path-in-arc-file))
+            (setq img-file-full-path (concat dest-dir-full-path img-file))
+            ;; (message (concat "arc-file-full-path: %s\npath-in-arc-file: %s\n"
             ;;                  "img-file: %s\nimg-file-full-path: %s\n"
-            ;;                  "dest-dir: %s\ndest-dir-full-path: %s")
-            ;;          arc-file path-in-arc-file
+            ;;                  "dest-dir-full-path: %s")
+            ;;          arc-file-full-path path-in-arc-file
             ;;          img-file img-file-full-path
-            ;;          dest-dir dest-dir-full-path)
+            ;;          dest-dir-full-path)
 
-            (when (file-newer-than-file-p arc-file img-file-full-path)
-              ;; This block is executed only if arc-file is newer than
+            (when (file-newer-than-file-p arc-file-full-path img-file-full-path)
+              ;; This block is executed only if arc-file-full-path is newer than
               ;; img-file-full-path
               ;; or if img-file does not exist
               ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Testing-Accessibility.html
               (when (file-exists-p dest-dir-full-path)
                 (delete-directory dest-dir-full-path t t))
               (make-directory dest-dir-full-path t)
-              (setq cmd (format "unzip -j %s %s%s -d ./%s."
-                                arc-file path-in-arc-file img-file
-                                (concat (file-name-base arc-file) "_zip/"
-                                        path-in-arc-file)))
+              ;; http://unix.stackexchange.com/a/57522/57923
+              (setq cmd (format "unzip -j %s %s%s -d %s"
+                                arc-file-full-path path-in-arc-file img-file
+                                (concat (file-name-sans-extension arc-file-full-path) "_"
+                                        arc-file-ext "/" path-in-arc-file)))
               (message "%s" cmd)
-              (with-temp-buffer
-                (shell-command cmd)
-                (shell-command (concat "touch " img-file-full-path))))))))))
+              (shell-command cmd)
+              (shell-command (concat "touch " img-file-full-path)))))))))
 
 
 (provide 'org-include-img-from-archive)
-
-
-;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=19963
-;; It should be legal for a parent folder to contain a file and a folder having
-;; the exact same name. But emacs doesn't allow that.
-
-;; So for time being, for a file `zippedimg.zip', the contents are unzipped to
-;; `zippedimg_zip'.
