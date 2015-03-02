@@ -123,7 +123,7 @@
 ;;; Code:
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-02-20-0d6420b-vpo"
+(defconst verilog-mode-version "2015-02-26-31d304d-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -2799,7 +2799,7 @@ find the errors."
      ;; from http://www.emacswiki.org/emacs/MultilineRegexp
      (concat "\\<\\(`define\\|`if\\)\\>" ;; directive
 	     "\\s-+" ;; separator
-	     "\\(.*\\(?:\n.*\\)*?\\)" ;; definition: to end of line, the maybe more lines (excludes any trailing \n)
+             "\\(?:.*?\\(?:\n.*\\)*?\\)" ;; definition: to end of line, then maybe more lines (excludes any trailing \n)
 	     "\\(?:\n\\s-*\n\\|\\'\\)") ;; blank line or EOF
      "\\)\\|\\(?:"
      ;; `<macro>() : i.e. `uvm_info(a,b,c) or any other pre-defined macro
@@ -2808,9 +2808,8 @@ find the errors."
      ;; parentheses and then continue to the end of the first
      ;; non-escaped EOL
      (concat "\\<`\\w+\\>\\s-*("
-	     "\\(.*\\(?:\n.*\\)*?\\)" ;; definition: to end of line, the maybe more lines (excludes any trailing \n)
+      "\\(?:.*?\\(?:\n.*\\)*?\\)" ;; definition: to end of line, then maybe more lines (excludes any trailing \n)
 	     "\\(?:\n\\s-*\n\\|\\'\\)") ;; blank line or EOF
-
      "\\)"
      )))
 
@@ -4810,6 +4809,9 @@ primitive or interface named NAME."
 				(throw 'skip 1))))
 			 ))))
 		  (end-of-line)
+      (if kill-existing-comment
+          (verilog-kill-existing-comment))
+      (delete-horizontal-space)
 		  (insert (concat " // " string ))))
 
 	       (;- this is end{function,generate,task,module,primitive,table,generate}
@@ -8291,10 +8293,9 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 		       typedefed nil  multidim nil    ptype nil   modport nil
 		       expect-signal 'sigs-assign     sig-paren paren))
 		((member keywd '("localparam" "genvar"))
-		 (unless io
-		   (setq vec nil        enum nil      rvalue nil  signed nil
-			 typedefed nil  multidim nil  ptype nil   modport nil
-			 expect-signal 'sigs-const    sig-paren paren)))
+		 (setq vec nil        enum nil      rvalue nil  signed nil
+		       typedefed nil  multidim nil  ptype nil   modport nil
+		       expect-signal 'sigs-const    sig-paren paren))
 		((member keywd '("signed" "unsigned"))
 		 (setq signed keywd))
 		((member keywd '("assert" "assume" "cover" "expect" "restrict"))
