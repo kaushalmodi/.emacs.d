@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-02 22:14:14 kmodi>
+;; Time-stamp: <2015-03-03 13:41:38 kmodi>
 
 ;; Org Mode
 
@@ -188,34 +188,33 @@ this with to-do items than with projects or headings."
             (defvar org-tree-slide-text-scale 3
               "Text scale ratio to default when `org-tree-slide-mode' is enabled.")
 
-            (defun hydra-org-slides/body-pre ()
-              (modi/toggle-one-window 4) ; force 1 window
-              (org-tree-slide-mode)
-              (text-scale-adjust org-tree-slide-text-scale))
-
-            (defun hydra-org-slides/post()
-              (modi/toggle-one-window) ; toggle 1 window
-              (org-tree-slide-mode -1)
-              (text-scale-adjust (- 0 org-tree-slide-text-scale)))
-
             (defhydra hydra-org-slides (:color    pink
-                                        :body-pre hydra-org-slides/body-pre
-                                        :post     hydra-org-slides/post)
+                                        :body-pre (org-tree-slide-mode)
+                                        :post     (org-tree-slide-mode -1))
               "org-tree-slide"
-              ("c"       org-tree-slide-content              "content" :bind nil)
-              ("p"       org-tree-slide-move-previous-tree   "prev" :bind nil)
-              ("<left>"  org-tree-slide-move-previous-tree   nil :bind nil)
-              ("n"       org-tree-slide-move-next-tree       "next" :bind nil)
-              ("<right>" org-tree-slide-move-next-tree       nil :bind nil)
-              ("C-0"     org-tree-slide-my-profile           "default profile" :bind nil)
-              ("C-1"     org-tree-slide-simple-profile       "simple profile" :bind nil)
-              ("C-2"     org-tree-slide-presentation-profile "presentation profile" :bind nil)
-              ("C-g"     org-tree-slide-mode                 nil :color blue :bind nil)
-              ("q"       org-tree-slide-mode                 "cancel" :color blue :bind nil))
+              ("C-c"      org-tree-slide-content                     "content" :bind nil)
+              ("<left>"   org-tree-slide-move-previous-tree          "prev" :bind nil)
+              ("<right>"  org-tree-slide-move-next-tree              "next" :bind nil)
+              ("C-0"      (text-scale-set org-tree-slide-text-scale) "font reset" :bind nil)
+              ("C-="      (text-scale-increase 1)                    "font incr" :bind nil)
+              ("C--"      (text-scale-decrease 1)                    "font decr" :bind nil)
+              ("C-1"      org-tree-slide-my-profile                  nil :bind nil)
+              ("C-2"      org-tree-slide-simple-profile              nil :bind nil)
+              ("C-3"      org-tree-slide-presentation-profile        nil :bind nil)
+              ("<f12>"    nil                                        "quit" :color blue :bind nil))
             (bind-key "<C-S-f8>" #'hydra-org-slides/body modi-mode-map))
           :config
           (progn
             (setq org-tree-slide--lighter " Slide")
+
+            (defun my/org-tree-slide-start ()
+              (modi/toggle-one-window 4) ; force 1 window
+              (text-scale-set org-tree-slide-text-scale)
+              (org-tree-slide-my-profile))
+
+            (defun my/org-tree-slide-stop()
+              (modi/toggle-one-window) ; toggle 1 window
+              (text-scale-set 0))
 
             (defun org-tree-slide-my-profile ()
               "Customize org-tree-slide variables.
@@ -239,9 +238,8 @@ this with to-do items than with projects or headings."
               (setq org-tree-slide-activate-message   "Starting org presentation.")
               (setq org-tree-slide-deactivate-message "Ended presentation."))
 
-            (add-hook 'org-tree-slide-play-hook #'org-tree-slide-my-profile)
-            ;; (remove-hook 'org-tree-slide-play-hook #'org-tree-slide-my-profile)
-            ))
+            (add-hook 'org-tree-slide-play-hook #'my/org-tree-slide-start)
+            (add-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)))
 
       (use-package ox
           :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
