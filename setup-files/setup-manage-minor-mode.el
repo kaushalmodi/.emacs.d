@@ -1,12 +1,9 @@
-;; Time-stamp: <2014-03-09 04:53:54 kmodi>
+;; Time-stamp: <2015-03-03 09:22:27 kmodi>
 
 ;; manage-minor-mode
-;; Source: https://github.com/ShingoFukuyama/manage-minor-mode
+;; https://github.com/ShingoFukuyama/manage-minor-mode
 
-(require 'manage-minor-mode)
-
-;;
+(use-package manage-minor-mode)
 
 
-(setq setup-manage-minor-mode-loaded t)
 (provide 'setup-manage-minor-mode)
