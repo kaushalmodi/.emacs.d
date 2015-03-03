@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-13 16:06:38 kmodi>
+;; Time-stamp: <2015-03-03 09:11:19 kmodi>
 
 ;; Line number package manager
 
@@ -27,52 +27,58 @@ This variable is for internal use only, not to be set by user.")
   "List of hooks of major modes in which a linum mode should be enabled.")
 
 ;; linum
-(require 'linum)
-(global-linum-mode -1) ; Disable linum-mode globally
+(use-package linum
+    :config
+  (progn
+    (global-linum-mode -1)
+
+    (defun modi/blend-linum ()
+      "Set the linum foreground and background color to that of the theme."
+      (set-face-attribute 'linum nil
+                          :height 0.9
+                          :foreground "dim gray"
+                          :background (face-background 'default)))
+
+    (defun modi/turn-on-linum ()
+      "Turn on linum mode in specific modes."
+      (interactive)
+      (dolist (hook modi/linum-mode-hooks)
+        (add-hook hook #'linum-mode)))
+
+    (defun modi/turn-off-linum ()
+      "Unhook linum mode from various major modes."
+      (interactive)
+      (dolist (hook modi/linum-mode-hooks)
+        (remove-hook hook #'linum-mode)))))
+
+;; linum relative
+(use-package linum-relative
+    :config
+  (progn
+    ;; The symbol you want to show on the current line, by default it is 0.
+    ;; You can use any string like \"->\". If this variable is empty string,
+    ;; linum-releative will show the real line number at current line.
+    (setq linum-relative-current-symbol "")))
 
 ;; nlinum
 ;; http://elpa.gnu.org/packages/nlinum.html
-(require 'nlinum)
-(global-nlinum-mode -1) ; Disable nlinum-mode globally
-(setq nlinum-format "%4d ") ; right aligned, 4 char wide line num col
+(use-package nlinum
+    :config
+  (progn
+    (global-nlinum-mode -1)
+    (setq nlinum-format "%4d ") ; right aligned, 4 char wide line num col
 
-;; linum relative
-(require 'linum-relative)
-(setq linum-relative-current-symbol "")
-;; The symbol you want to show on the current line, by default it is 0.
-;; You can use any string like \"->\". If this variable is empty string,
-;; linum-releative will show the real line number at current line.
+    (defun modi/turn-on-nlinum ()
+      "Turn on nlinum mode in specific modes."
+      (interactive)
+      (dolist (hook modi/linum-mode-hooks)
+        (add-hook hook #'nlinum-mode)))
 
-(defun modi/blend-linum ()
-  "Set the linum foreground and background color to that of the theme."
-  (set-face-attribute 'linum nil
-                      :height 0.9
-                      :foreground "dim gray"
-                      :background (face-background 'default)))
-
-(defun modi/turn-on-linum ()
-  "Turn on linum mode in specific modes."
-  (interactive)
-  (dolist (hook modi/linum-mode-hooks)
-    (add-hook hook #'linum-mode)))
-
-(defun modi/turn-off-linum ()
-  "Unhook linum mode from various major modes."
-  (interactive)
-  (dolist (hook modi/linum-mode-hooks)
-    (remove-hook hook #'linum-mode)))
-
-(defun modi/turn-on-nlinum ()
-  "Turn on nlinum mode in specific modes."
-  (interactive)
-  (dolist (hook modi/linum-mode-hooks)
-    (add-hook hook #'nlinum-mode)))
-
-(defun modi/turn-off-nlinum ()
-  "Unhook nlinum mode from various major modes."
-  (interactive)
-  (dolist (hook modi/linum-mode-hooks)
-    (remove-hook hook #'nlinum-mode)))
+    (defun modi/turn-off-nlinum ()
+      "Unhook nlinum mode from various major modes."
+      (interactive)
+      (dolist (hook modi/linum-mode-hooks)
+        (remove-hook hook #'nlinum-mode)))))
 
 (defun modi/set-linum (linum-pkg)
   "Set linum to either 'nlinum, 'linum-relative or 'linum.
