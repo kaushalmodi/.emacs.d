@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 11:34:00 kmodi>
+;; Time-stamp: <2015-03-03 16:27:25 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -224,26 +224,6 @@ remove the comment characters from that line."
       (indent-guide-global-mode -1)
       (dolist (hook modi/indent-guide-mode-hooks)
         (remove-hook hook #'indent-guide-mode)))))
-
-;; Aggressive auto indentation
-(defun endless/indent-defun ()
-  "Indent current defun.
-Do nothing if mark is active (to avoid deactivaing it), or if
-buffer is not modified (to avoid creating accidental
-modifications)."
-  (interactive)
-  (ignore-errors
-    (unless (or (region-active-p)
-                buffer-read-only
-                (null (buffer-modified-p)))
-      (let ((l (save-excursion (beginning-of-defun 1) (point)))
-            (r (save-excursion (end-of-defun 1) (point))))
-        (cl-letf (((symbol-function 'message) #'ignore))
-          (indent-region l r))))))
-(defun endless/activate-aggressive-indent ()
-  "Locally add `endless/indent-defun' to `post-command-hook'."
-  (add-hook 'post-command-hook #'endless/indent-defun nil 'local))
-(add-hook 'emacs-lisp-mode-hook #'endless/activate-aggressive-indent)
 
 ;; http://stackoverflow.com/q/12165205/1219634
 (defun copy-with-linenum (beg end use-unicode)
