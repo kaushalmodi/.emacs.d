@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-03-03 13:18:15 kmodi>
+;; Time-stamp: <2015-03-03 13:48:44 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
-;; Source: http://www.emacswiki.org/emacs/WinnerMode
+;; http://www.emacswiki.org/emacs/WinnerMode
 (use-package winner
   :config
   (progn
@@ -20,7 +20,7 @@
     ;; distinguishable.
     (setq uniquify-buffer-name-style 'post-forward)))
 
-;; Source: http://www.emacswiki.org/emacs/RecentFiles
+;; http://www.emacswiki.org/emacs/RecentFiles
 (use-package recentf
   :config
   (progn
@@ -43,7 +43,7 @@
       (key-chord-define-global "p[" 'windmove-left)
       (key-chord-define-global "[]" 'windmove-right))))
 
-;; Source: http://emacs.stackexchange.com/a/3334/115
+;; http://emacs.stackexchange.com/a/3334/115
 ;; Reopen Killed File
 (defvar killed-file-list nil
   "List of recently killed files.")
@@ -75,7 +75,7 @@
 ;; ;; (add-to-list 'default-frame-alist '(height . 63))
 ;; ;; (add-to-list 'default-frame-alist '(width  . 235))
 
-;; Source: http://www.whattheemacsd.com/
+;; http://www.whattheemacsd.com/
 (defun toggle-window-split ()
   "Convert horizontally splitted windows to vertically splitted, and vice-versa.
 Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
@@ -114,7 +114,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
      :map modi-mode-map
      ("C-c t" . transpose-frame))))
 
-;; Source: http://www.whattheemacsd.com/
+;; http://www.whattheemacsd.com/
 (defun rotate-windows ()
   "Rotate your windows"
   (interactive)
@@ -140,7 +140,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
              (set-window-start w2 s1)
              (setq i (1+ i)))))))
 
-;; Source: http://www.whattheemacsd.com/
+;; http://www.whattheemacsd.com/
 (defun delete-current-buffer-file ()
   "Deletes file connected to current buffer and kills buffer."
   (interactive)
@@ -154,7 +154,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
         (kill-buffer buffer)
         (message "File '%s' successfully deleted." filename)))))
 
-;; Source: http://www.whattheemacsd.com/
+;; http://www.whattheemacsd.com/
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
@@ -279,7 +279,7 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
-;; Source: http://www.emacswiki.org/emacs/SwitchingBuffers
+;; http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
   "Toggle between 2 buffers"
   (interactive)
@@ -318,7 +318,7 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Move window splitters / Resize windows
-;; Source: https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
+;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
 
 (defun hydra-move-splitter-left ()
   "Move window splitter left."
@@ -432,6 +432,23 @@ the current window and the windows state prior to that.
         (set-window-configuration modi/toggle-one-window--window-configuration)
         (switch-to-buffer modi/toggle-one-window--buffer-name)))))
 
+;; https://tsdh.wordpress.com/2015/03/03/swapping-emacs-windows-using-dragndrop/
+(defun th/swap-window-buffers-by-dnd (drag-event)
+  "Swaps the buffers displayed in the DRAG-EVENT's start and end window."
+  (interactive "e")
+  (let ((start-win (cl-caadr drag-event))
+        (end-win   (cl-caaddr drag-event)))
+    (when (and (windowp start-win)
+               (windowp end-win)
+               (not (eq start-win end-win))
+               (not (memq (minibuffer-window)
+                          (list start-win end-win))))
+      (let ((bs (window-buffer start-win))
+            (be (window-buffer end-win)))
+        (unless (eq bs be)
+          (set-window-buffer start-win be)
+          (set-window-buffer end-win bs))))))
+
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
@@ -447,9 +464,11 @@ the current window and the windows state prior to that.
  ("C-c s"       . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
-;; Source: http://stackoverflow.com/a/26629984/1219634
-(bind-key "<mode-line> <mouse-2>"   'show-copy-buffer-file-name        mode-line-buffer-identification-keymap)
+;; http://stackoverflow.com/a/26629984/1219634
+(bind-key "<mode-line> <mouse-2>"   #'show-copy-buffer-file-name       mode-line-buffer-identification-keymap)
 (bind-key "<mode-line> <S-mouse-2>" (λ (show-copy-buffer-file-name 4)) mode-line-buffer-identification-keymap)
+
+(bind-key "<C-S-drag-mouse-1>" #'th/swap-window-buffers-by-dnd modi-mode-map)
 
 ;; Below bindings are made in global map and not in my minor mode as I want
 ;; other modes to override those bindings.
