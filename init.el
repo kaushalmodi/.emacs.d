@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 15:05:32 kmodi>
+;; Time-stamp: <2015-03-03 17:55:21 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -28,8 +28,9 @@
         ace-jump-mode
         ace-window
         ag wgrep wgrep-ag s ; ag > ack > grep
-                                        ;wgrep+wgrep-ag allow editing files
-                                        ;directly in ag buffer
+                                        ; wgrep+wgrep-ag allow editing files
+                                        ; directly in ag buffer
+        aggressive-indent
         anzu   ; shows total search hits in mode line, > query-replace
         auto-complete fuzzy
         auto-highlight-symbol
@@ -136,6 +137,7 @@
 (use-package setup-ace-window)
 (when (executable-find "ag")
   (use-package setup-ag))
+(use-package setup-aggressive-indent)
 (use-package setup-auto-complete)
 (use-package setup-big-fringe)
 (use-package setup-bookmark+)
