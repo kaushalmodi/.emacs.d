@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 12:44:35 kmodi>
+;; Time-stamp: <2015-03-03 15:56:21 kmodi>
 ;;
 ;; LaTeX
 ;;
@@ -20,17 +20,19 @@
 (when (file-exists-p auctex-install-dir)
   (prepend-path auctex-install-dir)
   (load "auctex.el" nil t t)
-  (load "preview-latex.el" nil t t))
+  (load "preview-latex.el" nil t t)
 
-(setq LaTeX-command "latex -shell-escape")
+  (if (executable-find "xelatex")
+      (setq LaTeX-command "xelatex -shell-escape")
+    (setq LaTeX-command "latex -shell-escape"))
 
-;;http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
-(setq TeX-PDF-mode   t)
-(setq TeX-auto-save  t)
-(setq TeX-parse-self t)
-(setq TeX-save-query nil)
+  ;; http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
+  (setq TeX-PDF-mode   t)
+  (setq TeX-auto-save  t)
+  (setq TeX-parse-self t)
+  (setq TeX-save-query nil)
 
-(setq-default TeX-master nil) ; Query for master file.
+  (setq-default TeX-master nil)) ; Query for master file.
 
 
 (provide 'setup-latex)
