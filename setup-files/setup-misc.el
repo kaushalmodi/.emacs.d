@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 13:55:46 kmodi>
+;; Time-stamp: <2015-03-03 09:04:25 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -22,10 +22,6 @@
 (>=e "25.0"
      (setq select-enable-primary t)  ; if emacs 25.0 or newer
      (setq x-select-enable-primary t)) ; if older
-
-;; Load newer version of .el and .elc if both are available
-(>=e "24.4"
-     (setq load-prefer-newer t))
 
 ;; url
 ;; Solve the issue with `sx.el' when using that package simultaneously in
@@ -85,11 +81,13 @@ If universal arg is used, load the `init.el'."
 (bind-to-modi-map "l" xah-run-current-file)
 
 ;; Help Functions +
-(require 'help-fns+)
-(bind-keys
- :map help-map
- ("c"   . describe-key-briefly)
- ("C-c" . describe-command))
+(use-package help-fns+
+    :config
+  (progn
+    (bind-keys
+     :map help-map
+     ("c"   . describe-key-briefly)
+     ("C-c" . describe-command))))
 
 ;; Unset keys
 (global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
