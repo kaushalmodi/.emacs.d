@@ -8,14 +8,15 @@
 
 ;; create the server directory if it doesn't exist
 (use-package server
-    :config
+  :pre-load
   (progn
-    (setq server-dir (concat user-emacs-directory "/server_"
-                             emacs-version-short))
+    (setq server-auth-dir (concat user-emacs-directory "/server_"
+                                  emacs-version-short))
 
-    (unless (file-exists-p server-dir)
-      (make-directory server-dir))
-
+    (unless (file-exists-p server-auth-dir)
+      (make-directory server-auth-dir)))
+  :config
+  (progn
     ;; Suppress error "directory  ~/.emacs.d/server is unsafe" when
     ;; running on cygwin
     (>=e "23.0"
