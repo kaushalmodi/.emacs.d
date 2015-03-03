@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:07:43 kmodi>
+;; Time-stamp: <2015-03-03 09:21:04 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -130,7 +130,7 @@ point reaches the beginning or end of the buffer, stop there."
 ;; this case, when the major mode is verilog-mode, how do I NOT do
 ;; find-file-at-point when my cursor is on a line where the first 2
 ;; non-space characters are //?
-;; Source: http://emacs.stackexchange.com/questions/107/how-do-i-disable-ffap-find-file-at-point-when-the-first-two-non-space-characte
+;; http://emacs.stackexchange.com/q/107/115
 (require 'ffap)
 
 ;; Patch `ffap-string-at-point-mode-alist' to support file paths with curly braces:
