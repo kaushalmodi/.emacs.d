@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 13:59:49 kmodi>
+;; Time-stamp: <2015-03-02 22:14:14 kmodi>
 
 ;; Org Mode
 
@@ -185,17 +185,63 @@ this with to-do items than with projects or headings."
           :commands (org-tree-slide-mode)
           :init
           (progn
-            (bind-keys
-             :map modi-mode-map
-             ("<C-S-f8>" . org-tree-slide-mode)))
+            (defvar org-tree-slide-text-scale 3
+              "Text scale ratio to default when `org-tree-slide-mode' is enabled.")
+
+            (defun hydra-org-slides/body-pre ()
+              (modi/toggle-one-window 4) ; force 1 window
+              (org-tree-slide-mode)
+              (text-scale-adjust org-tree-slide-text-scale))
+
+            (defun hydra-org-slides/post()
+              (modi/toggle-one-window) ; toggle 1 window
+              (org-tree-slide-mode -1)
+              (text-scale-adjust (- 0 org-tree-slide-text-scale)))
+
+            (defhydra hydra-org-slides (:color    pink
+                                        :body-pre hydra-org-slides/body-pre
+                                        :post     hydra-org-slides/post)
+              "org-tree-slide"
+              ("c"       org-tree-slide-content              "content" :bind nil)
+              ("p"       org-tree-slide-move-previous-tree   "prev" :bind nil)
+              ("<left>"  org-tree-slide-move-previous-tree   nil :bind nil)
+              ("n"       org-tree-slide-move-next-tree       "next" :bind nil)
+              ("<right>" org-tree-slide-move-next-tree       nil :bind nil)
+              ("C-0"     org-tree-slide-my-profile           "default profile" :bind nil)
+              ("C-1"     org-tree-slide-simple-profile       "simple profile" :bind nil)
+              ("C-2"     org-tree-slide-presentation-profile "presentation profile" :bind nil)
+              ("C-g"     org-tree-slide-mode                 nil :color blue :bind nil)
+              ("q"       org-tree-slide-mode                 "cancel" :color blue :bind nil))
+            (bind-key "<C-S-f8>" #'hydra-org-slides/body modi-mode-map))
           :config
           (progn
-            (setq org-tree-slide-slide-in-effect nil)
-            (bind-keys
-             :map org-tree-slide-mode-map
-             ("p" . org-tree-slide-move-previous-tree)
-             ("n" . org-tree-slide-move-next-tree)
-             ("q" . org-tree-slide-mode))))
+            (setq org-tree-slide--lighter " Slide")
+
+            (defun org-tree-slide-my-profile ()
+              "Customize org-tree-slide variables.
+  `org-tree-slide-header'            => nil
+  `org-tree-slide-slide-in-effect'   => nil
+  `org-tree-slide-heading-emphasis'  => nil
+  `org-tree-slide-cursor-init'       => t
+  `org-tree-slide-modeline-display'  => 'lighter
+  `org-tree-slide-skip-done'         => nil
+  `org-tree-slide-skip-comments'     => t
+"
+              (interactive)
+              (setq org-tree-slide-text-scale         2)
+              (setq org-tree-slide-header             nil)
+              (setq org-tree-slide-slide-in-effect    nil)
+              (setq org-tree-slide-heading-emphasis   nil)
+              (setq org-tree-slide-cursor-init        t)
+              (setq org-tree-slide-modeline-display   'lighter)
+              (setq org-tree-slide-skip-done          nil)
+              (setq org-tree-slide-skip-comments      t)
+              (setq org-tree-slide-activate-message   "Starting org presentation.")
+              (setq org-tree-slide-deactivate-message "Ended presentation."))
+
+            (add-hook 'org-tree-slide-play-hook #'org-tree-slide-my-profile)
+            ;; (remove-hook 'org-tree-slide-play-hook #'org-tree-slide-my-profile)
+            ))
 
       (use-package ox
           :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
