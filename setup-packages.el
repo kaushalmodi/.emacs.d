@@ -1,7 +1,11 @@
-;; Time-stamp: <2015-02-24 19:49:07 kmodi>
+;; Time-stamp: <2015-03-03 09:03:19 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
+
+;; Load newer version of .el and .elc if both are available
+(when (version<= "24.4" emacs-version)
+     (setq load-prefer-newer t))
 
 (require 'package)
 
