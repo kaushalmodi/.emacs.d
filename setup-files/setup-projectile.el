@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 12:32:12 kmodi>
+;; Time-stamp: <2015-03-04 02:44:36 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -35,7 +35,7 @@
 
       (defhydra hydra-projectile (:color teal)
         "
-     PROJECTILE: %(projectile-project-root)
+     PROJECTILE: %(if (fboundp 'projectile-project-root) (projectile-project-root) \"TBD\")
 
      Find File            Search/Tags          Buffers                Cache
 ------------------------------------------------------------------------------------------
