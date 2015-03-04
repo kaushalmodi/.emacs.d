@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 09:04:25 kmodi>
+;; Time-stamp: <2015-03-04 02:38:43 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -136,7 +136,7 @@ If universal arg is used, load the `init.el'."
   ("T"     toggle-theme                 "theme")
   ("v"     recenter-top-bottom          "recenter" :color red)
   ("<SPC>" whitespace-mode              "whitespace" :color red)
-  ("<f11>" toggle-frame-maximized       "fullscreen")
+  ("<f11>" toggle-frame-fullscreen      "fullscreen")
   ("q"     nil                          "cancel" :color blue))
 (key-chord-define-global "qq"  #'hydra-toggle/body)
 (bind-key                "s-t" #'hydra-toggle/body modi-mode-map)
