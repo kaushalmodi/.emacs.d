@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 13:41:38 kmodi>
+;; Time-stamp: <2015-03-04 02:24:17 kmodi>
 
 ;; Org Mode
 
@@ -36,6 +36,9 @@
       ;; that are not DONE
       ;; http://orgmode.org/manual/TODO-dependencies.html
       (setq org-enforce-todo-dependencies t)
+      (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
+      (setq org-startup-indented t) ; http://orgmode.org/manual/Clean-view.html
+      (setq org-indent-indentation-per-level 1)
 
       ;; CAPTURE
       ;; http://orgmode.org/manual/Template-elements.html
@@ -188,9 +191,9 @@ this with to-do items than with projects or headings."
             (defvar org-tree-slide-text-scale 3
               "Text scale ratio to default when `org-tree-slide-mode' is enabled.")
 
-            (defhydra hydra-org-slides (:color    pink
-                                        :body-pre (org-tree-slide-mode)
-                                        :post     (org-tree-slide-mode -1))
+            (defhydra hydra-org-slide (:color    pink
+                                       :body-pre (org-tree-slide-mode)
+                                       :post     (org-tree-slide-mode -1))
               "org-tree-slide"
               ("C-c"      org-tree-slide-content                     "content" :bind nil)
               ("<left>"   org-tree-slide-move-previous-tree          "prev" :bind nil)
@@ -201,20 +204,12 @@ this with to-do items than with projects or headings."
               ("C-1"      org-tree-slide-my-profile                  nil :bind nil)
               ("C-2"      org-tree-slide-simple-profile              nil :bind nil)
               ("C-3"      org-tree-slide-presentation-profile        nil :bind nil)
+              ("<f11>"    toggle-frame-fullscreen                    "fullscreen" :bind nil)
               ("<f12>"    nil                                        "quit" :color blue :bind nil))
-            (bind-key "<C-S-f8>" #'hydra-org-slides/body modi-mode-map))
+            (bind-key "<C-S-f8>" #'hydra-org-slide/body modi-mode-map))
           :config
           (progn
             (setq org-tree-slide--lighter " Slide")
-
-            (defun my/org-tree-slide-start ()
-              (modi/toggle-one-window 4) ; force 1 window
-              (text-scale-set org-tree-slide-text-scale)
-              (org-tree-slide-my-profile))
-
-            (defun my/org-tree-slide-stop()
-              (modi/toggle-one-window) ; toggle 1 window
-              (text-scale-set 0))
 
             (defun org-tree-slide-my-profile ()
               "Customize org-tree-slide variables.
@@ -238,8 +233,22 @@ this with to-do items than with projects or headings."
               (setq org-tree-slide-activate-message   "Starting org presentation.")
               (setq org-tree-slide-deactivate-message "Ended presentation."))
 
+            (defun my/org-tree-slide-start ()
+              (interactive)
+              (modi/toggle-one-window 4) ; force 1 window
+              (text-scale-set org-tree-slide-text-scale)
+              (org-tree-slide-my-profile))
+
+            (defun my/org-tree-slide-stop()
+              (interactive)
+              (modi/toggle-one-window) ; toggle 1 window
+              (text-scale-set 0))
+
             (add-hook 'org-tree-slide-play-hook #'my/org-tree-slide-start)
-            (add-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)))
+            ;; (remove-hook 'org-tree-slide-play-hook #'my/org-tree-slide-start)
+            (add-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
+            ;; (remove-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
+            ))
 
       (use-package ox
           :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
