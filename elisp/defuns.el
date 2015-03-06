@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-10 11:12:10 kmodi>
+;; Time-stamp: <2015-03-05 12:07:07 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -37,7 +37,9 @@ Otherwise, get the symbol at point, as a string."
           (symbol-name (symbol-at-point))))))
 
 (defmacro remove-from-alist-matching-car (alist car-of-list-to-delete)
-  "For ALIST, remove a list from it whose `car' matches CAR-OF-LIST-TO-DELETE."
+  "For ALIST, remove a list from it whose `car' matches CAR-OF-LIST-TO-DELETE.
+
+e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
   `(let* ((to-delete nil))
      (dolist (item ,alist)
        (when (eq ',car-of-list-to-delete (car item))
