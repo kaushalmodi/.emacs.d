@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-03-05 11:05:16 kmodi>
 
 ;; Fill Column Indicator
-;; Source: http://www.emacswiki.org/FillColumnIndicator
+;; http://www.emacswiki.org/FillColumnIndicator
 
 (use-package fill-column-indicator
-  :config
+    :config
   (progn
 
     (defvar modi/fci-mode-hooks '(verilog-mode-hook
@@ -33,12 +33,25 @@
     ;; Enable fci-mode automatically for all files
     ;; (add-hook 'after-change-major-mode-hook 'fci-mode)
 
-    (setq fci-handle-truncate-lines t ;; Truncate lines in fci mode
-          ;;fci-handle-truncate-lines nil  ;; Do not truncate lines in fci mode
-          fci-rule-width 2
-          fci-rule-use-dashes nil
-          fci-dash-pattern 0.3)
-    (setq-default fci-rule-column 80))) ;; default is 70
+    (setq-default fci-handle-truncate-lines t) ; Truncate lines in fci mode
+    ;; (setq-default fci-handle-truncate-lines nil) ; Do not truncate lines in fci mode
+    (setq-default fci-rule-width 2)
+    (setq-default fci-rule-use-dashes nil)
+    (setq-default fci-dash-pattern 0.3)
+    (setq-default fci-rule-column 80) ; default is 70
+
+    (defun modi/fci-redraw-frame-all-buffers ()
+      "Redraw the fill-column rule in all buffers on the selected frame.
+Running this function after changing themes updates the fci rule color in
+all the buffers."
+      (interactive)
+      (let ((bufs (delete-dups (buffer-list (selected-frame)))))
+        (dolist (buf bufs)
+          (with-current-buffer buf
+            (when fci-mode
+              (fci-delete-unneeded)
+              (fci-make-overlay-strings)
+              (fci-update-all-windows t))))))))
 
 
 (provide 'setup-fci)
