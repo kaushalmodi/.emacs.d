@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-04 02:24:17 kmodi>
+;; Time-stamp: <2015-03-05 11:40:43 kmodi>
 
 ;; Org Mode
 
@@ -22,19 +22,27 @@
       (setq org-log-done 'timestamp) ; Insert only timestamp when closing an org TODO item
       ;; (setq org-log-done 'note) ; Insert timestamp and note when closing an org TODO item
       ;; http://orgmode.org/manual/Closing-items.html
-      (setq org-hide-leading-stars  t) ; hidden leading stars
-      (setq org-blank-before-new-entry (quote ((heading) (plain-list-item)))) ; prevent auto blank lines
+      (setq org-hide-leading-stars  t)
+      ;; Prevent auto insertion of blank lines before headings and list items
+      (setq org-blank-before-new-entry '((heading)
+                                         (plain-list-item)))
       (setq org-completion-use-ido t) ; use ido for auto completion
       (setq org-return-follows-link t) ; Hitting <RET> while on a link follows the link
-      (setq org-startup-folded (quote showeverything))
-      (setq org-todo-keywords (quote ((sequence "TODO" "SOMEDAY" "CANCELED" "DONE"))))
+      (setq org-startup-folded 'showall)
+      ;; fold / overview  - collapse everything, show only level 1 headlines
+      ;; content          - show only headlines
+      ;; nofold / showall - expand all headlines except the ones with :archive:
+      ;;                    tag and property drawers
+      ;; showeverything   - same as above but without exceptions
+      (setq org-todo-keywords '((sequence "TODO" "SOMEDAY" "CANCELED" "DONE")))
       (setq org-todo-keyword-faces
             '(("TODO"     . org-warning)
-              ("SOMEDAY"  . "#FFEF9F")
-              ("CANCELED" . (:foreground "#94BFF3" :weight bold :strike-through t))))
-      ;; block entries from changing state to DONE while they have children
-      ;; that are not DONE
-      ;; http://orgmode.org/manual/TODO-dependencies.html
+              ("SOMEDAY"  . (:foreground "black" :background "#FFEF9F"))
+              ("CANCELED" . (:foreground "#94BFF3" :weight bold :strike-through t))
+              ("DONE"     . (:foreground "black" :background "#91ba31"))
+              ))
+      ;; Block entries from changing state to DONE while they have children
+      ;; that are not DONE - http://orgmode.org/manual/TODO-dependencies.html
       (setq org-enforce-todo-dependencies t)
       (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
       (setq org-startup-indented t) ; http://orgmode.org/manual/Clean-view.html
