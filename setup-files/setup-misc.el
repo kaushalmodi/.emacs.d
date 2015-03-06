@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-04 02:38:43 kmodi>
+;; Time-stamp: <2015-03-05 12:15:42 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -120,6 +120,7 @@ If universal arg is used, load the `init.el'."
   ("f"     toggle-fill-unfill           "fill/unfill")
   ("F"     auto-fill-mode               "auto fill")
   ("g"     indent-guide-mode            "indent guide")
+  ("M-h"   hardcore-mode                "hardcore")
   ("i"     fci-mode                     "fci")
   ("k"     key-chord-mode               "key chord" :color red)
   ("l"     modi/toggle-linum            "linum")
@@ -136,7 +137,6 @@ If universal arg is used, load the `init.el'."
   ("T"     toggle-theme                 "theme")
   ("v"     recenter-top-bottom          "recenter" :color red)
   ("<SPC>" whitespace-mode              "whitespace" :color red)
-  ("<f11>" toggle-frame-fullscreen      "fullscreen")
   ("q"     nil                          "cancel" :color blue))
 (key-chord-define-global "qq"  #'hydra-toggle/body)
 (bind-key                "s-t" #'hydra-toggle/body modi-mode-map)
@@ -267,6 +267,18 @@ If universal arg is used, load the `init.el'."
   ;; exit points
   ("q"        hydra-vi/post                 "cancel" :color blue))
 (bind-key "C-:" #'hydra-vi/body modi-mode-map)
+
+;; Organize The Order Of Minor Mode Lighters
+(when (featurep 'multiple-cursors)
+  ;; The `multiple-cursors-mode' lighter is very useful in showing how many
+  ;; cursors are created or if multiple-cursors-mode is enabled. Move that
+  ;; lighter to the foremost position in the mode-line. That is done by
+  ;; moving it to the beginning of the `minor-mode-alist'.
+
+  ;; First remove it from the alist
+  (remove-from-alist-matching-car minor-mode-alist multiple-cursors-mode)
+  ;; Now add it back but to the beginning of the alist
+  (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line)))
 
 
 (provide 'setup-misc)
