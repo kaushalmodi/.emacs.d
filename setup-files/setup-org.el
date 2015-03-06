@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 11:40:43 kmodi>
+;; Time-stamp: <2015-03-05 21:07:40 kmodi>
 
 ;; Org Mode
 
@@ -203,15 +203,15 @@ this with to-do items than with projects or headings."
                                        :body-pre (org-tree-slide-mode)
                                        :post     (org-tree-slide-mode -1))
               "org-tree-slide"
-              ("C-c"      org-tree-slide-content                     "content" :bind nil)
+              ("C-0"      org-tree-slide-content                     "content" :bind nil)
               ("<left>"   org-tree-slide-move-previous-tree          "prev" :bind nil)
               ("<right>"  org-tree-slide-move-next-tree              "next" :bind nil)
-              ("C-0"      (text-scale-set org-tree-slide-text-scale) "font reset" :bind nil)
+              ("C-1"      (text-scale-set org-tree-slide-text-scale) "font reset" :bind nil)
               ("C-="      (text-scale-increase 1)                    "font incr" :bind nil)
               ("C--"      (text-scale-decrease 1)                    "font decr" :bind nil)
-              ("C-1"      org-tree-slide-my-profile                  nil :bind nil)
-              ("C-2"      org-tree-slide-simple-profile              nil :bind nil)
-              ("C-3"      org-tree-slide-presentation-profile        nil :bind nil)
+              ("C-2"      org-tree-slide-my-profile                  nil :bind nil)
+              ("C-3"      org-tree-slide-simple-profile              nil :bind nil)
+              ("C-4"      org-tree-slide-presentation-profile        nil :bind nil)
               ("<f11>"    toggle-frame-fullscreen                    "fullscreen" :bind nil)
               ("<f12>"    nil                                        "quit" :color blue :bind nil))
             (bind-key "<C-S-f8>" #'hydra-org-slide/body modi-mode-map))
