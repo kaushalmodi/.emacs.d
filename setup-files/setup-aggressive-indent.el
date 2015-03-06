@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 16:30:19 kmodi>
+;; Time-stamp: <2015-03-05 09:14:43 kmodi>
 
 ;; Aggressive Indent
 ;; https://github.com/Bruce-Connor/aggressive-indent-mode
@@ -11,9 +11,7 @@
       "List of hooks of major modes in which aggressive-indent-mode should be enabled.")
 
     (defun modi/turn-on-aggressive-indent-mode ()
-      "Turn on aggressive-indent-mode only for specific modes.
-    As truncation is enabled only in aggressive-indent-mode, truncation will be activated
-    only in the below modes"
+      "Turn on aggressive-indent-mode only for specific modes."
       (interactive)
       (dolist (hook modi/aggressive-indent-mode-hooks)
         (add-hook hook #'aggressive-indent-mode)))
