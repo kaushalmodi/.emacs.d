@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 13:30:52 kmodi>
+;; Time-stamp: <2015-03-05 09:49:36 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -75,13 +75,29 @@ Don't add “Revision Control” heading to TOC."
                                 h))
                 (setq n (1+ n))))))))
 
-    ;; Start `outline-mode' for `prog-mode's
-    (dolist (hook '(verilog-mode-hook
-                    emacs-lisp-mode-hook))
-      (add-hook hook #'outline-minor-mode)
-      (add-hook hook (λ (add-hook 'local-write-file-hooks
-                                  #'modi/outline-table-of-contents))))
-    ;; Hook `outshine-mode' to `outline-mode'
+    (defvar modi/outline-mode-hooks '(verilog-mode-hook
+                                      emacs-lisp-mode-hook)
+      "List of hooks of major modes in which outline-mode should be enabled.")
+
+    (defun modi/turn-on-outline-mode ()
+      "Turn on outline-mode only for specific modes."
+      (interactive)
+      (dolist (hook modi/outline-mode-hooks)
+        (add-hook hook #'outline-minor-mode)
+        (add-hook hook (λ (add-hook 'local-write-file-hooks
+                                    #'modi/outline-table-of-contents)))))
+
+    (defun modi/turn-off-outline-mode ()
+      "Turn off outline-mode only for specific modes."
+      (interactive)
+      (dolist (hook modi/outline-mode-hooks)
+        (remove-hook hook #'outline-minor-mode)
+        (remove-hook hook (λ (remove-hook 'local-write-file-hooks
+                                          #'modi/outline-table-of-contents)))))
+
+    (modi/turn-on-outline-mode)
+
+    ;; Hook `outshine' to `outline-mode'
     (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
 
     (bind-keys
@@ -95,3 +111,13 @@ Don't add “Revision Control” heading to TOC."
 
 
 (provide 'setup-outshine)
+
+;; To Debug:
+;; When outshine is enabled, it remaps self-insert-command to
+;; outshine-self-insert-command. That works fine except that in
+;; emacs-lisp-mode when outline-mode is enabled (and thus outshine is
+;; enabled), the eldoc-mode is messed up.
+;; Example: after typing `(define-key' followed by SPACE, the eldoc-mode
+;; should show the hint for `define-key' in the echo area. But that
+;; does not happen while outshine is enabled. It starts working fine
+;; if I disable outline-mode (and thus outshine too).
