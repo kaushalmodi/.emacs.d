@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:31:32 kmodi>
+;; Time-stamp: <2015-03-05 11:44:27 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -6,7 +6,7 @@
 
 ;; It is crucial that this require line happens after the above setq block
 (use-package smart-mode-line
-  :init
+    :init
   (progn
     (setq sml/name-width            40) ; space allocated for the buffer name in the mode-line
     (setq sml/line-number-format    "%4l")
@@ -34,18 +34,18 @@
                       "/\\([a-z0-9_]\\{2\\}\\).*?\\([a-z0-9_]\\)" ; project name
                       "/[so]+_\\([a-z0-9]+\\)" ; user project root
                       "/\\([a-z0-9_]\\{0,3\\}\\).*?/") ; dir in user project root
-             (lambda (string)
-               ;; (concat ":"
-               ;;         (capitalize (match-string 1 string))
-               ;;         (upcase (match-string 2 string))
-               ;;         (when (not (string= (match-string 3 string) (getenv "USER")))
-               ;;           (concat "[" (match-string 3 string) "]"))
-               ;;         ":" (upcase (match-string 4 string)) ":"
-               ;;         )
-               (concat (when (not (string= (match-string 3 string) (getenv "USER")))
-                         (concat "[" (match-string 3 string) "]"))
-                       ":" (upcase (match-string 4 string)) ":")
-               ))
+              (lambda (string)
+                ;; (concat ":"
+                ;;         (capitalize (match-string 1 string))
+                ;;         (upcase (match-string 2 string))
+                ;;         (when (not (string= (match-string 3 string) (getenv "USER")))
+                ;;           (concat "[" (match-string 3 string) "]"))
+                ;;         ":" (upcase (match-string 4 string)) ":"
+                ;;         )
+                (concat (when (not (string= (match-string 3 string) (getenv "USER")))
+                          (concat "[" (match-string 3 string) "]"))
+                        ":" (upcase (match-string 4 string)) ":")
+                ))
             ("\\(:.*\\)DIG:tb/"                    "\\1TB:" )
             ("\\(:.*\\)TB:agents/"                 "\\1AGT:" )
             ("\\(:.*\\)TB:patterns/"               "\\1PAT:" )
@@ -62,9 +62,9 @@
   :config
   (progn
     (use-package rich-minority
-      :config
+        :config
       (progn
-        (setq rm-excluded-modes
+        (setq rm-blacklist
               '(" Guide"        ; guide-key mode
                 " hc"           ; hardcore mode
                 " AC"           ; auto-complete
@@ -83,7 +83,10 @@
                 " ElDoc"        ; eldoc
                 " hl-highlight" ; hl-anything
                 " Helm"         ; Helm
-                ))))
+                ))
+        (add-to-list 'rm-text-properties '("Outl\\'" 'display " ø")) ; outline
+        (add-to-list 'rm-text-properties '("Ind\\'"  'display " *>")) ; org indent
+        ))
 
     (sml/setup)
 
