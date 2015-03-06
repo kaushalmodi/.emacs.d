@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 17:55:21 kmodi>
+;; Time-stamp: <2015-03-04 02:41:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -84,7 +84,7 @@
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
         popwin ; Open windows like *Help*, *Completions*, etc in minibuffer
-        projectile ;; Better than fiplr
+        projectile ; Better than fiplr
         rainbow-delimiters
         rainbow-mode
         rectangle-utils
