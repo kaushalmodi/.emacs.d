@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 13:14:49 kmodi>
+;; Time-stamp: <2015-03-05 11:22:46 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -62,8 +62,12 @@
         (debug-on-entry (intern fn))
         (message "Debug-on-entry: %s" fn)))))
 
-;; Turn on ElDoc mode in emacs-lisp-mode
-(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+;; Turn on ElDoc mode
+(dolist ( hook '(emacs-lisp-mode-hook
+                 lisp-interaction-mode-hook
+                 ielm-mode-hook
+                 eval-expression-minibuffer-setup-hook))
+  (add-hook hook #'eldoc-mode))
 
 ;; Change the default indentation function for `emacs-lisp-mode' to
 ;; `common-lisp-indent-function'
@@ -73,12 +77,6 @@
 ;;                            :post (deactivate-mark))
 (add-hook 'emacs-lisp-mode-hook
           (λ (setq-local lisp-indent-function 'common-lisp-indent-function)))
-
-;; edebug
-(bind-keys
- :map modi-mode-map
- ("<f7>"   . modi/toggle-edebug-defun) ; toggle edebug instrumentation
- ("<S-f7>" . modi/toggle-debug-defun)) ; enable/cancel debug-on-entry
 
 
 (provide 'setup-elisp)
