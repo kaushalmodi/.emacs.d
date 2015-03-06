@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 08:31:55 kmodi>
+;; Time-stamp: <2015-03-05 11:06:15 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -50,9 +50,9 @@ This variable is to be updated when changing themes.")
     (modi/blend-linum))
   (with-eval-after-load 'smart-mode-line
     (sml/apply-theme 'dark))
-  (with-eval-after-load 'fill-column-indicator
+  (with-eval-after-load 'setup-fci
     (setq fci-rule-color "#383838")
-    (fci-mode -1)))
+    (modi/fci-redraw-frame-all-buffers)))
 
 ;; smyx
 (defun smyx ()
@@ -68,9 +68,9 @@ This variable is to be updated when changing themes.")
     (modi/blend-linum))
   (with-eval-after-load 'smart-mode-line
     (sml/apply-theme 'dark))
-  (with-eval-after-load 'fill-column-indicator
+  (with-eval-after-load 'setup-fci
     (setq fci-rule-color "#383838")
-    (fci-mode -1)))
+    (modi/fci-redraw-frame-all-buffers)))
 
 ;;leuven theme
 (defun leuven ()
@@ -86,9 +86,27 @@ This variable is to be updated when changing themes.")
     (modi/blend-linum))
   (with-eval-after-load 'smart-mode-line
     (sml/apply-theme 'light))
-  (with-eval-after-load 'fill-column-indicator
-    (setq fci-rule-color "#F2F2F2")
-    (fci-mode -1)))
+  (with-eval-after-load 'setup-fci
+    (setq fci-rule-color "gray")
+    (modi/fci-redraw-frame-all-buffers)))
+
+;;stock theme
+(defun stock-theme ()
+  "Activate stock theme."
+  (interactive)
+  (setq dark-theme nil)
+  (disable-theme 'zenburn)
+  (disable-theme 'smyx)
+  (disable-theme 'leuven)
+  (with-eval-after-load 'faces
+    (modi/blend-fringe))
+  (with-eval-after-load 'linum
+    (modi/blend-linum))
+  (with-eval-after-load 'smart-mode-line
+    (sml/apply-theme 'respectful))
+  (with-eval-after-load 'setup-fci
+    (setq fci-rule-color "gray")
+    (modi/fci-redraw-frame-all-buffers)))
 
 (defun toggle-theme ()
   "Toggles theme between the default light and default dark themes."
