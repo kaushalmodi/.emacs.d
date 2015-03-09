@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 19:13:10 kmodi>
+;; Time-stamp: <2015-03-09 13:50:02 kmodi>
 
 ;; Highlight stuff
 
@@ -9,12 +9,12 @@ for global highlighting.")
 (if modi/use-hl-anything
     ;; Highlight Anything
     (use-package hl-anything
-      ;; This package has known to cause issues with the `list-colors-display'
-      ;; command. The buffer that opens on calling that command does not show the
-      ;; colors. The issue is fixed temporarily by uncommenting the below line
-      ;; and restarting emacs - https://github.com/boyw165/hl-anything/issues/14
-      ;; :disabled t
-      :config
+        ;; This package has known to cause issues with the `list-colors-display'
+        ;; command. The buffer that opens on calling that command does not show the
+        ;; colors. The issue is fixed temporarily by uncommenting the below line
+        ;; and restarting emacs - https://github.com/boyw165/hl-anything/issues/14
+        ;; :disabled t
+        :config
       (progn
         (hl-highlight-mode +1)
 
@@ -49,24 +49,24 @@ globally or locally (when called with prefix `C-u')."
         (bind-to-modi-map "h" hydra-hl-anything/body)))
   ;; Backup highlighting package when `hl-anything' has issues
   (use-package highlight-global
-    ;; :disabled t
-    :load-path "elisp/highlight-global"
-    :config
-    (progn
-      (bind-to-modi-map "h" highlight-frame-toggle)
-      (bind-to-modi-map "H" clear-highlight-frame))))
+      ;; :disabled t
+      :load-path "elisp/highlight-global"
+      :config
+      (progn
+        (bind-to-modi-map "h" highlight-frame-toggle)
+        (bind-to-modi-map "H" clear-highlight-frame))))
 
 ;; Volatile Highlights
 ;; https://github.com/k-talo/volatile-highlights.el
 (use-package volatile-highlights
-  :config
+    :config
   (progn
     (volatile-highlights-mode t)))
 
 ;; Auto Highlight Symbol
 ;; https://github.com/emacsmirror/auto-highlight-symbol
 (use-package auto-highlight-symbol
-  :config
+    :config
   (progn
     (bind-keys
      :map modi-mode-map
@@ -105,15 +105,11 @@ will not update as you type."
 
 ;; hl-line+
 (use-package hl-line+
-  :config
+    :config
   (progn
     (toggle-hl-line-when-idle 1) ; Highlight line only when idle
     (setq hl-line-flash-show-period 3) ; Number of seconds for `hl-line-flash' to highlight the line
-
-    ;; Below bindings are made in global map and not in my minor mode as I want
-    ;; other modes to override those bindings
-    (bind-keys
-     ("C-c C-f" . hl-line-flash))))
+    ))
 
 
 (provide 'setup-highlight)
