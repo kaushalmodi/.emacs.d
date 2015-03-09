@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-06 09:51:00 kmodi>
+;; Time-stamp: <2015-03-09 16:30:47 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -175,8 +175,8 @@ If universal arg is used, load the `init.el'."
   ("C"       calc                                  "calc")
   ("s-c"     rpn-calc                              "rpn-calc")
   ("D"       dired-single-magic-buffer-current-dir "dired")
-  ("d"       ediff-buffers                         "ediff")
-  ("ed"      ediff-buffers                         "ediff")
+  ("d"       modi/ediff-dwim                       "ediff")
+  ("ed"      modi/ediff-dwim                       "ediff")
   ("ee"      eww                                   "eww")
   ("el"      modi/eww-im-feeling-lucky             "eww lucky")
   ("eu"      (eww (browse-url-url-at-point))       "open url in eww")
