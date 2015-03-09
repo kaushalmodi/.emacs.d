@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-04 02:41:45 kmodi>
+;; Time-stamp: <2015-03-09 11:10:56 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -62,6 +62,7 @@
         hydra
         ibuffer-projectile
         ido-vertical-mode flx-ido ido-ubiquitous
+        interleave ; takes notes associated to pdf files in org mode
         iregister ; Interactive access to registers
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
         key-chord ; map pairs of simultaneously pressed keys to commands
