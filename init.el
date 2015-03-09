@@ -1,20 +1,20 @@
-;; Time-stamp: <2015-03-09 11:10:56 kmodi>
+;; Time-stamp: <2015-03-09 11:40:28 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
 (defvar *emacs-load-start* (current-time))
 
-;; Global variables (symbols)
-(setq user-home-directory  (getenv "HOME")
-      user-emacs-directory (concat user-home-directory "/.emacs.d")
-      emacs-version-short  (replace-regexp-in-string
+;; Global variables
+(setq user-home-directory  (getenv "HOME"))
+(setq user-emacs-directory (concat user-home-directory "/.emacs.d"))
+(setq emacs-version-short  (replace-regexp-in-string
                             "\\([0-9]+\\)\\.\\([0-9]+\\).*"
-                            "\\1_\\2" emacs-version) ; 25.0.50.1 -> 25_0
-      org-directory        (concat user-home-directory "/org")
-      setup-packages-file  (expand-file-name
+                            "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
+(setq org-directory        (concat user-home-directory "/org"))
+(setq setup-packages-file  (expand-file-name
                             "setup-packages.el"
-                            user-emacs-directory)
-      custom-file          (expand-file-name
+                            user-emacs-directory))
+(setq custom-file          (expand-file-name
                             (concat "custom_" emacs-version-short ".el")
                             user-emacs-directory))
 
