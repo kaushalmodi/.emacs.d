@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-09 11:40:28 kmodi>
+;; Time-stamp: <2015-03-09 13:55:36 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -49,6 +49,7 @@
         expand-region
         eww-lnum ; jump to links in eww buffer ace-jump style
         fill-column-indicator
+        fold-this
         gist
         ggtags
         guide-key
@@ -154,6 +155,7 @@
 (use-package setup-elisp-slime-nav)
 (use-package setup-expand-region)
 (use-package setup-fci)
+(use-package setup-fold-this)
 (use-package setup-gist)
 (use-package setup-guide-key)
 (use-package setup-hardcore)
