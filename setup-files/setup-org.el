@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 21:07:40 kmodi>
+;; Time-stamp: <2015-03-09 11:07:45 kmodi>
 
 ;; Org Mode
 
@@ -196,28 +196,13 @@ this with to-do items than with projects or headings."
           :commands (org-tree-slide-mode)
           :init
           (progn
-            (defvar org-tree-slide-text-scale 3
-              "Text scale ratio to default when `org-tree-slide-mode' is enabled.")
-
-            (defhydra hydra-org-slide (:color    pink
-                                       :body-pre (org-tree-slide-mode)
-                                       :post     (org-tree-slide-mode -1))
-              "org-tree-slide"
-              ("C-0"      org-tree-slide-content                     "content" :bind nil)
-              ("<left>"   org-tree-slide-move-previous-tree          "prev" :bind nil)
-              ("<right>"  org-tree-slide-move-next-tree              "next" :bind nil)
-              ("C-1"      (text-scale-set org-tree-slide-text-scale) "font reset" :bind nil)
-              ("C-="      (text-scale-increase 1)                    "font incr" :bind nil)
-              ("C--"      (text-scale-decrease 1)                    "font decr" :bind nil)
-              ("C-2"      org-tree-slide-my-profile                  nil :bind nil)
-              ("C-3"      org-tree-slide-simple-profile              nil :bind nil)
-              ("C-4"      org-tree-slide-presentation-profile        nil :bind nil)
-              ("<f11>"    toggle-frame-fullscreen                    "fullscreen" :bind nil)
-              ("<f12>"    nil                                        "quit" :color blue :bind nil))
-            (bind-key "<C-S-f8>" #'hydra-org-slide/body modi-mode-map))
+            (bind-key "<C-S-f8>" #'org-tree-slide-mode modi-mode-map))
           :config
           (progn
             (setq org-tree-slide--lighter " Slide")
+
+            (defvar org-tree-slide-text-scale 3
+              "Text scale ratio to default when `org-tree-slide-mode' is enabled.")
 
             (defun org-tree-slide-my-profile ()
               "Customize org-tree-slide variables.
@@ -256,7 +241,16 @@ this with to-do items than with projects or headings."
             ;; (remove-hook 'org-tree-slide-play-hook #'my/org-tree-slide-start)
             (add-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
             ;; (remove-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
-            ))
+
+            (bind-key "<left>"   #'org-tree-slide-move-previous-tree            org-tree-slide-mode-map)
+            (bind-key "<right>"  #'org-tree-slide-move-next-tree                org-tree-slide-mode-map)
+            (bind-key "C-0"      (λ (text-scale-set org-tree-slide-text-scale)) org-tree-slide-mode-map)
+            (bind-key "C-="      (λ (text-scale-increase 1))                    org-tree-slide-mode-map)
+            (bind-key "C--"      (λ (text-scale-decrease 1))                    org-tree-slide-mode-map)
+            (bind-key "C-1"      #'org-tree-slide-content                       org-tree-slide-mode-map)
+            (bind-key "C-2"      #'org-tree-slide-my-profile                    org-tree-slide-mode-map)
+            (bind-key "C-3"      #'org-tree-slide-simple-profile                org-tree-slide-mode-map)
+            (bind-key "C-4"      #'org-tree-slide-presentation-profile          org-tree-slide-mode-map)))
 
       (use-package ox
           :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
@@ -500,6 +494,58 @@ this with to-do items than with projects or headings."
       ;; the edit.
       (with-eval-after-load 'org-src
         (bind-key "C-x C-s" #'org-edit-src-exit org-src-mode-map))
+
+      ;; http://orgmode.org/manual/Easy-Templates.html
+      ;; http://oremacs.com/2015/03/07/hydra-org-templates
+      ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
+      (defhydra hydra-org-template (:color blue :hint nil)
+        "
+_c_enter  _q_uote     _E_macs-lisp    _L_aTeX:
+_l_atex   _e_xample   _v_erilog       _i_ndex:
+_a_scii   _v_erse     _S_hell         _I_NCLUDE:
+_s_rc     ^ ^         _t_ext          _H_TML:
+_h_tml    ^ ^         ^ ^             _A_SCII:
+"
+        ("s" (hot-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
+        ("E" (progn
+               (hot-expand "<s")
+               (insert "emacs-lisp")
+               (forward-line)))
+        ("v" (progn
+               (hot-expand "<s")
+               (insert "systemverilog")
+               (forward-line)))
+        ("S" (progn
+               (hot-expand "<s")
+               (insert "sh")
+               (forward-line)))
+        ("t" (progn
+               (hot-expand "<s")
+               (insert "text")
+               (forward-line)))
+        ("e" (hot-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
+        ("q" (hot-expand "<q")) ; #+BEGIN_QUOTE ... #+END_QUOTE
+        ("V" (hot-expand "<v")) ; #+BEGIN_VERSE ... #+END_VERSE
+        ("c" (hot-expand "<c")) ; #+BEGIN_CENTER ... #+END_CENTER
+        ("l" (hot-expand "<l")) ; #+BEGIN_LaTeX ... #+END_LaTeX
+        ("L" (hot-expand "<L")) ; #+LaTeX:
+        ("h" (hot-expand "<h")) ; #+BEGIN_HTML ... #+END_HTML
+        ("H" (hot-expand "<H")) ; #+HTML:
+        ("a" (hot-expand "<a")) ; #+BEGIN_ASCII ... #+END_ASCII
+        ("A" (hot-expand "<A")) ; #+ASCII:
+        ("i" (hot-expand "<i")) ; #+INDEX: line
+        ("I" (hot-expand "<I")) ; #+INCLUDE: line
+        ("<" self-insert-command "<")
+        ("o" nil         "quit"))
+
+      (defun hot-expand (str)
+        "Expand org template."
+        (insert str)
+        (org-try-structure-completion))
+
+      (define-key org-mode-map "<" (λ (if (looking-back "^")
+                                          (hydra-org-template/body)
+                                        (self-insert-command 1))))
       ))
 
 
