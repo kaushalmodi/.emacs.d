@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 12:15:42 kmodi>
+;; Time-stamp: <2015-03-06 09:51:00 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -112,6 +112,7 @@ If universal arg is used, load the `init.el'."
 (autoload 'dired-toggle-read-only "dired" nil t)
 (defhydra hydra-toggle (:color blue)
   "toggle"
+  ("a"     aggressive-indent-mode       "aggressive indent")
   ("b"     modi/toggle-menu-bar         "menu bar")
   ("c"     xah-cycle-letter-case        "letter case" :color red)
   ("d"     toggle-debug-on-error        "debug on error")
