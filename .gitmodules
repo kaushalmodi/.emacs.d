@@ -34,3 +34,6 @@
 [submodule "software/reveal.js"]
 	path = software/reveal.js
 	url = http://github.com/hakimel/reveal.js
+[submodule "elisp/gplusify"]
+	path = elisp/gplusify
+	url = https://www.github.com/kaushalmodi/gplusify

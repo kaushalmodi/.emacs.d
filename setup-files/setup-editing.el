@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 16:27:25 kmodi>
+;; Time-stamp: <2015-03-10 13:34:05 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -416,9 +416,20 @@ Temporarily consider - and _ characters as part of the word when sorting."
 
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
-    :load-path "elisp/unfill/")
+    :load-path "elisp/unfill")
 
-(with-eval-after-load 'region-bindings-mode
+;; Forked version of https://github.com/jorgenschaefer/gplusify
+(use-package gplusify
+    :commands (gplusify-region-as-kill)
+    :load-path "elisp/gplusify"
+    :idle
+    (progn
+      (when (featurep 'region-bindings-mode)
+        (bind-keys
+         :map region-bindings-mode-map
+         ("G" . gplusify-region-as-kill)))))
+
+(when (featurep 'region-bindings-mode)
   (bind-keys
    :map region-bindings-mode-map
    ;; When region is selected, pressing `c' will copy the region
