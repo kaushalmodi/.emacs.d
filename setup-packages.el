@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 09:03:19 kmodi>
+;; Time-stamp: <2015-03-10 17:09:23 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -74,15 +74,6 @@
   (dolist (p my-packages)
     (when (not (package-installed-p p))
       (package-install p))))
-
-;; Paradox - https://github.com/Bruce-Connor/paradox
-(require 'paradox)
-;; The ".paradox-token.el" file is supposed to contain this line:
-;;     (setq paradox-github-token "<YOUR_TOKEN>")
-(load ".paradox-token.el" :noerror :nomessage)
-(setq paradox-lines-per-entry 1)
-
-(paradox-enable)
 
 
 (provide 'setup-packages)

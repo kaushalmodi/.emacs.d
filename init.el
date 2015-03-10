@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-09 13:55:36 kmodi>
+;; Time-stamp: <2015-03-10 17:17:26 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -114,15 +114,17 @@
 (require 'cl-lib)
 
 (load custom-file nil :nomessage) ; Load the emacs `M-x customize` generated file
+
 (load setup-packages-file nil :nomessage) ; Load the packages
 
+;; Start `benchmark-init' as soon as possible
+(require 'benchmark-init)
+
 (require 'use-package)
-
-(use-package benchmark-init)
-
 (use-package defuns)
 (use-package modi-mode)
 (use-package temp-mode)
+(use-package setup-paradox)
 
 (use-package setup-region-bindings-mode)
 (use-package setup-key-chord)
