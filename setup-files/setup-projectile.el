@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-06 09:49:08 kmodi>
+;; Time-stamp: <2015-03-11 10:12:21 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -113,8 +113,9 @@ getting a list of all files in a project."
         (add-to-list 'projectile-globally-ignored-files item))
       ;; Customize the Projectile mode-line lighter
       ;; (setq projectile-mode-line '(:eval (format " Projectile[%s]" (projectile-project-name))))
-      ;; (setq projectile-mode-line " ρ")
-      (setq projectile-mode-line " ℙ")
+      ;; (setq projectile-mode-line " ∏")
+      ;; (setq projectile-mode-line " ℙ")
+      (setq projectile-mode-line " ρ")
 
       (defun projectile-project-name ()
         "Return project name.
