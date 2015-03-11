@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-10 17:17:26 kmodi>
+;; Time-stamp: <2015-03-11 09:45:40 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -192,6 +192,7 @@
 (use-package setup-term)
 (use-package setup-tiny)
 (use-package setup-undo-tree)
+(use-package setup-which-func)
 (use-package setup-wrap-region)
 (use-package setup-xkcd)
 (use-package setup-yafolding)
