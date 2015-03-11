@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 11:06:15 kmodi>
+;; Time-stamp: <2015-03-11 11:57:25 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -120,20 +120,19 @@ This variable is to be updated when changing themes.")
 ;; https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
 (add-hook 'window-setup-hook (λ (funcall default-theme)))
 
-(add-hook 'after-init-hook
-          ;; Frame title bar format
-          ;; If buffer-file-name exists, show it;
-          ;; else if you are in dired mode, show the directory name
-          ;; else show only the buffer name (*scratch*, *Messages*, etc)
-          ;; Append the value of PRJ_NAME env var to the above.
-          (λ (setq frame-title-format
-                   (list '(buffer-file-name "%f"
-                                            (dired-directory dired-directory "%b"))
-                         " [" (getenv "PRJ_NAME") "]"))))
+(defun modi/update-frame-title ()
+  (interactive)
+  ;; Frame title bar format
+  ;; If buffer-file-name exists, show it;
+  ;; else if you are in dired mode, show the directory name
+  ;; else show only the buffer name (*scratch*, *Messages*, etc)
+  (setq frame-title-format (list '(buffer-file-name "%f"
+                                   (dired-directory dired-directory "%b")))))
+(add-hook 'after-init-hook #'modi/update-frame-title)
 
-;; enable font-lock or syntax highlighting globally
+;; Enable font-lock or syntax highlighting globally
 (setq global-font-lock-mode t)
-;; use the maximum decoration level available for color highlighting
+;; Use the maximum decoration level available for color highlighting
 (setq font-lock-maximum-decoration t)
 
 ;; FONTS
