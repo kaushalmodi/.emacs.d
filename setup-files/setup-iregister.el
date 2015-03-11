@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-03-11 13:06:55 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
@@ -9,7 +9,7 @@
 (defalias 'my/iregister-delete-append  'iregister-append-to-latest-register-delete)
 
 (use-package iregister
-  :config
+    :config
   (progn
 
     (defun my/iregister-copy-append-sep (start end &optional separator)
@@ -33,15 +33,15 @@
       (if (region-active-p)
           (let ((selection (buffer-substring-no-properties start end)))
             (if iregister-last-used-register
-                (with-temp-buffer
-                  (if (string-match "\\n" separator)
-                      (newline)
-                    (insert separator))
-                  (insert selection)
-                  (append-to-register iregister-last-used-register
-                                      (point-min) (point-max))
-                  (when (equal delete-flag '(4))
-                    (delete-region start end)))
+                (progn
+                  (with-temp-buffer
+                    (if (string-match "\\n" separator)
+                        (newline)
+                      (insert separator))
+                    (insert selection)
+                    (append-to-register iregister-last-used-register
+                                        (point-min) (point-max)))
+                  (delete-region start end))
               (message "No registers has been used within iregister.el."))
             (deactivate-mark))
         (message "!Region is not active.")))
