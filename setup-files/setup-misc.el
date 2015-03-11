@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-09 16:30:47 kmodi>
+;; Time-stamp: <2015-03-11 10:22:40 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -271,15 +271,25 @@ If universal arg is used, load the `init.el'."
 
 ;; Organize The Order Of Minor Mode Lighters
 (when (featurep 'multiple-cursors)
-  ;; The `multiple-cursors-mode' lighter is very useful in showing how many
-  ;; cursors are created or if multiple-cursors-mode is enabled. Move that
-  ;; lighter to the foremost position in the mode-line. That is done by
-  ;; moving it to the beginning of the `minor-mode-alist'.
+  (defun modi/promote-multiple-cursors-mode-line ()
+    (interactive)
+    ;; The `multiple-cursors-mode' lighter is very useful in showing how many
+    ;; cursors are created or if multiple-cursors-mode is enabled. Move that
+    ;; lighter to the foremost position in the mode-line. That is done by
+    ;; moving it to the beginning of the `minor-mode-alist'.
 
-  ;; First remove it from the alist
-  (remove-from-alist-matching-car minor-mode-alist multiple-cursors-mode)
-  ;; Now add it back but to the beginning of the alist
-  (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line)))
+    ;; If `multiple-cursors-mode is not the first in `minor-mode-alist' ..
+    (when (not (equal 'multiple-cursors-mode (car (car minor-mode-alist))))
+      ;; First remove it from the alist
+      (remove-from-alist-matching-car minor-mode-alist multiple-cursors-mode)
+      ;; Now add it back but to the beginning of the alist
+      (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line))))
+
+  (modi/promote-multiple-cursors-mode-line)
+  ;; Also add the above fn to `after-revert-hook'. So in the event you don't find
+  ;; `multiple-cursors-mode' to be the primary minor mode in the mode-line,
+  ;; simply revert the buffer
+  (add-hook 'after-revert-hook #'modi/promote-multiple-cursors-mode-line))
 
 
 (provide 'setup-misc)
