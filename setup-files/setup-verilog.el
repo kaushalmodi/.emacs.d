@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 14:13:53 kmodi>
+;; Time-stamp: <2015-03-11 17:03:24 kmodi>
 
 ;; Verilog
 
@@ -38,8 +38,22 @@
       (when (executable-find "ag")
         (require 'ag)
         (require 'projectile)
-        (defvar verilog-identifier-regexp "[a-zA-Z][a-zA-Z0-9_]*"
+
+        (defvar verilog-mode-identifier-regexp "[a-zA-Z][a-zA-Z0-9_]*"
           "Regexp for a valid verilog identifier.")
+
+        ;; Regexp for reserved verilog keywords which should not be incorrectly
+        ;; parsed as a module or instance name
+        (setq verilog-mode-reserved-regexp nil)
+        (let ((cnt 1)
+              ;; `verilog-keywords' list is defined in the `verilog-mode.el'
+              (max-cnt (safe-length verilog-keywords)))
+          (dolist (keyword verilog-keywords)
+            (cond
+              ((= cnt 1)       (setq verilog-mode-reserved-regexp (concat "\\(" keyword)))
+              ((= cnt max-cnt) (setq verilog-mode-reserved-regexp (concat verilog-mode-reserved-regexp  "\\|" keyword "\\)")))
+              (t               (setq verilog-mode-reserved-regexp (concat verilog-mode-reserved-regexp  "\\|" keyword))))
+            (setq cnt (1+ cnt))))
 
         (defun verilog-mode-find-parent-module ()
           "Find the places where the current verilog module is instantiated in
@@ -48,7 +62,7 @@ the project."
           (let ((verilog-module-regexp (concat "^\\s-*" ; elisp regexp
                                                "\\(?:module\\)\\s-+" ; shy group
                                                "\\("
-                                               verilog-identifier-regexp
+                                               verilog-mode-identifier-regexp
                                                "\\)\\b"))
                 verilog-module-name
                 verilog-module-instance-regexp)
@@ -59,12 +73,11 @@ the project."
                     (concat "^\\s*" ; pcre regex
                             verilog-module-name
                             "\\s+"
-                            ;; "(#\\s*\\((\\n|.)*?\\)(\\n|.)*?)*" ; optional hardware parameters
                             "(#\\s*\\((\\n|.)*?\\))*" ; optional hardware parameters
                                         ; '(\n|.)*?' does non-greedy multi-line grep
                             "(\\n|.)*?" ; optional newline/space before instance name
                             "\\K" ; don't highlight anything till this point
-                            verilog-identifier-regexp ; instance name
+                            verilog-mode-identifier-regexp ; instance name
                             "(?=[^a-zA-Z0-9_]*\\()")) ; optional space/newline after instance name
                                         ; and before opening parenthesis `('
                                         ; don't highlight anything in (?=..)
@@ -82,12 +95,12 @@ C-u C-u COMMAND -> Jump to the next module instantiation."
           (let ((verilog-instance-regexp
                  (concat "^\\s-*" ; elisp regexp
                          "\\("
-                         verilog-identifier-regexp
+                         verilog-mode-identifier-regexp
                          "\\)"
                          "\\s-+"
                          "\\(#\\s-*([[:ascii:][:nonascii:]]*)\\)*" ; optional hardware parameters
                          "\\([^a-zA-Z0-9_\\.,()]*?\\)" ; optional space/newline before instance name
-                         "\\(" verilog-identifier-regexp "\\)" ; instance name
+                         "\\(" verilog-mode-identifier-regexp "\\)" ; instance name
                          "\\([^a-zA-Z0-9_]*(\\)" ; optional space/newline after instance name
                                         ; and before opening parenthesis `('
                          ;; "\\([^a-zA-Z0-9_]\\|\\.\\)" ; optional space/newline after `('
@@ -104,12 +117,24 @@ C-u C-u COMMAND -> Jump to the next module instantiation."
                           ;; (message "---- 3 ---- %s" (match-string 3))
                           ;; (message "---- 4 ---- %s" (match-string 4))
                           ;; (message "---- 5 ---- %s" (match-string 5))
-                          (if (string= "module" (match-string 1))
-                              (setq-local verilog-mode-module-name nil)
-                            (setq-local verilog-mode-module-name (match-string 1)))
+                          (setq-local verilog-mode-module-name   (match-string 1))
                           (setq-local verilog-mode-instance-name (match-string 4))
-                          (concat verilog-mode-module-name
-                                  "|" verilog-mode-instance-name))
+
+                          (when (and (stringp verilog-mode-module-name)
+                                     (string-match verilog-mode-reserved-regexp
+                                                   verilog-mode-module-name))
+                            (setq-local verilog-mode-module-name nil))
+
+                          (when (and (stringp verilog-mode-instance-name)
+                                     (string-match verilog-mode-reserved-regexp
+                                                   verilog-mode-instance-name))
+                            (setq-local verilog-mode-instance-name nil))
+
+                          (if (or (null verilog-mode-module-name)
+                                  (null verilog-mode-instance-name))
+                              nil
+                            (concat verilog-mode-module-name
+                                    "|" verilog-mode-instance-name)))
                       nil))))))
 
         (defun verilog-mode-jump-to-module-at-point ()
