@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 14:46:34 kmodi>
+;; Time-stamp: <2015-03-11 15:21:16 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -72,7 +72,6 @@
   ;; https://github.com/jixiuf/helm-etags-plus
   (use-package ctags-update
       :ensure t
-      :commands (turn-on-ctags-auto-update-mode ctags-update)
       :config
       (progn
         ;; Auto update
