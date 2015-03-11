@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 10:12:21 kmodi>
+;; Time-stamp: <2015-03-11 14:25:37 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -22,7 +22,8 @@
                projectile-find-file-other-window
                projectile-find-file-dwim-other-window
                projectile-find-dir-other-window
-               projectile-switch-to-buffer-other-window)
+               projectile-switch-to-buffer-other-window
+               projectile-project-root)
     :init
     (progn
       (defhydra hydra-projectile-other-window (:color teal)
@@ -33,7 +34,8 @@
         ("b"  projectile-switch-to-buffer-other-window "buffer")
         ("q"  nil                                      "cancel" :color blue))
 
-      (defhydra hydra-projectile (:color teal)
+      (defhydra hydra-projectile (:color teal
+                                  :hint  nil)
         "
      PROJECTILE: %(if (fboundp 'projectile-project-root) (projectile-project-root) \"TBD\")
 
@@ -46,29 +48,29 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
   _d_: dir
 
 "
-        ("a"   projectile-ag                      nil)
-        ("b"   projectile-switch-to-buffer        nil)
-        ("c"   projectile-invalidate-cache        nil)
-        ("d"   projectile-find-dir                nil)
-        ("s-f" projectile-find-file               nil)
-        ("ff"  projectile-find-file-dwim          nil)
-        ("fd"  projectile-find-file-in-directory  nil)
-        ("g"   ggtags-update-tags                 nil)
-        ("s-g" ggtags-update-tags                 nil)
-        ("i"   projectile-ibuffer                 nil)
-        ("K"   projectile-kill-buffers            nil)
-        ("s-k" projectile-kill-buffers            nil)
-        ("m"   projectile-multi-occur             nil)
-        ("o"   projectile-multi-occur             nil)
-        ("s-p" projectile-switch-project          "switch project")
-        ("p"   projectile-switch-project          nil)
-        ("s"   projectile-switch-project          nil)
-        ("r"   projectile-recentf                 nil)
-        ("x"   projectile-remove-known-project    nil)
-        ("X"   projectile-cleanup-known-projects  nil)
-        ("z"   projectile-cache-current-file      nil)
+        ("a"   projectile-ag)
+        ("b"   projectile-switch-to-buffer)
+        ("c"   projectile-invalidate-cache)
+        ("d"   projectile-find-dir)
+        ("s-f" projectile-find-file)
+        ("ff"  projectile-find-file-dwim)
+        ("fd"  projectile-find-file-in-directory)
+        ("g"   ggtags-update-tags)
+        ("s-g" ggtags-update-tags)
+        ("i"   projectile-ibuffer)
+        ("K"   projectile-kill-buffers)
+        ("s-k" projectile-kill-buffers)
+        ("m"   projectile-multi-occur)
+        ("o"   projectile-multi-occur)
+        ("s-p" projectile-switch-project "switch project")
+        ("p"   projectile-switch-project)
+        ("s"   projectile-switch-project)
+        ("r"   projectile-recentf)
+        ("x"   projectile-remove-known-project)
+        ("X"   projectile-cleanup-known-projects)
+        ("z"   projectile-cache-current-file)
         ("`"   hydra-projectile-other-window/body "other window")
-        ("q"   nil                                "cancel" :color blue))
+        ("q"   nil "cancel" :color blue))
 
       (bind-key "s-f" #'hydra-projectile/body modi-mode-map)
       (bind-key "s-p" #'hydra-projectile/body modi-mode-map))
