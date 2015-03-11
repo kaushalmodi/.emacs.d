@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-09 11:07:45 kmodi>
+;; Time-stamp: <2015-03-11 14:44:31 kmodi>
 
 ;; Org Mode
 
@@ -63,13 +63,6 @@
                "\n* %?\n  Context:\n    %i\n  Entered on %U")))
 
       (setq org-agenda-files (expand-file-name "agenda.files" org-directory))
-
-      (when (boundp 'project1-org-dir) ; set in setup-work.el
-        (add-to-list 'org-capture-templates
-                     '("t" "Project 1 Meeting Notes" entry
-                       (file+datetree
-                        (concat project1-org-dir "/dv_meeting_notes.org"))
-                       "\n* %?\n  Entered on %U")))
 
       ;; change the default app for opening pdf files from org
       ;; http://stackoverflow.com/a/9116029/1219634
