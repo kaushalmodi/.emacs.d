@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 09:45:40 kmodi>
+;; Time-stamp: <2015-03-11 12:04:26 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -21,7 +21,6 @@
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
       '(
-        ;; etags-select etags-table ctags-update ; < ggtags
         ;; zenburn-theme ; < forked version
         ;; smyx-theme ; < forked version
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
@@ -51,7 +50,7 @@
         fill-column-indicator
         fold-this
         gist
-        ggtags
+        etags-select etags-table ctags-update ggtags
         guide-key
         hardcore-mode
         header2
@@ -222,15 +221,13 @@
 (use-package setup-search)
 (use-package setup-print)
 (use-package setup-pdf)
-(when (executable-find "global")
-  (use-package setup-gtags))
+(use-package setup-tags)
 (when (or (executable-find "aspell")
           (executable-find "hunspell"))
   (use-package setup-spell))
 (use-package setup-calc)
 (use-package setup-desktop)
 (use-package setup-image)
-;; (use-package setup-ctags) ; Using gtags instead
 
 ;; require `setup-work' but don't trigger error if not found
 (require 'setup-work nil t)
