@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 09:53:22 kmodi>
+;; Time-stamp: <2015-03-11 14:13:53 kmodi>
 
 ;; Verilog
 
@@ -104,10 +104,33 @@ C-u C-u COMMAND -> Jump to the next module instantiation."
                           ;; (message "---- 3 ---- %s" (match-string 3))
                           ;; (message "---- 4 ---- %s" (match-string 4))
                           ;; (message "---- 5 ---- %s" (match-string 5))
-                          (concat (match-string 1) " | " (match-string 4)))
+                          (if (string= "module" (match-string 1))
+                              (setq-local verilog-mode-module-name nil)
+                            (setq-local verilog-mode-module-name (match-string 1)))
+                          (setq-local verilog-mode-instance-name (match-string 4))
+                          (concat verilog-mode-module-name
+                                  "|" verilog-mode-instance-name))
                       nil))))))
-        (key-chord-define verilog-mode-map "^^" (λ (verilog-mode-find-module-instance '(4))))
-        (key-chord-define verilog-mode-map "^&" (λ (verilog-mode-find-module-instance '(16))))
+
+        (defun verilog-mode-jump-to-module-at-point ()
+          "If the point is somewhere in a module instance, jump to the definition
+of that module.
+
+It is required to have `ctags' executable and `projectile' package installed
+for this to work."
+          (interactive)
+          (when (and (executable-find "ctags")
+                     (locate-file "TAGS" (list `,(projectile-project-root)))
+                     (featurep 'projectile))
+            (if (and (verilog-mode-find-module-instance)
+                     verilog-mode-module-name)
+                (find-tag verilog-mode-module-name)
+              (pop-tag-mark))))
+
+        (when (featurep 'key-chord)
+          (key-chord-define verilog-mode-map "^^"   (λ (verilog-mode-find-module-instance '(4))))
+          (key-chord-define verilog-mode-map "^&"   (λ (verilog-mode-find-module-instance '(16))))
+          (key-chord-define verilog-mode-map "\\\\" #'verilog-mode-jump-to-module-at-point)) ; "\\"
 
         (when (featurep 'which-func)
           (add-to-list 'which-func-modes 'verilog-mode)
