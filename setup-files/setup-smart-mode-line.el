@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 11:44:27 kmodi>
+;; Time-stamp: <2015-03-11 15:47:51 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -8,10 +8,9 @@
 (use-package smart-mode-line
     :init
   (progn
-    (setq sml/name-width            40) ; space allocated for the buffer name in the mode-line
     (setq sml/line-number-format    "%4l")
-    (setq sml/mode-width            'full)
-    (setq sml/theme                 'respectful)
+    (setq sml/name-width            40) ; buffer name width in the mode-line
+    (setq sml/mode-width            'full) ; minor mode lighters area width
     (setq sml/no-confirm-load-theme t)
     (setq sml/replacer-regexp-list
           `(

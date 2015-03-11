@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 11:57:25 kmodi>
+;; Time-stamp: <2015-03-11 15:46:22 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -103,7 +103,7 @@ This variable is to be updated when changing themes.")
   (with-eval-after-load 'linum
     (modi/blend-linum))
   (with-eval-after-load 'smart-mode-line
-    (sml/apply-theme 'respectful))
+    (sml/apply-theme 'light))
   (with-eval-after-load 'setup-fci
     (setq fci-rule-color "gray")
     (modi/fci-redraw-frame-all-buffers)))
