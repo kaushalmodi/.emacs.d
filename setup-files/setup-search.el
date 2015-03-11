@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 23:39:15 kmodi>
+;; Time-stamp: <2015-03-11 13:45:06 kmodi>
 
 ;; Search
 
@@ -139,6 +139,30 @@ searches all buffers."
       (remove-if-not 'buffer-file-name (buffer-list))))
    regexp))
 (bind-to-modi-map "s" search-all-buffers)
+
+(defun modi/isearch-backward-symbol-at-point ()
+  "Do incremental search backward for a symbol found near point.
+Like ordinary incremental search except that the symbol found at point
+is added to the search string initially as a regexp surrounded
+by symbol boundary constructs \\_< and \\_>.
+See the command `isearch-backward-symbol' for more information."
+  (interactive)
+  (isearch-mode (not :forward) nil nil nil 'isearch-symbol-regexp)
+  (let ((bounds (find-tag-default-bounds)))
+    (cond
+      (bounds
+       (when (< (car bounds) (point))
+         (goto-char (car bounds)))
+       (isearch-yank-string
+        (buffer-substring-no-properties (car bounds) (cdr bounds))))
+      (t
+       (setq isearch-error "No symbol at point")
+       (isearch-update)))))
+
+(bind-keys
+ :map modi-mode-map
+ ("C-S-s" . isearch-forward-symbol-at-point)
+ ("C-S-r" . modi/isearch-backward-symbol-at-point))
 
 
 (provide 'setup-search)
