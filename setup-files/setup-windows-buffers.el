@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-09 17:07:08 kmodi>
+;; Time-stamp: <2015-03-12 14:19:16 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -352,17 +352,18 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
         (shrink-window 1)
       (enlarge-window 1))))
 
-(defhydra hydra-win-resize
-  (nil "C-M-]"
-       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-       :color red)
+(defhydra hydra-win-resize (:color red)
   "win-resize"
-  ("]"  hydra-move-splitter-right "→")
-  ("["  hydra-move-splitter-left  "←")
-  ("p"  hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
-  ("\\" hydra-move-splitter-down  "↓")
-  ("="  balance-windows           "Balance" :bind nil)
-  ("q"  nil                       "cancel" :color blue))
+  ("]"        hydra-move-splitter-right "→")
+  ("["        hydra-move-splitter-left  "←")
+  ("p"        hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
+  ("{"        hydra-move-splitter-up    "↑")
+  ("\\"       hydra-move-splitter-down  "↓")
+  ("}"        hydra-move-splitter-down  "↓")
+  ("="        balance-windows           "Balance")
+  ("q"        nil                       "cancel" :color blue)
+  ("<return>" nil                       "cancel" :color blue))
+(bind-key "C-M-]" #'hydra-win-resize/body modi-mode-map)
 
 ;; Commented out this piece of code as it is giving the below error:
 ;; byte-code: Wrong number of arguments: (lambda (arg)
