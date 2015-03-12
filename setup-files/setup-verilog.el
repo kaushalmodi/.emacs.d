@@ -1,143 +1,265 @@
-;; Time-stamp: <2015-03-11 17:03:24 kmodi>
+;; Time-stamp: <2015-03-12 14:02:42 kmodi>
 
-;; Verilog
+;;; Verilog
 
 (use-package verilog-mode
     :load-path "elisp/verilog-mode"
-    :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ;; .v, .sv, .svh, .tv, .vp
+    :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ; .v, .sv, .svh, .tv, .vp
            ("\\.psl\\'"         . verilog-mode)
            ("\\.h\\'"           . verilog-mode)
            ("\\.vinc\\'"        . verilog-mode))
     :config
     (progn
-      (setq verilog-indent-level             3
-            verilog-indent-level-module      3
-            verilog-indent-level-declaration 3
-            verilog-indent-level-behavioral  3
-            verilog-indent-level-directive   3
-            verilog-case-indent              2
-            verilog-auto-newline             nil
-            verilog-auto-indent-on-newline   t
-            verilog-tab-always-indent        t
-            verilog-minimum-comment-distance 10
-            verilog-indent-begin-after-if    t
-            verilog-auto-lineup              'all
-            verilog-align-ifelse             nil
-            ;; verilog-align-ifelse             t
-            verilog-auto-endcomments         t
-            verilog-tab-to-comment           t
-            verilog-date-scientific-format   t)
 
-      (defun my-verilog-insert-date ()
-        "Insert a stamp with date and username  "
-        (interactive)
-        (insert "// ")
-        (verilog-insert-date)
-        (insert (concat " - " (getenv "USER"))))
+;;; Variables
+      (setq verilog-indent-level             3)
+      (setq verilog-indent-level-module      3)
+      (setq verilog-indent-level-declaration 3)
+      (setq verilog-indent-level-behavioral  3)
+      (setq verilog-indent-level-directive   3)
+      (setq verilog-case-indent              2)
+      (setq verilog-auto-newline             nil)
+      (setq verilog-auto-indent-on-newline   t)
+      (setq verilog-tab-always-indent        t)
+      (setq verilog-minimum-comment-distance 10)
+      (setq verilog-indent-begin-after-if    t)
+      (setq verilog-auto-lineup              'all)
+      (setq verilog-align-ifelse             nil)
+      ;; (setq verilog-align-ifelse             t)
+      (setq verilog-auto-endcomments         t)
+      (setq verilog-tab-to-comment           t)
+      (setq verilog-date-scientific-format   t)
 
-      (when (executable-find "ag")
-        (require 'ag)
-        (require 'projectile)
+      (defvar modi/verilog-identifier-re "[a-zA-Z][a-zA-Z0-9_]*"
+        "Regexp for a valid verilog identifier.")
 
-        (defvar verilog-mode-identifier-regexp "[a-zA-Z][a-zA-Z0-9_]*"
-          "Regexp for a valid verilog identifier.")
-
-        ;; Regexp for reserved verilog keywords which should not be incorrectly
-        ;; parsed as a module or instance name
-        (setq verilog-mode-reserved-regexp nil)
-        (let ((cnt 1)
-              ;; `verilog-keywords' list is defined in the `verilog-mode.el'
-              (max-cnt (safe-length verilog-keywords)))
-          (dolist (keyword verilog-keywords)
-            (cond
-              ((= cnt 1)       (setq verilog-mode-reserved-regexp (concat "\\(" keyword)))
-              ((= cnt max-cnt) (setq verilog-mode-reserved-regexp (concat verilog-mode-reserved-regexp  "\\|" keyword "\\)")))
-              (t               (setq verilog-mode-reserved-regexp (concat verilog-mode-reserved-regexp  "\\|" keyword))))
-            (setq cnt (1+ cnt))))
-
-        (defun verilog-mode-find-parent-module ()
-          "Find the places where the current verilog module is instantiated in
-the project."
-          (interactive)
-          (let ((verilog-module-regexp (concat "^\\s-*" ; elisp regexp
-                                               "\\(?:module\\)\\s-+" ; shy group
-                                               "\\("
-                                               verilog-mode-identifier-regexp
-                                               "\\)\\b"))
-                verilog-module-name
-                verilog-module-instance-regexp)
-            (save-excursion
-              (search-backward-regexp verilog-module-regexp)
-              (setq verilog-module-name (match-string 1))
-              (setq verilog-module-instance-regexp
-                    (concat "^\\s*" ; pcre regex
-                            verilog-module-name
-                            "\\s+"
-                            "(#\\s*\\((\\n|.)*?\\))*" ; optional hardware parameters
-                                        ; '(\n|.)*?' does non-greedy multi-line grep
-                            "(\\n|.)*?" ; optional newline/space before instance name
-                            "\\K" ; don't highlight anything till this point
-                            verilog-mode-identifier-regexp ; instance name
-                            "(?=[^a-zA-Z0-9_]*\\()")) ; optional space/newline after instance name
+      (defvar modi/verilog-module-instance-re
+        (concat "^\\s-*"
+                "\\("
+                modi/verilog-identifier-re
+                "\\)"
+                "\\s-+"
+                "\\(#\\s-*([[:ascii:][:nonascii:]]*)\\)*" ; optional hardware parameters
+                "\\([^a-zA-Z0-9_\\.,()$=`]*?\\)" ; optional space/newline before instance name
+                "\\(" modi/verilog-identifier-re "\\)" ; instance name
+                "\\([^a-zA-Z0-9_]*(\\)" ; optional space/newline after instance name
                                         ; and before opening parenthesis `('
-                                        ; don't highlight anything in (?=..)
-              (ag-regexp verilog-module-instance-regexp
-                         (projectile-project-root)))))
-        (bind-key "C-^" #'verilog-mode-find-parent-module verilog-mode-map)
+                ;; "\\([^a-zA-Z0-9_]\\|\\.\\)" ; optional space/newline after `('
+                                        ; or name-based port connections: .input_a(input_a),
+                )
+        "Regexp for a valid verilog module instance declaration.")
 
-        (defun verilog-mode-find-module-instance (&optional arg)
-          "Function to return the module and instance name within which
+      (defvar modi/verilog-header-re
+        (concat "^\\s-*"
+                "\\(" "case"
+                "\\|" "class"
+                "\\|" "clocking"
+                "\\|" "`define"
+                "\\|" "function"
+                "\\|" "group"
+                "\\|" "interface"
+                "\\|" "module"
+                "\\|" "program"
+                "\\|" "primitive"
+                "\\|" "package"
+                "\\|" "property"
+                "\\|" "sequence"
+                "\\|" "specify"
+                "\\|" "table"
+                "\\|" "task" "\\)"
+                "\\s-+"
+                "\\(" modi/verilog-identifier-re "\\)" ; block name
+                "\\b"
+                )
+        "Regexp for a valid verilog block header statement.")
+
+      (defvar modi/verilog-keywords-re nil
+        "Regexp for reserved verilog keywords which should not be incorrectly
+parsed as a module or instance name.")
+
+      (let ((cnt 1)
+            ;; `verilog-keywords' list is defined in the `verilog-mode.el'
+            (max-cnt (safe-length verilog-keywords)))
+        (dolist (keyword verilog-keywords)
+          (cond
+            ((= cnt 1)       (setq modi/verilog-keywords-re
+                                   (concat "\\("
+                                           "\\b" keyword "\\b")))
+            ((= cnt max-cnt) (setq modi/verilog-keywords-re
+                                   (concat modi/verilog-keywords-re
+                                           "\\|"
+                                           "\\b" keyword "\\b" "\\)")))
+            (t               (setq modi/verilog-keywords-re
+                                   (concat modi/verilog-keywords-re
+                                           "\\|"
+                                           "\\b" keyword "\\b"))))
+          (setq cnt (1+ cnt))))
+
+;;; modi/verilog-find-module-instance
+      (defun modi/verilog-find-module-instance (&optional fwd)
+        "Function to return the module and instance name within which
 the point is currently.
 
-    C-u COMMAND -> Jump to the top of the instantiation block.
-C-u C-u COMMAND -> Jump to the next module instantiation."
-          (interactive "P")
-          (let ((verilog-instance-regexp
-                 (concat "^\\s-*" ; elisp regexp
-                         "\\("
-                         verilog-mode-identifier-regexp
-                         "\\)"
-                         "\\s-+"
-                         "\\(#\\s-*([[:ascii:][:nonascii:]]*)\\)*" ; optional hardware parameters
-                         "\\([^a-zA-Z0-9_\\.,()]*?\\)" ; optional space/newline before instance name
-                         "\\(" verilog-mode-identifier-regexp "\\)" ; instance name
-                         "\\([^a-zA-Z0-9_]*(\\)" ; optional space/newline after instance name
-                                        ; and before opening parenthesis `('
-                         ;; "\\([^a-zA-Z0-9_]\\|\\.\\)" ; optional space/newline after `('
-                                        ; or name-based port connections: .input_a(input_a),
-                         )))
-            (cl-case (car arg)
-              (4  (search-backward-regexp verilog-instance-regexp nil :noerror))
-              (16 (search-forward-regexp  verilog-instance-regexp nil :noerror))
-              (t  (save-excursion
-                    (if (search-backward-regexp verilog-instance-regexp nil :noerror)
-                        (progn
-                          ;; (message "---- 1 ---- %s" (match-string 1))
-                          ;; (message "---- 2 ---- %s" (match-string 2))
-                          ;; (message "---- 3 ---- %s" (match-string 3))
-                          ;; (message "---- 4 ---- %s" (match-string 4))
-                          ;; (message "---- 5 ---- %s" (match-string 5))
-                          (setq-local verilog-mode-module-name   (match-string 1))
-                          (setq-local verilog-mode-instance-name (match-string 4))
+Using the optional argument FWD does the search in forward direction.
 
-                          (when (and (stringp verilog-mode-module-name)
-                                     (string-match verilog-mode-reserved-regexp
-                                                   verilog-mode-module-name))
-                            (setq-local verilog-mode-module-name nil))
+This function updates the local variable `modi/verilog-which-func-xtra'."
+        (let (instance-name return-val)
+          (setq-local modi/verilog-which-func-xtra nil) ; reset
+          (save-excursion
+            (if (if fwd
+                    (search-forward-regexp modi/verilog-module-instance-re nil :noerror)
+                  (search-backward-regexp modi/verilog-module-instance-re nil :noerror))
+                (progn
+                  ;; (message "---- 1 ---- %s" (match-string 1))
+                  ;; (message "---- 2 ---- %s" (match-string 2))
+                  ;; (message "---- 3 ---- %s" (match-string 3))
+                  ;; (message "---- 4 ---- %s" (match-string 4))
+                  ;; (message "---- 5 ---- %s" (match-string 5))
+                  (setq-local modi/verilog-which-func-xtra (match-string 1)) ; module name
+                  (setq instance-name (match-string 4)) ; instance name
 
-                          (when (and (stringp verilog-mode-instance-name)
-                                     (string-match verilog-mode-reserved-regexp
-                                                   verilog-mode-instance-name))
-                            (setq-local verilog-mode-instance-name nil))
+                  (when (and (stringp modi/verilog-which-func-xtra)
+                             (string-match modi/verilog-keywords-re
+                                           modi/verilog-which-func-xtra))
+                    (setq-local modi/verilog-which-func-xtra nil))
 
-                          (if (or (null verilog-mode-module-name)
-                                  (null verilog-mode-instance-name))
-                              nil
-                            (concat verilog-mode-module-name
-                                    "|" verilog-mode-instance-name)))
-                      nil))))))
+                  (when (and (stringp instance-name)
+                             (string-match modi/verilog-keywords-re
+                                           instance-name))
+                    (setq instance-name nil))
 
-        (defun verilog-mode-jump-to-module-at-point ()
+                  (setq return-val (if (or (null modi/verilog-which-func-xtra)
+                                           (null instance-name))
+                                       nil
+                                     instance-name)))
+              (setq return-val nil)))
+          (when (featurep 'which-func)
+            (modi/verilog-update-which-func-format))
+          return-val))
+
+;;; modi/verilog-get-header
+      (defun modi/verilog-get-header (&optional fwd)
+        "Function to return the block name under which the point is currently
+present.
+
+Using the optional argument FWD does the search in forward direction.
+
+Few examples of what is considered as a block: module, class, package, function,
+task, `define
+
+This function updates the local variable `modi/verilog-which-func-xtra'."
+        (let (block-type block-name return-val)
+          (setq-local modi/verilog-which-func-xtra nil) ; reset
+          (save-excursion
+            (if (if fwd
+                    (search-forward-regexp modi/verilog-header-re nil :noerror)
+                  (search-backward-regexp modi/verilog-header-re nil :noerror))
+                (progn
+                  ;; (message "---- 1 ---- %s" (match-string 1))
+                  ;; (message "---- 2 ---- %s" (match-string 2))
+                  (setq block-type (match-string 1))
+                  (setq block-name (match-string 2))
+
+                  (when (and (stringp block-name)
+                             (string-match modi/verilog-keywords-re
+                                           block-name))
+                    (setq block-name nil))
+
+                  (if (null block-name)
+                      nil
+                    (progn
+                      (setq-local modi/verilog-which-func-xtra
+                                  (cond
+                                    ((string= "class"     block-type) "class")
+                                    ((string= "clocking"  block-type) "clk")
+                                    ((string= "`define"   block-type) "def")
+                                    ((string= "group"     block-type) "group")
+                                    ((string= "module"    block-type) "mod")
+                                    ((string= "interface" block-type) "if")
+                                    ((string= "package"   block-type) "pkg")
+                                    ((string= "sequence"  block-type) "seq")
+                                    (t (substring block-type 0 4))))
+                      (setq return-val block-name))))
+              (setq return-val nil)))
+          (when (featurep 'which-func)
+            (modi/verilog-update-which-func-format))
+          return-val))
+
+;;; modi/verilog-jump-to-header-dwim
+      (defun modi/verilog-jump-to-header-dwim (&optional fwd)
+        "Jump to a module instantiation header about the current point. If
+a module instantiation is not found, jump to a block header if available.
+
+Using the optional argument FWD does the search in forward direction.
+
+Few examples of what is considered as a block: module, class, package, function,
+task, `define."
+        (interactive "P")
+        (if (modi/verilog-find-module-instance fwd)
+            (if fwd
+                (search-forward-regexp modi/verilog-module-instance-re nil :noerror)
+              (search-backward-regexp modi/verilog-module-instance-re nil :noerror))
+          (if fwd
+              (search-forward-regexp modi/verilog-header-re nil :noerror)
+            (search-backward-regexp modi/verilog-header-re nil :noerror))))
+
+      (when (featurep 'key-chord)
+        (key-chord-define verilog-mode-map "^^" #'modi/verilog-jump-to-header-dwim)
+        (key-chord-define verilog-mode-map "^&" (λ (modi/verilog-jump-to-header-dwim '(4)))))
+
+      (when (featurep 'which-func)
+        (add-to-list 'which-func-modes 'verilog-mode)
+
+;;; modi/verilog-which-func
+        (defun modi/verilog-which-func ()
+          (setq-local which-func-functions '(modi/verilog-find-module-instance
+                                             modi/verilog-get-header))
+          (which-function-mode))
+        (add-hook 'verilog-mode-hook #'modi/verilog-which-func)
+
+;;; modi/verilog-update-which-func-format
+        (defun modi/verilog-update-which-func-format ()
+          (let ((modi/verilog-which-func-echo-help
+                 (concat "mouse-1/scroll up: jump to header UP" "\n"
+                         "mouse-3/scroll-down: jump to header DOWN")))
+
+            (setq-local which-func-keymap
+                        (let ((map (make-sparse-keymap)))
+                          (define-key map [mode-line mouse-1] #'modi/verilog-jump-to-header-dwim)
+                          (define-key map [mode-line mouse-4] #'modi/verilog-jump-to-header-dwim) ; scroll up
+                          (define-key map [mode-line mouse-2] nil)
+                          (define-key map [mode-line mouse-3] (λ (modi/verilog-jump-to-header-dwim '(4))))
+                          (define-key map [mode-line mouse-5] (λ (modi/verilog-jump-to-header-dwim '(4)))) ; scroll down
+                          map))
+
+            (if modi/verilog-which-func-xtra
+                (setq-local which-func-format
+                            `("["
+                              (:propertize which-func-current
+                                           local-map ,which-func-keymap
+                                           face which-func
+                                           mouse-face mode-line-highlight
+                                           help-echo ,modi/verilog-which-func-echo-help)
+                              ":"
+                              (:propertize modi/verilog-which-func-xtra
+                                           local-map ,which-func-keymap
+                                           face (which-func :weight bold)
+                                           mouse-face mode-line-highlight
+                                           help-echo ,modi/verilog-which-func-echo-help)
+                              "]"))
+              (setq-local which-func-format
+                          `("["
+                            (:propertize which-func-current
+                                         local-map ,which-func-keymap
+                                         face which-func
+                                         mouse-face mode-line-highlight
+                                         help-echo ,modi/verilog-which-func-echo-help)
+                            "]"))))))
+
+      (when (featurep 'projectile)
+
+;;; modi/verilog-jump-to-module-at-point
+        (defun modi/verilog-jump-to-module-at-point ()
           "If the point is somewhere in a module instance, jump to the definition
 of that module.
 
@@ -145,60 +267,95 @@ It is required to have `ctags' executable and `projectile' package installed
 for this to work."
           (interactive)
           (when (and (executable-find "ctags")
-                     (locate-file "TAGS" (list `,(projectile-project-root)))
-                     (featurep 'projectile))
-            (if (and (verilog-mode-find-module-instance)
-                     verilog-mode-module-name)
-                (find-tag verilog-mode-module-name)
+                     (locate-file "TAGS" (list `,(projectile-project-root))))
+            (if (and (modi/verilog-find-module-instance)
+                     modi/verilog-which-func-xtra)
+                (find-tag modi/verilog-which-func-xtra)
               (pop-tag-mark))))
 
         (when (featurep 'key-chord)
-          (key-chord-define verilog-mode-map "^^"   (λ (verilog-mode-find-module-instance '(4))))
-          (key-chord-define verilog-mode-map "^&"   (λ (verilog-mode-find-module-instance '(16))))
-          (key-chord-define verilog-mode-map "\\\\" #'verilog-mode-jump-to-module-at-point)) ; "\\"
+          (key-chord-define verilog-mode-map "\\\\" #'modi/verilog-jump-to-module-at-point)) ; "\\"
 
-        (when (featurep 'which-func)
-          (add-to-list 'which-func-modes 'verilog-mode)
-          (defun my/verilog-mode-which-func ()
-            (setq-local which-func-functions '(verilog-mode-find-module-instance))
-            (which-function-mode))
-          (add-hook 'verilog-mode-hook #'my/verilog-mode-which-func)))
+        (when (featurep 'ag)
 
-      (defun my/verilog-mode-customizations()
-        ;; Unbind the backtick binding done to `electric-verilog-tick'
-        ;; With binding done to electric-verilog-tick, it's not possible to type
-        ;; backticks on multiple lines simultaneously in multiple-cursors mode
-        (define-key verilog-mode-map "\`"          nil)
-        (define-key verilog-mode-map (kbd "C-c d") #'my-verilog-insert-date)
-        ;; Replace tabs with spaces when saving files in verilog-mode
-        ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
-        ;; Note that keeping that `nil' in the argument is crucial; otherwise emacs
-        ;; with stay stuck with the "Saving file .." message and the file won't be
-        ;; saved.
-        (add-hook 'local-write-file-hooks
-                  (λ (untabify (point-min) (point-max)) nil))
+;;; modi/verilog-find-parent-module
+          (defun modi/verilog-find-parent-module ()
+            "Find the places where the current verilog module is instantiated in
+the project."
+            (interactive)
+            (let ((verilog-module-re (concat "^\\s-*" ; elisp regexp
+                                             "\\(?:module\\)\\s-+" ; shy group
+                                             "\\("
+                                             modi/verilog-identifier-re
+                                             "\\)\\b"))
+                  module-name
+                  module-instance-re)
+              (save-excursion
+                (search-backward-regexp verilog-module-re)
+                (setq module-name (match-string 1))
+                (setq module-instance-re
+                      (concat "^\\s*" ; pcre regex
+                              module-name
+                              "\\s+"
+                              "(#\\s*\\((\\n|.)*?\\))*" ; optional hardware parameters
+                                        ; '(\n|.)*?' does non-greedy multi-line grep
+                              "(\\n|.)*?" ; optional newline/space before instance name
+                              "\\K" ; don't highlight anything till this point
+                              modi/verilog-identifier-re ; instance name
+                              "(?=[^a-zA-Z0-9_]*\\()")) ; optional space/newline after instance name
+                                        ; and before opening parenthesis `('
+                                        ; don't highlight anything in (?=..)
+                (ag-regexp module-instance-re (projectile-project-root)))))
+          (bind-key "C-^" #'modi/verilog-find-parent-module verilog-mode-map)))
 
-        ;; Source: http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
+;;; my/verilog-insert-date
+      (defun my/verilog-insert-date ()
+        "Insert a stamp with date and username."
+        (interactive)
+        (insert "// ")
+        (verilog-insert-date)
+        (insert (concat " - " (getenv "USER"))))
+      (bind-key "C-c d" #'my/verilog-insert-date verilog-mode-map)
+
+      ;; Unbind the backtick binding done to `electric-verilog-tick'
+      ;; With binding done to electric-verilog-tick, it's not possible to type
+      ;; backticks on multiple lines simultaneously in multiple-cursors mode
+      (define-key verilog-mode-map "\`" nil)
+
+;;; my/verilog-mode-customizations
+      (defun my/verilog-mode-customizations ()
+        ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
         (font-lock-add-keywords nil
                                 '(("\\b\\(FIXME\\|TODO\\|BUG\\)\\b" 1
                                    font-lock-warning-face t)))
-        ;; Above solution highlights those keywords anywhere in the buffer (not just
-        ;; in comments). To do the highlighting intelligently, install the fic-mode
-        ;; package - https://github.com/lewang/fic-mode
+        ;; Above solution highlights those keywords anywhere in the buffer (not
+        ;; just in comments). To do the highlighting intelligently, install the
+        ;; `fic-mode' package - https://github.com/lewang/fic-mode
 
         ;; ;; Enable orgstruct mode
         ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
         ;; (turn-on-orgstruct++)
-        )
+
+        ;; Replace tabs with spaces when saving files in verilog-mode
+        ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
+        ;; Note that keeping that `nil' in the argument is crucial; otherwise
+        ;; emacs with stay stuck with the "Saving file .." message and the file
+        ;; won't be saved.
+        (add-hook 'local-write-file-hooks
+                  (λ (untabify (point-min) (point-max)) nil)))
       (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
 
-      ;; Tweak the verilog-mode indentation to skip the lines that begin with
-      ;; "<optional-white-space>// *" in order to not break any `outline-mode'
-      ;; or `outshine' functionality.
-      ;; http://emacs.stackexchange.com/a/8033/115
+
+;;; my/verilog-selective-indent
       (defun my/verilog-selective-indent (&rest args)
         "Return t if the current line starts with '// *'.
-If the line matches '// *' delete any preceding white space too."
+If the line matches '// *' delete any preceding white space too.
+
+Tweak the verilog-mode indentation to skip the lines that begin with
+“<optional-white-space>// *” in order to not break any `outline-mode'
+or `outshine' functionality.
+
+http://emacs.stackexchange.com/a/8033/115"
         (interactive)
         (save-excursion
           (beginning-of-line)
@@ -226,4 +383,4 @@ If the line matches '// *' delete any preceding white space too."
       ))
 
 
-(provide 'setup-verilog)
+      (provide 'setup-verilog)
