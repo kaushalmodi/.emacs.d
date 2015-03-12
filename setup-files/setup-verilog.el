@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-12 14:02:42 kmodi>
+;; Time-stamp: <2015-03-12 17:06:28 kmodi>
 
 ;;; Verilog
 
@@ -30,7 +30,8 @@
       (setq verilog-tab-to-comment           t)
       (setq verilog-date-scientific-format   t)
 
-      (defvar modi/verilog-identifier-re "[a-zA-Z][a-zA-Z0-9_]*"
+      (defvar modi/verilog-identifier-re "[a-zA-Z][a-zA-Z0-9:_]*"
+        ;; The : is to allow parsing extern methods like class::task
         "Regexp for a valid verilog identifier.")
 
       (defvar modi/verilog-module-instance-re
@@ -51,6 +52,7 @@
 
       (defvar modi/verilog-header-re
         (concat "^\\s-*"
+                "\\([a-z]+\\s-+\\)*" ; virtual, local, protected
                 "\\(" "case"
                 "\\|" "class"
                 "\\|" "clocking"
@@ -68,6 +70,7 @@
                 "\\|" "table"
                 "\\|" "task" "\\)"
                 "\\s-+"
+                "\\([a-z]+\\s-+\\)*" ; void, static, automatic, ..
                 "\\(" modi/verilog-identifier-re "\\)" ; block name
                 "\\b"
                 )
@@ -103,36 +106,33 @@ the point is currently.
 Using the optional argument FWD does the search in forward direction.
 
 This function updates the local variable `modi/verilog-which-func-xtra'."
-        (let (instance-name return-val)
+        (let (instance-name return-val) ; return-val will be nil by default
           (setq-local modi/verilog-which-func-xtra nil) ; reset
           (save-excursion
-            (if (if fwd
-                    (search-forward-regexp modi/verilog-module-instance-re nil :noerror)
-                  (search-backward-regexp modi/verilog-module-instance-re nil :noerror))
-                (progn
-                  ;; (message "---- 1 ---- %s" (match-string 1))
-                  ;; (message "---- 2 ---- %s" (match-string 2))
-                  ;; (message "---- 3 ---- %s" (match-string 3))
-                  ;; (message "---- 4 ---- %s" (match-string 4))
-                  ;; (message "---- 5 ---- %s" (match-string 5))
-                  (setq-local modi/verilog-which-func-xtra (match-string 1)) ; module name
-                  (setq instance-name (match-string 4)) ; instance name
+            (when (if fwd
+                      (search-forward-regexp modi/verilog-module-instance-re nil :noerror)
+                    (search-backward-regexp modi/verilog-module-instance-re nil :noerror))
+              ;; (message "---- 1 ---- %s" (match-string 1))
+              ;; (message "---- 2 ---- %s" (match-string 2))
+              ;; (message "---- 3 ---- %s" (match-string 3))
+              ;; (message "---- 4 ---- %s" (match-string 4))
+              ;; (message "---- 5 ---- %s" (match-string 5))
+              (setq-local modi/verilog-which-func-xtra (match-string 1)) ; module name
+              (setq instance-name (match-string 4)) ; instance name
 
-                  (when (and (stringp modi/verilog-which-func-xtra)
-                             (string-match modi/verilog-keywords-re
-                                           modi/verilog-which-func-xtra))
-                    (setq-local modi/verilog-which-func-xtra nil))
+              (when (and (stringp modi/verilog-which-func-xtra)
+                         (string-match modi/verilog-keywords-re
+                                       modi/verilog-which-func-xtra))
+                (setq-local modi/verilog-which-func-xtra nil))
 
-                  (when (and (stringp instance-name)
-                             (string-match modi/verilog-keywords-re
-                                           instance-name))
-                    (setq instance-name nil))
+              (when (and (stringp instance-name)
+                         (string-match modi/verilog-keywords-re
+                                       instance-name))
+                (setq instance-name nil))
 
-                  (setq return-val (if (or (null modi/verilog-which-func-xtra)
-                                           (null instance-name))
-                                       nil
-                                     instance-name)))
-              (setq return-val nil)))
+              (when (and modi/verilog-which-func-xtra
+                         instance-name)
+                (setq return-val instance-name))))
           (when (featurep 'which-func)
             (modi/verilog-update-which-func-format))
           return-val))
@@ -148,39 +148,34 @@ Few examples of what is considered as a block: module, class, package, function,
 task, `define
 
 This function updates the local variable `modi/verilog-which-func-xtra'."
-        (let (block-type block-name return-val)
+        (let (block-type block-name return-val) ; return-val will be nil by default
           (setq-local modi/verilog-which-func-xtra nil) ; reset
           (save-excursion
-            (if (if fwd
-                    (search-forward-regexp modi/verilog-header-re nil :noerror)
-                  (search-backward-regexp modi/verilog-header-re nil :noerror))
-                (progn
-                  ;; (message "---- 1 ---- %s" (match-string 1))
-                  ;; (message "---- 2 ---- %s" (match-string 2))
-                  (setq block-type (match-string 1))
-                  (setq block-name (match-string 2))
+            (when (if fwd
+                      (search-forward-regexp modi/verilog-header-re nil :noerror)
+                    (search-backward-regexp modi/verilog-header-re nil :noerror))
+              ;; (message "---- 1 ---- %s" (match-string 1))
+              ;; (message "---- 2 ---- %s" (match-string 2))
+              ;; (message "---- 3 ---- %s" (match-string 3))
+              ;; (message "---- 4 ---- %s" (match-string 4))
+              (setq block-type (match-string 2))
+              (setq block-name (match-string 4))
 
-                  (when (and (stringp block-name)
-                             (string-match modi/verilog-keywords-re
-                                           block-name))
-                    (setq block-name nil))
-
-                  (if (null block-name)
-                      nil
-                    (progn
-                      (setq-local modi/verilog-which-func-xtra
-                                  (cond
-                                    ((string= "class"     block-type) "class")
-                                    ((string= "clocking"  block-type) "clk")
-                                    ((string= "`define"   block-type) "def")
-                                    ((string= "group"     block-type) "group")
-                                    ((string= "module"    block-type) "mod")
-                                    ((string= "interface" block-type) "if")
-                                    ((string= "package"   block-type) "pkg")
-                                    ((string= "sequence"  block-type) "seq")
-                                    (t (substring block-type 0 4))))
-                      (setq return-val block-name))))
-              (setq return-val nil)))
+              (when (and (stringp block-name)
+                         (not (string-match modi/verilog-keywords-re
+                                            block-name)))
+                (setq-local modi/verilog-which-func-xtra
+                            (cond
+                              ((string= "class"     block-type) "class")
+                              ((string= "clocking"  block-type) "clk")
+                              ((string= "`define"   block-type) "macro")
+                              ((string= "group"     block-type) "group")
+                              ((string= "module"    block-type) "mod")
+                              ((string= "interface" block-type) "if")
+                              ((string= "package"   block-type) "pkg")
+                              ((string= "sequence"  block-type) "seq")
+                              (t (substring block-type 0 4)))) ; first 4 chars
+                (setq return-val block-name))))
           (when (featurep 'which-func)
             (modi/verilog-update-which-func-format))
           return-val))
@@ -237,13 +232,13 @@ task, `define."
                             `("["
                               (:propertize which-func-current
                                            local-map ,which-func-keymap
-                                           face which-func
+                                           face (which-func :weight bold)
                                            mouse-face mode-line-highlight
                                            help-echo ,modi/verilog-which-func-echo-help)
                               ":"
                               (:propertize modi/verilog-which-func-xtra
                                            local-map ,which-func-keymap
-                                           face (which-func :weight bold)
+                                           face which-func
                                            mouse-face mode-line-highlight
                                            help-echo ,modi/verilog-which-func-echo-help)
                               "]"))
@@ -268,6 +263,8 @@ for this to work."
           (interactive)
           (when (and (executable-find "ctags")
                      (locate-file "TAGS" (list `,(projectile-project-root))))
+            ;; `modi/verilog-which-func-xtra' contains the module name in
+            ;; whose instance declaration the point is currently.
             (if (and (modi/verilog-find-module-instance)
                      modi/verilog-which-func-xtra)
                 (find-tag modi/verilog-which-func-xtra)
@@ -344,7 +341,6 @@ the project."
         (add-hook 'local-write-file-hooks
                   (λ (untabify (point-min) (point-max)) nil)))
       (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
-
 
 ;;; my/verilog-selective-indent
       (defun my/verilog-selective-indent (&rest args)
