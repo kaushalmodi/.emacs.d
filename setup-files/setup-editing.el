@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-10 13:34:05 kmodi>
+;; Time-stamp: <2015-03-12 16:14:18 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -82,13 +82,15 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ;; http://stackoverflow.com/a/3035574/1219634
 (defun eval-and-replace-last-sexp ()
-  "Replace an emacs lisp expression (s-expression aka sexp) with its result"
+  "Replace an emacs lisp expression (s-expression aka sexp) with its result.
+
+How to use: Put the cursor at the end of an expression like (+ 1 2) and call
+this command."
   (interactive)
   (let ((value (eval (preceding-sexp))))
     (kill-sexp -1)
     (insert (format "%s" value))))
-;; How to use: Put the cursor at the end of an expression like (+ 1 2) and
-;; `M-x eval-and-replace-last-sexp`
+(bind-to-modi-map "x" eval-and-replace-last-sexp)
 
 ;; Toggle comment on current line or selected region
 ;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
@@ -226,50 +228,55 @@ remove the comment characters from that line."
         (remove-hook hook #'indent-guide-mode)))))
 
 ;; http://stackoverflow.com/q/12165205/1219634
-(defun copy-with-linenum (beg end use-unicode)
+(defun kill-with-linenum (beg end unicode)
   "Copy the selected region with file name, starting and ending
 line numbers, date and user name.
 
 When called with a prefix like `C-u', it will use unicode characters
 instead of ASCII characters for adorning the copied snippet."
   (interactive "r\nP")
-  (let* ((chars-start-of-code-block ",--------")
-         (chars-end-of-code-block   "`--------")
-         (chars-n-dash              "--")
-         (chars-m-dash              "---")
-         (chars-pipe                "|"))
-    (save-excursion
-      (when use-unicode
-        ( setq chars-start-of-code-block "╭────────"
-               chars-end-of-code-block   "╰────────"
-               chars-n-dash              "─"
-               chars-m-dash              "──"
-               chars-pipe                "│" ))
-      (goto-char end)
-      (skip-chars-backward "\n \t")
-      (setq end (point))
-      (let* ((chunk (buffer-substring beg end)))
-        (setq chunk (concat
-                     (format "%s #%-d %s %s %s\n%s "
-                             chars-start-of-code-block
-                             (line-number-at-pos beg)
-                             chars-n-dash
-                             (or (buffer-file-name) (buffer-name))
-                             chars-m-dash
-                             chars-pipe)
-                     (replace-regexp-in-string "\n"
-                                               (format "\n%s "
-                                                       chars-pipe)
-                                               chunk)
-                     (format "\n%s #%-d %s %s %s %s"
-                             chars-end-of-code-block
-                             (line-number-at-pos end)
-                             chars-n-dash
-                             (format-time-string "%Y/%m/%d")
-                             chars-n-dash
-                             (getenv "USER"))))
-        (kill-new chunk)))
-    (deactivate-mark)))
+  (save-excursion
+    (goto-char end)
+    (skip-chars-backward "\n \t")
+    (setq end (point))
+    (let ((chars-start-of-code-block (if unicode "╭────────" ",--------"))
+          (chars-end-of-code-block   (if unicode "╰────────" "`--------"))
+          (chars-n-dash              (if unicode "─"         "--"       ))
+          (chars-m-dash              (if unicode "──"        "---"      ))
+          (chars-pipe                (if unicode "│"         "|"        ))
+          (chunk                     (buffer-substring beg end)))
+      (setq chunk (concat
+                   (format "%s #%-d %s %s %s\n%s "
+                           chars-start-of-code-block
+                           (line-number-at-pos beg)
+                           chars-n-dash
+                           (or (buffer-file-name) (buffer-name))
+                           chars-m-dash
+                           chars-pipe)
+                   (replace-regexp-in-string "\n" (format "\n%s " chars-pipe)
+                                             chunk)
+                   (format "\n%s #%-d %s %s %s %s"
+                           chars-end-of-code-block
+                           (line-number-at-pos end)
+                           chars-n-dash
+                           (format-time-string "%Y/%m/%d")
+                           chars-n-dash
+                           (getenv "USER"))))
+      (kill-new chunk)))
+  (deactivate-mark))
+
+(defun kill-with-linenum-unicode (beg end)
+  (interactive "r")
+  (kill-with-linenum beg end :unicode))
+
+(when (featurep 'region-bindings-mode)
+  (bind-keys
+   :map region-bindings-mode-map
+   ;; When region is selected, pressing `c' will copy the region
+   ;; with ASCII character adornment.
+   ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
+   ("c" . kill-with-linenum)
+   ("C" . kill-with-linenum-unicode)))
 
 ;; Convert the decimal values in the whole buffer to 16-bit 2's complement hex
 (fset 'modi/convert-dec-to-twos-comp-16-bit-hex
@@ -397,6 +404,25 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 (defun modi/downcase ()   (interactive) (xah-cycle-letter-case 16))
 (defun modi/capitalize () (interactive) (xah-cycle-letter-case 64))
 
+(when (featurep 'region-bindings-mode)
+  (bind-keys
+   :map region-bindings-mode-map
+   ("~" . xah-cycle-letter-case)))
+
+(defhydra hydra-change-case(:color red)
+  "change-case"
+  ("c"   modi/capitalize       "Capitalize")
+  ("u"   modi/upcase           "UPCASE")
+  ("l"   modi/downcase         "downcase")
+  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")
+  ("q"   nil                   "cancel" :color blue))
+
+(bind-keys
+ :map modi-mode-map
+ ("C-x C-u" . modi/upcase)
+ ("C-x C-l" . modi/downcase)
+ ("M-c"     . hydra-change-case/body))
+
 ;; http://www.emacswiki.org/emacs/SortWords
 ;; http://emacs.stackexchange.com/a/7550/115
 (defun sort-words (reverse beg end)
@@ -428,15 +454,6 @@ Temporarily consider - and _ characters as part of the word when sorting."
         (bind-keys
          :map region-bindings-mode-map
          ("G" . gplusify-region-as-kill)))))
-
-(when (featurep 'region-bindings-mode)
-  (bind-keys
-   :map region-bindings-mode-map
-   ;; When region is selected, pressing `c' will copy the region
-   ;; with ASCII character adornment. Pressing `C-u c' will copy
-   ;; with Unicode character adornment.
-   ("c" . copy-with-linenum)
-   ("~" . xah-cycle-letter-case)))
 
 ;; Unicode
 (defhydra hydra-unicode (:color blue)
@@ -472,21 +489,6 @@ Temporarily consider - and _ characters as part of the word when sorting."
  ("M-j"     . comment-indent-new-line)
  ("<f9>"    . eval-region))
 
-(defhydra hydra-change-case(:color red)
-  "change-case"
-  ("c"   modi/capitalize       "Capitalize")
-  ("u"   modi/upcase           "UPCASE")
-  ("l"   modi/downcase         "downcase")
-  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")
-  ("q"   nil                   "cancel" :color blue))
-
-(bind-keys
- :map modi-mode-map
- ("C-x C-u" . modi/upcase)
- ("C-x C-l" . modi/downcase)
- ("M-c"     . hydra-change-case/body))
-
-(bind-to-modi-map "x" eval-and-replace-last-sexp)
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
 ;; default binding `C-x =' with something else.
 (bind-to-modi-map "=" what-cursor-position)
@@ -520,8 +522,6 @@ Temporarily consider - and _ characters as part of the word when sorting."
   ("s f" forward-sexp                   "forward sexp")
   ("q"   nil                            "cancel" :color blue))
 (key-chord-define-global "jj" #'hydra-comment/body)
-
-(key-chord-define-global "^^" (λ (insert "λ")))
 
 
 (provide 'setup-editing)
