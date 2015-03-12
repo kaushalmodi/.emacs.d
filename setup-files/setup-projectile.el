@@ -1,29 +1,9 @@
-;; Time-stamp: <2015-03-11 14:25:37 kmodi>
+;; Time-stamp: <2015-03-12 10:04:14 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
 
 (use-package projectile
-    :commands (projectile-ag
-               projectile-switch-to-buffer
-               projectile-invalidate-cache
-               projectile-find-dir
-               projectile-find-file
-               projectile-find-file-dwim
-               projectile-find-file-in-directory
-               projectile-ibuffer
-               projectile-kill-buffers
-               projectile-multi-occur
-               projectile-switch-project
-               projectile-recentf
-               projectile-remove-known-project
-               projectile-cleanup-known-projects
-               projectile-cache-current-file
-               projectile-find-file-other-window
-               projectile-find-file-dwim-other-window
-               projectile-find-dir-other-window
-               projectile-switch-to-buffer-other-window
-               projectile-project-root)
     :init
     (progn
       (defhydra hydra-projectile-other-window (:color teal)
