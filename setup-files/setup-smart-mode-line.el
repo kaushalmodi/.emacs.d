@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 15:47:51 kmodi>
+;; Time-stamp: <2015-03-12 12:55:53 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -9,7 +9,7 @@
     :init
   (progn
     (setq sml/line-number-format    "%4l")
-    (setq sml/name-width            40) ; buffer name width in the mode-line
+    (setq sml/name-width            30) ; buffer name width in the mode-line
     (setq sml/mode-width            'full) ; minor mode lighters area width
     (setq sml/no-confirm-load-theme t)
     (setq sml/replacer-regexp-list
@@ -83,8 +83,9 @@
                 " hl-highlight" ; hl-anything
                 " Helm"         ; Helm
                 ))
-        (add-to-list 'rm-text-properties '("Outl\\'" 'display " ø")) ; outline
-        (add-to-list 'rm-text-properties '("Ind\\'"  'display " *>")) ; org indent
+        (add-to-list 'rm-text-properties '("Outl\\'"    'display " ø")) ; outline
+        (add-to-list 'rm-text-properties '("Ind\\'"     'display " *>")) ; org indent
+        (add-to-list 'rm-text-properties '("Server\\'"  'display " Σ")) ; Server
         ))
 
     (sml/setup)
