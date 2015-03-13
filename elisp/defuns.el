@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 12:07:07 kmodi>
+;; Time-stamp: <2015-03-13 11:30:50 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -69,6 +69,45 @@ e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
     (set-face-attribute 'fringe nil
                         :foreground (face-foreground 'default)
                         :background (face-background 'default))))
+
+;; Re-evaluatable `defvar's
+;; Usage: When debugging/developing something in elisp, it is useful to have
+;; the `defvar's re-evaluatable. To do so, temporarily set the
+;; `defvar-always-reeval-values' to `t' and use `defvar-re's instead of
+;; `defvar's.
+;; It is recommended to keep the default value of the above var as nil.
+;; http://emacs.stackexchange.com/a/2301/115
+
+;; When non-nil, defvar will reevaluate the init-val arg even if the symbol
+;; is defined.
+(setq-default defvar-always-reeval-values nil)
+
+(defmacro defvar-re (name &optional init-value docstring)
+  "Like defvar, but when `defvar-always-reeval-values' is non-nil, it will
+set the symbol's value to INIT-VALUE even if the symbol is defined."
+  `(progn
+     (when defvar-always-reeval-values
+       (makunbound ',name))
+     (defvar ,name ,init-value ,docstring)))
+
+;; Fontify `defvar-re' as emacs-lisp keyword
+(font-lock-add-keywords
+ 'emacs-lisp-mode
+ '(("(\\(defvar\\-re\\)\\_> +\\(.*?\\)\\_>"
+    (1 font-lock-keyword-face)
+    (2 font-lock-type-face))))
+
+(defun modi/toggle-defvar-re-eval ()
+  "Toggle the “re-evaluatable” state of `defvar's."
+  (interactive)
+  (if defvar-always-reeval-values
+      (progn
+        (setq-default defvar-always-reeval-values nil)
+        (message "'defvar-re' will now work as 'defvar'."))
+    (progn
+      (setq-default defvar-always-reeval-values t)
+      (message "'defvar-re' will now force re-evaluate."))))
+;;
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
