@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-02-24 13:05:37 kmodi>
+;; Time-stamp: <2015-03-16 09:54:14 kmodi>
 
 ;; Auto complete
 
 (use-package auto-complete-config
-  :idle
+    :config
   (progn
     (setq ac-stop-words (quote ("/" "//" "/*" "//*" "///" "////")))
     (setq ac-ignore-case t) ; ignore case
