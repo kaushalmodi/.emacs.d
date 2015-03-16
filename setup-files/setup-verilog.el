@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-13 13:40:19 kmodi>
+;; Time-stamp: <2015-03-16 10:11:30 kmodi>
 
 ;;; Verilog
 
@@ -30,65 +30,65 @@
       (setq verilog-tab-to-comment           t)
       (setq verilog-date-scientific-format   t)
 
-      (defvar-re modi/verilog-identifier-re "\\b[a-zA-Z][a-zA-Z0-9:_]*"
+      (defconst modi/verilog-identifier-re "\\b[a-zA-Z][a-zA-Z0-9:_]*"
         ;; The : is to allow parsing extern methods like class::task
         "Regexp for a valid verilog identifier.")
 
-      (defvar-re modi/verilog-module-instance-re
-          ;; (concat "^\\s-*"
-          ;;         "\\("
-          ;;         modi/verilog-identifier-re
-          ;;         "\\)"
-          ;;         "\\s-+"
-          ;;         ;; optional hardware parameters followed by optional comments
-          ;;         "\\(#\\s-*([[:ascii:][:nonascii:]]*?)\\s-*/*.*\\)*"
-          ;;         "\\([^a-zA-Z0-9_\\.,()$=`]*?\\)" ; optional space/newline before instance name
-          ;;         "\\(" modi/verilog-identifier-re "\\)" ; instance name
-          ;;         "\\([^a-zA-Z0-9_]*(\\)" ; optional space/newline after instance name
-          ;;                             ; and before opening parenthesis `('
-          ;;         ;; "\\([^a-zA-Z0-9_]\\|\\.\\)" ; optional space/newline after `('
-          ;;                             ; or name-based port connections: .input_a(input_a),
-          ;;         )
-          (concat "^\\s-*"
-                  "\\(?1:" ; force group number to 1
-                  modi/verilog-identifier-re ; module name
-                  "\\)"
-                  "\\s-+"
-                  ;; optional hardware parameters followed by optional comments
-                  ;; followed by optional space/newline before instance name
-                  "\\(#([^;]+?)\\(\\s-*//.*?\\)*[^;\\./]+?\\)*"
-                  "\\(?2:" modi/verilog-identifier-re "\\)" ; instance name
+      (defconst modi/verilog-module-instance-re
+        ;; (concat "^\\s-*"
+        ;;         "\\("
+        ;;         modi/verilog-identifier-re
+        ;;         "\\)"
+        ;;         "\\s-+"
+        ;;         ;; optional hardware parameters followed by optional comments
+        ;;         "\\(#\\s-*([[:ascii:][:nonascii:]]*?)\\s-*/*.*\\)*"
+        ;;         "\\([^a-zA-Z0-9_\\.,()$=`]*?\\)" ; optional space/newline before instance name
+        ;;         "\\(" modi/verilog-identifier-re "\\)" ; instance name
+        ;;         "\\([^a-zA-Z0-9_]*(\\)" ; optional space/newline after instance name
+        ;;                             ; and before opening parenthesis `('
+        ;;         ;; "\\([^a-zA-Z0-9_]\\|\\.\\)" ; optional space/newline after `('
+        ;;                             ; or name-based port connections: .input_a(input_a),
+        ;;         )
+        (concat "^\\s-*"
+                "\\(?1:" ; force group number to 1
+                modi/verilog-identifier-re ; module name
+                "\\)"
+                "\\s-+"
+                ;; optional hardware parameters followed by optional comments
+                ;; followed by optional space/newline before instance name
+                "\\(#([^;]+?)\\(\\s-*//.*?\\)*[^;\\./]+?\\)*"
+                "\\(?2:" modi/verilog-identifier-re "\\)" ; instance name
                                         ; force group number to 2
-                  "[^;a-zA-Z0-9_]+?(" ; optional space/newline after instance name
+                "[^;a-zA-Z0-9_]+?(" ; optional space/newline after instance name
                                         ; and before opening parenthesis `('
-                  )
+                )
         "Regexp for a valid verilog module instance declaration.")
 
-      (defvar-re modi/verilog-header-re
-          (concat "^\\s-*"
-                  "\\([a-z]+\\s-+\\)*" ; virtual, local, protected
-                  "\\(?1:" "case" ; force group number to 1
-                  "\\|" "class"
-                  "\\|" "clocking"
-                  "\\|" "`define"
-                  "\\|" "function"
-                  "\\|" "group"
-                  "\\|" "interface"
-                  "\\|" "module"
-                  "\\|" "program"
-                  "\\|" "primitive"
-                  "\\|" "package"
-                  "\\|" "property"
-                  "\\|" "sequence"
-                  "\\|" "specify"
-                  "\\|" "table"
-                  "\\|" "task" "\\)"
-                  "\\s-+"
-                  "\\([a-z]+\\s-+\\)*" ; void, static, automatic, ..
-                  "\\(?2:" modi/verilog-identifier-re "\\)" ; block name
+      (defconst modi/verilog-header-re
+        (concat "^\\s-*"
+                "\\([a-z]+\\s-+\\)*" ; virtual, local, protected
+                "\\(?1:" "case" ; force group number to 1
+                "\\|" "class"
+                "\\|" "clocking"
+                "\\|" "`define"
+                "\\|" "function"
+                "\\|" "group"
+                "\\|" "interface"
+                "\\|" "module"
+                "\\|" "program"
+                "\\|" "primitive"
+                "\\|" "package"
+                "\\|" "property"
+                "\\|" "sequence"
+                "\\|" "specify"
+                "\\|" "table"
+                "\\|" "task" "\\)"
+                "\\s-+"
+                "\\([a-z]+\\s-+\\)*" ; void, static, automatic, ..
+                "\\(?2:" modi/verilog-identifier-re "\\)" ; block name
                                         ; force group number to 2
-                  "\\b"
-                  )
+                "\\b"
+                )
         "Regexp for a valid verilog block header statement.")
 
       (defvar modi/verilog-keywords-re nil
