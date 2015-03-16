@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 11:05:16 kmodi>
+;; Time-stamp: <2015-03-16 10:14:16 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
@@ -7,12 +7,12 @@
     :config
   (progn
 
-    (defvar modi/fci-mode-hooks '(verilog-mode-hook
-                                  emacs-lisp-mode-hook
-                                  python-mode-hook
-                                  sh-mode-hook
-                                  cperl-mode-hook
-                                  org-mode-hook)
+    (defconst modi/fci-mode-hooks '(verilog-mode-hook
+                                    emacs-lisp-mode-hook
+                                    python-mode-hook
+                                    sh-mode-hook
+                                    ;; org-src-mode-hook
+                                    cperl-mode-hook)
       "List of hooks of major modes in which fci mode should be enabled.")
 
     (defun modi/turn-on-fci-mode ()
