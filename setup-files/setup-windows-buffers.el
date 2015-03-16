@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-12 14:19:16 kmodi>
+;; Time-stamp: <2015-03-16 09:58:58 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -188,10 +188,14 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
             (4 (setq file-name (concat (file-name-base file-name-full) ; C-u
                                        (file-name-extension file-name-full :period))))
             (16 (setq file-name file-name-full)) ; C-u C-u
-            (t (setq file-name (replace-regexp-in-string ; no prefix
-                                (concat "/proj.*?_" (getenv "USER"))
-                                "${PRJ_USER}"
-                                file-name-full))))
+            (t (setq file-name ; no prefix
+                     ;; (replace-regexp-in-string
+                     ;;  (concat "/proj.*?_" (getenv "USER")) "${PRJ_USER}"
+                     ;;  file-name-full)
+                     (replace-regexp-in-string
+                      (concat "_" (getenv "USER")) "_${USER}"
+                      file-name-full)
+                     )))
           (kill-new file-name)
           (message file-name))
       (error "Buffer not visiting a file"))))
