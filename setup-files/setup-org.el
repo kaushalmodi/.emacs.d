@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-03-11 14:44:31 kmodi>
+;; Time-stamp: <2015-03-16 09:25:49 kmodi>
 
 ;; Org Mode
 
 (use-package org
     :defer t
-    :idle
+    :config
     (progn
       (setq org-agenda-archives-mode nil) ; required in org 8.0+
       (setq org-agenda-skip-comment-trees nil)
@@ -251,158 +251,160 @@ this with to-do items than with projects or headings."
           (progn
             ;; LaTeX export
             (use-package ox-latex
-                :idle
-              (progn
-                ;; Previewing latex fragments in org mode
-                ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
-                ;; (setq org-latex-create-formula-image-program 'dvipng) ; NOT Recommended
-                (setq org-latex-create-formula-image-program 'imagemagick) ; Recommended
-                (setq org-latex-listings 'minted)
-                ;; (setq org-latex-listings 'lstlisting)
+                :defer t
+                :config
+                (progn
+                  ;; Previewing latex fragments in org mode
+                  ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+                  ;; (setq org-latex-create-formula-image-program 'dvipng) ; NOT Recommended
+                  (setq org-latex-create-formula-image-program 'imagemagick) ; Recommended
+                  (setq org-latex-listings 'minted)
+                  ;; (setq org-latex-listings 'lstlisting)
 
-                ;; Below will output tex files with \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
-                ;; The org-latex-packages-alist is a list of cells of the format:
-                ;; ("options" "package" snippet-flag)
-                ;; snippet-flag is non-nil by default. So unless this flag is set to nil, that
-                ;; package will be used even when previewing latex fragments using the `C-c C-x C-l`
-                ;; org mode key binding
-                (setq org-latex-packages-alist
-                      '(
-                        ;; % 0 paragraph indent, adds vertical space between paragraphs
-                        ;; http://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting
-                        (""          "parskip")
-                        ;; ;; Replace default font with a much crisper font
-                        ;; ;; http://www.khirevich.com/latex/font/
-                        ;; (""          "charter")
-                        ;; ("expert"    "mathdesign")
-                        ;; Code blocks syntax highlighting
-                        ;; (""          "listings")
-                        ;; (""          "xcolor")
-                        (""          "minted") ; Comment this if org-latex-create-formula-image-program
-                        ;; is set to dvipng. minted package can't be loaded
-                        ;; when using dvipng to show latex previews
-                        ;; (""          "minted" nil) ; Uncomment this if org-latex-create-formula-image-program
-                        ;;                            ; is set to dvipng
-                        ;; Graphics package for more complicated figures
-                        (""          "tikz")
-                        ;; Prevent tables/figures from one section to float into another section
-                        ;; http://tex.stackexchange.com/questions/279/how-do-i-ensure-that-figures-appear-in-the-section-theyre-associated-with
-                        ("section"   "placeins")
-                        ;; It doesn't seem below packages are required
-                        ;; ;; Packages suggested to be added for previewing latex fragments
-                        ;; ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
-                        ;; ("usenames"  "color") ; HAD TO COMMENT IT OUT BECAUSE OF CLASH WITH placeins pkg
-                        ("mathscr"   "eucal")
-                        (""          "latexsym")
-                        ;; Prevent an image from floating to a different location
-                        ;; http://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
-                        (""          "float")
-                        (""          "caption")
-                        ))
+                  ;; Below will output tex files with \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
+                  ;; The org-latex-packages-alist is a list of cells of the format:
+                  ;; ("options" "package" snippet-flag)
+                  ;; snippet-flag is non-nil by default. So unless this flag is set to nil, that
+                  ;; package will be used even when previewing latex fragments using the `C-c C-x C-l`
+                  ;; org mode key binding
+                  (setq org-latex-packages-alist
+                        '(
+                          ;; % 0 paragraph indent, adds vertical space between paragraphs
+                          ;; http://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting
+                          (""          "parskip")
+                          ;; ;; Replace default font with a much crisper font
+                          ;; ;; http://www.khirevich.com/latex/font/
+                          ;; (""          "charter")
+                          ;; ("expert"    "mathdesign")
+                          ;; Code blocks syntax highlighting
+                          ;; (""          "listings")
+                          ;; (""          "xcolor")
+                          (""          "minted") ; Comment this if org-latex-create-formula-image-program
+                          ;; is set to dvipng. minted package can't be loaded
+                          ;; when using dvipng to show latex previews
+                          ;; (""          "minted" nil) ; Uncomment this if org-latex-create-formula-image-program
+                          ;;                            ; is set to dvipng
+                          ;; Graphics package for more complicated figures
+                          (""          "tikz")
+                          ;; Prevent tables/figures from one section to float into another section
+                          ;; http://tex.stackexchange.com/questions/279/how-do-i-ensure-that-figures-appear-in-the-section-theyre-associated-with
+                          ("section"   "placeins")
+                          ;; It doesn't seem below packages are required
+                          ;; ;; Packages suggested to be added for previewing latex fragments
+                          ;; ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+                          ;; ("usenames"  "color") ; HAD TO COMMENT IT OUT BECAUSE OF CLASH WITH placeins pkg
+                          ("mathscr"   "eucal")
+                          (""          "latexsym")
+                          ;; Prevent an image from floating to a different location
+                          ;; http://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
+                          (""          "float")
+                          (""          "caption")
+                          ))
 
-                ;; "H" option is from the `float' package. That prevents the images from floating around.
-                ;; (setq org-latex-default-figure-position "htb") ; default - figures are floating
-                (setq org-latex-default-figure-position "H") ; figures are NOT floating
+                  ;; "H" option is from the `float' package. That prevents the images from floating around.
+                  ;; (setq org-latex-default-figure-position "htb") ; default - figures are floating
+                  (setq org-latex-default-figure-position "H") ; figures are NOT floating
 
-                ;; In order to have that tex convert to pdf, you have to ensure that you have
-                ;; minted.sty in your TEXMF folder.
-                ;; -> To know if minted.sty in correct path do "kpsewhich minted.sty".
-                ;; -> If it is not found, download from http://www.ctan.org/tex-archive/macros/latex/contrib/minted
-                ;; -> Generate minted.sty by "tex minted.ins"
-                ;; -> To know your TEXMF folder, do "kpsewhich -var-value=TEXMFHOME"
-                ;; -> For me TEXMF folder was ~/texmf
-                ;; -> Move the minted.sty to your $TEXMF/tex/latex/commonstuff folder.
-                ;; -> Do mkdir -p ~/texmf/tex/latex/commonstuff if that folder hierarchy doesn't exist
-                ;; -> Do "mktexlsr" to refresh the sty database
-                ;; -> Generate pdf from the org exported tex by "pdflatex -shell-escape FILE.tex"
-                ;; Sources for org > tex > pdf conversion:
-                ;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
-                ;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
+                  ;; In order to have that tex convert to pdf, you have to ensure that you have
+                  ;; minted.sty in your TEXMF folder.
+                  ;; -> To know if minted.sty in correct path do "kpsewhich minted.sty".
+                  ;; -> If it is not found, download from http://www.ctan.org/tex-archive/macros/latex/contrib/minted
+                  ;; -> Generate minted.sty by "tex minted.ins"
+                  ;; -> To know your TEXMF folder, do "kpsewhich -var-value=TEXMFHOME"
+                  ;; -> For me TEXMF folder was ~/texmf
+                  ;; -> Move the minted.sty to your $TEXMF/tex/latex/commonstuff folder.
+                  ;; -> Do mkdir -p ~/texmf/tex/latex/commonstuff if that folder hierarchy doesn't exist
+                  ;; -> Do "mktexlsr" to refresh the sty database
+                  ;; -> Generate pdf from the org exported tex by "pdflatex -shell-escape FILE.tex"
+                  ;; Sources for org > tex > pdf conversion:
+                  ;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
+                  ;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
 
-                ;; -shell-escape is required when converting a .tex file containing `minted'
-                ;; package to a .pdf
-                ;; Now org > tex > pdf conversion can happen with the org default
-                ;; `C-c C-e l p` key binding
+                  ;; -shell-escape is required when converting a .tex file containing `minted'
+                  ;; package to a .pdf
+                  ;; Now org > tex > pdf conversion can happen with the org default
+                  ;; `C-c C-e l p` key binding
 
-                ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
-                ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
-                ;; automatically to resolve the cross-references.
-                ;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
+                  ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
+                  ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
+                  ;; automatically to resolve the cross-references.
+                  ;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
 
-                ;; Run xelatex multiple times to get the cross-references right
-                (setq org-latex-pdf-process '("xelatex -shell-escape %f"
-                                              "xelatex -shell-escape %f"
-                                              "xelatex -shell-escape %f"
-                                              "xelatex -shell-escape %f"))
+                  ;; Run xelatex multiple times to get the cross-references right
+                  (setq org-latex-pdf-process '("xelatex -shell-escape %f"
+                                                "xelatex -shell-escape %f"
+                                                "xelatex -shell-escape %f"
+                                                "xelatex -shell-escape %f"))
 
-                ;; Run pdflatex multiple times to get the cross-references right
-                ;; (setq org-latex-pdf-process '("pdflatex -shell-escape %f"
-                ;; "pdflatex -shell-escape %f"
-                ;; "pdflatex -shell-escape %f"))
+                  ;; Run pdflatex multiple times to get the cross-references right
+                  ;; (setq org-latex-pdf-process '("pdflatex -shell-escape %f"
+                  ;; "pdflatex -shell-escape %f"
+                  ;; "pdflatex -shell-escape %f"))
 
-                ;; customization of the minted package (applied to embedded source codes)
-                ;; https://code.google.com/p/minted/
-                (setq org-latex-minted-options
-                      '(("linenos")
-                        ("numbersep"   "5pt")
-                        ("frame"       "none") ; box frame is created by the mdframed package
-                        ("framesep"    "2mm")
-                        ;; ("fontfamily"  "zi4") ; Required only when using pdflatex instead of xelatex
-                        ))
-                ;; (add-to-list 'org-latex-classes
-                ;;              '("article"
-                ;;                "\\documentclass[11pt,letterpaper]{article}"
-                ;;                ("\\section{%s}"        . "\\section*{%s}")
-                ;;                ("\\subsection{%s}"     . "\\subsection*{%s}")
-                ;;                ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")
-                ;;                ("\\paragraph{%s}"      . "\\paragraph*{%s}")
-                ;;                ("\\subparagraph{%s}"   . "\\subparagraph*{%s}"))
-                ;;              )
+                  ;; customization of the minted package (applied to embedded source codes)
+                  ;; https://code.google.com/p/minted/
+                  (setq org-latex-minted-options
+                        '(("linenos")
+                          ("numbersep"   "5pt")
+                          ("frame"       "none") ; box frame is created by the mdframed package
+                          ("framesep"    "2mm")
+                          ;; ("fontfamily"  "zi4") ; Required only when using pdflatex instead of xelatex
+                          ))
+                  ;; (add-to-list 'org-latex-classes
+                  ;;              '("article"
+                  ;;                "\\documentclass[11pt,letterpaper]{article}"
+                  ;;                ("\\section{%s}"        . "\\section*{%s}")
+                  ;;                ("\\subsection{%s}"     . "\\subsection*{%s}")
+                  ;;                ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")
+                  ;;                ("\\paragraph{%s}"      . "\\paragraph*{%s}")
+                  ;;                ("\\subparagraph{%s}"   . "\\subparagraph*{%s}"))
+                  ;;              )
 
-                ;; You can also do the org > tex > pdf conversion and open the pdf file in
-                ;; acroread directly using the `C-c C-e l o` key binding
-                ))
+                  ;; You can also do the org > tex > pdf conversion and open the pdf file in
+                  ;; acroread directly using the `C-c C-e l o` key binding
+                  ))
 
             ;; HTML export
             (use-package ox-html
-                :idle
-              (progn
-                ;; ox-html patches
-                (load (expand-file-name
-                       "ox-html-patches.el"
-                       (concat user-emacs-directory "/elisp/patches"))
-                      nil :nomessage)
+                :defer t
+                :config
+                (progn
+                  ;; ox-html patches
+                  (load (expand-file-name
+                         "ox-html-patches.el"
+                         (concat user-emacs-directory "/elisp/patches"))
+                        nil :nomessage)
 
-                (use-package ox-html-fancybox
-                    :load-path "elisp/ox-html-fancybox")
+                  (use-package ox-html-fancybox
+                      :load-path "elisp/ox-html-fancybox")
 
-                ;; Center align the tables when exporting to HTML
-                ;; Note: This aligns the whole table, not the table columns
-                (setq org-html-table-default-attributes
-                      '(:border "2"
-                        :cellspacing "0"
-                        :cellpadding "6"
-                        :rules "groups"
-                        :frame "hsides"
-                        :align "center"
-                        ;; below class requires bootstrap.css ( http://getbootstrap.com )
-                        :class "table-striped")
-                      ;; '(:border "2"
-                      ;;           :cellspacing "0"
-                      ;;           :cellpadding "6"
-                      ;;           :rules "groups"
-                      ;;           :frame "hsides")
-                      )
+                  ;; Center align the tables when exporting to HTML
+                  ;; Note: This aligns the whole table, not the table columns
+                  (setq org-html-table-default-attributes
+                        '(:border "2"
+                          :cellspacing "0"
+                          :cellpadding "6"
+                          :rules "groups"
+                          :frame "hsides"
+                          :align "center"
+                          ;; below class requires bootstrap.css ( http://getbootstrap.com )
+                          :class "table-striped")
+                        ;; '(:border "2"
+                        ;;           :cellspacing "0"
+                        ;;           :cellpadding "6"
+                        ;;           :rules "groups"
+                        ;;           :frame "hsides")
+                        )
 
-                ;; Customize the HTML postamble
-                (setq org-html-postamble t) ; default value = 'auto
-                (setq org-html-postamble-format
-                      '(("en" "Exported using <div style=\"display: inline\" class=\"creator\">%c</div> on <div style=\"display: inline\"class=\"date\">%d</div> by %e.")))
+                  ;; Customize the HTML postamble
+                  (setq org-html-postamble t) ; default value = 'auto
+                  (setq org-html-postamble-format
+                        '(("en" "Exported using <div style=\"display: inline\" class=\"creator\">%c</div> on <div style=\"display: inline\"class=\"date\">%d</div> by %e.")))
 
-                ;; (setq org-html-htmlize-output-type 'inline-css) ; default
-                (setq org-html-htmlize-output-type 'css)
-                ;; (setq org-html-htmlize-font-prefix "") ; default
-                (setq org-html-htmlize-font-prefix "org-")))
+                  ;; (setq org-html-htmlize-output-type 'inline-css) ; default
+                  (setq org-html-htmlize-output-type 'css)
+                  ;; (setq org-html-htmlize-font-prefix "") ; default
+                  (setq org-html-htmlize-font-prefix "org-")))
 
             ;; Beamer export
             (use-package ox-beamer
@@ -424,12 +426,13 @@ this with to-do items than with projects or headings."
             ;; Download reveal.js from https://github.com/hakimel/reveal.js/
             (use-package ox-reveal
                 ;; :load-path "elisp/org-reveal"
-                :idle
-              (progn
-                (setq org-reveal-root     (concat user-emacs-directory "/software/reveal.js/"))
-                (setq org-reveal-hlevel   1)
-                (setq org-reveal-theme    "default") ; beige blood moon night serif simple sky solarized
-                (setq org-reveal-mathjax  t))) ; Use mathjax.org to render LaTeX equations
+                :defer t
+                :config
+                (progn
+                  (setq org-reveal-root    (concat user-emacs-directory "/software/reveal.js/"))
+                  (setq org-reveal-hlevel  1)
+                  (setq org-reveal-theme   "default") ; beige blood moon night serif simple sky solarized
+                  (setq org-reveal-mathjax t))) ; Use mathjax.org to render LaTeX equations
 
             ;; ODT export
             ;; The .odt files can be opened directly in MS Word.

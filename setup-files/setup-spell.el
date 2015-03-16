@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 16:02:41 kmodi>
+;; Time-stamp: <2015-03-16 09:26:03 kmodi>
 ;;
 ;; Spell check
 ;; ispell, flyspell
@@ -33,7 +33,7 @@
 
 (use-package ispell
     :defer t
-    :idle
+    :config
     (progn
       (cond
         ((executable-find "aspell")

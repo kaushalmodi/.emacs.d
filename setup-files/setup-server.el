@@ -8,7 +8,7 @@
 
 ;; create the server directory if it doesn't exist
 (use-package server
-  :pre-load
+  :init
   (progn
     (setq server-auth-dir (concat user-emacs-directory "/server_"
                                   emacs-version-short))

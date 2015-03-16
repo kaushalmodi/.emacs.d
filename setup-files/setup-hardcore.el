@@ -3,7 +3,7 @@
 ;; Hardcore mode
 
 (use-package hardcore-mode
-  :pre-load
+  :init
   (progn
     (setq too-hardcore-backspace t)
     (setq too-hardcore-return    t))

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-03-16 09:20:55 kmodi>
 
 ;; Popwin
 ;; Source: https://github.com/m2ym/popwin-el
@@ -8,7 +8,7 @@
 ;; can close them smoothly by typing `C-g' in anytime.
 
 (use-package popwin
-  :init
+    :config
   (progn
     ;; Special Display Config
     ;; M-!
