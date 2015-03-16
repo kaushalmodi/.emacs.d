@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-03-16 12:14:59 kmodi>
 
 ;; Desktop save and restore
 
@@ -6,7 +6,7 @@
 ;; or restore a desktop. Restored desktops are deleted from disk.
 
 (use-package desktop
-  :config
+    :config
   (progn
     (desktop-save-mode 1)
 
@@ -41,13 +41,15 @@
                     register-alist
                     (search-ring . 20)
                     (shell-command-history . 50)
-                    tags-file-name
-                    tags-table-list)))
+                    ;; tags-file-name
+                    ;; tags-table-list
+                    )))
 
     ;; Don't save .gpg files. Restoring those files in emacsclients causes
     ;; a problem as the password prompt appears before the frame is loaded.
     (setq desktop-files-not-to-save (concat desktop-files-not-to-save
-                                            "\\|\\(\\.gpg$\\)"))
+                                            "\\|\\(\\.gpg$\\)"
+                                            "\\|\\(\\TAGS$\\)"))
 
     ;; Patch `desktop-restore-file-buffer'.
     ;; DON'T throw any warnings; especially "Note: file is write protected" when
