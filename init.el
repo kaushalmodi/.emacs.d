@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 12:04:26 kmodi>
+;; Time-stamp: <2015-03-16 15:16:48 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -62,6 +62,7 @@
         hydra
         ibuffer-projectile
         ido-vertical-mode flx-ido ido-ubiquitous
+        indent-guide
         interleave ; takes notes associated to pdf files in org mode
         iregister ; Interactive access to registers
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
@@ -119,7 +120,9 @@
 ;; Start `benchmark-init' as soon as possible
 (require 'benchmark-init)
 
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
+(use-package bind-key)
 (use-package defuns)
 (use-package modi-mode)
 (use-package temp-mode)
@@ -229,8 +232,9 @@
 (use-package setup-desktop)
 (use-package setup-image)
 
-;; require `setup-work' but don't trigger error if not found
-(require 'setup-work nil t)
+(require 'setup-work nil t) ; don't trigger error if not found
+;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
+(require 'setup-personal nil t) ; don't trigger error if not found
 
 (if (daemonp)
     (add-hook 'window-setup-hook
