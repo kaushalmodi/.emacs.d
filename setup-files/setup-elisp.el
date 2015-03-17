@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 11:22:46 kmodi>
+;; Time-stamp: <2015-03-17 09:20:08 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -6,13 +6,13 @@
 ;; outside a `use-package' wrapper
 ;; http://emacs.stackexchange.com/q/7643/115
 
-;; Edebug defun
+;; Edebug a defun or defmacro
 (defvar modi/fns-in-edebug nil
   "List of functions for which `edebug' is instrumented.")
 
-(defvar modi/fns-regexp (concat "(\\s-*"
-                                "\\(defun\\|defmacro\\)\\s-+"
-                                "\\([a-zA-Z0-9\-/]+\\)\\b")
+(defconst modi/fns-regexp (concat "(\\s-*"
+                                  "\\(defun\\|defmacro\\)\\s-+"
+                                  "\\(?1:\\(\\w\\|\\s_\\)+\\)\\_>") ; word or symbol char
   "Regexp to find defun or defmacro definition.")
 
 (defun modi/toggle-edebug-defun ()
@@ -20,7 +20,7 @@
   (let (fn)
     (save-excursion
       (search-backward-regexp modi/fns-regexp)
-      (setq fn (match-string 2))
+      (setq fn (match-string 1))
       (mark-sexp)
       (narrow-to-region (point) (mark))
       (if (member fn modi/fns-in-edebug)
@@ -28,15 +28,15 @@
           (progn
             (setq modi/fns-in-edebug (delete fn modi/fns-in-edebug))
             (eval-region (point) (mark))
-            (setq eval-expression-print-length 12)
-            (setq eval-expression-print-level  4)
+            (setq-default eval-expression-print-length 12)
+            (setq-default eval-expression-print-level  4)
             (message "Edebug disabled: %s" fn))
         ;; If the function is not being edebugged, instrument it
         (progn
           (add-to-list 'modi/fns-in-edebug fn)
+          (setq-default eval-expression-print-length nil)
+          (setq-default eval-expression-print-level  nil)
           (edebug-defun)
-          (setq eval-expression-print-length nil)
-          (setq eval-expression-print-level  nil)
           (message "Edebug: %s" fn)))
       (widen))))
 
@@ -49,7 +49,7 @@
   (let (fn)
     (save-excursion
       (search-backward-regexp modi/fns-regexp)
-      (setq fn (match-string 2)))
+      (setq fn (match-string 1)))
     (if (member fn modi/fns-in-debug)
         ;; If the function is already being debugged, cancel its debug on entry
         (progn
