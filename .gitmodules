@@ -37,3 +37,6 @@
 [submodule "elisp/gplusify"]
 	path = elisp/gplusify
 	url = https://www.github.com/kaushalmodi/gplusify
+[submodule "elisp/git-link"]
+	path = elisp/git-link
+	url = http://github.com/kaushalmodi/git-link

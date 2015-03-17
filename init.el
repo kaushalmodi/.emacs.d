@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-16 15:16:48 kmodi>
+;; Time-stamp: <2015-03-17 12:06:22 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -171,7 +171,8 @@
 (when (executable-find "git")
   (use-package setup-magit)
   ;; (use-package setup-git-gutter)
-  (use-package setup-diff-hl))
+  (use-package setup-diff-hl)
+  (use-package setup-git-link))
 (use-package setup-manage-minor-mode)
 (use-package setup-multiple-cursors)
 (use-package setup-neotree)
