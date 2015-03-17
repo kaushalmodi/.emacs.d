@@ -1,12 +1,6 @@
-[submodule "elisp/reveal.js.master"]
-	path = elisp/reveal.js.master
-	url = http://github.com/hakimel/reveal.js
 [submodule "elisp/zenburn-emacs"]
 	path = elisp/zenburn-emacs
 	url = http://github.com/kaushalmodi/zenburn-emacs
-[submodule "elisp/org-reveal"]
-	path = elisp/org-reveal
-	url = https://github.com/yjwen/org-reveal
 [submodule "elisp/zop-to-char"]
 	path = elisp/zop-to-char
 	url = http://www.github.com/kaushalmodi/zop-to-char
@@ -16,9 +10,6 @@
 [submodule "elisp/smyx"]
 	path = elisp/smyx
 	url = https://www.github.com/kaushalmodi/smyx
-[submodule "elisp/sunshine.el"]
-	path = elisp/sunshine.el
-	url = https://github.com/aaronbieber/sunshine.el
 [submodule "elisp/unfill"]
 	path = elisp/unfill
 	url = https://github.com/kaushalmodi/unfill
@@ -34,9 +25,6 @@
 [submodule "software/reveal.js"]
 	path = software/reveal.js
 	url = http://github.com/hakimel/reveal.js
-[submodule "elisp/gplusify"]
-	path = elisp/gplusify
-	url = https://www.github.com/kaushalmodi/gplusify
 [submodule "elisp/git-link"]
 	path = elisp/git-link
 	url = http://github.com/kaushalmodi/git-link

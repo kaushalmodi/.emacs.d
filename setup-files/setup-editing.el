@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-16 09:24:28 kmodi>
+;; Time-stamp: <2015-03-17 13:46:11 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -446,7 +446,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
 
 ;; Forked version of https://github.com/jorgenschaefer/gplusify
 (use-package gplusify
-    :load-path "elisp/gplusify"
+    :ensure t
     :commands (gplusify-region-as-kill)
     :init
     (progn

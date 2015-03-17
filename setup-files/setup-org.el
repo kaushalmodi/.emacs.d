@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-17 09:30:48 kmodi>
+;; Time-stamp: <2015-03-17 13:47:47 kmodi>
 
 ;; Org Mode
 
@@ -185,6 +185,7 @@ this with to-do items than with projects or headings."
           :commands (epresent-run))
 
       ;; org-tree-slide
+      ;; https://github.com/takaxp/org-tree-slide
       (use-package org-tree-slide
           :load-path "elisp/org-tree-slide"
           :commands (org-tree-slide-mode)
@@ -424,7 +425,6 @@ this with to-do items than with projects or headings."
             ;; Presentations using reveal.js
             ;; Download reveal.js from https://github.com/hakimel/reveal.js/
             (use-package ox-reveal
-                ;; :load-path "elisp/org-reveal"
                 :config
               (progn
                 (setq org-reveal-root    (concat user-emacs-directory "/software/reveal.js/"))
