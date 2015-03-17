@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 13:45:06 kmodi>
+;; Time-stamp: <2015-03-17 10:15:05 kmodi>
 
 ;; Search
 
@@ -7,7 +7,7 @@
 ;; Anzu mode
 ;; Source: https://github.com/syohex/emacs-anzu
 (use-package anzu
-  :config
+    :config
   (progn
     (global-anzu-mode +1)
 
@@ -28,7 +28,7 @@
 
 ;; Visual Regular Expression search/replace
 (use-package visual-regexp
-  :config
+    :config
   (progn
     (setq vr--feedback-limit nil)
 
@@ -47,37 +47,40 @@
        :map region-bindings-mode-map
        ("}" . vr/query-replace)))))
 
-  ;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
-  ;; `query-replace-regexp' from replace.el
-  (defun query-exchange (string-1 string-2 &optional delimited start end)
-    "Exchange string-1 and string-2 interactively.
+;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
+;; `query-replace-regexp' from replace.el
+(defun query-exchange (string-1 string-2 &optional delimited start end)
+  "Exchange string-1 and string-2 interactively.
 The user is prompted at each instance like query-replace. Exchanging
 happens within a region if one is selected."
-    (interactive
-     (let ((common
-            (query-replace-read-args
-             (concat "Query replace"
-                     (if current-prefix-arg " word" "")
-                     " regexp"
-                     (if (and transient-mark-mode mark-active) " in region" ""))
-             t)))
-       (list (nth 0 common) (nth 1 common) (nth 2 common)
-             ;; These are done separately here
-             ;; so that command-history will record these expressions
-             ;; rather than the values they had this time.
-             (if (and transient-mark-mode mark-active)
-                 (region-beginning))
-             (if (and transient-mark-mode mark-active)
-                 (region-end)))))
-    (perform-replace
-     (concat "\\(" string-1 "\\)\\|" string-2)
-     '(replace-eval-replacement replace-quote
-                                (if (match-string 1) string-2 string-1))
-     t t delimited nil nil start end))
+  (interactive
+   (let ((common
+          (query-replace-read-args
+           (concat "Query replace"
+                   (if current-prefix-arg " word" "")
+                   " regexp"
+                   (if (and transient-mark-mode mark-active) " in region" ""))
+           t)))
+     (list (nth 0 common) (nth 1 common) (nth 2 common)
+           ;; These are done separately here
+           ;; so that command-history will record these expressions
+           ;; rather than the values they had this time.
+           (if (and transient-mark-mode mark-active)
+               (region-beginning))
+           (if (and transient-mark-mode mark-active)
+               (region-end)))))
+  (perform-replace
+   (concat "\\(" string-1 "\\)\\|" string-2)
+   '(replace-eval-replacement replace-quote
+     (if (match-string 1) string-2 string-1))
+   t t delimited nil nil start end))
 
 ;; Helm Swoop
-(defvar helm-swoop-last-prefix-number nil) ; Fix free variable warning
 (use-package helm-swoop
+    ;; Fix free variable warning
+    :preface
+  (progn
+    (defvar helm-swoop-last-prefix-number nil))
   :commands (helm-swoop helm-multi-swoop-all helm-swoop-from-isearch)
   :init
   (progn
@@ -114,9 +117,9 @@ happens within a region if one is selected."
 (require 'grep)
 (defcustom search-all-buffers-ignored-files (list (rx-to-string
                                                    '(and bos
-                                                         (or ".bash_history"
-                                                             "TAGS")
-                                                         eos)))
+                                                     (or ".bash_history"
+                                                      "TAGS")
+                                                     eos)))
   "Files to ignore when searching buffers via \\[search-all-buffers]."
   :type 'editable-list)
 (defun search-all-buffers (regexp prefix)

@@ -1,19 +1,19 @@
-;; Time-stamp: <2015-02-23 11:40:40 kmodi>
+;; Time-stamp: <2015-03-17 09:42:34 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
 ;; https://github.com/magnars/.emacs.d/blob/master/setup-ido.el
 
-;; If ido-ubiquitous 1.6 is used in emacs 24.3, there will always be a
-;; compile-log buffer warnings; below defvars will prevent those.
-(defvar ido-cur-item               nil)
-(defvar ido-default-item           nil)
-(defvar predicate                  nil)
-(defvar inherit-input-method       nil)
-(defvar ido-cur-list               nil)
-(defvar ido-context-switch-command nil)
-
 (use-package ido
+    :preface
+  (progn
+    ;; `defvar's to prevent compile warnings
+    (defvar ido-cur-item               nil)
+    (defvar ido-default-item           nil)
+    (defvar predicate                  nil)
+    (defvar inherit-input-method       nil)
+    (defvar ido-cur-list               nil)
+    (defvar ido-context-switch-command nil))
   :init
   (progn
     (setq ido-enable-flex-matching  t) ; enable fuzzy search
@@ -35,18 +35,18 @@
 
     ;; Use flx-ido for better flex matching between words
     (use-package flx-ido
-      :config
+        :config
       (progn
-        (flx-ido-mode 1)
-        (setq ido-use-faces nil))) ; disable ido faces to see flx highlights
+        (setq ido-use-faces nil) ; disable ido faces to see flx highlights
+        (flx-ido-mode 1)))
 
     (use-package ido-vertical-mode
-      :config
+        :config
       (progn
         (ido-vertical-mode 1))) ; flx-ido looks better with ido-vertical-mode
 
     (use-package ido-ubiquitous
-      :config
+        :config
       (progn
         (ido-ubiquitous-mode 1)))
 
@@ -216,10 +216,10 @@ This is merged into emacs 25.0."
 ;; | C-o     | 'ido-toggle-virtual-buffers |
 
 
-    ;; (setq ido-enable-prefix nil
-    ;;       ido-case-fold nil
-    ;;       ido-use-filename-at-point nil
-    ;;       ido-max-prospects 10)
+;; (setq ido-enable-prefix nil
+;;       ido-case-fold nil
+;;       ido-use-filename-at-point nil
+;;       ido-max-prospects 10)
 ;; (defun ido-disable-line-truncation ()
 ;;   (set (make-local-variable 'truncate-lines) nil))
 ;; (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
