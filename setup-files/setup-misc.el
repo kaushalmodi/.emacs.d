@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 10:22:40 kmodi>
+;; Time-stamp: <2015-03-17 10:47:56 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -166,6 +166,7 @@ If universal arg is used, load the `init.el'."
   ("v" (find-file
         (concat user-home-directory
                 "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")) "IEEE-SV")
+  ("V" (eww "http://www.veripool.org/ftp/verilog-mode.el")     "verilog-mode SRC")
   ("q" nil                                                     "cancel" :color blue))
 (defhydra hydra-launch (:color teal)
   "launch"
