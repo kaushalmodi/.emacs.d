@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-03-16 09:26:34 kmodi>
+;; Time-stamp: <2015-03-17 09:36:46 kmodi>
 
 ;; Guide Key
 ;; https://github.com/kai2nenobu/guide-key
 
 (use-package guide-key
-    :defer t
+    :defer 15
     :config
     (progn
       (setq guide-key/recursive-key-sequence-flag t)
