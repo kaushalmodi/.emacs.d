@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-16 10:11:30 kmodi>
+;; Time-stamp: <2015-03-18 14:24:43 kmodi>
 
 ;;; Verilog
 
@@ -127,27 +127,30 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
             (when (if fwd
                       (search-forward-regexp modi/verilog-module-instance-re nil :noerror)
                     (search-backward-regexp modi/verilog-module-instance-re nil :noerror))
-              ;; (message "---- 1 ---- %s" (match-string 1))
-              ;; (message "---- 2 ---- %s" (match-string 2))
-              ;; (message "---- 3 ---- %s" (match-string 3))
-              ;; (message "---- 4 ---- %s" (match-string 4))
-              ;; (message "---- 5 ---- %s" (match-string 5))
-              (setq-local modi/verilog-which-func-xtra (match-string 1)) ; module name
-              (setq instance-name (match-string 2)) ; instance name
+              ;; Ensure that text in line or block comments is not incorrectly
+              ;; parsed as a module instance
+              (when (not (equal (face-at-point) 'font-lock-comment-face))
+                ;; (message "---- 1 ---- %s" (match-string 1))
+                ;; (message "---- 2 ---- %s" (match-string 2))
+                ;; (message "---- 3 ---- %s" (match-string 3))
+                ;; (message "---- 4 ---- %s" (match-string 4))
+                ;; (message "---- 5 ---- %s" (match-string 5))
+                (setq-local modi/verilog-which-func-xtra (match-string 1)) ; module name
+                (setq instance-name (match-string 2)) ; instance name
 
-              (when (and (stringp modi/verilog-which-func-xtra)
-                         (string-match modi/verilog-keywords-re
-                                       modi/verilog-which-func-xtra))
-                (setq-local modi/verilog-which-func-xtra nil))
+                (when (and (stringp modi/verilog-which-func-xtra)
+                           (string-match modi/verilog-keywords-re
+                                         modi/verilog-which-func-xtra))
+                  (setq-local modi/verilog-which-func-xtra nil))
 
-              (when (and (stringp instance-name)
-                         (string-match modi/verilog-keywords-re
-                                       instance-name))
-                (setq instance-name nil))
+                (when (and (stringp instance-name)
+                           (string-match modi/verilog-keywords-re
+                                         instance-name))
+                  (setq instance-name nil))
 
-              (when (and modi/verilog-which-func-xtra
-                         instance-name)
-                (setq return-val instance-name))))
+                (when (and modi/verilog-which-func-xtra
+                           instance-name)
+                  (setq return-val instance-name)))))
           (when (featurep 'which-func)
             (modi/verilog-update-which-func-format))
           return-val))
@@ -169,28 +172,31 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
             (when (if fwd
                       (search-forward-regexp modi/verilog-header-re nil :noerror)
                     (search-backward-regexp modi/verilog-header-re nil :noerror))
-              ;; (message "---- 1 ---- %s" (match-string 1))
-              ;; (message "---- 2 ---- %s" (match-string 2))
-              ;; (message "---- 3 ---- %s" (match-string 3))
-              ;; (message "---- 4 ---- %s" (match-string 4))
-              (setq block-type (match-string 1))
-              (setq block-name (match-string 2))
+              ;; Ensure that text in line or block comments is not incorrectly
+              ;; parsed as a Verilog block header
+              (when (not (equal (face-at-point) 'font-lock-comment-face))
+                ;; (message "---- 1 ---- %s" (match-string 1))
+                ;; (message "---- 2 ---- %s" (match-string 2))
+                ;; (message "---- 3 ---- %s" (match-string 3))
+                ;; (message "---- 4 ---- %s" (match-string 4))
+                (setq block-type (match-string 1))
+                (setq block-name (match-string 2))
 
-              (when (and (stringp block-name)
-                         (not (string-match modi/verilog-keywords-re
-                                            block-name)))
-                (setq-local modi/verilog-which-func-xtra
-                            (cond
-                              ((string= "class"     block-type) "class")
-                              ((string= "clocking"  block-type) "clk")
-                              ((string= "`define"   block-type) "macro")
-                              ((string= "group"     block-type) "group")
-                              ((string= "module"    block-type) "mod")
-                              ((string= "interface" block-type) "if")
-                              ((string= "package"   block-type) "pkg")
-                              ((string= "sequence"  block-type) "seq")
-                              (t (substring block-type 0 4)))) ; first 4 chars
-                (setq return-val block-name))))
+                (when (and (stringp block-name)
+                           (not (string-match modi/verilog-keywords-re
+                                              block-name)))
+                  (setq-local modi/verilog-which-func-xtra
+                              (cond
+                                ((string= "class"     block-type) "class")
+                                ((string= "clocking"  block-type) "clk")
+                                ((string= "`define"   block-type) "macro")
+                                ((string= "group"     block-type) "group")
+                                ((string= "module"    block-type) "mod")
+                                ((string= "interface" block-type) "if")
+                                ((string= "package"   block-type) "pkg")
+                                ((string= "sequence"  block-type) "seq")
+                                (t (substring block-type 0 4)))) ; first 4 chars
+                  (setq return-val block-name)))))
           (when (featurep 'which-func)
             (modi/verilog-update-which-func-format))
           return-val))
