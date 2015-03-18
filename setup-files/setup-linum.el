@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 09:11:19 kmodi>
+;; Time-stamp: <2015-03-18 09:42:42 kmodi>
 
 ;; Line number package manager
 
@@ -36,7 +36,7 @@ This variable is for internal use only, not to be set by user.")
       "Set the linum foreground and background color to that of the theme."
       (set-face-attribute 'linum nil
                           :height 0.9
-                          :foreground "dim gray"
+                          :foreground (face-foreground 'font-lock-comment-face)
                           :background (face-background 'default)))
 
     (defun modi/turn-on-linum ()

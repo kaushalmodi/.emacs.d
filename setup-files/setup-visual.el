@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 15:46:22 kmodi>
+;; Time-stamp: <2015-03-18 17:19:57 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -27,86 +27,55 @@ This variable is to be updated when changing themes.")
       )
 
 ;; THEME and COLORS
+(defconst my/themes '((smyx        . dark)
+                      (zenburn     . dark)
+                      (darktooth   . dark)
+                      (leuven      . light)
+                      (stock-theme . light))
+  "Alist of themes I tend to switch to frequently.")
+
+(defun my/disable-all-themes ()
+  "Disable all of my themes."
+  (interactive)
+  (dolist (theme my/themes)
+    (when (not (equal (car theme) 'stock-theme))
+      (disable-theme (car theme)))))
+
 (setq default-dark-theme  'smyx)
 (setq default-light-theme 'leuven)
 (setq default-theme       default-dark-theme)
 
-;; Make the italics show as actual italics. For some unknown reason, the below
-;; is needed to render the italics in org-mode. The issue could be related to
-;; the fonts in use. But having this doesn't hurt regardless.
-(set-face-attribute 'italic nil :inherit nil :slant 'italic)
+(defmacro modi/gen-theme-fn (theme dark)
+  "Macro to generate a function to disable all themes and enable the chosen
+theme, while also customizing few faces outside the theme."
+  `(defun ,theme ()
+     (interactive)
+     (setq dark-theme ,dark)
+     (my/disable-all-themes)
+     (when (not (equal ',theme 'stock-theme))
+       (load-theme ',theme t))
+     (with-eval-after-load 'faces
+       (modi/blend-fringe))
+     (with-eval-after-load 'linum
+       (modi/blend-linum))
+     (with-eval-after-load 'smart-mode-line
+       (if ,dark
+           (sml/apply-theme 'dark)
+         (sml/apply-theme 'light)))
+     (with-eval-after-load 'setup-fci
+       (setq fci-rule-color (face-foreground 'font-lock-comment-face))
+       (modi/fci-redraw-frame-all-buffers))))
 
-;; zenburn
-(defun zenburn ()
-  "Activate zenburn theme."
-  (interactive)
-  (setq dark-theme t)
-  (disable-theme 'leuven)
-  (disable-theme 'smyx)
-  (load-theme 'zenburn t)
-  (with-eval-after-load 'faces
-    (modi/blend-fringe))
-  (with-eval-after-load 'linum
-    (modi/blend-linum))
-  (with-eval-after-load 'smart-mode-line
-    (sml/apply-theme 'dark))
-  (with-eval-after-load 'setup-fci
-    (setq fci-rule-color "#383838")
-    (modi/fci-redraw-frame-all-buffers)))
+;; FIXME: Need to get the below working
+;; (dolist (theme my/themes)
+;;   (message "%s %s" (car theme) (equal (cdr theme) 'dark))
+;;   `(modi/gen-theme-fn ,(car theme) ,(equal (cdr theme) 'dark)))
 
-;; smyx
-(defun smyx ()
-  "Activate smyx theme."
-  (interactive)
-  (setq dark-theme t)
-  (disable-theme 'leuven)
-  (disable-theme 'zenburn)
-  (load-theme 'smyx t)
-  (with-eval-after-load 'faces
-    (modi/blend-fringe))
-  (with-eval-after-load 'linum
-    (modi/blend-linum))
-  (with-eval-after-load 'smart-mode-line
-    (sml/apply-theme 'dark))
-  (with-eval-after-load 'setup-fci
-    (setq fci-rule-color "#383838")
-    (modi/fci-redraw-frame-all-buffers)))
-
-;;leuven theme
-(defun leuven ()
-  "Activate leuven theme."
-  (interactive)
-  (setq dark-theme nil)
-  (disable-theme 'zenburn)
-  (disable-theme 'smyx)
-  (load-theme 'leuven t)
-  (with-eval-after-load 'faces
-    (modi/blend-fringe))
-  (with-eval-after-load 'linum
-    (modi/blend-linum))
-  (with-eval-after-load 'smart-mode-line
-    (sml/apply-theme 'light))
-  (with-eval-after-load 'setup-fci
-    (setq fci-rule-color "gray")
-    (modi/fci-redraw-frame-all-buffers)))
-
-;;stock theme
-(defun stock-theme ()
-  "Activate stock theme."
-  (interactive)
-  (setq dark-theme nil)
-  (disable-theme 'zenburn)
-  (disable-theme 'smyx)
-  (disable-theme 'leuven)
-  (with-eval-after-load 'faces
-    (modi/blend-fringe))
-  (with-eval-after-load 'linum
-    (modi/blend-linum))
-  (with-eval-after-load 'smart-mode-line
-    (sml/apply-theme 'light))
-  (with-eval-after-load 'setup-fci
-    (setq fci-rule-color "gray")
-    (modi/fci-redraw-frame-all-buffers)))
+(modi/gen-theme-fn smyx        t)
+(modi/gen-theme-fn zenburn     t)
+(modi/gen-theme-fn darktooth   t)
+(modi/gen-theme-fn leuven      nil)
+(modi/gen-theme-fn stock-theme nil)
 
 (defun toggle-theme ()
   "Toggles theme between the default light and default dark themes."
@@ -119,6 +88,11 @@ This variable is to be updated when changing themes.")
 ;; when running emacs in daemon mode)
 ;; https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
 (add-hook 'window-setup-hook (λ (funcall default-theme)))
+
+;; Make the italics show as actual italics. For some unknown reason, the below
+;; is needed to render the italics in org-mode. The issue could be related to
+;; the fonts in use. But having this doesn't hurt regardless.
+(set-face-attribute 'italic nil :inherit nil :slant 'italic)
 
 (defun modi/update-frame-title ()
   (interactive)
@@ -325,19 +299,19 @@ during presentations."
 ;; Show long lines
 ;; http://stackoverflow.com/a/6346547/1219634
 (use-package whitespace
-  :commands (modi/show-long-lines)
-  :init
-  (progn
-    (bind-to-modi-map "L" modi/show-long-lines))
-  :config
-  (progn
-    (defun modi/show-long-lines()
-      (interactive)
-      (let ((hi-lock-mode -1)) ; reset hi-lock mode
-        (highlight-lines-matching-regexp
-         (concat ".\\{"
-                 (number-to-string (+ 1 whitespace-line-column))
-                 "\\}") "hi-yellow")))))
+    :commands (modi/show-long-lines)
+    :init
+    (progn
+      (bind-to-modi-map "L" modi/show-long-lines))
+    :config
+    (progn
+      (defun modi/show-long-lines()
+        (interactive)
+        (let ((hi-lock-mode -1)) ; reset hi-lock mode
+          (highlight-lines-matching-regexp
+           (concat ".\\{"
+                   (number-to-string (+ 1 whitespace-line-column))
+                   "\\}") "hi-yellow")))))
 
 ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun endless/narrow-or-widen-dwim (p)
@@ -371,9 +345,9 @@ narrowed."
 ;; Usage: C-x - _ - 0 _ _ _ _ - - 0
 ;; Usage: C-x _ _ 0 - _ - _ _ _ _ - - 0
 (defhydra hydra-font-resize
-  (nil "C-x"
-       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-       :color red)
+    (nil "C-x"
+     :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+     :color red)
   "font-resize"
   ("-"   modi/font-size-decr  "Decrease")
   ("_"   modi/font-size-incr  "Increase")
