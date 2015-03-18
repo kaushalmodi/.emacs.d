@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-17 13:46:45 kmodi>
+;; Time-stamp: <2015-03-18 09:35:11 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -38,6 +38,7 @@
         buffer-move
         cperl-mode
         csv-nav ; editing csv files
+        darktooth-theme ; coffee background theme
         diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
