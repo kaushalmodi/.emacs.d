@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 16:24:01 kmodi>
+;; Time-stamp: <2015-03-19 12:26:32 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
@@ -97,15 +97,17 @@ It added extra strings at the front and back of the default dired buffer name."
         "
 Number of marked items: %(length (dired-get-marked-files))
 "
-        ("m"   dired-mark             "mark")
-        ("u"   dired-unmark           "unmark")
-        ("U"   dired-unmark-all-marks "unmark ALL")
-        ("t"   dired-toggle-marks     "toggle marks")
-        ("P"   dired-prev-marked-file "prev marked")
-        ("M-{" dired-prev-marked-file "prev marked")
-        ("N"   dired-next-marked-file "next marked")
-        ("M-}" dired-next-marked-file "next marked")
-        ("C-g" nil                    "cancel" :color blue))))
+        ("m"   dired-mark                      "mark")
+        ("u"   dired-unmark                    "unmark")
+        ("U"   dired-unmark-all-marks          "unmark ALL")
+        ("t"   dired-toggle-marks              "toggle marks")
+        ("P"   dired-prev-marked-file          "prev marked")
+        ("M-{" dired-prev-marked-file          "prev marked")
+        ("N"   dired-next-marked-file          "next marked")
+        ("M-}" dired-next-marked-file          "next marked")
+        ("w"   dired-copy-filename-as-kill     "copy file name(s)")
+        ("W"   (dired-copy-filename-as-kill 0) "copy file name(s) - full path")
+        ("C-g" nil                             "cancel" :color blue))))
 
 
 (provide 'setup-dired)
@@ -119,3 +121,11 @@ Number of marked items: %(length (dired-get-marked-files))
 ;; If in Dired already, pop up a level and goto old directory's line.
 ;; In case the proper dired file line cannot be found, refresh the dired
 ;; buffer and try again.
+
+;; https://peterreavy.wordpress.com/2011/05/04/emacs-dired-tips/
+;; (2) To copy the name of the file at point, in order to make use of
+;; it elsewhere, use `dired-copy-filename-as-kill', which is bound to
+;; `w'.
+;;    To make it copy the absolute path: `0 w'
+
+;; (3) To copy the path to the folder you’re looking at in dired: `M-< w'
