@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-18 17:19:57 kmodi>
+;; Time-stamp: <2015-03-19 14:42:19 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -63,7 +63,11 @@ theme, while also customizing few faces outside the theme."
            (sml/apply-theme 'dark)
          (sml/apply-theme 'light)))
      (with-eval-after-load 'setup-fci
-       (setq fci-rule-color (face-foreground 'font-lock-comment-face))
+       ;; Below commented code does not work
+       ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
+       (if ,dark
+           (setq fci-rule-color "gray40")
+         (setq fci-rule-color "gray"))
        (modi/fci-redraw-frame-all-buffers))))
 
 ;; FIXME: Need to get the below working
