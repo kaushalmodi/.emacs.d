@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 15:21:16 kmodi>
+;; Time-stamp: <2015-03-19 14:43:43 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -130,7 +130,8 @@
                         matlab-mode-hook
                         sh-mode-hook
                         cperl-mode-hook
-                        c-mode-hook))
+                        c-mode-hook
+                        makefile-mode-hook))
           (add-hook hook #'ggtags-mode))
 
         ;; Patch - Enable "-d" option
