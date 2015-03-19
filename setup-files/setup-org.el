@@ -1,10 +1,9 @@
-;; Time-stamp: <2015-03-17 13:47:47 kmodi>
+;; Time-stamp: <2015-03-19 16:47:27 kmodi>
 
 ;; Org Mode
 
 (use-package org
-    :defer 10
-    :mode "\\.org\\'"
+    :mode ("\\.org\\'" . org-mode)
     :config
     (progn
       (setq org-agenda-archives-mode nil) ; required in org 8.0+
@@ -248,6 +247,7 @@ this with to-do items than with projects or headings."
             (bind-key "C-4"      #'org-tree-slide-presentation-profile          org-tree-slide-mode-map)))
 
       (use-package ox
+          :defer 10
           :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
           :config
           (progn
