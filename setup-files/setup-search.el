@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-17 10:15:05 kmodi>
+;; Time-stamp: <2015-03-19 14:49:45 kmodi>
 
 ;; Search
 
@@ -80,6 +80,7 @@ happens within a region if one is selected."
     ;; Fix free variable warning
     :preface
   (progn
+    (defvar helm-swoop-pattern            nil)
     (defvar helm-swoop-last-prefix-number nil))
   :commands (helm-swoop helm-multi-swoop-all helm-swoop-from-isearch)
   :init
