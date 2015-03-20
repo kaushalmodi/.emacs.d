@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-19 14:42:19 kmodi>
+;; Time-stamp: <2015-03-20 10:36:08 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -26,12 +26,12 @@ This variable is to be updated when changing themes.")
       tooltip-mode nil ; disable tooltip appearance on mouse hover
       )
 
-;; THEME and COLORS
-(defconst my/themes '((smyx        . dark)
-                      (zenburn     . dark)
-                      (darktooth   . dark)
-                      (leuven      . light)
-                      (stock-theme . light))
+;;                     THEME-NAME  DARK   FCI-RULE-COLOR
+(defconst my/themes '((smyx        'dark  "gray40")
+                      (zenburn     'dark  "gray40")
+                      (darktooth   'dark  "gray40")
+                      (leuven      'light "gray")
+                      (stock-theme 'light "gray"))
   "Alist of themes I tend to switch to frequently.")
 
 (defun my/disable-all-themes ()
@@ -41,57 +41,65 @@ This variable is to be updated when changing themes.")
     (when (not (equal (car theme) 'stock-theme))
       (disable-theme (car theme)))))
 
-(setq default-dark-theme  'smyx)
-(setq default-light-theme 'leuven)
-(setq default-theme       default-dark-theme)
+;; How can I create multiple defuns by looping through a list?
+;; http://emacs.stackexchange.com/a/10122/115
+(defun modi/gen-theme-fn (theme-name dark fci-rule-color)
+  "Function to generate a function to disable all themes and enable the chosen
+theme, while also customizing few faces outside the theme.
 
-(defmacro modi/gen-theme-fn (theme dark)
-  "Macro to generate a function to disable all themes and enable the chosen
-theme, while also customizing few faces outside the theme."
-  `(defun ,theme ()
-     (interactive)
-     (setq dark-theme ,dark)
-     (my/disable-all-themes)
-     (when (not (equal ',theme 'stock-theme))
-       (load-theme ',theme t))
-     (with-eval-after-load 'faces
-       (modi/blend-fringe))
-     (with-eval-after-load 'linum
-       (modi/blend-linum))
-     (with-eval-after-load 'smart-mode-line
-       (if ,dark
-           (sml/apply-theme 'dark)
-         (sml/apply-theme 'light)))
-     (with-eval-after-load 'setup-fci
-       ;; Below commented code does not work
-       ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
-       (if ,dark
-           (setq fci-rule-color "gray40")
-         (setq fci-rule-color "gray"))
-       (modi/fci-redraw-frame-all-buffers))))
+The theme loading functions are named “load-theme/THEME-NAME”.
+Example: For `smyx' theme, the generated function will be `load-theme/smyx'.
 
-;; FIXME: Need to get the below working
-;; (dolist (theme my/themes)
-;;   (message "%s %s" (car theme) (equal (cdr theme) 'dark))
-;;   `(modi/gen-theme-fn ,(car theme) ,(equal (cdr theme) 'dark)))
+The DARK variable should be set to `'dark' if the theme is dark and `'light'
+if otherwise.
 
-(modi/gen-theme-fn smyx        t)
-(modi/gen-theme-fn zenburn     t)
-(modi/gen-theme-fn darktooth   t)
-(modi/gen-theme-fn leuven      nil)
-(modi/gen-theme-fn stock-theme nil)
+The FCI-RULE-COLOR is the color string to set the color for fci rules."
+  (let ((theme-fn-name (intern (format "load-theme/%s" theme-name))))
+    `(defun ,theme-fn-name ()
+       (interactive)
+       ;; `dark-theme' is set to `t' if `dark' value is `'dark'
+       (setq dark-theme (equal ,dark 'dark))
+       (my/disable-all-themes)
+       (when (not (equal ',theme-name 'stock-theme))
+         (load-theme ',theme-name t))
+       (with-eval-after-load 'faces
+         (modi/blend-fringe))
+       (with-eval-after-load 'linum
+         (modi/blend-linum))
+       (with-eval-after-load 'smart-mode-line
+         (sml/apply-theme ,dark))
+       (with-eval-after-load 'setup-fci
+         ;; Below commented code does not work
+         ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
+         (setq fci-rule-color ,fci-rule-color)
+         (modi/fci-redraw-frame-all-buffers)))))
+
+(defmacro modi/gen-all-theme-fns ()
+  `(progn ,@(mapcar
+             (lambda (x) (modi/gen-theme-fn (nth 0 x) (nth 1 x) (nth 2 x)))
+             my/themes)))
+
+(modi/gen-all-theme-fns)
+;; (pp (macroexpand '(modi/gen-all-theme-fns))) ; for debug
+
+(defconst default-dark-theme-fn  'load-theme/smyx
+  "Function to set the default dark theme.")
+(defconst default-light-theme-fn 'load-theme/leuven
+  "Function to set the default light theme.")
+(defconst default-theme-fn default-dark-theme-fn
+  "Function to set the default theme.")
 
 (defun toggle-theme ()
   "Toggles theme between the default light and default dark themes."
   (interactive)
   (if dark-theme
-      (funcall default-light-theme)
-    (funcall default-dark-theme)))
+      (funcall default-light-theme-fn)
+    (funcall default-dark-theme-fn)))
 
 ;; Load the theme ONLY after the frame has finished loading (needed especially
 ;; when running emacs in daemon mode)
 ;; https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
-(add-hook 'window-setup-hook (λ (funcall default-theme)))
+(add-hook 'window-setup-hook (λ (funcall default-theme-fn)))
 
 ;; Make the italics show as actual italics. For some unknown reason, the below
 ;; is needed to render the italics in org-mode. The issue could be related to
