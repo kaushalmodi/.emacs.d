@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-13 11:30:50 kmodi>
+;; Time-stamp: <2015-03-20 10:06:59 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -25,6 +25,10 @@ Usage: (>=e \"25.0\"
 ;; Alias ^ as a function to calculate exponents
 ;; (^ 2 15) `C-x C-e' -> 32768
 (defalias '^ 'expt)
+
+;; Easier to remember aliases
+(defalias 'undefun 'fmakunbound) ; Set symbol's function definition to nil
+(defalias 'unsetq  'makunbound) ; Set symbol's value to nil
 
 ;; Source https://github.com/Wilfred/ag.el
 (defun modi/get-symbol-at-point ()
