@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-19 14:49:45 kmodi>
+;; Time-stamp: <2015-03-20 14:39:20 kmodi>
 
 ;; Search
 
@@ -75,7 +75,35 @@ happens within a region if one is selected."
      (if (match-string 1) string-2 string-1))
    t t delimited nil nil start end))
 
+;; Swiper
+;; https://github.com/abo-abo/swiper
+(use-package swiper
+    :ensure t
+    :config
+    (progn
+      (defun swiper--dwim ()
+        "Input the selected region or symbol at point to swiper by default."
+        (interactive)
+        (swiper (modi/get-symbol-at-point)))
+
+      (defun swiper--from-isearch ()
+        "Invoke `swiper' from isearch.
+
+https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
+"
+        (interactive)
+        (let (($query (if isearch-regexp
+                          isearch-string
+                        (regexp-quote isearch-string))))
+          (isearch-exit)
+          (swiper $query)))
+
+      (bind-key "M-i" #'swiper--dwim modi-mode-map)
+      ;; isearch > M-i > swiper
+      (bind-key "M-i" #'swiper--from-isearch isearch-mode-map)))
+
 ;; Helm Swoop
+;; https://github.com/ShingoFukuyama/helm-swoop
 (use-package helm-swoop
     ;; Fix free variable warning
     :preface
@@ -85,12 +113,11 @@ happens within a region if one is selected."
   :commands (helm-swoop helm-multi-swoop-all helm-swoop-from-isearch)
   :init
   (progn
-    (bind-keys
-     :map modi-mode-map
-     ("M-i" . helm-swoop)
-     ("M-I" . helm-multi-swoop-all))
-    ;; isearch > press [M-i] > helm-swoop
-    (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map))
+    (when (not (featurep 'swiper))
+      (bind-key "M-i" #'helm-swoop modi-mode-map)
+      ;; isearch > M-i > helm-swoop
+      (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map))
+    (bind-key "M-I" #'helm-multi-swoop-all modi-mode-map))
   :config
   (progn
     ;; Disable helm
