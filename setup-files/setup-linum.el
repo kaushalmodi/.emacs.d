@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-18 09:42:42 kmodi>
+;; Time-stamp: <2015-03-20 16:27:59 kmodi>
 
 ;; Line number package manager
 
@@ -12,6 +12,9 @@ If nil, the line numbers are not displayed.
 Else this value is either 'nlinum, 'linum or 'linum-relative.
 
 This variable is for internal use only, not to be set by user.")
+
+(defvar modi/linum-mode-enable-global nil
+  "Variable to enable a linum mode globally or selectively based on major modes.")
 
 (defvar modi/linum-mode-hooks '(verilog-mode-hook
                                 emacs-lisp-mode-hook
@@ -42,12 +45,20 @@ This variable is for internal use only, not to be set by user.")
     (defun modi/turn-on-linum ()
       "Turn on linum mode in specific modes."
       (interactive)
-      (dolist (hook modi/linum-mode-hooks)
-        (add-hook hook #'linum-mode)))
+      (if modi/linum-mode-enable-global
+          (progn
+            (dolist (hook modi/linum-mode-hooks)
+              (remove-hook hook #'linum-mode))
+            (global-linum-mode 1))
+        (progn
+          (global-linum-mode -1)
+          (dolist (hook modi/linum-mode-hooks)
+            (add-hook hook #'linum-mode)))))
 
     (defun modi/turn-off-linum ()
       "Unhook linum mode from various major modes."
       (interactive)
+      (global-linum-mode -1)
       (dolist (hook modi/linum-mode-hooks)
         (remove-hook hook #'linum-mode)))))
 
@@ -71,12 +82,20 @@ This variable is for internal use only, not to be set by user.")
     (defun modi/turn-on-nlinum ()
       "Turn on nlinum mode in specific modes."
       (interactive)
-      (dolist (hook modi/linum-mode-hooks)
-        (add-hook hook #'nlinum-mode)))
+      (if modi/linum-mode-enable-global
+          (progn
+            (dolist (hook modi/linum-mode-hooks)
+              (remove-hook hook #'nlinum-mode))
+            (global-nlinum-mode 1))
+        (progn
+          (global-nlinum-mode -1)
+          (dolist (hook modi/linum-mode-hooks)
+            (add-hook hook #'nlinum-mode)))))
 
     (defun modi/turn-off-nlinum ()
       "Unhook nlinum mode from various major modes."
       (interactive)
+      (global-nlinum-mode -1)
       (dolist (hook modi/linum-mode-hooks)
         (remove-hook hook #'nlinum-mode)))))
 
