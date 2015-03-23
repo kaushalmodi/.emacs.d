@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-17 13:46:11 kmodi>
+;; Time-stamp: <2015-03-23 12:32:24 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -194,17 +194,17 @@ remove the comment characters from that line."
 ;; zop-to-char
 ;; Source: https://github.com/thierryvolpiatto/zop-to-char
 (use-package zop-to-char
-    :load-path "elisp/zop-to-char"
-    :config
-    (progn
-      (bind-keys
-       :map modi-mode-map
-       ("M-z" . zop-up-to-char)
-       ("M-Z" . zop-to-char))))
+  :load-path "elisp/zop-to-char"
+  :config
+  (progn
+    (bind-keys
+     :map modi-mode-map
+      ("M-z" . zop-up-to-char)
+      ("M-Z" . zop-to-char))))
 
 ;; indent-guide
 (use-package indent-guide
-    :config
+  :config
   (progn
     (setq indent-guide-recursive t)
     (setq indent-guide-char "|")
@@ -272,11 +272,11 @@ instead of ASCII characters for adorning the copied snippet."
 (when (featurep 'region-bindings-mode)
   (bind-keys
    :map region-bindings-mode-map
-   ;; When region is selected, pressing `c' will copy the region
-   ;; with ASCII character adornment.
-   ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
-   ("c" . kill-with-linenum)
-   ("C" . kill-with-linenum-unicode)))
+    ;; When region is selected, pressing `c' will copy the region
+    ;; with ASCII character adornment.
+    ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
+    ("c" . kill-with-linenum)
+    ("C" . kill-with-linenum-unicode)))
 
 ;; Convert the decimal values in the whole buffer to 16-bit 2's complement hex
 (fset 'modi/convert-dec-to-twos-comp-16-bit-hex
@@ -288,24 +288,24 @@ instead of ASCII characters for adorning the copied snippet."
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 (use-package rectangle-utils
-    :commands (modi/extend-rectangle-to-end)
-    :init
-    (progn
-      (when (featurep 'region-bindings-mode)
-        (bind-keys
-         :map region-bindings-mode-map
-         ("|" . modi/extend-rectangle-to-end))))
-    :config
-    (progn
-      (defun modi/extend-rectangle-to-end(beg end)
-        "Make `extend-rectangle-to-end' work for read-only buffers too."
-        (interactive "r")
-        (let* (original-read-only-state buffer-read-only)
-          (when original-read-only-state
-            (read-only-mode -1)) ; Force the buffer to be writable
-          (extend-rectangle-to-end beg end)
-          (when original-read-only-state
-            (read-only-mode +1)))))) ; Revert the buffer back to its read-only state
+  :commands (modi/extend-rectangle-to-end)
+  :init
+  (progn
+    (when (featurep 'region-bindings-mode)
+      (bind-keys
+       :map region-bindings-mode-map
+        ("|" . modi/extend-rectangle-to-end))))
+  :config
+  (progn
+    (defun modi/extend-rectangle-to-end(beg end)
+      "Make `extend-rectangle-to-end' work for read-only buffers too."
+      (interactive "r")
+      (let* (original-read-only-state buffer-read-only)
+        (when original-read-only-state
+          (read-only-mode -1)) ; Force the buffer to be writable
+        (extend-rectangle-to-end beg end)
+        (when original-read-only-state
+          (read-only-mode +1)))))) ; Revert the buffer back to its read-only state
 
 (defun copy-rectangle-as-kill-then-delete (start end)
   "Copy the region-rectangle and save it as the last killed one.
@@ -383,12 +383,12 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
            (save-excursion
              (goto-char p1)
              (cond
-               ;; lower -> Capitalize
-               ((looking-at "[[:lower:]]")            (put this-command 'next-state "Capitalize"))
-               ;; Capitalize -> UPPER
-               ((looking-at "[[:upper:]][[:lower:]]") (put this-command 'next-state "UPPER"))
-               ;; Default: UPPER -> lower
-               (t                                     (put this-command 'next-state "lower")))))))
+              ;; lower -> Capitalize
+              ((looking-at "[[:lower:]]")            (put this-command 'next-state "Capitalize"))
+              ;; Capitalize -> UPPER
+              ((looking-at "[[:upper:]][[:lower:]]") (put this-command 'next-state "UPPER"))
+              ;; Default: UPPER -> lower
+              (t                                     (put this-command 'next-state "lower")))))))
 
     (cl-case (string-to-char (get this-command 'next-state)) ; `string-to-char' returns first character in string
       (?U (upcase-region p1 p2)
@@ -407,7 +407,7 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 (when (featurep 'region-bindings-mode)
   (bind-keys
    :map region-bindings-mode-map
-   ("~" . xah-cycle-letter-case)))
+    ("~" . xah-cycle-letter-case)))
 
 (defhydra hydra-change-case(:color red)
   "change-case"
@@ -419,9 +419,9 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 
 (bind-keys
  :map modi-mode-map
- ("C-x C-u" . modi/upcase)
- ("C-x C-l" . modi/downcase)
- ("M-c"     . hydra-change-case/body))
+  ("C-x C-u" . modi/upcase)
+  ("C-x C-l" . modi/downcase)
+  ("M-c"     . hydra-change-case/body))
 
 ;; http://www.emacswiki.org/emacs/SortWords
 ;; http://emacs.stackexchange.com/a/7550/115
@@ -442,18 +442,17 @@ Temporarily consider - and _ characters as part of the word when sorting."
 
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
-    :load-path "elisp/unfill")
+  :load-path "elisp/unfill")
 
 ;; Forked version of https://github.com/jorgenschaefer/gplusify
 (use-package gplusify
-    :ensure t
-    :commands (gplusify-region-as-kill)
-    :init
-    (progn
-      (when (featurep 'region-bindings-mode)
-        (bind-keys
-         :map region-bindings-mode-map
-         ("G" . gplusify-region-as-kill)))))
+  :commands (gplusify-region-as-kill)
+  :init
+  (progn
+    (when (featurep 'region-bindings-mode)
+      (bind-keys
+       :map region-bindings-mode-map
+        ("G" . gplusify-region-as-kill)))))
 
 ;; Unicode
 (defhydra hydra-unicode (:color blue)
@@ -471,23 +470,23 @@ Temporarily consider - and _ characters as part of the word when sorting."
 ;; Key bindings
 (bind-keys
  :map modi-mode-map
- ;; override the binding of `M-;' for `comment-dwim'
- ("M-;"     . endless/comment-line-or-region)
- ("C-x d"   . delete-region)
- ("C-S-d"   . duplicate-current-line-or-region)
- ;; override the binding of `C-x =` for `what-cursor-position'
- ("C-x ="   . align-to-equals) ; align all = signs in selected region
- ("C-x \\"  . align-regexp)  ; align selected region to the entered regexp
- ;; align multiple columns in the selected region. Of course all the selected
- ;; lines must have the same number of columns of groups of non-space characters
- ("C-x |"   . align-columns)
- ("C-k"     . kill-line)
- ("C-S-k"   . smart-kill-whole-line)
- ;; override the binding of `C-o` for `open-line'
- ("C-o"     . modi/smart-open-line)
- ("C-j"     . modi/pull-up-line)
- ("M-j"     . comment-indent-new-line)
- ("<f9>"    . eval-region))
+  ;; override the binding of `M-;' for `comment-dwim'
+  ("M-;"     . endless/comment-line-or-region)
+  ("C-x d"   . delete-region)
+  ("C-S-d"   . duplicate-current-line-or-region)
+  ;; override the binding of `C-x =` for `what-cursor-position'
+  ("C-x ="   . align-to-equals) ; align all = signs in selected region
+  ("C-x \\"  . align-regexp)  ; align selected region to the entered regexp
+  ;; align multiple columns in the selected region. Of course all the selected
+  ;; lines must have the same number of columns of groups of non-space characters
+  ("C-x |"   . align-columns)
+  ("C-k"     . kill-line)
+  ("C-S-k"   . smart-kill-whole-line)
+  ;; override the binding of `C-o` for `open-line'
+  ("C-o"     . modi/smart-open-line)
+  ("C-j"     . modi/pull-up-line)
+  ("M-j"     . comment-indent-new-line)
+  ("<f9>"    . eval-region))
 
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
 ;; default binding `C-x =' with something else.
