@@ -1,11 +1,11 @@
-;; Time-stamp: <2015-03-10 17:09:23 kmodi>
+;; Time-stamp: <2015-03-23 17:32:07 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
 
 ;; Load newer version of .el and .elc if both are available
 (when (version<= "24.4" emacs-version)
-     (setq load-prefer-newer t))
+  (setq load-prefer-newer t))
 
 (require 'package)
 
@@ -15,19 +15,14 @@
 (defun append-path ( my-path )
   (setq load-path (append load-path (list (expand-file-name my-path)))))
 
-(prepend-path user-emacs-directory)
-(prepend-path (concat user-emacs-directory "/setup-files"))
 (prepend-path (concat user-emacs-directory "/elisp"))
+(prepend-path (concat user-emacs-directory "/setup-files"))
 
 ;; Create the package install directory if it doesn't exist
 (setq package-user-dir (concat user-emacs-directory "/elpa_"
                                emacs-version-short)) ; default = ~/.emacs.d/elpa
 (unless (file-exists-p package-user-dir)
   (make-directory package-user-dir))
-
-;; add all sub directories under package install dir to the load-path
-(let ((default-directory package-user-dir))
-  (normal-top-level-add-subdirs-to-load-path))
 
 ;; add theme paths
 (add-to-list 'custom-theme-load-path
