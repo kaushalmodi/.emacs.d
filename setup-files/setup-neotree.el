@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-03-23 09:25:23 kmodi>
 
 ;; Neotree
 ;; https://github.com/jaypei/emacs-neotree
 
 (use-package neotree
-  :init
+    :init
   (progn
     (setq-default neo-smart-open t) ;  every time when the neotree window is
                                         ;  opened, it will try to find current
@@ -47,8 +47,7 @@
      ("c"          . neotree-create-node)
      ("+"          . neotree-create-node)
      ("d"          . neotree-delete-node)
-     ("r"          . neotree-rename-node)
-     ("e"          . neotree-enter))
+     ("r"          . neotree-rename-node))
 
     (bind-to-modi-map "n" neotree-toggle)))
 
