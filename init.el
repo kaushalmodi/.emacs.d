@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-18 09:35:11 kmodi>
+;; Time-stamp: <2015-03-23 09:26:53 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -172,7 +172,6 @@
 (use-package setup-iregister)
 (when (executable-find "git")
   (use-package setup-magit)
-  ;; (use-package setup-git-gutter)
   (use-package setup-diff-hl)
   (use-package setup-git-link))
 (use-package setup-manage-minor-mode)
