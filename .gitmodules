@@ -28,3 +28,6 @@
 [submodule "elisp/git-link"]
 	path = elisp/git-link
 	url = http://github.com/kaushalmodi/git-link
+[submodule "elisp/interleave"]
+	path = elisp/interleave
+	url = http://www.github.com/kaushalmodi/interleave
