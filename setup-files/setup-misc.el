@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-17 10:47:56 kmodi>
+;; Time-stamp: <2015-03-24 13:31:32 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -110,165 +110,113 @@ If universal arg is used, load the `init.el'."
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
 (autoload 'dired-toggle-read-only "dired" nil t)
-(defhydra hydra-toggle (:color blue)
-  "toggle"
-  ("a"     aggressive-indent-mode       "aggressive indent")
-  ("b"     modi/toggle-menu-bar         "menu bar")
-  ("c"     xah-cycle-letter-case        "letter case" :color red)
-  ("d"     toggle-debug-on-error        "debug on error")
-  ("e"     modi/toggle-edebug-defun     "edebug")
-  ("E"     modi/toggle-debug-defun      "debug on entry")
-  ("f"     toggle-fill-unfill           "fill/unfill")
-  ("F"     auto-fill-mode               "auto fill")
-  ("g"     indent-guide-mode            "indent guide")
-  ("M-h"   hardcore-mode                "hardcore")
-  ("i"     fci-mode                     "fci")
-  ("k"     key-chord-mode               "key chord" :color red)
-  ("l"     modi/toggle-linum            "linum")
-  ("m"     modi-mode                    "modi mode")
-  ("n"     endless/narrow-or-widen-dwim "narrow/widen")
-  ("N"     neotree-toggle               "neotree")
-  ("o"     modi/toggle-one-window       "one window" :color red)
-  ("p"     prez-mode                    "presentation")
-  ("r"     dired-toggle-read-only       "read only") ; generalized `read-only-mode'
-  ("s"     transpose-frame              "split horz/vert" :color red)
-  ("S"     stripe-buffer-mode           "stripe buffer")
-  ("t"     toggle-truncate-lines        "truncate" :color red)
-  ("s-t"   toggle-theme                 "theme")
-  ("T"     toggle-theme                 "theme")
-  ("v"     recenter-top-bottom          "recenter" :color red)
-  ("<SPC>" whitespace-mode              "whitespace" :color red)
-  ("q"     nil                          "cancel" :color blue))
+(defhydra hydra-toggle (:color blue
+                        :hint  nil)
+  "
+    TOGGLE ...
+_a_ggressive indent^^             _e_debug^^                         fill col _i_ndicator      _p_resentation         _t_runcate lines
+menu _b_ar^^                      _f_/_F_ fill/autofill              _k_ey chord               _r_ead only            _s-t_/_T_ theme
+cycle _c_ase^^                    indent _g_uide^^                   _l_ine num                _s_plit horz/vert      _<SPC>_ whitespace
+_d_/_D_ debug on error/entry      _H_ardcore (allow arrows)^^        _m_odi mode               _S_tripe buffer
+"
+  ("a"     aggressive-indent-mode)
+  ("b"     modi/toggle-menu-bar)
+  ("c"     xah-cycle-letter-case :color red)
+  ("d"     toggle-debug-on-error)
+  ("D"     modi/toggle-debug-defun)
+  ("e"     modi/toggle-edebug-defun)
+  ("f"     toggle-fill-unfill)
+  ("F"     auto-fill-mode)
+  ("g"     indent-guide-mode)
+  ("H"     hardcore-mode)
+  ("i"     fci-mode)
+  ("k"     key-chord-mode :color red)
+  ("l"     modi/toggle-linum)
+  ("m"     modi-mode)
+  ("n"     endless/narrow-or-widen-dwim)
+  ("N"     neotree-toggle)
+  ("o"     modi/toggle-one-window :color red)
+  ("p"     prez-mode)
+  ("r"     dired-toggle-read-only) ; generalized `read-only-mode'
+  ("s"     transpose-frame :color red)
+  ("S"     stripe-buffer-mode)
+  ("t"     toggle-truncate-lines :color red)
+  ("s-t"   toggle-theme)
+  ("T"     toggle-theme)
+  ("<SPC>" whitespace-mode :color red)
+  ("q"     nil "cancel" :color blue))
 (key-chord-define-global "qq"  #'hydra-toggle/body)
 (bind-key                "s-t" #'hydra-toggle/body modi-mode-map)
 
 ;; Launcher
-(defhydra hydra-launch-freq (:color teal)
-  "open"
+(defhydra hydra-launch-freq (:color teal
+                             :hint  nil)
+  "
+._a_lias     _e_macs init     ._g_pms     _i_ndex.html     _j_ournal     ._t_mux.conf     IEEE system_v_erilog Std     _V_erilog-mode.el
+"
   ("a" (find-file
         (concat user-home-directory
-                "/.alias"))                                    ".alias")
+                "/.alias")))
   ("e" (find-file
         (concat user-emacs-directory
-                "/init.el"))                                   "init.el")
+                "/init.el")))
   ("g" (find-file
         (concat user-home-directory
-                "/scripts/gpms/.gpms"))                        ".gpms")
+                "/scripts/gpms/.gpms")))
   ("i" (find-file
         (concat user-home-directory
-                "/public_html/index.html"))                    "index.html")
+                "/public_html/index.html")))
   ("j" (find-file
         (concat org-directory
-                "/journal.org"))                               "org journal")
+                "/journal.org")))
   ("t" (find-file
         (concat user-home-directory
-                "/.tmux.conf"))                                ".tmux.conf")
+                "/.tmux.conf")))
   ("v" (find-file
         (concat user-home-directory
-                "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")) "IEEE-SV")
-  ("V" (eww "http://www.veripool.org/ftp/verilog-mode.el")     "verilog-mode SRC")
-  ("q" nil                                                     "cancel" :color blue))
-(defhydra hydra-launch (:color teal)
-  "launch"
-  ("a"       ag-regexp-cwd                         "ag here") ; ag in current dir
-  ("b"       bookmark-jump                         "bookmark")
-  ("c"       quick-calc                            "quick-calc")
-  ("C"       calc                                  "calc")
-  ("s-c"     rpn-calc                              "rpn-calc")
-  ("D"       dired-single-magic-buffer-current-dir "dired")
-  ("d"       modi/ediff-dwim                       "ediff")
-  ("ed"      modi/ediff-dwim                       "ediff")
-  ("ee"      eww                                   "eww")
-  ("el"      modi/eww-im-feeling-lucky             "eww lucky")
-  ("eu"      (eww (browse-url-url-at-point))       "open url in eww")
-  ("f"       browse-url-firefox                    "firefox")
-  ("h"       hl-line-flash                         "highlight curr line")
-  ("l"       xah-run-current-file                  "run/load current")
-  ("L"       (xah-run-current-file 4)              "load init")
-  ("m"       man                                   "man")
-  ("n"       neotree-toggle                        "neotree")
-  ("o"       org-capture                           "org capture")
-  ("p"       paradox-list-packages                 "packages")
+                "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")))
+  ("V" (eww "http://www.veripool.org/ftp/verilog-mode.el"))
+  ("q" nil "cancel" :color blue))
+(defhydra hydra-launch (:color teal
+                        :hint  nil)
+  "
+_a_g cwd             _d_ired current dir      _h_l line flash          _o_rg capture              _sa_ ^^ Async shell cmd
+_b_ookmark jump      _ed_iff dwim             _l_oad current file      _p_ackage list             _ss_ ^^ Shell cmd
+_cq_ Quick calc      _ee_ eww                 _L_oad init.el           _u_pgrade packages         _se_ ^^ emacs.SE
+_cc_ Calc            _el_ eww Lucky           _m_an                    _P_ermissions (chmod)      _w_/_W_ quick/full weather
+_cr_ Rpn calc        _f_irefox                _n_eotree                _<SPC>_ ace jump           _:_  ^^ eval
+"
+  ("a"       ag-regexp-cwd)
+  ("b"       bookmark-jump)
+  ("cq"      quick-calc)
+  ("cc"      calc)
+  ("cr"      rpn-calc)
+  ("d"       dired-single-magic-buffer-current-dir)
+  ("ed"      modi/ediff-dwim)
+  ("ee"      eww)
+  ("el"      modi/eww-im-feeling-lucky)
+  ("eu"      (eww (browse-url-url-at-point)))
+  ("f"       browse-url-firefox)
+  ("h"       hl-line-flash)
+  ("l"       xah-run-current-file)
+  ("L"       (xah-run-current-file 4))
+  ("m"       man)
+  ("n"       neotree-toggle)
+  ("o"       org-capture)
+  ("p"       paradox-list-packages)
   ;; chmod usage: s-SPC 644 P, s-SPC 400 P
-  ("P"       modi/set-file-permissions             "chmod")
-  ("sa"      async-shell-command                   "async shell cmd")
-  ("ss"      shell-command                         "shell cmd")
-  ("se"      (sx-tab-newest nil "emacs")           "emacs SE")
-  ("w"       sunshine-quick-forecast               "weather (quick)")
-  ("W"       sunshine-forecast                     "weather (full)")
-  ("<s-SPC>" hydra-launch-freq/body                "freq files")
-  ("<SPC>"   ace-jump-mode                         "ace jump")
-  (":"       eval-expression                       "eval")
-  ("q"       nil                                   "cancel" :color blue))
+  ("P"       modi/set-file-permissions)
+  ("sa"      async-shell-command)
+  ("ss"      shell-command)
+  ("se"      (sx-tab-newest nil "emacs"))
+  ("u"       paradox-upgrade-packages)
+  ("w"       sunshine-quick-forecast)
+  ("W"       sunshine-forecast)
+  ("<s-SPC>" hydra-launch-freq/body "Frequently Accessed Stuff")
+  ("<SPC>"   ace-jump-mode)
+  (":"       eval-expression)
+  ("q"       nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body)
-
-;; Vi-mode
-;; http://oremacs.com/2015/02/05/amaranth-hydra/
-(defvar hydra-vi/init-pos nil
-  "Variable to store the cursor location at the time of entering `hydra-vi' body")
-(defun hydra-vi/pre ()
-  (setq hydra-vi/init-pos (point))
-  (set-cursor-color "#e52b50"))
-(defun hydra-vi/post ()
-  (interactive)
-  (goto-char hydra-vi/init-pos)
-  ;; `hcz-set-cursor-color-color' variable is set in `setup-visual.el'
-  (set-cursor-color hcz-set-cursor-color-color))
-(defun hydra-vi/end-of-buffer (&optional arg)
-  (interactive "P")
-  (let* ((numeric-arg (if (consp arg) (car arg) arg))
-         (pos-arg (if (and arg (< numeric-arg 0)) (- 0 numeric-arg) numeric-arg)))
-    (if arg
-        (goto-line pos-arg) ; go to a line if argument is specified
-      (goto-char (point-max))))) ; end of buffer
-(defun hydra-vi/beginning-of-buffer (&optional arg)
-  (interactive "P")
-  (let* ((numeric-arg (if (consp arg) (car arg) arg))
-         (pos-arg (if (and arg (< numeric-arg 0)) (- 0 numeric-arg) numeric-arg)))
-    (if arg
-        (goto-line pos-arg) ; go to a line if argument is specified
-      (goto-char (point-min))))) ; beginning of buffer
-
-(defhydra hydra-vi (:body-pre hydra-vi/pre
-                    :color    amaranth)
-  "vi"
-  ;; basic navigation
-  ("l"        forward-char                  nil)
-  ("h"        backward-char                 nil)
-  ("j"        next-line                     nil)
-  ("k"        previous-line                 nil)
-  ;; mark
-  ("m"        set-mark-command              "mark")
-  ("C-o"      (set-mark-command 4)          "jump to prev location")
-  ;; beginning/end of line
-  ("a"        back-to-indentation-or-beginning-of-line "beg of line/indentation")
-  ("^"        back-to-indentation-or-beginning-of-line "beg of line/indentation")
-  ("$"        move-end-of-line              "end of line")
-  ;; word navigation
-  ("e"        forward-word                  "end of word")
-  ("w"        modi/forward-word-begin       "beg of next word")
-  ("b"        backward-word                 "beg of word")
-  ;; page scrolling
-  ("<prior>"  scroll-down-command           "page up")
-  ("<next>"   scroll-up-command             "page down")
-  ;; delete/cut/copy/paste
-  ("x"        delete-forward-char           "del char")
-  ("d"        my/iregister-cut              "cut/del")
-  ("D"        smart-kill-whole-line         "cut/del line")
-  ("y"        my/iregister-copy             "copy")
-  ("p"        yank                          "paste")
-  ;; beginning/end of buffer and go to line
-  ("g"        hydra-vi/beginning-of-buffer  "beg of buffer/goto line")
-  ("G"        hydra-vi/end-of-buffer        "end of buffer/goto line")
-  ("<return>" goto-line                     "goto line")
-  ;; undo/redo
-  ("u"        undo-tree-undo                "undo")
-  ("C-r"      undo-tree-redo                "redo")
-  ;; misc
-  ("<SPC>"    ace-jump-mode                 "ace jump")
-  ;; exit points
-  ("q"        hydra-vi/post                 "cancel" :color blue))
-(bind-key "C-:" #'hydra-vi/body modi-mode-map)
 
 ;; Organize The Order Of Minor Mode Lighters
 (when (featurep 'multiple-cursors)
