@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-20 10:36:08 kmodi>
+;; Time-stamp: <2015-03-24 09:54:27 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -62,8 +62,11 @@ The FCI-RULE-COLOR is the color string to set the color for fci rules."
        (my/disable-all-themes)
        (when (not (equal ',theme-name 'stock-theme))
          (load-theme ',theme-name t))
-       (with-eval-after-load 'faces
-         (modi/blend-fringe))
+       ;; (with-eval-after-load 'faces
+       ;; FIXME: Using the below function results in warnings
+       ;;    Unable to load color "unspecified-bg"
+       ;;    Unable to load color "unspecified-fg"
+       ;;   (modi/blend-fringe))
        (with-eval-after-load 'linum
          (modi/blend-linum))
        (with-eval-after-load 'smart-mode-line

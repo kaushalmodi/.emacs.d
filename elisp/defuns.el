@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-03-20 10:06:59 kmodi>
+;; Time-stamp: <2015-03-24 10:02:21 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
 ;; Save typing the lambda mumbo-jumbo
-;; Source: https://github.com/waymondo/hemacs/blob/master/defuns.el
+;; https://github.com/waymondo/hemacs/blob/master/defuns.el
 (defmacro λ (&rest body)
   (declare (indent 1))
   `(lambda ()
@@ -51,7 +51,7 @@ e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
      (setq ,alist (delete to-delete ,alist))))
 
 ;; Kill emacs when running in daemon mode or not
-;; Source: http://lists.gnu.org/archive/html/emacs-devel/2011-11/msg00348.html
+;; http://lists.gnu.org/archive/html/emacs-devel/2011-11/msg00348.html
 (defun tv-stop-emacs ()
   (interactive)
   (if (daemonp)
@@ -60,19 +60,24 @@ e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
 
 ;; `with-eval-after-load' macro was introduced in emacs 24.4
 ;; Below code makes this macro compatible with older versions of emacsen
-;; Source: http://www.lunaryorn.com/2013/06/25/introducing-with-eval-after-load.html
+;; http://www.lunaryorn.com/2013/06/25/introducing-with-eval-after-load.html
 (unless (fboundp 'with-eval-after-load)
   (defmacro with-eval-after-load (file &rest body)
     `(eval-after-load ,file
        `(funcall (function ,(lambda () ,@body))))))
 
-;; Source: http://emacs.stackexchange.com/a/5343/115
+;; FIXME: Using the below function results in warnings
+;;    Unable to load color "unspecified-bg"
+;;    Unable to load color "unspecified-fg"
+;; - Used in setup-visual.el
+;; http://emacs.stackexchange.com/a/5343/115
 (with-eval-after-load 'faces
   (defun modi/blend-fringe ()
     "Set the fringe foreground and background color to that of the theme."
     (set-face-attribute 'fringe nil
                         :foreground (face-foreground 'default)
-                        :background (face-background 'default))))
+                        :background (face-background 'default))
+    ))
 
 ;; Re-evaluatable `defvar's
 ;; Usage: When debugging/developing something in elisp, it is useful to have
@@ -117,7 +122,7 @@ set the symbol's value to INIT-VALUE even if the symbol is defined."
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
 ;; (defun update-custom-theme-load-path ()
 ;;   "Ensure that the custom-theme-load-path has all the theme paths added.
-;; Source: http://stackoverflow.com/a/15381087/1219634"
+;; http://stackoverflow.com/a/15381087/1219634"
 ;;   (interactive)
 ;;   (require 'dash)
 ;;   (require 's)
