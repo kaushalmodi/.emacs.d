@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-23 14:46:46 kmodi>
+;; Time-stamp: <2015-03-24 17:05:36 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -21,6 +21,7 @@
     (save-excursion
       (search-backward-regexp modi/fns-regexp)
       (setq fn (match-string 1))
+      ;; (message "Parsed: %s fns-in-edebug: %s" fn modi/fns-in-edebug)
       (mark-sexp)
       (narrow-to-region (point) (mark))
       (if (member fn modi/fns-in-edebug)

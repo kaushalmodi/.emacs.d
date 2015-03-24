@@ -1,5 +1,6 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-03-24 15:58:53 kmodi>
 
+;; https://github.com/abo-abo/tiny
 (use-package tiny
   :config
   (progn
