@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-16 12:14:59 kmodi>
+;; Time-stamp: <2015-03-24 11:41:41 kmodi>
 
 ;; Desktop save and restore
 
@@ -6,7 +6,7 @@
 ;; or restore a desktop. Restored desktops are deleted from disk.
 
 (use-package desktop
-    :config
+  :config
   (progn
     (desktop-save-mode 1)
 
@@ -89,12 +89,16 @@
 
     (bind-keys
      :map modi-mode-map
-     ("<S-f2>" . desktop-save-in-desktop-dir))
+      ("<S-f2>" . desktop-save-in-desktop-dir))
 
     ;; The emacs-quitting feature is useful whether or not my minor map is loaded
     ;; So bind the keys globally instead of to the minor mode map.
     (if desktop-save-mode
         (bind-keys
+         ;; ("C-x C-c" . save-buffers-kill-terminal) ; default binding
+                                        ; `save-buffers-kill-terminal' kills
+                                        ; only the current frame; it will not
+                                        ; kill the emacs server.
          ("C-x C-c" . save-desktop-save-buffers-stop-emacs)
          ("C-x M-c" . tv-stop-emacs)) ; quit without saving desktop
       (bind-key "C-x C-c" #'tv-stop-emacs))))
