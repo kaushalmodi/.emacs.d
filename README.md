@@ -2,7 +2,7 @@
 
 ## Using my emacs setup
 
-* You can clone my emacs setup using `git clone --recursive https://github.com/kaushalmodi/.emacs.d.git`
+* You can clone my emacs setup using `source git_force_update.csh ~/.emacs.d`
 * Few setup files have setup catered my personal work area so it wouldn't make sense to completely copy those setups
     - setup-files/setup-smart-mode-line.el
     - setup-files/setup-registers.el
