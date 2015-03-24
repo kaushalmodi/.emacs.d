@@ -11,9 +11,10 @@ else
     set emacs_config_dir = $argv[1]
 endif
 
-echo "The emacs config will be saved to ${emacs_config_dir}."
+echo "The emacs config will be saved to ${emacs_config_dir}"
 echo "Press Ctrl-C within 10 seconds if you don't want that .."
 sleep 10
+echo ''
 
 set start_dir = `pwd`
 
