@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-03-24 10:06:59 kmodi>
+;; Time-stamp: <2015-03-24 12:14:16 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
-(defvar *emacs-load-start* (current-time))
+(setq *emacs-load-start* (current-time))
 
 ;; Global variables
 (setq user-home-directory  (getenv "HOME"))
@@ -258,8 +258,9 @@
 
 (global-modi-mode t)
 
-(when (bound-and-true-p emacs-initialized)
-  (funcall default-theme))
+(when (and (bound-and-true-p emacs-initialized)
+           (featurep 'setup-visual))
+  (funcall default-theme-fn)) ; defined in setup-visual.el
 
 (setq emacs-initialized t)
 
