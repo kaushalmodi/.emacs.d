@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-23 17:27:43 kmodi>
+;; Time-stamp: <2015-03-24 10:06:59 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -236,18 +236,22 @@
 (require 'setup-image)
 
 (require 'setup-work nil t) ; don't trigger error if not found
-;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
-(require 'setup-personal nil t) ; don't trigger error if not found
+
+(defun post-window-setup-stuff ()
+  ;; It is mandatory to load linum AFTER the frames are set up
+  ;; Else, I get "*ERROR*: Invalid face: linum"
+  (require 'setup-linum)
+
+  ;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
+  (require 'setup-personal nil t)) ; don't trigger error if not found
 
 (if (daemonp)
     (add-hook 'window-setup-hook
               (λ (message ">> Daemon mode")
-                ;; It is mandatory to load linum AFTER the frames are set up
-                ;; Else, I get "*ERROR*: Invalid face: linum"
-                (require 'setup-linum)))
+                (post-window-setup-stuff)))
   (progn
     (message ">> Non daemon mode")
-    (require 'setup-linum)))
+    (post-window-setup-stuff)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'setup-misc) ; This MUST be the last required package
