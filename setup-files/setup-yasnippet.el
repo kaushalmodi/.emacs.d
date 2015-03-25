@@ -1,8 +1,9 @@
-;; Time-stamp: <2015-02-24 00:14:19 kmodi>
+;; Time-stamp: <2015-03-25 14:56:15 kmodi>
 
 ;; YASnippet
 
 (use-package yasnippet
+  :if (not (bound-and-true-p disable-pkg-yasnippet))
   :bind (("s-y s-y" . yas-expand)
          ("s-y y"   . yas-expand)
          ("s-y e"   . yas-expand)

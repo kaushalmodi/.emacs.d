@@ -1,12 +1,12 @@
-;; Time-stamp: <2015-03-05 09:14:43 kmodi>
+;; Time-stamp: <2015-03-25 18:28:33 kmodi>
 
 ;; Aggressive Indent
-;; https://github.com/Bruce-Connor/aggressive-indent-mode
+;; https://github.com/Malabarba/aggressive-indent-mode
 
 (use-package aggressive-indent
-    :config
+  :if (not (bound-and-true-p disable-pkg-aggressive-indent))
+  :config
   (progn
-
     (defvar modi/aggressive-indent-mode-hooks '(emacs-lisp-mode-hook)
       "List of hooks of major modes in which aggressive-indent-mode should be enabled.")
 
