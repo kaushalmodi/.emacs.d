@@ -1,7 +1,7 @@
-;; Time-stamp: <2015-03-10 17:20:00 kmodi>
+;; Time-stamp: <2015-03-25 16:40:58 kmodi>
 
 ;; Paradox
-;; https://github.com/Bruce-Connor/paradox
+;; https://github.com/Malabarba/paradox
 
 (use-package paradox
     ;; :load-path "elisp/paradox"

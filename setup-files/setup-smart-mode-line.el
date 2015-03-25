@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-03-12 12:55:53 kmodi>
+;; Time-stamp: <2015-03-25 16:40:36 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
-;; https://github.com/Bruce-Connor/smart-mode-line
+;; https://github.com/Malabarba/smart-mode-line
 
 ;; It is crucial that this require line happens after the above setq block
 (use-package smart-mode-line
@@ -90,7 +90,7 @@
 
     (sml/setup)
 
-    ;; http://bruce-connor.github.io/emacs-online-documentation/Var/display-time-mode
+    ;; http://doc.endlessparentheses.com/Var/display-time-mode
     ;; Just doing `(setq display-time-mode t)' does not work..
     ;;   You have to manually call the display-time-mode function if
     ;; `display-time-mode' is not set to t via `M-x customize'

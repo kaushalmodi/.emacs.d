@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-24 09:54:27 kmodi>
+;; Time-stamp: <2015-03-25 16:39:42 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -101,7 +101,7 @@ The FCI-RULE-COLOR is the color string to set the color for fci rules."
 
 ;; Load the theme ONLY after the frame has finished loading (needed especially
 ;; when running emacs in daemon mode)
-;; https://github.com/Bruce-Connor/smart-mode-line/issues/84#issuecomment-46429893
+;; https://github.com/Malabarba/smart-mode-line/issues/84#issuecomment-46429893
 (add-hook 'window-setup-hook (λ (funcall default-theme-fn)))
 
 ;; Make the italics show as actual italics. For some unknown reason, the below
