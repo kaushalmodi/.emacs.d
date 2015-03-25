@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-24 11:20:30 kmodi>
+;; Time-stamp: <2015-03-25 11:30:40 kmodi>
 
 ;; PDF
 
@@ -6,6 +6,7 @@
 (add-hook 'doc-view-mode-hook #'auto-revert-mode)
 
 (use-package pdf-tools
+  :if (not (bound-and-true-p disable-pkg-pdf-tools))
   :config
   (progn
 
