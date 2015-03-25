@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-25 11:33:57 kmodi>
+;; Time-stamp: <2015-03-25 18:32:04 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -124,7 +124,7 @@
 ;; packages. Format to be used: (setq disable-pkg-PKGNAME t)
 ;; Example: (setq disable-pkg-pdf-tools t)
 ;; Place `setup-disables.el' with `(provide 'setup-disables)' in `setup-files/'
-(require 'setup-disables nil t)
+(require 'setup-disables nil :noerror)
 
 ;; Start `benchmark-init' as soon as possible
 (require 'benchmark-init)
@@ -243,7 +243,7 @@
 (require 'setup-desktop)
 (require 'setup-image)
 
-(require 'setup-work nil t) ; don't trigger error if not found
+(require 'setup-work nil :noerror)
 
 (defun post-window-setup-stuff ()
   ;; It is mandatory to load linum AFTER the frames are set up
@@ -251,7 +251,7 @@
   (require 'setup-linum)
 
   ;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
-  (require 'setup-personal nil t)) ; don't trigger error if not found
+  (require 'setup-personal nil :noerror))
 
 (if (daemonp)
     (add-hook 'window-setup-hook
