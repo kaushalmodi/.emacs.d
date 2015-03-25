@@ -26,7 +26,7 @@
  '(desktop-restore-frames nil)
  '(display-time-mode t)
  '(doc-view-continuous t)
- '(fci-rule-color "#151515")
+ '(fci-rule-color "#585858")
  '(fringe-mode nil nil (fringe))
  '(global-hi-lock-mode t)
  '(guide-key-mode t)
@@ -50,7 +50,7 @@
  '(safe-local-variable-values
    (quote
     ((eval when
-           (fboundp
+           (featurep
             (quote aggressive-indent))
            (aggressive-indent-mode -1))
      (eval when
