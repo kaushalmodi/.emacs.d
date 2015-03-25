@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-24 12:14:16 kmodi>
+;; Time-stamp: <2015-03-25 08:52:40 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -69,6 +69,7 @@
         iregister ; Interactive access to registers
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
         key-chord ; map pairs of simultaneously pressed keys to commands
+        kurecolor ; library to tweak colors
         leuven-theme ; awesome white background theme
         linum-relative
         magit ; for git management
@@ -175,6 +176,7 @@
   (require 'setup-magit)
   (require 'setup-diff-hl)
   (require 'setup-git-link))
+(require 'setup-kurecolor)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
