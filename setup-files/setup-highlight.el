@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-09 13:50:02 kmodi>
+;; Time-stamp: <2015-03-25 12:30:42 kmodi>
 
 ;; Highlight stuff
 
@@ -105,10 +105,10 @@ will not update as you type."
 
 ;; hl-line+
 (use-package hl-line+
-    :config
+  :config
   (progn
     (toggle-hl-line-when-idle 1) ; Highlight line only when idle
-    (setq hl-line-flash-show-period 3) ; Number of seconds for `hl-line-flash' to highlight the line
+    (setq hl-line-flash-show-period 5) ; Number of seconds for `hl-line-flash' to highlight the line
     ))
 
 
