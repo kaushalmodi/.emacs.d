@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-25 08:52:40 kmodi>
+;; Time-stamp: <2015-03-25 11:33:57 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -119,6 +119,12 @@
 (load custom-file nil :nomessage) ; Load the emacs `M-x customize` generated file
 
 (load setup-packages-file nil :nomessage) ; Load the packages
+
+;; Optional file containing `setq' statements to disable loading of selected
+;; packages. Format to be used: (setq disable-pkg-PKGNAME t)
+;; Example: (setq disable-pkg-pdf-tools t)
+;; Place `setup-disables.el' with `(provide 'setup-disables)' in `setup-files/'
+(require 'setup-disables nil t)
 
 ;; Start `benchmark-init' as soon as possible
 (require 'benchmark-init)
