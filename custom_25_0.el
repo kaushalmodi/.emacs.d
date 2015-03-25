@@ -51,6 +51,10 @@
    (quote
     ((eval when
            (fboundp
+            (quote aggressive-indent))
+           (aggressive-indent-mode -1))
+     (eval when
+           (fboundp
             (quote rainbow-mode))
            (rainbow-mode 1))
      (eval define-key temp-mode-map
