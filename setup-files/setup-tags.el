@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-23 12:32:40 kmodi>
+;; Time-stamp: <2015-03-26 16:41:59 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -86,6 +86,8 @@
 ;;;; gtags, GNU global
 
 (when (executable-find "global")
+
+;;; ggtags
   (use-package ggtags
     :config
     (progn
@@ -105,8 +107,7 @@
               project-name)
           nil))
 
-      ;; (setq ggtags-navigation-mode-lighter nil)
-      ;; (setq ggtags-mode-line-project-name nil)
+      (setq ggtags-navigation-mode-lighter nil)
       (setq ggtags-mode-line-project-name
             '("[" (:eval (let ((name (if (stringp (my/ggtags-project-name))
                                          (my/ggtags-project-name)
@@ -172,15 +173,22 @@
       (define-key ggtags-mode-map (kbd "M-.") nil)
 
       (when (featurep 'key-chord)
-        (key-chord-define-global "??" #'ggtags-show-definition)))))
+        (key-chord-define-global "??" #'ggtags-show-definition))))
+
+;;; helm-gtags
+  (use-package helm-gtags)
+  )
 
 (defun modi/find-tag (&optional arg)
-  "Use ctags by default and gtags when called with `C-u' prefix."
+  "Use `helm-gtags' if available.
+Else use `ctags' to find tags.
+
+If prefix arg is used, use `ctags'."
   (interactive "P")
-  (if (or (null arg)
-          (null ggtags-mode))
-      (update-etags-table-then-find-tag)
-    (ggtags-find-definition (ggtags-tag-at-point))))
+  (if (and (null arg)
+           (featurep 'helm-gtags))
+      (helm-gtags-find-tag (helm-gtags--token-at-point 'tag))
+    (update-etags-table-then-find-tag)))
 (bind-key "M-." #'modi/find-tag)
 
 

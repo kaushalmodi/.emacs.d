@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-25 18:32:04 kmodi>
+;; Time-stamp: <2015-03-26 15:58:46 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -52,7 +52,7 @@
         fold-this
         gist
         gplusify ; copy region with formatting for G+ posts
-        etags-select etags-table ctags-update ggtags
+        etags-select etags-table ctags-update ggtags helm-gtags
         guide-key
         hardcore-mode
         header2
