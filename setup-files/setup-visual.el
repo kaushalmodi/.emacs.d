@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-25 16:39:42 kmodi>
+;; Time-stamp: <2015-03-26 12:26:53 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -31,14 +31,14 @@ This variable is to be updated when changing themes.")
                       (zenburn     'dark  "gray40")
                       (darktooth   'dark  "gray40")
                       (leuven      'light "gray")
-                      (stock-theme 'light "gray"))
+                      (default     'light "gray")) ; default emacs theme
   "Alist of themes I tend to switch to frequently.")
 
 (defun my/disable-all-themes ()
   "Disable all of my themes."
   (interactive)
   (dolist (theme my/themes)
-    (when (not (equal (car theme) 'stock-theme))
+    (when (not (equal (car theme) 'default))
       (disable-theme (car theme)))))
 
 ;; How can I create multiple defuns by looping through a list?
@@ -60,7 +60,7 @@ The FCI-RULE-COLOR is the color string to set the color for fci rules."
        ;; `dark-theme' is set to `t' if `dark' value is `'dark'
        (setq dark-theme (equal ,dark 'dark))
        (my/disable-all-themes)
-       (when (not (equal ',theme-name 'stock-theme))
+       (when (not (equal ',theme-name 'default))
          (load-theme ',theme-name t))
        ;; (with-eval-after-load 'faces
        ;; FIXME: Using the below function results in warnings
