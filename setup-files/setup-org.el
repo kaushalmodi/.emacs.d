@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-26 15:02:10 kmodi>
+;; Time-stamp: <2015-03-27 18:48:57 kmodi>
 
 ;; Org Mode
 
@@ -494,14 +494,14 @@ this with to-do items than with projects or headings."
     ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
     (defhydra hydra-org-template (:color blue :hint nil)
       "
-_c_enter  _q_uote     _E_macs-lisp    _L_aTeX:
-_l_atex   _e_xample   _v_erilog       _i_ndex:
+_c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
+_l_atex   e_x_ample   _v_erilog       _i_ndex:
 _a_scii   _v_erse     _S_hell         _I_NCLUDE:
 _s_rc     ^ ^         _t_ext          _H_TML:
 _h_tml    ^ ^         ^ ^             _A_SCII:
 "
       ("s" (hot-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
-      ("E" (progn
+      ("e" (progn
              (hot-expand "<s")
              (insert "emacs-lisp")
              (forward-line)))
@@ -517,7 +517,7 @@ _h_tml    ^ ^         ^ ^             _A_SCII:
              (hot-expand "<s")
              (insert "text")
              (forward-line)))
-      ("e" (hot-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
+      ("x" (hot-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
       ("q" (hot-expand "<q")) ; #+BEGIN_QUOTE ... #+END_QUOTE
       ("V" (hot-expand "<v")) ; #+BEGIN_VERSE ... #+END_VERSE
       ("c" (hot-expand "<c")) ; #+BEGIN_CENTER ... #+END_CENTER
