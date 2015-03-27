@@ -1,65 +1,64 @@
-;; Time-stamp: <2015-03-25 12:30:42 kmodi>
+;; Time-stamp: <2015-03-27 01:11:19 kmodi>
 
 ;; Highlight stuff
 
-(defvar modi/use-hl-anything nil
-  "Variable to set if `hl-anything' or an alternate package should be used
-for global highlighting.")
+;; Highlight Anything
+(use-package hl-anything
+  :if (not (bound-and-true-p disable-pkg-hl-anything))
+  ;; This package has known to cause issues with the `list-colors-display'
+  ;; command. The buffer that opens on calling that command does not show the
+  ;; colors. The issue is fixed temporarily by uncommenting the below line
+  ;; and restarting emacs - https://github.com/boyw165/hl-anything/issues/14
+  ;; Also causes to show this error at startup:
+  ;;   org-mode fontification error
+  :config
+  (progn
+    (hl-highlight-mode +1)
 
-(if modi/use-hl-anything
-    ;; Highlight Anything
-    (use-package hl-anything
-        ;; This package has known to cause issues with the `list-colors-display'
-        ;; command. The buffer that opens on calling that command does not show the
-        ;; colors. The issue is fixed temporarily by uncommenting the below line
-        ;; and restarting emacs - https://github.com/boyw165/hl-anything/issues/14
-        ;; :disabled t
-        :config
-      (progn
-        (hl-highlight-mode +1)
-
-        (defun my/hl-anything (&optional arg)
-          "Wrapper function to call functions to highlight the thing at point either
+    (defun my/hl-anything (&optional arg)
+      "Wrapper function to call functions to highlight the thing at point either
 globally or locally (when called with prefix `C-u')."
-          (interactive "p")
-          (if (eq arg 4)
-              (hl-highlight-thingatpt-local)
-            (hl-highlight-thingatpt-global)))
+      (interactive "p")
+      (if (eq arg 4)
+          (hl-highlight-thingatpt-local)
+        (hl-highlight-thingatpt-global)))
 
-        (defun my/unhl-anything (&optional arg)
-          "Wrapper function to call functions to unhighlight all either
+    (defun my/unhl-anything (&optional arg)
+      "Wrapper function to call functions to unhighlight all either
 globally or locally (when called with prefix `C-u')."
-          (interactive "p")
-          (if (eq arg 4)
-              (hl-unhighlight-all-local)
-            (hl-unhighlight-all-global)))
+      (interactive "p")
+      (if (eq arg 4)
+          (hl-unhighlight-all-local)
+        (hl-unhighlight-all-global)))
 
-        (defhydra hydra-hl-anything (:color red)
-          "hl-anything"
-          ("h" my/hl-anything             "hl-global")
-          ("H" (my/hl-anything 4)         "hl-local")
-          ("u" my/unhl-anything           "unhl-global" :color blue)
-          ("U" (my/unhl-anything 4)       "unhl-local" :color blue)
-          ("n" hl-find-next-thing         "next")
-          ("p" hl-find-prev-thing         "prev")
-          ("s" hl-save-highlights         "save" :color blue)
-          ("r" hl-restore-highlights      "restore" :color blue)
-          ("t" hl-global-highlight-on/off "toggle")
-          ("q" nil                        "cancel" :color blue))
-        (bind-to-modi-map "h" hydra-hl-anything/body)))
-  ;; Backup highlighting package when `hl-anything' has issues
+    (defhydra hydra-hl-anything (:color red)
+      "hl-anything"
+      ("h" my/hl-anything             "hl-global")
+      ("H" (my/hl-anything 4)         "hl-local")
+      ("u" my/unhl-anything           "unhl-global" :color blue)
+      ("U" (my/unhl-anything 4)       "unhl-local" :color blue)
+      ("n" hl-find-next-thing         "next")
+      ("p" hl-find-prev-thing         "prev")
+      ("s" hl-save-highlights         "save" :color blue)
+      ("r" hl-restore-highlights      "restore" :color blue)
+      ("t" hl-global-highlight-on/off "toggle")
+      ("q" nil                        "cancel" :color blue))
+    (bind-to-modi-map "h" hydra-hl-anything/body)))
+
+;; Alternative highlighting package when `hl-anything' has issues
+(when (not (featurep 'hl-anything))
   (use-package highlight-global
-      ;; :disabled t
-      :load-path "elisp/highlight-global"
-      :config
-      (progn
-        (bind-to-modi-map "h" highlight-frame-toggle)
-        (bind-to-modi-map "H" clear-highlight-frame))))
+    ;; :disabled t
+    :load-path "elisp/highlight-global"
+    :config
+    (progn
+      (bind-to-modi-map "h" highlight-frame-toggle)
+      (bind-to-modi-map "H" clear-highlight-frame))))
 
 ;; Volatile Highlights
 ;; https://github.com/k-talo/volatile-highlights.el
 (use-package volatile-highlights
-    :config
+  :config
   (progn
     (volatile-highlights-mode t)))
 

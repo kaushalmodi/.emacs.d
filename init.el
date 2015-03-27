@@ -1,8 +1,10 @@
-;; Time-stamp: <2015-03-26 15:58:46 kmodi>
+;; Time-stamp: <2015-03-27 00:53:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
 (setq *emacs-load-start* (current-time))
+
+;; (setq debug-on-message "set to automatic")
 
 ;; Global variables
 (setq user-home-directory  (getenv "HOME"))
@@ -58,7 +60,7 @@
         header2
         helm helm-swoop
         help-fns+
-        hl-anything
+        ;; hl-anything ; temporarily removing it, bugs
         hl-line+
         hungry-delete
         hydra
