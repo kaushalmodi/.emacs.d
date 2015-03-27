@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-24 13:31:32 kmodi>
+;; Time-stamp: <2015-03-27 15:37:04 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -22,6 +22,10 @@
 (>=e "25.0"
      (setq select-enable-primary t)  ; if emacs 25.0 or newer
      (setq x-select-enable-primary t)) ; if older
+
+;; Save stuff copied from an external program to the kill ring before killing
+;; new stuff from within emacs
+(setq save-interprogram-paste-before-kill t)
 
 ;; url
 ;; Solve the issue with `sx.el' when using that package simultaneously in
@@ -282,5 +286,3 @@ _cr_ Rpn calc        _f_irefox                _n_eotree                _<SPC>_ a
 ;; (9) Put this line at the top of an anything.gpg file to prevent it from
 ;; asking for the password on each save
 ;; -*- epa-file-encrypt-to: ("<MY_EMAIL>") -*-
-;;
-;;
