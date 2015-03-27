@@ -12,6 +12,9 @@
     (setq sml/name-width            30) ; buffer name width in the mode-line
     (setq sml/mode-width            'full) ; minor mode lighters area width
     (setq sml/no-confirm-load-theme t)
+    (setq sml/theme (if (boundp 'dark-theme)
+                        (if (not dark-theme) 'light 'dark)
+                      'dark))
     (setq sml/replacer-regexp-list
           `(
             ("^~/org/"                          ":Org:")
