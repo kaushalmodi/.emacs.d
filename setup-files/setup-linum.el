@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 01:06:26 kmodi>
+;; Time-stamp: <2015-03-27 13:30:58 kmodi>
 
 ;; Line number package manager
 
@@ -33,10 +33,9 @@ This variable is for internal use only, not to be set by user.")
 (use-package linum
   :config
   (progn
-    (global-linum-mode -1)
-
     (defun modi/blend-linum ()
-      "Set the linum foreground and background color to that of the theme."
+      "Set the linum foreground face to that of `font-lock-comment-face' and
+background color to that of the theme."
       (interactive)
       (set-face-attribute
        'linum nil
@@ -59,7 +58,8 @@ This variable is for internal use only, not to be set by user.")
               (remove-hook hook #'linum-mode))
             (global-linum-mode 1))
         (progn
-          (global-linum-mode -1)
+          (when global-linum-mode
+            (global-linum-mode -1))
           (dolist (hook modi/linum-mode-hooks)
             (add-hook hook #'linum-mode)))))
 
@@ -72,7 +72,7 @@ This variable is for internal use only, not to be set by user.")
 
 ;; linum relative
 (use-package linum-relative
-    :config
+  :config
   (progn
     ;; The symbol you want to show on the current line, by default it is 0.
     ;; You can use any string like \"->\". If this variable is empty string,
@@ -82,10 +82,9 @@ This variable is for internal use only, not to be set by user.")
 ;; nlinum
 ;; http://elpa.gnu.org/packages/nlinum.html
 (use-package nlinum
-    :config
+  :config
   (progn
-    (global-nlinum-mode -1)
-    (setq nlinum-format "%4d ") ; right aligned, 4 char wide line num col
+    (setq nlinum-format " %d ") ; 1 space padding on each side of line number
 
     (defun modi/turn-on-nlinum ()
       "Turn on nlinum mode in specific modes."
@@ -96,7 +95,8 @@ This variable is for internal use only, not to be set by user.")
               (remove-hook hook #'nlinum-mode))
             (global-nlinum-mode 1))
         (progn
-          (global-nlinum-mode -1)
+          (when global-linum-mode
+            (global-nlinum-mode -1))
           (dolist (hook modi/linum-mode-hooks)
             (add-hook hook #'nlinum-mode)))))
 
