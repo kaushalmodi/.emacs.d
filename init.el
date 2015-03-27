@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 00:53:45 kmodi>
+;; Time-stamp: <2015-03-27 01:20:07 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -23,8 +23,6 @@
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
       '(
-        ;; zenburn-theme ; < forked version
-        ;; smyx-theme ; < forked version
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
         ace-jump-mode
         ace-window
@@ -40,7 +38,6 @@
         buffer-move
         cperl-mode
         csv-nav ; editing csv files
-        darktooth-theme ; coffee background theme
         diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
@@ -72,7 +69,6 @@
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
         key-chord ; map pairs of simultaneously pressed keys to commands
         kurecolor ; library to tweak colors
-        leuven-theme ; awesome white background theme
         linum-relative
         magit ; for git management
         manage-minor-mode
@@ -112,6 +108,16 @@
         yafolding ; indentation detected code folding
         yaml-mode ; Useful for editing Octopress' _config.yml
         yasnippet
+
+        ;; Themes
+        ;; zenburn-theme ; < forked version
+        ;; smyx-theme ; < forked version
+        ample-theme ; ample, ample-flat, ample-light
+        darktooth-theme ; coffee
+        leuven-theme ; awesome white background theme
+        planet-theme ; dark blue
+        twilight-bright-theme
+        twilight-anti-bright-theme
         ))
 
 ;; Basic requires

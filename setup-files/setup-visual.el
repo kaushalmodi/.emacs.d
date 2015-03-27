@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-26 12:26:53 kmodi>
+;; Time-stamp: <2015-03-27 01:15:41 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -26,12 +26,17 @@ This variable is to be updated when changing themes.")
       tooltip-mode nil ; disable tooltip appearance on mouse hover
       )
 
-;;                     THEME-NAME  DARK   FCI-RULE-COLOR
-(defconst my/themes '((smyx        'dark  "gray40")
-                      (zenburn     'dark  "gray40")
-                      (darktooth   'dark  "gray40")
-                      (leuven      'light "gray")
-                      (default     'light "gray")) ; default emacs theme
+;;                     THEME-NAME      DARK   FCI-RULE-COLOR
+(defconst my/themes '((smyx            'dark  "gray40")
+                      (zenburn         'dark  "gray40")
+                      (darktooth       'dark  "gray40")
+                      (ample           'dark  "gray40")
+                      (ample-flat      'dark  "gray40")
+                      (planet          'dark  "gray40")
+                      (ample-light     'light "gray")
+                      (leuven          'light "gray")
+                      (twilight-bright 'light "gray")
+                      (default         'light "gray")) ; default emacs theme
   "Alist of themes I tend to switch to frequently.")
 
 (defun my/disable-all-themes ()
@@ -62,16 +67,13 @@ The FCI-RULE-COLOR is the color string to set the color for fci rules."
        (my/disable-all-themes)
        (when (not (equal ',theme-name 'default))
          (load-theme ',theme-name t))
-       ;; (with-eval-after-load 'faces
-       ;; FIXME: Using the below function results in warnings
-       ;;    Unable to load color "unspecified-bg"
-       ;;    Unable to load color "unspecified-fg"
-       ;;   (modi/blend-fringe))
-       (with-eval-after-load 'linum
+       (when (featurep 'defuns)
+         (modi/blend-fringe))
+       (when (featurep 'setup-linum)
          (modi/blend-linum))
-       (with-eval-after-load 'smart-mode-line
-         (sml/apply-theme ,dark))
-       (with-eval-after-load 'setup-fci
+       (when (featurep 'smart-mode-line)
+         (sml/apply-theme ,dark nil :silent)) ; apply sml theme silently
+       (when (featurep 'fill-column-indicator)
          ;; Below commented code does not work
          ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
          (setq fci-rule-color ,fci-rule-color)
