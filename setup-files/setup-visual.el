@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 01:15:41 kmodi>
+;; Time-stamp: <2015-03-27 10:49:05 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -39,12 +39,16 @@ This variable is to be updated when changing themes.")
                       (default         'light "gray")) ; default emacs theme
   "Alist of themes I tend to switch to frequently.")
 
-(defun my/disable-all-themes ()
-  "Disable all of my themes."
-  (interactive)
-  (dolist (theme my/themes)
-    (when (not (equal (car theme) 'default))
-      (disable-theme (car theme)))))
+(defun my/disable-enabled-themes ()
+  "Disable all enable themes except the one used by `smart-mode-line'.
+
+This function is not meant for interactive use. A clean way to disable all
+themes will be to run `M-x load-theme/default' (this function is generated
+by the `modi/gen-all-theme-fns' macro. That will ensure that all
+themes are disabled and also fix the faces for linum, fringe, etc."
+  (dolist (theme custom-enabled-themes)
+    (unless (string-match "smart-mode-line-" (format "%s" theme))
+      (disable-theme theme))))
 
 ;; How can I create multiple defuns by looping through a list?
 ;; http://emacs.stackexchange.com/a/10122/115
@@ -64,7 +68,7 @@ The FCI-RULE-COLOR is the color string to set the color for fci rules."
        (interactive)
        ;; `dark-theme' is set to `t' if `dark' value is `'dark'
        (setq dark-theme (equal ,dark 'dark))
-       (my/disable-all-themes)
+       (my/disable-enabled-themes)
        (when (not (equal ',theme-name 'default))
          (load-theme ',theme-name t))
        (when (featurep 'defuns)
