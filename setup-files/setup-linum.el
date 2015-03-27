@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-20 16:27:59 kmodi>
+;; Time-stamp: <2015-03-27 01:06:26 kmodi>
 
 ;; Line number package manager
 
@@ -31,16 +31,24 @@ This variable is for internal use only, not to be set by user.")
 
 ;; linum
 (use-package linum
-    :config
+  :config
   (progn
     (global-linum-mode -1)
 
     (defun modi/blend-linum ()
       "Set the linum foreground and background color to that of the theme."
-      (set-face-attribute 'linum nil
-                          :height 0.9
-                          :foreground (face-foreground 'font-lock-comment-face)
-                          :background (face-background 'default)))
+      (interactive)
+      (set-face-attribute
+       'linum nil
+       :height 0.9
+       :foreground (if (string= (face-foreground 'font-lock-comment-face)
+                                "unspecified-fg")
+                       "#8f8f8f"
+                     (face-foreground 'font-lock-comment-face))
+       :background (if (string= (face-background 'default)
+                                "unspecified-bg")
+                       "#282828"
+                     (face-background 'default))))
 
     (defun modi/turn-on-linum ()
       "Turn on linum mode in specific modes."

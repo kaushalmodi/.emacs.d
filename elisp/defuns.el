@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-24 10:02:21 kmodi>
+;; Time-stamp: <2015-03-27 01:08:43 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -66,18 +66,15 @@ e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
     `(eval-after-load ,file
        `(funcall (function ,(lambda () ,@body))))))
 
-;; FIXME: Using the below function results in warnings
-;;    Unable to load color "unspecified-bg"
-;;    Unable to load color "unspecified-fg"
-;; - Used in setup-visual.el
 ;; http://emacs.stackexchange.com/a/5343/115
-(with-eval-after-load 'faces
-  (defun modi/blend-fringe ()
-    "Set the fringe foreground and background color to that of the theme."
-    (set-face-attribute 'fringe nil
-                        :foreground (face-foreground 'default)
-                        :background (face-background 'default))
-    ))
+(defun modi/blend-fringe ()
+  (interactive)
+  "Set the fringe foreground and background color to that of the theme."
+  (set-face-attribute 'fringe nil
+                      :foreground (if (string= (face-foreground 'default) "unspecified-fg")
+                                      "#f7f7f7" (face-foreground 'default))
+                      :background (if (string= (face-background 'default) "unspecified-bg")
+                                      "#282828" (face-background 'default))))
 
 ;; Re-evaluatable `defvar's
 ;; Usage: When debugging/developing something in elisp, it is useful to have
