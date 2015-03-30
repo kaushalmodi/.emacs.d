@@ -1,11 +1,11 @@
-;; Time-stamp: <2015-03-30 13:55:36 kmodi>
+;; Time-stamp: <2015-03-30 14:47:18 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
 (setq *emacs-load-start* (current-time))
 
 ;; (setq debug-on-message "set to automatic")
-(setq debug-on-message "Making tags")
+;; (setq debug-on-message "Making tags")
 
 ;; Global variables
 (setq user-home-directory  (getenv "HOME"))
