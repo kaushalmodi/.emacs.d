@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 10:49:05 kmodi>
+;; Time-stamp: <2015-03-30 13:35:25 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -62,7 +62,10 @@ Example: For `smyx' theme, the generated function will be `load-theme/smyx'.
 The DARK variable should be set to `'dark' if the theme is dark and `'light'
 if otherwise.
 
-The FCI-RULE-COLOR is the color string to set the color for fci rules."
+The FCI-RULE-COLOR is the color string to set the color for fci rules.
+
+Running `M-x load-theme/default' will disable all custom themes except
+the smart-mode-line theme."
   (let ((theme-fn-name (intern (format "load-theme/%s" theme-name))))
     `(defun ,theme-fn-name ()
        (interactive)
@@ -77,7 +80,7 @@ The FCI-RULE-COLOR is the color string to set the color for fci rules."
          (modi/blend-linum))
        (when (featurep 'smart-mode-line)
          (sml/apply-theme ,dark nil :silent)) ; apply sml theme silently
-       (when (featurep 'fill-column-indicator)
+       (when (featurep 'setup-fci)
          ;; Below commented code does not work
          ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
          (setq fci-rule-color ,fci-rule-color)
