@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 01:20:07 kmodi>
+;; Time-stamp: <2015-03-30 09:41:55 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -108,6 +108,7 @@
         yafolding ; indentation detected code folding
         yaml-mode ; Useful for editing Octopress' _config.yml
         yasnippet
+        zop-to-char
 
         ;; Themes
         ;; zenburn-theme ; < forked version

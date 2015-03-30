@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-26 16:32:32 kmodi>
+;; Time-stamp: <2015-03-30 09:44:12 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -194,9 +194,15 @@ remove the comment characters from that line."
 ;; zop-to-char
 ;; Source: https://github.com/thierryvolpiatto/zop-to-char
 (use-package zop-to-char
-  :load-path "elisp/zop-to-char"
   :config
   (progn
+    (setq zop-to-char-kill-keys          '(?\r ?\C-k))
+    (setq zop-to-char-copy-keys          '(?\M-w ?\C-c))
+    (setq zop-to-char-next-keys          '(?\C-n ?\C-f))
+    (setq zop-to-char-prec-keys          '(?\C-p ?\C-b))
+    (setq zop-to-char-quit-at-pos-keys   '(?\C-g ?\e)) ; quit to original pos
+    (setq zop-to-char-quit-at-point-keys '(?\C-q nil)) ; quit to current pos
+    (setq zop-to-char-erase-keys         '(?\d ?\C-d))
     (bind-keys
      :map modi-mode-map
       ("M-z" . zop-up-to-char)

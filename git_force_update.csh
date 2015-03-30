@@ -57,7 +57,7 @@ endif
 
 ################################################################################
 # List of package forks to be updated from http://www.github.com/kaushalmodi
-set git_submodules = ( git-link interleave org-tree-slide rpn-calc smyx unfill zenburn-emacs zop-to-char )
+set git_submodules = ( git-link interleave org-tree-slide rpn-calc smyx unfill zenburn-emacs )
 foreach pkg (${git_submodules})
     set pkg_dir = "${emacs_config_dir}/elisp/${pkg}"
     if ( ! -d ${pkg_dir}/.git ) then
