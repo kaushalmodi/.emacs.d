@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-03-20 15:56:21 kmodi>
+;; Time-stamp: <2015-03-30 13:54:45 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
 
 (use-package projectile
-    :init
+  :init
   (progn
     (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
@@ -98,6 +98,16 @@ getting a list of all files in a project."
     ;; (setq projectile-mode-line " ∏")
     ;; (setq projectile-mode-line " ℙ")
     (setq projectile-mode-line " ρ")
+
+    (when (fboundp 'ggtags-mode)
+      (defun projectile-visit-project-tags-table ()
+        "Visit the current project's tags table ONLY IF `ggtags-mode' is not loaded.
+If `ggtags-mode' function is defined, “empty” this definition so that it does
+nothing.
+
+Doing so prevents prevents the unnecessary call to `visit-tags-table' function
+and the subsequent `find-file' call for the `TAGS' file."
+        ))
 
     (defun projectile-project-name ()
       "Return project name.

@@ -1,10 +1,11 @@
-;; Time-stamp: <2015-03-30 09:41:55 kmodi>
+;; Time-stamp: <2015-03-30 13:55:36 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
 (setq *emacs-load-start* (current-time))
 
 ;; (setq debug-on-message "set to automatic")
+(setq debug-on-message "Making tags")
 
 ;; Global variables
 (setq user-home-directory  (getenv "HOME"))
@@ -150,6 +151,8 @@
 (require 'setup-region-bindings-mode)
 (require 'setup-key-chord)
 (require 'setup-hydra)
+(require 'setup-tags) ; It's important that this is required up-front, at least
+                      ; before requiring `setup-projectile'
 ;; End of basic requires
 
 ;; Set up the looks of emacs
@@ -244,7 +247,6 @@
 (require 'setup-search)
 (require 'setup-print)
 (require 'setup-pdf)
-(require 'setup-tags)
 (when (or (executable-find "aspell")
           (executable-find "hunspell"))
   (require 'setup-spell))
