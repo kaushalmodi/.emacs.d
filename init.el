@@ -1,10 +1,9 @@
-;; Time-stamp: <2015-03-31 09:51:09 kmodi>
+;; Time-stamp: <2015-03-31 10:15:10 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
 (setq *emacs-load-start* (current-time))
 
-;; (setq debug-on-message "set to automatic")
 ;; (setq debug-on-message "Making tags")
 
 ;; Global variables
@@ -69,6 +68,7 @@
         iregister ; Interactive access to registers
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
         key-chord ; map pairs of simultaneously pressed keys to commands
+        keyfreq ; find which commands you use the most
         kurecolor ; library to tweak colors
         linum-relative
         magit ; for git management
@@ -194,6 +194,7 @@
   (require 'setup-magit)
   (require 'setup-diff-hl)
   (require 'setup-git-link))
+(require 'setup-keyfreq)
 (require 'setup-kurecolor)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
