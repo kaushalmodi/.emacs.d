@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-31 16:18:17 kmodi>
+;; Time-stamp: <2015-03-31 16:32:57 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -498,7 +498,8 @@ C-u C-u C-u -> Both prefix and user name are not inserted."
                (not (looking-back " ")))
       (insert " "))
     (insert (format-time-string current-date-time-format (current-time)))
-    (when (not (equal option '(16))) ; C-u C-u
+    (when (not (or (equal option '(16)) ; C-u C-u or C-u C-u C-u
+                   (equal option '(64))))
       (insert (concat " - " (getenv "USER"))))
     ;; Insert a space after the time stamp if not at the end of the line
     (when (not (looking-at " *$"))
