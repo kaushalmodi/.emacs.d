@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 13:30:58 kmodi>
+;; Time-stamp: <2015-03-31 09:51:43 kmodi>
 
 ;; Line number package manager
 
@@ -16,17 +16,18 @@ This variable is for internal use only, not to be set by user.")
 (defvar modi/linum-mode-enable-global nil
   "Variable to enable a linum mode globally or selectively based on major modes.")
 
-(defvar modi/linum-mode-hooks '(verilog-mode-hook
-                                emacs-lisp-mode-hook
-                                cperl-mode-hook
-                                c-mode-hook
-                                python-mode-hook
-                                matlab-mode-hook
-                                sh-mode-hook
-                                web-mode-hook
-                                html-mode-hook
-                                css-mode-hook
-                                makefile-gmake-mode-hook)
+(defconst modi/linum-mode-hooks '(verilog-mode-hook
+                                  emacs-lisp-mode-hook
+                                  cperl-mode-hook
+                                  c-mode-hook
+                                  python-mode-hook
+                                  matlab-mode-hook
+                                  sh-mode-hook
+                                  web-mode-hook
+                                  html-mode-hook
+                                  css-mode-hook
+                                  makefile-gmake-mode-hook
+                                  tcl-mode-hook)
   "List of hooks of major modes in which a linum mode should be enabled.")
 
 ;; linum

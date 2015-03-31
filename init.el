@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-30 14:47:18 kmodi>
+;; Time-stamp: <2015-03-31 09:51:09 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -238,7 +238,7 @@
 (require 'setup-yaml-mode)
 (require 'setup-latex)
 (require 'setup-spice)
-;; (require 'setup-tcl)
+(require 'setup-tcl)
 
 (require 'setup-editing)
 (require 'setup-windows-buffers)
