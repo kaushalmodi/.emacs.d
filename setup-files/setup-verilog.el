@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-23 14:34:05 kmodi>
+;; Time-stamp: <2015-03-31 11:05:24 kmodi>
 
 ;;; Verilog
 
@@ -325,15 +325,6 @@ the project."
                                         ; don't highlight anything in (?=..)
               (ag-regexp module-instance-re (projectile-project-root)))))
         (key-chord-define verilog-mode-map "^^" #'modi/verilog-find-parent-module)))
-
-;;; my/verilog-insert-date
-  (defun my/verilog-insert-date ()
-    "Insert a stamp with date and username."
-    (interactive)
-    (insert "// ")
-    (verilog-insert-date)
-    (insert (concat " - " (getenv "USER"))))
-  (bind-key "C-c d" #'my/verilog-insert-date verilog-mode-map)
 
   ;; Unbind the backtick binding done to `electric-verilog-tick'
   ;; With binding done to electric-verilog-tick, it's not possible to type

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-30 09:44:12 kmodi>
+;; Time-stamp: <2015-03-31 11:12:54 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -41,19 +41,6 @@ there's a region, all lines that region covers will be duplicated."
 ;; This is very useful for macro definitions in Verilog as for multi-line
 ;; macros, NO space is allowed after line continuation character "\"
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
-
-;; DATE AND TIME
-;; insert date and time
-(defvar current-date-time-format "%a %b %d %H:%M:%S %Z %Y"
-  "Format of date to insert with `insert-current-date-time' func
-See help of `format-time-string' for possible replacements")
-(defun insert-current-date-time ()
-  "insert the current date and time into current buffer.
-Uses `current-date-time-format' for the formatting the date/time."
-  (interactive)
-  (insert "==========\n")
-  (insert (format-time-string current-date-time-format (current-time)))
-  (insert "\n"))
 
 ;; Align
 ;; http://stackoverflow.com/questions/6217153/aligning-or-prettifying-code-in-emacs
@@ -460,15 +447,33 @@ Temporarily consider - and _ characters as part of the word when sorting."
        :map region-bindings-mode-map
         ("G" . gplusify-region-as-kill)))))
 
+;; Insert comment with date, time, username
+(defun modi/insert-timestamp-comment ()
+  "Insert a comment with date, time, username."
+  (interactive)
+  (let ((current-date-time-format "%a %b %d %H:%M:%S %Z %Y"))
+    ;; Insert a space if there is no space to the left of the current point
+    (when (not (looking-back "\\s-")) (insert " "))
+    (insert comment-start)
+    ;; Insert a space if the `comment-start' does not end with a space char
+    (when (not (looking-back "\\s-")) (insert " "))
+    (insert (format-time-string current-date-time-format (current-time)))
+    (insert (concat " - " (getenv "USER")))))
+(bind-key "C-c d" #'modi/insert-timestamp-comment modi-mode-map)
+
 ;; Unicode
 (defhydra hydra-unicode (:color blue)
   "unicode"
-  (">"   (insert-char ?☛) "☛") ; C-x 8 RET 261b RET, pointing hand
-  ("SPC" (insert-char ?​)  "0-width space") ; C-x 8 RET 200b RET, zero width space
-  ("\\"  (insert-char ?▮) "▮") ; C-x 8 RET 9646 RET, black vertical rectangle
-  ("|"   (insert-char ?▯) "▯") ; C-x 8 RET 9647 RET, white vertical rectangle
-  ("dd"  (insert-char ?“) "“") ; curved double quotes open
-  ("df"  (insert-char ?”) "”") ; curved double quotes close
+  (">"       (insert-char ?☛) "☛") ; C-x 8 RET 261b RET, pointing hand
+  ("SPC"     (insert-char ?​)  "0-width space") ; C-x 8 RET 200b RET, zero width space
+  ("\\"      (insert-char ?▮) "▮") ; C-x 8 RET 9646 RET, black vertical rectangle
+  ("|"       (insert-char ?▯) "▯") ; C-x 8 RET 9647 RET, white vertical rectangle
+  ("dd"      (insert-char ?“) "“") ; curved double quotes open
+  ("df"      (insert-char ?”) "”") ; curved double quotes close
+  ("<right>" (insert-char ?→) "→")
+  ("<left>"  (insert-char ?←) "←")
+  ("<up>"    (insert-char ?↑) "↑")
+  ("<down>"  (insert-char ?↓) "↓")
   ("q"   nil              "cancel"))
 (bind-key "s-u" #'hydra-unicode/body modi-mode-map)
 (key-chord-define-global "jk" #'hydra-unicode/body)
