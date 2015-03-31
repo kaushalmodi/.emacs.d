@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-31 13:32:38 kmodi>
+;; Time-stamp: <2015-03-31 16:18:17 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -447,24 +447,63 @@ Temporarily consider - and _ characters as part of the word when sorting."
        :map region-bindings-mode-map
         ("G" . gplusify-region-as-kill)))))
 
-;; Insert date, time, username
-(defun modi/insert-timestamp (no-comment-start)
-  "Insert date, time, username.
+;; Insert date, time, user name
+(defun modi/insert-time-stamp (option)
+  "Insert date, time, user name - DWIM.
 
-By default, the above is inserted prefixed with `comment-start' characters.
-If NO-COMMENT-START is non-nil (when used with universal prefix), do not
-insert the `comment-start' characters."
+If the point is NOT in a comment/string, the time stamp is inserted prefixed
+with `comment-start' characters.
+
+If the point is IN a comment/string, the time stamp is inserted without the
+`comment-start' characters. If the time stamp is not being inserted immediately
+after the `comment-start' characters (followed by optional space),
+the time stamp is inserted with “--” prefix.
+
+If the buffer is in a major mode where `comment-start' var is nil, no prefix is
+added regardless.
+
+Additional control:
+
+        C-u -> Only `comment-start'/`--' prefixes are NOT inserted
+    C-u C-u -> Only user name is NOT inserted
+C-u C-u C-u -> Both prefix and user name are not inserted."
   (interactive "P")
   (let ((current-date-time-format "%a %b %d %H:%M:%S %Z %Y"))
     ;; Insert a space if there is no space to the left of the current point
-    (when (not (looking-back "\\s-")) (insert " "))
-    (when (null no-comment-start)
-      (insert comment-start)
-      ;; Insert a space if the `comment-start' does not end with a space char
-      (when (not (looking-back "\\s-")) (insert " ")))
+    ;; and it's not at the beginning of a line
+    (when (and (not (looking-back "^ *"))
+               (not (looking-back " ")))
+      (insert " "))
+    ;; Insert prefix only if `comment-start' is defined for the major mode
+    (when (stringp comment-start)
+      (if (or (nth 3 (syntax-ppss)) ; string
+              (nth 4 (syntax-ppss))) ; comment
+          ;; If the point is already in a comment/string
+          (progn
+            ;; If the point is not immediately after `comment-start' chars
+            ;; (followed by optional space)
+            (when (and (not (or (equal option '(4)) ; C-u or C-u C-u C-u
+                                (equal option '(64))))
+                       (not (looking-back (concat comment-start " *")))
+                       (not (looking-back "^ *")))
+              (insert "--")))
+        ;; If the point is NOT in a comment
+        (progn
+          (when (not (or (equal option '(4)) ; C-u or C-u C-u C-u
+                         (equal option '(64))))
+            (insert comment-start)))))
+    ;; Insert a space if there is no space to the left of the current point
+    ;; and it's not at the beginning of a line
+    (when (and (not (looking-back "^ *"))
+               (not (looking-back " ")))
+      (insert " "))
     (insert (format-time-string current-date-time-format (current-time)))
-    (insert (concat " - " (getenv "USER")))))
-(bind-key "C-c d" #'modi/insert-timestamp modi-mode-map)
+    (when (not (equal option '(16))) ; C-u C-u
+      (insert (concat " - " (getenv "USER"))))
+    ;; Insert a space after the time stamp if not at the end of the line
+    (when (not (looking-at " *$"))
+      (insert " "))))
+(bind-key "C-c d" #'modi/insert-time-stamp modi-mode-map)
 
 ;; Unicode
 (defhydra hydra-unicode (:color blue)
