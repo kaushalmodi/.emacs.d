@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-31 11:12:54 kmodi>
+;; Time-stamp: <2015-03-31 13:32:38 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -447,19 +447,24 @@ Temporarily consider - and _ characters as part of the word when sorting."
        :map region-bindings-mode-map
         ("G" . gplusify-region-as-kill)))))
 
-;; Insert comment with date, time, username
-(defun modi/insert-timestamp-comment ()
-  "Insert a comment with date, time, username."
-  (interactive)
+;; Insert date, time, username
+(defun modi/insert-timestamp (no-comment-start)
+  "Insert date, time, username.
+
+By default, the above is inserted prefixed with `comment-start' characters.
+If NO-COMMENT-START is non-nil (when used with universal prefix), do not
+insert the `comment-start' characters."
+  (interactive "P")
   (let ((current-date-time-format "%a %b %d %H:%M:%S %Z %Y"))
     ;; Insert a space if there is no space to the left of the current point
     (when (not (looking-back "\\s-")) (insert " "))
-    (insert comment-start)
-    ;; Insert a space if the `comment-start' does not end with a space char
-    (when (not (looking-back "\\s-")) (insert " "))
+    (when (null no-comment-start)
+      (insert comment-start)
+      ;; Insert a space if the `comment-start' does not end with a space char
+      (when (not (looking-back "\\s-")) (insert " ")))
     (insert (format-time-string current-date-time-format (current-time)))
     (insert (concat " - " (getenv "USER")))))
-(bind-key "C-c d" #'modi/insert-timestamp-comment modi-mode-map)
+(bind-key "C-c d" #'modi/insert-timestamp modi-mode-map)
 
 ;; Unicode
 (defhydra hydra-unicode (:color blue)
