@@ -1,7 +1,8 @@
-;; Time-stamp: <2015-02-23 10:51:15 kmodi>
+;; Time-stamp: <2015-03-31 10:30:04 kmodi>
 
 ;; Key Chord Mode
 ;; http://www.emacswiki.org/emacs/key-chord.el
+
 (use-package key-chord
   :config
   (progn
