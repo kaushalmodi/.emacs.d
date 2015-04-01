@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 15:37:04 kmodi>
+;; Time-stamp: <2015-04-01 10:48:46 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -118,12 +118,13 @@ If universal arg is used, load the `init.el'."
                         :hint  nil)
   "
     TOGGLE ...
-_a_ggressive indent^^             _e_debug^^                         fill col _i_ndicator      _p_resentation         _t_runcate lines
-menu _b_ar^^                      _f_/_F_ fill/autofill              _k_ey chord               _r_ead only            _s-t_/_T_ theme
-cycle _c_ase^^                    indent _g_uide^^                   _l_ine num                _s_plit horz/vert      _<SPC>_ whitespace
-_d_/_D_ debug on error/entry      _H_ardcore (allow arrows)^^        _m_odi mode               _S_tripe buffer
+_ai_ aggressive indent      _d_/_D_ debug on error/entry      _H_ardcore (allow arrows)      _m_odi mode            _S_tripe buffer
+_aw_ adaptive wrap          _e_debug^^                        fill col _i_ndicator           _p_resentation         _t_runcate lines
+menu _b_ar                  _f_/_F_ fill/autofill             _k_ey chord                    _r_ead only            _s-t_/_T_ theme
+cycle _c_ase                indent _g_uide^^                  _l_ine num                     _s_plit horz/vert      _<SPC>_ whitespace
 "
-  ("a"     aggressive-indent-mode)
+  ("ai"    aggressive-indent-mode)
+  ("aw"    adaptive-wrap-prefix-mode)
   ("b"     modi/toggle-menu-bar)
   ("c"     xah-cycle-letter-case :color red)
   ("d"     toggle-debug-on-error)
