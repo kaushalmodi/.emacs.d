@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-25 11:30:40 kmodi>
+;; Time-stamp: <2015-04-01 14:21:58 kmodi>
 
 ;; PDF
 
@@ -7,6 +7,10 @@
 
 (use-package pdf-tools
   :if (not (bound-and-true-p disable-pkg-pdf-tools))
+  :preface
+  (progn
+    (defvar pdf-tools-github-version-name "pdf-tools-0.60"))
+  ;; :load-path "elisp/pdf-tools/pdf-tools-0.60"
   :config
   (progn
 
@@ -14,26 +18,39 @@
 
     (defun my/get-latest-pdf-tools-dir ()
       "Get the full directory path of the latest installed version of
-pdf-tools package."
+pdf-tools package.
+
+If pdf-tools is installed in the elisp/ directory, that path is returned
+instead of the one present in `package-user-dir'."
       (interactive)
-      ;; Get a list of directories and files in `package-user-dir'
-      (let ((my/package-dirs (directory-files package-user-dir)))
-        ;; `break' implementation in elisp
-        ;; http://ergoemacs.org/emacs/elisp_break_loop.html
-        (catch 'break
-          (dotimes (index (safe-length my/package-dirs))
-            (let ((dir-name (pop my/package-dirs))
-                  full-dir-name)
-              ;; (message "%s" dir-name) ; debug
-              ;; Find a directory name that matches "pdf-tools-*"
-              (when (string-match "pdf\\-tools\\-.*" dir-name)
-                (setq full-dir-name (concat package-user-dir "/" dir-name))
-                ;; To ensure that the directory is valid, ensure that it
-                ;; contains "pdf-tools.el"
-                (when (locate-file "pdf-tools.el" (list full-dir-name))
-                  ;; break the `dotimes' loop on finding this directory
-                  ;; and return its full path
-                  (throw 'break full-dir-name))))))))
+      (let ((pdf-tools-epdfinfo-dir))
+        ;; Use the package version in elisp/pdf-tools dir if available
+        (if (locate-file "pdf-tools.el" (list (concat user-emacs-directory
+                                                      "/elisp/pdf-tools/lisp")))
+            (progn
+              (setq pdf-tools-epdfinfo-dir (concat user-emacs-directory
+                                                   "/elisp/pdf-tools/"
+                                                   pdf-tools-github-version-name))
+              pdf-tools-epdfinfo-dir)
+          ;; Else use the package manager installed version
+          ;; Get a list of directories and files in `package-user-dir'
+          (let ((my/package-dirs (directory-files package-user-dir)))
+            ;; `break' implementation in elisp
+            ;; http://ergoemacs.org/emacs/elisp_break_loop.html
+            (catch 'break
+              (dotimes (index (safe-length my/package-dirs))
+                (let ((dir-name (pop my/package-dirs))
+                      )
+                  ;; (message "%s" dir-name) ; debug
+                  ;; Find a directory name that matches "pdf-tools-*"
+                  (when (string-match "pdf\\-tools\\-.*" dir-name)
+                    (setq pdf-tools-epdfinfo-dir (concat package-user-dir "/" dir-name))
+                    ;; To ensure that the directory is valid, ensure that it
+                    ;; contains "pdf-tools.el"
+                    (when (locate-file "pdf-tools.el" (list pdf-tools-epdfinfo-dir))
+                      ;; break the `dotimes' loop on finding this directory
+                      ;; and return its full path
+                      (throw 'break pdf-tools-epdfinfo-dir))))))))))
 
     (defun my/pdf-tools-install ()
       (interactive)
@@ -55,12 +72,12 @@ pdf-tools package."
 
 (provide 'setup-pdf)
 
-
 ;; * =pdf-tools= package
 ;; ** How to install
 ;; - git clone https://github.com/politza/pdf-tools
-;; - ./configure --prefix=$HOME/usr_local
-;;   + poppler-glib ( http://poppler.freedesktop.org/ ) is REQUIRED
+;; - Install `poppler-glib' library if not present
+;;   + poppler-glib ( http://poppler.freedesktop.org/ )
+;;   + ./configure --prefix=$HOME/usr_local
 ;; - make -s
 ;; - make install-package
 ;; ** Useful key bindings
