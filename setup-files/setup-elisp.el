@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-24 17:05:36 kmodi>
+;; Time-stamp: <2015-04-01 09:40:43 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -160,6 +160,15 @@ Lisp function does not specify a special indentation."
                (funcall method indent-point state))))))))
 (add-hook 'emacs-lisp-mode-hook
           (λ (setq-local lisp-indent-function #'Fuco1/lisp-indent-function)))
+
+;; http://ergoemacs.org/emacs/emacs_byte_compile.html
+(defun byte-compile-current-buffer ()
+  "`byte-compile' current buffer if in `emacs-lisp-mode' and compiled file exists."
+  (interactive)
+  (when (and (derived-mode-p 'emacs-lisp-mode)
+             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+    (byte-compile-file buffer-file-name)))
+(add-hook 'after-save-hook #'byte-compile-current-buffer)
 
 
 (provide 'setup-elisp)
