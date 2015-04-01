@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-18 09:50:07 kmodi>
+;; Time-stamp: <2015-04-01 09:37:03 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
@@ -31,7 +31,7 @@
 
     (modi/turn-on-fci-mode)
     ;; Enable fci-mode automatically for all files
-    ;; (add-hook 'after-change-major-mode-hook 'fci-mode)
+    ;; (add-hook 'after-change-major-mode-hook #'fci-mode)
 
     (setq-default fci-handle-truncate-lines t) ; Truncate lines in fci mode
     ;; (setq-default fci-handle-truncate-lines nil) ; Do not truncate lines in fci mode

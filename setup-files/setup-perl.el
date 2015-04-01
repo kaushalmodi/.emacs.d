@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:20:23 kmodi>
+;; Time-stamp: <2015-04-01 09:35:52 kmodi>
 
 ;; Perl
 
@@ -52,8 +52,8 @@ Leave 'print' instructions untouched."
           (insert-buffer-substring buf-name))
 
         (defun isend-default-perl-setup ()
-          (when (eq major-mode 'cperl-mode)
-            (set (make-local-variable 'isend-send-line-function) #'isend--perl)))
+          (when (derived-mode-p 'cperl-mode)
+            (setq-local isend-send-line-function #'isend--perl)))
 
         (add-hook 'isend-mode-hook #'isend-default-perl-setup)))))
 
