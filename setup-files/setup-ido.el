@@ -1,11 +1,11 @@
-;; Time-stamp: <2015-03-17 09:42:34 kmodi>
+;; Time-stamp: <2015-04-01 11:14:39 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
 ;; https://github.com/magnars/.emacs.d/blob/master/setup-ido.el
 
 (use-package ido
-    :preface
+  :preface
   (progn
     ;; `defvar's to prevent compile warnings
     (defvar ido-cur-item               nil)
@@ -35,25 +35,25 @@
 
     ;; Use flx-ido for better flex matching between words
     (use-package flx-ido
-        :config
+      :config
       (progn
         (setq ido-use-faces nil) ; disable ido faces to see flx highlights
         (flx-ido-mode 1)))
 
     (use-package ido-vertical-mode
-        :config
+      :config
       (progn
         (ido-vertical-mode 1))) ; flx-ido looks better with ido-vertical-mode
 
     (use-package ido-ubiquitous
-        :config
+      :config
       (progn
         (ido-ubiquitous-mode 1)))
 
     ;; Sometimes when using ido-switch-buffer the *Messages* buffer get in the way,
     ;; so we set it to be ignored (it can be accessed using `C-h e', so there is
     ;; really no need for it in the buffer list).
-    ;; Source: https://github.com/larstvei/dot-emacs
+    ;; https://github.com/larstvei/dot-emacs
     (add-to-list 'ido-ignore-buffers "*Messages*")
 
     ;; Sort ido filelist by mtime instead of alphabetically
@@ -96,12 +96,12 @@
                               nil t)))
       (bind-keys
        :map modi-mode-map
-       ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-       ("C-x C-o" . ido-find-recentf)))
+        ;; overriding the `C-x C-o` binding with `delete-blank-lines'
+        ("C-x C-o" . ido-find-recentf)))
 
     (defun endless/ido-bury-buffer-at-head ()
       "Bury the buffer at the head of `ido-matches'.
-Source: http://endlessparentheses.com/Ido-Bury-Buffer.html
+http://endlessparentheses.com/Ido-Bury-Buffer.html
 This is merged into emacs 25.0."
       (interactive)
       (let ((enable-recursive-minibuffers t)
@@ -122,17 +122,17 @@ This is merged into emacs 25.0."
           (exit-minibuffer))))
 
     (defun ido-define-keys ()
-      (unbind-key "C-a" ido-completion-map)
+      (unbind-key "C-a" ido-completion-map) ; default binding: `ido-toggle-ignore'
       (bind-keys
        :map ido-completion-map
-       ;; C-n/p  and up/down keys are more intuitive in vertical layout
-       ("C-n"    . ido-next-match)
-       ("<down>" . ido-next-match)
-       ("C-p"    . ido-prev-match)
-       ("<up>"   . ido-prev-match)
-       ("C-f"    . ido-magic-forward-char)
-       ("C-b"    . ido-magic-backward-char)
-       ("C-i"    . ido-toggle-ignore))
+        ;; C-n/p  and up/down keys are more intuitive in vertical layout
+        ("C-n"    . ido-next-match)
+        ("<down>" . ido-next-match)
+        ("C-p"    . ido-prev-match)
+        ("<up>"   . ido-prev-match)
+        ("C-f"    . ido-magic-forward-char)
+        ("C-b"    . ido-magic-backward-char)
+        ("C-i"    . ido-toggle-ignore))
       (>=e "25.0"
            (bind-key "C-S-b" #'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
            (bind-key "C-S-b" #'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0
@@ -141,17 +141,8 @@ This is merged into emacs 25.0."
 
 (provide 'setup-ido)
 
-;; (defun ido-define-keys ()
-;;   ;; C-n/p  and up/down keys are more intuitive in vertical layout
-;;   (define-key ido-completion-map (kbd "C-n")    'ido-next-match)
-;;   (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
-;;   (define-key ido-completion-map (kbd "C-p")    'ido-prev-match)
-;;   (define-key ido-completion-map (kbd "<up>")   'ido-prev-match)
-;;   (define-key ido-completion-map (kbd "C-b")    'endless/ido-bury-buffer-at-head))
-;; (add-hook 'ido-setup-hook 'ido-define-keys)
-
-;; Default ido key map
-
+;; Default Ido Key Map
+;;
 ;; Basic map
 ;; | C-a     | 'ido-toggle-ignore              |
 ;; | C-c     | 'ido-toggle-case                |
@@ -171,12 +162,12 @@ This is merged into emacs 25.0."
 ;; | Right   | 'ido-next-match                 |
 ;; | Left    | 'ido-prev-match                 |
 ;; | ?       | 'ido-completion-help            |
-
+;;
 ;; Magic commands.
-;; | C-b | 'ido-magic-backward-char (OVERRIDDEN) |
-;; | C-f | 'ido-magic-forward-char               |
-;; | C-d | 'ido-magic-delete-char                |
-
+;; | C-b | 'ido-magic-backward-char |
+;; | C-f | 'ido-magic-forward-char  |
+;; | C-d | 'ido-magic-delete-char   |
+;;
 ;; File and directory map
 ;; | C-x C-b                      | 'ido-enter-switch-buffer                 |
 ;; | C-x C-f                      | 'ido-fallback-command                    |
@@ -202,57 +193,15 @@ This is merged into emacs 25.0."
 ;; | M-C-o                        | 'ido-next-work-file                      |
 ;; | M-p                          | 'ido-prev-work-directory                 |
 ;; | M-s                          | 'ido-merge-work-directories              |
-
+;;
 ;; File only map
-;; | C-k | 'ido-delete-file-at-head    |
-;; | C-o | 'ido-copy-current-word      |
-;; | C-w | 'ido-copy-current-file-name |
-;; | M-l | 'ido-toggle-literal         |
-
+;; | C-k | 'ido-delete-file-at-head                                         |
+;; | C-o | 'ido-copy-current-word                                           |
+;; | C-w | 'ido-copy-current-file-name (Insert file name of current buffer) |
+;; | M-l | 'ido-toggle-literal                                              |
+;;
 ;; Buffer map
 ;; | C-x C-f | 'ido-enter-find-file        |
 ;; | C-x C-b | 'ido-fallback-command       |
 ;; | C-k     | 'ido-kill-buffer-at-head    |
 ;; | C-o     | 'ido-toggle-virtual-buffers |
-
-
-;; (setq ido-enable-prefix nil
-;;       ido-case-fold nil
-;;       ido-use-filename-at-point nil
-;;       ido-max-prospects 10)
-;; (defun ido-disable-line-truncation ()
-;;   (set (make-local-variable 'truncate-lines) nil))
-;; (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
-
-;; ;; Use C-w to go back up a dir to better match normal usage of C-w
-;; ;; - insert current file name with C-x C-w instead.
-;; (define-key ido-file-completion-map (kbd "C-w") 'ido-delete-backward-updir)
-;; (define-key ido-file-completion-map (kbd "C-x C-w") 'ido-copy-current-file-name)
-
-;; (define-key ido-file-dir-completion-map (kbd "C-w") 'ido-delete-backward-updir)
-;; (define-key ido-file-dir-completion-map (kbd "C-x C-w") 'ido-copy-current-file-name))
-
-;; ;; Always rescan buffer for imenu
-;; (set-default 'imenu-auto-rescan t)
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; Ido at point (Replacement for auto-complete)
-;; ;; https://github.com/katspaugh/ido-at-point
-;; (require 'ido-at-point)
-;; (ido-at-point-mode t)
-;; Update: But I found auto-complete better.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Use ido everywhere, example: when searching for var name `C-h v`, searching
-;; for function name `C-h f`, etc
-
-;; ;; Fix ido-ubiquitous for newer packages
-;; (defmacro ido-ubiquitous-use-new-completing-read (cmd package)
-;;   `(eval-after-load ,package
-;;      '(defadvice ,cmd (around ido-ubiquitous-new activate)
-;;         (let ((ido-ubiquitous-enable-compatibility nil))
-;;           ad-do-it))))
-
-;; (ido-ubiquitous-use-new-completing-read webjump 'webjump)
-;; (ido-ubiquitous-use-new-completing-read yas-expand 'yasnippet)
-;; (ido-ubiquitous-use-new-completing-read yas-visit-snippet-file 'yasnippet)

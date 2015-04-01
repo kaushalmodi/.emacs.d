@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:00:29 kmodi>
+;; Time-stamp: <2015-04-01 11:19:09 kmodi>
 
 ;; Smart M-x (smex)
 ;; https://github.com/nonsequitur/smex/
@@ -18,6 +18,12 @@
 
 (provide 'setup-smex)
 
-;; `C-h f` while Smex is active, runs describe-function on the currently selected command.
-;; `M-.`   jumps to the definition of the selected command.
-;; `C-h w` shows the key bindings for the selected command. (Via where-is.)
+;; Useful bindings while smex is active
+;;
+;; |---------+------------------------------------------------------------|
+;; | Binding | Description                                                |
+;; |---------+------------------------------------------------------------|
+;; | C-h f   | Runs `describe-function' on the currently selected command |
+;; | M-.     | Jump to the definition of the selected command             |
+;; | C-h w   | Show the key bindings for the selected command             |
+;; |---------+------------------------------------------------------------|
