@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-31 10:15:10 kmodi>
+;; Time-stamp: <2015-04-01 09:24:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -26,6 +26,7 @@
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
         ace-jump-mode
         ace-window
+        adaptive-wrap ; indented line wrapping
         ag wgrep wgrep-ag s ; ag > ack > grep
                                         ; wgrep+wgrep-ag allow editing files
                                         ; directly in ag buffer

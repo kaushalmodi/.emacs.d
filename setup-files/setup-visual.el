@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-30 13:35:25 kmodi>
+;; Time-stamp: <2015-04-01 09:33:10 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -190,6 +190,23 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 (add-hook 'sh-mode-hook       #'turn-off-visual-line-mode)
 (add-hook 'org-mode-hook      #'turn-on-visual-line-mode)
 (add-hook 'markdown-mode-hook #'turn-on-visual-line-mode)
+
+;; `adaptive-wrap-prefix-mode' indents the visual lines to
+;; the level of the actual line plus `adaptive-wrap-extra-indent'. Thus line
+;; truncation has to be off for adaptive wrap to be in effect.
+(use-package adaptive-wrap
+  :config
+  (progn
+    (setq-default adaptive-wrap-extra-indent 2)
+
+    (defun turn-on-adaptive-wrap-prefix-mode ()
+      "Turns on adaptive-wrap-prefix-mode."
+      (interactive)
+      (adaptive-wrap-prefix-mode t))
+    (define-globalized-minor-mode global-adaptive-wrap-prefix-mode
+      adaptive-wrap-prefix-mode
+      turn-on-adaptive-wrap-prefix-mode)
+    (global-adaptive-wrap-prefix-mode t)))
 
 ;; CURSOR
 ;; Change cursor color according to mode:
