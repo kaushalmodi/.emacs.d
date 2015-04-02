@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-26 16:34:05 kmodi>
+;; Time-stamp: <2015-04-02 17:15:24 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -63,6 +63,31 @@
     (setq column-number-mode t)) ; show column # in mode-line
   :config
   (progn
+    ;; Patch the `sml/perform-projectile-replacement' function
+    (defun sml/perform-projectile-replacement (in)
+      "If path IN is inside a project, use its name as a prefix."
+      (if (file-exists-p in)
+          (let ((proj (projectile-project-p)))
+            (if (stringp proj)
+                (let* ((replacement
+                        (format sml/projectile-replacement-format
+                                (projectile-project-name)))
+                       (short (replace-regexp-in-string
+                               (concat "^" (regexp-quote (abbreviate-file-name proj)))
+                               replacement
+                               in)))
+                  (if (string= short in)
+                      (replace-regexp-in-string
+                       (concat "^" (regexp-quote (abbreviate-file-name (file-truename proj))))
+                       replacement
+                       (abbreviate-file-name (file-truename in)))
+                    short)) ; return the file path with abbreviated project name
+                                        ; if `short' and `in' are unequal
+              in)) ; return `in' if the file does not belong to a `projectile' project
+        in)) ; return `in' if `in' is already abbreviated based on
+                                        ; `sml/replacer-regexp-list' and thus
+                                        ; no longer a valid file path
+
     (use-package rich-minority
       :config
       (progn
