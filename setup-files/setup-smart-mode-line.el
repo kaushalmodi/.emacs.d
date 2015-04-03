@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-03 09:46:00 kmodi>
+;; Time-stamp: <2015-04-03 15:05:35 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -63,29 +63,6 @@
     (setq column-number-mode t)) ; show column # in mode-line
   :config
   (progn
-    ;; Patch the `sml/perform-projectile-replacement' function
-    (defun sml/perform-projectile-replacement (in)
-      "If path IN is inside a project, use its name as a prefix."
-      (let ((proj (projectile-project-p)))
-        (if (stringp proj)
-            (let* ((replacement
-                    (format sml/projectile-replacement-format
-                            (projectile-project-name)))
-                   (short (replace-regexp-in-string
-                           (concat "^" (regexp-quote (abbreviate-file-name proj)))
-                           replacement
-                           in)))
-              (if (string= short in)
-                  (let* ((true-in (abbreviate-file-name (file-truename in)))
-                         (true-short
-                          (replace-regexp-in-string
-                           (concat "^" (regexp-quote (abbreviate-file-name (file-truename proj))))
-                           replacement true-in)))
-                    (if (string= true-in true-short) in true-short))
-                short)) ; return the file path with abbreviated project name
-                                        ; if `short' and `in' are unequal
-          in)))
-
     (use-package rich-minority
       :config
       (progn
