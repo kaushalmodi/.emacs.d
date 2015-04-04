@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-01 14:21:58 kmodi>
+;; Time-stamp: <2015-04-04 00:48:33 kmodi>
 
 ;; PDF
 
@@ -67,7 +67,13 @@ instead of the one present in `package-user-dir'."
 ;; https://github.com/rudolfochrist/interleave
 (use-package interleave
   :load-path "elisp/interleave"
-  :commands (interleave))
+  :init
+  (progn
+    (with-eval-after-load "doc-view"
+      (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
+    (with-eval-after-load "pdf-view"
+      (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map)))
+  :commands (interleave interleave--open-notes-file-for-pdf))
 
 
 (provide 'setup-pdf)
