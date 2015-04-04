@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-01 10:48:46 kmodi>
+;; Time-stamp: <2015-04-03 22:22:04 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -86,12 +86,13 @@ If universal arg is used, load the `init.el'."
 
 ;; Help Functions +
 (use-package help-fns+
-    :config
+  :config
   (progn
     (bind-keys
      :map help-map
-     ("c"   . describe-key-briefly)
-     ("C-c" . describe-command))))
+      ("c"   . describe-key-briefly)
+      ("C-c" . describe-command))))
+(bind-key "C" #'describe-char help-map)
 
 ;; Unset keys
 (global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
