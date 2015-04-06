@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-06 10:16:38 kmodi>
+;; Time-stamp: <2015-04-06 12:08:13 kmodi>
 
 ;; Org Mode
 
@@ -478,7 +478,7 @@ this with to-do items than with projects or headings."
       (when (derived-mode-p 'org-mode)
         (save-excursion
           (goto-char (point-min))
-          (while (search-forward-regexp
+          (while (re-search-forward
                   "^\\s-*#\\+MACRO:\\s-+TODAY"
                   nil 'noerror)
             (forward-line 0)

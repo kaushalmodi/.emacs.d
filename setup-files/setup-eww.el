@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-26 17:43:47 kmodi>
+;; Time-stamp: <2015-04-06 12:08:13 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -52,12 +52,12 @@ This function is not for interactive use."
           (bury-buffer))
         (eww search-term)
         ;; The while loop will keep on repeating every 0.1 seconds till the
-        ;; result of `(search-forward-regexp " +1 +" nil :noerror)' is non-nil
+        ;; result of `(re-search-forward " +1 +" nil :noerror)' is non-nil
         (catch 'break
           (while t
             (goto-char (point-min)) ; go to the top of the buffer
-            (search-forward-regexp "[0-9]+\\s-+results" nil :noerror) ; go to the start of results
-            (when (search-forward-regexp "\\s-+1\\s-+" nil :noerror) ; go to the first result
+            (re-search-forward "[0-9]+\\s-+results" nil :noerror) ; go to the start of results
+            (when (re-search-forward "\\s-+1\\s-+" nil :noerror) ; go to the first result
               (throw 'break nil))
             (sleep-for 0.1))) ; 0.1 second wait
         (forward-char 5)) ; locate the point safely on the first result link

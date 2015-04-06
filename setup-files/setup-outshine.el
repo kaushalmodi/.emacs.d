@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-05 09:49:36 kmodi>
+;; Time-stamp: <2015-04-06 12:08:14 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -30,7 +30,7 @@ Don't add “Revision Control” heading to TOC."
               headings-list stars-list
               heading star)
           ;; (message "%s" outline-comment-start)
-          (while (search-forward-regexp
+          (while (re-search-forward
                   (concat outline-comment-start " " ; followed by space
                           "\\*\\(\\**\\) " ; one or more * chars followed by space
                           "\\(.+\\)") ; followed by heading
@@ -46,7 +46,7 @@ Don't add “Revision Control” heading to TOC."
           (setq headings-list (nreverse headings-list))
 
           (goto-char (point-min))
-          (while (search-forward-regexp
+          (while (re-search-forward
                   (concat outline-comment-start " " ; followed by space
                           "Contents:")
                   nil :noerror)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-31 11:05:24 kmodi>
+;; Time-stamp: <2015-04-06 12:12:20 kmodi>
 
 ;;; Verilog
 
@@ -125,8 +125,8 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
         (setq-local modi/verilog-which-func-xtra nil) ; reset
         (save-excursion
           (when (if fwd
-                    (search-forward-regexp modi/verilog-module-instance-re nil :noerror)
-                  (search-backward-regexp modi/verilog-module-instance-re nil :noerror))
+                    (re-search-forward modi/verilog-module-instance-re nil :noerror)
+                  (re-search-backward modi/verilog-module-instance-re nil :noerror))
             ;; Ensure that text in line or block comments is not incorrectly
             ;; parsed as a module instance
             (when (not (equal (face-at-point) 'font-lock-comment-face))
@@ -170,8 +170,8 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
         (setq-local modi/verilog-which-func-xtra nil) ; reset
         (save-excursion
           (when (if fwd
-                    (search-forward-regexp modi/verilog-header-re nil :noerror)
-                  (search-backward-regexp modi/verilog-header-re nil :noerror))
+                    (re-search-forward modi/verilog-header-re nil :noerror)
+                  (re-search-backward modi/verilog-header-re nil :noerror))
             ;; Ensure that text in line or block comments is not incorrectly
             ;; parsed as a Verilog block header
             (when (not (equal (face-at-point) 'font-lock-comment-face))
@@ -213,11 +213,11 @@ task, `define."
       (interactive "P")
       (if (modi/verilog-find-module-instance fwd)
           (if fwd
-              (search-forward-regexp modi/verilog-module-instance-re nil :noerror)
-            (search-backward-regexp modi/verilog-module-instance-re nil :noerror))
+              (re-search-forward modi/verilog-module-instance-re nil :noerror)
+            (re-search-backward modi/verilog-module-instance-re nil :noerror))
         (if fwd
-            (search-forward-regexp modi/verilog-header-re nil :noerror)
-          (search-backward-regexp modi/verilog-header-re nil :noerror))))
+            (re-search-forward modi/verilog-header-re nil :noerror)
+          (re-search-backward modi/verilog-header-re nil :noerror))))
 
     (when (featurep 'key-chord)
       (bind-key "C-^" #'modi/verilog-jump-to-header-dwim          verilog-mode-map)
@@ -309,7 +309,7 @@ the project."
                 module-name
                 module-instance-re)
             (save-excursion
-              (search-backward-regexp verilog-module-re)
+              (re-search-backward verilog-module-re)
               (setq module-name (match-string 1))
               (setq module-instance-re
                     (concat "^\\s*" ; pcre regex

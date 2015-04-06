@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-01 09:40:43 kmodi>
+;; Time-stamp: <2015-04-06 12:12:20 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -19,7 +19,7 @@
   (interactive)
   (let (fn)
     (save-excursion
-      (search-backward-regexp modi/fns-regexp)
+      (re-search-backward modi/fns-regexp)
       (setq fn (match-string 1))
       ;; (message "Parsed: %s fns-in-edebug: %s" fn modi/fns-in-edebug)
       (mark-sexp)
@@ -49,7 +49,7 @@
   (interactive)
   (let (fn)
     (save-excursion
-      (search-backward-regexp modi/fns-regexp)
+      (re-search-backward modi/fns-regexp)
       (setq fn (match-string 1)))
     (if (member fn modi/fns-in-debug)
         ;; If the function is already being debugged, cancel its debug on entry
