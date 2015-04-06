@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 18:48:57 kmodi>
+;; Time-stamp: <2015-04-06 10:16:38 kmodi>
 
 ;; Org Mode
 
@@ -255,6 +255,11 @@ this with to-do items than with projects or headings."
         (use-package ox-latex
           :config
           (progn
+            ;; ox-latex patches
+            (load (expand-file-name
+                   "ox-latex-patches.el"
+                   (concat user-emacs-directory "/elisp/patches"))
+                  nil :nomessage)
             ;; Previewing latex fragments in org mode
             ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
             ;; (setq org-latex-create-formula-image-program 'dvipng) ; NOT Recommended
