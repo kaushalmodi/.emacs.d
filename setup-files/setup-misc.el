@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-03 22:22:04 kmodi>
+;; Time-stamp: <2015-04-06 22:40:11 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -236,7 +236,7 @@ _cr_ Rpn calc        _f_irefox                _n_eotree                _<SPC>_ a
     ;; If `multiple-cursors-mode is not the first in `minor-mode-alist' ..
     (when (not (equal 'multiple-cursors-mode (car (car minor-mode-alist))))
       ;; First remove it from the alist
-      (remove-from-alist-matching-car minor-mode-alist multiple-cursors-mode)
+      (setq minor-mode-alist (assq-delete-all 'multiple-cursors-mode minor-mode-alist))
       ;; Now add it back but to the beginning of the alist
       (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line))))
 

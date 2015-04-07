@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-11 00:07:09 kmodi>
+;; Time-stamp: <2015-04-06 22:23:03 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -118,6 +118,17 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (ignore-errors (backward-word 5)))
 
+(require 'ffap)
+
+;; Patch `ffap-string-at-point-mode-alist' to support file paths with curly braces:
+;; ${HOME}/.emacs.d/init.el
+;; Delete from `ffap-string-at-point-mode-alist' all elements whose `car' is `file'
+(setq ffap-string-at-point-mode-alist
+      (assq-delete-all 'file ffap-string-at-point-mode-alist))
+;; and then add a new list `(file ..)' that supports the curly braces.
+(add-to-list 'ffap-string-at-point-mode-alist
+             '(file "--:\\\\$\\{\\}+<>@-Z_[:alpha:]~*?" "<@" "@>;.,!:"))
+
 ;; Patched version to fix this issue:
 ;; In Verilog/C/C++, comments can begin with //.
 ;; Here's an example comment,
@@ -131,22 +142,12 @@ point reaches the beginning or end of the buffer, stop there."
 ;; find-file-at-point when my cursor is on a line where the first 2
 ;; non-space characters are //?
 ;; http://emacs.stackexchange.com/q/107/115
-(require 'ffap)
-
-;; Patch `ffap-string-at-point-mode-alist' to support file paths with curly braces:
-;; ${PRJ_USER}/somefile.txt
-;; Delete a list from `ffap-string-at-point-mode-alist' whose `car' is `file'
-;; and then add a new list `(file ..)' that supports the curly braces.
-(remove-from-alist-matching-car ffap-string-at-point-mode-alist file)
-(add-to-list 'ffap-string-at-point-mode-alist '(file "--:\\\\$\\{\\}+<>@-Z_[:alpha:]~*?" "<@" "@>;.,!:"))
-
 (defun ffap-string-at-point (&optional mode)
   (let* ((args
           (cdr
            (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
                (assq 'file ffap-string-at-point-mode-alist))))
          next-comment ; patch
-         modi/ffap-string-at-point-loadeXd
          (pt (point))
          (beg (if (use-region-p)
                   (region-beginning)
@@ -171,7 +172,6 @@ point reaches the beginning or end of the buffer, stop there."
     ;; (message "end = %d beg = %d" end beg)
     (when (> end next-comment)
       (setq beg next-comment))
-    (setq modi/ffap-string-at-point-loaded t)
     ;;
     (setq ffap-string-at-point
           (buffer-substring-no-properties

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-27 01:08:43 kmodi>
+;; Time-stamp: <2015-04-06 22:43:08 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -39,16 +39,6 @@ Otherwise, get the symbol at point, as a string."
         ((symbol-at-point)
          (substring-no-properties
           (symbol-name (symbol-at-point))))))
-
-(defmacro remove-from-alist-matching-car (alist car-of-list-to-delete)
-  "For ALIST, remove a list from it whose `car' matches CAR-OF-LIST-TO-DELETE.
-
-e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
-  `(let* ((to-delete nil))
-     (dolist (item ,alist)
-       (when (eq ',car-of-list-to-delete (car item))
-         (setq to-delete item)))
-     (setq ,alist (delete to-delete ,alist))))
 
 ;; Kill emacs when running in daemon mode or not
 ;; http://lists.gnu.org/archive/html/emacs-devel/2011-11/msg00348.html
@@ -114,6 +104,18 @@ set the symbol's value to INIT-VALUE even if the symbol is defined."
       (setq-default defvar-always-reeval-values t)
       (message "'defvar-re' will now force re-evaluate."))))
 ;;
+
+
+;; Use `assq-delete-all' instead of the below macro -- Mon Apr 06 2015
+;; (defmacro remove-from-alist-matching-car (alist car-of-list-to-delete)
+;;   "For ALIST, remove a list from it whose `car' matches CAR-OF-LIST-TO-DELETE.
+
+;; e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
+;;   `(let* ((to-delete nil))
+;;      (dolist (item ,alist)
+;;        (when (eq ',car-of-list-to-delete (car item))
+;;          (setq to-delete item)))
+;;      (setq ,alist (delete to-delete ,alist))))
 
 ;; Below is not required any more as per
 ;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
