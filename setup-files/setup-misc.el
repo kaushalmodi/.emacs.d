@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-06 22:40:11 kmodi>
+;; Time-stamp: <2015-04-08 14:51:37 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -129,8 +129,8 @@ cycle _c_ase                indent _g_uide^^                  _l_ine num        
   ("b"     modi/toggle-menu-bar)
   ("c"     xah-cycle-letter-case :color red)
   ("d"     toggle-debug-on-error)
-  ("D"     modi/toggle-debug-defun)
-  ("e"     modi/toggle-edebug-defun)
+  ("D"     modi/toggle-debug)
+  ("e"     modi/toggle-edebug)
   ("f"     toggle-fill-unfill)
   ("F"     auto-fill-mode)
   ("g"     indent-guide-mode)
