@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-06 12:12:20 kmodi>
+;; Time-stamp: <2015-04-07 23:30:10 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -17,29 +17,33 @@
 
 (defun modi/toggle-edebug-defun ()
   (interactive)
-  (let (fn)
-    (save-excursion
-      (re-search-backward modi/fns-regexp)
-      (setq fn (match-string 1))
+  (save-excursion
+    (re-search-backward modi/fns-regexp)
+    (let ((start (point))
+          (fn (match-string 1))
+          end
+          selection)
       ;; (message "Parsed: %s fns-in-edebug: %s" fn modi/fns-in-edebug)
-      (mark-sexp)
-      (narrow-to-region (point) (mark))
-      (if (member fn modi/fns-in-edebug)
-          ;; If the function is already being edebugged, uninstrument it
+      (forward-sexp 1)
+      (setq end (point))
+      (setq selection (buffer-substring-no-properties start end))
+      (with-temp-buffer
+        (insert selection)
+        (if (member fn modi/fns-in-edebug)
+            ;; If the function is already being edebugged, uninstrument it
+            (progn
+              (setq modi/fns-in-edebug (delete fn modi/fns-in-edebug))
+              (eval-buffer)
+              (setq-default eval-expression-print-length 12)
+              (setq-default eval-expression-print-level  4)
+              (message "Edebug disabled: %s" fn))
+          ;; If the function is not being edebugged, instrument it
           (progn
-            (setq modi/fns-in-edebug (delete fn modi/fns-in-edebug))
-            (eval-region (point) (mark))
-            (setq-default eval-expression-print-length 12)
-            (setq-default eval-expression-print-level  4)
-            (message "Edebug disabled: %s" fn))
-        ;; If the function is not being edebugged, instrument it
-        (progn
-          (add-to-list 'modi/fns-in-edebug fn)
-          (setq-default eval-expression-print-length nil)
-          (setq-default eval-expression-print-level  nil)
-          (edebug-defun)
-          (message "Edebug: %s" fn)))
-      (widen))))
+            (add-to-list 'modi/fns-in-edebug fn)
+            (setq-default eval-expression-print-length nil)
+            (setq-default eval-expression-print-level  nil)
+            (edebug-defun)
+            (message "Edebug: %s" fn)))))))
 
 ;; Debug on entry
 (defvar modi/fns-in-debug nil
