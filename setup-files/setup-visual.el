@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-01 09:33:10 kmodi>
+;; Time-stamp: <2015-04-08 10:05:04 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -423,6 +423,19 @@ menu bar."
                       bkp/frame-width-pixel
                       bkp/frame-height-pixel
                       :pixelwise))))
+
+(defun modi/set-selective-display-dwim (col)
+  "Call `set-selective-display' if the point is on the first column.
+If point is not on the first column, pass the column number as argument to
+`set-selective-display'.
+
+If the argument COL is passed explicitly, that takes the precedence over
+the above behavior."
+  (interactive "P")
+  (if (null col)
+      (set-selective-display (current-column))
+    (set-selective-display col)))
+(bind-key "C-x $" #'modi/set-selective-display-dwim modi-mode-map)
 
 (bind-keys
  :map modi-mode-map
