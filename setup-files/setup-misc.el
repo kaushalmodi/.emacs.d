@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-08 14:51:37 kmodi>
+;; Time-stamp: <2015-04-09 23:54:35 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -98,7 +98,7 @@ If universal arg is used, load the `init.el'."
 (global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
 ;; suspend-frame can be called using `C-x C-z` too. And `C-z` is used as prefix
 ;; key in tmux. So removing the `C-z` binding from emacs makes it possible to
-;; use emacs in -nw (no window) mode in tmux if needed without any key binding
+;; use emacs in -nw (no-window) mode in tmux if needed without any key binding
 ;; contention.
 
 ;; Source: http://endlessparentheses.com/sweet-new-features-in-24-4.html
@@ -219,10 +219,12 @@ _cr_ Rpn calc        _f_irefox                _n_eotree                _<SPC>_ a
   ("w"       sunshine-quick-forecast)
   ("W"       sunshine-forecast)
   ("<s-SPC>" hydra-launch-freq/body "Frequently Accessed Stuff")
+  ("C-@"     hydra-launch-freq/body "Frequently Accessed Stuff") ; bound to <C-SPC> in no-window mode
   ("<SPC>"   ace-jump-mode)
   (":"       eval-expression)
   ("q"       nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body)
+(bind-to-modi-map "<SPC>" hydra-launch/body)
 
 ;; Organize The Order Of Minor Mode Lighters
 (when (featurep 'multiple-cursors)
