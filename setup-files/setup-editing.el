@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-31 16:32:57 kmodi>
+;; Time-stamp: <2015-04-10 16:28:35 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -522,6 +522,16 @@ C-u C-u C-u -> Both prefix and user name are not inserted."
   ("q"   nil              "cancel"))
 (bind-key "s-u" #'hydra-unicode/body modi-mode-map)
 (key-chord-define-global "jk" #'hydra-unicode/body)
+
+;; Delete Blank Lines
+;; http://www.masteringemacs.org/article/removing-blank-lines-buffer
+(defun modi/delete-blank-lines ()
+  "Call `delete-blank-lines' if no region is selected.
+If a region is selected, delete all blank lines in that region."
+  (interactive)
+  (if (use-region-p)
+      (flush-lines "^$" (region-beginning) (region-end))
+    (delete-blank-lines)))
 
 ;; Key bindings
 (bind-keys
