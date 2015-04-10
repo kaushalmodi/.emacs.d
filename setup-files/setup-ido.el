@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-01 11:14:39 kmodi>
+;; Time-stamp: <2015-04-10 14:03:00 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -46,6 +46,9 @@
         (ido-vertical-mode 1))) ; flx-ido looks better with ido-vertical-mode
 
     (use-package ido-ubiquitous
+      :preface
+      (progn
+        (defvar ido-ubiquitous-debug-mode nil))
       :config
       (progn
         (ido-ubiquitous-mode 1)))

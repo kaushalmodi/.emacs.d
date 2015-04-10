@@ -1,7 +1,11 @@
-;; Time-stamp: <2015-03-23 17:32:07 kmodi>
+;; Time-stamp: <2015-04-10 14:02:47 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
+
+;; Take care of free variables
+(defvar ido-cr+-enable-next-call   nil)
+(defvar ido-cr+-replace-completely nil)
 
 ;; Load newer version of .el and .elc if both are available
 (when (version<= "24.4" emacs-version)
