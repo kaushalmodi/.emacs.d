@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-03 22:35:20 kmodi>
+;; Time-stamp: <2015-04-10 14:00:48 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -278,10 +278,6 @@
 (require 'setup-misc) ; This MUST be the last required package
 
 (global-modi-mode t)
-
-(when (and (bound-and-true-p emacs-initialized)
-           (featurep 'setup-visual))
-  (funcall default-theme-fn)) ; defined in setup-visual.el
 
 (setq emacs-initialized t)
 
