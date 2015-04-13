@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-10 14:02:47 kmodi>
+;; Time-stamp: <2015-04-13 16:37:12 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -12,6 +12,14 @@
   (setq load-prefer-newer t))
 
 (require 'package)
+
+(when (version<= "25.0" emacs-version)
+  (setq package-menu-async t) ; Do activities like refreshing package menu
+                                        ; asynchronously
+
+  ;; Patch to not make `package.el' force update my init.el
+  ;; Make the `package--ensure-init-file' function do nothing
+  (defun package--ensure-init-file ()))
 
 (defun prepend-path ( my-path )
   (setq load-path (cons (expand-file-name my-path) load-path)))
@@ -38,21 +46,12 @@
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 
-;; Mark packages to not be updated
-;; http://emacs.stackexchange.com/a/9342/115
-(defvar package-menu-exclude-packages '()
-  "List of packages for which the package manager should not look for updates.")
-(defun package-menu--remove-excluded-packages (orig)
-  (let ((included (-filter
-                   (lambda (entry)
-                     (let ((name (symbol-name (package-desc-name (car entry)))))
-                       (not (member name package-menu-exclude-packages))))
-                   tabulated-list-entries)))
-    (setq-local tabulated-list-entries included)
-    (funcall orig)))
-(advice-add 'package-menu--find-upgrades :around #'package-menu--remove-excluded-packages)
-
-(package-initialize) ;; Load emacs packages and activate them
+;; Load emacs packages and activate them
+;; This must come before configurations of installed packages.
+;; Don't delete this line.
+(package-initialize)
+;; `package-initialize' call is required before any of the below
+;; can happen
 
 ;; Auto install the required packages
 ;; https://github.com/bbatsov/prelude/blob/master/core/prelude-packages.el
@@ -73,6 +72,20 @@
   (dolist (p my-packages)
     (when (not (package-installed-p p))
       (package-install p))))
+
+;; Mark packages to not be updated
+;; http://emacs.stackexchange.com/a/9342/115
+(defvar package-menu-exclude-packages '()
+  "List of packages for which the package manager should not look for updates.")
+(defun package-menu--remove-excluded-packages (orig)
+  (let ((included (-filter
+                   (lambda (entry)
+                     (let ((name (symbol-name (package-desc-name (car entry)))))
+                       (not (member name package-menu-exclude-packages))))
+                   tabulated-list-entries)))
+    (setq-local tabulated-list-entries included)
+    (funcall orig)))
+(advice-add 'package-menu--find-upgrades :around #'package-menu--remove-excluded-packages)
 
 
 (provide 'setup-packages)
