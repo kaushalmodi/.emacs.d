@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-09 23:54:35 kmodi>
+;; Time-stamp: <2015-04-13 10:43:36 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -186,11 +186,11 @@ cycle _c_ase                indent _g_uide^^                  _l_ine num        
 (defhydra hydra-launch (:color teal
                         :hint  nil)
   "
-_a_g cwd             _d_ired current dir      _h_l line flash          _o_rg capture              _sa_ ^^ Async shell cmd
-_b_ookmark jump      _ed_iff dwim             _l_oad current file      _p_ackage list             _ss_ ^^ Shell cmd
-_cq_ Quick calc      _ee_ eww                 _L_oad init.el           _u_pgrade packages         _se_ ^^ emacs.SE
-_cc_ Calc            _el_ eww Lucky           _m_an                    _P_ermissions (chmod)      _w_/_W_ quick/full weather
-_cr_ Rpn calc        _f_irefox                _n_eotree                _<SPC>_ ace jump           _:_  ^^ eval
+_a_g cwd             _d_ired current dir      ma_g_it status           _n_eotree                  _sa_ ^^ Async shell cmd
+_b_ookmark jump      _ed_iff dwim             _h_l line flash          _o_rg capture              _ss_ ^^ Shell cmd
+_cq_ Quick calc      _ee_ eww                 _l_oad current file      _p_ackage list             _se_ ^^ emacs.SE
+_cc_ Calc            _el_ eww Lucky           _L_oad init.el           _u_pgrade packages         _w_/_W_ quick/full weather
+_cr_ Rpn calc        _f_irefox                _m_an                    _P_ermissions (chmod)      _<SPC>_ ace jump
 "
   ("a"       ag-regexp-cwd)
   ("b"       bookmark-jump)
@@ -202,6 +202,7 @@ _cr_ Rpn calc        _f_irefox                _n_eotree                _<SPC>_ a
   ("ee"      eww)
   ("el"      modi/eww-im-feeling-lucky)
   ("eu"      (eww (browse-url-url-at-point)))
+  ("g"       magit-status)
   ("f"       browse-url-firefox)
   ("h"       hl-line-flash)
   ("l"       xah-run-current-file)
@@ -221,7 +222,7 @@ _cr_ Rpn calc        _f_irefox                _n_eotree                _<SPC>_ a
   ("<s-SPC>" hydra-launch-freq/body "Frequently Accessed Stuff")
   ("C-@"     hydra-launch-freq/body "Frequently Accessed Stuff") ; bound to <C-SPC> in no-window mode
   ("<SPC>"   ace-jump-mode)
-  (":"       eval-expression)
+  (":"       eval-expression "eval")
   ("q"       nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body)
 (bind-to-modi-map "<SPC>" hydra-launch/body)
