@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 08:48:21 kmodi>
+;; Time-stamp: <2015-04-13 09:47:14 kmodi>
 
 ;; Calculator
 
@@ -11,7 +11,7 @@
 
     (bind-keys
      :map modi-mode-map
-     ("C-`" . quick-calc)))
+      ("C-`" . quick-calc)))
   :config
   (progn
     ;; Make alog10(0.3) give the antilog(base 10) in quick-calc
@@ -50,12 +50,11 @@ because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
     ))
 
 (use-package rpn-calc
-  :load-path "elisp/rpn-calc"
   :config
   (progn
     (bind-keys
      :map modi-mode-map
-     ("C-~" . rpn-calc))))
+      ("C-~" . rpn-calc))))
 
 
 (provide 'setup-calc)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-10 14:00:48 kmodi>
+;; Time-stamp: <2015-04-13 09:51:11 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -94,6 +94,7 @@
         rainbow-mode
         rectangle-utils
         region-bindings-mode ; complements really well with multiple-cursors
+        rpn-calc
         smart-compile
         smart-mode-line popup rich-minority
         smex ; smart M-x
