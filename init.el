@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 09:51:11 kmodi>
+;; Time-stamp: <2015-04-13 16:39:19 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -67,6 +67,7 @@
         ido-vertical-mode flx-ido ido-ubiquitous
         indent-guide
         iregister ; Interactive access to registers
+        isend-mode ; used in setup-perl.el
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
         key-chord ; map pairs of simultaneously pressed keys to commands
         keyfreq ; find which commands you use the most
@@ -99,6 +100,7 @@
         smart-mode-line popup rich-minority
         smex ; smart M-x
         stripe-buffer
+        swiper
         sx
         tiny
         undo-tree ; supercool undo visualization
@@ -279,6 +281,10 @@
 (require 'setup-misc) ; This MUST be the last required package
 
 (global-modi-mode t)
+
+(when (and (bound-and-true-p emacs-initialized)
+           (featurep 'setup-visual))
+  (funcall default-theme-fn)) ; defined in setup-visual.el
 
 (setq emacs-initialized t)
 

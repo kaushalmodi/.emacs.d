@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-04 00:48:33 kmodi>
+;; Time-stamp: <2015-04-13 16:35:45 kmodi>
 
 ;; PDF
 
@@ -7,6 +7,7 @@
 
 (use-package pdf-tools
   :if (not (bound-and-true-p disable-pkg-pdf-tools))
+  :ensure t
   :preface
   (progn
     (defvar pdf-tools-github-version-name "pdf-tools-0.60"))
