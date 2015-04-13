@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-09 23:53:46 kmodi>
+;; Time-stamp: <2015-04-13 16:02:55 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -111,9 +111,10 @@ the smart-mode-line theme."
 ;; Load the theme ONLY after the frame has finished loading (needed especially
 ;; when running emacs in daemon mode)
 ;; https://github.com/Malabarba/smart-mode-line/issues/84#issuecomment-46429893
-;; `after-make-frame-functions' hook is not run in no-window mode
-(add-hook 'after-make-frame-functions (lambda (&rest frame)
-                                        (funcall default-theme-fn)))
+;; ;; `after-make-frame-functions' hook is not run in no-window mode
+;; (add-hook 'after-make-frame-functions (lambda (&rest frame)
+;;                                         (funcall default-theme-fn)))
+(add-hook 'window-setup-hook (λ (funcall default-theme-fn)))
 
 ;; Make the italics show as actual italics. For some unknown reason, the below
 ;; is needed to render the italics in org-mode. The issue could be related to
