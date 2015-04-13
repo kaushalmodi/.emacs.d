@@ -1,13 +1,14 @@
-;; Time-stamp: <2015-02-25 13:45:27 kmodi>
+;; Time-stamp: <2015-04-13 09:49:32 kmodi>
 
 ;; Diff-hl
 ;; https://github.com/dgutov/diff-hl
 
 (use-package diff-hl
-    :config
+  :config
   (progn
 
-    (defvar modi/diff-hl-mode-hooks '(emacs-lisp-mode-hook)
+    (defvar modi/diff-hl-mode-hooks '(emacs-lisp-mode-hook
+                                      sh-mode-hook)
       "List of hooks of major modes in which diff-hl-mode should be enabled.")
 
     (dolist (hook modi/diff-hl-mode-hooks)
