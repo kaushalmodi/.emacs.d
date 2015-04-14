@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-14 14:27:55 kmodi>
+;; Time-stamp: <2015-04-14 15:41:55 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -52,6 +52,7 @@
         fill-column-indicator
         fold-this
         gist
+        git-timemachine ; walk through git revisions
         gplusify ; copy region with formatting for G+ posts
         etags-select etags-table ctags-update ggtags helm-gtags
         guide-key
@@ -204,7 +205,8 @@
 (when (executable-find "git")
   (require 'setup-magit)
   (require 'setup-diff-hl)
-  (require 'setup-git-link))
+  (require 'setup-git-link)
+  (require 'setup-git-timemachine))
 (require 'setup-keyfreq)
 (require 'setup-kurecolor)
 (require 'setup-manage-minor-mode)
