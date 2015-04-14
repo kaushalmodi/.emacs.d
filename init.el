@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 16:39:19 kmodi>
+;; Time-stamp: <2015-04-13 23:34:57 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -133,6 +133,13 @@
 (load custom-file nil :nomessage) ; Load the emacs `M-x customize` generated file
 
 (load setup-packages-file nil :nomessage) ; Load the packages
+;; (package-initialize) ; Do NOT delete this comment
+;;   In emacs 25+, the `package-initialize' call is auto-added to the top of
+;; init.el unless the user already has a commented or uncommented
+;; `(package-initialize)' line present in their init.el.
+;;   I call this function in setup-packages.el and so am keeping the
+;; commented out version here so that package.el does not add it again.
+
 
 ;; Optional file containing `setq' statements to disable loading of selected
 ;; packages. Format to be used: (setq disable-pkg-PKGNAME t)
@@ -156,7 +163,7 @@
 (require 'setup-key-chord)
 (require 'setup-hydra)
 (require 'setup-tags) ; It's important that this is required up-front, at least
-                      ; before requiring `setup-projectile'
+                                        ; before requiring `setup-projectile'
 ;; End of basic requires
 
 ;; Set up the looks of emacs

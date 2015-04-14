@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 16:37:12 kmodi>
+;; Time-stamp: <2015-04-13 23:27:25 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -14,12 +14,9 @@
 (require 'package)
 
 (when (version<= "25.0" emacs-version)
-  (setq package-menu-async t) ; Do activities like refreshing package menu
-                                        ; asynchronously
-
-  ;; Patch to not make `package.el' force update my init.el
-  ;; Make the `package--ensure-init-file' function do nothing
-  (defun package--ensure-init-file ()))
+  (setq package-menu-async t) ; Do activities asynchronously,
+                                        ; like refreshing menu
+  )
 
 (defun prepend-path ( my-path )
   (setq load-path (cons (expand-file-name my-path) load-path)))
