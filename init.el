@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 23:34:57 kmodi>
+;; Time-stamp: <2015-04-14 14:27:55 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -100,6 +100,7 @@
         smart-mode-line popup rich-minority
         smex ; smart M-x
         stripe-buffer
+        sunshine
         swiper
         sx
         tiny
@@ -139,7 +140,6 @@
 ;; `(package-initialize)' line present in their init.el.
 ;;   I call this function in setup-packages.el and so am keeping the
 ;; commented out version here so that package.el does not add it again.
-
 
 ;; Optional file containing `setq' statements to disable loading of selected
 ;; packages. Format to be used: (setq disable-pkg-PKGNAME t)
