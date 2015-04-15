@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-14 15:41:55 kmodi>
+;; Time-stamp: <2015-04-15 14:44:57 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -163,7 +163,7 @@
 (require 'setup-region-bindings-mode)
 (require 'setup-key-chord)
 (require 'setup-hydra)
-(require 'setup-tags) ; It's important that this is required up-front, at least
+(require 'setup-tags) ; It's important that this is required at least
                                         ; before requiring `setup-projectile'
 ;; End of basic requires
 
