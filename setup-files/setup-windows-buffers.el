@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 08:36:31 kmodi>
+;; Time-stamp: <2015-04-15 14:44:24 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -39,9 +39,9 @@
   (progn
     (setq windmove-wrap-around t) ; default = nil
     (windmove-default-keybindings) ; Bind windmove nav to S-left/right/up/down
-    (when (featurep 'key-chord)
-      (key-chord-define-global "p[" 'windmove-left)
-      (key-chord-define-global "[]" 'windmove-right))))
+
+    (key-chord-define-global "p[" #'windmove-left)
+    (key-chord-define-global "[]" #'windmove-right)))
 
 ;; http://emacs.stackexchange.com/a/3334/115
 ;; Reopen Killed File
@@ -534,10 +534,9 @@ the current window and the windows state prior to that.
 (bind-to-modi-map "f" full-screen-center)
 (bind-to-modi-map "y" bury-buffer)
 
-(when (featurep 'key-chord)
-  (key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
-  (key-chord-define-global "ZZ" 'toggle-between-buffers)
-  (key-chord-define-global "5t" 'revert-buffer)) ; alternative to F5
+(key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
+(key-chord-define-global "ZZ" 'toggle-between-buffers)
+(key-chord-define-global "5t" 'revert-buffer) ; alternative to F5
 
 
 (provide 'setup-windows-buffers)

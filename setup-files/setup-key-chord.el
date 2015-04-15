@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-01 09:10:33 kmodi>
+;; Time-stamp: <2015-04-15 13:00:28 kmodi>
 
 ;; Key Chord Mode
 ;; http://www.emacswiki.org/emacs/key-chord.el
@@ -6,6 +6,7 @@
 (use-package key-chord
   :config
   (progn
+    (setq key-chord-two-keys-delay 0.05)
     (key-chord-mode 1)))
 
 

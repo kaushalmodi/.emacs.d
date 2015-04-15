@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-06 12:08:13 kmodi>
+;; Time-stamp: <2015-04-15 13:12:18 kmodi>
 
 ;; Org Mode
 
@@ -501,9 +501,9 @@ this with to-do items than with projects or headings."
       "
 _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
 _l_atex   e_x_ample   _v_erilog       _i_ndex:
-_a_scii   _v_erse     _S_hell         _I_NCLUDE:
-_s_rc     ^ ^         _t_ext          _H_TML:
-_h_tml    ^ ^         ^ ^             _A_SCII:
+_a_scii   _v_erse     _m_atlab        _I_NCLUDE:
+_s_rc     ^^          _S_hell         _H_TML:
+_h_tml    ^^          _t_ext          _A_SCII:
 "
       ("s" (hot-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
       ("e" (progn
@@ -513,6 +513,10 @@ _h_tml    ^ ^         ^ ^             _A_SCII:
       ("v" (progn
              (hot-expand "<s")
              (insert "systemverilog")
+             (forward-line)))
+      ("m" (progn
+             (hot-expand "<s")
+             (insert "matlab")
              (forward-line)))
       ("S" (progn
              (hot-expand "<s")

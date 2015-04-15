@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 09:11:15 kmodi>
+;; Time-stamp: <2015-04-15 14:42:59 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -12,11 +12,10 @@
     (setq iy-go-to-char-key-forward             ?\.)
     ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
     ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-    (when (featurep 'key-chord)
-      (key-chord-define-global "]'"  #'iy-go-to-char)
-      (key-chord-define-global "}\"" #'iy-go-to-or-up-to-continue)
-      (key-chord-define-global "[;"  #'iy-go-to-char-backward)
-      (key-chord-define-global "{:"  #'iy-go-to-or-up-to-continue-backward))
+    (key-chord-define-global "]'"  #'iy-go-to-char)
+    (key-chord-define-global "}\"" #'iy-go-to-or-up-to-continue)
+    (key-chord-define-global "[;"  #'iy-go-to-char-backward)
+    (key-chord-define-global "{:"  #'iy-go-to-or-up-to-continue-backward)
     ;; To make `iy-go-to-char' works better with `multiple-cursors', add
     ;; `iy-go-to-char-start-pos' to `mc/cursor-specific-vars' when mc is loaded:
     (with-eval-after-load 'multiple-cursors
@@ -240,10 +239,9 @@ If ARG is omitted or nil, move point forward one word."
  ("M-{" . backward-paragraph) ;; default binding for `backward-paragraph'
  )
 
-(when (featurep 'key-chord)
-  (key-chord-define-global "1q" #'goto-line) ; alternative for F1
-  (key-chord-define-global "m," #'beginning-of-buffer)
-  (key-chord-define-global ",." #'end-of-buffer))
+(key-chord-define-global "1q" #'goto-line) ; alternative for F1
+(key-chord-define-global "m," #'beginning-of-buffer)
+(key-chord-define-global ",." #'end-of-buffer)
 
 
 (provide 'setup-navigation)

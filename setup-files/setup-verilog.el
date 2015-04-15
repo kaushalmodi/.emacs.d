@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-06 12:12:20 kmodi>
+;; Time-stamp: <2015-04-15 14:40:50 kmodi>
 
 ;;; Verilog
 
@@ -219,9 +219,8 @@ task, `define."
             (re-search-forward modi/verilog-header-re nil :noerror)
           (re-search-backward modi/verilog-header-re nil :noerror))))
 
-    (when (featurep 'key-chord)
-      (bind-key "C-^" #'modi/verilog-jump-to-header-dwim          verilog-mode-map)
-      (bind-key "C-&" (λ (modi/verilog-jump-to-header-dwim '(4))) verilog-mode-map))
+    (bind-key "C-^" #'modi/verilog-jump-to-header-dwim          verilog-mode-map)
+    (bind-key "C-&" (λ (modi/verilog-jump-to-header-dwim '(4))) verilog-mode-map)
 
     (when (featurep 'which-func)
       (add-to-list 'which-func-modes 'verilog-mode)
@@ -291,8 +290,7 @@ for this to work."
               (find-tag modi/verilog-which-func-xtra)
             (pop-tag-mark))))
 
-      (when (featurep 'key-chord)
-        (key-chord-define verilog-mode-map "\\\\" #'modi/verilog-jump-to-module-at-point)) ; "\\"
+      (key-chord-define verilog-mode-map "\\\\" #'modi/verilog-jump-to-module-at-point) ; "\\"
 
       (when (featurep 'ag)
 
@@ -326,37 +324,37 @@ the project."
               (ag-regexp module-instance-re (projectile-project-root)))))
         (key-chord-define verilog-mode-map "^^" #'modi/verilog-find-parent-module)))
 
-  ;; Unbind the backtick binding done to `electric-verilog-tick'
-  ;; With binding done to electric-verilog-tick, it's not possible to type
-  ;; backticks on multiple lines simultaneously in multiple-cursors mode
-  (define-key verilog-mode-map "\`" nil)
+    ;; Unbind the backtick binding done to `electric-verilog-tick'
+    ;; With binding done to electric-verilog-tick, it's not possible to type
+    ;; backticks on multiple lines simultaneously in multiple-cursors mode
+    (define-key verilog-mode-map "\`" nil)
 
 ;;; my/verilog-mode-customizations
-  (defun my/verilog-mode-customizations ()
-    ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
-    (font-lock-add-keywords nil
-                            '(("\\b\\(FIXME\\|TODO\\|BUG\\)\\b" 1
-                               font-lock-warning-face t)))
-    ;; Above solution highlights those keywords anywhere in the buffer (not
-    ;; just in comments). To do the highlighting intelligently, install the
-    ;; `fic-mode' package - https://github.com/lewang/fic-mode
+    (defun my/verilog-mode-customizations ()
+      ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
+      (font-lock-add-keywords nil
+                              '(("\\b\\(FIXME\\|TODO\\|BUG\\)\\b" 1
+                                 font-lock-warning-face t)))
+      ;; Above solution highlights those keywords anywhere in the buffer (not
+      ;; just in comments). To do the highlighting intelligently, install the
+      ;; `fic-mode' package - https://github.com/lewang/fic-mode
 
-    ;; ;; Enable orgstruct mode
-    ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
-    ;; (turn-on-orgstruct++)
+      ;; ;; Enable orgstruct mode
+      ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
+      ;; (turn-on-orgstruct++)
 
-    ;; Replace tabs with spaces when saving files in verilog-mode
-    ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
-    ;; Note that keeping that `nil' in the argument is crucial; otherwise
-    ;; emacs with stay stuck with the "Saving file .." message and the file
-    ;; won't be saved.
-    (add-hook 'local-write-file-hooks
-              (λ (untabify (point-min) (point-max)) nil)))
-  (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
+      ;; Replace tabs with spaces when saving files in verilog-mode
+      ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
+      ;; Note that keeping that `nil' in the argument is crucial; otherwise
+      ;; emacs with stay stuck with the "Saving file .." message and the file
+      ;; won't be saved.
+      (add-hook 'local-write-file-hooks
+                (λ (untabify (point-min) (point-max)) nil)))
+    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
 
 ;;; my/verilog-selective-indent
-  (defun my/verilog-selective-indent (&rest args)
-    "Return t if the current line starts with '// *'.
+    (defun my/verilog-selective-indent (&rest args)
+      "Return t if the current line starts with '// *'.
 If the line matches '// *' delete any preceding white space too.
 
 Tweak the verilog-mode indentation to skip the lines that begin with
@@ -364,22 +362,22 @@ Tweak the verilog-mode indentation to skip the lines that begin with
 or `outshine' functionality.
 
 http://emacs.stackexchange.com/a/8033/115"
-    (interactive)
-    (save-excursion
-      (beginning-of-line)
-      (let ((match (looking-at "^[[:blank:]]*// \\*")))
-        (when match
-          (delete-horizontal-space))
-        match)))
-  ;; Advise the indentation behavior of `indent-region' done using `C-M-\'
-  (advice-add 'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
-  ;; Advise the indentation done by hitting `TAB'
-  (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
+      (interactive)
+      (save-excursion
+        (beginning-of-line)
+        (let ((match (looking-at "^[[:blank:]]*// \\*")))
+          (when match
+            (delete-horizontal-space))
+          match)))
+    ;; Advise the indentation behavior of `indent-region' done using `C-M-\'
+    (advice-add 'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
+    ;; Advise the indentation done by hitting `TAB'
+    (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
 
 ;;; hydra-verilog-template
-  (defhydra hydra-verilog-template (:color blue
-                                    :hint nil)
-    "
+    (defhydra hydra-verilog-template (:color blue
+                                      :hint nil)
+      "
 _i_nitial        _?_ if             _j_ fork           _A_ssign                _uc_ uvm-component
 _b_egin          _:_ else-if        _m_odule           _I_nput                 _uo_ uvm-object
 _a_lways         _f_or              _g_enerate         _O_utput
@@ -389,53 +387,53 @@ _a_lways         _f_or              _g_enerate         _O_utput
 ^^               case_x_            _F_unction         _R_eg
 ^^               case_z_            ^^                 _D_efine-signal
 "
-    ("a"   verilog-sk-always)
-    ("b"   verilog-sk-begin)
-    ("c"   verilog-sk-case)
-    ("f"   verilog-sk-for)
-    ("g"   verilog-sk-generate)
-    ("h"   verilog-sk-header)
-    ("i"   verilog-sk-initial)
-    ("j"   verilog-sk-fork)
-    ("m"   verilog-sk-module)
-    ("p"   verilog-sk-primitive)
-    ("r"   verilog-sk-repeat)
-    ("s"   verilog-sk-specify)
-    ("t"   verilog-sk-task)
-    ("w"   verilog-sk-while)
-    ("x"   verilog-sk-casex)
-    ("z"   verilog-sk-casez)
-    ("?"   verilog-sk-if)
-    (":"   verilog-sk-else-if)
-    ("/"   verilog-sk-comment)
-    ("A"   verilog-sk-assign)
-    ("F"   verilog-sk-function)
-    ("I"   verilog-sk-input)
-    ("O"   verilog-sk-output)
-    ("S"   verilog-sk-state-machine)
-    ("="   verilog-sk-inout)
-    ("uc"  verilog-sk-uvm-component)
-    ("uo"  verilog-sk-uvm-object)
-    ("W"   verilog-sk-wire)
-    ("R"   verilog-sk-reg)
-    ("D"   verilog-sk-define-signal)
-    ("q"   nil nil :color blue)
-    ("C-g" nil nil :color blue))
-  (bind-key "C-c C-t" #'hydra-verilog-template/body verilog-mode-map)
+      ("a"   verilog-sk-always)
+      ("b"   verilog-sk-begin)
+      ("c"   verilog-sk-case)
+      ("f"   verilog-sk-for)
+      ("g"   verilog-sk-generate)
+      ("h"   verilog-sk-header)
+      ("i"   verilog-sk-initial)
+      ("j"   verilog-sk-fork)
+      ("m"   verilog-sk-module)
+      ("p"   verilog-sk-primitive)
+      ("r"   verilog-sk-repeat)
+      ("s"   verilog-sk-specify)
+      ("t"   verilog-sk-task)
+      ("w"   verilog-sk-while)
+      ("x"   verilog-sk-casex)
+      ("z"   verilog-sk-casez)
+      ("?"   verilog-sk-if)
+      (":"   verilog-sk-else-if)
+      ("/"   verilog-sk-comment)
+      ("A"   verilog-sk-assign)
+      ("F"   verilog-sk-function)
+      ("I"   verilog-sk-input)
+      ("O"   verilog-sk-output)
+      ("S"   verilog-sk-state-machine)
+      ("="   verilog-sk-inout)
+      ("uc"  verilog-sk-uvm-component)
+      ("uo"  verilog-sk-uvm-object)
+      ("W"   verilog-sk-wire)
+      ("R"   verilog-sk-reg)
+      ("D"   verilog-sk-define-signal)
+      ("q"   nil nil :color blue)
+      ("C-g" nil nil :color blue))
+    (bind-key "C-c C-t" #'hydra-verilog-template/body verilog-mode-map)
 
-  ;; Uncomment the lines for which the advice needs to be removed
-  ;; (advice-remove 'verilog-indent-line-relative #'my/verilog-selective-indent)
-  ;; (advice-remove 'verilog-indent-line          #'my/verilog-selective-indent)
+    ;; Uncomment the lines for which the advice needs to be removed
+    ;; (advice-remove 'verilog-indent-line-relative #'my/verilog-selective-indent)
+    ;; (advice-remove 'verilog-indent-line          #'my/verilog-selective-indent)
 
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Macros saved as functions
-  ;;
-  ;; Regex Search Expression - \$display(\(.*?\));\(.*\)
-  ;; Replace Expression - `uvm_info("REPLACE_THIS_GENERIC_ID", $sformatf(\1), UVM_MEDIUM) \2
-  (fset 'uvm-convert-display-to-uvm_info
-        (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([3 113 92 36 100 105 115 112 108 97 121 40 92 40 46 42 63 92 41 41 59 92 40 46 42 92 41 return 96 117 118 109 95 105 110 102 111 40 34 82 69 80 76 65 67 69 95 84 72 73 83 95 71 69 78 69 82 73 67 95 73 68 34 44 32 36 115 102 111 114 109 97 116 102 40 92 49 41 44 32 85 86 77 95 77 69 68 73 85 77 41 32 92 50 return 33] 0 "%d")) arg)))
-  ;;
-  ))
+    ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Macros saved as functions
+    ;;
+    ;; Regex Search Expression - \$display(\(.*?\));\(.*\)
+    ;; Replace Expression - `uvm_info("REPLACE_THIS_GENERIC_ID", $sformatf(\1), UVM_MEDIUM) \2
+    (fset 'uvm-convert-display-to-uvm_info
+          (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([3 113 92 36 100 105 115 112 108 97 121 40 92 40 46 42 63 92 41 41 59 92 40 46 42 92 41 return 96 117 118 109 95 105 110 102 111 40 34 82 69 80 76 65 67 69 95 84 72 73 83 95 71 69 78 69 82 73 67 95 73 68 34 44 32 36 115 102 111 114 109 97 116 102 40 92 49 41 44 32 85 86 77 95 77 69 68 73 85 77 41 32 92 50 return 33] 0 "%d")) arg)))
+    ;;
+    ))
 
 
 (provide 'setup-verilog)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:04:07 kmodi>
+;; Time-stamp: <2015-04-15 14:43:47 kmodi>
 
 ;; w3m - web browser
 
@@ -118,8 +118,7 @@ before doing the search"
       (define-key map (kbd "C-c C-c")     'w3m-submit-form)
       (setq modi-w3m-map map))
     (add-hook 'w3m-mode-hook (λ (use-local-map modi-w3m-map)))
-    (when (featurep 'key-chord)
-      (key-chord-define-global "-=" 'wicked/toggle-w3m))))
+    (key-chord-define-global "-=" #'wicked/toggle-w3m)))
 
 
 (provide 'setup-w3m)

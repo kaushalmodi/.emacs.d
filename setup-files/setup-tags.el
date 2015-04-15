@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-26 16:41:59 kmodi>
+;; Time-stamp: <2015-04-15 14:43:27 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -172,8 +172,7 @@
       ;; Remove the default binding for `M-.' in `ggtags-mode-map'
       (define-key ggtags-mode-map (kbd "M-.") nil)
 
-      (when (featurep 'key-chord)
-        (key-chord-define-global "??" #'ggtags-show-definition))))
+      (key-chord-define-global "??" #'ggtags-show-definition)))
 
 ;;; helm-gtags
   (use-package helm-gtags)

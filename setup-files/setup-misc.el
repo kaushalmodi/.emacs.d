@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 08:55:30 kmodi>
+;; Time-stamp: <2015-04-15 13:07:15 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -151,7 +151,7 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("C-t"   toggle-theme)
   ("<SPC>" whitespace-mode :color red)
   ("q"     nil "cancel" :color blue))
-(key-chord-define-global "qq"  #'hydra-toggle/body)
+(key-chord-define-global " t" #'hydra-toggle/body) ; SPC + t
 (bind-key "s-t" #'hydra-toggle/body modi-mode-map)
 (bind-key "C-c t" #'hydra-toggle/body modi-mode-map)
 
@@ -187,11 +187,11 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
 (defhydra hydra-launch (:color teal
                         :hint  nil)
   "
-_a_g cwd             _d_ired current dir      ma_g_it status           _n_eotree                  _sa_ ^^ Async shell cmd
-_b_ookmark jump      _ed_iff dwim             _h_l line flash          _o_rg capture              _ss_ ^^ Shell cmd
-_cq_ Quick calc      _ee_ eww                 _l_oad current file      _p_ackage list             _se_ ^^ emacs.SE
-_cc_ Calc            _el_ eww Lucky           _L_oad init.el           _u_pgrade packages         _w_/_W_ quick/full weather
-_cr_ Rpn calc        _f_irefox                _m_an                    _P_ermissions (chmod)      _<SPC>_ ace jump
+_a_g cwd             _d_ired current dir      ma_g_it status           _n_eotree                  ^^ _sa_   Async shell cmd
+_b_ookmark jump      _ed_iff dwim             _h_l line flash          _o_rg capture              ^^ _ss_   Shell cmd
+_cq_ Quick calc      _ee_ eww                 _l_oad current file      _p_ackage list             ^^ _se_   emacs.SE
+_cc_ Calc            _el_ eww Lucky           _L_oad init.el           _u_pgrade packages         _w_/_W_   quick/full weather
+_cr_ Rpn calc        _f_irefox                _m_an                    _P_ermissions (chmod)      ^^_<SPC>_ frequent
 "
   ("a"       ag-regexp-cwd)
   ("b"       bookmark-jump)
@@ -220,13 +220,12 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _P_ermiss
   ("u"       paradox-upgrade-packages)
   ("w"       sunshine-quick-forecast)
   ("W"       sunshine-forecast)
-  ("<s-SPC>" hydra-launch-freq/body "Frequently Accessed Stuff")
-  ("<C-SPC>" hydra-launch-freq/body "Frequently Accessed Stuff")
-  ("C-@"     hydra-launch-freq/body nil) ; bound to <C-SPC> in no-window mode
-  ("<SPC>"   ace-jump-mode)
+  ("<SPC>"   hydra-launch-freq/body)
+  ("<s-SPC>" hydra-launch-freq/body)
   (":"       eval-expression "eval")
   ("q"       nil "cancel" :color blue))
-(bind-key "<s-SPC>" #'hydra-launch/body)
+(key-chord-define-global " l" #'hydra-launch/body) ; SPC + l
+(bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
 (bind-key "C-c l" #'hydra-launch/body modi-mode-map)
 
 ;; Organize The Order Of Minor Mode Lighters

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 09:03:30 kmodi>
+;; Time-stamp: <2015-04-15 13:09:35 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -51,10 +51,11 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
       ("z"   projectile-cache-current-file)
       ("`"   hydra-projectile-other-window/body "other window")
       ("q"   nil "cancel" :color blue))
+    (key-chord-define-global " p" #'hydra-projectile/body) ; SPC + p
     (bind-key "s-f" #'hydra-projectile/body modi-mode-map)
     (setq projectile-keymap-prefix (kbd "C-c P"))
-    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map)
-    (bind-key "C-c p" #'hydra-projectile/body modi-mode-map))
+    (bind-key "C-c p" #'hydra-projectile/body modi-mode-map)
+    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map))
   :config
   (progn
     (defvar projectile-ag-command
