@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-25 09:33:27 kmodi>
+;; Time-stamp: <2015-04-15 08:59:05 kmodi>
 
 ;; Kurecolor
 ;; https://github.com/emacsfodder/kurecolor
@@ -30,7 +30,9 @@ _rh_ RGB → Hex   _hr_ Hex → RGB    _hR_ Hex → RGBA
       ("hr" kurecolor-hexcolor-at-point-or-region-to-css-rgb :color blue)
       ("hR" kurecolor-hexcolor-at-point-or-region-to-css-rgba :color blue)
       ("q"  nil "cancel" :color blue))
-    (bind-key "s-c" #'hydra-kurecolor/body modi-mode-map)))
+    (bind-key "s-k" #'hydra-kurecolor/body modi-mode-map)
+    (bind-key "C-c k" #'hydra-kurecolor/body modi-mode-map)
+    ))
 
 
 (provide 'setup-kurecolor)

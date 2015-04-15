@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-10 16:28:35 kmodi>
+;; Time-stamp: <2015-04-15 08:34:55 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -521,6 +521,7 @@ C-u C-u C-u -> Both prefix and user name are not inserted."
   ("<down>"  (insert-char ?↓) "↓")
   ("q"   nil              "cancel"))
 (bind-key "s-u" #'hydra-unicode/body modi-mode-map)
+(bind-key "C-c u" #'hydra-unicode/body modi-mode-map)
 (key-chord-define-global "jk" #'hydra-unicode/body)
 
 ;; Delete Blank Lines

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 09:49:32 kmodi>
+;; Time-stamp: <2015-04-15 08:34:20 kmodi>
 
 ;; Diff-hl
 ;; https://github.com/dgutov/diff-hl
@@ -25,6 +25,7 @@
       ("n"     diff-hl-next-hunk      "next hunk")
       ("q" nil                    "cancel"))
     (bind-key "s-v" #'hydra-diff-hl/body modi-mode-map)
+    (bind-key "C-c v" #'hydra-diff-hl/body modi-mode-map)
 
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)))
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-16 09:58:58 kmodi>
+;; Time-stamp: <2015-04-15 08:36:31 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -107,12 +107,7 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
 ;; Converts between horz-split <-> vert-split. In addition it also rotates
 ;; the windows around in the frame when you have 3 or more windows.
 (use-package transpose-frame
-  :load-path "elisp/transpose-frame/"
-  :config
-  (progn
-    (bind-keys
-     :map modi-mode-map
-     ("C-c t" . transpose-frame))))
+  :load-path "elisp/transpose-frame/")
 
 ;; http://www.whattheemacsd.com/
 (defun rotate-windows ()
@@ -505,7 +500,7 @@ the current window and the windows state prior to that.
  ;; Make Alt+mousewheel scroll the other buffer
  ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
  ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ; M + wheel down
- ("C-c s"       . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
+ ("C-c )"       . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; http://stackoverflow.com/a/26629984/1219634

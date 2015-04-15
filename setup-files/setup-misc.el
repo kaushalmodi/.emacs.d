@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-14 15:36:44 kmodi>
+;; Time-stamp: <2015-04-15 08:55:30 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -119,10 +119,11 @@ If universal arg is used, load the `init.el'."
                         :hint  nil)
   "
     TOGGLE ...
-_ai_ aggressive indent      _d_ebug on error / _D_ebug on entry      _H_ardcore (allow arrows)      _m_odi mode            _S_tripe buffer
-_aw_ adaptive wrap          _e_debug^^                               fill col _i_ndicator           _p_resentation         _t_runcate lines
-menu _b_ar                  _f_ill / auto_F_ill                      _k_ey chord                    _r_ead only            _T_heme
-cycle _c_ase                indent _g_uide^^                         _l_ine num                     _s_plit horz/vert      _<SPC>_ whitespace
+_ai_ aggressive indent      _d_/_D_ debug on error/entry      _H_ardcore (allow arrows)      _p_resentation         _t_ranspose frame
+_aw_ adaptive wrap          _e_debug^^                        fill col _i_ndicator           _r_ead only            _C-t_ theme
+menu _b_ar                  _f_ill^^                          _k_ey chord                    _S_tripe buffer        _<SPC>_ whitespace
+cycle _c_ase                _F_ollow^^                        _l_ine num                     _-_ truncate lines
+^^                          indent _g_uide^^                  _m_odi mode
 "
   ("ai"    aggressive-indent-mode)
   ("aw"    adaptive-wrap-prefix-mode)
@@ -132,7 +133,7 @@ cycle _c_ase                indent _g_uide^^                         _l_ine num 
   ("D"     modi/toggle-debug)
   ("e"     modi/toggle-edebug)
   ("f"     toggle-fill-unfill)
-  ("F"     auto-fill-mode)
+  ("F"     follow-mode)
   ("g"     indent-guide-mode)
   ("H"     hardcore-mode)
   ("i"     fci-mode)
@@ -144,15 +145,15 @@ cycle _c_ase                indent _g_uide^^                         _l_ine num 
   ("o"     modi/toggle-one-window :color red)
   ("p"     prez-mode)
   ("r"     dired-toggle-read-only) ; generalized `read-only-mode'
-  ("s"     transpose-frame :color red)
   ("S"     stripe-buffer-mode)
-  ("t"     toggle-truncate-lines :color red)
-  ("s-t"   toggle-theme)
-  ("T"     toggle-theme)
+  ("-"     toggle-truncate-lines :color red)
+  ("t"     transpose-frame :color red)
+  ("C-t"   toggle-theme)
   ("<SPC>" whitespace-mode :color red)
   ("q"     nil "cancel" :color blue))
 (key-chord-define-global "qq"  #'hydra-toggle/body)
-(bind-key                "s-t" #'hydra-toggle/body modi-mode-map)
+(bind-key "s-t" #'hydra-toggle/body modi-mode-map)
+(bind-key "C-c t" #'hydra-toggle/body modi-mode-map)
 
 ;; Launcher
 (defhydra hydra-launch-freq (:color teal
@@ -220,12 +221,13 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _P_ermiss
   ("w"       sunshine-quick-forecast)
   ("W"       sunshine-forecast)
   ("<s-SPC>" hydra-launch-freq/body "Frequently Accessed Stuff")
-  ("C-@"     hydra-launch-freq/body "Frequently Accessed Stuff") ; bound to <C-SPC> in no-window mode
+  ("<C-SPC>" hydra-launch-freq/body "Frequently Accessed Stuff")
+  ("C-@"     hydra-launch-freq/body nil) ; bound to <C-SPC> in no-window mode
   ("<SPC>"   ace-jump-mode)
   (":"       eval-expression "eval")
   ("q"       nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body)
-(bind-to-modi-map "<SPC>" hydra-launch/body)
+(bind-key "C-c l" #'hydra-launch/body modi-mode-map)
 
 ;; Organize The Order Of Minor Mode Lighters
 (when (featurep 'multiple-cursors)
