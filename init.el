@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 14:44:57 kmodi>
+;; Time-stamp: <2015-04-16 00:53:18 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -132,7 +132,7 @@
 (require 'cl)
 (require 'cl-lib)
 
-(load custom-file nil :nomessage) ; Load the emacs `M-x customize` generated file
+(load custom-file :noerror :nomessage) ; Load the emacs `M-x customize` generated file
 
 (load setup-packages-file nil :nomessage) ; Load the packages
 ;; (package-initialize) ; Do NOT delete this comment
