@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 13:12:18 kmodi>
+;; Time-stamp: <2015-04-16 10:11:22 kmodi>
 
 ;; Org Mode
 
@@ -159,6 +159,27 @@ this with to-do items than with projects or headings."
     (bind-keys
      :map org-mode-map
       ("C-m" . modi/org-return-no-indent))
+
+    ;; http://emacs.stackexchange.com/a/10712/115
+    (defun modi/org-delete-link ()
+      "Replace an org link of the format [[LINK][DESCRIPTION]] with DESCRIPTION.
+If the link is of the format [[LINK]], delete the whole org link.
+
+In both the cases, save the LINK to the kill-ring.
+
+Execute this command while the point is on or after the hyper-linked org link."
+      (interactive)
+      (when (derived-mode-p 'org-mode)
+        (let ((search-invisible t) start end)
+          (save-excursion
+            (when (re-search-backward "\\[\\[" nil :noerror)
+              (when (re-search-forward "\\[\\[\\(.*?\\)\\(\\]\\[.*?\\)*\\]\\]"
+                                       nil :noerror)
+                (setq start (match-beginning 0))
+                (setq end   (match-end 0))
+                (kill-new (match-string-no-properties 1)) ; Save link to kill-ring
+                (replace-regexp "\\[\\[.*?\\(\\]\\[\\(.*?\\)\\)*\\]\\]" "\\2"
+                                nil start end)))))))
 
     ;; org-ref - JKitchin
     ;; http://kitchingroup.cheme.cmu.edu/blog/2014/05/13/Using-org-ref-for-citations-and-references/
