@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 13:07:15 kmodi>
+;; Time-stamp: <2015-04-16 15:33:52 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -151,7 +151,6 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("C-t"   toggle-theme)
   ("<SPC>" whitespace-mode :color red)
   ("q"     nil "cancel" :color blue))
-(key-chord-define-global " t" #'hydra-toggle/body) ; SPC + t
 (bind-key "s-t" #'hydra-toggle/body modi-mode-map)
 (bind-key "C-c t" #'hydra-toggle/body modi-mode-map)
 
@@ -224,7 +223,6 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _P_ermiss
   ("<s-SPC>" hydra-launch-freq/body)
   (":"       eval-expression "eval")
   ("q"       nil "cancel" :color blue))
-(key-chord-define-global " l" #'hydra-launch/body) ; SPC + l
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
 (bind-key "C-c l" #'hydra-launch/body modi-mode-map)
 
