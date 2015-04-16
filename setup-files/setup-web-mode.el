@@ -1,12 +1,12 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-04-16 12:44:33 kmodi>
 
 ;; Web Mode
-;; Source: http://web-mode.org/
+;; http://web-mode.org
 
 (use-package web-mode
-  :mode (("\\.html?\\'"     . web-mode)
-         ("\\.tpl\\.php\\'" . web-mode)
-         ("\\.as[cp]x\\'"   . web-mode)))
+  :mode ("\\.html?\\'"
+         "\\.php\\'"
+         "\\.as[cp]x\\'"))
 
 
 (provide 'setup-web-mode)
