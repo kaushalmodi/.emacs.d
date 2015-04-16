@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-16 15:33:52 kmodi>
+;; Time-stamp: <2015-04-16 16:59:04 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -147,7 +147,7 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("r"     dired-toggle-read-only) ; generalized `read-only-mode'
   ("S"     stripe-buffer-mode)
   ("-"     toggle-truncate-lines :color red)
-  ("t"     transpose-frame :color red)
+  ("t"     transpose-frame)
   ("C-t"   toggle-theme)
   ("<SPC>" whitespace-mode :color red)
   ("q"     nil "cancel" :color blue))
