@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-16 16:59:04 kmodi>
+;; Time-stamp: <2015-04-17 14:47:20 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -153,6 +153,7 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("q"     nil "cancel" :color blue))
 (bind-key "s-t" #'hydra-toggle/body modi-mode-map)
 (bind-key "C-c t" #'hydra-toggle/body modi-mode-map)
+(key-chord-define-global "hj" #'hydra-toggle/body)
 
 ;; Launcher
 (defhydra hydra-launch-freq (:color teal
@@ -225,6 +226,7 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _P_ermiss
   ("q"       nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
 (bind-key "C-c l" #'hydra-launch/body modi-mode-map)
+(key-chord-define-global "jk" #'hydra-launch/body)
 
 ;; Organize The Order Of Minor Mode Lighters
 (when (featurep 'multiple-cursors)
