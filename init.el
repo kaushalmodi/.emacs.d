@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-16 00:53:18 kmodi>
+;; Time-stamp: <2015-04-20 11:35:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -265,7 +265,6 @@
           (executable-find "hunspell"))
   (require 'setup-spell))
 (require 'setup-calc)
-(require 'setup-desktop)
 (require 'setup-image)
 
 (require 'setup-work nil :noerror)
@@ -274,7 +273,13 @@
   ;; It is mandatory to load linum AFTER the frames are set up
   ;; Else, I get "*ERROR*: Invalid face: linum"
   (require 'setup-linum)
-
+  (require 'setup-desktop)
+  ;; By default, if `desktop-save-mode' is enabled, `(desktop-read)' happens
+  ;; automatically in `after-init-hook'. But we need to require `desktop.el' in
+  ;; `window-setup-hook' (which is run much later `after-init-hook'), after
+  ;; linum is enabled for the cases when emacs is launched in daemon mode.
+  ;; For that reason, `desktop-read' has to be called manually for daemon case.
+  (when (and (daemonp) desktop-save-mode) (desktop-read))
   ;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
   (require 'setup-personal nil :noerror))
 
