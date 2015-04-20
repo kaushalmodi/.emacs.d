@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-03 15:05:35 kmodi>
+;; Time-stamp: <2015-04-17 14:56:34 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -44,18 +44,19 @@
                ;;           (concat "[" (match-string 3 string) "]"))
                ;;         ":" (upcase (match-string 4 string)) ":"
                ;;         )
-               (concat (when (not (string= (match-string 3 string) (getenv "USER")))
-                         (concat "[" (match-string 3 string) "]"))
-                       ":" (upcase (match-string 4 string)) ":")
-               ))
-            ("\\(:.*\\)DIG:tb/"                    "\\1TB:" )
+               (let ((user       (match-string-no-properties 3 string))
+                     (abbrev-dir (match-string-no-properties 4 string)))
+                 (concat ":" ; The first char HAS to be `:'
+                         (when (not (string= user (getenv "USER")))
+                           (concat "~" user "/"))
+                         (upcase abbrev-dir) ":"))))
+            ("\\(:.*\\)DIG:tb/"                    "\\1TB:"  )
             ("\\(:.*\\)TB:agents/"                 "\\1AGT:" )
             ("\\(:.*\\)TB:patterns/"               "\\1PAT:" )
             ("\\(:.*\\)TB:uvm.*src/"               "\\1UVM:" )
             ("\\(:.*\\)DIG:design_code/"           "\\1DSGN:")
             ("\\(:.*\\)DSGN:rtl/"                  "\\1RTL:" )
-            ("\\(:.*\\)DSGN:analog_partition_rtl/" "\\1ANA:" )
-            ))
+            ("\\(:.*\\)DSGN:analog_partition_rtl/" "\\1ANA:" )))
     ;; customize the date and time display format in mode-line
     (setq display-time-format               "%l:%M %b %d %a" )
     (setq display-time-default-load-average nil ) ; do NOT show average system load time
