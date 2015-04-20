@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 14:44:24 kmodi>
+;; Time-stamp: <2015-04-20 10:52:03 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -234,8 +234,8 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
 (defun full-screen-center ()
   (interactive)
   (let ((frame-resize-pixelwise t))
-    (set-frame-position (selected-frame) 1910 0)   ; pixels x y from upper left
-    (set-frame-size     (selected-frame) 1894 1096 :pixelwise))) ; width, height
+    (set-frame-position nil 1910 0) ; pixels x y from upper left
+    (set-frame-size     nil 1894 1096 :pixelwise))) ; width, height
 
 ;; Set the emacs frame/window size at startup
 ;; `boundp` returns t if SYMBOL's value is not void. This prevents the frame to
