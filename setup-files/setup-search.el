@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-23 12:32:09 kmodi>
+;; Time-stamp: <2015-04-20 17:16:14 kmodi>
 
 ;; Search
 
@@ -134,10 +134,22 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
     ;; original buffer by `C-x C-s`
     ))
 
-;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
-;; DEL during isearch should edit the search string, not jump back to
-;; the previous result
-(define-key isearch-mode-map [remap isearch-delete-char] #'isearch-del-char)
+;; ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
+;; ;; DEL during isearch should edit the search string, not jump back to
+;; ;; the previous result
+;; (define-key isearch-mode-map [remap isearch-delete-char] #'isearch-del-char)
+
+;; http://emacs.stackexchange.com/a/10360/115
+(defun drew/isearch-delete ()
+  "Delete the failed portion of the search string, or the last char if successful."
+  (interactive)
+  (with-isearch-suspended
+   (setq isearch-new-string
+         (substring
+          isearch-string 0 (or (isearch-fail-pos) (1- (length isearch-string))))
+         isearch-new-message
+         (mapconcat 'isearch-text-char-description isearch-new-string ""))))
+(define-key isearch-mode-map [remap isearch-delete-char] #'drew/isearch-delete)
 
 ;; Search for the highlighted string in ALL buffers `search-all-buffers'
 ;; http://stackoverflow.com/a/2642655/1219634
