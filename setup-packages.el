@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 23:27:25 kmodi>
+;; Time-stamp: <2015-04-22 13:56:55 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -83,6 +83,22 @@
     (setq-local tabulated-list-entries included)
     (funcall orig)))
 (advice-add 'package-menu--find-upgrades :around #'package-menu--remove-excluded-packages)
+
+;; Inspired from paradox.el
+(defun my/package-upgrade-packages (&optional no-fetch)
+  "Upgrade all packages.  No questions asked.
+This function is equivalent to `list-packages', followed by a
+`package-menu-mark-upgrades' and a `package-menu-execute'.  Except
+the user isn't asked to confirm deletion of packages.
+
+The NO-FETCH prefix argument is passed to `list-packages'.  It
+prevents re-download of information about new versions.  It does
+not prevent downloading the actual packages (obviously)."
+  (interactive "P")
+  (save-window-excursion
+    (package-list-packages no-fetch)
+    (package-menu-mark-upgrades)
+    (package-menu-execute 'noquery)))
 
 
 (provide 'setup-packages)

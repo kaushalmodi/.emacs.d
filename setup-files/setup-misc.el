@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-17 14:47:20 kmodi>
+;; Time-stamp: <2015-04-22 13:59:06 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -187,11 +187,12 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
 (defhydra hydra-launch (:color teal
                         :hint  nil)
   "
-_a_g cwd             _d_ired current dir      ma_g_it status           _n_eotree                  ^^ _sa_   Async shell cmd
-_b_ookmark jump      _ed_iff dwim             _h_l line flash          _o_rg capture              ^^ _ss_   Shell cmd
-_cq_ Quick calc      _ee_ eww                 _l_oad current file      _p_ackage list             ^^ _se_   emacs.SE
-_cc_ Calc            _el_ eww Lucky           _L_oad init.el           _u_pgrade packages         _w_/_W_   quick/full weather
-_cr_ Rpn calc        _f_irefox                _m_an                    _P_ermissions (chmod)      ^^_<SPC>_ frequent
+_a_g cwd             _d_ired current dir      ma_g_it status           _n_eotree                    ^^ _sa_   Async shell cmd
+_b_ookmark jump      _ed_iff dwim             _h_l line flash          _o_rg capture                ^^ _ss_   Shell cmd
+_cq_ Quick calc      _ee_ eww                 _l_oad current file      _p_ackage list               ^^ _se_   emacs.SE
+_cc_ Calc            _el_ eww Lucky           _L_oad init.el           _u_pgrade packages           _w_/_W_   quick/full weather
+_cr_ Rpn calc        _f_irefox                _m_an                    _U_pgrade using paradox      ^^_<SPC>_ frequent
+^^                   ^^                       ^^                       _P_ermissions (chmod)
 "
   ("a"       ag-regexp-cwd)
   ("b"       bookmark-jump)
@@ -217,7 +218,8 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _P_ermiss
   ("sa"      async-shell-command)
   ("ss"      shell-command)
   ("se"      (sx-tab-newest nil "emacs"))
-  ("u"       paradox-upgrade-packages)
+  ("u"       my/package-upgrade-packages)
+  ("U"       paradox-upgrade-packages)
   ("w"       sunshine-quick-forecast)
   ("W"       sunshine-forecast)
   ("<SPC>"   hydra-launch-freq/body)
