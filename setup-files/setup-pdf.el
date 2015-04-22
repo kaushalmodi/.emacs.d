@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 16:35:45 kmodi>
+;; Time-stamp: <2015-04-22 13:43:07 kmodi>
 
 ;; PDF
 
@@ -62,6 +62,11 @@ instead of the one present in `package-user-dir'."
       ;; Call the original `pdf-tools-install' function after updating the
       ;; `pdf-info-epdfinfo-program' variable
       (pdf-tools-install))
+
+    (bind-keys
+     :map pdf-view-mode-map
+      ("M-w" . pdf-view-kill-ring-save)
+      ("C-w" . pdf-view-kill-ring-save))
 
     (my/pdf-tools-install)))
 
