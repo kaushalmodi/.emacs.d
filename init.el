@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-20 11:35:51 kmodi>
+;; Time-stamp: <2015-04-23 12:47:04 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -269,27 +269,17 @@
 
 (require 'setup-work nil :noerror)
 
-(defun post-window-setup-stuff ()
-  ;; It is mandatory to load linum AFTER the frames are set up
-  ;; Else, I get "*ERROR*: Invalid face: linum"
-  (require 'setup-linum)
-  (require 'setup-desktop)
-  ;; By default, if `desktop-save-mode' is enabled, `(desktop-read)' happens
-  ;; automatically in `after-init-hook'. But we need to require `desktop.el' in
-  ;; `window-setup-hook' (which is run much later `after-init-hook'), after
-  ;; linum is enabled for the cases when emacs is launched in daemon mode.
-  ;; For that reason, `desktop-read' has to be called manually for daemon case.
-  (when (and (daemonp) desktop-save-mode) (desktop-read))
-  ;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
-  (require 'setup-personal nil :noerror))
+;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
+(require 'setup-personal nil :noerror)
 
-(if (daemonp)
-    (add-hook 'window-setup-hook
-              (λ (message ">> Daemon mode")
-                (post-window-setup-stuff)))
-  (progn
-    (message ">> Non daemon mode")
-    (post-window-setup-stuff)))
+;; Do linum setup after a 1 second idle time after emacs has loaded
+(use-package setup-linum
+  :defer 1)
+;; Do desktop setup after a 2 second idle time after emacs has loaded
+;; By then linum would have loaded and the desktop loaded files will show
+;; linum if enabled for that major mode or if enabled globally
+(use-package setup-desktop
+  :defer 2)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'setup-misc) ; This MUST be the last required package
