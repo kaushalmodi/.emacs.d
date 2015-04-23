@@ -1,14 +1,15 @@
-;; Time-stamp: <2015-02-24 09:02:00 kmodi>
+;; Time-stamp: <2015-04-23 16:19:52 kmodi>
 
 ;; Shell Script Mode
 
 (use-package shell-script-mode
-  :mode (("\\.alias\\'"   . shell-script-mode)
-         ("\\.setup.*\\'" . shell-script-mode)
-         ("\\.gpms\\'"    . shell-script-mode)
-         ("\\.cfg\\'"     . shell-script-mode)
-         ("\\.*csh.*\\'"  . shell-script-mode)
-         ("crontab.*\\'"  . shell-script-mode)))
+  :mode (("\\.alias\\'"       . shell-script-mode)
+         ("\\.setup.*\\'"     . shell-script-mode)
+         ("\\.gpms\\'"        . shell-script-mode)
+         ("\\.cfg\\'"         . shell-script-mode)
+         ("\\.c*sh\\'"        . shell-script-mode)
+         ("\\.[a-zA-Z]+rc\\'" . shell-script-mode)
+         ("crontab.*\\'"      . shell-script-mode)))
 
 ;; https://github.com/Tux/tcsh/blob/master/csh-mode.el
 (use-package csh-mode
