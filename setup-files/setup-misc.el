@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-22 13:59:06 kmodi>
+;; Time-stamp: <2015-04-23 12:50:28 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -251,6 +251,10 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _U_pgrade
   ;; `multiple-cursors-mode' to be the primary minor mode in the mode-line,
   ;; simply revert the buffer
   (add-hook 'after-revert-hook #'modi/promote-multiple-cursors-mode-line))
+
+;; Exiting emacs
+(when (null desktop-save-mode)
+  (bind-key "C-x C-c" #'tv-stop-emacs))
 
 
 (provide 'setup-misc)
