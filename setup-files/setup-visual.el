@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 16:02:55 kmodi>
+;; Time-stamp: <2015-04-23 15:54:06 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -116,18 +116,14 @@ the smart-mode-line theme."
 ;;                                         (funcall default-theme-fn)))
 (add-hook 'window-setup-hook (λ (funcall default-theme-fn)))
 
-;; Make the italics show as actual italics. For some unknown reason, the below
-;; is needed to render the italics in org-mode. The issue could be related to
-;; the fonts in use. But having this doesn't hurt regardless.
-(set-face-attribute 'italic nil :inherit nil :slant 'italic)
-
 (defun modi/update-frame-title ()
   (interactive)
   ;; Frame title bar format
   ;; If buffer-file-name exists, show it;
   ;; else if you are in dired mode, show the directory name
   ;; else show only the buffer name (*scratch*, *Messages*, etc)
-  (setq frame-title-format (list '(buffer-file-name "%f"
+  (setq frame-title-format (list '(buffer-file-name
+                                   "%f"
                                    (dired-directory dired-directory "%b")))))
 (add-hook 'after-init-hook #'modi/update-frame-title)
 
@@ -137,6 +133,15 @@ the smart-mode-line theme."
 (setq font-lock-maximum-decoration t)
 
 ;; FONTS
+;; Make the italics show as actual italics. For some unknown reason, the below
+;; is needed to render the italics in org-mode. The issue could be related to
+;; the fonts in use. But having this doesn't hurt regardless.
+(set-face-attribute 'italic nil :inherit nil :slant 'italic)
+
+;; Default fonts for Windows
+(when (eq system-type 'windows-nt)
+  (set-face-attribute 'default nil :family "Consolas"))
+
 ;; (set-face-attribute 'default nil :font "Source Code Pro for Powerline" )
 ;; (set-frame-font "Input Mono" nil t)
 
