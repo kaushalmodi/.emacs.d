@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-20 11:34:21 kmodi>
+;; Time-stamp: <2015-04-23 12:49:10 kmodi>
 
 ;; Desktop save and restore
 
@@ -87,6 +87,7 @@
       (tv-stop-emacs))
 
     (desktop-save-mode 1)
+    (when desktop-save-mode (desktop-read))
 
     (bind-keys
      :map modi-mode-map
@@ -94,15 +95,14 @@
 
     ;; The emacs-quitting feature is useful whether or not my minor map is loaded
     ;; So bind the keys globally instead of to the minor mode map.
-    (if desktop-save-mode
-        (bind-keys
-         ;; ("C-x C-c" . save-buffers-kill-terminal) ; default binding
+    (when desktop-save-mode
+      (bind-keys
+       ;; ("C-x C-c" . save-buffers-kill-terminal) ; default binding
                                         ; `save-buffers-kill-terminal' kills
                                         ; only the current frame; it will not
                                         ; kill the emacs server.
-         ("C-x C-c" . save-desktop-save-buffers-stop-emacs)
-         ("C-x M-c" . tv-stop-emacs)) ; quit without saving desktop
-      (bind-key "C-x C-c" #'tv-stop-emacs))))
+       ("C-x C-c" . save-desktop-save-buffers-stop-emacs)
+       ("C-x M-c" . tv-stop-emacs))))) ; quit without saving desktop
 
 
 (provide 'setup-desktop)
