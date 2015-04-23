@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-03-12 10:04:22 kmodi>
+;; Time-stamp: <2015-04-22 15:32:46 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
 (use-package ag
-    :init
+  :init
   (progn
     (bind-to-modi-map "a" ag-project-regexp)
     (bind-to-modi-map "g" ag-project-regexp))
@@ -13,23 +13,23 @@
     ;; wgrep-ag : To allow editing in *ag* buffer
     ;; https://github.com/mhayashi1120/Emacs-wgrep
     (use-package wgrep-ag
-        :commands (wgrep-ag-setup)
-        :config
-        (progn
-          (add-hook 'ag-mode-hook #'wgrep-ag-setup)
-          (bind-keys
-           :map wgrep-mode-map
-           ("C-x s" . wgrep-save-all-buffers)
-           ("C-c C-c" . wgrep-finish-edit) ;; Apply changes to file buffers
-           ("C-c C-e" . wgrep-finish-edit)
-           ("C-x C-s" . wgrep-finish-edit)
-           ("C-c C-d" . wgrep-mark-deletion)
-           ("C-c C-p" . wgrep-toggle-readonly-area)
-           ("C-c C-r" . wgrep-remove-change)
-           ("C-c C-u" . wgrep-remove-all-change)
-           ("C-c C-[" . wgrep-remove-all-change)
-           ("C-c C-k" . wgrep-abort-changes)
-           ("C-x C-q" . wgrep-exit))))
+      :commands (wgrep-ag-setup)
+      :config
+      (progn
+        (add-hook 'ag-mode-hook #'wgrep-ag-setup)
+        (bind-keys
+         :map wgrep-mode-map
+          ("C-x s" . wgrep-save-all-buffers)
+          ("C-c C-c" . wgrep-finish-edit) ;; Apply changes to file buffers
+          ("C-c C-e" . wgrep-finish-edit)
+          ("C-x C-s" . wgrep-finish-edit)
+          ("C-c C-d" . wgrep-mark-deletion)
+          ("C-c C-p" . wgrep-toggle-readonly-area)
+          ("C-c C-r" . wgrep-remove-change)
+          ("C-c C-u" . wgrep-remove-all-change)
+          ("C-c C-[" . wgrep-remove-all-change)
+          ("C-c C-k" . wgrep-abort-changes)
+          ("C-x C-q" . wgrep-exit))))
 
     ;; Set default ag arguments
     (setq ag-arguments (list "--smart-case" "--nogroup" "--column"))
@@ -52,6 +52,22 @@
     (setq ag-reuse-buffers t)
     ;; ;; To save buffer automatically when `wgrep-finish-edit'
     ;; (setq wgrep-auto-save-buffer t)
+
+    (when (featurep 'projectile)
+      ;; Override the default function to use the projectile function instead
+      (defun ag/project-root (file-path)
+        (let ((proj-name (projectile-project-root)))
+          (if proj-name
+              proj-name ; return `projectile-project-root' if non-nil
+            ;; Else condition is same as the `ag/project-root' definition
+            ;; from ag.el
+            (if ag-project-root-function
+                (funcall ag-project-root-function file-path)
+              (or (ag/longest-string
+                   (vc-git-root file-path)
+                   (vc-svn-root file-path)
+                   (vc-hg-root file-path))
+                  file-path))))))
 
     ;; Redefine the ag-regexp function where the default search pattern is
     ;; word at point
@@ -77,11 +93,11 @@ If called with a prefix, prompts for flags to pass to ag."
 
     (bind-keys
      :map ag-mode-map
-     ("i" . wgrep-change-to-wgrep-mode)
-     ("/" . isearch-forward)
-     ("n" . isearch-repeat-forward)
-     ("N" . isearch-repeat-backward)
-     ("q" . ag-kill-buffers))))
+      ("i" . wgrep-change-to-wgrep-mode)
+      ("/" . isearch-forward)
+      ("n" . isearch-repeat-forward)
+      ("N" . isearch-repeat-backward)
+      ("q" . ag-kill-buffers))))
 
 
 (provide 'setup-ag)
