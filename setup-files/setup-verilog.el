@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 14:40:50 kmodi>
+;; Time-stamp: <2015-04-24 15:50:44 kmodi>
 
 ;;; Verilog
 
@@ -252,13 +252,13 @@ task, `define."
                           `("["
                             (:propertize which-func-current
                              local-map ,which-func-keymap
-                             face (which-func :weight bold)
+                             face (font-lock-keyword-face :weight bold)
                              mouse-face mode-line-highlight
                              help-echo ,modi/verilog-which-func-echo-help)
                             ":"
                             (:propertize modi/verilog-which-func-xtra
                              local-map ,which-func-keymap
-                             face which-func
+                             face font-lock-keyword-face
                              mouse-face mode-line-highlight
                              help-echo ,modi/verilog-which-func-echo-help)
                             "]"))
@@ -266,7 +266,7 @@ task, `define."
                         `("["
                           (:propertize which-func-current
                            local-map ,which-func-keymap
-                           face which-func
+                           face font-lock-keyword-face
                            mouse-face mode-line-highlight
                            help-echo ,modi/verilog-which-func-echo-help)
                           "]"))))))

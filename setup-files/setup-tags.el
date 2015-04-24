@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 14:43:27 kmodi>
+;; Time-stamp: <2015-04-24 15:46:26 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -112,13 +112,13 @@
             '("[" (:eval (let ((name (if (stringp (my/ggtags-project-name))
                                          (my/ggtags-project-name)
                                        "?")))
-                           (propertize
-                            name 'face compilation-info-face
-                            'help-echo (if (stringp ggtags-project-root)
-                                           (concat "mouse-1 to visit " ggtags-project-root)
-                                         "mouse-1 to set project")
-                            'mouse-face 'mode-line-highlight
-                            'keymap ggtags-mode-line-project-keymap)))
+                           (propertize name
+                                       'face font-lock-type-face
+                                       'help-echo (if (stringp ggtags-project-root)
+                                                      (concat "mouse-1 to visit " ggtags-project-root)
+                                                    "mouse-1 to set project")
+                                       'mouse-face 'mode-line-highlight
+                                       'keymap ggtags-mode-line-project-keymap)))
               "]"))
 
       (setq ggtags-oversize-limit (* 30 1024 1024)) ; 30 MB
