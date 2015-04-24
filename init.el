@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-23 12:47:04 kmodi>
+;; Time-stamp: <2015-04-24 14:27:54 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -104,6 +104,7 @@
         sunshine
         swiper
         sx
+        symon ; system monitor in mode-line
         tiny
         undo-tree ; supercool undo visualization
         use-package ; optimize package loading
@@ -228,6 +229,7 @@
 (require 'setup-stripe-buffer)
 (require 'setup-sunshine)
 (require 'setup-sx)
+(require 'setup-symon)
 (require 'setup-term)
 (require 'setup-tiny)
 (require 'setup-undo-tree)
@@ -275,11 +277,10 @@
 ;; Do linum setup after a 1 second idle time after emacs has loaded
 (use-package setup-linum
   :defer 1)
-;; Do desktop setup after a 2 second idle time after emacs has loaded
-;; By then linum would have loaded and the desktop loaded files will show
+;; Do desktop setup after linum setup so that the desktop loaded files will show
 ;; linum if enabled for that major mode or if enabled globally
-(use-package setup-desktop
-  :defer 2)
+(with-eval-after-load "setup-linum"
+  (require 'setup-desktop))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'setup-misc) ; This MUST be the last required package
