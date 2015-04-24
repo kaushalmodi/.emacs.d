@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-17 14:56:34 kmodi>
+;; Time-stamp: <2015-04-24 14:25:25 kmodi>
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -9,7 +9,7 @@
   :init
   (progn
     (setq sml/line-number-format    "%4l")
-    (setq sml/name-width            30) ; buffer name width in the mode-line
+    (setq sml/name-width            40) ; buffer name width in the mode-line
     (setq sml/mode-width            'full) ; minor mode lighters area width
     (setq sml/no-confirm-load-theme t)
     (setq sml/theme (if (boundp 'dark-theme)
@@ -58,9 +58,10 @@
             ("\\(:.*\\)DSGN:rtl/"                  "\\1RTL:" )
             ("\\(:.*\\)DSGN:analog_partition_rtl/" "\\1ANA:" )))
     ;; customize the date and time display format in mode-line
-    (setq display-time-format               "%l:%M %b %d %a" )
+    ;; (setq display-time-format "%l:%M %b %d %a" )
+    (setq display-time-format "" )
     (setq display-time-default-load-average nil ) ; do NOT show average system load time
-    (setq line-number-mode   t) ; show line # in mode-line
+    (setq line-number-mode t) ; show line # in mode-line
     (setq column-number-mode t)) ; show column # in mode-line
   :config
   (progn
