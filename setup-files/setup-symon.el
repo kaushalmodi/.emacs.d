@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-24 16:45:38 kmodi>
+;; Time-stamp: <2015-04-25 01:25:58 kmodi>
 
 ;; Mode-line system monitor
 ;; https://github.com/zk-phi/symon
@@ -6,8 +6,6 @@
 (use-package symon
   :config
   (progn
-    (setq symon-refresh-rate 4)
-    (setq symon-delay 5)
     (setq symon-sparkline-type 'symon-sparkline-type-plain)
 
     (define-symon-monitor symon-current-date-time-monitor
