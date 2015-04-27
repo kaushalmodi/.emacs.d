@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-22 13:56:55 kmodi>
+;; Time-stamp: <2015-04-27 09:52:47 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -14,8 +14,7 @@
 (require 'package)
 
 (when (version<= "25.0" emacs-version)
-  (setq package-menu-async t) ; Do activities asynchronously,
-                                        ; like refreshing menu
+  (setq package-menu-async t) ; If non-nil, do activities asynchronously, like refreshing menu
   )
 
 (defun prepend-path ( my-path )
