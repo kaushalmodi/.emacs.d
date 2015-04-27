@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-27 09:52:47 kmodi>
+;; Time-stamp: <2015-04-27 17:06:50 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -94,10 +94,11 @@ The NO-FETCH prefix argument is passed to `list-packages'.  It
 prevents re-download of information about new versions.  It does
 not prevent downloading the actual packages (obviously)."
   (interactive "P")
-  (save-window-excursion
-    (package-list-packages no-fetch)
-    (package-menu-mark-upgrades)
-    (package-menu-execute 'noquery)))
+  (let ((package-menu-async nil)) ; This variable was introduced in emacs 25.0
+    (save-window-excursion
+      (package-list-packages no-fetch)
+      (package-menu-mark-upgrades)
+      (package-menu-execute 'noquery))))
 
 
 (provide 'setup-packages)
