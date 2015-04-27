@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-23 12:50:28 kmodi>
+;; Time-stamp: <2015-04-27 17:08:30 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -111,6 +111,12 @@ If universal arg is used, load the `init.el'."
 
 ;; Turn off dir local variables
 (setq enable-dir-local-variables nil)
+
+;; Avert the "auto-notify not working" bug in emacs 24.5+
+;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20441
+(>=e "24.4" ; The `auto-revert-use-notify' variable was introduced in emacs 24.4
+     (with-eval-after-load "autorevert"
+       (setq-default auto-revert-use-notify nil)))
 
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
