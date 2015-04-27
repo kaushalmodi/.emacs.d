@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-24 14:27:54 kmodi>
+;; Time-stamp: <2015-04-27 09:55:53 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -77,6 +77,7 @@
         magit ; for git management
         manage-minor-mode
         markdown-mode
+        minibuffer-line
         multi-term
         multiple-cursors
         mwe-log-commands ; for logging commands; useful when demoing emacs
@@ -104,7 +105,7 @@
         sunshine
         swiper
         sx
-        symon ; system monitor in mode-line
+        ;; symon ; system monitor in mode-line
         tiny
         undo-tree ; supercool undo visualization
         use-package ; optimize package loading
@@ -170,7 +171,7 @@
 
 ;; Set up the looks of emacs
 (require 'setup-popwin) ; require popwin first as packages might depend on it
-(require 'setup-smart-mode-line)
+(require 'setup-mode-line)
 (require 'setup-visual)
 
 ;; Set up extensions/packages
@@ -229,7 +230,6 @@
 (require 'setup-stripe-buffer)
 (require 'setup-sunshine)
 (require 'setup-sx)
-(require 'setup-symon)
 (require 'setup-term)
 (require 'setup-tiny)
 (require 'setup-undo-tree)
@@ -238,6 +238,7 @@
 (require 'setup-xkcd)
 (require 'setup-yafolding)
 (require 'setup-yasnippet)
+;; (require 'setup-symon) ; testing `minibuffer-line' instead of `symon'
 ;; (require 'setup-fiplr)
 ;; (require 'setup-workgroups2)
 
