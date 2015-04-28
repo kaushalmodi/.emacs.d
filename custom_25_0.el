@@ -19,33 +19,19 @@
    ["#282828" "#FAB1AB" "#D1FA71" "#FFA600" "#7b68ee" "#dc8cc3" "#96D9F1" "#F7F7F7"])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
  '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
- '(bzg-big-fringe-mode nil)
- '(column-number-mode t)
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
- '(desktop-restore-frames nil)
- '(display-time-mode t)
- '(doc-view-continuous t)
  '(fci-rule-color "#585858")
  '(fringe-mode nil nil (fringe))
- '(global-hi-lock-mode t)
- '(guide-key-mode t)
- '(hl-highlight-mode t)
- '(indent-guide-global-mode nil)
  '(indent-tabs-mode nil nil nil "use spaces instead of tabs for indentation")
  '(indicate-buffer-boundaries (quote ((top . right) (bottom . right))) nil nil "show frame boundaries in the fringe; as the fringe is activated only for the right-hand side, the buffer boundaries (top, bottom) are marked on the right side")
- '(indicate-empty-lines nil)
  '(keyboard-coding-system (quote utf-8-unix) nil nil "default EOL system = that of Unix")
- '(magit-auto-revert-mode nil)
- '(menu-bar-mode nil)
  '(next-line-add-newlines nil nil nil "Do not auto-add newlines at the end of the file on pressing `C-n` or down arrow")
  '(org-confirm-elisp-link-not-regexp "\\(.*switch\\-to\\-buffer.*\\|org-show\\)")
- '(org-export-headline-levels 4)
  '(outline-minor-mode-prefix "\243")
  '(package-selected-packages
    (quote
     (twilight-anti-bright-theme twilight-bright-theme planet-theme ample-theme rpn-calc markdown-mode kurecolor keyfreq helm-gtags wgrep adaptive-wrap aggressive-indent zop-to-char yasnippet yaml-mode yafolding xkcd wrap-region wgrep-ag web-mode volatile-highlights visual-regexp use-package unfill undo-tree transpose-frame tiny sx swiper sunshine stripe-buffer smex smart-mode-line smart-compile region-bindings-mode rectangle-utils rainbow-mode rainbow-delimiters python-mode poporg pdf-tools paradox page-break-lines ox-reveal outshine org-tree-slide number nlinum neotree navi-mode names mwe-log-commands multiple-cursors multi-term marshal manage-minor-mode magit log4e loccur linum-relative leuven-theme key-chord iy-go-to-char isend-mode iregister interleave indent-guide ido-vertical-mode ido-ubiquitous ibuffer-projectile hydra hungry-delete htmlize hl-line+ hl-anything help-fns+ helm-swoop header2 hardcore-mode guide-key gplusify git-link gist ggtags fuzzy fringe-helper fold-this flx-ido fill-column-indicator f expand-region eww-lnum etags-table etags-select epresent elisp-slime-nav elfeed el-get eimp drag-stuff discover-my-major dired-single dired+ diff-hl darktooth-theme ctags-update csv-nav buffer-move bookmark+ benchmark-init avy-jump auto-highlight-symbol auto-complete anzu ag ace-window ace-jump-mode)))
- '(paradox-automatically-star t)
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
@@ -103,7 +89,6 @@
      (header-auto-update-enabled))))
  '(save-place t nil (saveplace) "save the last cursor location for each file")
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
- '(sml/theme (quote automatic))
  '(vc-annotate-background "#2B2B2B" t)
  '(vc-annotate-color-map
    (quote
@@ -127,16 +112,7 @@
      (360 . "#DC8CC3"))) t)
  '(vc-annotate-very-old-color "#DC8CC3" t)
  '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error")
- '(visual-line-fringe-indicators (quote (nil nil)))
- '(vr/default-feedback-limit 200)
- '(w3m-mode-hook
-   (quote
-    (bookmark-w3m-prepare
-     (lambda nil
-       (set
-        (make-local-variable
-         (quote bookmark-make-record-function))
-        (quote bmkp-make-w3m-record))))) t))
+ '(visual-line-fringe-indicators (quote (nil nil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

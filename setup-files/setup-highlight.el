@@ -1,6 +1,8 @@
-;; Time-stamp: <2015-03-27 01:11:19 kmodi>
+;; Time-stamp: <2015-04-28 09:02:34 kmodi>
 
 ;; Highlight stuff
+
+(global-hi-lock-mode 1)
 
 ;; Highlight Anything
 (use-package hl-anything

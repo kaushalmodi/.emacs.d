@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-20 17:16:14 kmodi>
+;; Time-stamp: <2015-04-28 09:13:24 kmodi>
 
 ;; Search
 
@@ -30,7 +30,7 @@
 (use-package visual-regexp
   :config
   (progn
-    (setq vr--feedback-limit nil)
+    (setq vr/default-feedback-limit 300)
 
     (bind-keys
      :map modi-mode-map

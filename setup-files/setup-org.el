@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-16 10:11:22 kmodi>
+;; Time-stamp: <2015-04-28 09:11:07 kmodi>
 
 ;; Org Mode
 
@@ -47,6 +47,7 @@
     (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
     (setq org-startup-indented t) ; http://orgmode.org/manual/Clean-view.html
     (setq org-indent-indentation-per-level 1)
+    (setq org-export-headline-levels 4)
 
     ;; CAPTURE
     ;; http://orgmode.org/manual/Template-elements.html

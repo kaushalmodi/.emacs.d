@@ -17,34 +17,24 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
  '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
- '(bzg-big-fringe-mode nil)
- '(column-number-mode t)
- '(custom-safe-themes (quote (default)))
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
- '(desktop-restore-frames nil)
- '(display-time-mode t)
- '(doc-view-continuous t)
+ '(fci-rule-color "#585858")
  '(fringe-mode nil nil (fringe))
- '(global-hi-lock-mode t)
- '(guide-key-mode t)
- '(hl-highlight-mode t)
- '(indent-guide-global-mode nil)
  '(indent-tabs-mode nil nil nil "use spaces instead of tabs for indentation")
  '(indicate-buffer-boundaries (quote ((top . right) (bottom . right))) nil nil "show frame boundaries in the fringe; as the fringe is activated only for the right-hand side, the buffer boundaries (top, bottom) are marked on the right side")
- '(indicate-empty-lines nil)
  '(keyboard-coding-system (quote utf-8-unix) nil nil "default EOL system = that of Unix")
- '(magit-auto-revert-mode nil)
- '(menu-bar-mode nil)
  '(next-line-add-newlines nil nil nil "Do not auto-add newlines at the end of the file on pressing `C-n` or down arrow")
  '(org-confirm-elisp-link-not-regexp "\\(.*switch\\-to\\-buffer.*\\|org-show\\)")
- '(org-export-headline-levels 4)
  '(outline-minor-mode-prefix "\243")
- '(paradox-automatically-star t)
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
     ((eval when
+           (featurep
+            (quote aggressive-indent))
+           (aggressive-indent-mode -1))
+     (eval when
            (fboundp
             (quote rainbow-mode))
            (rainbow-mode 1))
@@ -94,7 +84,6 @@
      (header-auto-update-enabled))))
  '(save-place t nil (saveplace) "save the last cursor location for each file")
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
- '(sml/theme (quote automatic))
  '(vc-annotate-background "#2B2B2B" t)
  '(vc-annotate-color-map
    (quote
@@ -118,22 +107,10 @@
      (360 . "#DC8CC3"))) t)
  '(vc-annotate-very-old-color "#DC8CC3" t)
  '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error")
- '(visual-line-fringe-indicators (quote (nil nil)))
- '(vr/default-feedback-limit 200)
- '(w3m-mode-hook
-   (quote
-    (bookmark-w3m-prepare
-     (lambda nil
-       (set
-        (make-local-variable
-         (quote bookmark-make-record-function))
-        (quote bmkp-make-w3m-record))))) t))
-
+ '(visual-line-fringe-indicators (quote (nil nil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(italic ((t (:inherit nil :slant italic))))
- '(stripe-hl-line ((t (:inherit nil :overline "gray" :underline "gray" :weight bold :height 1.1))))
- '(yafolding-ellipsis-face ((t (:foreground "deep sky blue" :slant italic :weight bold :height 1.1))) t))
+ )

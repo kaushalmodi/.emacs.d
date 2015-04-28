@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-17 11:17:49 kmodi>
+;; Time-stamp: <2015-04-28 09:10:03 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -218,7 +218,9 @@ remove the comment characters from that line."
       (interactive)
       (indent-guide-global-mode -1)
       (dolist (hook modi/indent-guide-mode-hooks)
-        (remove-hook hook #'indent-guide-mode)))))
+        (remove-hook hook #'indent-guide-mode)))
+
+    (indent-guide-global-mode -1)))
 
 ;; http://stackoverflow.com/q/12165205/1219634
 (defun kill-with-linenum (beg end unicode)

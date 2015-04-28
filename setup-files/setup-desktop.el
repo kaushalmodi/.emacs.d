@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-23 12:49:10 kmodi>
+;; Time-stamp: <2015-04-28 09:28:38 kmodi>
 
 ;; Desktop save and restore
 
@@ -14,6 +14,9 @@
     (setq desktop-base-lock-name (concat ".emacs_"
                                          emacs-version-short
                                          ".desktop.lock"))
+
+    ;; Fix the frameset warning at startup
+    (setq desktop-restore-frames nil)
 
     ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-sessions.el
     ;; save a bunch of variables to the desktop file
