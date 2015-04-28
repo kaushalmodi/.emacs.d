@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-04-28 12:02:30 kmodi>
 
 ;; Elisp Slime Nav
 ;; gtags/ctags like navigation into elisp source codes (even the compressed ones)
-;; Source: https://github.com/purcell/elisp-slime-nav
+;; https://github.com/purcell/elisp-slime-nav
 
 (use-package elisp-slime-nav
   :config
