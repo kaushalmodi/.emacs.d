@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-22 15:32:46 kmodi>
+;; Time-stamp: <2015-04-28 15:48:14 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -95,8 +95,8 @@ If called with a prefix, prompts for flags to pass to ag."
      :map ag-mode-map
       ("i" . wgrep-change-to-wgrep-mode)
       ("/" . isearch-forward)
-      ("n" . isearch-repeat-forward)
-      ("N" . isearch-repeat-backward)
+      ("n" . next-error-no-select)
+      ("p" . previous-error-no-select)
       ("q" . ag-kill-buffers))))
 
 
