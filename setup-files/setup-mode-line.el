@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-27 09:49:26 kmodi>
+;; Time-stamp: <2015-04-28 10:06:51 kmodi>
 
 ;; Customize the mode-line
 
@@ -24,6 +24,8 @@ If nil, show the same in the minibuffer.")
 ;; Display date+time in the minibuffer instead of in the mode-line
 (use-package minibuffer-line
   :if (null modi/show-date-time-in-mode-line)
+  :defer 1 ; to prevent 'Invalid face reference: minibuffer-line'
+                                        ; when launching emacsclient
   :init
   (progn
     (setq minibuffer-line-format '((:eval (format-time-string "%l:%M %b %d %a")))))
