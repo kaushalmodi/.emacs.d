@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-29 10:14:13 kmodi>
+;; Time-stamp: <2015-04-29 10:23:26 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -29,7 +29,7 @@
         (remove-hook hook #'auto-make-header)))
 
     (defun modi/header-multiline ()
-      "Insert multiline comment.  The comment text is in `header-multiline'."
+      "Insert multiline comment. The comment text is in `header-multiline' var."
       (let ((lineno  1)
             beg end nb-lines)
         (beginning-of-line)
@@ -97,7 +97,9 @@
       (insert "\n"))
 
     (defsubst modi/header-copyright ()
-      "Insert a custom copyright block if available."
+      "Insert the copyright block using `modi/header-multiline'.
+The copyright block will inserted only if the value of `header-copyright-notice'
+is non-nil."
       (let ((header-multiline header-copyright-notice))
         (modi/header-multiline)))
 
