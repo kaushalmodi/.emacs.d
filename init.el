@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 23:33:37 kmodi>
+;; Time-stamp: <2015-04-29 09:26:13 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -199,6 +199,7 @@
 (require 'setup-gist)
 (require 'setup-guide-key)
 (require 'setup-hardcore)
+(require 'setup-header2)
 (require 'setup-highlight)
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
