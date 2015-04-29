@@ -1,14 +1,15 @@
-;; Time-stamp: <2015-04-06 12:08:14 kmodi>
+;; Time-stamp: <2015-04-28 23:36:36 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
 
 ;; (defvar outline-minor-mode-prefix "\M-#")
 ;; Above needs to be set using Customize so that it is set BEFORE the
-;; `outline' (not `outshine') library is loaded.
+;; `outline' library is loaded (not `outshine').
 
 (use-package outshine
-    :config
+  :load-path "elisp/outshine"
+  :config
   (progn
     (setq outshine-use-speed-commands t)
     (setq outshine-org-style-global-cycling-at-bob-p t)
@@ -100,12 +101,21 @@ Don't add “Revision Control” heading to TOC."
     ;; Hook `outshine' to `outline-mode'
     (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
 
+    (with-eval-after-load "outline"
+      (use-package foldout
+        :config
+        (progn
+          (bind-keys
+           :map outline-minor-mode-map
+            ("C-c C-z" . foldout-zoom-subtree)
+            ("C-c C-x" . foldout-exit-fold)))))
+
     (bind-keys
      :map outline-minor-mode-map
-     ("<M-up>"   . nil)
-     ("M-p"      . outline-previous-visible-heading)
-     ("<M-down>" . nil)
-     ("M-n"      . outline-next-visible-heading))
+      ("<M-up>"   . nil)
+      ("M-p"      . outline-previous-visible-heading)
+      ("<M-down>" . nil)
+      ("M-n"      . outline-next-visible-heading))
 
     (key-chord-define outline-minor-mode-map "JJ" #'outshine-imenu)))
 
