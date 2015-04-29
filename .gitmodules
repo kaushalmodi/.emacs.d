@@ -31,3 +31,6 @@
 [submodule "elisp/interleave"]
 	path = elisp/interleave
 	url = http://www.github.com/kaushalmodi/interleave
+[submodule "elisp/outshine"]
+	path = elisp/outshine
+	url = https://kaushalmodi@github.com/kaushalmodi/outshine

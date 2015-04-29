@@ -2,7 +2,7 @@ DIR = $(shell basename `pwd`)
 TIMESTAMP = $(shell date | tr ' :' '__')
 
 tar:
-	tar cvfz emacsd_$(TIMESTAMP).tar.gz -h *.el *.csh *.org setup-files snippets elisp software org-sty backup .gitignore .gitmodules .mc-lists.el
+	tar cvfz emacsd_$(TIMESTAMP).tar.gz -h *.el *.csh *.org setup-files snippets elisp software org-sty .gitignore .gitmodules .mc-lists.el
 
 clean:
 	find . -name "*.*~" | xargs \rm -f

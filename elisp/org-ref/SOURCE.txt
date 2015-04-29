@@ -1,3 +1,0 @@
-* org-ref
-How to install: http://kitchingroup.cheme.cmu.edu/blog/2014/05/13/Using-org-ref-for-citations-and-references/
-Download: https://github.com/jkitchin/jmax/blob/master/org-ref.org
