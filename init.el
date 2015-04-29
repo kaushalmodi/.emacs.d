@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 12:03:42 kmodi>
+;; Time-stamp: <2015-04-28 23:33:37 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -25,6 +25,7 @@
       '(
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
         ;; interleave ; takes notes associated to pdf files in org mode ; using fork
+        ;; outshine < my forked version
         ace-jump-mode
         ace-window
         adaptive-wrap ; indented line wrapping
@@ -88,7 +89,7 @@
                                         ; poporg to edit comments from any other mode in org mode
         org-tree-slide
         ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
-        outshine outorg navi-mode ; org-mode like structure in other major modes
+        outorg navi-mode ; supporting packages for outshine
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
         popwin ; Open windows like *Help*, *Completions*, etc in minibuffer
