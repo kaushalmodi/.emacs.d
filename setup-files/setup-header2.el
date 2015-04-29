@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-29 09:51:55 kmodi>
+;; Time-stamp: <2015-04-29 10:14:13 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -6,6 +6,9 @@
 (use-package header2
   :config
   (progn
+
+    (defvar modi/header-sep-line-char ?-
+      "Character to be used for creating separator lines in header.")
 
     (defconst modi/auto-headers-hooks '(verilog-mode-hook
                                         python-mode-hook
@@ -83,47 +86,56 @@
       "Insert \"Description: \" line."
       (insert header-prefix-string "Description: \n"))
 
-    (defsubst modi/header-dash-line ()
-      "Insert dashed line"
+    (defsubst modi/header-sep-line ()
+      "Insert separator line"
       (insert header-prefix-string)
-      (insert-char ?- (- (if (featurep 'fill-column-indicator)
-                             fci-rule-column
-                           fill-column)
-                         (current-column)))
+      (insert-char modi/header-sep-line-char
+                   (- (if (featurep 'fill-column-indicator)
+                          fci-rule-column
+                        fill-column)
+                      (current-column)))
       (insert "\n"))
 
     (defsubst modi/header-copyright ()
       "Insert a custom copyright block if available."
-      (let ((header-multiline (or modi/custom-header-string
-                                  header-copyright-notice)))
+      (let ((header-multiline header-copyright-notice))
         (modi/header-multiline)))
 
-    (defcustom modi/header-sos-revision-log-placeholder
+    (defcustom modi/header-revision-log-placeholder
       "* Revision Control
 $Log: $"
-      "Placeholder for insertion of revision logs auto inserted by SOS on check-in"
+      "Placeholder for insertion of revision logs auto inserted on check-ins."
       :type 'string :group 'Automatic-File-Header)
 
-    (defsubst modi/header-sos-revision-log ()
-      "Insert placeholder for insertion of revision logs auto inserted by SOS on
-check-in."
-      (when (featurep 'sos-fns)
-        (let ((header-multiline modi/header-sos-revision-log-placeholder))
-          (dotimes (i 5) (insert "\n"))
-          (modi/header-multiline))))
+    (defsubst modi/header-revision-log ()
+      "Insert placeholder for insertion of revision logs auto inserted on
+doing check-ins."
+      (let ((header-multiline modi/header-revision-log-placeholder))
+        (dotimes (i 5) (insert "\n"))
+        (modi/header-multiline)))
+
+    (defsubst modi/header-position-point ()
+      "Bring the point into the body of the file (above the eof comments).
+Assume the separator line to have at least 10 characters."
+      (goto-char (point-max))
+      (re-search-backward (concat (char-to-string modi/header-sep-line-char)
+                                  "\\{10,\\}")
+                          nil :noerror)
+      (forward-line 2))
 
     (setq make-header-hook '(modi/header-timestamp
                              header-blank
-                             modi/header-dash-line
+                             modi/header-sep-line
                              modi/header-projectname
                              modi/header-file-name
                              modi/header-author
                              modi/header-description
-                             modi/header-dash-line
+                             modi/header-sep-line
                              modi/header-copyright
-                             modi/header-dash-line
-                             modi/header-sos-revision-log
-                             header-eof))
+                             modi/header-sep-line
+                             modi/header-revision-log
+                             header-eof
+                             modi/header-position-point))
 
     (modi/turn-on-auto-headers)))
 
