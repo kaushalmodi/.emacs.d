@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-20 10:52:03 kmodi>
+;; Time-stamp: <2015-04-29 12:12:16 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -362,7 +362,8 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
   ("="        balance-windows           "Balance")
   ("q"        nil                       "cancel" :color blue)
   ("<return>" nil                       "cancel" :color blue))
-(bind-key "C-M-]" #'hydra-win-resize/body modi-mode-map)
+(bind-key "C-c ]" #'hydra-win-resize/body modi-mode-map)
+(bind-key "C-c [" #'hydra-win-resize/body modi-mode-map)
 
 ;; Commented out this piece of code as it is giving the below error:
 ;; byte-code: Wrong number of arguments: (lambda (arg)
