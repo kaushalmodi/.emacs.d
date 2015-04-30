@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-24 15:50:44 kmodi>
+;; Time-stamp: <2015-04-30 11:50:03 kmodi>
 
 ;;; Verilog
 
@@ -424,6 +424,9 @@ _a_lways         _f_or              _g_enerate         _O_utput
     ;; Uncomment the lines for which the advice needs to be removed
     ;; (advice-remove 'verilog-indent-line-relative #'my/verilog-selective-indent)
     ;; (advice-remove 'verilog-indent-line          #'my/verilog-selective-indent)
+
+    ;; Reset the verilog-mode abbrev table
+    (clear-abbrev-table verilog-mode-abbrev-table)
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Macros saved as functions

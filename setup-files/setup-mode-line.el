@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 10:06:51 kmodi>
+;; Time-stamp: <2015-04-30 11:07:47 kmodi>
 
 ;; Customize the mode-line
 
@@ -115,8 +115,9 @@ If nil, show the same in the minibuffer.")
                 " Helm"         ; Helm
                 " GG"           ; ggtags
                 ))
-        (add-to-list 'rm-text-properties '("Outl\\'"    'display " ø")) ; outline
+        (add-to-list 'rm-text-properties '("Abbrev\\'"  'display " @")) ; Abbrev
         (add-to-list 'rm-text-properties '("Ind\\'"     'display " *>")) ; org indent
+        (add-to-list 'rm-text-properties '("Outl\\'"    'display " ø")) ; outline
         (add-to-list 'rm-text-properties '("Server\\'"  'display " Σ")) ; Server
         ))
 
