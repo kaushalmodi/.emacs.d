@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-04-15 14:44:04 kmodi>
+;; Time-stamp: <2015-04-29 16:21:22 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
 (use-package eww
-  :commands (eww eww-search-words
+  :commands (eww eww-open-file eww-search-words
                  modi/eww-copy-link-first-search-result
                  modi/eww-im-feeling-lucky)
   :init
@@ -77,38 +77,6 @@ This function is not for interactive use."
       (interactive "sSearch term (I'm Feeling Lucky!): ")
       (modi/eww-go-to-first-search-result search-term)
       (eww-follow-link))
-
-    ;; Auto-refreshing *eww* buffer
-    ;; http://emacs.stackexchange.com/a/2566/115
-    (with-eval-after-load 'filenotify
-      (defun modi/eww-open-file-with-notify (file)
-        "Open a file in eww and add `file-notify' watch for it."
-        (interactive "fFile: ")
-        (eww-open-file file)
-        (file-notify-add-watch file
-                               '(change attribute-change)
-                               #'modi/eww-notify-callback))
-
-      (defun modi/eww-notify-callback (event)
-        "On getting triggered, switch to the *eww* buffer,
-reload and switch back to the working buffer. Also save
-the `file-notify-descriptor' of the triggering event."
-        (let* ((working-buffer (buffer-name)))
-          (switch-to-buffer-other-window "*eww*")
-          (eww-reload)
-          (switch-to-buffer-other-window working-buffer))
-        ;; `(car event)' will return the event descriptor
-        (add-to-list 'modi/eww-file-notify-descriptors-list (car event)))
-
-      (defun modi/eww-quit ()
-        "When quitting `eww', also remove any saved file-notify descriptors
-specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
-        (interactive)
-        (quit-window :kill)
-        (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
-          (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
-      (key-chord-define eww-mode-map "XX" #'modi/eww-quit))
-    ;;
 
     (defun modi/eww-copy-url-dwim(&optional option)
       "Copy the URL under point to the kill ring.
@@ -195,6 +163,42 @@ If OPTION is 16 (`C-u C-u'), copy the page url."
     (bind-keys
      :map eww-link-keymap
       ("w" . modi/eww-copy-url-dwim))))
+
+;; Auto-refreshing *eww* buffer
+;; http://emacs.stackexchange.com/a/2566/115
+(use-package filenotify
+  :commands (modi/eww-open-file-with-notify)
+  :config
+  (progn
+    (defun modi/eww-open-file-with-notify (file)
+      "Open a file in eww and add `file-notify' watch for it."
+      (interactive "fFile: ")
+      (eww-open-file file)
+      (file-notify-add-watch file
+                             '(change attribute-change)
+                             #'modi/eww-notify-callback))
+
+    (defun modi/eww-notify-callback (event)
+      "On getting triggered, switch to the *eww* buffer,
+reload and switch back to the working buffer. Also save
+the `file-notify-descriptor' of the triggering event."
+      (let* ((working-buffer (buffer-name)))
+        (switch-to-buffer-other-window "eww")
+        (eww-reload)
+        (switch-to-buffer-other-window working-buffer))
+      ;; `(car event)' will return the event descriptor
+      (add-to-list 'modi/eww-file-notify-descriptors-list (car event)))
+
+    (defun modi/eww-quit ()
+      "When quitting `eww', also remove any saved file-notify descriptors
+specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
+      (interactive)
+      (quit-window :kill)
+      (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
+        (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
+
+    (with-eval-after-load "eww"
+      (bind-key "C-c C-k" #'modi/eww-quit eww-mode-map))))
 
 
 (provide 'setup-eww)
