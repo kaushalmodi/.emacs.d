@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 09:28:38 kmodi>
+;; Time-stamp: <2015-04-29 16:39:57 kmodi>
 
 ;; Desktop save and restore
 
@@ -52,6 +52,10 @@
     (setq desktop-files-not-to-save (concat desktop-files-not-to-save
                                             "\\|\\(\\.gpg$\\)"
                                             "\\|\\(\\TAGS$\\)"))
+
+    ;; Don't save the eww buffers
+    (setq desktop-buffers-not-to-save (concat desktop-buffers-not-to-save
+                                              "\\|\\(^eww\\(<[0-9]+>\\)*$\\)"))
 
     ;; Patch `desktop-restore-file-buffer'.
     ;; DON'T throw any warnings; especially "Note: file is write protected" when
