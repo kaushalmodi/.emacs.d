@@ -1,9 +1,13 @@
-;; Time-stamp: <2015-04-30 11:03:20 kmodi>
+;; Time-stamp: <2015-05-01 10:24:49 kmodi>
 
 ;; Abbrev
 (use-package abbrev
   :config
   (progn
+
+    (setq abbrev-file-name (expand-file-name "abbrev_defs" user-emacs-directory))
+    (unless (file-exists-p abbrev-file-name)
+      (with-temp-buffer (write-file abbrev-file-name)))
 
     (defconst modi/abbrev-hooks '(verilog-mode-hook
                                   emacs-lisp-mode-hook
