@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-27 17:08:30 kmodi>
+;; Time-stamp: <2015-05-01 13:39:05 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -165,7 +165,7 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
 (defhydra hydra-launch-freq (:color teal
                              :hint  nil)
   "
-._a_lias     _e_macs init     ._g_pms     _i_ndex.html     _j_ournal     ._t_mux.conf     IEEE system_v_erilog Std     _V_erilog-mode.el
+._a_lias     _e_macs init     ._g_pms     _i_ndex.html     _j_ournal     _o_rg Manual     ._t_mux.conf     IEEE system_v_erilog Std     _V_erilog-mode.el
 "
   ("a" (find-file
         (concat user-home-directory
@@ -182,6 +182,9 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("j" (find-file
         (concat org-directory
                 "/journal.org")))
+  ("o" (find-file
+        (concat org-directory
+                "/org_man/org_man.org")))
   ("t" (find-file
         (concat user-home-directory
                 "/.tmux.conf")))
@@ -197,8 +200,7 @@ _a_g cwd             _d_ired current dir      ma_g_it status           _n_eotree
 _b_ookmark jump      _ed_iff dwim             _h_l line flash          _o_rg capture                ^^ _ss_   Shell cmd
 _cq_ Quick calc      _ee_ eww                 _l_oad current file      _p_ackage list               ^^ _se_   emacs.SE
 _cc_ Calc            _el_ eww Lucky           _L_oad init.el           _u_pgrade packages           _w_/_W_   quick/full weather
-_cr_ Rpn calc        _f_irefox                _m_an                    _U_pgrade using paradox      ^^_<SPC>_ frequent
-^^                   ^^                       ^^                       _P_ermissions (chmod)
+_cr_ Rpn calc        _f_irefox                _m_an                    _P_ermissions (chmod)        ^^_<SPC>_ frequent
 "
   ("a"       ag-regexp-cwd)
   ("b"       bookmark-jump)
@@ -224,8 +226,7 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _U_pgrade
   ("sa"      async-shell-command)
   ("ss"      shell-command)
   ("se"      (sx-tab-newest nil "emacs"))
-  ("u"       my/package-upgrade-packages)
-  ("U"       paradox-upgrade-packages)
+  ("u"       paradox-upgrade-packages)
   ("w"       sunshine-quick-forecast)
   ("W"       sunshine-forecast)
   ("<SPC>"   hydra-launch-freq/body)
