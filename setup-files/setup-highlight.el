@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 09:02:34 kmodi>
+;; Time-stamp: <2015-05-04 14:43:54 kmodi>
 
 ;; Highlight stuff
 
@@ -50,7 +50,6 @@ globally or locally (when called with prefix `C-u')."
 ;; Alternative highlighting package when `hl-anything' has issues
 (when (not (featurep 'hl-anything))
   (use-package highlight-global
-    ;; :disabled t
     :load-path "elisp/highlight-global"
     :config
     (progn

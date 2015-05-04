@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 09:11:07 kmodi>
+;; Time-stamp: <2015-05-04 14:44:20 kmodi>
 
 ;; Org Mode
 
@@ -46,7 +46,7 @@
     (setq org-enforce-todo-dependencies t)
     (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
     (setq org-startup-indented t) ; http://orgmode.org/manual/Clean-view.html
-    (setq org-indent-indentation-per-level 1)
+    (setq org-indent-indentation-per-level 1) ; default = 2
     (setq org-export-headline-levels 4)
 
     ;; CAPTURE
@@ -182,25 +182,6 @@ Execute this command while the point is on or after the hyper-linked org link."
                 (replace-regexp "\\[\\[.*?\\(\\]\\[\\(.*?\\)\\)*\\]\\]" "\\2"
                                 nil start end)))))))
 
-    ;; org-ref - JKitchin
-    ;; http://kitchingroup.cheme.cmu.edu/blog/2014/05/13/Using-org-ref-for-citations-and-references/
-    ;; (org-babel-load-file (concat user-emacs-directory "/elisp/org-ref/org-ref.org"))
-
-    ;; org-show -JKitchin
-    ;; https://github.com/jkitchin/jmax/blob/master/org-show.org
-    ;; (use-package org-show
-    ;; :load-path "elisp/org-show")
-    ;; (define-key  org-show-mode-map  [next]        'org-show-next-slide) ; Pg-Down
-    ;; (define-key  org-show-mode-map  [prior]       'org-show-previous-slide) ; Pg-Up
-
-    ;; (define-key  org-show-mode-map  [f5]          'org-show-start-slideshow)
-    ;; (define-key  org-show-mode-map  [f6]          'org-show-execute-slide)
-    ;; (define-key  org-show-mode-map  (kbd "C--")   'org-show-decrease-text-size)
-    ;; (define-key  org-show-mode-map  (kbd "C-=")   'org-show-increase-text-size)
-    ;; (define-key  org-show-mode-map  (kbd "\e\eg") 'org-show-goto-slide)
-    ;; (define-key  org-show-mode-map  (kbd "\e\et") 'org-show-toc)
-    ;; (define-key  org-show-mode-map  (kbd "\e\eq") 'org-show-stop-slideshow)
-
     ;; epresent
     (use-package epresent
       :commands (epresent-run))
@@ -269,7 +250,6 @@ Execute this command while the point is on or after the hyper-linked org link."
         (bind-key "C-4"      #'org-tree-slide-presentation-profile          org-tree-slide-mode-map)))
 
     (use-package ox
-      :defer 10
       :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
       :config
       (progn
@@ -463,9 +443,9 @@ Execute this command while the point is on or after the hyper-linked org link."
         ;; The .odt files can be opened directly in MS Word.
         ;; http://stackoverflow.com/a/22990257/1219634
         ;; odt export is disabled by default in org 8.x
-        ;; Comment out the ":disabled t" line below to enable it.
+        ;; Comment out the ":disabled" line below to enable it.
         (use-package ox-odt
-          :disabled t
+          :disabled
           )
 
         (defun modi/org-export-to-html-txt-pdf ()
