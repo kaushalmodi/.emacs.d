@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:55:03 kmodi>
+;; Time-stamp: <2015-05-04 15:30:15 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -196,15 +196,55 @@ If ARG is omitted or nil, move point forward one word."
 ;; they enable you to cycle through the list of occur matches from
 ;; within the source buffer itself."
 (defhydra hydra-nav-error
-    (nil "M-g"
-     :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-     :color pink)
+  (nil "M-g"
+       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+       :color pink)
   "nav-error"
   ("g"        first-error    "first")
   ("n"        next-error     "next")
   ("p"        previous-error "prev")
   ("q"        nil            "cancel")
   ("<return>" nil            "cancel"))
+
+;; Avy Jump (part of Ace Window package)
+;; https://github.com/abo-abo/ace-window
+(use-package avy-jump
+  :config
+  (progn
+    (defun my/avi-jump (&optional arg)
+      "
+        `my/avi-jump' -> `avi-goto-word-1'
+    C-u `my/avi-jump' -> `avi-goto-char'
+C-u C-u `my/avi-jump' -> `avi-goto-line'
+"
+      (interactive "p")
+      (let ((avi-all-windows t)) ; search in all windows
+        (call-interactively (cl-case arg
+                              (4  'avi-goto-char) ; C-u
+                              (16 'avi-goto-line) ; C-u C-u
+                              (t  'avi-goto-word-1)))))
+    (bind-keys
+     :map modi-mode-map
+      ;; Important to use my minor mode map as I want my bindings to override
+      ;; bindings in other major modes (esp org-mode)
+      ("C-c SPC" . my/avi-jump))
+    (key-chord-define-global "l;" #'my/avi-jump)))
+
+;; Ace Jump
+;; http://www.emacswiki.org/emacs/AceJump
+(when (not (featurep 'avy-jump))
+  (use-package ace-jump-mode
+    :config
+    (progn
+      (bind-keys
+       :map modi-mode-map
+        ;; Important to use my minor mode map as I want my bindings to override
+        ;; bindings in other major modes (esp org-mode)
+        ("C-c SPC" . ace-jump-mode))
+      (key-chord-define-global "l;" #'ace-jump-mode))))
+;;         `ace-jump-mode' -> `ace-jump-word-mode'
+;;     C-u `ace-jump-mode' -> `ace-jump-char-mode'
+;; C-u C-u `ace-jump-mode' -> `ace-jump-line-mode'
 
 ;; Key bindings
 (bind-keys
@@ -238,21 +278,6 @@ If ARG is omitted or nil, move point forward one word."
  ("M-}" . forward-paragraph) ;; default binding for `forward-paragraph'
  ("M-{" . backward-paragraph) ;; default binding for `backward-paragraph'
  )
-
-;; Ace Jump
-;; http://www.emacswiki.org/emacs/AceJump
-(use-package ace-jump-mode
-  :init
-  (progn
-    (bind-keys
-     :map modi-mode-map
-      ;; Important to use my minor mode map as I want my bindings to override
-      ;; bindings in other major modes (esp org-mode)
-      ("C-c SPC" . ace-jump-mode))
-    (key-chord-define-global "l;" #'ace-jump-mode)))
-;;         `ace-jump-mode-BINDING' -> `ace-jump-word-mode'
-;;     C-u `ace-jump-mode-BINDING' -> `ace-jump-char-mode'
-;; C-u C-u `ace-jump-mode-BINDING' -> `ace-jump-line-mode'
 
 (key-chord-define-global "1q" #'goto-line) ; alternative for F1
 (key-chord-define-global "m," #'beginning-of-buffer)

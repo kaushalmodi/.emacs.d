@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:49:59 kmodi>
+;; Time-stamp: <2015-05-04 15:34:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -26,7 +26,7 @@
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
         ;; interleave ; takes notes associated to pdf files in org mode ; using fork
         ;; outshine < my forked version
-        ace-jump-mode
+        ace-jump-mode ; < avy-jump (part of ace-window)
         ace-window
         adaptive-wrap ; indented line wrapping
         ag wgrep wgrep-ag s ; ag > ack > grep
