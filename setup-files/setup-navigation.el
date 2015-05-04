@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:42:49 kmodi>
+;; Time-stamp: <2015-05-04 14:55:03 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -250,10 +250,6 @@ If ARG is omitted or nil, move point forward one word."
       ;; bindings in other major modes (esp org-mode)
       ("C-c SPC" . ace-jump-mode))
     (key-chord-define-global "l;" #'ace-jump-mode)))
-
-
-(provide 'setup-ace-jump-mode)
-
 ;;         `ace-jump-mode-BINDING' -> `ace-jump-word-mode'
 ;;     C-u `ace-jump-mode-BINDING' -> `ace-jump-char-mode'
 ;; C-u C-u `ace-jump-mode-BINDING' -> `ace-jump-line-mode'
