@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-30 11:01:35 kmodi>
+;; Time-stamp: <2015-05-04 14:49:59 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -177,7 +177,6 @@
 
 ;; Set up extensions/packages
 (require 'setup-abbrev)
-(require 'setup-ace-jump-mode)
 (require 'setup-ace-window)
 (when (executable-find "ag")
   (require 'setup-ag))
