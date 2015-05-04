@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 09:05:36 kmodi>
+;; Time-stamp: <2015-05-04 14:47:20 kmodi>
 
 ;; PDF
 
@@ -75,13 +75,13 @@ instead of the one present in `package-user-dir'."
   :load-path "elisp/interleave"
   :init
   (progn
-    (with-eval-after-load "doc-view"
+    (with-eval-after-load 'doc-view
       (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
-    (with-eval-after-load "pdf-view"
+    (with-eval-after-load 'pdf-view
       (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map)))
   :commands (interleave interleave--open-notes-file-for-pdf))
 
-(with-eval-after-load "doc-view"
+(with-eval-after-load 'doc-view
   ;; In continuous mode, reaching the page edge advances to the next/prev page
   (setq doc-view-continuous t))
 

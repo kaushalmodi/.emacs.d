@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 23:36:36 kmodi>
+;; Time-stamp: <2015-05-04 14:46:37 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -101,7 +101,7 @@ Don't add “Revision Control” heading to TOC."
     ;; Hook `outshine' to `outline-mode'
     (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
 
-    (with-eval-after-load "outline"
+    (with-eval-after-load 'outline
       (use-package foldout
         :config
         (progn

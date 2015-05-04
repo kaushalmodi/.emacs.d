@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-29 16:21:22 kmodi>
+;; Time-stamp: <2015-05-04 14:47:58 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -197,7 +197,7 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
       (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
         (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
 
-    (with-eval-after-load "eww"
+    (with-eval-after-load 'eww
       (bind-key "C-c C-k" #'modi/eww-quit eww-mode-map))))
 
 

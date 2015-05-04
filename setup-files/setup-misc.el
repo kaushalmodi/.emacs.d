@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-01 13:39:05 kmodi>
+;; Time-stamp: <2015-05-04 14:45:49 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -115,7 +115,7 @@ If universal arg is used, load the `init.el'."
 ;; Avert the "auto-notify not working" bug in emacs 24.5+
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20441
 (>=e "24.4" ; The `auto-revert-use-notify' variable was introduced in emacs 24.4
-     (with-eval-after-load "autorevert"
+     (with-eval-after-load 'autorevert
        (setq-default auto-revert-use-notify nil)))
 
 ;; Toggles
