@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-30 11:50:03 kmodi>
+;; Time-stamp: <2015-05-04 17:13:24 kmodi>
 
 ;;; Verilog
 
@@ -35,20 +35,6 @@
       "Regexp for a valid verilog identifier.")
 
     (defconst modi/verilog-module-instance-re
-      ;; (concat "^\\s-*"
-      ;;         "\\("
-      ;;         modi/verilog-identifier-re
-      ;;         "\\)"
-      ;;         "\\s-+"
-      ;;         ;; optional hardware parameters followed by optional comments
-      ;;         "\\(#\\s-*([[:ascii:][:nonascii:]]*?)\\s-*/*.*\\)*"
-      ;;         "\\([^a-zA-Z0-9_\\.,()$=`]*?\\)" ; optional space/newline before instance name
-      ;;         "\\(" modi/verilog-identifier-re "\\)" ; instance name
-      ;;         "\\([^a-zA-Z0-9_]*(\\)" ; optional space/newline after instance name
-      ;;                             ; and before opening parenthesis `('
-      ;;         ;; "\\([^a-zA-Z0-9_]\\|\\.\\)" ; optional space/newline after `('
-      ;;                             ; or name-based port connections: .input_a(input_a),
-      ;;         )
       (concat "^\\s-*"
               "\\(?1:" ; force group number to 1
               modi/verilog-identifier-re ; module name
@@ -59,7 +45,7 @@
               "\\(#([^;]+?)\\(\\s-*//.*?\\)*[^;\\./]+?\\)*"
               "\\(?2:" modi/verilog-identifier-re "\\)" ; instance name
                                         ; force group number to 2
-              "[^;a-zA-Z0-9_]+?(" ; optional space/newline after instance name
+              "[^;a-zA-Z0-9_]*?(" ; optional space/newline after instance name
                                         ; and before opening parenthesis `('
               )
       "Regexp for a valid verilog module instance declaration.")
@@ -133,8 +119,6 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
               ;; (message "---- 1 ---- %s" (match-string 1))
               ;; (message "---- 2 ---- %s" (match-string 2))
               ;; (message "---- 3 ---- %s" (match-string 3))
-              ;; (message "---- 4 ---- %s" (match-string 4))
-              ;; (message "---- 5 ---- %s" (match-string 5))
               (setq-local modi/verilog-which-func-xtra (match-string 1)) ; module name
               (setq instance-name (match-string 2)) ; instance name
 
