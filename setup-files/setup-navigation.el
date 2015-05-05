@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 16:34:36 kmodi>
+;; Time-stamp: <2015-05-05 09:58:22 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -214,13 +214,13 @@ If ARG is omitted or nil, move point forward one word."
     (defun my/avi-jump (&optional arg)
       "
         `my/avi-jump' -> `avi-goto-word-1'
-    C-u `my/avi-jump' -> `avi-goto-char'
+    C-u `my/avi-jump' -> `avi-goto-char-2'
 C-u C-u `my/avi-jump' -> `avi-goto-line'
 "
       (interactive "p")
       (let ((avi-all-windows t) ; search in all windows
             (fn (cl-case arg
-                  (4  'avi-goto-char) ; C-u
+                  (4  'avi-goto-char-2) ; C-u
                   (16 'avi-goto-line) ; C-u C-u
                   (t  'avi-goto-word-1))))
         (funcall fn)))
