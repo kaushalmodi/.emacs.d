@@ -1,23 +1,24 @@
-;; Time-stamp: <2015-04-29 12:12:16 kmodi>
+;; Time-stamp: <2015-05-07 14:18:52 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
 ;; http://www.emacswiki.org/emacs/WinnerMode
+;; Winner Mode is a global minor mode. When activated, it allows to “undo”
+;; (and “redo”) changes in the window configuration with the key commands
+;; ‘C-c left’ and ‘C-c right’
 (use-package winner
   :config
   (progn
     (winner-mode 1)))
-;; Winner Mode is a global minor mode. When activated, it allows to “undo”
-;; (and “redo”) changes in the window configuration with the key commands
-;; ‘C-c left’ and ‘C-c right’
 
+;; Uniquify
+;; The library uniquify overrides Emacs’ default mechanism for making buffer
+;; names unique (using suffixes like <2>, <3> etc.) with a more sensible
+;; behaviour which use parts of the file names to make the buffer names
+;; distinguishable.
 (use-package uniquify
   :config
   (progn
-    ;; The library uniquify overrides Emacs’ default mechanism for making buffer
-    ;; names unique (using suffixes like <2>, <3> etc.) with a more sensible
-    ;; behaviour which use parts of the file names to make the buffer names
-    ;; distinguishable.
     (setq uniquify-buffer-name-style 'post-forward)))
 
 ;; http://www.emacswiki.org/emacs/RecentFiles
@@ -25,14 +26,7 @@
   :config
   (progn
     (recentf-mode 1)
-    (setq recentf-max-menu-items 2000)
-
-    ;; Customizing recentf mode map
-    (bind-keys
-     :map recentf-dialog-mode-map
-     ("/" . isearch-forward)
-     ("n" . isearch-repeat-forward)
-     ("N" . isearch-repeat-backward))))
+    (setq recentf-max-menu-items 2000)))
 
 (use-package windmove
   :config
@@ -43,8 +37,8 @@
     (key-chord-define-global "p[" #'windmove-left)
     (key-chord-define-global "[]" #'windmove-right)))
 
-;; http://emacs.stackexchange.com/a/3334/115
 ;; Reopen Killed File
+;; http://emacs.stackexchange.com/a/3334/115
 (defvar killed-file-list nil
   "List of recently killed files.")
 
@@ -63,47 +57,7 @@
       (find-file (pop killed-file-list))
     (message "No recently killed file found to reopen.")))
 
-;; ;; Set initial frame size and position
-;; ;; fills full screen of the left monitor
-;; (setq initial-frame-alist
-;;       '((top    . 1)
-;;         (left   . 1)
-;;         (width  . 235)
-;;         (height . 63)))
-;; ;; (add-to-list 'default-frame-alist '(left   . 0))
-;; ;; (add-to-list 'default-frame-alist '(top    . 0))
-;; ;; (add-to-list 'default-frame-alist '(height . 63))
-;; ;; (add-to-list 'default-frame-alist '(width  . 235))
-
-;; http://www.whattheemacsd.com/
-(defun toggle-window-split ()
-  "Convert horizontally splitted windows to vertically splitted, and vice-versa.
-Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
-  (interactive)
-  (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-             (next-win-buffer (window-buffer (next-window)))
-             (this-win-edges (window-edges (selected-window)))
-             (next-win-edges (window-edges (next-window)))
-             (this-win-2nd (not (and (<= (car this-win-edges)
-                                         (car next-win-edges))
-                                     (<= (cadr this-win-edges)
-                                         (cadr next-win-edges)))))
-             (splitter
-              (if (= (car this-win-edges)
-                     (car (window-edges (next-window))))
-                  'split-window-horizontally
-                'split-window-vertically)))
-        (delete-other-windows)
-        (let ((first-win (selected-window)))
-          (funcall splitter)
-          (if this-win-2nd (other-window 1))
-          (set-window-buffer (selected-window) this-win-buffer)
-          (set-window-buffer (next-window) next-win-buffer)
-          (select-window first-win)
-          (if this-win-2nd (other-window 1))))))
-
-;; Better alternative to `toggle-window-split', `transpose-frame'
+;; Transpose Frame
 ;; Converts between horz-split <-> vert-split. In addition it also rotates
 ;; the windows around in the frame when you have 3 or more windows.
 (use-package transpose-frame
@@ -167,7 +121,8 @@ Useful when you do `C-x 3` when you intended to do `C-x 2` and vice-versa."
           (message "File '%s' successfully renamed to '%s'."
                    name (file-name-nondirectory new-name)))))))
 
-;; Display the file path of the file in current buffer and also copy it to the kill-ring
+;; Display the file path of the file in current buffer and also copy it to
+;; the kill-ring
 ;; http://camdez.com/blog/2013/11/14/emacs-show-buffer-file-name/
 (defun show-copy-buffer-file-name (arg)
   "Show the full path to the current file in the minibuffer and also copy it.
@@ -183,14 +138,9 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
             (4 (setq file-name (concat (file-name-base file-name-full) ; C-u
                                        (file-name-extension file-name-full :period))))
             (16 (setq file-name file-name-full)) ; C-u C-u
-            (t (setq file-name ; no prefix
-                     ;; (replace-regexp-in-string
-                     ;;  (concat "/proj.*?_" (getenv "USER")) "${PRJ_USER}"
-                     ;;  file-name-full)
-                     (replace-regexp-in-string
-                      (concat "_" (getenv "USER")) "_${USER}"
-                      file-name-full)
-                     )))
+            (t (setq file-name (replace-regexp-in-string ; no prefix
+                                (concat "_" (getenv "USER")) "_${USER}"
+                                file-name-full))))
           (kill-new file-name)
           (message file-name))
       (error "Buffer not visiting a file"))))
@@ -237,16 +187,7 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
     (set-frame-position nil 1910 0) ; pixels x y from upper left
     (set-frame-size     nil 1894 1096 :pixelwise))) ; width, height
 
-;; Set the emacs frame/window size at startup
-;; `boundp` returns t if SYMBOL's value is not void. This prevents the frame to
-;; resize every time this file is re-evaluated. With the `unless boundp` condition
-;; this block is evaluated only once when emacs starts.
-;; (unless (boundp 'emacs-initialized)
-;;   (when (window-system)
-;;     (set-frame-position (selected-frame) 0 0)
-;;     (set-frame-size (selected-frame) 90 30)
-;;     ))
-
+;; http://emacs.stackexchange.com/a/81/115
 (defun modi/switch-to-scratch-and-back (arg)
   "Toggle between *scratch-MODE* buffer and the current buffer.
 If a scratch buffer does not exist, create it with the major mode set to that
@@ -276,7 +217,7 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
   "kill the minibuffer"
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
-(add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
+(add-hook 'mouse-leave-buffer-hook #'stop-using-minibuffer)
 
 ;; http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
@@ -292,30 +233,72 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 ;; - If the optional third argument FRAME is non-nil, use that frame's buffer
 ;;   list instead of the selected frame's buffer list.
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scroll without moving the point/cursor
 (defun scroll-up-dont-move-point ()
   "Scroll up by 1 line without moving the point."
-  (interactive)
-  (scroll-up 1))
+  (interactive) (scroll-up 1))
 
 (defun scroll-down-dont-move-point ()
   "Scroll down by 1 line without moving the point."
-  (interactive)
-  (scroll-down 1))
+  (interactive) (scroll-down 1))
 
 (defun scroll-other-window-up-dont-move-point ()
   "Scroll other window up by 1 line without moving the point."
-  (interactive)
-  (scroll-other-window 1))
+  (interactive) (scroll-other-window 1))
 
 (defun scroll-other-window-down-dont-move-point ()
   "Scroll other window down by 1 line without moving the point."
-  (interactive)
-  (scroll-other-window -1))
+  (interactive) (scroll-other-window -1))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Below bindings are made in global map and not in my minor mode as I want
+;; other modes to override those bindings.
+(bind-keys
+ ("<M-up>"    . scroll-down-dont-move-point)
+ ("<M-down>"  . scroll-up-dont-move-point)
+ ;; Change the default `M-left` key binding from `left-word'
+ ;; The same function anyways is also bound to `C-left`
+ ("<M-left>"  . scroll-other-window-down-dont-move-point)
+ ("<S-prior>" . scroll-other-window-down-dont-move-point) ; S-PgUp
+ ;; Change the default `M-right` key binding from `right-word'
+ ;; The same function anyways is also bound to `C-right`
+ ("<M-right>" . scroll-other-window-up-dont-move-point)
+ ("<S-next>"  . scroll-other-window-up-dont-move-point)) ; S-PgDown
+
+(bind-keys
+ :map modi-mode-map
+  ;; Make Alt+mousewheel scroll the other buffer
+  ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
+  ("<M-mouse-5>" . scroll-other-window-up-dont-move-point)) ; M + wheel down
+
+;; Commented out this piece of code as it is giving the below error:
+;; byte-code: Wrong number of arguments: (lambda (arg)
+;; (mwheel-scroll-all-function-all (quote scroll-up) arg)), 0
+;; ;; Allow scrolling of all buffers using mouse-wheel in scroll-all-mode
+;; ;; (by default scroll-all-mode doesn't do that)
+;; ;; http://www.emacswiki.org/emacs/ScrollAllMode
+;; (defun mwheel-scroll-all-function-all (func arg)
+;;   (if scroll-all-mode
+;;       (save-selected-window
+;;         (walk-windows
+;;          (lambda (win)
+;;            (select-window win)
+;;            (condition-case nil
+;;                (funcall func arg)
+;;              (error nil)))))
+;;     (funcall func arg)))
+
+;; (defun mwheel-scroll-all-scroll-up-all (arg)
+;;   (mwheel-scroll-all-function-all 'scroll-up arg))
+
+;; (defun mwheel-scroll-all-scroll-down-all (arg)
+;;   (mwheel-scroll-all-function-all 'scroll-down arg))
+
+;; (setq mwheel-scroll-up-function   'mwheel-scroll-all-scroll-up-all)
+;; (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
+
+(setq mwheel-scroll-up-function   'scroll-up)
+(setq mwheel-scroll-down-function 'scroll-down)
+
 ;; Move window splitters / Resize windows
 ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
 
@@ -365,45 +348,16 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 (bind-key "C-c ]" #'hydra-win-resize/body modi-mode-map)
 (bind-key "C-c [" #'hydra-win-resize/body modi-mode-map)
 
-;; Commented out this piece of code as it is giving the below error:
-;; byte-code: Wrong number of arguments: (lambda (arg)
-;; (mwheel-scroll-all-function-all (quote scroll-up) arg)), 0
-;; ;; Allow scrolling of all buffers using mouse-wheel in scroll-all-mode
-;; ;; (by default scroll-all-mode doesn't do that)
-;; ;; http://www.emacswiki.org/emacs/ScrollAllMode
-;; (defun mwheel-scroll-all-function-all (func arg)
-;;   (if scroll-all-mode
-;;       (save-selected-window
-;;         (walk-windows
-;;          (lambda (win)
-;;            (select-window win)
-;;            (condition-case nil
-;;                (funcall func arg)
-;;              (error nil)))))
-;;     (funcall func arg)))
-
-;; (defun mwheel-scroll-all-scroll-up-all (arg)
-;;   (mwheel-scroll-all-function-all 'scroll-up arg))
-
-;; (defun mwheel-scroll-all-scroll-down-all (arg)
-;;   (mwheel-scroll-all-function-all 'scroll-down arg))
-
-;; (setq mwheel-scroll-up-function   'mwheel-scroll-all-scroll-up-all)
-;; (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
-
-(setq mwheel-scroll-up-function   'scroll-up)
-(setq mwheel-scroll-down-function 'scroll-down)
-
 ;; Ediff
 (use-package ediff
-    :commands (ediff-files ediff-buffers modi/ediff-dwim)
-    :config
-    (progn
-      ;; Split windows horizontally in ediff (instead of vertically)
-      (setq ediff-split-window-function #'split-window-horizontally)
+  :commands (ediff-files ediff-buffers modi/ediff-dwim)
+  :config
+  (progn
+    ;; Split windows horizontally in ediff (instead of vertically)
+    (setq ediff-split-window-function #'split-window-horizontally)
 
-      (defun modi/ediff-dwim ()
-        "Do ediff as I mean.
+    (defun modi/ediff-dwim ()
+      "Do ediff as I mean.
 
 If a region is active when this command is called, call `ediff-regions-wordwise'.
 
@@ -413,29 +367,29 @@ Else if the current frame has 2 windows,
 - Do `ediff-buffers' otherwise.
 
 Otherwise call `ediff-buffers' interactively."
-        (interactive)
-        (if (region-active-p)
-            (call-interactively 'ediff-regions-wordwise)
-          (if (= 2 (safe-length (window-list)))
-              (let (bufa bufb filea fileb)
-                (setq bufa  (get-buffer (buffer-name)))
-                (setq filea (buffer-file-name bufa))
-                (save-excursion
-                  (other-window 1)
-                  (setq bufb (get-buffer (buffer-name))))
-                (setq fileb (buffer-file-name bufb))
-                (if (or
-                     ;; if either of the buffers is not associated to a file
-                     (null filea) (null fileb)
-                     ;; if either of the buffers is modified
-                     (buffer-modified-p bufa) (buffer-modified-p bufb))
-                    (progn
-                      (message "Running (ediff-buffers \"%s\" \"%s\") .." bufa bufb)
-                      (ediff-buffers bufa bufb))
+      (interactive)
+      (if (region-active-p)
+          (call-interactively 'ediff-regions-wordwise)
+        (if (= 2 (safe-length (window-list)))
+            (let (bufa bufb filea fileb)
+              (setq bufa  (get-buffer (buffer-name)))
+              (setq filea (buffer-file-name bufa))
+              (save-excursion
+                (other-window 1)
+                (setq bufb (get-buffer (buffer-name))))
+              (setq fileb (buffer-file-name bufb))
+              (if (or
+                   ;; if either of the buffers is not associated to a file
+                   (null filea) (null fileb)
+                   ;; if either of the buffers is modified
+                   (buffer-modified-p bufa) (buffer-modified-p bufb))
                   (progn
-                    (message "Running (ediff-files \"%s\" \"%s\") .." filea fileb)
-                    (ediff-files filea fileb))))
-            (call-interactively 'ediff-buffers))))))
+                    (message "Running (ediff-buffers \"%s\" \"%s\") .." bufa bufb)
+                    (ediff-buffers bufa bufb))
+                (progn
+                  (message "Running (ediff-files \"%s\" \"%s\") .." filea fileb)
+                  (ediff-files filea fileb))))
+          (call-interactively 'ediff-buffers))))))
 
 (defun modi/set-file-permissions (perm)
   "Change permissions of the file in current buffer.
@@ -447,7 +401,8 @@ Example: M-644 M-x modi/set-file-permissions."
                      (format "%s " perm)
                      (buffer-file-name))))
     (message "%s" cmd)
-    (shell-command cmd)))
+    (shell-command cmd "*Shell Temp*")
+    (kill-buffer "*Shell Temp*")))
 
 (defvar modi/toggle-one-window--buffer-name nil
   "Variable to store the name of the buffer for which the `modi/toggle-one-window'
@@ -488,56 +443,38 @@ the current window and the windows state prior to that.
         (unless (eq bs be)
           (set-window-buffer start-win be)
           (set-window-buffer end-win bs))))))
+(bind-key "<C-S-drag-mouse-1>" #'th/swap-window-buffers-by-dnd modi-mode-map)
 
-;; Key bindings
 (bind-keys
  :map modi-mode-map
- ;; overriding the `C-x C-p binding with `mark-page' command
- ("C-x 1"       . modi/toggle-one-window) ; default binding to `delete-other-windows'
- ("C-x C-p"     . show-copy-buffer-file-name)
- ("C-x C-k"     . delete-current-buffer-file)
- ("C-x C-r"     . rename-current-buffer-file)
- ("C-S-t"       . reopen-killed-file) ; same shortcut as for reopening closed tabs in browsers
- ;; Make Alt+mousewheel scroll the other buffer
- ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
- ("<M-mouse-5>" . scroll-other-window-up-dont-move-point) ; M + wheel down
- ("C-c )"       . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
+  ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
+  ;; overriding `C-x C-p' originally bound to `mark-page' command
+  ("C-x C-p"      . show-copy-buffer-file-name)
+  ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence' command
+  ("C-x <delete>" . delete-current-buffer-file)
+  ("C-x C-r"      . rename-current-buffer-file)
+  ("C-S-t"        . reopen-killed-file) ; mimicking reopen-closed-tab binding used in browsers
+  ("C-c )"        . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; http://stackoverflow.com/a/26629984/1219634
 (bind-key "<mode-line> <mouse-2>"   #'show-copy-buffer-file-name       mode-line-buffer-identification-keymap)
 (bind-key "<mode-line> <S-mouse-2>" (λ (show-copy-buffer-file-name 4)) mode-line-buffer-identification-keymap)
 
-(bind-key "<C-S-drag-mouse-1>" #'th/swap-window-buffers-by-dnd modi-mode-map)
-
 ;; Below bindings are made in global map and not in my minor mode as I want
 ;; other modes to override those bindings.
-(unbind-key "<M-up>"    modi-mode-map)
-(unbind-key "<M-down>"  modi-mode-map)
-(unbind-key "<M-left>"  modi-mode-map)
-(unbind-key "<M-right>" modi-mode-map)
 (bind-keys
- ("<f5>"      . revert-buffer)
- ("<S-f5>"    . revert-all-buffers)
- ("<S-f9>"    . eshell)
- ("<M-up>"    . scroll-down-dont-move-point)
- ("<M-down>"  . scroll-up-dont-move-point)
- ;; Change the default `M-left` key binding from `left-word'
- ;; The same function anyways is also bound to `C-left`
- ("<M-left>"  . scroll-other-window-down-dont-move-point)
- ("<S-prior>" . scroll-other-window-down-dont-move-point) ; S-PgUp
- ;; Change the default `M-right` key binding from `right-word'
- ;; The same function anyways is also bound to `C-right`
- ("<M-right>" . scroll-other-window-up-dont-move-point)
- ("<S-next>"  . scroll-other-window-up-dont-move-point)) ; S-PgDown
+ ("<f5>"   . revert-buffer)
+ ("<S-f5>" . revert-all-buffers)
+ ("<S-f9>" . eshell))
 
 (bind-to-modi-map "b" modi/switch-to-scratch-and-back)
 (bind-to-modi-map "f" full-screen-center)
 (bind-to-modi-map "y" bury-buffer)
 
 (key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
-(key-chord-define-global "ZZ" 'toggle-between-buffers)
-(key-chord-define-global "5t" 'revert-buffer) ; alternative to F5
+(key-chord-define-global "ZZ" #'toggle-between-buffers)
+(key-chord-define-global "5t" #'revert-buffer) ; alternative to F5
 
 
 (provide 'setup-windows-buffers)
@@ -549,10 +486,3 @@ the current window and the windows state prior to that.
 ;; (C-l C-l) scrolls the window so that point is on the topmost screen line.
 ;; Typing a third C-l scrolls the window so that point is on the bottom-most
 ;; screen line. Each successive C-l cycles through these three positions.
-
-;; (global-set-key (kbd "<C-tab>")   'other-window) ;; alternative shortcut for `C-x o`
-;; ;; Cycle the buffers in reverse order than what happens with `C-x o`
-;; (global-set-key (kbd "C-x O")
-;;                 (lambda ()
-;;                   (interactive)
-;;                   (other-window -1)))
