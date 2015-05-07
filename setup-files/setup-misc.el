@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-06 14:18:57 kmodi>
+;; Time-stamp: <2015-05-07 13:36:23 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -287,7 +287,7 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _P_ermiss
 ;;
 ;; (3) See a variable value
 ;; `C-h v`, enter the variable name, Enter
-;; Example: `C-h v`, `tooltip-mode`, Enter
+;; Example: `C-h v tooltip-mode`
 ;;
 ;; (4) How to insert superscript
 ;; `C-x 8 ^ 2` inserts ²
@@ -307,8 +307,21 @@ _cr_ Rpn calc        _f_irefox                _m_an                    _P_ermiss
 ;; the string you can pass to the macro 'kbd.
 ;;
 ;; (8) How to know what the current major mode is?
-;; Do `M-:`, type the following `(message "%s" major-mode)` and press Return.
+;; `C-h v major-mode`
 ;;
 ;; (9) Put this line at the top of an anything.gpg file to prevent it from
 ;; asking for the password on each save
 ;; -*- epa-file-encrypt-to: ("<MY_EMAIL>") -*-
+;;
+;; (10) Replace a string with string suffixed with incrementing numbers
+;; http://www.reddit.com/r/emacs/comments/355bm0/til_after_so_long_using_emacs/cr1l6gy
+;; Let's say you want to replace all the instances of "Here" with "Here1" "Here2" "Here3" ..
+;;    1. M-x query-replace-regexp
+;;    2. regexp: \bHere\b
+;;    3. replacement: Here\,(1+ \#)
+;;  \, lets you put in some elisp to evaluate, which is incredibly
+;; useful. In the s-expression here, \# is a variable available to
+;; query-replace-regexp that holds the number of replacements done so
+;; far (i.e. before the first replacement it's 0, before the second
+;; replacement it's 1, and so on). To start the numbering at one, we
+;; just add one to it with the function 1+.
