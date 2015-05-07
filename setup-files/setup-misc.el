@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:45:49 kmodi>
+;; Time-stamp: <2015-05-06 14:18:57 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -118,6 +118,13 @@ If universal arg is used, load the `init.el'."
      (with-eval-after-load 'autorevert
        (setq-default auto-revert-use-notify nil)))
 
+;; Special Mode Map
+;; Kill buffer instead of simply quitting the window on pressing `q'
+;; Instead quit window on pressing `z'
+;; `special-mode' is a read-only major mode (simple.el)
+(define-key special-mode-map (kbd "q") (λ (kill-buffer (current-buffer))))
+(define-key special-mode-map (kbd "z") #'quit-window)
+
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
 (autoload 'dired-toggle-read-only "dired" nil t)
@@ -157,8 +164,8 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("C-t"   toggle-theme)
   ("<SPC>" whitespace-mode :color red)
   ("q"     nil "cancel" :color blue))
-(bind-key "s-t" #'hydra-toggle/body modi-mode-map)
-(bind-key "C-c t" #'hydra-toggle/body modi-mode-map)
+(bind-key "s-t" #'hydra-toggle/body)
+(bind-key "C-c t" #'hydra-toggle/body)
 (key-chord-define-global "hj" #'hydra-toggle/body)
 
 ;; Launcher
