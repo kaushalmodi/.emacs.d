@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-30 09:09:24 kmodi>
+;; Time-stamp: <2015-05-06 12:13:04 kmodi>
 
 ;; Search
 
@@ -112,11 +112,15 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
   :commands (helm-swoop helm-multi-swoop-all helm-swoop-from-isearch)
   :init
   (progn
-    (when (not (featurep 'swiper))
-      (bind-key "M-i" #'helm-swoop modi-mode-map)
-      ;; isearch > M-i > helm-swoop
-      (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map))
-    (bind-key "M-I" #'helm-multi-swoop-all modi-mode-map))
+    (if (featurep 'swiper)
+        (progn
+          (bind-key "M-I" #'helm-swoop modi-mode-map)
+          ;; isearch > M-I > helm-swoop
+          (bind-key "M-I" #'helm-swoop-from-isearch isearch-mode-map))
+      (progn
+        (bind-key "M-i" #'helm-swoop modi-mode-map)
+        ;; isearch > M-i > helm-swoop
+        (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map))))
   :config
   (progn
     ;; Disable helm
