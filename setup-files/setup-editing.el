@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-07 12:22:24 kmodi>
+;; Time-stamp: <2015-05-07 12:45:23 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -509,40 +509,17 @@ C-u C-u C-u -> Both prefix and user name are not inserted."
 (bind-key "C-c d" #'modi/insert-time-stamp modi-mode-map)
 
 ;; Replace identical strings with incremental number suffixes
-(defvar modi/get-incr-number-string-default-end 100
+(defvar modi/replace-with-incr-num-suffix-max 100
   "Default maximum number till which the number suffixes will increment in the
-string returned by `modi/get-incr-number-string'.")
+replacements.")
 
-(defvar modi/get-incr-number-string-default-incr 1
+(defvar modi/replace-with-incr-num-suffix-incr 1
   "Default number by which the number suffixes will increment in the
-string returned by `modi/get-incr-number-string'.")
-
-(defun modi/get-incr-number-string (&optional prefix start end inc)
-  "Returns a string of the format:
-
-  PREFIX<START> PREFIX<START+INC> PREFIX<START+(2*INC)>  ..
-
-till the number in <..> is less than or equal to END.
-
-Example: (modi/get-incr-number-string nil 1 10 1) returns
-
-  \"1 2 3 4 5 6 7 8 9 10\"
-"
-  (interactive)
-  (when (null prefix) (setq prefix ""))
-  (when (null start)  (setq start 1))
-  (when (null end)    (setq end modi/get-incr-number-string-default-end))
-  (when (null inc)    (setq inc modi/get-incr-number-string-default-incr))
-  (let ((num start)
-        num-str)
-    (while (<= num end)
-      (setq num-str (concat num-str prefix (number-to-string num) " "))
-      (setq num (+ num inc)))
-    num-str))
+replacements.")
 
 (defun modi/replace-with-incr-num-suffix (start)
   "Replace all instances of the selected region or the symbol under point with
-the same but suffixed with a number.
+the same, but suffixed with an incrementing number.
 
 If START is non-nil, the replacements will be suffixes with the START number
 and increment by 1 on each replacement.
@@ -553,11 +530,11 @@ the replacements will use that number as the START number.
 If START is nil and if the selected region or symbol does NOT end in a number,
 the replacements will use 1 as the START number.
 
-`modi/get-incr-number-string-default-end' variable controls the maximum number
+`modi/replace-with-incr-num-suffix-max' variable controls the maximum number
 till which the suffix number increments. After the max number is reached, the
 suffixes will restart from START (behavior of `map-query-replace-regexp').
 
-`modi/get-incr-number-string-default-incr' variable controls the increments
+`modi/replace-with-incr-num-suffix-incr' variable controls the increments
 between the number suffixes in consecutive replacements.
 
 Example:
@@ -567,10 +544,9 @@ After replacement text:
    Here3 Here4 Here5 Here6 Here7
 "
   (interactive "p")
-  (when current-prefix-arg
-    (message "p:%d" current-prefix-arg))
   (let ((regexp (cond ((use-region-p)
-                       (buffer-substring-no-properties (region-beginning) (region-end)))
+                       (buffer-substring-no-properties (region-beginning)
+                                                       (region-end)))
                       ((symbol-at-point)
                        (substring-no-properties
                         (symbol-name (symbol-at-point))))))
@@ -583,8 +559,15 @@ After replacement text:
             (setq start (string-to-number (match-string-no-properties 2 regexp)))))
       (progn
         (setq prefix regexp)))
-    (setq to-strings (modi/get-incr-number-string prefix start))
-    (backward-word 1)
+    ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Mapping-Functions.html
+    (setq to-strings (mapconcat (lambda (x) (concat prefix (number-to-string x)))
+                                (number-sequence start
+                                                 modi/replace-with-incr-num-suffix-max
+                                                 modi/replace-with-incr-num-suffix-incr)
+                                " "))
+    ;; Go to the start of the current word
+    (when (not (looking-back "\\b"))
+      (re-search-backward "\\b" nil :noerror))
     (map-query-replace-regexp regexp to-strings)))
 
 ;; Unicode
