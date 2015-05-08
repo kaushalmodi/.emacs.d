@@ -108,9 +108,8 @@
      (340 . "#94BFF3")
      (360 . "#DC8CC3"))) t)
  '(vc-annotate-very-old-color "#DC8CC3" t)
- '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error")
- '(visual-line-fringe-indicators (quote (nil nil))))
-(custom-set-faces
+ '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error"))
+ (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.

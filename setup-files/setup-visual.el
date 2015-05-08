@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 11:56:08 kmodi>
+;; Time-stamp: <2015-05-08 12:19:30 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -201,7 +201,8 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 (modi/turn-on-visual-line-mode) ; and then enable it only in selected modes
 
 ;; Turn on line wrapping fringe indicators in Visual Line Mode
-(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+(setq-default visual-line-fringe-indicators '(left-curly-arrow
+                                              right-curly-arrow))
 
 ;; Adaptive Wrap
 ;; `adaptive-wrap-prefix-mode' indents the visual lines to
