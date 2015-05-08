@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 07:26:18 kmodi>
+;; Time-stamp: <2015-05-08 12:41:17 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -230,7 +230,8 @@ C-u C-u `my/avy-jump' -> `avy-goto-line'
       ;; Important to use my minor mode map as I want my bindings to override
       ;; bindings in other major modes (esp org-mode)
       ("C-c SPC" . my/avy-jump))
-    (key-chord-define-global "l;" #'my/avy-jump)))
+    (key-chord-define-global "l;" #'my/avy-jump)
+    (bind-key "C-SPC" #'avy-isearch isearch-mode-map)))
 
 ;; Ace Jump
 ;; http://www.emacswiki.org/emacs/AceJump
