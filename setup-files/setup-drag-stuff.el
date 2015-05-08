@@ -1,12 +1,14 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-05-08 11:13:21 kmodi>
 
 ;; Drag Stuff
-;; Source: https://github.com/rejeep/drag-stuff
+;; https://github.com/rejeep/drag-stuff
 
 (use-package drag-stuff
+  :init
+  (progn
+    (setq drag-stuff-modifier nil))
   :config
   (progn
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Solution posted by drag-stuff dev on posting an issue I faced,
     ;; https://github.com/rejeep/drag-stuff.el/issues/4
     (defvar drag-stuff-hax nil)
