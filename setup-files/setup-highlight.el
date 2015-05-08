@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:43:54 kmodi>
+;; Time-stamp: <2015-05-08 11:01:29 kmodi>
 
 ;; Highlight stuff
 
@@ -15,7 +15,7 @@
   ;;   org-mode fontification error
   :config
   (progn
-    (hl-highlight-mode +1)
+    (hl-highlight-mode 1)
 
     (defun my/hl-anything (&optional arg)
       "Wrapper function to call functions to highlight the thing at point either
@@ -61,7 +61,7 @@ globally or locally (when called with prefix `C-u')."
 (use-package volatile-highlights
   :config
   (progn
-    (volatile-highlights-mode t)))
+    (volatile-highlights-mode 1)))
 
 ;; Auto Highlight Symbol
 ;; https://github.com/emacsmirror/auto-highlight-symbol

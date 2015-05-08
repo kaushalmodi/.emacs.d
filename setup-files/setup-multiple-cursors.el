@@ -1,44 +1,35 @@
-;; Time-stamp: <2015-02-23 11:23:55 kmodi>
+;; Time-stamp: <2015-05-08 10:54:50 kmodi>
 
 ;; Multiple Cursors
-;; Source: https://github.com/magnars/multiple-cursors.el
+;; https://github.com/magnars/multiple-cursors.el
 
 (use-package multiple-cursors
-  :init
+  :config
   (progn
-    (defun toggle-mc-hide-unmatched-lines-mode ()
-      (interactive)
-      (if mc-hide-unmatched-lines-mode
-          (hum/keyboard-quit)
-        (mc-hide-unmatched-lines-mode t)))
-
     (bind-keys
      :map modi-mode-map
-     ("C-S-c C-S-c"   . mc/edit-lines)
-     ("C->"           . mc/mark-next-like-this)
-     ("C-<"           . mc/mark-previous-like-this)
-     ("C-c C-<"       . mc/mark-all-like-this)
-     ("C-S-<mouse-1>" . mc/add-cursor-on-click))
+      ("C-S-c C-S-c"   . mc/edit-lines)
+      ("C->"           . mc/mark-next-like-this)
+      ("C-<"           . mc/mark-previous-like-this)
+      ("C-c C-<"       . mc/mark-all-like-this)
+      ("C-S-<mouse-1>" . mc/add-cursor-on-click))
 
     (when (featurep 'region-bindings-mode)
       (bind-keys
        :map region-bindings-mode-map
-       ("a" . mc/mark-all-like-this)
-       ("p" . mc/mark-previous-like-this)
-       ("n" . mc/mark-next-like-this)
-       ("P" . mc/cycle-backward)
-       ("N" . mc/cycle-forward)
-       ("m" . mc/mark-more-like-this-extended)
-       ("h" . toggle-mc-hide-unmatched-lines-mode)))
+        ("a" . mc/mark-all-like-this)
+        ("p" . mc/mark-previous-like-this)
+        ("n" . mc/mark-next-like-this)
+        ("P" . mc/cycle-backward)
+        ("N" . mc/cycle-forward)
+        ("m" . mc/mark-more-like-this-extended)
+        ("h" . mc-hide-unmatched-lines-mode)))
 
     (bind-to-modi-map "m" mc/mark-all-like-this-dwim)
     (bind-to-modi-map "r" set-rectangular-region-anchor)))
 
 
 (provide 'setup-multiple-cursors)
-
-
-;; ## Command overview
 
 ;; ### Mark one more occurrence
 

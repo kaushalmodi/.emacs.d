@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-07 12:45:23 kmodi>
+;; Time-stamp: <2015-05-08 11:19:10 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -300,7 +300,7 @@ instead of ASCII characters for adorning the copied snippet."
           (read-only-mode -1)) ; Force the buffer to be writable
         (extend-rectangle-to-end beg end)
         (when original-read-only-state
-          (read-only-mode +1)))))) ; Revert the buffer back to its read-only state
+          (read-only-mode 1)))))) ; Revert the buffer back to its read-only state
 
 (defun copy-rectangle-as-kill-then-delete (start end)
   "Copy the region-rectangle and save it as the last killed one.

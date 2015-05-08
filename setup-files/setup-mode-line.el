@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-30 11:07:47 kmodi>
+;; Time-stamp: <2015-05-08 11:04:19 kmodi>
 
 ;; Customize the mode-line
 
@@ -6,20 +6,19 @@
   "If non-nil, show the date-time in the mode-line.
 If nil, show the same in the minibuffer.")
 
-(setq line-number-mode t) ; show line # in mode-line
-(setq column-number-mode t) ; show column # in mode-line
-
-;; Date, time, mail, load average display in mode-line
+;; Date, time, load average, mail in mode-line
 (if modi/show-date-time-in-mode-line
     (setq display-time-format "%l:%M %b %d %a" )
   (setq display-time-format ""))
-(setq display-time-default-load-average nil) ; do NOT show average system load time
 
-;; http://doc.endlessparentheses.com/Var/display-time-mode
-;; Just doing `(setq display-time-mode t)' does not work..
-;;   You have to manually call the display-time-mode function if
-;; `display-time-mode' is not set to t via `M-x customize'
+;; Do NOT show average system load time
+(setq display-time-default-load-average nil)
+
 (display-time-mode 1)
+
+;; Show line and column numbers in the mode-line
+(line-number-mode 1)
+(column-number-mode 1)
 
 ;; Display date+time in the minibuffer instead of in the mode-line
 (use-package minibuffer-line

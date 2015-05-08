@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-06 12:13:04 kmodi>
+;; Time-stamp: <2015-05-08 11:18:56 kmodi>
 
 ;; Search
 
@@ -9,7 +9,7 @@
 (use-package anzu
   :config
   (progn
-    (global-anzu-mode +1)
+    (global-anzu-mode 1)
 
     (set-face-attribute 'anzu-mode-line nil :foreground "lightblue" :weight 'bold)
     (setq anzu-mode-lighter                "")

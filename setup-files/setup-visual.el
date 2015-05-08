@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-04-23 15:54:06 kmodi>
+;; Time-stamp: <2015-05-08 11:19:30 kmodi>
 
 ;; Set up the looks of emacs
 
 ;; Highlight closing parentheses; show the name of the body being closed with
 ;; the closing parentheses in the minibuffer.
-(show-paren-mode +1)
+(show-paren-mode 1)
 
 (defvar default-font-size-pt 13
   "Default font size in points.")
@@ -128,7 +128,7 @@ the smart-mode-line theme."
 (add-hook 'after-init-hook #'modi/update-frame-title)
 
 ;; Enable font-lock or syntax highlighting globally
-(setq global-font-lock-mode t)
+(global-font-lock-mode 1)
 ;; Use the maximum decoration level available for color highlighting
 (setq font-lock-maximum-decoration t)
 
@@ -210,11 +210,11 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
     (defun turn-on-adaptive-wrap-prefix-mode ()
       "Turns on adaptive-wrap-prefix-mode."
       (interactive)
-      (adaptive-wrap-prefix-mode t))
+      (adaptive-wrap-prefix-mode 1))
     (define-globalized-minor-mode global-adaptive-wrap-prefix-mode
       adaptive-wrap-prefix-mode
       turn-on-adaptive-wrap-prefix-mode)
-    (global-adaptive-wrap-prefix-mode t)))
+    (global-adaptive-wrap-prefix-mode 1)))
 
 ;; CURSOR
 ;; Change cursor color according to mode:
@@ -268,7 +268,7 @@ during presentations."
 (defun turn-on-prez-mode ()
   "Turns on prez-mode."
   (interactive)
-  (prez-mode t))
+  (prez-mode 1))
 (defun turn-off-prez-mode ()
   "Turns off prez-mode."
   (interactive)
@@ -425,7 +425,7 @@ menu bar."
         ;; pixels compared to that set using `set-frame-size'. So the below
         ;; adjustment has to be made.
         (setq bkp/frame-width-pixel  (- (frame-pixel-width) (* 2 (frame-char-width))))
-        (menu-bar-mode +1)))
+        (menu-bar-mode 1)))
     (when (not menu-bar-mode) ; restore frame size if menu bar is hidden after toggle
       (set-frame-size (selected-frame)
                       bkp/frame-width-pixel

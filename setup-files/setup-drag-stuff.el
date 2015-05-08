@@ -20,18 +20,20 @@
               (λ (when drag-stuff-hax
                    (forward-char 1)
                    (setq drag-stuff-hax nil))))
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     ;; Drag Stuff is incompatible with Org, because it shadows many useful Org
     ;; bindings.  This doesn't do much harm, because Org has its own structural
     ;; movement commands
     (add-to-list 'drag-stuff-except-modes 'org-mode)
-    (setq drag-stuff-global-mode t)
+
     (bind-keys
      :map modi-mode-map
-     ("C-\""        . drag-stuff-up)   ;; C-S-'
-     ("C-?"         . drag-stuff-down) ;; C-S-/
-     ("<C-S-left>"  . drag-stuff-left)
-     ("<C-S-right>" . drag-stuff-right))))
+      ("C-\""        . drag-stuff-up)   ;; C-S-'
+      ("C-?"         . drag-stuff-down) ;; C-S-/
+      ("<C-S-left>"  . drag-stuff-left)
+      ("<C-S-right>" . drag-stuff-right))
+
+    (drag-stuff-global-mode 1)))
 
 
 (provide 'setup-drag-stuff)

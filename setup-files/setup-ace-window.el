@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-03-12 15:48:28 kmodi>
+;; Time-stamp: <2015-05-08 10:57:12 kmodi>
 
 ;; Ace Window
 ;; https://github.com/abo-abo/ace-window
 
 (use-package ace-window
-    :config
+  :config
   (progn
 
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
@@ -26,14 +26,14 @@
            (apply #'string (reverse path))
            'face 'modi/aw-mode-line-face)))))
 
-    (ace-window-display-mode t)
-
     (bind-keys
      :map modi-mode-map
-     ;; Important to use my minor mode map as I want my bindings to override
-     ;; bindings in other major modes (esp org-mode)
-     ("C-x o" . ace-window)
-     ("M-o"   . ace-window))))
+      ;; Important to use my minor mode map as I want my bindings to override
+      ;; bindings in other major modes (esp org-mode)
+      ("C-x o" . ace-window)
+      ("M-o"   . ace-window))
+
+    (ace-window-display-mode 1)))
 
 
 (provide 'setup-ace-window)
