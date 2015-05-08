@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 11:19:30 kmodi>
+;; Time-stamp: <2015-05-08 11:56:08 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -172,33 +172,38 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 
 (modi/font-size-reset) ; Initialize font-size-pt var to the default value
 
-;; LINE TRUNCATION / VISUAL LINE MODE
+;; Line truncation
+;; Disable truncation. This setting does NOT apply to windows split using `C-x 3`
+(setq-default truncate-lines nil)
+;; Disable truncation in windows split using `C-x 3` too.
+(setq-default truncate-partial-width-windows nil)
 ;; Do `M-x toggle-truncate-lines` to toggle truncation mode.
 
-;; Line truncation has to be enabled for the visual-line-mode to be effective.
+;; Visual Line Mode
+;; Do word wrapping only at word boundaries
+(defconst modi/visual-line-mode-hooks '(org-mode-hook
+                                        markdown-mode-hook)
+  "List of hooks of major modes in which visual line mode should be enabled.")
 
-;; Disable truncation. This setting does NOT apply to windows split using `C-x 3`
-(setq truncate-lines nil)
-;; Disable truncation in windows split using `C-x 3` too.
-(setq truncate-partial-width-windows nil)
+(defun modi/turn-on-visual-line-mode ()
+  "Turn on visual-line-mode only for specific modes."
+  (interactive)
+  (dolist (hook modi/visual-line-mode-hooks)
+    (add-hook hook #'visual-line-mode)))
+
+(defun modi/turn-off-visual-line-mode ()
+  "Turn off visual-line-mode only for specific modes."
+  (interactive)
+  (dolist (hook modi/visual-line-mode-hooks)
+    (remove-hook hook #'visual-line-mode)))
+
+(global-visual-line-mode -1) ; Disable visual line mode globally
+(modi/turn-on-visual-line-mode) ; and then enable it only in selected modes
+
 ;; Turn on line wrapping fringe indicators in Visual Line Mode
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 
-;; (global-visual-line-mode 1) ; Enable wrapping lines at word boundaries
-(global-visual-line-mode -1) ; Disable wrapping lines at word boundaries
-
-;; Enable/Disable visual-line mode in specific major modes. Enabling visual
-;; line mode does word wrapping only at word boundaries
-(defun turn-off-visual-line-mode ()
-  (interactive)
-  (visual-line-mode -1))
-(defun turn-on-visual-line-mode ()
-  (interactive)
-  (visual-line-mode 1))
-(add-hook 'sh-mode-hook       #'turn-off-visual-line-mode)
-(add-hook 'org-mode-hook      #'turn-on-visual-line-mode)
-(add-hook 'markdown-mode-hook #'turn-on-visual-line-mode)
-
+;; Adaptive Wrap
 ;; `adaptive-wrap-prefix-mode' indents the visual lines to
 ;; the level of the actual line plus `adaptive-wrap-extra-indent'. Thus line
 ;; truncation has to be off for adaptive wrap to be in effect.
