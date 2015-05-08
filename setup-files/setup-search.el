@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 11:18:56 kmodi>
+;; Time-stamp: <2015-05-08 16:52:55 kmodi>
 
 ;; Search
 
@@ -80,12 +80,17 @@ happens within a region if one is selected."
 (use-package swiper
   :config
   (progn
-    (defun swiper--dwim ()
-      "Input the selected region or symbol at point to swiper by default."
-      (interactive)
-      (swiper (modi/get-symbol-at-point)))
+    (defun modi/swiper-dwim (init-empty)
+      "Input the selected region or symbol at point to swiper by default.
 
-    (defun swiper--from-isearch ()
+If INIT-EMPTY is non-nil (example, when using prefix argument C-u), swiper
+starts without any pre-filled search string (stock behavior)."
+      (interactive "P")
+      (if init-empty
+          (swiper)
+        (swiper (modi/get-symbol-at-point))))
+
+    (defun isearch-swiper ()
       "Invoke `swiper' from isearch.
 
 https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
@@ -97,9 +102,11 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
         (isearch-exit)
         (swiper $query)))
 
-    (bind-key "M-i" #'swiper--dwim modi-mode-map)
-    ;; isearch > M-i > swiper
-    (bind-key "M-i" #'swiper--from-isearch isearch-mode-map)))
+    (bind-key "M-i"   #'isearch-swiper isearch-mode-map) ; isearch > swiper
+    (bind-key "C-SPC" #'swiper-avy swiper-map) ; swiper > avy-jump
+
+    (key-chord-define-global "'/" #'modi/swiper-dwim)
+    (bind-key "M-i" #'modi/swiper-dwim modi-mode-map)))
 
 ;; Helm Swoop
 ;; https://github.com/ShingoFukuyama/helm-swoop
@@ -114,13 +121,11 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
   (progn
     (if (featurep 'swiper)
         (progn
-          (bind-key "M-I" #'helm-swoop modi-mode-map)
-          ;; isearch > M-I > helm-swoop
-          (bind-key "M-I" #'helm-swoop-from-isearch isearch-mode-map))
+          (bind-key "M-I" #'helm-swoop-from-isearch isearch-mode-map) ; isearch > helm-swoop
+          (bind-key "M-I" #'helm-swoop modi-mode-map))
       (progn
-        (bind-key "M-i" #'helm-swoop modi-mode-map)
-        ;; isearch > M-i > helm-swoop
-        (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map))))
+        (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map) ; isearch > helm-swoop
+        (bind-key "M-i" #'helm-swoop modi-mode-map))))
   :config
   (progn
     ;; Disable helm
@@ -133,7 +138,6 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
       (modi/disable-helm-enable-ido))
     (setq helm-swoop-split-direction 'split-window-vertically)
     (setq helm-swoop-speed-or-color nil) ; If nil, boosts speed in exchange for color
-    ;; helm-swoop  > press [M-i] > helm-multi-swoop-all
     ;; While doing `helm-swoop` press `C-c C-e` to edit mode, apply changes to
     ;; original buffer by `C-x C-s`
     ))
