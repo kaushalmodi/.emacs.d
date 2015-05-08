@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-05 09:58:22 kmodi>
+;; Time-stamp: <2015-05-08 07:26:18 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -206,31 +206,31 @@ If ARG is omitted or nil, move point forward one word."
   ("q"        nil            "cancel")
   ("<return>" nil            "cancel"))
 
-;; Avy Jump (part of Ace Window package)
-;; https://github.com/abo-abo/ace-window
+;; Avy Jump
+;; https://github.com/abo-abo/avy
 (use-package avy-jump
   :config
   (progn
-    (defun my/avi-jump (&optional arg)
+    (defun my/avy-jump (&optional arg)
       "
-        `my/avi-jump' -> `avi-goto-word-1'
-    C-u `my/avi-jump' -> `avi-goto-char-2'
-C-u C-u `my/avi-jump' -> `avi-goto-line'
+        `my/avy-jump' -> `avy-goto-word-1'
+    C-u `my/avy-jump' -> `avy-goto-char-2'
+C-u C-u `my/avy-jump' -> `avy-goto-line'
 "
       (interactive "p")
-      (let ((avi-all-windows t) ; search in all windows
+      (let ((avy-all-windows t) ; search in all windows
             (fn (cl-case arg
-                  (4  'avi-goto-char-2) ; C-u
-                  (16 'avi-goto-line) ; C-u C-u
-                  (t  'avi-goto-word-1))))
+                  (4  'avy-goto-char-2) ; C-u
+                  (16 'avy-goto-line) ; C-u C-u
+                  (t  'avy-goto-word-1))))
         (funcall fn)))
 
     (bind-keys
      :map modi-mode-map
       ;; Important to use my minor mode map as I want my bindings to override
       ;; bindings in other major modes (esp org-mode)
-      ("C-c SPC" . my/avi-jump))
-    (key-chord-define-global "l;" #'my/avi-jump)))
+      ("C-c SPC" . my/avy-jump))
+    (key-chord-define-global "l;" #'my/avy-jump)))
 
 ;; Ace Jump
 ;; http://www.emacswiki.org/emacs/AceJump
