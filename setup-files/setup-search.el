@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 16:52:55 kmodi>
+;; Time-stamp: <2015-05-08 17:05:25 kmodi>
 
 ;; Search
 
@@ -80,15 +80,16 @@ happens within a region if one is selected."
 (use-package swiper
   :config
   (progn
-    (defun modi/swiper-dwim (init-empty)
-      "Input the selected region or symbol at point to swiper by default.
+    (defun modi/swiper-dwim (arg)
+      "Start swiper with input as the selected region or symbol at point by default.
 
-If INIT-EMPTY is non-nil (example, when using prefix argument C-u), swiper
-starts without any pre-filled search string (stock behavior)."
+C-u     -> `ivy-resume' (resume from where you last left off swiper)
+C-u C-u -> Start swiper without any arguments (stock behavior)"
       (interactive "P")
-      (if init-empty
-          (swiper)
-        (swiper (modi/get-symbol-at-point))))
+      (cl-case (car arg)
+        (4  (ivy-resume)) ; C-u
+        (16 (swiper)) ; C-u C-u
+        (t  (swiper (modi/get-symbol-at-point)))))
 
     (defun isearch-swiper ()
       "Invoke `swiper' from isearch.
