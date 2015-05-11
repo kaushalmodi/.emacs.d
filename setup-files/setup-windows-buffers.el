@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-07 14:18:52 kmodi>
+;; Time-stamp: <2015-05-11 14:38:39 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -353,43 +353,57 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
   :commands (ediff-files ediff-buffers modi/ediff-dwim)
   :config
   (progn
+    ;; No separate frame for ediff control buffer
+    (setq ediff-window-setup-function #'ediff-setup-windows-plain)
+
     ;; Split windows horizontally in ediff (instead of vertically)
     (setq ediff-split-window-function #'split-window-horizontally)
 
     (defun modi/ediff-dwim ()
       "Do ediff as I mean.
 
-If a region is active when this command is called, call `ediff-regions-wordwise'.
-
-Else if the current frame has 2 windows,
-- Do `ediff-files' if the buffers are associated to files and the buffers
-  have not been modified.
-- Do `ediff-buffers' otherwise.
-
-Otherwise call `ediff-buffers' interactively."
+- If a region is active, call `ediff-regions-wordwise'.
+- Else if the frame has 2 windows with identical major modes,
+  - Do `ediff-files' if the buffers are associated to files and the buffers
+    have not been modified.
+  - Do `ediff-buffers' otherwise.
+- Else if the current is a file buffer with a VC backend, call `vc-ediff'
+- Else call `ediff-buffers'."
       (interactive)
-      (if (region-active-p)
-          (call-interactively 'ediff-regions-wordwise)
-        (if (= 2 (safe-length (window-list)))
-            (let (bufa bufb filea fileb)
-              (setq bufa  (get-buffer (buffer-name)))
-              (setq filea (buffer-file-name bufa))
-              (save-excursion
-                (other-window 1)
-                (setq bufb (get-buffer (buffer-name))))
-              (setq fileb (buffer-file-name bufb))
-              (if (or
-                   ;; if either of the buffers is not associated to a file
-                   (null filea) (null fileb)
-                   ;; if either of the buffers is modified
-                   (buffer-modified-p bufa) (buffer-modified-p bufb))
-                  (progn
-                    (message "Running (ediff-buffers \"%s\" \"%s\") .." bufa bufb)
-                    (ediff-buffers bufa bufb))
-                (progn
-                  (message "Running (ediff-files \"%s\" \"%s\") .." filea fileb)
-                  (ediff-files filea fileb))))
-          (call-interactively 'ediff-buffers))))))
+      (let* ((num-win (safe-length (window-list)))
+             (bufa (get-buffer (buffer-name)))
+             (filea (buffer-file-name bufa))
+             (modea (with-current-buffer bufa major-mode))
+             bufb fileb modeb)
+        (save-excursion
+          (other-window 1)
+          (setq bufb (get-buffer (buffer-name)))
+          (setq fileb (buffer-file-name bufb))
+          (setq modeb (with-current-buffer bufb major-mode)))
+        (cond
+         ;; If a region is selected
+         ((region-active-p)
+          (call-interactively 'ediff-regions-wordwise))
+         ;; Else If 2 windows with same major modes
+         ((and (= 2 num-win)
+               (eq modea modeb))
+          (if (or
+               ;; if either of the buffers is not associated to a file
+               (null filea) (null fileb)
+               ;; if either of the buffers is modified
+               (buffer-modified-p bufa) (buffer-modified-p bufb))
+              (progn
+                (message "Running (ediff-buffers \"%s\" \"%s\") .." bufa bufb)
+                (ediff-buffers bufa bufb))
+            (progn
+              (message "Running (ediff-files \"%s\" \"%s\") .." filea fileb)
+              (ediff-files filea fileb))))
+         ;; Else If file in current buffer has a vc backend
+         ((and (buffer-file-name)
+               (vc-registered (buffer-file-name)))
+          (call-interactively 'vc-ediff))
+         ;; Else call `ediff-buffers'
+         (t (call-interactively 'ediff-buffers)))))))
 
 (defun modi/set-file-permissions (perm)
   "Change permissions of the file in current buffer.
