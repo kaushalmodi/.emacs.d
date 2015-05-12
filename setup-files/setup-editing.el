@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 11:19:10 kmodi>
+;; Time-stamp: <2015-05-12 12:37:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -571,21 +571,75 @@ After replacement text:
     (map-query-replace-regexp regexp to-strings)))
 
 ;; Unicode
-(defhydra hydra-unicode (:color blue)
-  "unicode"
-  (">"       (insert-char ?☛) "☛") ; C-x 8 RET 261b RET, pointing hand
-  ("SPC"     (insert-char ?​)  "0-width space") ; C-x 8 RET 200b RET, zero width space
-  ("\\"      (insert-char ?▮) "▮") ; C-x 8 RET 9646 RET, black vertical rectangle
-  ("|"       (insert-char ?▯) "▯") ; C-x 8 RET 9647 RET, white vertical rectangle
-  ("dd"      (insert-char ?“) "“") ; curved double quotes open
-  ("df"      (insert-char ?”) "”") ; curved double quotes close
-  ("<right>" (insert-char ?→) "→")
-  ("<left>"  (insert-char ?←) "←")
-  ("<up>"    (insert-char ?↑) "↑")
-  ("<down>"  (insert-char ?↓) "↓")
-  ("q"   nil              "cancel"))
-(bind-key "s-u" #'hydra-unicode/body modi-mode-map)
-(bind-key "C-c u" #'hydra-unicode/body modi-mode-map)
+(require 'iso-transl)
+;; Add custom bindings to "C-x 8" map
+(dolist (binding '(;; >
+                   (">"       . nil) ; First unbind ">" from the map
+                   (">="      . [?≥]) ; greater than or equal to
+                   (">>"      . [?≫]) ; much greater than
+                   (">\""     . [?»]) ; right-pointing double angle quotation mark
+                   (">'"      . [?›]) ; single right-pointing angle quotation mark
+                   (">h"      . [?☛]) ; black right pointing index
+                   ;; <
+                   ("<"       . nil) ; First unbind "<" from the map
+                   ("<="      . [?≤]) ; less than or equal to
+                   ("<<"      . [?≪]) ; much less than
+                   ("<\""     . [?«]) ; left-pointing double angle quotation mark
+                   ("<'"      . [?‹]) ; single left-pointing angle quotation mark
+                   ("<h"      . [?☚]) ; black left pointing index
+                   ;; arrows
+                   ("<right>" . [?→]) ; rightwards arrow
+                   ("<left>"  . [?←]) ; leftwards arrow
+                   ("<up>"    . [?↑]) ; upwards arrow
+                   ("<down>"  . [?↓]) ; downwards arrow
+                   ;; misc
+                   ("r"       . [?▯]) ; white vertical rectangle
+                   ("R"       . [?▮]) ; black vertical rectangle
+                   ("*r"      . [?₹]) ; indian rupee sign
+                   ("1/3"     . [?⅓]) ; fraction one third
+                   ("0"       . [?​]) ; zero width space
+                   ))
+  (define-key iso-transl-ctl-x-8-map (kbd (car binding)) (cdr binding)))
+;; Unicode chars that can be entered using C-x 8 binding
+;; |------------------+-------------------------|
+;; | C-x 8 prefix map | Unicode                 |
+;; | binding          | character               |
+;; |------------------+-------------------------|
+;; | {                | “                       |
+;; | }                | ”                       |
+;; | ^1               | ¹                       |
+;; | ^2               | ²                       |
+;; | ^3               | ³                       |
+;; | .                | ·                       |
+;; | **               | •                       |
+;; | o                | ° (degree)              |
+;; | ~=               | ≈                       |
+;; | /=               | ≠                       |
+;; | +                | ±                       |
+;; | /o               | ø                       |
+;; | 1/2              | ½                       |
+;; | 1/4              | ¼                       |
+;; | 3/4              | ¾                       |
+;; | R                | ®                       |
+;; | C                | ©                       |
+;; | m                | µ                       |
+;; | 'a               | á                       |
+;; | 'e               | é                       |
+;; | 'i               | í                       |
+;; | 'o               | ó                       |
+;; | 'u               | ú                       |
+;; | "u               | ü                       |
+;; | ~n               | ñ                       |
+;; | ?                | ¿                       |
+;; | !                | ¡                       |
+;; | _n               | – (en dash)             |
+;; | _m               | — (em dash)             |
+;; | _h               | ‐ (hyphen)              |
+;; | _H               | ‑ (non-breaking hyphen) |
+;; | _-               | − (minus sign)          |
+;; | a>               | →                       |
+;; | a<               | ←                       |
+;; |------------------+-------------------------|
 
 ;; Delete Blank Lines
 ;; http://www.masteringemacs.org/article/removing-blank-lines-buffer
