@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 07:23:37 kmodi>
+;; Time-stamp: <2015-05-12 15:37:19 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -282,7 +282,7 @@
   :defer 1)
 ;; Do desktop setup after linum setup so that the desktop loaded files will show
 ;; linum if enabled for that major mode or if enabled globally
-(with-eval-after-load "setup-linum"
+(with-eval-after-load 'setup-linum
   (require 'setup-desktop))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
