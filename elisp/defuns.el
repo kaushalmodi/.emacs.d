@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-06 22:43:08 kmodi>
+;; Time-stamp: <2015-05-12 16:17:30 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -104,6 +104,16 @@ set the symbol's value to INIT-VALUE even if the symbol is defined."
       (setq-default defvar-always-reeval-values t)
       (message "'defvar-re' will now force re-evaluate."))))
 ;;
+
+;; Below macro is used to wrap stuff that need to be run only after emacs
+;; starts up completely. This is very crucial when calling functions like
+;; `find-font' which return correct value only after emacs startup is finished
+;; especially when emacs is started in daemon mode.
+;; http://emacs.stackexchange.com/a/12352/115
+(defmacro do-once-1-sec-after-emacs-startup (&rest body)
+  `(run-with-idle-timer 1 ; run this after emacs is idle for 1 second
+                        nil ; do this just once; don't repeat
+                        (lambda () ,@body)))
 
 
 ;; Use `assq-delete-all' instead of the below macro -- Mon Apr 06 2015

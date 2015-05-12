@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 12:19:30 kmodi>
+;; Time-stamp: <2015-05-12 16:11:49 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -142,13 +142,19 @@ the smart-mode-line theme."
 (when (eq system-type 'windows-nt)
   (set-face-attribute 'default nil :family "Consolas"))
 
-;; (set-face-attribute 'default nil :font "Source Code Pro for Powerline" )
-;; (set-frame-font "Input Mono" nil t)
+;; Symbola font check (required for emoji and other Unicode 6+ display)
+(defvar font-symbola-p nil
+  "If non-nil, Symbola font is available on the system.")
 
-;; Manually choose a fallback font for Unicode
-;; http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
-(set-fontset-font "fontset-default" nil
-                  (font-spec :size 20 :name "Symbola"))
+;; Check if the Symbola font is available just once, after a second delay after
+;; emacs startup. This trick works when emacs is launched in regular or daemon
+;; mode
+(do-once-1-sec-after-emacs-startup
+ (when (find-font (font-spec :name "Symbola"))
+   ;; Manually choose a fallback font for Unicode
+   ;; http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
+   (set-fontset-font "fontset-default" nil (font-spec :size 20 :name "Symbola"))
+   (setq font-symbola-p t)))
 
 (defun modi/font-size-adj (&optional arg)
   "The default C-x C-0/-/= bindings do an excellent job of font resizing.
