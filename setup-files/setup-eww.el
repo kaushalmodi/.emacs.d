@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:47:58 kmodi>
+;; Time-stamp: <2015-05-11 16:06:51 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -121,6 +121,17 @@ If OPTION is 16 (`C-u C-u'), copy the page url."
        :map eww-mode-map
         ("o" . org-eww-copy-for-org-mode)))
 
+    (defun modi/eww-keep-lines (regexp)
+      "Show only the lines matching regexp in the web page.
+Call `eww-reload' to undo the filtering."
+      (interactive (list (read-from-minibuffer
+                          "Keep only lines matching regexp: ")))
+      (save-excursion
+        (read-only-mode -1)
+        (goto-char (point-min))
+        (keep-lines regexp)
+        (read-only-mode 1)))
+
     (bind-keys
      :map eww-mode-map
       ("G"           . eww) ; Go to URL
@@ -140,7 +151,8 @@ If OPTION is 16 (`C-u C-u'), copy the page url."
       ("C-w"         . modi/eww-copy-url-dwim)
       ("\<"          . eww-back-url)
       ("\>"          . eww-forward-url)
-      ("/"           . highlight-regexp))
+      ("/"           . highlight-regexp)
+      ("k"           . modi/eww-keep-lines))
     (>=e "25.0"
          (bind-key "R" #'eww-readable eww-mode-map)
          ;; Refresh the page with `eww-reload' or `g' to switch back to
