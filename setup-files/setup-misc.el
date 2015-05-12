@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-07 13:36:23 kmodi>
+;; Time-stamp: <2015-05-12 15:08:12 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -134,8 +134,8 @@ If universal arg is used, load the `init.el'."
     TOGGLE ...
 _ai_ aggressive indent      _d_/_D_ debug on error/entry      _H_ardcore (allow arrows)      _p_resentation         _t_ranspose frame
 _aw_ adaptive wrap          _e_debug^^                        fill col _i_ndicator           _r_ead only            _C-t_ theme
-menu _b_ar                  _f_ill^^                          _k_ey chord                    _S_tripe buffer        _<SPC>_ whitespace
-cycle _c_ase                _F_ollow^^                        _l_ine num                     _-_ truncate lines
+menu _b_ar                  _f_ill^^                          _k_ey chord                    _S_tripe buffer        _v_isible mode
+cycle _c_ase                _F_ollow^^                        _l_ine num                     _-_ truncate lines     _<SPC>_ whitespace
 ^^                          indent _g_uide^^                  _m_odi mode
 "
   ("ai"    aggressive-indent-mode)
@@ -162,6 +162,7 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("-"     toggle-truncate-lines :color red)
   ("t"     transpose-frame)
   ("C-t"   toggle-theme)
+  ("v"     visible-mode)
   ("<SPC>" whitespace-mode :color red)
   ("q"     nil "cancel" :color blue))
 (bind-key "s-t" #'hydra-toggle/body)
