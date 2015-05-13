@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-12 12:37:45 kmodi>
+;; Time-stamp: <2015-05-13 11:53:26 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -11,7 +11,7 @@
 ;; or like this:
 ;;      Time-stamp: " "
 (setq time-stamp-line-limit 20)
-(add-hook 'write-file-hooks 'time-stamp)
+(add-hook 'write-file-hooks #'time-stamp)
 
 ;; Duplicate current line or region
 ;; Source: http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
@@ -40,7 +40,7 @@ there's a region, all lines that region covers will be duplicated."
 ;; at the time of saving
 ;; This is very useful for macro definitions in Verilog as for multi-line
 ;; macros, NO space is allowed after line continuation character "\"
-(add-hook 'write-file-hooks 'delete-trailing-whitespace)
+(add-hook 'write-file-hooks #'delete-trailing-whitespace)
 
 ;; Align
 ;; http://stackoverflow.com/questions/6217153/aligning-or-prettifying-code-in-emacs
