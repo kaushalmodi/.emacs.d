@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-11 16:06:51 kmodi>
+;; Time-stamp: <2015-05-14 10:45:48 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -179,7 +179,6 @@ Call `eww-reload' to undo the filtering."
 ;; Auto-refreshing *eww* buffer
 ;; http://emacs.stackexchange.com/a/2566/115
 (use-package filenotify
-  :commands (modi/eww-open-file-with-notify)
   :config
   (progn
     (defun modi/eww-open-file-with-notify (file)
