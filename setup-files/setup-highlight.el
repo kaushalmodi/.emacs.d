@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 11:01:29 kmodi>
+;; Time-stamp: <2015-05-15 12:47:57 kmodi>
 
 ;; Highlight stuff
 
@@ -66,21 +66,21 @@ globally or locally (when called with prefix `C-u')."
 ;; Auto Highlight Symbol
 ;; https://github.com/emacsmirror/auto-highlight-symbol
 (use-package auto-highlight-symbol
-    :config
+  :config
   (progn
     (bind-keys
      :map modi-mode-map
-     ("C-*"             . auto-highlight-symbol-mode)
-     ("<C-kp-multiply>" . auto-highlight-symbol-mode))
+      ("C-*"             . auto-highlight-symbol-mode)
+      ("<C-kp-multiply>" . auto-highlight-symbol-mode))
     (bind-keys
      :map auto-highlight-symbol-mode-map
-     ("M-<left>"    . ahs-backward)
-     ("M-<right>"   . ahs-forward)
-     ("M-S-<left>"  . ahs-backward-definition)
-     ("M-S-<right>" . ahs-forward-definition)
-     ("M--"         . ahs-back-to-start)
-     ("C-x C-'"     . ahs-change-range)
-     ("C-x C-a"     . ahs-edit-mode))))
+      ("M-<left>"    . ahs-backward)
+      ("M-<right>"   . ahs-forward)
+      ("M-S-<left>"  . ahs-backward-definition)
+      ("M-S-<right>" . ahs-forward-definition)
+      ("M--"         . ahs-back-to-start)
+      ("C-x C-'"     . ahs-change-range)
+      ("C-x C-a"     . ahs-edit-mode))))
 
 (>=e "24.4"
      ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
@@ -108,8 +108,10 @@ will not update as you type."
   :config
   (progn
     (toggle-hl-line-when-idle 1) ; Highlight line only when idle
-    (setq hl-line-flash-show-period 5) ; Number of seconds for `hl-line-flash' to highlight the line
-    ))
+    ;; Number of seconds of idle time after when the line should be highlighted
+    (setq hl-line-idle-interval 5)
+    ;; Number of seconds for `hl-line-flash' to highlight the line
+    (setq hl-line-flash-show-period 3)))
 
 
 (provide 'setup-highlight)
