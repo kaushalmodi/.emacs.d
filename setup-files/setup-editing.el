@@ -1,17 +1,18 @@
-;; Time-stamp: <2015-05-13 11:53:26 kmodi>
+;; Time-stamp: <2015-05-15 10:32:47 kmodi>
 
 ;; Functions related to editing text in the buffer
 
 ;; Write time stamps when saving files
-;; Source: http://www.emacswiki.org/emacs/TimeStamp
+;; http://www.emacswiki.org/emacs/TimeStamp
 ;; You can arrange to put a time stamp in a file, so that it is updated
 ;; automatically each time you edit and save the file. The time stamp must be
-;; in the first 8 lines of the file, and you should insert it like this:
+;; in the first few N lines of the file (where N is set by the variable
+;; `time-stamp-line-limit', and you should insert it like this:
 ;;      Time-stamp: <2013-11-28 02:08:29 KModi>
 ;; or like this:
 ;;      Time-stamp: " "
 (setq time-stamp-line-limit 20)
-(add-hook 'write-file-hooks #'time-stamp)
+(add-hook 'before-save-hook #'time-stamp)
 
 ;; Duplicate current line or region
 ;; Source: http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
