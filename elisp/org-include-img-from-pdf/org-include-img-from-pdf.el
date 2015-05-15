@@ -1,9 +1,11 @@
-;; Time-stamp: <2015-02-24 10:05:18 kmodi>
+;; Time-stamp: <2015-05-15 11:04:07 kmodi>
 
 ;; http://emacs.stackexchange.com/a/401/115
 
 ;; Execute the `modi/org-include-img-from-pdf' function just before saving the file
-(add-hook 'before-save-hook #'modi/org-include-img-from-pdf)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'modi/org-include-img-from-pdf nil :local)))
 ;; Execute the `modi/org-include-img-from-pdf' function before processing the
 ;; file for export
 (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf)

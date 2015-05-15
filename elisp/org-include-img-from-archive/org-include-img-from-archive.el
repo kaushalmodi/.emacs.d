@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-27 17:39:43 kmodi>
+;; Time-stamp: <2015-05-15 11:03:51 kmodi>
 
 ;; http://stackoverflow.com/q/28697108/1219634
 
@@ -22,7 +22,9 @@
 ;; folder.
 
 ;; Execute the `modi/org-include-img-from-archive' function just before saving the file
-(add-hook 'before-save-hook #'modi/org-include-img-from-archive)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'modi/org-include-img-from-archive nil :local)))
 ;; Execute the `modi/org-include-img-from-archive' function before processing the
 ;; file for export
 (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 09:34:14 kmodi>
+;; Time-stamp: <2015-05-15 11:18:22 kmodi>
 
 ;; Insert fancybox class to all images when exporting org to html
 ;; Usage: Add the below to org files
@@ -36,8 +36,6 @@
 (setq modi/ox-html-fancybox-img-thumb-suffix "")
 
 (add-hook 'org-export-before-processing-hook #'modi/org-html-add-fancybox)
-;; (add-hook 'before-save-hook #'modi/org-html-add-fancybox)
-(remove-hook 'before-save-hook #'modi/org-html-add-fancybox)
 
 (defun modi/org-html-add-fancybox (&rest ignore)
   "Update TODAY macro to hold string with current date and time."

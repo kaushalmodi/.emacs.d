@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 09:53:55 kmodi>
+;; Time-stamp: <2015-05-15 11:03:39 kmodi>
 
 ;; Updating the #+INCLUDE source code line numbers automatically
 ;; http://emacs.stackexchange.com/q/64/115
@@ -23,7 +23,9 @@
 ;; If both of the above are missing, the `:lines' won't be auto updated
 
 ;; Execute the `endless/update-includes' function just before saving the file
-(add-hook 'before-save-hook #'endless/update-includes)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'endless/update-includes nil :local)))
 
 ;; * The Updater *
 ;; This is the function that goes through the buffer. You can bind it
