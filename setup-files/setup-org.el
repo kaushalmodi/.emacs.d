@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:44:20 kmodi>
+;; Time-stamp: <2015-05-15 11:21:59 kmodi>
 
 ;; Org Mode
 
@@ -349,14 +349,17 @@ Execute this command while the point is on or after the hyper-linked org link."
             ;; "pdflatex -shell-escape %f"
             ;; "pdflatex -shell-escape %f"))
 
-            ;; customization of the minted package (applied to embedded source codes)
-            ;; https://code.google.com/p/minted/
+            ;; minted package options (applied to embedded source codes)
+            ;; https://github.com/gpoore/minted
             (setq org-latex-minted-options
                   '(("linenos")
                     ("numbersep"   "5pt")
                     ("frame"       "none") ; box frame is created by the mdframed package
                     ("framesep"    "2mm")
-                    ;; ("fontfamily"  "zi4") ; Required only when using pdflatex instead of xelatex
+                    ;; ("fontfamily"  "zi4") ; required only when using pdflatex
+                                        ; instead of xelatex
+                    ;; minted 2.0 specific features
+                    ("breaklines") ; line wrapping within code blocks
                     ))
             ;; (add-to-list 'org-latex-classes
             ;;              '("article"
