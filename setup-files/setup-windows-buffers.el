@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-11 14:38:39 kmodi>
+;; Time-stamp: <2015-05-15 17:50:58 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -232,6 +232,10 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 ;;   unless optional second argument VISIBLE-OK is non-nil.
 ;; - If the optional third argument FRAME is non-nil, use that frame's buffer
 ;;   list instead of the selected frame's buffer list.
+
+;; Keep point at its screen position if the scroll command moved it vertically
+;; out of the window, e.g. when scrolling by full screens using C-v.
+(setq scroll-preserve-screen-position t)
 
 ;; Scroll without moving the point/cursor
 (defun scroll-up-dont-move-point ()
