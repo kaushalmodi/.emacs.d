@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-12 09:16:42 kmodi>
+;; Time-stamp: <2015-05-18 16:42:21 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -211,22 +211,47 @@ If ARG is omitted or nil, move point forward one word."
 (use-package avy
   :config
   (progn
-    (setq avy-style 'at-full)
-    (setq avy-styles-alist '((avy-goto-word-1 . pre)))
+    (setq avy-style 'at-pre)
+    (setq avy-styles-alist '((avy-goto-line . at-full)))
 
-    (defun my/avy (arg)
+    (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    ;; Increase the number of keys for `avy-goto-line' so that for the usual
+    ;; case of a 2-window frame, it's possible to jump to any line using just
+    ;; 2-char jump code
+    (setq avy-keys-alist '((avy-goto-line . (?a ?s ?d ?f ?g ?h ?j ?k ?l ?b ?n ?m))))
+
+    (defun modi/avy (arg)
       "
-        `my/avy' -> `avy-goto-word-1'
-    C-u `my/avy' -> `avy-goto-char-2'
-C-u C-u `my/avy' -> `avy-goto-line'
+        `modi/avy' -> `avy-goto-word-1'
+    C-u `modi/avy' -> `avy-goto-char-2'
+C-u C-u `modi/avy' -> `avy-goto-line'
 "
       (interactive "p")
       (let ((avy-all-windows t) ; search in all windows
+            (fci-state-orig (when (featurep 'fill-column-indicator) fci-mode))
             (fn (cl-case arg
                   (4  'avy-goto-char-2) ; C-u
                   (16 'avy-goto-line) ; C-u C-u
-                  (t  'avy-goto-word-1))))
-        (funcall fn)))
+                  (t  'avy-goto-word-1)))
+            (current-prefix-arg nil)) ; Don't pass on this wrapper's args to `fn'
+        (if fci-state-orig
+            (fci-mode 'toggle))
+        (call-interactively fn)
+        (if fci-state-orig
+            (fci-mode 'toggle))))
+
+    (defun modi/goto-line ()
+      "Call `avy-goto-line'.
+If `fci-mode' is enabled, disable it temporarily while `avy-goto-line' is
+being executed."
+      (interactive)
+      (let ((avy-all-windows t) ; search in all windows
+            (fci-state-orig fci-mode))
+        (if fci-state-orig
+            (fci-mode 'toggle))
+        (avy-goto-line)
+        (if fci-state-orig
+            (fci-mode 'toggle))))
 
     (bind-key "C-SPC" #'avy-isearch isearch-mode-map) ; isearch > avy
 
@@ -234,8 +259,8 @@ C-u C-u `my/avy' -> `avy-goto-line'
      :map modi-mode-map
       ;; Important to use my minor mode map as I want my bindings to override
       ;; bindings in other major modes (esp org-mode)
-      ("C-c SPC" . my/avy))
-    (key-chord-define-global "l;" #'my/avy)))
+      ("C-c SPC" . modi/avy))
+    (key-chord-define-global "l;" #'modi/avy)))
 
 ;; Ace Jump
 ;; http://www.emacswiki.org/emacs/AceJump
@@ -254,9 +279,12 @@ C-u C-u `my/avy' -> `avy-goto-line'
 ;; C-u C-u `ace-jump-mode' -> `ace-jump-line-mode'
 
 ;; Key bindings
+(if (featurep 'avy)
+    (bind-key "<f1>" #'modi/goto-line modi-mode-map)
+  (bind-key "<f1>" #'goto-line modi-mode-map))
+
 (bind-keys
  :map modi-mode-map
-  ("<f1>"   . goto-line)
   ;; Move faster
   ("C-S-n"  . next-line-fast)
   ("C-S-p"  . previous-line-fast)
