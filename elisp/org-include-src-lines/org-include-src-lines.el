@@ -1,11 +1,7 @@
-;; Time-stamp: <2015-05-15 11:03:39 kmodi>
+;; Time-stamp: <2015-05-19 11:59:59 kmodi>
 
 ;; Updating the #+INCLUDE source code line numbers automatically
 ;; http://emacs.stackexchange.com/q/64/115
-
-;; Here is another option. This one is let's you customize the regular
-;; expressions on a per-include basis. It should fit better with some
-;; workflows as you're not limited to extension-based definitions.
 
 ;; * To Use *
 ;; Do something like the following in your org-file. (The :lines keyword
@@ -46,13 +42,19 @@ add it to `before-save-hook'."
               "^\\s-*#\\+INCLUDE: *\"\\([^\"]+\\)\".*:range-\\(begin\\|end\\)"
               nil 'noerror)
         (let* ((file (expand-file-name (match-string-no-properties 1)))
+               (adj-begin 0)
+               (adj-end 0)
                lines begin end)
           (forward-line 0)
           (when (looking-at "^.*:range-begin *\"\\([^\"]+\\)\"")
             (setq begin (match-string-no-properties 1)))
           (when (looking-at "^.*:range-end *\"\\([^\"]+\\)\"")
             (setq end (match-string-no-properties 1)))
-          (setq lines (endless/decide-line-range file begin end))
+          (when (looking-at "^.*:adj-begin *\\([-+0-9]+\\)")
+            (setq adj-begin (string-to-number (match-string-no-properties 1))))
+          (when (looking-at "^.*:adj-end *\\([-+0-9]+\\)")
+            (setq adj-end (string-to-number (match-string-no-properties 1))))
+          (setq lines (endless/decide-line-range file begin end adj-begin adj-end))
           (when lines
             (if (looking-at ".*:lines *\"\\([-0-9]+\\)\"")
                 (replace-match lines :fixedcase :literal nil 1)
@@ -62,9 +64,11 @@ add it to `before-save-hook'."
 ;; * The background worker *
 ;; This is the guy that does most of the work.
 
-(defun endless/decide-line-range (file begin end)
+(defun endless/decide-line-range (file begin end adj-begin adj-end)
   "Visit FILE and decide which lines to include.
-BEGIN and END are regexps which define the line range to use."
+BEGIN and END are regexps which define the line range to use.
+ADJ-BEGIN is a positive/negative integer to add to the beginning line number.
+ADJ-END is a positive/negative integer to add to the ending line number."
   (let (l r)
     (save-match-data
       (with-temp-buffer
@@ -73,11 +77,13 @@ BEGIN and END are regexps which define the line range to use."
         (if (null begin)
             (setq l "")
           (search-forward-regexp begin)
-          (setq l (line-number-at-pos (match-beginning 0))))
+          (setq l (line-number-at-pos (match-beginning 0)))
+          (setq l (+ l adj-begin)))
         (if (null end)
             (setq r "")
           (search-forward-regexp end)
-          (setq r (1+ (line-number-at-pos (match-end 0)))))
+          (setq r (1+ (line-number-at-pos (match-end 0))))
+          (setq r (+ r adj-end)))
         (format "%s-%s" l r)))))
 
 
