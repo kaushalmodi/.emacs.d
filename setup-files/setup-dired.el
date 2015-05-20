@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 11:06:32 kmodi>
+;; Time-stamp: <2015-05-19 17:27:18 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
@@ -90,24 +90,7 @@ It added extra strings at the front and back of the default dired buffer name."
      :map dired-mode-map
       ("<return>"         . dired-single-buffer)
       ("<double-mouse-1>" . dired-single-buffer-mouse)
-      ("^"                . dired-single-up-directory))
-
-    ;; http://oremacs.com/2015/02/21/hydra-docstring-sexp
-    (defhydra hydra-dired-marked (dired-mode-map "" :color pink)
-      "
-Number of marked items: %(length (dired-get-marked-files))
-"
-      ("m"   dired-mark                      "mark")
-      ("u"   dired-unmark                    "unmark")
-      ("U"   dired-unmark-all-marks          "unmark ALL")
-      ("t"   dired-toggle-marks              "toggle marks")
-      ("P"   dired-prev-marked-file          "prev marked")
-      ("M-{" dired-prev-marked-file          "prev marked")
-      ("N"   dired-next-marked-file          "next marked")
-      ("M-}" dired-next-marked-file          "next marked")
-      ("w"   dired-copy-filename-as-kill     "copy file name(s)")
-      ("W"   (dired-copy-filename-as-kill 0) "copy file name(s) - full path")
-      ("C-g" nil                             "cancel" :color blue))))
+      ("^"                . dired-single-up-directory))))
 
 
 (provide 'setup-dired)
