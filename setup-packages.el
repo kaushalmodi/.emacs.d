@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-27 17:06:50 kmodi>
+;; Time-stamp: <2015-05-20 00:02:31 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -39,8 +39,10 @@
              (concat user-emacs-directory "/elisp/smyx/"))
 
 ;; Add melpa package source when using package list
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+;; For org-plus-contrib
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 ;; Load emacs packages and activate them
 ;; This must come before configurations of installed packages.

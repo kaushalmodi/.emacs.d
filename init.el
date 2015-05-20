@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-12 15:37:19 kmodi>
+;; Time-stamp: <2015-05-19 23:58:08 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -86,7 +86,7 @@
         neotree
         nlinum ; reviews say it's better than linum
         number ; number manipulation
-        org htmlize poporg ; Get the latest org-mode package from MELPA
+        org-plus-contrib htmlize poporg ; Get the latest org-mode package from MELPA
                                         ; poporg to edit comments from any other mode in org mode
         org-tree-slide
         ox-reveal ; Using branch 'stable' from github; used to export to HTML slides

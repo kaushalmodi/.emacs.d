@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-14 10:45:48 kmodi>
+;; Time-stamp: <2015-05-20 00:05:17 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -114,7 +114,7 @@ If OPTION is 16 (`C-u C-u'), copy the page url."
     ;; e.g. Copied HTML hyperlinks get converted to [[link][desc]] for org mode.
     ;; http://emacs.stackexchange.com/a/8191/115
     (use-package org-eww
-      :load-path "elisp/org-mode/contrib/lisp"
+      :load-path "elisp/org-eww"
       :commands (org-eww-copy-for-org-mode)
       :init
       (bind-keys
