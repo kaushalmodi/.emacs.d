@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-19 23:58:08 kmodi>
+;; Time-stamp: <2015-05-21 10:51:48 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -107,7 +107,6 @@
         sunshine
         swiper
         sx
-        ;; symon ; system monitor in mode-line
         tiny
         undo-tree ; supercool undo visualization
         use-package ; optimize package loading
@@ -240,7 +239,6 @@
 (require 'setup-xkcd)
 (require 'setup-yafolding)
 (require 'setup-yasnippet)
-;; (require 'setup-symon) ; testing `minibuffer-line' instead of `symon'
 ;; (require 'setup-fiplr)
 ;; (require 'setup-workgroups2)
 
