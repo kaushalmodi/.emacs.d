@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-12 15:08:12 kmodi>
+;; Time-stamp: <2015-05-22 11:51:13 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -56,7 +56,7 @@ If universal arg is used, load the `init.el'."
                       ("csh" . "tcsh")
                       ("pl"  . "perl")))
          (fName    (if eval-init
-                       (concat user-emacs-directory "/init.el")
+                       (expand-file-name "init.el" user-emacs-directory)
                      (buffer-file-name)))
          (fSuffix  (file-name-extension fName))
          (progName (cdr (assoc fSuffix suffixMap)))
@@ -176,29 +176,22 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
 ._a_lias     _e_macs init     ._g_pms     _i_ndex.html     _j_ournal     _o_rg Manual     ._t_mux.conf     IEEE system_v_erilog Std     _V_erilog-mode.el
 "
   ("a" (find-file
-        (concat user-home-directory
-                "/.alias")))
+        (expand-file-name ".alias" user-home-directory)))
   ("e" (find-file
-        (concat user-emacs-directory
-                "/init.el")))
+        (expand-file-name "init.el" user-emacs-directory)))
   ("g" (find-file
-        (concat user-home-directory
-                "/scripts/gpms/.gpms")))
+        (expand-file-name ".gpms" (concat user-home-directory "scripts/gpms/"))))
   ("i" (find-file
-        (concat user-home-directory
-                "/public_html/index.html")))
+        (expand-file-name "index.html" (concat user-home-directory "public_html/"))))
   ("j" (find-file
-        (concat org-directory
-                "/journal.org")))
+        (expand-file-name "journal.org" org-directory)))
   ("o" (find-file
-        (concat org-directory
-                "/org_man/org_man.org")))
+        (expand-file-name "org_man.org" (concat org-directory "org_man/"))))
   ("t" (find-file
-        (concat user-home-directory
-                "/.tmux.conf")))
+        (expand-file-name ".tmux.conf" user-home-directory)))
   ("v" (find-file
-        (concat user-home-directory
-                "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf")))
+        (expand-file-name "IEEE_STD_1800-2012_SystemVerilog.pdf"
+                          (concat user-home-directory "docs/"))))
   ("V" (eww "http://www.veripool.org/ftp/verilog-mode.el"))
   ("q" nil "cancel" :color blue))
 (defhydra hydra-launch (:color teal

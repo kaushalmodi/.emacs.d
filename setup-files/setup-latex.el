@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 15:56:21 kmodi>
+;; Time-stamp: <2015-05-22 11:46:04 kmodi>
 ;;
 ;; LaTeX
 ;;
@@ -14,7 +14,7 @@
 ;; 4. make
 ;; 5. make install
 
-(defvar auctex-install-dir (concat user-emacs-directory "/auctex")
+(defvar auctex-install-dir (concat user-emacs-directory "auctex/") ; must end with /
   "AucTeX install directory.")
 
 (when (file-exists-p auctex-install-dir)

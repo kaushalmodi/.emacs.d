@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:47:20 kmodi>
+;; Time-stamp: <2015-05-22 12:15:31 kmodi>
 
 ;; PDF
 
@@ -23,15 +23,15 @@ pdf-tools package.
 
 If pdf-tools is installed in the elisp/ directory, that path is returned
 instead of the one present in `package-user-dir'."
-      (interactive)
       (let ((pdf-tools-epdfinfo-dir))
         ;; Use the package version in elisp/pdf-tools dir if available
         (if (locate-file "pdf-tools.el" (list (concat user-emacs-directory
-                                                      "/elisp/pdf-tools/lisp")))
+                                                      "elisp/pdf-tools/lisp/")))
             (progn
               (setq pdf-tools-epdfinfo-dir (concat user-emacs-directory
-                                                   "/elisp/pdf-tools/"
-                                                   pdf-tools-github-version-name))
+                                                   "elisp/pdf-tools/"
+                                                   pdf-tools-github-version-name
+                                                   "/"))
               pdf-tools-epdfinfo-dir)
           ;; Else use the package manager installed version
           ;; Get a list of directories and files in `package-user-dir'
@@ -58,7 +58,7 @@ instead of the one present in `package-user-dir'."
       ;; Update the `pdf-info-epdfinfo-program' variable to point to
       ;; the directory containing the latest version of `pdf-tools'
       (setq pdf-info-epdfinfo-program
-            (concat (my/get-latest-pdf-tools-dir) "/epdfinfo"))
+            (expand-file-name "epdfinfo" (my/get-latest-pdf-tools-dir)))
       ;; Call the original `pdf-tools-install' function after updating the
       ;; `pdf-info-epdfinfo-program' variable
       (pdf-tools-install))

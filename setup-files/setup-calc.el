@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 09:47:14 kmodi>
+;; Time-stamp: <2015-05-22 12:01:07 kmodi>
 
 ;; Calculator
 
@@ -6,8 +6,9 @@
   :commands (calc quick-calc)
   :init
   (progn
-    (setq calc-settings-file (concat user-emacs-directory
-                                     "/setup-files/setup-calc-defaults.el"))
+    (setq calc-settings-file (expand-file-name
+                              "setup-calc-defaults.el"
+                              (concat user-emacs-directory "setup-files/")))
 
     (bind-keys
      :map modi-mode-map

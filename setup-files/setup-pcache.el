@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:33 kmodi>
+;; Time-stamp: <2015-05-22 12:06:42 kmodi>
 
 ;; Pcache
 
@@ -7,7 +7,7 @@
   (progn
     (setq pcache-directory
           (let ((dir (concat user-emacs-directory
-                             "/var_"
+                             "var_"
                              emacs-version-short
                              "/pcache/")))
             (make-directory dir t)

@@ -1,19 +1,23 @@
-;; Time-stamp: <2014-11-13 13:07:37 kmodi>
+;; Time-stamp: <2015-05-22 11:58:34 kmodi>
 
 ;; Source: http://stackoverflow.com/questions/12558019/shortcut-to-open-a-specific-file-in-emacs
 ;; Source: http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Registers.html#File-Registers
 ;; Save the frequently accessed file locations in registers for quick access
 
 
-(set-register ?e (cons 'file (concat user-emacs-directory "/init.el"))) ;; C-x r j e
+(set-register ?e (cons 'file (expand-file-name "init.el" user-emacs-directory))) ;; C-x r j e
 
-(set-register ?j (cons 'file (concat org-directory "/journal.org"))) ;; C-x r j j
+(set-register ?j (cons 'file (expand-file-name "journal.org" org-directory))) ;; C-x r j j
 
-(set-register ?a (cons 'file (concat user-home-directory "/.alias"))) ;; C-x r j a
-(set-register ?t (cons 'file (concat user-home-directory "/.tmux.conf"))) ;; C-x r j t
-(set-register ?i (cons 'file (concat user-home-directory "/public_html/index.html"))) ;; C-x r j i
+(set-register ?a (cons 'file (expand-file-name ".alias" user-home-directory ))) ;; C-x r j a
+(set-register ?t (cons 'file (expand-file-name ".tmux.conf" user-home-directory ))) ;; C-x r j t
+(set-register ?i (cons 'file (expand-file-name
+                              "index.html"
+                              (concat user-home-directory "public_html/")))) ;; C-x r j i
 
-(set-register ?v (cons 'file (concat user-home-directory "/docs/IEEE_STD_1800-2012_SystemVerilog.pdf"))) ;; C-x r j v
+(set-register ?v (cons 'file (expand-file-name
+                              "IEEE_STD_1800-2012_SystemVerilog.pdf"
+                              (concat user-home-directory "docs/")))) ;; C-x r j v
 
 
 (provide 'setup-registers)

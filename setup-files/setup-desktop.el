@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-29 16:39:57 kmodi>
+;; Time-stamp: <2015-05-22 12:08:50 kmodi>
 
 ;; Desktop save and restore
 
@@ -122,7 +122,7 @@
 ;; (setq desktop-dirname user-emacs-directory)
 ;; (setq desktop-path (list desktop-dirname))
 ;; (setq desktop-base-file-name "emacs-desktop")
-;; (setq desktop-file-name (concat desktop-dirname "/" desktop-base-file-name))
+;; (setq desktop-file-name (expand-file-name desktop-base-file-name desktop-dirname))
 
 ;; ;; remove desktop after it's been read
 ;; (add-hook 'desktop-after-read-hook

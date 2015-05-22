@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-03-03 09:19:56 kmodi>
+;; Time-stamp: <2015-05-22 11:53:42 kmodi>
 
 ;; server setup
 
@@ -10,8 +10,8 @@
 (use-package server
   :init
   (progn
-    (setq server-auth-dir (concat user-emacs-directory "/server_"
-                                  emacs-version-short))
+    (setq server-auth-dir (concat user-emacs-directory "server_"
+                                  emacs-version-short "/"))
 
     (unless (file-exists-p server-auth-dir)
       (make-directory server-auth-dir)))

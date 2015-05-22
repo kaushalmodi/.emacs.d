@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-21 10:51:48 kmodi>
+;; Time-stamp: <2015-05-22 11:44:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -7,12 +7,12 @@
 ;; (setq debug-on-message "Making tags")
 
 ;; Global variables
-(setq user-home-directory  (getenv "HOME"))
-(setq user-emacs-directory (concat user-home-directory "/.emacs.d"))
+(setq user-home-directory  (concat (getenv "HOME") "/")) ; must end with /
+(setq user-emacs-directory (concat user-home-directory ".emacs.d/")) ; must end with /
 (setq emacs-version-short  (replace-regexp-in-string
                             "\\([0-9]+\\)\\.\\([0-9]+\\).*"
                             "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
-(setq org-directory        (concat user-home-directory "/org"))
+(setq org-directory        (concat user-home-directory "org/")) ; must end with /
 (setq setup-packages-file  (expand-file-name
                             "setup-packages.el"
                             user-emacs-directory))

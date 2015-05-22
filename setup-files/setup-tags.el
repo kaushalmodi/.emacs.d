@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-24 15:46:26 kmodi>
+;; Time-stamp: <2015-05-22 11:59:26 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -21,14 +21,14 @@
 
       ;; emacs config
       (add-to-list 'etags-table-alist
-                   `(,(concat user-emacs-directory "/.*")
-                     ,(concat user-emacs-directory "/TAGS")))
+                   `(,(concat user-emacs-directory ".*")
+                     ,(concat user-emacs-directory "TAGS")))
 
       ;; add-to-list if uvm-source-code-dir symbol is defined
       (when (boundp 'uvm-source-code-dir)
         (add-to-list 'etags-table-alist
-                     `(,(concat uvm-source-code-dir "/.*")
-                       ,(concat uvm-source-code-dir "/TAGS"))
+                     `(,(concat uvm-source-code-dir ".*")
+                       ,(concat uvm-source-code-dir "TAGS"))
                      t))
       ;; Max depth to search up for a tags file; nil means don't search
       (setq etags-table-search-up-depth 15)
