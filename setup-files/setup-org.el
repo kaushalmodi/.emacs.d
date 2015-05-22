@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-15 11:21:59 kmodi>
+;; Time-stamp: <2015-05-22 12:12:22 kmodi>
 
 ;; Org Mode
 
@@ -54,13 +54,13 @@
     ;; http://orgmode.org/manual/Template-expansion.html
     (setq org-capture-templates
           '(("j" "Journal" entry ; `org-capture' binding + j
-             (file+datetree (concat org-directory "/journal.org"))
+             (file+datetree (expand-file-name "journal.org" org-directory))
              "\n* %?\n  Entered on %U")
             ("n" "Note" entry ; `org-capture' binding + n
-             (file (concat org-directory "/notes.org"))
+             (file (expand-file-name "notes.org" org-directory))
              "\n* %?\n  Context:\n    %i\n  Entered on %U")
             ("u" "UVM/System Verilog Notes" ; `org-capture' binding + u
-             entry (file (concat org-directory "/uvm.org"))
+             entry (file (expand-file-name "uvm.org" org-directory))
              "\n* %?\n  Context:\n    %i\n  Entered on %U")))
 
     (setq org-agenda-files (expand-file-name "agenda.files" org-directory))
@@ -88,10 +88,10 @@
     ;; http://pages.sachachua.com/.emacs.d/Sacha.html
     (setq org-ditaa-jar-path (expand-file-name
                               "ditaa.jar"
-                              (concat user-emacs-directory "/software")))
+                              (concat user-emacs-directory "software/")))
     (setq org-plantuml-jar-path (expand-file-name
                                  "plantuml.jar"
-                                 (concat user-emacs-directory "/software")))
+                                 (concat user-emacs-directory "software/")))
 
     ;; (setq org-startup-with-inline-images t)
     ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
@@ -260,7 +260,7 @@ Execute this command while the point is on or after the hyper-linked org link."
             ;; ox-latex patches
             (load (expand-file-name
                    "ox-latex-patches.el"
-                   (concat user-emacs-directory "/elisp/patches"))
+                   (concat user-emacs-directory "elisp/patches/"))
                   nil :nomessage)
             ;; Previewing latex fragments in org mode
             ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
@@ -382,7 +382,7 @@ Execute this command while the point is on or after the hyper-linked org link."
             ;; ox-html patches
             (load (expand-file-name
                    "ox-html-patches.el"
-                   (concat user-emacs-directory "/elisp/patches"))
+                   (concat user-emacs-directory "elisp/patches/"))
                   nil :nomessage)
 
             (use-package ox-html-fancybox
@@ -437,7 +437,7 @@ Execute this command while the point is on or after the hyper-linked org link."
         (use-package ox-reveal
           :config
           (progn
-            (setq org-reveal-root    (concat user-emacs-directory "/software/reveal.js/"))
+            (setq org-reveal-root    (concat user-emacs-directory "software/reveal.js/"))
             (setq org-reveal-hlevel  1)
             (setq org-reveal-theme   "default") ; beige blood moon night serif simple sky solarized
             (setq org-reveal-mathjax t))) ; Use mathjax.org to render LaTeX equations
