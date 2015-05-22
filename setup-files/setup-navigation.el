@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-18 16:42:21 kmodi>
+;; Time-stamp: <2015-05-22 12:31:46 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -211,7 +211,7 @@ If ARG is omitted or nil, move point forward one word."
 (use-package avy
   :config
   (progn
-    (setq avy-style 'at-pre)
+    (setq avy-style 'pre)
     (setq avy-styles-alist '((avy-goto-line . at-full)))
 
     (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
