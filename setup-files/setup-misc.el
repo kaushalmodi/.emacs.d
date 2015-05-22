@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 11:51:13 kmodi>
+;; Time-stamp: <2015-05-22 13:14:46 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -28,12 +28,16 @@
 (setq save-interprogram-paste-before-kill t)
 
 ;; url
+;; First delete the old `url/' directory if present
+(let ((url-dir-old (concat user-emacs-directory "url/")))
+  (when (file-exists-p url-dir-old)
+    (delete-directory url-dir-old :recursive)))
 ;; Solve the issue with `sx.el' when using that package simultaneously in
 ;; different emacs versions
-(setq url-configuration-directory (locate-user-emacs-file
-                                   (concat "url_"
-                                           emacs-version-short
-                                           "/") "url/"))
+(setq url-configuration-directory (let ((dir (concat user-emacs-directory
+                                                     "url_" emacs-version-short "/")))
+                                    (make-directory dir :parents)
+                                    dir))
 
 ;; Execute the script in current buffer
 ;; Source: http://ergoemacs.org/emacs/elisp_run_current_file.html
