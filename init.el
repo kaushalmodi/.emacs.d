@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 11:44:45 kmodi>
+;; Time-stamp: <2015-05-22 12:48:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -55,8 +55,9 @@
         fold-this
         gist
         git-timemachine ; walk through git revisions
+        google-contacts
         gplusify ; copy region with formatting for G+ posts
-        etags-select etags-table ctags-update ggtags helm-gtags
+        ggtags helm-gtags etags-select etags-table ctags-update
         guide-key
         hardcore-mode
         header2
@@ -197,6 +198,7 @@
 (require 'setup-fci)
 (require 'setup-fold-this)
 (require 'setup-gist)
+(require 'setup-google-contacts)
 (require 'setup-guide-key)
 (require 'setup-hardcore)
 (require 'setup-header2)
