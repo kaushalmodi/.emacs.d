@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 11:59:26 kmodi>
+;; Time-stamp: <2015-05-26 16:49:00 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -131,32 +131,6 @@
                       makefile-mode-hook))
         (add-hook hook #'ggtags-mode))
 
-      ;; Patch - Enable "-d" option
-      (defun ggtags-global-build-command (cmd &rest args)
-        ;; CMD can be definition, reference, symbol, grep, idutils
-        (let ((xs (append (list (shell-quote-argument (ggtags-program-path "global"))
-                                "-v"
-                                (format "--result=%s" ggtags-global-output-format)
-                                (and ggtags-global-ignore-case "--ignore-case")
-                                (and ggtags-global-use-color
-                                     (ggtags-find-project)
-                                     (ggtags-project-has-color (ggtags-find-project))
-                                     "--color=always")
-                                (and (ggtags-find-project)
-                                     (ggtags-project-has-path-style (ggtags-find-project))
-                                     "--path-style=shorter")
-                                (and ggtags-global-treat-text "--other")
-                                (pcase cmd
-                                  ((pred stringp) cmd)
-                                  (`definition "-d") ;-d not supported by Global 5.7.1
-                                  (`reference "--reference")
-                                  (`symbol "--symbol")
-                                  (`path "--path")
-                                  (`grep "--grep")
-                                  (`idutils "--idutils")))
-                          args)))
-          (mapconcat #'identity (delq nil xs) " ")))
-
       ;; Don't consider ` (back quote) as part of `tag' when looking for a
       ;; Verilog macro definition
       (defun ggtags-tag-at-point ()
@@ -175,8 +149,9 @@
       (key-chord-define-global "??" #'ggtags-show-definition)))
 
 ;;; helm-gtags
-  (use-package helm-gtags)
-  )
+  (use-package helm-gtags
+    :commands (helm-gtags-find-tag
+               helm-gtags-dwim)))
 
 (defun modi/find-tag (&optional arg)
   "Use `helm-gtags' if available.
@@ -185,8 +160,10 @@ Else use `ctags' to find tags.
 If prefix arg is used, use `ctags'."
   (interactive "P")
   (if (and (null arg)
-           (featurep 'helm-gtags))
-      (helm-gtags-find-tag (helm-gtags--token-at-point 'tag))
+           (featurep 'ggtags))
+      (call-interactively #'ggtags-find-tag-dwim)
+    ;; (featurep 'helm-gtags))
+    ;; (helm-gtags-find-tag (helm-gtags--token-at-point 'tag))
     (update-etags-table-then-find-tag)))
 (bind-key "M-." #'modi/find-tag)
 
