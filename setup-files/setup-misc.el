@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 13:14:46 kmodi>
+;; Time-stamp: <2015-05-26 11:58:59 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -97,6 +97,11 @@ If universal arg is used, load the `init.el'."
       ("c"   . describe-key-briefly)
       ("C-c" . describe-command))))
 (bind-key "C" #'describe-char help-map)
+
+(>=e "25.0"
+     (use-package saveplace
+       :config
+       (save-place-mode 1)))
 
 ;; Unset keys
 (global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
