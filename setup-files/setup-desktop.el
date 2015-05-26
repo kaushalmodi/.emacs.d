@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 12:08:50 kmodi>
+;; Time-stamp: <2015-05-23 11:01:39 kmodi>
 
 ;; Desktop save and restore
 
@@ -49,8 +49,10 @@
 
     ;; Don't save .gpg files. Restoring those files in emacsclients causes
     ;; a problem as the password prompt appears before the frame is loaded.
-    (setq desktop-files-not-to-save (concat desktop-files-not-to-save
+    (setq desktop-files-not-to-save (concat "\\(^/[^/:]*:\\|(ftp)$\\)" ; original val
                                             "\\|\\(\\.gpg$\\)"
+                                            "\\|\\(\\.plstore$\\)"
+                                            "\\|\\(\\.desktop$\\)"
                                             "\\|\\(\\TAGS$\\)"))
 
     ;; Don't save the eww buffers
