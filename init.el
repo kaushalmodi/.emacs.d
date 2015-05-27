@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 14:14:12 kmodi>
+;; Time-stamp: <2015-05-27 15:04:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -24,7 +24,9 @@
 (setq my-packages
       '(
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
-        ;; outshine < my forked version
+        ;; outshine ; < my forked version
+        ;; popwin ; < shackle
+        ;; hl-anything ; temporarily removing it, bugs
         ace-jump-mode ; < avy
         ace-window
         adaptive-wrap ; indented line wrapping
@@ -57,13 +59,12 @@
         git-timemachine ; walk through git revisions
         google-contacts
         gplusify ; copy region with formatting for G+ posts
-        ggtags helm-gtags etags-select etags-table ctags-update
+        ggtags etags-select etags-table ctags-update helm-gtags
         guide-key
         hardcore-mode
         header2
         helm helm-swoop
         help-fns+
-        ;; hl-anything ; temporarily removing it, bugs
         hl-line+
         hungry-delete
         hydra
@@ -88,25 +89,25 @@
         neotree
         nlinum ; reviews say it's better than linum
         number ; number manipulation
-        org-plus-contrib htmlize poporg ; Get the latest org-mode package from MELPA
-                                        ; poporg to edit comments from any other mode in org mode
+        org-plus-contrib htmlize
         org-tree-slide
         ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         outorg navi-mode ; supporting packages for outshine
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
-        popwin ; Open windows like *Help*, *Completions*, etc in minibuffer
+        poporg ; edit comments from any other mode in org mode
         projectile ; Better than fiplr
         rainbow-delimiters
         rainbow-mode
         rectangle-utils
         region-bindings-mode ; complements really well with multiple-cursors
         rpn-calc
+        shackle
         smart-compile
         smart-mode-line popup rich-minority
         smex ; smart M-x
         stripe-buffer
-        sunshine
+        sunshine ; weather
         swiper
         sx
         tiny
@@ -173,7 +174,6 @@
 ;; End of basic requires
 
 ;; Set up the looks of emacs
-(require 'setup-popwin) ; require popwin first as packages might depend on it
 (require 'setup-mode-line)
 (require 'setup-visual)
 
@@ -229,6 +229,7 @@
 (require 'setup-rainbow-delimiters)
 (require 'setup-rainbow-mode)
 (require 'setup-server)
+(require 'setup-shackle)
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
