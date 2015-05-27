@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-15 17:50:58 kmodi>
+;; Time-stamp: <2015-05-27 17:28:38 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -444,6 +444,27 @@ the current window and the windows state prior to that.
       (when modi/toggle-one-window--buffer-name
         (set-window-configuration modi/toggle-one-window--window-configuration)
         (switch-to-buffer modi/toggle-one-window--buffer-name)))))
+
+;; Control where to display the *Messages* buffer
+;; http://emacs.stackexchange.com/a/12749/115
+(defun drew/view-echo-area-messages ()
+  "Display the *Messages* buffer as I mean.
+
+- If the frame has just 1 window, split the frame to create a new window and
+  show *Messages* in that new window.
+- If the frame already has 2 or more windows, display *Messages* in the other
+  window (not the current one).
+- If the current window is already displaying *Messages* buffer, do NOTHING."
+  (interactive)
+  (unless (equal "*Messages*" (buffer-name (window-buffer)))
+    (display-buffer "*Messages*" (if (one-window-p)
+                                     #'display-buffer-pop-up-window
+                                   #'display-buffer-reuse-window))))
+(bind-key "C-h e" #'drew/view-echo-area-messages modi-mode-map)
+;; (add-to-list 'display-buffer-alist
+;;              '("\\*Messages\\*" . ((display-buffer-reuse-window
+;;                                     display-buffer-pop-up-window)
+;;                                    . ((inhibit-same-window . t)))))
 
 ;; https://tsdh.wordpress.com/2015/03/03/swapping-emacs-windows-using-dragndrop/
 (defun th/swap-window-buffers-by-dnd (drag-event)
