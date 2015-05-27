@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-26 11:58:59 kmodi>
+;; Time-stamp: <2015-05-27 13:11:59 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -128,10 +128,10 @@ If universal arg is used, load the `init.el'."
        (setq-default auto-revert-use-notify nil)))
 
 ;; Special Mode Map
-;; Kill buffer instead of simply quitting the window on pressing `q'
-;; Instead quit window on pressing `z'
+;; Kill buffer in addition to quitting the window on pressing `q'
+;; Only quit window (and bury the buffer) on pressing `z'
 ;; `special-mode' is a read-only major mode (simple.el)
-(define-key special-mode-map (kbd "q") (λ (kill-buffer (current-buffer))))
+(define-key special-mode-map (kbd "q") (λ (quit-window :kill)))
 (define-key special-mode-map (kbd "z") #'quit-window)
 
 ;; Toggles
