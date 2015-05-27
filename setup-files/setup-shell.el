@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-23 16:19:52 kmodi>
+;; Time-stamp: <2015-05-27 16:06:11 kmodi>
 
 ;; Shell Script Mode
 
@@ -29,8 +29,8 @@
 ;; Don't display async command execution windows
 ;; http://emacs.stackexchange.com/a/5554/115
 (add-to-list 'display-buffer-alist
-             (cons "\\*Async Shell Command\\*.*"
-                   (cons #'display-buffer-no-window nil)))
+             '("\\*Async Shell Command\\*.*" . ((display-buffer-no-window)
+                                                . ())))
 
 
 (provide 'setup-shell)
