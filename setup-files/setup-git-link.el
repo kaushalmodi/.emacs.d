@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-04-22 09:47:50 kmodi>
+;; Time-stamp: <2015-05-27 14:14:20 kmodi>
 
 ;; Diff-hl
 ;; https://github.com/sshaw/git-link
 
 (use-package git-link
-  :load-path "elisp/git-link"
+  ;; :load-path "elisp/git-link"
   :config
   (progn
     (defun git-link-force-hash ()

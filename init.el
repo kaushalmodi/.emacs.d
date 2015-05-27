@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 12:48:30 kmodi>
+;; Time-stamp: <2015-05-27 14:14:12 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -24,7 +24,6 @@
 (setq my-packages
       '(
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
-        ;; interleave ; takes notes associated to pdf files in org mode ; using fork
         ;; outshine < my forked version
         ace-jump-mode ; < avy
         ace-window
@@ -54,6 +53,7 @@
         fill-column-indicator
         fold-this
         gist
+        git-link ; get git links with line numbers and commit-hash/branch
         git-timemachine ; walk through git revisions
         google-contacts
         gplusify ; copy region with formatting for G+ posts
@@ -70,6 +70,7 @@
         ibuffer-projectile
         ido-vertical-mode flx-ido ido-ubiquitous
         indent-guide
+        interleave ; takes notes associated to pdf files in org mode
         iregister ; Interactive access to registers
         isend-mode ; used in setup-perl.el
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim

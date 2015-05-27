@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 12:15:31 kmodi>
+;; Time-stamp: <2015-05-27 14:11:09 kmodi>
 
 ;; PDF
 
@@ -72,7 +72,7 @@ instead of the one present in `package-user-dir'."
 
 ;; https://github.com/rudolfochrist/interleave
 (use-package interleave
-  :load-path "elisp/interleave"
+  ;; :load-path "elisp/interleave"
   :init
   (progn
     (with-eval-after-load 'doc-view
