@@ -1,14 +1,15 @@
-;; Time-stamp: <2015-03-16 09:20:55 kmodi>
+;; Time-stamp: <2015-05-27 14:29:06 kmodi>
 
 ;; Popwin
-;; Source: https://github.com/m2ym/popwin-el
+;; https://github.com/m2ym/popwin-el
+
 ;; popwin is a popup window manager for Emacs which makes you free from the hell
-;; of annoying buffers such like *Help*, *Completions*, *compilation*, and etc.
+;; of annoying buffers such like *Help*, *Completions*, *compilation*, etc.
 ;; Windows of such temporary buffers will be shown as a popup window, and you
 ;; can close them smoothly by typing `C-g' in anytime.
 
 (use-package popwin
-    :config
+  :config
   (progn
     ;; Special Display Config
     ;; M-!
@@ -39,15 +40,18 @@
 ;; is a string or a symbol, PATTERN will be CONFIG and KEYWORDS will be
 ;; empty. Available keywords are following:
 ;;
+;; |-----------------+--------------------------------------------------------------|
+;; | Keyword         | Description                                                  |
+;; |-----------------+--------------------------------------------------------------|
 ;; | :regexp         | If the value is non-nil, PATTERN will be used as regexp      |
 ;; |                 | to matching buffer.                                          |
 ;; | :width, :height | Specify width or height of the popup window. If no size      |
-;; |                 | specified, popwin:popup-window-width or                      |
-;; |                 | popwin:popup-window-height will be used.                     |
-;; |                 | See also position keyword.                                   |
+;; |                 | specified, `popwin:popup-window-width' or                    |
+;; |                 | `popwin:popup-window-height' will be used.                   |
+;; |                 | See also :position keyword.                                  |
 ;; | :position       | The value must be one of (left top right bottom). The        |
 ;; |                 | popup window will shown at the position of the frame. If     |
-;; |                 | no position specified, popwin:popup-window-position will     |
+;; |                 | no position specified, `popwin:popup-window-position' will   |
 ;; |                 | be used.                                                     |
 ;; | :noselect       | If the value is non-nil, the popup window will not be        |
 ;; |                 | selected when it is shown.                                   |
@@ -60,3 +64,4 @@
 ;; |                 | it is shown.                                                 |
 ;; | :tail           | If the value is non-nil, the popup window will show the      |
 ;; |                 | last contents.                                               |
+;; |-----------------+--------------------------------------------------------------|
