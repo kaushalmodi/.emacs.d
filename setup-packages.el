@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-20 00:02:31 kmodi>
+;; Time-stamp: <2015-05-28 11:09:46 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -23,20 +23,18 @@
 (defun append-path ( my-path )
   (setq load-path (append load-path (list (expand-file-name my-path)))))
 
-(prepend-path (concat user-emacs-directory "/elisp"))
-(prepend-path (concat user-emacs-directory "/setup-files"))
+(prepend-path (concat user-emacs-directory "elisp/"))
+(prepend-path (concat user-emacs-directory "setup-files/"))
 
 ;; Create the package install directory if it doesn't exist
-(setq package-user-dir (concat user-emacs-directory "/elpa_"
-                               emacs-version-short)) ; default = ~/.emacs.d/elpa
-(unless (file-exists-p package-user-dir)
-  (make-directory package-user-dir))
+(setq package-user-dir (concat user-emacs-directory "elpa_"
+                               emacs-version-short "/")) ; default = ~/.emacs.d/elpa/
 
 ;; add theme paths
 (add-to-list 'custom-theme-load-path
-             (concat user-emacs-directory "/elisp/zenburn-emacs/"))
+             (concat user-emacs-directory "elisp/zenburn-emacs/"))
 (add-to-list 'custom-theme-load-path
-             (concat user-emacs-directory "/elisp/smyx/"))
+             (concat user-emacs-directory "elisp/smyx/"))
 
 ;; Add melpa package source when using package list
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
