@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-15 10:32:47 kmodi>
+;; Time-stamp: <2015-05-28 14:39:07 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -284,24 +284,14 @@ instead of ASCII characters for adorning the copied snippet."
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 (use-package rectangle-utils
-  :commands (modi/extend-rectangle-to-end)
+  :load-path "elisp/rectangle-utils"
+  :commands (extend-rectangle-to-end)
   :init
   (progn
     (when (featurep 'region-bindings-mode)
       (bind-keys
        :map region-bindings-mode-map
-        ("|" . modi/extend-rectangle-to-end))))
-  :config
-  (progn
-    (defun modi/extend-rectangle-to-end(beg end)
-      "Make `extend-rectangle-to-end' work for read-only buffers too."
-      (interactive "r")
-      (let* (original-read-only-state buffer-read-only)
-        (when original-read-only-state
-          (read-only-mode -1)) ; Force the buffer to be writable
-        (extend-rectangle-to-end beg end)
-        (when original-read-only-state
-          (read-only-mode 1)))))) ; Revert the buffer back to its read-only state
+        ("|" . extend-rectangle-to-end)))))
 
 (defun copy-rectangle-as-kill-then-delete (start end)
   "Copy the region-rectangle and save it as the last killed one.

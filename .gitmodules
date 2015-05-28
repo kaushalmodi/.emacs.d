@@ -34,3 +34,6 @@
 [submodule "elisp/outshine"]
 	path = elisp/outshine
 	url = https://kaushalmodi@github.com/kaushalmodi/outshine
+[submodule "elisp/rectangle-utils"]
+	path = elisp/rectangle-utils
+	url = https://kaushalmodi@github.com/kaushalmodi/rectangle-utils
