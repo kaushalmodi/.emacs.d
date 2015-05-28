@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 17:28:38 kmodi>
+;; Time-stamp: <2015-05-27 23:14:02 KModi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -445,26 +445,29 @@ the current window and the windows state prior to that.
         (set-window-configuration modi/toggle-one-window--window-configuration)
         (switch-to-buffer modi/toggle-one-window--buffer-name)))))
 
-;; Control where to display the *Messages* buffer
-;; http://emacs.stackexchange.com/a/12749/115
-(defun drew/view-echo-area-messages ()
-  "Display the *Messages* buffer as I mean.
+;; http://emacs.stackexchange.com/a/12757/115
+;; Advise `display-buffer' to not execute if the current buffer is same as the
+;; buffer tried to being displayed
+(defvar modi/display-buffer-inhibit-duplicate-buffer nil
+  "When non-nil, do not execute `display-buffer' if the current buffer and the
+buffer to be displayed are the same.")
 
-- If the frame has just 1 window, split the frame to create a new window and
-  show *Messages* in that new window.
-- If the frame already has 2 or more windows, display *Messages* in the other
-  window (not the current one).
-- If the current window is already displaying *Messages* buffer, do NOTHING."
-  (interactive)
-  (unless (equal "*Messages*" (buffer-name (window-buffer)))
-    (display-buffer "*Messages*" (if (one-window-p)
-                                     #'display-buffer-pop-up-window
-                                   #'display-buffer-reuse-window))))
-(bind-key "C-h e" #'drew/view-echo-area-messages modi-mode-map)
-;; (add-to-list 'display-buffer-alist
-;;              '("\\*Messages\\*" . ((display-buffer-reuse-window
-;;                                     display-buffer-pop-up-window)
-;;                                    . ((inhibit-same-window . t)))))
+(defun modi/current-buffer-same-as-new-buffer-p (buffer-or-name &optional action frame)
+  (and modi/display-buffer-inhibit-duplicate-buffer
+       (equal buffer-or-name (window-buffer))))
+(advice-add 'display-buffer :before-until #'modi/current-buffer-same-as-new-buffer-p)
+
+;; Control where to display the *Messages* buffer
+(add-to-list 'display-buffer-alist
+             '("\\*Messages\\*" . ((display-buffer-reuse-window
+                                    display-buffer-pop-up-window)
+                                   . ((inhibit-same-window . t)))))
+
+(defun modi/view-echo-area-messages (orig-fun &rest args)
+  "Disallow displaying multiple *Messages* buffers in the same frame."
+  (let ((modi/display-buffer-inhibit-duplicate-buffer t))
+    (apply orig-fun args)))
+(advice-add 'view-echo-area-messages :around #'modi/view-echo-area-messages)
 
 ;; https://tsdh.wordpress.com/2015/03/03/swapping-emacs-windows-using-dragndrop/
 (defun th/swap-window-buffers-by-dnd (drag-event)
