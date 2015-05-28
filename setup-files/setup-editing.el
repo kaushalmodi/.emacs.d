@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 15:31:07 kmodi>
+;; Time-stamp: <2015-05-28 15:40:29 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -284,7 +284,7 @@ instead of ASCII characters for adorning the copied snippet."
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 (use-package rectangle-utils
-  :load-path "elisp/rectangle-utils"
+  ;; :load-path "elisp/rectangle-utils"
   :commands (extend-rectangle-to-end)
   :init
   (progn

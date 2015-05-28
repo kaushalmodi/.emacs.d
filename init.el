@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 14:48:20 kmodi>
+;; Time-stamp: <2015-05-28 15:40:12 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -27,7 +27,6 @@
         ;; outshine ; < my forked version
         ;; popwin ; < shackle
         ;; hl-anything ; temporarily removing it, bugs
-        ;; rectangle-utils ; < my forked version
         ace-jump-mode ; < avy
         ace-window
         adaptive-wrap ; indented line wrapping
@@ -101,6 +100,7 @@
         rainbow-delimiters
         rainbow-mode
         region-bindings-mode ; complements really well with multiple-cursors
+        rectangle-utils
         rpn-calc
         shackle
         smart-compile
