@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 14:38:50 kmodi>
+;; Time-stamp: <2015-05-27 19:48:56 KModi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -10,7 +10,8 @@
     (setq shackle-select-reused-windows nil) ; default nil
     (setq shackle-default-alignment 'below) ; default below
     (setq shackle-default-ratio 0.4) ; default 0.5
-
+    (unless font-symbola-p
+      (setq shackle-lighter " §"))
     (setq shackle-rules
           '((compilation-mode                :select nil)
             ("*undo-tree*"                               :ratio 0.25 :align right )
