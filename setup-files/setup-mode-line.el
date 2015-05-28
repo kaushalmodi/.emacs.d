@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-12 16:26:37 kmodi>
+;; Time-stamp: <2015-05-27 23:37:11 kmodi>
 
 ;; Customize the mode-line
 
@@ -118,9 +118,9 @@ If nil, show the same in the minibuffer.")
         (add-to-list 'rm-text-properties '("Ind\\'"     'display " *>")) ; org indent
         (add-to-list 'rm-text-properties '("Outl\\'"    'display " ø")) ; outline
         (add-to-list 'rm-text-properties '("Server\\'"  'display " Σ")) ; Server
-        (do-once-1-sec-after-emacs-startup
-         (when font-symbola-p
-           (add-to-list 'rm-text-properties '("Vis\\'" 'display " 👀")))) ; visible
+        (with-eval-after-load 'setup-symbola
+          (when font-symbola-p
+            (add-to-list 'rm-text-properties '("Vis\\'" 'display " 👀")))) ; visible
         ))
 
     (sml/setup)))

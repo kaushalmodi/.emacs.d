@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-12 16:17:30 kmodi>
+;; Time-stamp: <2015-05-27 23:43:37 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -104,48 +104,6 @@ set the symbol's value to INIT-VALUE even if the symbol is defined."
       (setq-default defvar-always-reeval-values t)
       (message "'defvar-re' will now force re-evaluate."))))
 ;;
-
-;; Below macro is used to wrap stuff that need to be run only after emacs
-;; starts up completely. This is very crucial when calling functions like
-;; `find-font' which return correct value only after emacs startup is finished
-;; especially when emacs is started in daemon mode.
-;; http://emacs.stackexchange.com/a/12352/115
-(defmacro do-once-1-sec-after-emacs-startup (&rest body)
-  `(run-with-idle-timer 1 ; run this after emacs is idle for 1 second
-                        nil ; do this just once; don't repeat
-                        (lambda () ,@body)))
-
-
-;; Use `assq-delete-all' instead of the below macro -- Mon Apr 06 2015
-;; (defmacro remove-from-alist-matching-car (alist car-of-list-to-delete)
-;;   "For ALIST, remove a list from it whose `car' matches CAR-OF-LIST-TO-DELETE.
-
-;; e.g. (remove-from-alist-matching-car ffap-string-at-point-mode-alist file)"
-;;   `(let* ((to-delete nil))
-;;      (dolist (item ,alist)
-;;        (when (eq ',car-of-list-to-delete (car item))
-;;          (setq to-delete item)))
-;;      (setq ,alist (delete to-delete ,alist))))
-
-;; Below is not required any more as per
-;; http://emacs.stackexchange.com/questions/2112/why-does-load-theme-reset-the-custom-theme-load-path
-;; (defun update-custom-theme-load-path ()
-;;   "Ensure that the custom-theme-load-path has all the theme paths added.
-;; http://stackoverflow.com/a/15381087/1219634"
-;;   (interactive)
-;;   (require 'dash)
-;;   (require 's)
-;;   (-each
-;;       (-map
-;;        (lambda (item)
-;;          (format (concat elpa-dir "/%s") item))
-;;        (-filter
-;;         (lambda (item)
-;;           (or (s-contains? "theme" item)
-;;               (s-contains? "smart-mode-line" item)))
-;;         (directory-files elpa-dir)))
-;;     (lambda (item)
-;;       (add-to-list 'custom-theme-load-path item))))
 
 
 (provide 'defuns)

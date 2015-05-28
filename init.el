@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 15:04:51 kmodi>
+;; Time-stamp: <2015-05-27 23:40:40 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -279,9 +279,14 @@
 ;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
 (require 'setup-personal nil :noerror)
 
-;; Do linum setup after a 1 second idle time after emacs has loaded
-(use-package setup-linum
-  :defer 1)
+;; Load certain setup files after a 1 second idle time after emacs has loaded.
+;; This files need the emacs frame to be set up properly. For example, linum,
+;; font detection does not work when emacs is launched in daemon mode while
+;; the emacs frame has yet to load. So do those things after a safe estimate
+;; delay of 1 second by which the frame should have loaded.
+(use-package setup-linum   :defer 1)
+(use-package setup-symbola :defer 1)
+
 ;; Do desktop setup after linum setup so that the desktop loaded files will show
 ;; linum if enabled for that major mode or if enabled globally
 (with-eval-after-load 'setup-linum
