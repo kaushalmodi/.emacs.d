@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-20 00:05:17 kmodi>
+;; Time-stamp: <2015-05-28 14:33:52 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -126,11 +126,18 @@ If OPTION is 16 (`C-u C-u'), copy the page url."
 Call `eww-reload' to undo the filtering."
       (interactive (list (read-from-minibuffer
                           "Keep only lines matching regexp: ")))
-      (save-excursion
-        (read-only-mode -1)
-        (goto-char (point-min))
-        (keep-lines regexp)
-        (read-only-mode 1)))
+      (let ((inhibit-read-only t)) ; ignore read-only status of eww buffers
+        (save-excursion
+          (goto-char (point-min))
+          (keep-lines regexp))))
+
+    (defun modi/eww-back-dwim ()
+      "Call `eww-back-url' if the buffer is read only.
+Else perform the default backspace action."
+      (interactive)
+      (if buffer-read-only
+          (eww-back-url)
+        (delete-backward-char 1)))
 
     (bind-keys
      :map eww-mode-map
@@ -145,10 +152,8 @@ Call `eww-reload' to undo the filtering."
       ("<tab>"       . shr-next-link)
       ("N"           . eww-next-url)
       ("P"           . eww-previous-url)
-      ("<backspace>" . eww-back-url)
-      ("C-d"         . eww-add-bookmark) ; Add bookmark
+      ("<backspace>" . modi/eww-back-dwim)
       ("w"           . modi/eww-copy-url-dwim)
-      ("C-w"         . modi/eww-copy-url-dwim)
       ("\<"          . eww-back-url)
       ("\>"          . eww-forward-url)
       ("/"           . highlight-regexp)
