@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 23:14:02 KModi>
+;; Time-stamp: <2015-05-28 00:58:53 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -447,27 +447,34 @@ the current window and the windows state prior to that.
 
 ;; http://emacs.stackexchange.com/a/12757/115
 ;; Advise `display-buffer' to not execute if the current buffer is same as the
-;; buffer tried to being displayed
-(defvar modi/display-buffer-inhibit-duplicate-buffer nil
-  "When non-nil, do not execute `display-buffer' if the current buffer and the
-buffer to be displayed are the same.")
+;; to-be-displayed buffer if the new ALIST entry `inhibit-duplicate-buffer'
+;; is non-nil.
+(defun modi/execute-display-buffer-if-nil (buffer-or-name &optional action frame)
+  "This functions advices `display-buffer' such that `display-buffer' gets
+executed only if this function returns `nil'.
 
-(defun modi/current-buffer-same-as-new-buffer-p (buffer-or-name &optional action frame)
-  (and modi/display-buffer-inhibit-duplicate-buffer
-       (equal buffer-or-name (window-buffer))))
-(advice-add 'display-buffer :before-until #'modi/current-buffer-same-as-new-buffer-p)
+This function returns `t' when below two conditions are true:
+1. BUFFER-OR-NAME has a matching entry in `display-buffer-alist' with a
+   non-nil `inhibit-duplicate-buffer' entry in its ALIST.
+2. BUFFER-OR-NAME is same as the current buffer."
+  ;; logic borrowed from the `display-function' definition
+  (if (null display-buffer-function)
+      (let* ((user-action
+              (display-buffer-assq-regexp
+               (buffer-name buffer-or-name) display-buffer-alist action))
+             ;; end of borrowed logic
+             (inhibit-duplicate-buffer (cdr (assq 'inhibit-duplicate-buffer user-action))))
+        (and inhibit-duplicate-buffer ; condition 1
+             (equal buffer-or-name (window-buffer)))) ; condition 2
+    nil))
+(advice-add 'display-buffer :before-until #'modi/execute-display-buffer-if-nil)
 
 ;; Control where to display the *Messages* buffer
 (add-to-list 'display-buffer-alist
              '("\\*Messages\\*" . ((display-buffer-reuse-window
                                     display-buffer-pop-up-window)
-                                   . ((inhibit-same-window . t)))))
-
-(defun modi/view-echo-area-messages (orig-fun &rest args)
-  "Disallow displaying multiple *Messages* buffers in the same frame."
-  (let ((modi/display-buffer-inhibit-duplicate-buffer t))
-    (apply orig-fun args)))
-(advice-add 'view-echo-area-messages :around #'modi/view-echo-area-messages)
+                                   . ((inhibit-duplicate-buffer . t)
+                                      (inhibit-same-window      . t)))))
 
 ;; https://tsdh.wordpress.com/2015/03/03/swapping-emacs-windows-using-dragndrop/
 (defun th/swap-window-buffers-by-dnd (drag-event)
