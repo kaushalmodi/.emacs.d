@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 10:57:12 kmodi>
+;; Time-stamp: <2015-05-28 11:34:38 kmodi>
 
 ;; Ace Window
 ;; https://github.com/abo-abo/ace-window
@@ -41,3 +41,15 @@
 ;;         `ace-window-BINDING' -> `ace-select-window'
 ;;     C-u `ace-window-BINDING' -> `ace-swap-window'
 ;; C-u C-u `ace-window-BINDING' -> `ace-delete-window'
+
+;; ace-window dispatch operations:
+;;
+;; | x | aw-delete-window     | Ace - Delete Window     |
+;; | m | aw-swap-window       | Ace - Swap Window       |
+;; | n | aw-flip-window       |                         |
+;; | v | aw-split-window-vert | Ace - Split Vert Window |
+;; | b | aw-split-window-horz | Ace - Split Horz Window |
+;; | i | delete-other-windows | Ace - Maximize Window   |
+;; | o | delete-other-windows |                         |
+;;
+;; Usage: <ace-window BINDING> x <WINDOW-CHAR> will delete that window
