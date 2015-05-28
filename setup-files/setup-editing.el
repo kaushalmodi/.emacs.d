@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 14:39:07 kmodi>
+;; Time-stamp: <2015-05-28 15:31:07 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -646,22 +646,23 @@ If a region is selected, delete all blank lines in that region."
 (bind-keys
  :map modi-mode-map
   ;; override the binding of `M-;' for `comment-dwim'
-  ("M-;"     . endless/comment-line-or-region)
-  ("C-x d"   . delete-region)
-  ("C-S-d"   . duplicate-current-line-or-region)
+  ("M-;"          . endless/comment-line-or-region)
+  ("C-x d"        . delete-region)
+  ("C-S-d"        . duplicate-current-line-or-region)
   ;; override the binding of `C-x =` for `what-cursor-position'
-  ("C-x ="   . align-to-equals) ; align all = signs in selected region
-  ("C-x \\"  . align-regexp)  ; align selected region to the entered regexp
+  ("C-x ="        . align-to-equals) ; align all = signs in selected region
+  ("C-x \\"       . align-regexp)  ; align selected region to the entered regexp
   ;; align multiple columns in the selected region. Of course all the selected
   ;; lines must have the same number of columns of groups of non-space characters
-  ("C-x |"   . align-columns)
-  ("C-k"     . kill-line)
-  ("C-S-k"   . smart-kill-whole-line)
+  ("C-x |"        . align-columns)
+  ("C-x <kp-add>" . count-words-region) ; count in whole buffer with `C-u' prefix
+  ("C-k"          . kill-line)
+  ("C-S-k"        . smart-kill-whole-line)
   ;; override the binding of `C-o` for `open-line'
-  ("C-o"     . modi/smart-open-line)
-  ("C-j"     . modi/pull-up-line)
-  ("M-j"     . comment-indent-new-line)
-  ("<f9>"    . eval-region))
+  ("C-o"          . modi/smart-open-line)
+  ("C-j"          . modi/pull-up-line)
+  ("M-j"          . comment-indent-new-line)
+  ("<f9>"         . eval-region))
 
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
 ;; default binding `C-x =' with something else.
