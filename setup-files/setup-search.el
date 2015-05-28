@@ -1,11 +1,34 @@
-;; Time-stamp: <2015-05-08 17:05:25 kmodi>
+;; Time-stamp: <2015-05-28 18:15:14 kmodi>
 
-;; Search
+;; Search / Replace
 
-(setq case-fold-search t) ;; Ignore case when searching
+(setq-default case-fold-search t) ; Ignore case when searching
+
+;; replace.el patches
+(load (expand-file-name
+       "replace-patches.el"
+       (concat user-emacs-directory "elisp/patches/"))
+      nil :nomessage)
+
+;; Do not do case sensitive search during `query-replace' or `query-replace-regexp'
+;; if the search string has a mix of upper and lower case characters
+(defun modi/disable-search-upper-case (orig-fun &rest args)
+  "Set `search-upper-case' to `nil' temporarily while ORIG-FUN is begin
+executed."
+  (let (search-upper-case)
+    (apply orig-fun args)))
+(advice-add 'perform-replace :around #'modi/disable-search-upper-case)
+
+;; http://emacs.stackexchange.com/a/12781/115
+(defun drew/toggle-case ()
+  "Toggle the value of `case-fold-search' between `nil' and non-nil."
+  (interactive)
+  ;; `case-fold-search' automatically becomes buffer-local when set
+  (setq case-fold-search (not case-fold-search)))
+(define-key query-replace-map (kbd "C") #'drew/toggle-case)
 
 ;; Anzu mode
-;; Source: https://github.com/syohex/emacs-anzu
+;; https://github.com/syohex/emacs-anzu
 (use-package anzu
   :config
   (progn
@@ -18,7 +41,6 @@
 
     (bind-keys
      :map modi-mode-map
-      ("M-%"   . anzu-query-replace) ; override binding for `query-replace'
       ("C-c r" . anzu-query-replace))
 
     (when (featurep 'region-bindings-mode)
@@ -34,7 +56,6 @@
 
     (bind-keys
      :map modi-mode-map
-      ("C-M-%" . vr/query-replace) ; override binding for `query-replace-regexp'
       ("C-c q" . vr/query-replace))
 
     (when (featurep 'multiple-cursors)
