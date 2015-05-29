@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 15:40:29 kmodi>
+;; Time-stamp: <2015-05-28 23:23:14 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -101,15 +101,32 @@ If region is active, apply to active region instead."
     (forward-line 1)
     (back-to-indentation)))
 
-;; Make `kill-whole-line' indentation aware
-;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
-(defun smart-kill-whole-line (&optional arg)
-  "Kill whole line and move back to indentation.
-Kill the whole line with function `kill-whole-line' and then move
-`back-to-indentation'."
-  (interactive "p")
-  (kill-whole-line arg)
-  (back-to-indentation))
+(defun modi/kill-line (&optional arg)
+  "Kill line.
+
+If ARG is nil, kill line from the current point to the end of the line, not
+including the trailing newline. But if the point is at the beginning of the
+line or at indentation, kill the whole line including the trailing newline
+and move back to the indentation.
+
+If ARG <  0, kill lines backward.
+
+If ARG == 0, kill text before point on the current line.
+
+If ARG >  0, kill that many lines from point."
+  (interactive "P")
+  (when (and arg (listp arg)) ; to handle universal prefix cases
+    (setq arg (car arg)))
+  (let* ((kill-whole-line t)
+         (bol-point (save-excursion
+                      (beginning-of-line)
+                      (point)))
+         (bol-or-at-indentation-p (looking-back "^ *" bol-point)))
+    (when bol-or-at-indentation-p
+      (beginning-of-line))
+    (kill-line arg)
+    (when bol-or-at-indentation-p
+      (back-to-indentation))))
 
 (defun modi/smart-open-line (&optional n)
   "Move the current line down if there are no word chars between the start of
@@ -656,8 +673,7 @@ If a region is selected, delete all blank lines in that region."
   ;; lines must have the same number of columns of groups of non-space characters
   ("C-x |"        . align-columns)
   ("C-x <kp-add>" . count-words-region) ; count in whole buffer with `C-u' prefix
-  ("C-k"          . kill-line)
-  ("C-S-k"        . smart-kill-whole-line)
+  ("C-k"          . modi/kill-line)
   ;; override the binding of `C-o` for `open-line'
   ("C-o"          . modi/smart-open-line)
   ("C-j"          . modi/pull-up-line)
