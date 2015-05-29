@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 15:40:12 kmodi>
+;; Time-stamp: <2015-05-29 14:42:22 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -209,7 +209,8 @@
 (require 'setup-highlight)
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
-(require 'setup-ido)
+(require 'setup-ido) ; setup ido first
+(require 'setup-ivy)
 (require 'setup-iregister)
 (when (executable-find "git")
   (require 'setup-magit)

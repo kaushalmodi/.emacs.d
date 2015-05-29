@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 23:37:11 kmodi>
+;; Time-stamp: <2015-05-29 14:00:55 kmodi>
 
 ;; Customize the mode-line
 
@@ -120,7 +120,8 @@ If nil, show the same in the minibuffer.")
         (add-to-list 'rm-text-properties '("Server\\'"  'display " Σ")) ; Server
         (with-eval-after-load 'setup-symbola
           (when font-symbola-p
-            (add-to-list 'rm-text-properties '("Vis\\'" 'display " 👀")))) ; visible
+            (add-to-list 'rm-text-properties '("Vis\\'" 'display " 👀")) ; visible-mode
+            (add-to-list 'rm-text-properties '("ivy\\'" 'display " 🍁")))) ; ivy
         ))
 
     (sml/setup)))
