@@ -176,6 +176,9 @@
 ;; Set up the looks of emacs
 (require 'setup-mode-line)
 (require 'setup-visual)
+(if (bound-and-true-p disable-pkg-shackle)
+    (require 'setup-popwin)
+  (require 'setup-shackle))
 
 ;; Set up extensions/packages
 (require 'setup-abbrev)
@@ -229,7 +232,6 @@
 (require 'setup-rainbow-delimiters)
 (require 'setup-rainbow-mode)
 (require 'setup-server)
-(require 'setup-shackle)
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
