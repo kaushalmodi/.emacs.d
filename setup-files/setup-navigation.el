@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 12:31:46 kmodi>
+;; Time-stamp: <2015-05-29 13:25:52 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -278,10 +278,9 @@ being executed."
 ;;     C-u `ace-jump-mode' -> `ace-jump-char-mode'
 ;; C-u C-u `ace-jump-mode' -> `ace-jump-line-mode'
 
-;; Key bindings
 (if (featurep 'avy)
-    (bind-key "<f1>" #'modi/goto-line modi-mode-map)
-  (bind-key "<f1>" #'goto-line modi-mode-map))
+    (bind-key "<f1>" #'modi/goto-line) ; bind in global map
+  (bind-key "<f1>" #'goto-line))
 
 (bind-keys
  :map modi-mode-map
