@@ -24,9 +24,10 @@
 (setq my-packages
       '(
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
-        ;; outshine ; < my forked version
+        ;; outshine ; < forked
         ;; popwin ; < shackle
         ;; hl-anything ; temporarily removing it, bugs
+        ;; interleave ; takes notes associated to pdf files in org mode < forked
         ace-jump-mode ; < avy
         ace-window
         adaptive-wrap ; indented line wrapping
@@ -71,7 +72,6 @@
         ibuffer-projectile
         ido-vertical-mode flx-ido ido-ubiquitous
         indent-guide
-        interleave ; takes notes associated to pdf files in org mode
         iregister ; Interactive access to registers
         isend-mode ; used in setup-perl.el
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim

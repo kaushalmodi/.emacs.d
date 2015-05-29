@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 14:11:09 kmodi>
+;; Time-stamp: <2015-05-29 13:28:02 kmodi>
 
 ;; PDF
 
@@ -65,14 +65,15 @@ instead of the one present in `package-user-dir'."
 
     (bind-keys
      :map pdf-view-mode-map
-      ("M-w" . pdf-view-kill-ring-save)
-      ("C-w" . pdf-view-kill-ring-save))
+      ("M-w"  . pdf-view-kill-ring-save)
+      ("C-w"  . pdf-view-kill-ring-save)
+      ("<f1>" . pdf-view-goto-page))
 
     (my/pdf-tools-install)))
 
 ;; https://github.com/rudolfochrist/interleave
 (use-package interleave
-  ;; :load-path "elisp/interleave"
+  :load-path "elisp/interleave"
   :init
   (progn
     (with-eval-after-load 'doc-view

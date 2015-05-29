@@ -30,7 +30,7 @@
 	url = http://github.com/kaushalmodi/git-link
 [submodule "elisp/interleave"]
 	path = elisp/interleave
-	url = http://www.github.com/kaushalmodi/interleave
+	url = http://kaushalmodi@github.com/kaushalmodi/interleave
 [submodule "elisp/outshine"]
 	path = elisp/outshine
 	url = https://kaushalmodi@github.com/kaushalmodi/outshine
