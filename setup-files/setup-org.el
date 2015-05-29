@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 12:12:22 kmodi>
+;; Time-stamp: <2015-05-29 10:59:26 kmodi>
 
 ;; Org Mode
 
@@ -11,14 +11,16 @@
     (setq org-agenda-skip-function nil)
     (setq org-src-fontify-natively t) ; fontify code in code blocks
     ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
-    (setq org-pretty-entities t
-          org-pretty-entities-include-sub-superscripts nil)
+    (setq org-pretty-entities t)
+    ;; Allow _ and ^ characters to sub/super-script strings but only when
+    ;; string is wrapped in braces
+    (setq org-use-sub-superscripts         '{}) ; in-buffer rendering
+    (setq org-export-with-sub-superscripts '{}) ; for exports
+    ;; Render subscripts and superscripts in org buffers
+    (setq org-pretty-entities-include-sub-superscripts t)
     (setq org-export-with-smart-quotes t)
     ;; active single key command execution when at beginning of a headline
     (setq org-use-speed-commands t)
-    ;; Allow _ and ^ characters to sub/super-script strings but only when followed by braces
-    (setq org-use-sub-superscripts         '{}
-          org-export-with-sub-superscripts '{})
     (setq org-log-done 'timestamp) ; Insert only timestamp when closing an org TODO item
     ;; (setq org-log-done 'note) ; Insert timestamp and note when closing an org TODO item
     ;; http://orgmode.org/manual/Closing-items.html
