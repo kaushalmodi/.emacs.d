@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-23 11:01:39 kmodi>
+;; Time-stamp: <2015-06-01 14:16:12 kmodi>
 
 ;; Desktop save and restore
 
@@ -8,11 +8,9 @@
 (use-package desktop
   :config
   (progn
-    (setq desktop-base-file-name (concat ".emacs_"
-                                         emacs-version-short
+    (setq desktop-base-file-name (concat "emacs_" emacs-version-short
                                          ".desktop"))
-    (setq desktop-base-lock-name (concat ".emacs_"
-                                         emacs-version-short
+    (setq desktop-base-lock-name (concat "emacs_" emacs-version-short
                                          ".desktop.lock"))
 
     ;; Fix the frameset warning at startup

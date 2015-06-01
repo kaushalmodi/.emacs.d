@@ -1,11 +1,11 @@
-;; Time-stamp: <2015-05-01 10:24:49 kmodi>
+;; Time-stamp: <2015-06-01 14:20:30 kmodi>
 
 ;; Abbrev
 (use-package abbrev
   :config
   (progn
 
-    (setq abbrev-file-name (expand-file-name "abbrev_defs" user-emacs-directory))
+    (setq abbrev-file-name (locate-user-emacs-file "abbrev_defs"))
     (unless (file-exists-p abbrev-file-name)
       (with-temp-buffer (write-file abbrev-file-name)))
 

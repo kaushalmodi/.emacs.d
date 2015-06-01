@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 11:20:57 kmodi>
+;; Time-stamp: <2015-06-01 14:26:56 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -13,12 +13,9 @@
                             "\\([0-9]+\\)\\.\\([0-9]+\\).*"
                             "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
 (setq org-directory        (concat user-home-directory "org/")) ; must end with /
-(setq setup-packages-file  (expand-file-name
-                            "setup-packages.el"
-                            user-emacs-directory))
-(setq custom-file          (expand-file-name
-                            (concat "custom_" emacs-version-short ".el")
-                            user-emacs-directory))
+(setq setup-packages-file  (locate-user-emacs-file "setup-packages.el"))
+(setq custom-file          (locate-user-emacs-file
+                            (concat "custom_" emacs-version-short ".el")))
 
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
