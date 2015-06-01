@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 14:33:52 kmodi>
+;; Time-stamp: <2015-06-01 11:09:23 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -158,6 +158,8 @@ Else perform the default backspace action."
       ("\>"          . eww-forward-url)
       ("/"           . highlight-regexp)
       ("k"           . modi/eww-keep-lines))
+    ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
+    (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
     (>=e "25.0"
          (bind-key "R" #'eww-readable eww-mode-map)
          ;; Refresh the page with `eww-reload' or `g' to switch back to
