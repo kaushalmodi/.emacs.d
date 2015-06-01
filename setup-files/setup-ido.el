@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 10:56:45 kmodi>
+;; Time-stamp: <2015-06-01 14:38:52 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -99,10 +99,9 @@
          (ido-completing-read "Recentf open: "
                               (mapcar 'abbreviate-file-name recentf-list)
                               nil t)))
-      (bind-keys
-       :map modi-mode-map
+      (when (bound-and-true-p disable-pkg-ivy)
         ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-        ("C-x C-o" . ido-find-recentf)))
+        (bind-key "C-x C-o" #'ido-find-recentf modi-mode-map)))
 
     (defun endless/ido-bury-buffer-at-head ()
       "Bury the buffer at the head of `ido-matches'.
