@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 10:53:27 kmodi>
+;; Time-stamp: <2015-06-01 11:20:57 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -44,6 +44,7 @@
         buffer-move
         cperl-mode
         csv-nav ; editing csv files
+        deft
         diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
@@ -191,6 +192,7 @@
 (require 'setup-bookmark+)
 (require 'setup-buffer-move)
 (require 'setup-de-ansi)
+(require 'setup-deft)
 (require 'setup-dired)
 (require 'setup-discover-my-major)
 (require 'setup-drag-stuff)
