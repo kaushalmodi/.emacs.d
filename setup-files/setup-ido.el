@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-10 14:03:00 kmodi>
+;; Time-stamp: <2015-06-01 10:56:45 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -31,7 +31,9 @@
     (setq ido-auto-merge-work-directories-length 0))
   :config
   (progn
-    (ido-mode 1)
+    ;; Don't enable `ido-mode' when `ivy-mode' is intended to be used instead
+    (when (bound-and-true-p disable-pkg-ivy)
+      (ido-mode 1))
 
     ;; Use flx-ido for better flex matching between words
     (use-package flx-ido

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-16 15:33:36 kmodi>
+;; Time-stamp: <2015-05-29 15:33:09 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -57,6 +57,10 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
     (bind-key "C-c f" #'hydra-projectile/body modi-mode-map))
   :config
   (progn
+    (when (not (bound-and-true-p disable-pkg-ivy))
+      (with-eval-after-load 'ivy
+        (setq projectile-completion-system 'ivy)))
+
     (defvar projectile-ag-command
       (concat "\\ag" ; used unaliased version of `ag': \ag
               " -i" ; case insensitive

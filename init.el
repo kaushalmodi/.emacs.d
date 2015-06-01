@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-29 14:42:22 kmodi>
+;; Time-stamp: <2015-06-01 10:53:27 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -108,7 +108,7 @@
         smex ; smart M-x
         stripe-buffer
         sunshine ; weather
-        swiper
+        swiper counsel
         sx
         tiny
         undo-tree ; supercool undo visualization
@@ -209,7 +209,7 @@
 (require 'setup-highlight)
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
-(require 'setup-ido) ; setup ido first
+(require 'setup-ido) ; setup ido first and then ivy
 (require 'setup-ivy)
 (require 'setup-iregister)
 (when (executable-find "git")

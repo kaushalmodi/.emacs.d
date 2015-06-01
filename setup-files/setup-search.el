@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 18:15:14 kmodi>
+;; Time-stamp: <2015-06-01 10:34:45 kmodi>
 
 ;; Search / Replace
 
@@ -152,12 +152,8 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
   (progn
     ;; Disable helm
     (with-eval-after-load 'setup-ido
-      (defun modi/disable-helm-enable-ido ()
-        (interactive)
-        (helm-mode -1)
-        (ido-mode 1)
-        (ido-ubiquitous-mode 1))
-      (modi/disable-helm-enable-ido))
+      (helm-mode -1)
+      (ido-mode (if (bound-and-true-p disable-pkg-ivy) 1 -1)))
     (setq helm-swoop-split-direction 'split-window-vertically)
     (setq helm-swoop-speed-or-color nil) ; If nil, boosts speed in exchange for color
     ;; While doing `helm-swoop` press `C-c C-e` to edit mode, apply changes to
