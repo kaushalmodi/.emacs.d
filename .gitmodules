@@ -37,3 +37,6 @@
 [submodule "elisp/rectangle-utils"]
 	path = elisp/rectangle-utils
 	url = https://kaushalmodi@github.com/kaushalmodi/rectangle-utils
+[submodule "elisp/deft"]
+	path = elisp/deft
+	url = https://kaushalmodi@github.com/kaushalmodi/deft

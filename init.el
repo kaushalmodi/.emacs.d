@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 14:26:56 kmodi>
+;; Time-stamp: <2015-06-01 18:30:48 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -25,6 +25,7 @@
         ;; popwin ; < shackle
         ;; hl-anything ; temporarily removing it, bugs
         ;; interleave ; takes notes associated to pdf files in org mode < forked
+        ;; deft < forked
         ace-jump-mode ; < avy
         ace-window
         adaptive-wrap ; indented line wrapping
@@ -41,7 +42,6 @@
         buffer-move
         cperl-mode
         csv-nav ; editing csv files
-        deft
         diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
