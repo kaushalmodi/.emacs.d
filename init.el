@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 13:34:01 kmodi>
+;; Time-stamp: <2015-06-02 15:53:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -25,6 +25,7 @@
         ;; popwin ; < shackle
         ;; hl-anything ; temporarily removing it, bugs
         ;; deft < forked
+        ;; poporg ; edit comments from any other mode in org mode < forked
         ace-jump-mode ; < avy
         ace-window
         adaptive-wrap ; indented line wrapping
@@ -93,7 +94,6 @@
         outorg navi-mode ; supporting packages for outshine
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
-        poporg ; edit comments from any other mode in org mode
         projectile ; Better than fiplr
         rainbow-delimiters
         rainbow-mode

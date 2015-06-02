@@ -40,3 +40,6 @@
 [submodule "elisp/deft"]
 	path = elisp/deft
 	url = https://kaushalmodi@github.com/kaushalmodi/deft
+[submodule "elisp/poporg"]
+	path = elisp/poporg
+	url = https://kaushalmodi@github.com/kaushalmodi/poporg
