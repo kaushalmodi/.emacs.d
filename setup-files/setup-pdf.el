@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 13:34:24 kmodi>
+;; Time-stamp: <2015-06-02 16:12:46 kmodi>
 
 ;; PDF
 
@@ -15,6 +15,7 @@
   :config
   (progn
 
+    (setq-default pdf-view-display-size 'fit-page) ; fit page by default
     (setq pdf-view-resize-factor 1.10)
 
     (defun my/get-latest-pdf-tools-dir ()
@@ -119,7 +120,17 @@ instead of the one present in `package-user-dir'."
 ;; | s m <drag mouse to select box> | PDF zooms to that selection |
 ;; | s r                            | Resets the above view slice |
 ;; |--------------------------------+-----------------------------|
-;;
+;; | M-s w                          | isearch-forward-word        |
+;; | M-s o                          | pdf-isearch-occur           |
+;; |--------------------------------+-----------------------------|
+;; | m                              | bookmark-set                |
+;; |                                | (jump to bookmark using     |
+;; |                                |  C-x r b)                   |
+;; |--------------------------------+-----------------------------|
+;; | View in Printed mode           | C-c C-r p                   |
+;; | View in Midnight mode          | C-c C-r m                   |
+;; |--------------------------------+-----------------------------|
+
 ;; * =interleave= package
 ;; Create a Org file that will keep your notes. In the Org header
 ;; section (#+TITLE, #+AUTHOR, etc.) add
