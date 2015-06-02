@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 18:30:48 kmodi>
+;; Time-stamp: <2015-06-02 13:34:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -24,7 +24,6 @@
         ;; outshine ; < forked
         ;; popwin ; < shackle
         ;; hl-anything ; temporarily removing it, bugs
-        ;; interleave ; takes notes associated to pdf files in org mode < forked
         ;; deft < forked
         ace-jump-mode ; < avy
         ace-window
@@ -70,6 +69,7 @@
         ibuffer-projectile
         ido-vertical-mode flx-ido ido-ubiquitous
         indent-guide
+        interleave ; takes notes associated to pdf files in org mode
         iregister ; Interactive access to registers
         isend-mode ; used in setup-perl.el
         iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
