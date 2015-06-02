@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 00:12:32 kmodi>
+;; Time-stamp: <2015-06-02 09:58:59 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -18,23 +18,8 @@
     (setq deft-use-filename-as-title nil) ; show actual titles in deft buf
     (setq deft-use-filter-string-for-filename t)
     (setq deft-auto-save-interval 1.0) ; default: 1.0; 0 to disable auto-save
-
-    (defun deft-absolute-filename (slug &optional extension)
-      "Return an absolute filename to file named SLUG with optional EXTENSION.
-If EXTENSION is not given, `deft-extension' is assumed.
-
-If SLUG has spaces, replace them with underscores.
-Also force the file name to be all lower case."
-      (let* ((slug-no-space (replace-regexp-in-string
-                             "\\(.*?\\) *\\'" "\\1"
-                             slug)) ; remove trailing spaces if any
-             (slug-no-space (replace-regexp-in-string
-                             " " "_"
-                             slug-no-space)) ; replace spaces with _
-             (slug-no-space (downcase slug-no-space))) ; lower case
-        (concat (file-name-as-directory (expand-file-name deft-directory))
-                slug-no-space
-                "." (or extension deft-extension))))
+    (setq deft-file-naming-rules '((nospace . "_")
+                                   (case-fn . downcase)))
 
     ;; http://pragmaticemacs.com/emacs/tweaking-deft-quicker-notes/
     (defvar modi/pre-deft-window-configuration nil
