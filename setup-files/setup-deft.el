@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 09:58:59 kmodi>
+;; Time-stamp: <2015-06-02 23:49:10 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -17,7 +17,7 @@
     (setq deft-text-mode 'org-mode)
     (setq deft-use-filename-as-title nil) ; show actual titles in deft buf
     (setq deft-use-filter-string-for-filename t)
-    (setq deft-auto-save-interval 1.0) ; default: 1.0; 0 to disable auto-save
+    (setq deft-auto-save-interval 0) ; default: 1.0; 0 to disable auto-save
     (setq deft-file-naming-rules '((nospace . "_")
                                    (case-fn . downcase)))
 
