@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 10:34:45 kmodi>
+;; Time-stamp: <2015-06-02 22:32:33 kmodi>
 
 ;; Search / Replace
 
@@ -6,26 +6,9 @@
 
 ;; replace.el patches
 (load (expand-file-name
-       "replace-patches.el"
+       "replace.el"
        (concat user-emacs-directory "elisp/patches/"))
       nil :nomessage)
-
-;; Do not do case sensitive search during `query-replace' or `query-replace-regexp'
-;; if the search string has a mix of upper and lower case characters
-(defun modi/disable-search-upper-case (orig-fun &rest args)
-  "Set `search-upper-case' to `nil' temporarily while ORIG-FUN is begin
-executed."
-  (let (search-upper-case)
-    (apply orig-fun args)))
-(advice-add 'perform-replace :around #'modi/disable-search-upper-case)
-
-;; http://emacs.stackexchange.com/a/12781/115
-(defun drew/toggle-case ()
-  "Toggle the value of `case-fold-search' between `nil' and non-nil."
-  (interactive)
-  ;; `case-fold-search' automatically becomes buffer-local when set
-  (setq case-fold-search (not case-fold-search)))
-(define-key query-replace-map (kbd "C") #'drew/toggle-case)
 
 ;; Anzu mode
 ;; https://github.com/syohex/emacs-anzu
