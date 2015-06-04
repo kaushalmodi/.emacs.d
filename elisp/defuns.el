@@ -1,15 +1,6 @@
-;; Time-stamp: <2015-05-27 23:43:37 kmodi>
+;; Time-stamp: <2015-06-04 11:07:03 kmodi>
 
 ;; Collection of general purposes defuns and macros
-
-;; Save typing the lambda mumbo-jumbo
-;; https://github.com/waymondo/hemacs/blob/master/defuns.el
-(defmacro λ (&rest body)
-  (declare (indent 1))
-  `(lambda ()
-     (interactive)
-     ,@body))
-(key-chord-define-global "^^" (λ (insert "λ")))
 
 (defmacro >=e (V &rest body)
   "The BODY can contain both

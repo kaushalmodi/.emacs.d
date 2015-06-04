@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-27 23:32:42 kmodi>
+;; Time-stamp: <2015-06-04 11:35:42 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -114,7 +114,7 @@ the smart-mode-line theme."
 ;; ;; `after-make-frame-functions' hook is not run in no-window mode
 ;; (add-hook 'after-make-frame-functions (lambda (&rest frame)
 ;;                                         (funcall default-theme-fn)))
-(add-hook 'window-setup-hook (λ (funcall default-theme-fn)))
+(add-hook 'window-setup-hook (lambda () (funcall default-theme-fn)))
 
 (defun modi/update-frame-title ()
   (interactive)
@@ -346,19 +346,19 @@ during presentations."
 ;; Show long lines
 ;; http://stackoverflow.com/a/6346547/1219634
 (use-package whitespace
-    :commands (modi/show-long-lines)
-    :init
-    (progn
-      (bind-to-modi-map "L" modi/show-long-lines))
-    :config
-    (progn
-      (defun modi/show-long-lines()
-        (interactive)
-        (let ((hi-lock-mode -1)) ; reset hi-lock mode
-          (highlight-lines-matching-regexp
-           (concat ".\\{"
-                   (number-to-string (+ 1 whitespace-line-column))
-                   "\\}") "hi-yellow")))))
+  :commands (modi/show-long-lines)
+  :init
+  (progn
+    (bind-to-modi-map "L" modi/show-long-lines))
+  :config
+  (progn
+    (defun modi/show-long-lines()
+      (interactive)
+      (let ((hi-lock-mode -1)) ; reset hi-lock mode
+        (highlight-lines-matching-regexp
+         (concat ".\\{"
+                 (number-to-string (+ 1 whitespace-line-column))
+                 "\\}") "hi-yellow")))))
 
 ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun endless/narrow-or-widen-dwim (p)
@@ -392,9 +392,9 @@ narrowed."
 ;; Usage: C-x - _ - 0 _ _ _ _ - - 0
 ;; Usage: C-x _ _ 0 - _ - _ _ _ _ - - 0
 (defhydra hydra-font-resize
-    (nil "C-x"
-     :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-     :color red)
+  (nil "C-x"
+       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+       :color red)
   "font-resize"
   ("-"   modi/font-size-decr  "Decrease")
   ("_"   modi/font-size-incr  "Increase")
@@ -443,20 +443,27 @@ the above behavior."
     (set-selective-display col)))
 (bind-key "C-x $" #'modi/set-selective-display-dwim modi-mode-map)
 
+;; Prettify symbols
+(defvar modi/prettify-symbols-mode-hooks '(emacs-lisp-mode-hook)
+  "List of hooks of major modes in which prettify-symbols-mode should be enabled.")
+
+(dolist (hook modi/prettify-symbols-mode-hooks)
+  (add-hook hook #'prettify-symbols-mode))
+
 (bind-keys
  :map modi-mode-map
- ("<f2>"        . modi/toggle-menu-bar)
- ;; F8 key can't be used as it launches the VNC menu
- ;; It can though be used with shift/ctrl/alt keys
- ("<S-f8>"      . prez-mode)
- ;; Make Control+mousewheel do increase/decrease font-size
- ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
- ("<C-mouse-1>" . modi/font-size-reset) ; C + left mouse click
- ("<C-mouse-4>" . modi/font-size-incr) ; C + wheel-up
- ("<C-mouse-5>" . modi/font-size-decr) ; C + wheel-down
- ("C-x t"       . toggle-truncate-lines)
- ;; This line actually replaces Emacs' entire narrowing keymap.
- ("C-x n"       . endless/narrow-or-widen-dwim))
+  ("<f2>"        . modi/toggle-menu-bar)
+  ;; F8 key can't be used as it launches the VNC menu
+  ;; It can though be used with shift/ctrl/alt keys
+  ("<S-f8>"      . prez-mode)
+  ;; Make Control+mousewheel do increase/decrease font-size
+  ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
+  ("<C-mouse-1>" . modi/font-size-reset) ; C + left mouse click
+  ("<C-mouse-4>" . modi/font-size-incr) ; C + wheel-up
+  ("<C-mouse-5>" . modi/font-size-decr) ; C + wheel-down
+  ("C-x t"       . toggle-truncate-lines)
+  ;; This line actually replaces Emacs' entire narrowing keymap.
+  ("C-x n"       . endless/narrow-or-widen-dwim))
 
 (key-chord-define-global "2w" 'menu-bar-mode) ; alternative to F2
 (key-chord-define-global "8i" 'prez-mode) ; alternative to S-F8

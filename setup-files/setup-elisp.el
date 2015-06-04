@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-08 14:51:06 kmodi>
+;; Time-stamp: <2015-06-04 11:15:59 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -73,14 +73,14 @@
   (add-hook hook #'eldoc-mode))
 
 ;; Change the default indentation function for `emacs-lisp-mode' to
-;; improve the indentation of blocks like:
+;; improve the indentation of blocks like below:
 ;; (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
 ;;                            :color pink
 ;;                            :post (deactivate-mark))
 
 ;; Solution 1
 ;; (add-hook 'emacs-lisp-mode-hook
-;;           (λ (setq-local lisp-indent-function #'common-lisp-indent-function)))
+;;           (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
 
 ;; Solution 2
 ;; http://emacs.stackexchange.com/q/10230/115
@@ -161,7 +161,7 @@ Lisp function does not specify a special indentation."
               (method
                (funcall method indent-point state))))))))
 (add-hook 'emacs-lisp-mode-hook
-          (λ (setq-local lisp-indent-function #'Fuco1/lisp-indent-function)))
+          (lambda () (setq-local lisp-indent-function #'Fuco1/lisp-indent-function)))
 
 ;; http://ergoemacs.org/emacs/emacs_byte_compile.html
 (defun byte-compile-current-buffer ()

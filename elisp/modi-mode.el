@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-25 14:42:31 kmodi>
+;; Time-stamp: <2015-06-04 11:27:15 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -59,7 +59,7 @@ USAGE: (bind-to-modi-map \"f\" full-screen-center)
 
 (defmacro bind-to-modi-map-noquote (key fn)
   "Bind a function to the `modi-mode-map'
-USAGE: (bind-to-modi-map \"f\" (λ (some-fn arg)))
+USAGE: (bind-to-modi-map \"f\" (lambda () (interactive) (some-fn arg)))
 "
   `(bind-key (concat ,modi/pseudo-map-prefix " " ,key) ,fn modi-mode-map))
 

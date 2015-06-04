@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 00:58:53 kmodi>
+;; Time-stamp: <2015-06-04 11:37:23 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -449,13 +449,16 @@ the current window and the windows state prior to that.
   ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence' command
   ("C-x <delete>" . delete-current-buffer-file)
   ("C-x C-r"      . rename-current-buffer-file)
-  ("C-S-t"        . reopen-killed-file) ; mimicking reopen-closed-tab binding used in browsers
-  ("C-c )"        . rotate-windows)) ; rotate windows clockwise. This will do the act of swapping windows if the frame is split into only 2 windows
+  ("C-S-t"        . reopen-killed-file)) ; mimick reopen-closed-tab in browsers
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; http://stackoverflow.com/a/26629984/1219634
-(bind-key "<mode-line> <mouse-2>"   #'show-copy-buffer-file-name       mode-line-buffer-identification-keymap)
-(bind-key "<mode-line> <S-mouse-2>" (λ (show-copy-buffer-file-name 4)) mode-line-buffer-identification-keymap)
+(bind-key "<mode-line> <mouse-2>" #'show-copy-buffer-file-name
+          mode-line-buffer-identification-keymap)
+(bind-key "<mode-line> <S-mouse-2>" (lambda ()
+                                      (interactive)
+                                      (show-copy-buffer-file-name 4))
+          mode-line-buffer-identification-keymap)
 
 ;; Below bindings are made in global map and not in my minor mode as I want
 ;; other modes to override those bindings.
@@ -468,7 +471,7 @@ the current window and the windows state prior to that.
 (bind-to-modi-map "f" full-screen-center)
 (bind-to-modi-map "y" bury-buffer)
 
-(key-chord-define-global "XX" (λ (kill-buffer (current-buffer))))
+(key-chord-define-global "XX" (lambda () (interactive) (kill-buffer (current-buffer))))
 (key-chord-define-global "ZZ" #'toggle-between-buffers)
 (key-chord-define-global "5t" #'revert-buffer) ; alternative to F5
 

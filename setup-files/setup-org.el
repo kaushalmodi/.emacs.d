@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-29 10:59:26 kmodi>
+;; Time-stamp: <2015-06-04 11:18:40 kmodi>
 
 ;; Org Mode
 
@@ -142,7 +142,8 @@ this with to-do items than with projects or headings."
       (org-capture 0))
 
     (add-hook 'org-agenda-mode-hook
-              (λ (bind-keys
+              (lambda ()
+                (bind-keys
                   :map org-agenda-mode-map
                    ("x" . sacha/org-agenda-done)
                    ("X" . sacha/org-agenda-mark-done-and-add-followup)
@@ -243,9 +244,9 @@ Execute this command while the point is on or after the hyper-linked org link."
 
         (bind-key "<left>"   #'org-tree-slide-move-previous-tree            org-tree-slide-mode-map)
         (bind-key "<right>"  #'org-tree-slide-move-next-tree                org-tree-slide-mode-map)
-        (bind-key "C-0"      (λ (text-scale-set org-tree-slide-text-scale)) org-tree-slide-mode-map)
-        (bind-key "C-="      (λ (text-scale-increase 1))                    org-tree-slide-mode-map)
-        (bind-key "C--"      (λ (text-scale-decrease 1))                    org-tree-slide-mode-map)
+        (bind-key "C-0"      (lambda () (interactive) (text-scale-set org-tree-slide-text-scale)) org-tree-slide-mode-map)
+        (bind-key "C-="      (lambda () (interactive) (text-scale-increase 1))                    org-tree-slide-mode-map)
+        (bind-key "C--"      (lambda () (interactive) (text-scale-decrease 1))                    org-tree-slide-mode-map)
         (bind-key "C-1"      #'org-tree-slide-content                       org-tree-slide-mode-map)
         (bind-key "C-2"      #'org-tree-slide-my-profile                    org-tree-slide-mode-map)
         (bind-key "C-3"      #'org-tree-slide-simple-profile                org-tree-slide-mode-map)
@@ -553,7 +554,9 @@ _h_tml    ^^          _t_ext          _A_SCII:
       (insert str)
       (org-try-structure-completion))
 
-    (define-key org-mode-map "<" (λ (if (looking-back "^")
+    (define-key org-mode-map "<" (lambda ()
+                                   (interactive)
+                                   (if (looking-back "^")
                                         (hydra-org-template/body)
                                       (self-insert-command 1))))
     ))

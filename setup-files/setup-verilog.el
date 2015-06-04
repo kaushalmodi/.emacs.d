@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 17:13:24 kmodi>
+;; Time-stamp: <2015-06-04 11:42:02 kmodi>
 
 ;;; Verilog
 
@@ -203,8 +203,11 @@ task, `define."
             (re-search-forward modi/verilog-header-re nil :noerror)
           (re-search-backward modi/verilog-header-re nil :noerror))))
 
-    (bind-key "C-^" #'modi/verilog-jump-to-header-dwim          verilog-mode-map)
-    (bind-key "C-&" (λ (modi/verilog-jump-to-header-dwim '(4))) verilog-mode-map)
+    (bind-key "C-^" #'modi/verilog-jump-to-header-dwim verilog-mode-map)
+    (bind-key "C-&" (lambda ()
+                      (interactive)
+                      (modi/verilog-jump-to-header-dwim '(4)))
+              verilog-mode-map)
 
     (when (featurep 'which-func)
       (add-to-list 'which-func-modes 'verilog-mode)
@@ -227,8 +230,12 @@ task, `define."
                         (define-key map [mode-line mouse-1] #'modi/verilog-jump-to-header-dwim)
                         (define-key map [mode-line mouse-4] #'modi/verilog-jump-to-header-dwim) ; scroll up
                         (define-key map [mode-line mouse-2] nil)
-                        (define-key map [mode-line mouse-3] (λ (modi/verilog-jump-to-header-dwim '(4))))
-                        (define-key map [mode-line mouse-5] (λ (modi/verilog-jump-to-header-dwim '(4)))) ; scroll down
+                        (define-key map [mode-line mouse-3] (lambda ()
+                                                              (interactive)
+                                                              (modi/verilog-jump-to-header-dwim '(4))))
+                        (define-key map [mode-line mouse-5] (lambda ()
+                                                              (interactive)
+                                                              (modi/verilog-jump-to-header-dwim '(4)))) ; scroll down
                         map))
 
           (if modi/verilog-which-func-xtra
@@ -333,7 +340,7 @@ the project."
       ;; emacs with stay stuck with the "Saving file .." message and the file
       ;; won't be saved.
       (add-hook 'local-write-file-hooks
-                (λ (untabify (point-min) (point-max)) nil)))
+                (lambda () (untabify (point-min) (point-max)) nil)))
     (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
 
 ;;; my/verilog-selective-indent

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-04 14:46:37 kmodi>
+;; Time-stamp: <2015-06-04 11:30:37 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -15,8 +15,8 @@
     (setq outshine-org-style-global-cycling-at-bob-p t)
 
     ;; http://emacs.stackexchange.com/a/2803/115
-    (defun modi/outline-table-of-contents ()
-      "Create a table of content for outshine headers.
+    (defun modi/outline-toc ()
+      "Create a table of contents for outshine headers.
 Insert/update the TOC after the line that has the “// Contents:” string.
 Here “//” represents 2 comment start characters for any major mode.
 Don't add “Revision Control” heading to TOC."
@@ -85,16 +85,14 @@ Don't add “Revision Control” heading to TOC."
       (interactive)
       (dolist (hook modi/outline-mode-hooks)
         (add-hook hook #'outline-minor-mode)
-        (add-hook hook (λ (add-hook 'local-write-file-hooks
-                                    #'modi/outline-table-of-contents)))))
+        (add-hook hook (lambda () (add-hook 'local-write-file-hooks #'modi/outline-toc)))))
 
     (defun modi/turn-off-outline-mode ()
       "Turn off outline-mode only for specific modes."
       (interactive)
       (dolist (hook modi/outline-mode-hooks)
         (remove-hook hook #'outline-minor-mode)
-        (remove-hook hook (λ (remove-hook 'local-write-file-hooks
-                                          #'modi/outline-table-of-contents)))))
+        (remove-hook hook (lambda () (remove-hook 'local-write-file-hooks #'modi/outline-toc)))))
 
     (modi/turn-on-outline-mode)
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 15:53:20 kmodi>
+;; Time-stamp: <2015-06-04 11:17:02 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -129,10 +129,14 @@ If universal arg is used, load the `init.el'."
 
 ;; Special Mode Map
 ;; `special-mode' is a read-only major mode (simple.el)
-(define-key special-mode-map (kbd "q") (λ (quit-window :kill))) ; quit + kill
-(define-key special-mode-map (kbd "y") #'quit-window) ; quit + bury
 (define-key special-mode-map (kbd "z") #'quit-window) ; quit + bury
-(define-key special-mode-map (kbd "k") (λ (kill-buffer (current-buffer)))) ; only kill
+(define-key special-mode-map (kbd "y") #'bury-buffer) ; only bury
+(define-key special-mode-map (kbd "q") (lambda ()
+                                         (interactive)
+                                         (quit-window :kill))) ; quit + kill
+(define-key special-mode-map (kbd "k") (lambda ()
+                                         (interactive)
+                                         (kill-buffer (current-buffer)))) ; only kill
 
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
@@ -141,11 +145,10 @@ If universal arg is used, load the `init.el'."
                         :hint  nil)
   "
     TOGGLE ...
-_ai_ aggressive indent      _d_/_D_ debug on error/entry      _H_ardcore (allow arrows)      _p_resentation         _t_ranspose frame
-_aw_ adaptive wrap          _e_debug^^                        fill col _i_ndicator           _r_ead only            _C-t_ theme
-menu _b_ar                  _f_ill^^                          _k_ey chord                    _S_tripe buffer        _v_isible mode
-cycle _c_ase                _F_ollow^^                        _l_ine num                     _-_ truncate lines     _<SPC>_ whitespace
-^^                          indent _g_uide^^                  _m_odi mode
+_ai_ aggressive indent      _d_/_D_ debug on error/entry      indent _g_uide                 _l_ine num          _S_tripe buffer         _<SPC>_ whitespace
+_aw_ adaptive wrap          _e_debug^^                        _H_ardcore (allow arrows)      _m_odi mode         _t_ truncate lines
+menu _b_ar                  _f_ill^^                          fill col _i_ndicator           _p_resentation      _C-t_ theme
+cycle _c_ase                _F_ollow^^                        _k_ey chord                    _r_ead only         _v_isible mode
 "
   ("ai"    aggressive-indent-mode)
   ("aw"    adaptive-wrap-prefix-mode)
@@ -168,8 +171,7 @@ cycle _c_ase                _F_ollow^^                        _l_ine num        
   ("p"     prez-mode)
   ("r"     dired-toggle-read-only) ; generalized `read-only-mode'
   ("S"     stripe-buffer-mode)
-  ("-"     toggle-truncate-lines :color red)
-  ("t"     transpose-frame)
+  ("t"     toggle-truncate-lines :color red)
   ("C-t"   toggle-theme)
   ("v"     visible-mode)
   ("<SPC>" whitespace-mode :color red)

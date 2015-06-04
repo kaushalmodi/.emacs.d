@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-19 17:27:18 kmodi>
+;; Time-stamp: <2015-06-04 11:16:15 kmodi>
 
 ;; dired, dired-x, dired+, dired-single
 ;; http://www.emacswiki.org/emacs-en/dired-single.el
@@ -84,7 +84,7 @@ It added extra strings at the front and back of the default dired buffer name."
         (if (not (string-match "/$" name))
             (rename-buffer (concat "*Dired* " name "/") t))))
     (add-hook 'dired-mode-hook #'rename-dired-buffer-name)
-    (add-hook 'dired-mode-hook (λ (toggle-truncate-lines 1))) ; enable truncation
+    (add-hook 'dired-mode-hook (lambda () (toggle-truncate-lines 1))) ; enable truncation
 
     (bind-keys
      :map dired-mode-map
