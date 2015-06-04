@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:37:23 kmodi>
+;; Time-stamp: <2015-06-04 15:09:35 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -64,8 +64,8 @@
   (progn
     (bind-keys
      :map modi-mode-map
-      ("C-c C-r" . rotate-frame)
-      ("C-c C-t" . transpose-frame)))) ; toggles between horz/vert splits
+      ("C-c o"    . rotate-frame)
+      ("C-c C-\\" . transpose-frame)))) ; toggles between horz/vert splits
 
 ;; http://www.whattheemacsd.com/
 (defun delete-current-buffer-file ()
