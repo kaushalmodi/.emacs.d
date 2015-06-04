@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 10:32:39 kmodi>
+;; Time-stamp: <2015-06-04 15:10:47 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -577,6 +577,23 @@ After replacement text:
     (when (not (looking-back "\\b"))
       (re-search-backward "\\b" nil :noerror))
     (map-query-replace-regexp regexp to-strings)))
+
+;; Make backups
+;; http://ergoemacs.org/emacs/elisp_make-backup.html
+(defun modi/make-backup ()
+  "Make a backup copy of current file.
+The backup file name has the form ‹name›~‹timestamp›~, in the same dir.
+If such a file already exist, it's overwritten.
+If the current buffer is not associated with a file, nothing's done."
+  (interactive)
+  (if (buffer-file-name)
+      (let* ((currentName (buffer-file-name))
+             (backupName (concat currentName
+                                 "~" (format-time-string "%Y%m%d_%H%M") "~")))
+        (copy-file currentName backupName :overwrite-if-already-exists)
+        (message (concat "Backup saved as: " (file-name-nondirectory backupName))))
+    (user-error "buffer is not a file.")))
+(bind-to-modi-map "`" modi/make-backup)
 
 ;; Unicode
 (require 'iso-transl)

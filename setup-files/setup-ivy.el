@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 14:41:03 kmodi>
+;; Time-stamp: <2015-06-04 15:05:51 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -17,8 +17,12 @@
       (progn
         (setq counsel-find-file-at-point t)
         (setq counsel-find-file-ignore-regexp
-              (concat "\\(?:\\`[#.]\\)" ; file names beginning with # or .
-                      "\\|\\(?:[#~]\\'\\)")) ; file names ending with # or ~
+              (concat
+               ;; file names beginning with # or .
+               "\\(?:\\`[#.]\\)"
+               ;; file names ending with # or ~
+               ;; but still allow backup files named like abc.el~timestamp~
+               "\\|\\(?:\\`[^~]+?[#~]\\'\\)"))
         (bind-key "C-x C-f" #'counsel-find-file modi-mode-map)))
     ;; overriding the `C-x C-o` binding with `delete-blank-lines'
     (bind-key "C-x C-o" #'ivy-recentf modi-mode-map)))
