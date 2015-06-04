@@ -1,62 +1,6 @@
-;; Time-stamp: <2015-02-24 09:47:46 kmodi>
+;; Time-stamp: <2015-06-04 16:03:44 kmodi>
 
 ;; `ox-html' needs to be required before `load'ing this patch file
-
-(defun org-html-fontify-code (code lang)
-  "Color CODE with htmlize library.
-      CODE is a string representing the source code to colorize.  LANG
-      is the language used for CODE, as a string, or nil."
-  (when code
-    (cond
-     ;; Case 1: No lang.  Possibly an example block.
-     ((not lang)
-      ;; Simple transcoding.
-      (org-html-encode-plain-text code))
-     ;; Case 2: No htmlize or an inferior version of htmlize
-     ((not (and (require 'htmlize nil t) (fboundp 'htmlize-region-for-paste)))
-      ;; Emit a warning.
-      (message "Cannot fontify src block (htmlize.el >= 1.34 required)")
-      ;; Simple transcoding.
-      (org-html-encode-plain-text code))
-     (t
-      ;; Map language
-      (setq lang (or (assoc-default lang org-src-lang-modes) lang))
-      (let* ((lang-mode (and lang (intern (format "%s-mode" lang)))))
-        (cond
-         ;; Case 1: Language is not associated with any Emacs mode
-         ((not (functionp lang-mode))
-          ;; Simple transcoding.
-          (org-html-encode-plain-text code))
-         ;; Case 2: Default.  Fontify code.
-         (t
-          ;; htmlize
-          (setq code (with-temp-buffer
-                       ;; Switch to language-specific mode.
-                       (funcall lang-mode)
-          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                       (when (require 'fill-column-indicator nil 'noerror)
-                         (fci-mode -1))
-          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                       (insert code)
-                       ;; Fontify buffer.
-                       (font-lock-fontify-buffer)
-                       ;; Remove formatting on newline characters.
-                       (save-excursion
-                         (let ((beg (point-min))
-                               (end (point-max)))
-                           (goto-char beg)
-                           (while (progn (end-of-line) (< (point) end))
-                             (put-text-property (point) (1+ (point)) 'face nil)
-                             (forward-char 1))))
-                       (org-src-mode)
-                       (set-buffer-modified-p nil)
-                       ;; Htmlize region.
-                       (org-html-htmlize-region-for-paste
-                        (point-min) (point-max))))
-          ;; Strip any enclosing <pre></pre> tags.
-          (let* ((beg (and (string-match "\\`<pre[^>]*>\n*" code) (match-end 0)))
-                 (end (and beg (string-match "</pre>\\'" code))))
-            (if (and beg end) (substring code beg end) code)))))))))
 
 ;; Remove HTML tags from the title string; otherwise the tags show up
 ;; verbatim in browser tabs3

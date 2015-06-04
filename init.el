@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 15:53:30 kmodi>
+;; Time-stamp: <2015-06-04 15:18:23 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -64,6 +64,7 @@
         header2
         helm helm-swoop
         help-fns+
+        htmlize
         hl-line+
         hungry-delete
         hydra
@@ -88,7 +89,7 @@
         neotree
         nlinum ; reviews say it's better than linum
         number ; number manipulation
-        org-plus-contrib htmlize
+        org-plus-contrib
         org-tree-slide
         ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         outorg navi-mode ; supporting packages for outshine
@@ -206,6 +207,7 @@
 (require 'setup-hardcore)
 (require 'setup-header2)
 (require 'setup-highlight)
+(require 'setup-htmlize)
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
 (require 'setup-ido) ; setup ido first and then ivy
