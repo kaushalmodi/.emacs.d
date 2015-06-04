@@ -445,37 +445,6 @@ the current window and the windows state prior to that.
         (set-window-configuration modi/toggle-one-window--window-configuration)
         (switch-to-buffer modi/toggle-one-window--buffer-name)))))
 
-;; http://emacs.stackexchange.com/a/12757/115
-;; Advise `display-buffer' to not execute if the current buffer is same as the
-;; to-be-displayed buffer if the new ALIST entry `inhibit-duplicate-buffer'
-;; is non-nil.
-(defun modi/execute-display-buffer-if-nil (buffer-or-name &optional action frame)
-  "This functions advices `display-buffer' such that `display-buffer' gets
-executed only if this function returns `nil'.
-
-This function returns `t' when below two conditions are true:
-1. BUFFER-OR-NAME has a matching entry in `display-buffer-alist' with a
-   non-nil `inhibit-duplicate-buffer' entry in its ALIST.
-2. BUFFER-OR-NAME is same as the current buffer."
-  ;; logic borrowed from the `display-function' definition
-  (if (null display-buffer-function)
-      (let* ((user-action
-              (display-buffer-assq-regexp
-               (buffer-name buffer-or-name) display-buffer-alist action))
-             ;; end of borrowed logic
-             (inhibit-duplicate-buffer (cdr (assq 'inhibit-duplicate-buffer user-action))))
-        (and inhibit-duplicate-buffer ; condition 1
-             (equal buffer-or-name (window-buffer)))) ; condition 2
-    nil))
-(advice-add 'display-buffer :before-until #'modi/execute-display-buffer-if-nil)
-
-;; Control where to display the *Messages* buffer
-(add-to-list 'display-buffer-alist
-             '("\\*Messages\\*" . ((display-buffer-reuse-window
-                                    display-buffer-pop-up-window)
-                                   . ((inhibit-duplicate-buffer . t)
-                                      (inhibit-same-window      . t)))))
-
 ;; https://tsdh.wordpress.com/2015/03/03/swapping-emacs-windows-using-dragndrop/
 (defun th/swap-window-buffers-by-dnd (drag-event)
   "Swaps the buffers displayed in the DRAG-EVENT's start and end window."

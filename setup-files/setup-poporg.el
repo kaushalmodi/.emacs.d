@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 15:56:23 kmodi>
+;; Time-stamp: <2015-06-04 00:11:05 kmodi>
 
 ;; poporg
 ;; https://github.com/QBobWatson/poporg
@@ -13,13 +13,7 @@
   :commands (poporg-dwim)
   :init
   (progn
-    (bind-to-modi-map "o" poporg-dwim))
-  :config
-  (progn
-    (add-to-list 'display-buffer-alist
-                 '("\\*poporg.*?\\*" . ((display-buffer-reuse-window
-                                         display-buffer-pop-up-window)
-                                        . ((inhibit-same-window . t)))))))
+    (bind-to-modi-map "o" poporg-dwim)))
 
 
 (provide 'setup-poporg)

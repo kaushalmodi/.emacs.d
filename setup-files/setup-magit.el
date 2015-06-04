@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-13 10:50:41 kmodi>
+;; Time-stamp: <2015-06-04 00:29:41 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -16,18 +16,7 @@
     (setq magit-repo-dirs                `( ,user-emacs-directory))
     (setq magit-diff-options             '("--ignore-space-change"))
 
-    (magit-auto-revert-mode -1) ; Disable magit auto revert
-
-    ;; http://emacs.stackexchange.com/a/2195/115
-    ;; While in "*magit..*" buffer on doing Commit (`c c'), the
-    ;; ".. COMMIT_EDITMSG" buffer opens and reuses the "*magit .." window.
-    ;; This is not useful when you'd want to add details about what you are
-    ;; committing while reviewing the diff in "*magit .." window. So ensure
-    ;; that the ".. COMMIT_EDITMSG" buffer always pops up in a new window.
-    ;; `display-buffer-alist' = '(CONDITION . (FUNCTION . ALIST))
-    (add-to-list 'display-buffer-alist
-                 '(".*COMMIT_EDITMSG". ((display-buffer-pop-up-window) .
-                                        ((inhibit-same-window . t)))))))
+    (magit-auto-revert-mode -1)))
 
 
 (provide 'setup-magit)
