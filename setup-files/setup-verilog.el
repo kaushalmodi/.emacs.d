@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:42:02 kmodi>
+;; Time-stamp: <2015-06-04 12:41:14 kmodi>
 
 ;;; Verilog
 
@@ -187,7 +187,7 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
 
 ;;; modi/verilog-jump-to-header-dwim
     (defun modi/verilog-jump-to-header-dwim (&optional fwd)
-      "Jump to a module instantiation header about the current point. If
+      "Jump to a module instantiation header above the current point. If
 a module instantiation is not found, jump to a block header if available.
 
 Using the optional argument FWD does the search in forward direction.
@@ -203,11 +203,17 @@ task, `define."
             (re-search-forward modi/verilog-header-re nil :noerror)
           (re-search-backward modi/verilog-header-re nil :noerror))))
 
-    (bind-key "C-^" #'modi/verilog-jump-to-header-dwim verilog-mode-map)
-    (bind-key "C-&" (lambda ()
-                      (interactive)
-                      (modi/verilog-jump-to-header-dwim '(4)))
-              verilog-mode-map)
+    (defun modi/verilog-jump-to-header-dwim-fwd ()
+      "Executes `modi/verilog-jump-to-header' with non-nil prefix argument so
+the point jumps to a module instantiation/block header *below* the current
+point."
+      (interactive)
+      (modi/verilog-jump-to-header-dwim :fwd))
+
+    (bind-keys
+     :map verilog-mode-map
+      ("C-^" . modi/verilog-jump-to-header-dwim)
+      ("C-&" . modi/verilog-jump-to-header-dwim-fwd))
 
     (when (featurep 'which-func)
       (add-to-list 'which-func-modes 'verilog-mode)
@@ -229,13 +235,8 @@ task, `define."
                       (let ((map (make-sparse-keymap)))
                         (define-key map [mode-line mouse-1] #'modi/verilog-jump-to-header-dwim)
                         (define-key map [mode-line mouse-4] #'modi/verilog-jump-to-header-dwim) ; scroll up
-                        (define-key map [mode-line mouse-2] nil)
-                        (define-key map [mode-line mouse-3] (lambda ()
-                                                              (interactive)
-                                                              (modi/verilog-jump-to-header-dwim '(4))))
-                        (define-key map [mode-line mouse-5] (lambda ()
-                                                              (interactive)
-                                                              (modi/verilog-jump-to-header-dwim '(4)))) ; scroll down
+                        (define-key map [mode-line mouse-2] #'modi/verilog-jump-to-header-dwim-fwd)
+                        (define-key map [mode-line mouse-5] #'modi/verilog-jump-to-header-dwim-fwd) ; scroll down
                         map))
 
           (if modi/verilog-which-func-xtra
