@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 17:26:11 kmodi>
+;; Time-stamp: <2015-06-08 11:48:54 kmodi>
 
 ;; Drag Stuff
 ;; https://github.com/rejeep/drag-stuff
@@ -23,8 +23,8 @@
 
     (bind-keys
      :map modi-mode-map
-      ("C-M-'" . drag-stuff-up)
-      ("C-M-/" . drag-stuff-down)
+      ("C-S-o" . drag-stuff-up)
+      ("C-S-l" . drag-stuff-down)
       ("C-:"   . drag-stuff-left)
       ("C-\""  . drag-stuff-right))
 
