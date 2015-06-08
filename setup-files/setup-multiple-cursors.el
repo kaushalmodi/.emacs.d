@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 10:54:50 kmodi>
+;; Time-stamp: <2015-06-08 16:27:52 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -6,6 +6,8 @@
 (use-package multiple-cursors
   :config
   (progn
+    (setq mc/list-file (locate-user-emacs-file "mc-lists"))
+
     (bind-keys
      :map modi-mode-map
       ("C-S-c C-S-c"   . mc/edit-lines)
