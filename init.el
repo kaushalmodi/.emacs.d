@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 15:18:23 kmodi>
+;; Time-stamp: <2015-06-08 09:10:43 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -24,7 +24,6 @@
         ;; outshine ; < forked
         ;; popwin ; < shackle
         ;; hl-anything ; temporarily removing it, bugs
-        ;; deft < forked
         ;; poporg ; edit comments from any other mode in org mode < forked
         ace-jump-mode ; < avy
         ace-window
@@ -42,6 +41,7 @@
         buffer-move
         cperl-mode
         csv-nav ; editing csv files
+        deft ; quick note taking and management
         diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
