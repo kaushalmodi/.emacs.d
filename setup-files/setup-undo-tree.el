@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 17:27:06 kmodi>
+;; Time-stamp: <2015-06-08 17:24:41 kmodi>
 
 ;; Undo Tree
 ;; http://www.dr-qubit.org/emacs.php
@@ -15,7 +15,7 @@
     (setq undo-tree-auto-save-history t)
 
     ;; Compress the history files as .gz files
-    (advice-add 'undo-tree-make-history-save-file-name :filter-return
+    (advice-add #'undo-tree-make-history-save-file-name :filter-return
                 (lambda (return-val) (concat return-val ".gz")))
 
     (global-undo-tree-mode)))

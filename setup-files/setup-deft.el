@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 08:55:46 kmodi>
+;; Time-stamp: <2015-06-08 17:24:57 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -29,7 +29,7 @@
     (defun modi/deft-dwim-save-windows (orig-fun &rest args)
       (setq modi/pre-deft-window-configuration (current-window-configuration))
       (apply orig-fun args))
-    (advice-add 'deft :around #'modi/deft-dwim-save-windows)
+    (advice-add #'deft :around #'modi/deft-dwim-save-windows)
 
     (defun modi/deft-quit ()
       "Save buffer, kill both the deft-opened file buffer and the *Deft* buffer,

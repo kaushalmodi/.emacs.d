@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 09:40:20 kmodi>
+;; Time-stamp: <2015-06-08 17:24:13 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -687,7 +687,7 @@ and move the point to the indentation level."
         (back-to-indentation))
     (just-one-space 1)))
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
-(advice-add 'kill-word :after (lambda (arg) (modi/just-one-space)))
+(advice-add #'kill-word :after (lambda (arg) (modi/just-one-space)))
 
 ;; Key bindings
 (bind-keys
