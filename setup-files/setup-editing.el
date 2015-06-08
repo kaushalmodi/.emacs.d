@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 15:10:47 kmodi>
+;; Time-stamp: <2015-06-08 09:40:20 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -675,6 +675,19 @@ If a region is selected, delete all blank lines in that region."
   (if (use-region-p)
       (flush-lines "^$" (region-beginning) (region-end))
     (delete-blank-lines)))
+
+(defun modi/just-one-space ()
+  "Normally execute `just-one-space' with its argument N set to 1.
+But if there is only white space to the left of the point, remove all spaces
+and move the point to the indentation level."
+  (interactive)
+  (if (looking-back "^ *")
+      (progn
+        (just-one-space 0)
+        (back-to-indentation))
+    (just-one-space 1)))
+;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
+(advice-add 'kill-word :after (lambda (arg) (modi/just-one-space)))
 
 ;; Key bindings
 (bind-keys
