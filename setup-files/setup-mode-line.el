@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-29 14:00:55 kmodi>
+;; Time-stamp: <2015-06-09 10:21:08 kmodi>
 
 ;; Customize the mode-line
 
@@ -54,8 +54,8 @@ If nil, show the same in the minibuffer.")
             ("^~/.*box/uvm/adsim_uvm_examples/" ":AD_UVM_EX:")
             (":\\(.*_EX\\):\\([a-z0-9_]\\{3\\}\\).*?/"
              (lambda (string) (concat ":\\1:"
-                                      (match-string 2 string)
-                                      ":")))
+                                 (match-string 2 string)
+                                 ":")))
             ;; Prefix with first 2 letters and last letter of project name
             ;; To distinguish between projects that could have same first 3 letters
             ;; Using "\,(upcase ...)" only works when calling `replace-regexp` interactively.
@@ -113,6 +113,8 @@ If nil, show the same in the minibuffer.")
                 " hl-highlight" ; hl-anything
                 " Helm"         ; Helm
                 " GG"           ; ggtags
+                " hs"           ; hideshow
+                " hs+"          ;
                 ))
         (add-to-list 'rm-text-properties '("Abbrev\\'"  'display " @")) ; Abbrev
         (add-to-list 'rm-text-properties '("Ind\\'"     'display " *>")) ; org indent
