@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 09:10:43 kmodi>
+;; Time-stamp: <2015-06-09 10:01:33 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -64,6 +64,7 @@
         header2
         helm helm-swoop
         help-fns+
+        hideshow-org hideshowvis
         htmlize
         hl-line+
         hungry-delete
@@ -200,7 +201,7 @@
 (require 'setup-elisp-slime-nav)
 (require 'setup-expand-region)
 (require 'setup-fci)
-(require 'setup-fold-this)
+(require 'setup-fold )
 (require 'setup-gist)
 (require 'setup-google-contacts)
 (require 'setup-guide-key)
@@ -245,7 +246,6 @@
 (require 'setup-which-func)
 (require 'setup-wrap-region)
 (require 'setup-xkcd)
-(require 'setup-yafolding)
 (require 'setup-yasnippet)
 ;; (require 'setup-fiplr)
 ;; (require 'setup-workgroups2)
