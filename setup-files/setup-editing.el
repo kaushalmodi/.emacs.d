@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 17:24:13 kmodi>
+;; Time-stamp: <2015-06-08 23:02:19 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -676,18 +676,29 @@ If a region is selected, delete all blank lines in that region."
       (flush-lines "^$" (region-beginning) (region-end))
     (delete-blank-lines)))
 
-(defun modi/just-one-space ()
-  "Normally execute `just-one-space' with its argument N set to 1.
-But if there is only white space to the left of the point, remove all spaces
-and move the point to the indentation level."
+(defun modi/space-as-i-mean ()
+  "Function to manage white space with `kill-word' operations.
+
+1. If point is at the beginning of the line after possibly some white space,
+   remove that white space and re-indent that line.
+2. If point is at the end of the line before possibly some white space,
+   do not do anything.
+3. Otherwise, ensure that there is only 1 white space around the point.
+
+During the whole operation do not change the point position with respect to the
+surrounding white space.
+
+abc|   def  ghi <-- point on the left of white space after 'abc'
+abc| ghi        <-- point still before white space after calling this function
+abc   |def  ghi <-- point on the right of white space before 'def'
+abc |ghi        <-- point still after white space after calling this function."
   (interactive)
-  (if (looking-back "^ *")
-      (progn
-        (just-one-space 0)
-        (back-to-indentation))
-    (just-one-space 1)))
+  (save-excursion ; maintain the initial position of the point w.r.t. space
+    (cond ((looking-back "^ *") (just-one-space 0) (indent-according-to-mode))
+          ((looking-at   " *$")) ; do nothing
+          (t                    (just-one-space 1)))))
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
-(advice-add #'kill-word :after (lambda (arg) (modi/just-one-space)))
+(advice-add #'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
 
 ;; Key bindings
 (bind-keys
