@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 17:24:01 kmodi>
+;; Time-stamp: <2015-06-09 11:27:21 kmodi>
 
 ;;; Verilog
 
@@ -365,6 +365,31 @@ http://emacs.stackexchange.com/a/8033/115"
     (advice-add #'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
     ;; Advise the indentation done by hitting `TAB'
     (advice-add #'verilog-indent-line          :before-until #'my/verilog-selective-indent)
+
+;;; hideshow
+    (with-eval-after-load 'setup-fold
+      (add-to-list 'hs-special-modes-alist
+                   `(verilog-mode ,(concat "\\b\\(begin"
+                                           "\\|task"
+                                           "\\|function"
+                                           "\\|class"
+                                           "\\|module"
+                                           "\\|program"
+                                           "\\|interface"
+                                           "\\|module"
+                                           "\\|case"
+                                           "\\|fork\\)\\b")
+                                  ,(concat "\\b\\(end"
+                                           "\\|endtask"
+                                           "\\|endfunction"
+                                           "\\|endclass"
+                                           "\\|endmodule"
+                                           "\\|endprogram"
+                                           "\\|endinterface"
+                                           "\\|endmodule"
+                                           "\\|endcase"
+                                           "\\|join\\|join_none\\|join_any\\)\\b")
+                                  nil verilog-forward-sexp-function)))
 
 ;;; hydra-verilog-template
     (defhydra hydra-verilog-template (:color blue
