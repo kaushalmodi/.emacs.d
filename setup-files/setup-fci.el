@@ -1,9 +1,10 @@
-;; Time-stamp: <2015-06-09 10:52:11 kmodi>
+;; Time-stamp: <2015-06-09 13:39:35 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
 
 (use-package fill-column-indicator
+  :if (not (bound-and-true-p disable-pkg-fci))
   :config
   (progn
 
