@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-29 15:33:09 kmodi>
+;; Time-stamp: <2015-06-09 08:17:40 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -53,8 +53,7 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
       ("q"   nil "cancel" :color blue))
     (bind-key "s-f" #'hydra-projectile/body modi-mode-map)
     (setq projectile-keymap-prefix (kbd "C-c P"))
-    (bind-key "C-c p" #'hydra-projectile/body modi-mode-map)
-    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map))
+    (bind-key "C-c p" #'hydra-projectile/body modi-mode-map))
   :config
   (progn
     (when (not (bound-and-true-p disable-pkg-ivy))
