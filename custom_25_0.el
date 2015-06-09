@@ -21,7 +21,7 @@
  '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
- '(fci-rule-color "#585858")
+ '(fci-rule-color "#585858" t)
  '(fringe-mode nil nil (fringe))
  '(indent-tabs-mode nil nil nil "use spaces instead of tabs for indentation")
  '(indicate-buffer-boundaries (quote ((top . right) (bottom . right))) nil nil "show frame boundaries in the fringe; as the fringe is activated only for the right-hand side, the buffer boundaries (top, bottom) are marked on the right side")
@@ -35,7 +35,8 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((eval when
+    ((checkdoc-minor-mode . t)
+     (eval when
            (featurep
             (quote aggressive-indent))
            (aggressive-indent-mode -1))
