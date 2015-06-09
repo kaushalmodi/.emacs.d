@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 00:52:09 kmodi>
+;; Time-stamp: <2015-06-09 14:33:24 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -74,17 +74,18 @@ the smart-mode-line theme."
        (my/disable-enabled-themes)
        (when (not (equal ',theme-name 'default))
          (load-theme ',theme-name t))
-       (when (featurep 'defuns)
+       (with-eval-after-load 'defuns
          (modi/blend-fringe))
-       (when (featurep 'setup-linum)
+       (with-eval-after-load 'setup-linum
          (modi/blend-linum))
-       (when (featurep 'smart-mode-line)
+       (with-eval-after-load 'smart-mode-line
          (sml/apply-theme ,dark nil :silent)) ; apply sml theme silently
-       (when (featurep 'setup-fci)
-         ;; Below commented code does not work
-         ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
-         (setq fci-rule-color ,fci-rule-color)
-         (modi/fci-redraw-frame-all-buffers)))))
+       (when (not (bound-and-true-p disable-pkg-fci))
+         (with-eval-after-load 'setup-fci
+           ;; Below commented code does not work
+           ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
+           (setq fci-rule-color ,fci-rule-color)
+           (modi/fci-redraw-frame-all-buffers))))))
 
 (defmacro modi/gen-all-theme-fns ()
   `(progn ,@(mapcar
@@ -165,10 +166,10 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 (modi/font-size-reset) ; Initialize font-size-pt var to the default value
 
 ;; Line truncation
-;; Disable truncation. This setting does NOT apply to windows split using `C-x 3`
-(setq-default truncate-lines nil)
-;; Disable truncation in windows split using `C-x 3` too.
-(setq-default truncate-partial-width-windows nil)
+;; Enable truncation. This setting does NOT apply to windows split using `C-x 3`
+(setq-default truncate-lines t)
+;; Enable truncation in windows split using `C-x 3` too.
+(setq-default truncate-partial-width-windows t)
 ;; Do `M-x toggle-truncate-lines` to toggle truncation mode.
 
 ;; Visual Line Mode
@@ -189,8 +190,7 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
   (dolist (hook modi/visual-line-mode-hooks)
     (remove-hook hook #'visual-line-mode)))
 
-(global-visual-line-mode -1) ; Disable visual line mode globally
-(modi/turn-on-visual-line-mode) ; and then enable it only in selected modes
+(modi/turn-on-visual-line-mode)
 
 ;; Turn on line wrapping fringe indicators in Visual Line Mode
 (setq-default visual-line-fringe-indicators '(left-curly-arrow
