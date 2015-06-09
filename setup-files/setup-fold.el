@@ -1,10 +1,13 @@
-;; Time-stamp: <2015-06-09 11:21:14 kmodi>
+;; Time-stamp: <2015-06-09 13:20:22 kmodi>
 
-;; Fold setup
+;;;; Fold setup
 
-;; Fold This
+(defface modi/fold-face
+  '((t (:foreground "deep sky blue" :slant italic)))
+  "Face used for fold ellipsis.")
+
+;;; Fold This - Fold selected
 ;; https://github.com/magnars/fold-this.el
-
 (use-package fold-this
   :init
   (progn
@@ -25,9 +28,9 @@
         (overlay-put o 'type 'fold-this)
         (overlay-put o 'invisible t)
         (overlay-put o 'keymap fold-this-keymap)
-        (overlay-put o 'face 'fold-this-overlay)
+        (overlay-put o 'face 'modi/fold-face)
         (overlay-put o 'modification-hooks '(fold-this--unfold-overlay))
-        (overlay-put o 'display (propertize "..." 'face 'fold-this-overlay))
+        (overlay-put o 'display (propertize " « » " 'face 'modi/fold-face))
         (overlay-put o 'evaporate t)
         (setq modi/fold-this--last-overlay o))
       (deactivate-mark))
@@ -40,22 +43,15 @@
        :map region-bindings-mode-map
         ("f" . fold-this)))))
 
-;; Yet Another Folding
-;; Folding code blocks based on indentation.
+;;; Yet Another Folding - Folding code blocks based on indentation
 ;; https://github.com/zenozeng/yafolding.el
-
 (use-package yafolding
   :config
   (progn
-    (setq yafolding-ellipsis-content ">>>folded")
+    (setq yafolding-ellipsis-content " ... ")
+    (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'modi/fold-face)))
 
-    (set-face-attribute 'yafolding-ellipsis-face nil
-                        :foreground "deep sky blue"
-                        :slant      'italic
-                        :weight     'bold
-                        :height     1.1)))
-
-;; Hide-show
+;;; Hide-show
 (use-package hideshow
   :config
   (progn
@@ -73,6 +69,7 @@
             (java-mode   "{" "}" "/[*/]" nil nil)
             (js-mode     "{" "}" "/[*/]" nil)))
 
+    ;; org-style folding/unfolding in hideshow
     (use-package hideshow-org
       :init
       (progn
@@ -83,47 +80,49 @@
                                             [(shift tab)]
                                             [backtab]))))
 
+    ;; Show hideshow foldable sections in the buffer
     (use-package hideshowvis
       :config
       (progn
-        (defun hideshowvis-symbols ()
-          "Defines the things necessary to get a + symbol in the fringe."
-          (interactive)
+        ;; + bitmap
+        (define-fringe-bitmap 'hs-expand-bitmap [0   ; 0 0 0 0 0 0 0 0
+                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                 126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                 126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                 0]) ; 0 0 0 0 0 0 0 0
 
-          (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
+        (defface modi/hs-fringe-face
+          '((t (:foreground "#888"
+                :box (:line-width 2 :color "grey75" :style released-button))))
+          "Face used to highlight the fringe on folded regions"
+          :group 'hideshow)
 
-          (defcustom hs-fringe-face 'hs-fringe-face
-            "*Specify face used to highlight the fringe on hidden regions."
-            :type 'face
-            :group 'hideshow)
-
-          (defface hs-fringe-face
-            '((t (:foreground "#888" :box (:line-width 2 :color "grey75" :style released-button))))
-            "Face used to highlight the fringe on folded regions"
-            :group 'hideshow)
-
-          (defun display-code-line-counts (ov)
-            (when (eq 'code (overlay-get ov 'hs))
-              (let* ((marker-string "*fringe-dummy*")
-                     (marker-length (length marker-string)))
-                (put-text-property 0 marker-length 'display
-                                   (list 'left-fringe 'hs-marker 'hs-fringe-face)
-                                   marker-string)
-                (overlay-put ov
-                             'before-string
-                             marker-string)
-                (overlay-put ov
-                             'help-echo
-                             (buffer-substring (overlay-start ov)
-                                               (overlay-end ov)))
-                (overlay-put ov
-                             'display
-                             (format "... [%d]"
-                                     (count-lines (overlay-start ov)
-                                                  (overlay-end ov))))
-                )))
-          (setq hs-set-up-overlay #'display-code-line-counts))
-        (hideshowvis-symbols)))
+        (defun modi/display-code-line-counts (ov)
+          (when (eq 'code (overlay-get ov 'hs))
+            (let* ((marker-string "*fringe-dummy*"))
+              ;; Place the + bitmap in the left fringe
+              (put-text-property 0 (length marker-string)
+                                 'display
+                                 '(left-fringe hs-expand-bitmap modi/hs-fringe-face)
+                                 marker-string)
+              (overlay-put ov
+                           'before-string
+                           marker-string)
+              (overlay-put ov
+                           'display
+                           (propertize
+                            (format " ... [%d] "
+                                    (count-lines (overlay-start ov)
+                                                 (overlay-end ov)))
+                            'face 'modi/fold-face))
+              (overlay-put ov
+                           'help-echo
+                           (buffer-substring (overlay-start ov)
+                                             (overlay-end ov))))))
+        (setq hs-set-up-overlay #'modi/display-code-line-counts)))
 
     (defun modi/turn-on-hs-minor-mode ()
       "Turn on hs-minor-mode only for specific modes."
@@ -143,6 +142,7 @@
 
     (modi/turn-on-hs-minor-mode)))
 
+;;; DWIM
 (defvar modi/fold-dwim--last-fn nil
   "Store the symbol of the last function called using `modi/fold-dwim'.")
 
