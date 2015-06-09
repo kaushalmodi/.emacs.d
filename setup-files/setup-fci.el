@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-04-01 09:37:03 kmodi>
+;; Time-stamp: <2015-06-09 10:52:11 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
 
 (use-package fill-column-indicator
-    :config
+  :config
   (progn
 
     (defconst modi/fci-mode-hooks '(verilog-mode-hook
@@ -39,6 +39,26 @@
     (setq-default fci-rule-use-dashes nil)
     (setq-default fci-dash-pattern 0.3)
     (setq-default fci-rule-column 80) ; default is 70
+
+    ;; Turn off fci-mode when popups are activated
+    ;; https://github.com/alpaker/Fill-Column-Indicator/issues/21#issuecomment-6959718
+    (with-eval-after-load 'popup
+      (defvar sanityinc/fci-mode-suppressed nil)
+
+      (defun sanityinc/suppress-fci-mode (&rest args)
+        "Suspend fci-mode while popups are visible"
+        (setq-local sanityinc/fci-mode-suppressed fci-mode)
+        (when fci-mode
+          (turn-off-fci-mode)))
+      (advice-add #'popup-create :before #'sanityinc/suppress-fci-mode)
+
+      (defun sanityinc/restore-fci-mode (&rest args)
+        "Restore fci-mode when all popups have closed"
+        (when (and sanityinc/fci-mode-suppressed
+                   (null popup-instances))
+          (setq-local sanityinc/fci-mode-suppressed nil)
+          (turn-on-fci-mode)))
+      (advice-add #'popup-delete :after #'sanityinc/restore-fci-mode))
 
     (defun modi/fci-redraw-frame-all-buffers ()
       "Redraw the fill-column rule in all buffers on the selected frame.
