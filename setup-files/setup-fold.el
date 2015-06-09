@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 13:20:22 kmodi>
+;; Time-stamp: <2015-06-09 14:52:32 kmodi>
 
 ;;;; Fold setup
 
@@ -56,8 +56,9 @@
   :config
   (progn
 
-    (defvar modi/hs-minor-mode-hooks '(emacs-lisp-mode-hook
-                                       verilog-mode-hook)
+    (defconst modi/hs-minor-mode-hooks '(emacs-lisp-mode-hook
+                                         verilog-mode-hook
+                                         cperl-mode-hook)
       "List of hooks of major modes in which hs-minor-mode should be enabled.")
 
     (setq hs-isearch-open 'code) ; default 'code, options: 'comment, t, nil
@@ -140,7 +141,21 @@
         (remove-hook hook #'hs-org/minor-mode)
         (remove-hook hook #'hideshowvis-minor-mode)))
 
-    (modi/turn-on-hs-minor-mode)))
+    (define-minor-mode modi/hideshow-mode
+      "Minor mode to toggle the `hs-minor-mode' and related modes in the
+current buffer."
+      :global     nil
+      :init-value nil
+      :lighter    " ḤṢ"
+      (if modi/hideshow-mode
+          (progn
+            (hs-minor-mode 1)
+            (hs-org/minor-mode 1)
+            (hideshowvis-minor-mode 1))
+        (progn
+          (hs-minor-mode -1)
+          (hs-org/minor-mode -1)
+          (hideshowvis-minor-mode -1))))))
 
 ;;; DWIM
 (defvar modi/fold-dwim--last-fn nil

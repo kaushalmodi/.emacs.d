@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:17:02 kmodi>
+;; Time-stamp: <2015-06-09 14:51:38 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -145,10 +145,10 @@ If universal arg is used, load the `init.el'."
                         :hint  nil)
   "
     TOGGLE ...
-_ai_ aggressive indent      _d_/_D_ debug on error/entry      indent _g_uide                 _l_ine num          _S_tripe buffer         _<SPC>_ whitespace
-_aw_ adaptive wrap          _e_debug^^                        _H_ardcore (allow arrows)      _m_odi mode         _t_ truncate lines
-menu _b_ar                  _f_ill^^                          fill col _i_ndicator           _p_resentation      _C-t_ theme
-cycle _c_ase                _F_ollow^^                        _k_ey chord                    _r_ead only         _v_isible mode
+_ai_ aggressive indent      _d_/_D_ debug on error/entry      indent _g_uide                 _k_ey chord         _r_ead only             _v_isible mode
+_aw_ adaptive wrap          _e_debug^^                        _h_ideshow                     _l_ine num          _S_tripe buffer         _<SPC>_ whitespace
+menu _b_ar                  _f_ill^^                          _H_ardcore (allow arrows)      _m_odi mode         _t_ truncate lines
+cycle _c_ase                _F_ollow^^                        fill col _i_ndicator           _p_resentation      _C-t_ theme
 "
   ("ai"    aggressive-indent-mode)
   ("aw"    adaptive-wrap-prefix-mode)
@@ -160,6 +160,7 @@ cycle _c_ase                _F_ollow^^                        _k_ey chord       
   ("f"     toggle-fill-unfill)
   ("F"     follow-mode)
   ("g"     indent-guide-mode)
+  ("h"     modi/hideshow-mode)
   ("H"     hardcore-mode)
   ("i"     fci-mode)
   ("k"     key-chord-mode :color red)
@@ -294,31 +295,26 @@ _cc_ Calc            _ee_ eww                 ma_g_it status          _m_an     
 ;; `C-h v`, enter the variable name, Enter
 ;; Example: `C-h v tooltip-mode`
 ;;
-;; (4) How to insert superscript
-;; `C-x 8 ^ 2` inserts ²
-;;
-;; (5) Killing buffers from an emacsclient frame
+;; (4) Killing buffers from an emacsclient frame
 ;; `C-x #`   Kills the buffer in emacsclient frame without killing the frame
 ;; `C-x 5 0` Kills the emacsclient frame
 ;;
-;; (6)
-;; `C-q' is bound to `quoted-insert'
+;; (5) `C-q' is bound to `quoted-insert'
 ;; Example: Pressing `C-q C-l' inserts the `^l' character (form feed):  
 ;;
-;; (7)
-;; The way to figure out how to type a particular key combination or to know
+;; (6) The way to figure out how to type a particular key combination or to know
 ;; what a particular key combination does, do help on a key `C-h k`, and type
 ;; the keystrokes you're interested in. What Emacs shows in the Help buffer is
 ;; the string you can pass to the macro 'kbd.
 ;;
-;; (8) How to know what the current major mode is?
+;; (7) How to know what the current major mode is?
 ;; `C-h v major-mode`
 ;;
-;; (9) Put this line at the top of an anything.gpg file to prevent it from
+;; (8) Put this line at the top of an anything.gpg file to prevent it from
 ;; asking for the password on each save
 ;; -*- epa-file-encrypt-to: ("<MY_EMAIL>") -*-
 ;;
-;; (10) Replace a string with string suffixed with incrementing numbers
+;; (9) Replace a string with string suffixed with incrementing numbers
 ;; http://www.reddit.com/r/emacs/comments/355bm0/til_after_so_long_using_emacs/cr1l6gy
 ;; Let's say you want to replace all the instances of "Here" with "Here1" "Here2" "Here3" ..
 ;;    1. M-x query-replace-regexp
