@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 15:05:51 kmodi>
+;; Time-stamp: <2015-06-09 16:59:52 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -25,7 +25,12 @@
                "\\|\\(?:\\`[^~]+?[#~]\\'\\)"))
         (bind-key "C-x C-f" #'counsel-find-file modi-mode-map)))
     ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-    (bind-key "C-x C-o" #'ivy-recentf modi-mode-map)))
+    (bind-key "C-x C-o" #'ivy-recentf modi-mode-map)
+    ;; Revert the default bindings to C-j and C-m
+    (bind-keys
+     :map ivy-minibuffer-map
+      ("C-m" . ivy-alt-done) ; RET
+      ("C-j" . ivy-done))))
 
 
 (provide 'setup-ivy)
