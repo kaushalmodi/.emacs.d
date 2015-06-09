@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 23:02:19 kmodi>
+;; Time-stamp: <2015-06-09 09:10:21 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -694,9 +694,16 @@ abc   |def  ghi <-- point on the right of white space before 'def'
 abc |ghi        <-- point still after white space after calling this function."
   (interactive)
   (save-excursion ; maintain the initial position of the point w.r.t. space
-    (cond ((looking-back "^ *") (just-one-space 0) (indent-according-to-mode))
-          ((looking-at   " *$")) ; do nothing
-          (t                    (just-one-space 1)))))
+    (cond ((looking-back "^ *") ; remove extra space at beginning of line
+           (just-one-space 0)
+           (indent-according-to-mode))
+          ((looking-at " *$") ; do nothing when point at end of line
+           )
+          ((or (looking-at   " ")
+               (looking-back " ")) ; adjust space only if it exists
+           (just-one-space 1))
+          (t ; do nothing otherwise
+           ))))
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
 (advice-add #'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
 
