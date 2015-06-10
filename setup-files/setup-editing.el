@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 09:10:21 kmodi>
+;; Time-stamp: <2015-06-10 13:11:47 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -707,7 +707,22 @@ abc |ghi        <-- point still after white space after calling this function."
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
 (advice-add #'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
 
-;; Key bindings
+(defmacro modi/add-whole-buffer-if-not-region-advice (symbol)
+  "Advice SYMBOL function (that originally acts on a region) to act on the
+whole buffer if a region is not selected."
+  `(advice-add ,symbol :around (lambda (orig-fn &rest args)
+                                 (save-excursion
+                                   (if (region-active-p)
+                                       (apply orig-fn args)
+                                     (apply orig-fn (list (point-min) (point-max)))
+                                     (message "Executed %s on the whole buffer"
+                                              (propertize
+                                               (symbol-name ,symbol)
+                                               'face
+                                               'font-lock-function-name-face)))))))
+(modi/add-whole-buffer-if-not-region-advice #'indent-region)
+(modi/add-whole-buffer-if-not-region-advice #'eval-region)
+
 (bind-keys
  :map modi-mode-map
   ;; override the binding of `M-;' for `comment-dwim'
