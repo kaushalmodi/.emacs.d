@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 09:35:44 kmodi>
+;; Time-stamp: <2015-06-10 17:29:44 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -132,6 +132,7 @@
         planet-theme ; dark blue
         twilight-bright-theme
         twilight-anti-bright-theme
+        writegood-mode ; highlight passive voice, weasel words and duplicates
         ))
 
 ;; Basic requires
@@ -246,6 +247,7 @@
 (require 'setup-undo-tree)
 (require 'setup-which-func)
 (require 'setup-wrap-region)
+(require 'setup-writegood)
 (require 'setup-xkcd)
 (require 'setup-yasnippet)
 ;; (require 'setup-fiplr)
