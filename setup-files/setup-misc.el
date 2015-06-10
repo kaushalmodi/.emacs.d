@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 14:51:38 kmodi>
+;; Time-stamp: <2015-06-10 10:23:45 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -209,10 +209,10 @@ cycle _c_ase                _F_ollow^^                        fill col _i_ndicat
 (defhydra hydra-launch (:color teal
                         :hint  nil)
   "
-_a_g cwd             _cr_ Rpn calc            _eb_ eww bookmarks      _h_l line flash          _n_eotree               _P_ermissions (chmod)       _w_/_W_   quick/full weather
-_b_ookmark jump      _d_ired current dir      _el_ eww Lucky          _l_oad current file      _o_rg capture           _sa_   Async shell cmd      ^^_<SPC>_ frequent
-_cq_ Quick calc      _ed_iff dwim             _f_irefox               _L_oad init.el           _p_ackage list          _ss_   Shell cmd
-_cc_ Calc            _ee_ eww                 ma_g_it status          _m_an                    _u_pgrade packages      _se_   emacs.SE
+_a_g cwd             _cr_ Rpn calc            _eb_ eww bookmarks      _h_l line flash          _m_an               _u_pgrade packages          ^^_se_   emacs.SE
+_b_ookmark jump      _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _w_/_W_   quick/full weather
+_cq_ Quick calc      _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      ^^_<SPC>_ frequent
+_cc_ Calc            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd
 "
   ("a"       ag-regexp-cwd)
   ("b"       bookmark-jump)
@@ -228,6 +228,7 @@ _cc_ Calc            _ee_ eww                 ma_g_it status          _m_an     
   ("g"       magit-status)
   ("f"       browse-url-firefox)
   ("h"       hl-line-flash)
+  ("i"       counsel-git-grep)
   ("l"       xah-run-current-file)
   ("L"       (xah-run-current-file 4))
   ("m"       man)
