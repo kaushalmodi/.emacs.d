@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 14:33:24 kmodi>
+;; Time-stamp: <2015-06-10 17:04:38 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -168,9 +168,10 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 ;; Line truncation
 ;; Enable truncation. This setting does NOT apply to windows split using `C-x 3`
 (setq-default truncate-lines t)
-;; Enable truncation in windows split using `C-x 3` too.
-(setq-default truncate-partial-width-windows t)
 ;; Do `M-x toggle-truncate-lines` to toggle truncation mode.
+;; `truncate-partial-width-windows' has to be nil for `toggle-truncate-lines'
+;; to work even in split windows
+(setq-default truncate-partial-width-windows nil)
 
 ;; Visual Line Mode
 ;; Do word wrapping only at word boundaries
