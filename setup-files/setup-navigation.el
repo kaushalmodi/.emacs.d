@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-29 13:25:52 kmodi>
+;; Time-stamp: <2015-06-10 14:23:24 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -253,7 +253,7 @@ being executed."
         (if fci-state-orig
             (fci-mode 'toggle))))
 
-    (bind-key "C-SPC" #'avy-isearch isearch-mode-map) ; isearch > avy
+    (bind-key "M-a" #'avy-isearch isearch-mode-map) ; isearch > avy
 
     (bind-keys
      :map modi-mode-map

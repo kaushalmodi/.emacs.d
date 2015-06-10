@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-02 22:32:33 kmodi>
+;; Time-stamp: <2015-06-10 15:50:43 kmodi>
 
 ;; Search / Replace
 
@@ -108,7 +108,7 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
         (swiper $query)))
 
     (bind-key "M-i"   #'isearch-swiper isearch-mode-map) ; isearch > swiper
-    (bind-key "C-SPC" #'swiper-avy swiper-map) ; swiper > avy-jump
+    (bind-key "M-a" #'swiper-avy swiper-map) ; swiper > avy
 
     (key-chord-define-global "'/" #'modi/swiper-dwim)
     (bind-key "M-i" #'modi/swiper-dwim modi-mode-map)))
