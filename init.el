@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 10:01:33 kmodi>
+;; Time-stamp: <2015-06-10 09:35:44 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -187,6 +187,7 @@
   (require 'setup-ag))
 (require 'setup-aggressive-indent)
 (require 'setup-auto-complete)
+(require 'setup-counsel)
 (require 'setup-big-fringe)
 (require 'setup-bookmark+)
 (require 'setup-buffer-move)
