@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-29 10:23:26 kmodi>
+;; Time-stamp: <2015-06-10 15:15:06 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -113,7 +113,7 @@ $Log: $"
       "Insert placeholder for insertion of revision logs auto inserted on
 doing check-ins."
       (let ((header-multiline modi/header-revision-log-placeholder))
-        (dotimes (i 5) (insert "\n"))
+        (dotimes (i 1) (insert "\n"))
         (modi/header-multiline)))
 
     (defsubst modi/header-position-point ()
@@ -135,8 +135,8 @@ Assume the separator line to have at least 10 characters."
                              modi/header-sep-line
                              modi/header-copyright
                              modi/header-sep-line
-                             modi/header-revision-log
                              header-eof
+                             modi/header-revision-log
                              modi/header-position-point))
 
     (modi/turn-on-auto-headers)))
