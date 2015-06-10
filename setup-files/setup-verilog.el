@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 11:27:21 kmodi>
+;; Time-stamp: <2015-06-10 15:47:52 kmodi>
 
 ;;; Verilog
 
@@ -6,7 +6,6 @@
   :load-path "elisp/verilog-mode"
   :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ; .v, .sv, .svh, .tv, .vp
          ("\\.psl\\'"         . verilog-mode)
-         ("\\.h\\'"           . verilog-mode)
          ("\\.vinc\\'"        . verilog-mode))
   :config
   (progn
