@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 13:11:47 kmodi>
+;; Time-stamp: <2015-06-10 17:43:19 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -712,7 +712,7 @@ abc |ghi        <-- point still after white space after calling this function."
 whole buffer if a region is not selected."
   `(advice-add ,symbol :around (lambda (orig-fn &rest args)
                                  (save-excursion
-                                   (if (region-active-p)
+                                   (if (use-region-p)
                                        (apply orig-fn args)
                                      (apply orig-fn (list (point-min) (point-max)))
                                      (message "Executed %s on the whole buffer"
