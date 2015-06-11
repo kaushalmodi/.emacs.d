@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 17:43:19 kmodi>
+;; Time-stamp: <2015-06-11 09:31:27 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -712,7 +712,12 @@ abc |ghi        <-- point still after white space after calling this function."
 whole buffer if a region is not selected."
   `(advice-add ,symbol :around (lambda (orig-fn &rest args)
                                  (save-excursion
-                                   (if (use-region-p)
+                                   ;; Execute the original SYMBOL function if
+                                   ;; it is called indirectly. Example: we do
+                                   ;; not want to trigger this advice if
+                                   ;; `eval-region' is called via `eval-defun'.
+                                   (if (or (not (eq ,symbol this-command))
+                                           (use-region-p))
                                        (apply orig-fn args)
                                      (apply orig-fn (list (point-min) (point-max)))
                                      (message "Executed %s on the whole buffer"
