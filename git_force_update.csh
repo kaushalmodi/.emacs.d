@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-06-02 15:52:47 kmodi>
+# Time-stamp: <2015-06-11 16:56:36 kmodi>
 
 # Usage: source git_force_update.csh <YOUR .emacs.d PATH>
 # Example: source git_force_update.csh ~/.emacs.d
@@ -11,7 +11,7 @@ if ( "${called}" != "" ) then  # called by source
 else # called by direct excution of the script
    set script_file_name=`readlink -f $0`
 endif
-unset ${called}
+unset {called}
 set script_dir=`dirname ${script_file_name}`
 # echo "Script file name: ${script_file_name}"
 # echo "Script dir: ${script_dir}"
@@ -115,12 +115,12 @@ if ( ${script_dir} == "/tmp" ) then
 endif
 
 unalias gfu
-unset ${git_submodules}
-unset ${pkg_dir}
-unset ${emacs_autobkp_dir}
-unset ${emacs_config_dir}
-unset ${start_dir}
-unset ${script_file_name}
-unset ${script_dir}
+unset {git_submodules}
+unset {pkg_dir}
+unset {emacs_autobkp_dir}
+unset {emacs_config_dir}
+unset {start_dir}
+unset {script_file_name}
+unset {script_dir}
 
 echo "Done\!\!"
