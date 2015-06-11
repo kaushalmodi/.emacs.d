@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 10:25:02 kmodi>
+;; Time-stamp: <2015-06-11 09:05:49 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -13,6 +13,11 @@
            ;; file names ending with # or ~
            ;; but still allow backup files named like abc.el~timestamp~
            "\\|\\(?:\\`[^~]+?[#~]\\'\\)"))
+
+    (bind-keys
+     :map counsel-describe-map
+      ("SPC" . minibuffer-complete-word))
+
     (bind-keys
      :map modi-mode-map
       ("C-x C-f" . counsel-find-file)
