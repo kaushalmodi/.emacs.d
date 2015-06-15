@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:33:47 kmodi>
+;; Time-stamp: <2015-06-12 23:52:52 kmodi>
 
 ;; multi-term
 ;; Source: http://www.emacswiki.org/emacs/multi-term.el
@@ -17,7 +17,7 @@
 
     ;; multi-term
     (setq multi-term-buffer-name "term")
-    (setq multi-term-program (getenv "SHELL"))
+    (setq multi-term-program "/bin/tcsh")
 
     (setq term-bind-key-alist
           '(("C-c C-c" . term-interrupt-subjob)            ; default
