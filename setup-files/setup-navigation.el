@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 14:23:24 kmodi>
+;; Time-stamp: <2015-06-15 16:03:40 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -309,8 +309,8 @@ being executed."
 ;; Allow the `term-mode-map' to override the binding to `C-a'
 (bind-keys
  ("C-a" . back-to-indentation-or-beginning-of-line) ; default binding for `move-beginning-of-line'
- ("M-}" . forward-paragraph) ;; default binding for `forward-paragraph'
- ("M-{" . backward-paragraph) ;; default binding for `backward-paragraph'
+ ("M-}" . forward-paragraph) ; default binding for `forward-paragraph'
+ ("M-{" . backward-paragraph) ; default binding for `backward-paragraph'
  )
 
 (key-chord-define-global "1q" #'goto-line) ; alternative for F1

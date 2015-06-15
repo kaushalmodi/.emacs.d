@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-11 09:31:27 kmodi>
+;; Time-stamp: <2015-06-15 17:08:46 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -734,23 +734,22 @@ whole buffer if a region is not selected."
   ("M-;"          . endless/comment-line-or-region)
   ("C-x d"        . delete-region)
   ("C-S-d"        . duplicate-current-line-or-region)
-  ;; override the binding of `C-x =` for `what-cursor-position'
+  ;; override the binding of `C-x =' for `what-cursor-position'
   ("C-x ="        . align-to-equals) ; align all = signs in selected region
   ("C-x \\"       . align-regexp)  ; align selected region to the entered regexp
   ;; align multiple columns in the selected region. Of course all the selected
   ;; lines must have the same number of columns of groups of non-space characters
   ("C-x |"        . align-columns)
   ("C-k"          . modi/kill-line)
-  ;; override the binding of `C-o` for `open-line'
+  ;; override the binding of `C-o' for `open-line'
   ("C-o"          . modi/smart-open-line)
   ("C-j"          . modi/pull-up-line)
-  ("M-j"          . comment-indent-new-line)
   ("M-="          . count-words) ; count words in buffer if no region selected
   ("<f9>"         . eval-region))
 
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
 ;; default binding `C-x =' with something else.
-(bind-to-modi-map "=" what-cursor-position)
+(bind-to-modi-map "=" #'what-cursor-position)
 
 ;; Comment Commander
 ;; Usage: Quickly pressing `j' twice will toggle comment on the current line or
@@ -789,7 +788,7 @@ whole buffer if a region is not selected."
 ;; TIPS
 
 ;; (1) Commented new line
-;; `M-j' - `comment-indent-new-line'
+;; `M-j'/`C-M-j' - `indent-new-comment-line' (aliased to `comment-indent-new-line')
 ;; This creates a commented new line; useful when writing multiline comments
 ;; like this one without having to manually type in the comment characters.
 
