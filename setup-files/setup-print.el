@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 11:42:32 kmodi>
+;; Time-stamp: <2015-06-15 17:08:47 kmodi>
 
 ;; Printing
 ;; http://www.emacswiki.org/emacs/PsPrintPackage-23
@@ -55,10 +55,10 @@ converted to PDF at the same location."
         (delete-file filename)
         (message "Deleted %s" filename)
         (message "Wrote %s" (concat (file-name-sans-extension filename) ".pdf")))
-      (bind-to-modi-map "p" modi/pdf-print-buffer-with-faces))
+      (bind-to-modi-map "p" #'modi/pdf-print-buffer-with-faces))
 
     ;; Print to printer defined by env var `PRINTER'
-    (bind-to-modi-map "P" ps-print-buffer-with-faces)))
+    (bind-to-modi-map "P" #'ps-print-buffer-with-faces)))
 
 
 (provide 'setup-print)

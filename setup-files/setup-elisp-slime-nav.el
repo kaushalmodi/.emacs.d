@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 11:30:29 kmodi>
+;; Time-stamp: <2015-06-15 17:08:48 kmodi>
 
 ;; Elisp Slime Nav
 ;; gtags/ctags like navigation into elisp source codes (even the compressed ones)
@@ -96,7 +96,7 @@
             (progn
               (error "Don't know how to find '%s'" sym)))))))
 
-    (bind-to-modi-map "?" modi/elisp-slime-nav-find-elisp-interactive)))
+    (bind-to-modi-map "?" #'modi/elisp-slime-nav-find-elisp-interactive)))
 
 
 (provide 'setup-elisp-slime-nav)

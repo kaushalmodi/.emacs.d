@@ -78,7 +78,7 @@ this command."
   (let ((value (eval (preceding-sexp))))
     (kill-sexp -1)
     (insert (format "%s" value))))
-(bind-to-modi-map "x" eval-and-replace-last-sexp)
+(bind-to-modi-map "x" #'eval-and-replace-last-sexp)
 
 ;; Toggle comment on current line or selected region
 ;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
@@ -593,7 +593,7 @@ If the current buffer is not associated with a file, nothing's done."
         (copy-file currentName backupName :overwrite-if-already-exists)
         (message (concat "Backup saved as: " (file-name-nondirectory backupName))))
     (user-error "buffer is not a file.")))
-(bind-to-modi-map "`" modi/make-backup)
+(bind-to-modi-map "`" #'modi/make-backup)
 
 ;; Unicode
 (require 'iso-transl)

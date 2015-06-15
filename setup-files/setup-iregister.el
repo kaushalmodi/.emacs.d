@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-08 08:19:20 kmodi>
+;; Time-stamp: <2015-06-15 17:08:48 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
@@ -73,7 +73,7 @@
      ("C-w"     . my/iregister-cut) ; Replace normal 'cut' function
      ("C-x r a" . hydra-append/body))
 
-    (bind-to-modi-map "i" iregister-latest-text)))
+    (bind-to-modi-map "i" #'iregister-latest-text)))
 
 
 (provide 'setup-iregister)

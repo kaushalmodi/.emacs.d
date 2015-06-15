@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-23 22:30:36 kmodi>
+;; Time-stamp: <2015-06-15 17:08:48 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
@@ -33,7 +33,7 @@
      :map elfeed-search-mode-map
      ("R" . elfeed-mark-all-as-read))
 
-    (bind-to-modi-map ";" elfeed)))
+    (bind-to-modi-map ";" #'elfeed)))
 
 
 (provide 'setup-elfeed)

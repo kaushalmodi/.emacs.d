@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-15 12:47:57 kmodi>
+;; Time-stamp: <2015-06-15 17:08:47 kmodi>
 
 ;; Highlight stuff
 
@@ -45,7 +45,7 @@ globally or locally (when called with prefix `C-u')."
       ("r" hl-restore-highlights      "restore" :color blue)
       ("t" hl-global-highlight-on/off "toggle")
       ("q" nil                        "cancel" :color blue))
-    (bind-to-modi-map "h" hydra-hl-anything/body)))
+    (bind-to-modi-map "h" #'hydra-hl-anything/body)))
 
 ;; Alternative highlighting package when `hl-anything' has issues
 (when (not (featurep 'hl-anything))
@@ -53,8 +53,8 @@ globally or locally (when called with prefix `C-u')."
     :load-path "elisp/highlight-global"
     :config
     (progn
-      (bind-to-modi-map "h" highlight-frame-toggle)
-      (bind-to-modi-map "H" clear-highlight-frame))))
+      (bind-to-modi-map "h" #'highlight-frame-toggle)
+      (bind-to-modi-map "H" #'clear-highlight-frame))))
 
 ;; Volatile Highlights
 ;; https://github.com/k-talo/volatile-highlights.el

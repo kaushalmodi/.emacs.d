@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-12 23:52:01 kmodi>
+;; Time-stamp: <2015-06-15 17:08:47 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -86,7 +86,7 @@ If universal arg is used, load the `init.el'."
             (message "Running…")
             (shell-command cmdStr "*xah-run-current-file output*" ))
         (message "No recognized program file suffix for this file.")))))
-(bind-to-modi-map "l" xah-run-current-file)
+(bind-to-modi-map "l" #'xah-run-current-file)
 
 ;; Help Functions +
 (use-package help-fns+

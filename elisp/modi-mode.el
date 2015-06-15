@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:27:15 kmodi>
+;; Time-stamp: <2015-06-15 17:08:30 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -53,22 +53,24 @@
 (require 'bind-key)
 (defmacro bind-to-modi-map (key fn)
   "Bind a function to the `modi-mode-map'
-USAGE: (bind-to-modi-map \"f\" full-screen-center)
-"
-  `(bind-key (concat ,modi/pseudo-map-prefix " " ,key) ',fn modi-mode-map))
-
-(defmacro bind-to-modi-map-noquote (key fn)
-  "Bind a function to the `modi-mode-map'
-USAGE: (bind-to-modi-map \"f\" (lambda () (interactive) (some-fn arg)))
+USAGE: (bind-to-modi-map \"f\" #'full-screen-center)
 "
   `(bind-key (concat ,modi/pseudo-map-prefix " " ,key) ,fn modi-mode-map))
 
+;; http://emacs.stackexchange.com/a/12906/115
 (defun unbind-from-modi-map (key)
   "Unbind a function from the `modi-mode-map'
 USAGE: (unbind-from-modi-map \"C-x m f\")
 "
   (interactive "kUnset key from modi-mode-map: ")
-  (define-key modi-mode-map key nil))
+  (define-key modi-mode-map (kbd (key-description key)) nil)
+  (message (concat "Unbound "
+                   (propertize (key-description key)
+                               'face 'font-lock-function-name-face)
+                   " key from the "
+                   (propertize "modi-mode-map"
+                               'face 'font-lock-function-name-face)
+                   ".")))
 
 
 (provide 'modi-mode)

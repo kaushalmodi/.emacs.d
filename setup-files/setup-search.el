@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 15:50:43 kmodi>
+;; Time-stamp: <2015-06-15 17:08:46 kmodi>
 
 ;; Search / Replace
 
@@ -177,7 +177,7 @@ searches all buffers."
          search-all-buffers-ignored-files))
       (remove-if-not 'buffer-file-name (buffer-list))))
    regexp))
-(bind-to-modi-map "s" search-all-buffers)
+(bind-to-modi-map "s" #'search-all-buffers)
 
 (defun modi/isearch-backward-symbol-at-point ()
   "Do incremental search backward for a symbol found near point.

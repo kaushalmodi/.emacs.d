@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 17:04:38 kmodi>
+;; Time-stamp: <2015-06-15 17:08:47 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -350,7 +350,7 @@ during presentations."
   :commands (modi/show-long-lines)
   :init
   (progn
-    (bind-to-modi-map "L" modi/show-long-lines))
+    (bind-to-modi-map "L" #'modi/show-long-lines))
   :config
   (progn
     (defun modi/show-long-lines()

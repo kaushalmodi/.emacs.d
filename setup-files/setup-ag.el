@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 17:16:56 kmodi>
+;; Time-stamp: <2015-06-15 17:08:47 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -6,8 +6,8 @@
 (use-package ag
   :init
   (progn
-    (bind-to-modi-map "a" ag-project-regexp)
-    (bind-to-modi-map "g" ag-project-regexp))
+    (bind-to-modi-map "a" #'ag-project-regexp)
+    (bind-to-modi-map "g" #'ag-project-regexp))
   :config
   (progn
     ;; wgrep-ag : To allow editing in *ag* buffer

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 15:09:35 kmodi>
+;; Time-stamp: <2015-06-15 17:08:47 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -467,9 +467,9 @@ the current window and the windows state prior to that.
  ("<S-f5>" . revert-all-buffers)
  ("<S-f9>" . eshell))
 
-(bind-to-modi-map "b" modi/switch-to-scratch-and-back)
-(bind-to-modi-map "f" full-screen-center)
-(bind-to-modi-map "y" bury-buffer)
+(bind-to-modi-map "b" #'modi/switch-to-scratch-and-back)
+(bind-to-modi-map "f" #'full-screen-center)
+(bind-to-modi-map "y" #'bury-buffer)
 
 (key-chord-define-global "XX" (lambda () (interactive) (kill-buffer (current-buffer))))
 (key-chord-define-global "ZZ" #'toggle-between-buffers)

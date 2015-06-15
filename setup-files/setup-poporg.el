@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 00:11:05 kmodi>
+;; Time-stamp: <2015-06-15 17:08:48 kmodi>
 
 ;; poporg
 ;; https://github.com/QBobWatson/poporg
@@ -13,7 +13,7 @@
   :commands (poporg-dwim)
   :init
   (progn
-    (bind-to-modi-map "o" poporg-dwim)))
+    (bind-to-modi-map "o" #'poporg-dwim)))
 
 
 (provide 'setup-poporg)

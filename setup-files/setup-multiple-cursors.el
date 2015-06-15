@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 09:22:27 kmodi>
+;; Time-stamp: <2015-06-15 17:08:47 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -28,8 +28,8 @@
         ("m" . mc/mark-more-like-this-extended)
         ("h" . mc-hide-unmatched-lines-mode)))
 
-    (bind-to-modi-map "m" mc/mark-all-like-this-dwim)
-    (bind-to-modi-map "r" set-rectangular-region-anchor)))
+    (bind-to-modi-map "m" #'mc/mark-all-like-this-dwim)
+    (bind-to-modi-map "r" #'set-rectangular-region-anchor)))
 
 
 (provide 'setup-multiple-cursors)
