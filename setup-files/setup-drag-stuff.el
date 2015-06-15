@@ -1,25 +1,24 @@
-;; Time-stamp: <2015-06-08 11:48:54 kmodi>
+;; Time-stamp: <2015-06-15 10:09:37 kmodi>
 
 ;; Drag Stuff
 ;; https://github.com/rejeep/drag-stuff
 
 (use-package drag-stuff
-  :init
-  (progn
-    (setq drag-stuff-modifier nil))
   :config
   (progn
+    ;; Do not use `drag-stuff' keys
+    (defun drag-stuff-define-keys ())
     ;; Solution posted by drag-stuff dev on posting an issue I faced,
     ;; https://github.com/rejeep/drag-stuff.el/issues/4
     (defvar drag-stuff-hax nil)
     (add-hook 'drag-stuff-before-drag-hook
               (lambda () (when (and (region-active-p) (zerop (current-column)))
-                           (backward-char 1)
-                           (setq drag-stuff-hax t))))
+                      (backward-char 1)
+                      (setq drag-stuff-hax t))))
     (add-hook 'drag-stuff-after-drag-hook
               (lambda () (when drag-stuff-hax
-                           (forward-char 1)
-                           (setq drag-stuff-hax nil))))
+                      (forward-char 1)
+                      (setq drag-stuff-hax nil))))
 
     (bind-keys
      :map modi-mode-map
