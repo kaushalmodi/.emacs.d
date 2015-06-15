@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-12 23:47:13 kmodi>
+;; Time-stamp: <2015-06-15 14:51:14 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -23,7 +23,8 @@
     (bind-keys
      :map ivy-minibuffer-map
       ("C-m" . ivy-alt-done) ; RET
-      ("C-j" . ivy-done))))
+      ("C-j" . ivy-done)
+      ("C-t" . ivy-toggle-fuzzy))))
 
 
 (provide 'setup-ivy)
