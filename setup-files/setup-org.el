@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:18:40 kmodi>
+;; Time-stamp: <2015-06-15 11:24:53 kmodi>
 
 ;; Org Mode
 
@@ -445,14 +445,15 @@ Execute this command while the point is on or after the hyper-linked org link."
             (setq org-reveal-theme   "default") ; beige blood moon night serif simple sky solarized
             (setq org-reveal-mathjax t))) ; Use mathjax.org to render LaTeX equations
 
-        ;; ODT export
-        ;; The .odt files can be opened directly in MS Word.
+        ;; ODT, doc export
         ;; http://stackoverflow.com/a/22990257/1219634
-        ;; odt export is disabled by default in org 8.x
-        ;; Comment out the ":disabled" line below to enable it.
         (use-package ox-odt
-          :disabled
-          )
+          ;; :disabled
+          :config
+          (progn
+            ;; Auto convert the exported .odt to .doc (MS Word 97) format
+            ;; Requires the soffice binary packaged with openoffice
+            (setq org-odt-preferred-output-format "doc")))
 
         (defun modi/org-export-to-html-txt-pdf ()
           "Export the org file to multiple formats."
