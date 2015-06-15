@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 15:47:52 kmodi>
+;; Time-stamp: <2015-06-15 16:20:35 kmodi>
 
 ;;; Verilog
 
@@ -38,14 +38,15 @@
               "\\(?1:" ; force group number to 1
               modi/verilog-identifier-re ; module name
               "\\)"
-              "\\s-+"
+              "\\(?:\n\\|\\s-\\)+" ; newline/space
               ;; optional hardware parameters followed by optional comments
               ;; followed by optional space/newline before instance name
               "\\(#([^;]+?)\\(\\s-*//.*?\\)*[^;\\./]+?\\)*"
-              "\\(?2:" modi/verilog-identifier-re "\\)" ; instance name
-                                        ; force group number to 2
-              "[^;a-zA-Z0-9_]*?(" ; optional space/newline after instance name
-                                        ; and before opening parenthesis `('
+              "\\(?2:" ; force group number to 2
+              modi/verilog-identifier-re
+              "\\)" ; instance name
+              "\\(?:\n\\|\\s-\\)*" ; optional newline/space
+              "(" ; opening parenthesis `(' before port list
               )
       "Regexp for a valid verilog module instance declaration.")
 
