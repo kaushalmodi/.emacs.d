@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 13:19:00 kmodi>
+;; Time-stamp: <2015-06-12 23:47:13 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -14,8 +14,8 @@
 
     (setq ivy-use-virtual-buffers t)
 
-    ;; (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
-    (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+    (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
+    ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
 
     ;; overriding the `C-x C-o` binding with `delete-blank-lines'
     (bind-key "C-x C-o" #'ivy-recentf modi-mode-map)
