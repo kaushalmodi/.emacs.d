@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-26 16:49:00 kmodi>
+;; Time-stamp: <2015-06-15 13:06:28 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -91,6 +91,8 @@
   (use-package ggtags
     :config
     (progn
+      ;; Requires global 6.5+
+      (setq ggtags-sort-by-nearness t)
 
       (defun my/ggtags-project-name ()
         "Return gtags project name."
