@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 10:23:45 kmodi>
+;; Time-stamp: <2015-06-12 23:52:01 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -210,9 +210,9 @@ cycle _c_ase                _F_ollow^^                        fill col _i_ndicat
                         :hint  nil)
   "
 _a_g cwd             _cr_ Rpn calc            _eb_ eww bookmarks      _h_l line flash          _m_an               _u_pgrade packages          ^^_se_   emacs.SE
-_b_ookmark jump      _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _w_/_W_   quick/full weather
-_cq_ Quick calc      _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      ^^_<SPC>_ frequent
-_cc_ Calc            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd
+_b_ookmark jump      _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
+_cq_ Quick calc      _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      _w_/_W_   quick/full weather
+_cc_ Calc            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd            ^^_<SPC>_ frequent
 "
   ("a"       ag-regexp-cwd)
   ("b"       bookmark-jump)
@@ -240,6 +240,7 @@ _cc_ Calc            _ee_ eww                 ma_g_it status          _L_oad ini
   ("sa"      async-shell-command)
   ("ss"      shell-command)
   ("se"      (sx-tab-newest nil "emacs"))
+  ("t"       multi-term)
   ("u"       paradox-upgrade-packages)
   ("w"       sunshine-quick-forecast)
   ("W"       sunshine-forecast)
