@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:30:37 kmodi>
+;; Time-stamp: <2015-06-16 11:47:50 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -18,27 +18,34 @@
     (defun modi/outline-toc ()
       "Create a table of contents for outshine headers.
 Insert/update the TOC after the line that has the “// Contents:” string.
-Here “//” represents 2 comment start characters for any major mode.
+Here “//” represents the `major-mode''s `comment-start' string.
+
 Don't add “Revision Control” heading to TOC."
       (interactive)
       (save-excursion
         (goto-char (point-min))
-        (let ((outline-comment-start (concat "^" ; beginning of line
-                                             "\\(\\(\\s<\\|"
-                                             (substring comment-start 0 1)
-                                             "\\)\\{2\\}\\)")) ; 2 comment chars
+        (let ((outline-comment-start (concat "\\(\\s<\\|"
+                                             ;; trim white space from comment-start
+                                             (replace-regexp-in-string
+                                              " " ""
+                                              comment-start)
+                                             "\\)"))
               parsed-outline-comment-start
               headings-list stars-list
               heading star)
           ;; (message "%s" outline-comment-start)
           (while (re-search-forward
-                  (concat outline-comment-start " " ; followed by space
-                          "\\*\\(\\**\\) " ; one or more * chars followed by space
-                          "\\(.+\\)") ; followed by heading
+                  (concat "^\\(?1:" ; beginning of line
+                          outline-comment-start
+                          "\\s-\\{1\\}\\)" ; SINGLE white space
+                          "\\*\\(?2:\\**\\) " ; one or more * chars followed by space
+                          "\\(?3:.+\\)") ; followed by heading
                   nil :noerror)
-            (setq parsed-outline-comment-start (match-string 1))
-            (setq star                         (match-string 3))
-            (setq heading                      (match-string 4))
+            (setq parsed-outline-comment-start (match-string-no-properties 1))
+            ;; Note that the below `star' var stores one less * than the actual;
+            ;; that's intentional
+            (setq star                         (match-string-no-properties 2))
+            (setq heading                      (match-string-no-properties 3))
             ;; (message "%s %s %s" parsed-outline-comment-start star heading)
             (when (not (string= heading "Revision Control"))
               (setq stars-list    (cons star stars-list))
@@ -48,21 +55,20 @@ Don't add “Revision Control” heading to TOC."
 
           (goto-char (point-min))
           (while (re-search-forward
-                  (concat outline-comment-start " " ; followed by space
-                          "Contents:")
+                  (concat "^" outline-comment-start " " "Contents:")
                   nil :noerror)
             (forward-line 1)
             ;; First delete old contents
             ;; Keep on going on to the next line till it reaches a blank line
             (while (progn
-                     (when (looking-at outline-comment-start)
+                     (when (looking-at (concat "^" outline-comment-start))
                        ;; Delete current line without saving to kill-ring
                        (let (p1 p2)
                          (save-excursion
                            (setq p1 (line-beginning-position))
                            (next-line 1)
-                           (setq p2 (line-beginning-position)))
-                         (delete-region p1 p2)))
+                           (setq p2 (line-beginning-position))
+                           (delete-region p1 p2))))
                      (not (looking-at "^\n"))))
             ;; Then print table of contents
             (insert (format "%s\n" parsed-outline-comment-start))
