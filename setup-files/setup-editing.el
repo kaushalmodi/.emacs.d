@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:46 kmodi>
+;; Time-stamp: <2015-06-16 13:05:22 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -41,12 +41,24 @@ there's a region, all lines that region covers will be duplicated."
 ;; at the time of saving
 ;; This is very useful for macro definitions in Verilog as for multi-line
 ;; macros, NO space is allowed after line continuation character "\"
-(add-hook 'write-file-hooks #'delete-trailing-whitespace)
+(add-hook 'write-file-functions #'delete-trailing-whitespace)
+
+;; Untabify buffer
+(defun modi/untabify-buffer ()
+  "Untabify the current buffer."
+  (interactive)
+  (untabify (point-min) (point-max))
+  ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
+  ;; Note that the function's return value is set to `nil' because if this
+  ;; function is added to `write-file-functions' hook, emacs will stay stuck at
+  ;; at the "Saving file .." message and the file won't be saved (as one of the
+  ;; functions in the `write-file-functions' is not returning `nil'.
+  nil)
 
 ;; Align
 ;; http://stackoverflow.com/questions/6217153/aligning-or-prettifying-code-in-emacs
 ;; http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
-(defun align-to-equals (begin end)
+(defun modi/align-to-equals (begin end)
   "Align region to equal signs"
   (interactive "r")
   ;; align-regexp syntax:  align-regexp (beg end regexp &optional group spacing repeat)
