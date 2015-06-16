@@ -9,13 +9,13 @@ For example, you can run
 #+BEGIN_SRC sh
 source git_force_update.csh ~/.emacs.d
 #+END_SRC
-/If a =~/.emacs.d= directory already exists, it will be =\cp -rf= ed to =~/.emacs.dbkpauto=./
+/If a =​~/​.emacs.d= directory already exists, it will be =\cp -rf= ed to =~/​.emacs.dbkpauto=./
 - Few setup files have setup done as per my personal tastes and needs:
     - =setup-files/setup-misc.el=
     - =setup-files/setup-smart-mode-line.el=
     - =setup-files/setup-registers.el=
 - If you want to change the default theme, font size, etc, you would want to edit =setup-files/setup-visual.el=
-- Any of the variables or global minor modes set in my config can be overridden in =setup-personal.el= which you need to create in the directory pointed by the variable =user-personal-directory=. /By default, this directory is =~/.emacs.d/personal/=./
+- Any of the variables or global minor modes set in my config can be overridden in =setup-personal.el= which you need to create in the directory pointed by the variable =user-personal-directory=. /By default, this directory is =~/​.emacs.d/personal/​=./
 - You can also choose to override certain variables in the very beginning of the =init.el= by customizing the variables in a =setup-var-overrides.el= file placed in =user-personal-directory=. You can refer to an example of this file [[https://github.com/kaushalmodi/.emacs.d/blob/master/personal/setup-var-overrides-EXAMPLE.el][here]].
 
 * Key points
