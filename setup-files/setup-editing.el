@@ -61,12 +61,12 @@ there's a region, all lines that region covers will be duplicated."
 ;; To perform align-regexp WITHOUT the default values of regexp, group, spacing, repeat
 ;; do `C-u M-x align-regexp`
 
-(defun align-columns (begin end)
+(defun modi/align-columns (begin end)
   "Align text columns"
   (interactive "r")
   ;; align-regexp syntax:  align-regexp (beg end regexp &optional group spacing repeat)
-  (align-regexp begin end "\\(\\s-+\\)[a-z=(),?':`\.{}]" 1 1 t)
-  (indent-region begin end)) ;; indent the region correctly after alignment
+  (align-regexp begin end "\\(\\s-+\\)[a-zA-Z0-9=(),?':`\.{}]" 1 1 t)
+  (indent-region begin end)) ; indent the region correctly after alignment
 
 ;; http://stackoverflow.com/a/3035574/1219634
 (defun eval-and-replace-last-sexp ()
@@ -735,11 +735,11 @@ whole buffer if a region is not selected."
   ("C-x d"        . delete-region)
   ("C-S-d"        . duplicate-current-line-or-region)
   ;; override the binding of `C-x =' for `what-cursor-position'
-  ("C-x ="        . align-to-equals) ; align all = signs in selected region
+  ("C-x ="        . modi/align-to-equals) ; align all = signs in selected region
   ("C-x \\"       . align-regexp)  ; align selected region to the entered regexp
   ;; align multiple columns in the selected region. Of course all the selected
   ;; lines must have the same number of columns of groups of non-space characters
-  ("C-x |"        . align-columns)
+  ("C-x |"        . modi/align-columns)
   ("C-k"          . modi/kill-line)
   ;; override the binding of `C-o' for `open-line'
   ("C-o"          . modi/smart-open-line)
