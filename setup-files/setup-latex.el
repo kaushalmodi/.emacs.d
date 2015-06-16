@@ -18,7 +18,7 @@
   "AucTeX install directory.")
 
 (when (file-exists-p auctex-install-dir)
-  (prepend-path auctex-install-dir)
+  (add-to-list 'load-path auctex-install-dir)
   (load "auctex.el" nil t t)
   (load "preview-latex.el" nil t t)
 

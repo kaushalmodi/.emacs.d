@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 17:29:44 kmodi>
+;; Time-stamp: <2015-06-16 16:58:29 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -7,15 +7,19 @@
 ;; (setq debug-on-message "Making tags")
 
 ;; Global variables
-(setq user-home-directory  (concat (getenv "HOME") "/")) ; must end with /
-(setq user-emacs-directory (concat user-home-directory ".emacs.d/")) ; must end with /
-(setq emacs-version-short  (replace-regexp-in-string
-                            "\\([0-9]+\\)\\.\\([0-9]+\\).*"
-                            "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
-(setq org-directory        (concat user-home-directory "org/")) ; must end with /
-(setq setup-packages-file  (locate-user-emacs-file "setup-packages.el"))
-(setq custom-file          (locate-user-emacs-file
-                            (concat "custom_" emacs-version-short ".el")))
+(setq user-home-directory     (concat (getenv "HOME") "/")) ; must end with /
+(setq user-emacs-directory    (concat user-home-directory ".emacs.d/")) ; must end with /
+(setq emacs-version-short     (replace-regexp-in-string
+                               "\\([0-9]+\\)\\.\\([0-9]+\\).*"
+                               "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
+(setq org-directory           (concat user-home-directory "org/")) ; must end with /
+(setq setup-packages-file     (locate-user-emacs-file "setup-packages.el"))
+(setq custom-file             (locate-user-emacs-file
+                               (concat "custom_" emacs-version-short ".el")))
+(setq user-personal-directory (let ((dir (concat user-emacs-directory
+                                                 "personal/")))
+                                (make-directory dir :parents)
+                                dir))
 
 ;; A list of packages to ensure are installed at launch
 (setq my-packages
@@ -139,6 +143,10 @@
 (require 'cl)
 (require 'cl-lib)
 
+;; Place `setup-var-overrides.el' with `(provide 'setup-var-overrides)' in
+;; `user-personal-directory'
+(require 'setup-var-overrides nil :noerror)
+
 (load custom-file :noerror :nomessage) ; Load the emacs `M-x customize` generated file
 
 (load setup-packages-file nil :nomessage) ; Load the packages
@@ -148,12 +156,6 @@
 ;; `(package-initialize)' line present in their init.el.
 ;;   I call this function in setup-packages.el and so am keeping the
 ;; commented out version here so that package.el does not add it again.
-
-;; Optional file containing `setq' statements to disable loading of selected
-;; packages. Format to be used: (setq disable-pkg-PKGNAME t)
-;; Example: (setq disable-pkg-pdf-tools t)
-;; Place `setup-disables.el' with `(provide 'setup-disables)' in `setup-files/'
-(require 'setup-disables nil :noerror)
 
 ;; Start `benchmark-init' as soon as possible
 (require 'benchmark-init)
@@ -281,9 +283,10 @@
 (require 'setup-calc)
 (require 'setup-image)
 
+;; Place `setup-work.el' with `(provide 'setup-work)' in `user-personal-directory'
 (require 'setup-work nil :noerror)
 
-;; Place `setup-personal.el' with `(provide 'setup-personal)' in `setup-files/'
+;; Place `setup-personal.el' with `(provide 'setup-personal)' in `user-personal-directory'
 (require 'setup-personal nil :noerror)
 
 ;; Load certain setup files after a 1 second idle time after emacs has loaded.

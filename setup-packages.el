@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 11:09:46 kmodi>
+;; Time-stamp: <2015-06-16 16:34:44 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -14,17 +14,11 @@
 (require 'package)
 
 (when (version<= "25.0" emacs-version)
-  (setq package-menu-async t) ; If non-nil, do activities asynchronously, like refreshing menu
-  )
+  (setq package-menu-async t)) ; If non-nil, do activities asynchronously, like refreshing menu
 
-(defun prepend-path ( my-path )
-  (setq load-path (cons (expand-file-name my-path) load-path)))
-
-(defun append-path ( my-path )
-  (setq load-path (append load-path (list (expand-file-name my-path)))))
-
-(prepend-path (concat user-emacs-directory "elisp/"))
-(prepend-path (concat user-emacs-directory "setup-files/"))
+(add-to-list 'load-path (concat user-emacs-directory "elisp/"))
+(add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
+(add-to-list 'load-path user-personal-directory)
 
 ;; Create the package install directory if it doesn't exist
 (setq package-user-dir (concat user-emacs-directory "elpa_"
