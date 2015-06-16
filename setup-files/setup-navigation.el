@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 16:03:40 kmodi>
+;; Time-stamp: <2015-06-16 09:14:56 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -303,15 +303,14 @@ being executed."
   ("C-{"    . backward-paragraph)
   ("M-["    . backward-paragraph))
 
-;; The `M-}' and `M-{' bindings are useful in Ibuffer and dired to move to
-;; next and previous marked items respectively. So bind them in global map so
-;; that those major modes and override the below bindings.
-;; Allow the `term-mode-map' to override the binding to `C-a'
 (bind-keys
+ ;; Allow the `term-mode-map' to override the binding to `C-a'
  ("C-a" . back-to-indentation-or-beginning-of-line) ; default binding for `move-beginning-of-line'
+ ;; The `M-}' and `M-{' bindings are useful in Ibuffer and dired to move to
+ ;; next and previous marked items respectively. Bind them in global map so
+ ;; that those major mode bindings can override the global bindings.
  ("M-}" . forward-paragraph) ; default binding for `forward-paragraph'
- ("M-{" . backward-paragraph) ; default binding for `backward-paragraph'
- )
+ ("M-{" . backward-paragraph)) ; default binding for `backward-paragraph'
 
 (key-chord-define-global "1q" #'goto-line) ; alternative for F1
 (key-chord-define-global "m," #'beginning-of-buffer)
