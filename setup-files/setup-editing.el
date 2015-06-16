@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 13:05:22 kmodi>
+;; Time-stamp: <2015-06-16 14:34:49 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -743,21 +743,24 @@ whole buffer if a region is not selected."
 (bind-keys
  :map modi-mode-map
   ;; override the binding of `M-;' for `comment-dwim'
-  ("M-;"          . endless/comment-line-or-region)
-  ("C-x d"        . delete-region)
-  ("C-S-d"        . duplicate-current-line-or-region)
+  ("M-;"        . endless/comment-line-or-region)
+  ("C-x d"      . delete-region)
+  ("C-S-d"      . duplicate-current-line-or-region)
   ;; override the binding of `C-x =' for `what-cursor-position'
-  ("C-x ="        . modi/align-to-equals) ; align all = signs in selected region
-  ("C-x \\"       . align-regexp)  ; align selected region to the entered regexp
+  ("C-x ="      . modi/align-to-equals) ; align all = signs in selected region
+  ("C-x \\"     . align-regexp)  ; align selected region to the entered regexp
   ;; align multiple columns in the selected region. Of course all the selected
   ;; lines must have the same number of columns of groups of non-space characters
-  ("C-x |"        . modi/align-columns)
-  ("C-k"          . modi/kill-line)
+  ("C-x |"      . modi/align-columns)
+  ("C-k"        . modi/kill-line)
   ;; override the binding of `C-o' for `open-line'
-  ("C-o"          . modi/smart-open-line)
-  ("C-j"          . modi/pull-up-line)
-  ("M-="          . count-words) ; count words in buffer if no region selected
-  ("<f9>"         . eval-region))
+  ("C-o"        . modi/smart-open-line)
+  ("C-j"        . modi/pull-up-line)
+  ("M-="        . count-words) ; count words in buffer if no region selected
+  ("<f9>"       . eval-region)
+  ;; override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
+  ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
+  ("<M-delete>" . backward-kill-word))
 
 ;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
 ;; default binding `C-x =' with something else.
