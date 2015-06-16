@@ -85,14 +85,14 @@ Don't add “Revision Control” heading to TOC."
       (interactive)
       (dolist (hook modi/outline-mode-hooks)
         (add-hook hook #'outline-minor-mode)
-        (add-hook hook (lambda () (add-hook 'local-write-file-hooks #'modi/outline-toc)))))
+        (add-hook hook (lambda () (add-hook 'write-file-functions #'modi/outline-toc)))))
 
     (defun modi/turn-off-outline-mode ()
       "Turn off outline-mode only for specific modes."
       (interactive)
       (dolist (hook modi/outline-mode-hooks)
         (remove-hook hook #'outline-minor-mode)
-        (remove-hook hook (lambda () (remove-hook 'local-write-file-hooks #'modi/outline-toc)))))
+        (remove-hook hook (lambda () (remove-hook 'write-file-functions #'modi/outline-toc)))))
 
     (modi/turn-on-outline-mode)
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 16:20:35 kmodi>
+;; Time-stamp: <2015-06-16 10:47:19 kmodi>
 
 ;;; Verilog
 
@@ -340,7 +340,7 @@ the project."
       ;; Note that keeping that `nil' in the argument is crucial; otherwise
       ;; emacs with stay stuck with the "Saving file .." message and the file
       ;; won't be saved.
-      (add-hook 'local-write-file-hooks
+      (add-hook 'write-file-functions
                 (lambda () (untabify (point-min) (point-max)) nil)))
     (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
 

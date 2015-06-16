@@ -35,7 +35,10 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((checkdoc-minor-mode . t)
+    ((eval add-hook
+           (quote write-file-functions)
+           (function modi/outline-toc))
+     (checkdoc-minor-mode . t)
      (eval when
            (featurep
             (quote aggressive-indent))
