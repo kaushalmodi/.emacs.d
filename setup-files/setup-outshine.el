@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 13:07:03 kmodi>
+;; Time-stamp: <2015-06-16 13:45:42 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -17,19 +17,21 @@
     ;; http://emacs.stackexchange.com/a/2803/115
     (defun modi/outline-toc ()
       "Create a table of contents for outshine headers.
-Insert/update the TOC after the line that has the “// Contents:” string.
-Here “//” represents the `major-mode''s `comment-start' string.
+Insert/update the TOC after the line that has the “<comment start> Contents:”
+string.
 
 Don't add “Revision Control” heading to TOC."
       (interactive)
       (save-excursion
         (goto-char (point-min))
-        (let ((outline-comment-start (concat "\\(\\s<\\|"
-                                             ;; trim white space from comment-start
-                                             (replace-regexp-in-string
-                                              " " ""
-                                              comment-start)
-                                             "\\)"))
+        (let ((outline-comment-start
+               (concat "\\(\\s<"
+                       (when comment-start
+                         (concat
+                          "\\|"
+                          ;; trim white space from comment-start
+                          (replace-regexp-in-string " " "" comment-start)))
+                       "\\)"))
               parsed-outline-comment-start
               headings-list stars-list
               heading star)
