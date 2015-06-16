@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 10:47:19 kmodi>
+;; Time-stamp: <2015-06-16 12:48:00 kmodi>
 
 ;;; Verilog
 
@@ -336,12 +336,7 @@ the project."
       ;; (turn-on-orgstruct++)
 
       ;; Replace tabs with spaces when saving files in verilog-mode
-      ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
-      ;; Note that keeping that `nil' in the argument is crucial; otherwise
-      ;; emacs with stay stuck with the "Saving file .." message and the file
-      ;; won't be saved.
-      (add-hook 'write-file-functions
-                (lambda () (untabify (point-min) (point-max)) nil)))
+      (add-hook 'write-file-functions #'modi/untabify-buffer nil :local))
     (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
 
 ;;; my/verilog-selective-indent

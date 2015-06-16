@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 11:47:50 kmodi>
+;; Time-stamp: <2015-06-16 13:07:03 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -91,14 +91,14 @@ Don't add “Revision Control” heading to TOC."
       (interactive)
       (dolist (hook modi/outline-mode-hooks)
         (add-hook hook #'outline-minor-mode)
-        (add-hook hook (lambda () (add-hook 'write-file-functions #'modi/outline-toc)))))
+        (add-hook hook (lambda () (add-hook 'write-file-functions #'modi/outline-toc nil :local)))))
 
     (defun modi/turn-off-outline-mode ()
       "Turn off outline-mode only for specific modes."
       (interactive)
       (dolist (hook modi/outline-mode-hooks)
         (remove-hook hook #'outline-minor-mode)
-        (remove-hook hook (lambda () (remove-hook 'write-file-functions #'modi/outline-toc)))))
+        (remove-hook hook (lambda () (remove-hook 'write-file-functions #'modi/outline-toc :local)))))
 
     (modi/turn-on-outline-mode)
 
