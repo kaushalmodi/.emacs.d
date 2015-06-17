@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 00:29:41 kmodi>
+;; Time-stamp: <2015-06-17 13:02:01 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -14,7 +14,8 @@
     (setq magit-auto-revert-mode         nil)
     (setq magit-expand-staged-on-commit  nil) ; default = nil
     (setq magit-repo-dirs                `( ,user-emacs-directory))
-    (setq magit-diff-options             '("--ignore-space-change"))
+    (setq magit-diff-options             nil) ; default
+    ;; (setq magit-diff-options             '("--ignore-space-change"))
 
     (magit-auto-revert-mode -1)))
 
