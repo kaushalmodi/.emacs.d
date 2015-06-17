@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:47 kmodi>
+;; Time-stamp: <2015-06-17 12:31:54 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -97,6 +97,8 @@ If universal arg is used, load the `init.el'."
       ("c"   . describe-key-briefly)
       ("C-c" . describe-command))))
 (bind-key "C" #'describe-char help-map)
+;;     C-x = <-- `what-cursor-position' ; default binding
+;; C-u C-x = <-- `describe-char'
 
 (>=e "25.0"
      (use-package saveplace
