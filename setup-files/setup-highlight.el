@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:47 kmodi>
+;; Time-stamp: <2015-06-17 10:09:46 kmodi>
 
 ;; Highlight stuff
 
@@ -13,6 +13,9 @@
   ;; and restarting emacs - https://github.com/boyw165/hl-anything/issues/14
   ;; Also causes to show this error at startup:
   ;;   org-mode fontification error
+  :init
+  (progn
+    (setq hl-highlight-save-file (locate-user-emacs-file "hl-save")))
   :config
   (progn
     (hl-highlight-mode 1)
