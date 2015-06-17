@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 13:45:42 kmodi>
+;; Time-stamp: <2015-06-17 11:39:05 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -116,12 +116,16 @@ Don't add “Revision Control” heading to TOC."
             ("C-c C-z" . foldout-zoom-subtree)
             ("C-c C-x" . foldout-exit-fold)))))
 
+    ;; Mirror the default org-mode behavior in `outline-minor-mode-map'
     (bind-keys
      :map outline-minor-mode-map
-      ("<M-up>"   . nil)
-      ("M-p"      . outline-previous-visible-heading)
-      ("<M-down>" . nil)
-      ("M-n"      . outline-next-visible-heading))
+      ("<backtab>" . outshine-cycle-buffer) ; global cycle using S-TAB
+      ("M-p"       . outline-previous-visible-heading)
+      ("M-n"       . outline-next-visible-heading)
+      ("<M-up>"    . outline-move-subtree-up)
+      ("<M-down>"  . outline-move-subtree-down)
+      ("<M-left>"  . outline-promote)
+      ("<M-right>" . outline-demote))
 
     (key-chord-define outline-minor-mode-map "JJ" #'outshine-imenu)))
 
