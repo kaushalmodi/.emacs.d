@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 11:24:53 kmodi>
+;; Time-stamp: <2015-06-17 09:56:11 kmodi>
 
 ;; Org Mode
 
@@ -144,10 +144,10 @@ this with to-do items than with projects or headings."
     (add-hook 'org-agenda-mode-hook
               (lambda ()
                 (bind-keys
-                  :map org-agenda-mode-map
-                   ("x" . sacha/org-agenda-done)
-                   ("X" . sacha/org-agenda-mark-done-and-add-followup)
-                   ("N" . sacha/org-agenda-new))))
+                 :map org-agenda-mode-map
+                  ("x" . sacha/org-agenda-done)
+                  ("X" . sacha/org-agenda-mark-done-and-add-followup)
+                  ("N" . sacha/org-agenda-new))))
 
     (bind-keys
      :map modi-mode-map
@@ -242,15 +242,15 @@ Execute this command while the point is on or after the hyper-linked org link."
         (add-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
         ;; (remove-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
 
-        (bind-key "<left>"   #'org-tree-slide-move-previous-tree            org-tree-slide-mode-map)
-        (bind-key "<right>"  #'org-tree-slide-move-next-tree                org-tree-slide-mode-map)
+        (bind-key "<left>"   #'org-tree-slide-move-previous-tree                                  org-tree-slide-mode-map)
+        (bind-key "<right>"  #'org-tree-slide-move-next-tree                                      org-tree-slide-mode-map)
         (bind-key "C-0"      (lambda () (interactive) (text-scale-set org-tree-slide-text-scale)) org-tree-slide-mode-map)
         (bind-key "C-="      (lambda () (interactive) (text-scale-increase 1))                    org-tree-slide-mode-map)
         (bind-key "C--"      (lambda () (interactive) (text-scale-decrease 1))                    org-tree-slide-mode-map)
-        (bind-key "C-1"      #'org-tree-slide-content                       org-tree-slide-mode-map)
-        (bind-key "C-2"      #'org-tree-slide-my-profile                    org-tree-slide-mode-map)
-        (bind-key "C-3"      #'org-tree-slide-simple-profile                org-tree-slide-mode-map)
-        (bind-key "C-4"      #'org-tree-slide-presentation-profile          org-tree-slide-mode-map)))
+        (bind-key "C-1"      #'org-tree-slide-content                                             org-tree-slide-mode-map)
+        (bind-key "C-2"      #'org-tree-slide-my-profile                                          org-tree-slide-mode-map)
+        (bind-key "C-3"      #'org-tree-slide-simple-profile                                      org-tree-slide-mode-map)
+        (bind-key "C-4"      #'org-tree-slide-presentation-profile                                org-tree-slide-mode-map)))
 
     (use-package ox
       :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
@@ -558,8 +558,8 @@ _h_tml    ^^          _t_ext          _A_SCII:
     (define-key org-mode-map "<" (lambda ()
                                    (interactive)
                                    (if (looking-back "^")
-                                        (hydra-org-template/body)
-                                      (self-insert-command 1))))
+                                       (hydra-org-template/body)
+                                     (self-insert-command 1))))
     ))
 
 
@@ -581,7 +581,7 @@ _h_tml    ^^          _t_ext          _A_SCII:
 
 ;; Auto-completions http://orgmode.org/manual/Completion.html
 ;; \ M-TAB <- TeX symbols
-;; * M-TAB <- Headlines; useful when doing [[* Partial heading M-TAB when linking to headings
+;; ​* M-TAB <- Headlines; useful when doing [[* Partial heading M-TAB when linking to headings
 ;; #+ M-TAB <- org-mode special keywords like #+DATE, #+AUTHOR, etc
 
 ;; Speed-keys are awesome! http://orgmode.org/manual/Speed-keys.html
@@ -597,3 +597,6 @@ _h_tml    ^^          _t_ext          _A_SCII:
 ;; h 	#+BEGIN_HTML ... #+END_HTML
 ;; H 	#+HTML:
 ;; I 	#+INCLUDE: line
+
+;; Disable selected org-mode markup character on per-file basis
+;; http://emacs.stackexchange.com/a/13231/115
