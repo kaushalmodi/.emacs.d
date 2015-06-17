@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 14:34:49 kmodi>
+;; Time-stamp: <2015-06-17 12:30:32 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -746,9 +746,7 @@ whole buffer if a region is not selected."
   ("M-;"        . endless/comment-line-or-region)
   ("C-x d"      . delete-region)
   ("C-S-d"      . duplicate-current-line-or-region)
-  ;; override the binding of `C-x =' for `what-cursor-position'
-  ("C-x ="      . modi/align-to-equals) ; align all = signs in selected region
-  ("C-x \\"     . align-regexp)  ; align selected region to the entered regexp
+  ("C-x \\"      . align-regexp)  ; align selected region to the entered regexp
   ;; align multiple columns in the selected region. Of course all the selected
   ;; lines must have the same number of columns of groups of non-space characters
   ("C-x |"      . modi/align-columns)
@@ -761,10 +759,7 @@ whole buffer if a region is not selected."
   ;; override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
   ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
   ("<M-delete>" . backward-kill-word))
-
-;; Bind `what-cursor-position' to `modi-mode-map' as I have overridden its
-;; default binding `C-x =' with something else.
-(bind-to-modi-map "=" #'what-cursor-position)
+(bind-to-modi-map "=" #'modi/align-to-equals)
 
 ;; Comment Commander
 ;; Usage: Quickly pressing `j' twice will toggle comment on the current line or
