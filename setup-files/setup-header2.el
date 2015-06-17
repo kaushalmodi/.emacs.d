@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 15:15:06 kmodi>
+;; Time-stamp: <2015-06-17 10:23:58 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -58,7 +58,7 @@
 
     (defsubst modi/header-projectname ()
       "Insert Project Name"
-      (insert header-prefix-string "Project    : "
+      (insert header-prefix-string "Project     : "
               (when (featurep 'projectile)
                 (replace-regexp-in-string "/proj/\\(.*?\\)/.*"
                                           "\\1"
@@ -67,7 +67,7 @@
 
     (defsubst modi/header-file-name ()
       "Insert \"Filename: \" line, using buffer's file name."
-      (insert header-prefix-string "Filename   : "
+      (insert header-prefix-string "Filename    : "
               (if (buffer-file-name)
                   (file-name-nondirectory (buffer-file-name))
                 (buffer-name))
@@ -76,14 +76,14 @@
     (defsubst modi/header-author ()
       "Insert current user's name (`user-full-name') as this file's author."
       (insert header-prefix-string
-              "Author     : "
+              "Author      : "
               (user-full-name) "@"
               (replace-regexp-in-string ".*?\\(\\w+\\.\\w+\\)$" "\\1"
                                         (getenv "HOST"))
               "\n"))
 
     (defsubst modi/header-description ()
-      "Insert \"Description: \" line."
+      "Insert \"Description : \" line."
       (insert header-prefix-string "Description: \n"))
 
     (defsubst modi/header-sep-line ()
