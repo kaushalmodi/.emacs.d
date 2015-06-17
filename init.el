@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 16:58:29 kmodi>
+;; Time-stamp: <2015-06-17 09:49:49 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -50,6 +50,7 @@
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
         drag-stuff
+        easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
         eimp ; required by org-show
         elfeed
         elisp-slime-nav ; tag based code navigation for elisp; works even for compressed code

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 10:21:08 kmodi>
+;; Time-stamp: <2015-06-17 12:33:30 kmodi>
 
 ;; Customize the mode-line
 
@@ -122,6 +122,7 @@ If nil, show the same in the minibuffer.")
         (add-to-list 'rm-text-properties '("Server\\'"  'display " Σ")) ; Server
         (with-eval-after-load 'setup-symbola
           (when font-symbola-p
+            (add-to-list 'rm-text-properties '("ez-esc\\'" 'display " ⑊")) ; easy-escape
             (add-to-list 'rm-text-properties '("Vis\\'" 'display " 👀")) ; visible-mode
             (add-to-list 'rm-text-properties '("ivy\\'" 'display " 🍁")))) ; ivy
         ))

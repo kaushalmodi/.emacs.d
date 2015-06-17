@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:15:59 kmodi>
+;; Time-stamp: <2015-06-17 12:41:23 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -171,6 +171,15 @@ Lisp function does not specify a special indentation."
              (file-exists-p (byte-compile-dest-file buffer-file-name)))
     (byte-compile-file buffer-file-name)))
 (add-hook 'after-save-hook #'byte-compile-current-buffer)
+
+;; Easy Escape
+;; https://github.com/cpitclaudel/easy-escape
+(use-package easy-escape
+  :config
+  (progn
+    (setq easy-escape-character ?\\) ; default
+    ;; (setq easy-escape-character ?⑊)
+    (add-hook 'emacs-lisp-mode-hook #'easy-escape-minor-mode)))
 
 
 (provide 'setup-elisp)
