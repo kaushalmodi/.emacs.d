@@ -1,6 +1,7 @@
-;; Time-stamp: <2015-03-25 14:56:15 kmodi>
+;; Time-stamp: <2015-06-18 09:47:34 kmodi>
 
-;; YASnippet
+;; yasnippet
+;; https://github.com/capitaomorte/yasnippet
 
 (use-package yasnippet
   :if (not (bound-and-true-p disable-pkg-yasnippet))
