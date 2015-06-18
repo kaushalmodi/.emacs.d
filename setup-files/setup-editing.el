@@ -731,8 +731,14 @@ whole buffer if a region is not selected."
                                    (if (or (not (eq ,symbol this-command))
                                            (use-region-p))
                                        (apply orig-fn args)
+                                     ;; Prevent the "The mark is not set now,
+                                     ;; so there is no region." error. So
+                                     ;; initialize region by setting/unsetting
+                                     ;; the mark.
+                                     (set-mark (point))
+                                     (deactivate-mark)
                                      (apply orig-fn (list (point-min) (point-max)))
-                                     (message "Executed %s on the whole buffer"
+                                     (message "Executed %s on the whole buffer."
                                               (propertize
                                                (symbol-name ,symbol)
                                                'face
