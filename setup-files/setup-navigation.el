@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 09:14:56 kmodi>
+;; Time-stamp: <2015-06-18 10:56:08 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -281,6 +281,34 @@ being executed."
 (if (featurep 'avy)
     (bind-key "<f1>" #'modi/goto-line) ; bind in global map
   (bind-key "<f1>" #'goto-line))
+
+;; Quickly save and restore point using bookmarks
+(defun modi/save-point (restore)
+  "Save the current point to a bookmark.
+
+If RESTORE is non-nil, restore the saved point."
+  (interactive "P")
+  (let ((reg-char ?🖝)
+        (text (if restore
+                  (list "Restored" "from")
+                (list "Saved" "to")))
+        (message-log-max nil))
+    (if restore
+        (jump-to-register reg-char)
+      (point-to-register reg-char))
+    (message "%s point %s register %s (%s)."
+             (nth 0 text)
+             (nth 1 text)
+             (get-char-code-property reg-char 'name)
+             (char-to-string reg-char))))
+(defun modi/restore-point ()
+  "Restore saved point from register."
+  (interactive)
+  (modi/save-point :restore))
+(bind-keys
+ :map modi-mode-map
+  ("<M-home>" . modi/save-point)
+  ("<M-end>"  . modi/restore-point))
 
 (bind-keys
  :map modi-mode-map
