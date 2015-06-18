@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:47 kmodi>
+;; Time-stamp: <2015-06-18 00:15:08 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -441,6 +441,16 @@ the current window and the windows state prior to that.
           (set-window-buffer end-win bs))))))
 (bind-key "<C-S-drag-mouse-1>" #'th/swap-window-buffers-by-dnd modi-mode-map)
 
+(defun modi/kill-buffer-dwim (kill-next-error-buffer)
+  "Kill the current buffer.
+
+If KILL-NEXT-ERROR-BUFFER is non-nil, kill the `next-error' buffer. Examples of such
+buffers: *gtags-global*, *ag*, *Occur*."
+  (interactive "P")
+  (if kill-next-error-buffer
+      (kill-buffer (next-error-find-buffer))
+    (kill-buffer (current-buffer))))
+
 (bind-keys
  :map modi-mode-map
   ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
@@ -471,7 +481,7 @@ the current window and the windows state prior to that.
 (bind-to-modi-map "f" #'full-screen-center)
 (bind-to-modi-map "y" #'bury-buffer)
 
-(key-chord-define-global "XX" (lambda () (interactive) (kill-buffer (current-buffer))))
+(key-chord-define-global "XX" #'modi/kill-buffer-dwim)
 (key-chord-define-global "ZZ" #'toggle-between-buffers)
 (key-chord-define-global "5t" #'revert-buffer) ; alternative to F5
 
