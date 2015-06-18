@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 14:51:14 kmodi>
+;; Time-stamp: <2015-06-17 23:10:21 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -22,9 +22,18 @@
     ;; Revert the default bindings to C-j and C-m
     (bind-keys
      :map ivy-minibuffer-map
-      ("C-m" . ivy-alt-done) ; RET
-      ("C-j" . ivy-done)
-      ("C-t" . ivy-toggle-fuzzy))))
+      ("C-m"   . ivy-alt-done) ; RET
+      ("C-S-m" . ivy-immediate-done)
+      ("C-j"   . ivy-done)
+      ("C-t"   . ivy-toggle-fuzzy))))
 
 
 (provide 'setup-ivy)
+
+;; Call `ivy-immediate-done' if you want to use whatever you typed in the
+;; search field, and ignore the suggestions provided by ivy in the list.
+;;
+;;  C-u <`ivy-alt-done' binding> <-- `ivy-immediate-done'
+;;
+;; This is useful especially when renaming files (and the name you want to
+;; rename to partially matches one of the existing files).
