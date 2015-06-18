@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 12:31:54 kmodi>
+;; Time-stamp: <2015-06-18 09:43:47 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -139,6 +139,22 @@ If universal arg is used, load the `init.el'."
 (define-key special-mode-map (kbd "k") (lambda ()
                                          (interactive)
                                          (kill-buffer (current-buffer)))) ; only kill
+
+(defvar emacs-build-hash emacs-repository-version
+  "Git hash of the commit at which this version was emacs was built.")
+
+(defun modi/browse-current-build-git (log)
+  "Browse to the emacs git page for the current build commit details.
+Also save the url to the kill-ring.
+
+If LOG is non-nil, browse to the log page having the current build commit."
+  (interactive "P")
+  (let* ((commit-or-log (if log "log" "commit"))
+         (url (concat "http://git.savannah.gnu.org/cgit/emacs.git/"
+                      commit-or-log
+                      "/?id=" emacs-repository-version)))
+    (kill-new url)
+    (browse-url url)))
 
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
