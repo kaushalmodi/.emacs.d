@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 17:24:57 kmodi>
+;; Time-stamp: <2015-06-18 00:41:49 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -9,7 +9,8 @@
   :commands (modi/deft-dwim deft deft-new-file deft-find-file)
   :init
   (progn
-    (bind-key "<f6>" #'modi/deft-dwim modi-mode-map))
+    (bind-key "C-c d" #'modi/deft-dwim modi-mode-map)
+    (bind-key "<f6>"  #'modi/deft-dwim modi-mode-map))
   :config
   (progn
     (setq deft-directory (concat org-directory "notes/"))

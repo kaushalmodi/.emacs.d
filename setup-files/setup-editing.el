@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 12:30:32 kmodi>
+;; Time-stamp: <2015-06-18 00:54:59 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -526,7 +526,7 @@ C-u C-u C-u -> Both prefix and user name are not inserted."
     ;; Insert a space after the time stamp if not at the end of the line
     (when (not (looking-at " *$"))
       (insert " "))))
-(bind-key "C-c d" #'modi/insert-time-stamp modi-mode-map)
+(bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
 
 ;; Replace identical strings with incremental number suffixes
 (defvar modi/replace-with-incr-num-suffix-max 100
