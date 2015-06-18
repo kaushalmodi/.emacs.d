@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 14:52:32 kmodi>
+;; Time-stamp: <2015-06-18 00:40:26 kmodi>
 
 ;;;; Fold setup
 
@@ -165,25 +165,41 @@ current buffer."
   "If region is selected use `fold-this', else use `yafolding'.
 If prefix argument is used, `set-selective-display' to the current column."
   (interactive "r")
-  (if (region-active-p)
-      (progn
-        (fold-this beg end)
-        (setq modi/fold-dwim--last-fn #'fold-this))
-    (if current-prefix-arg
+  (let ((message-log-max nil))
+    (if (region-active-p)
         (progn
-          (set-selective-display (current-column))
-          (setq modi/fold-dwim--last-fn #'set-selective-display))
-      (progn
-        (yafolding-toggle-element)
-        (setq modi/fold-dwim--last-fn #'yafolding-toggle-element)))))
+          (fold-this beg end)
+          (setq modi/fold-dwim--last-fn #'fold-this)
+          (message "Folded the selected region using %s."
+                   (propertize
+                    (symbol-name modi/fold-dwim--last-fn)
+                    'face 'font-lock-function-name-face)))
+      (if current-prefix-arg
+          (progn
+            (set-selective-display (current-column))
+            (setq modi/fold-dwim--last-fn #'set-selective-display)
+            (message "Folded using %s at column %d."
+                     (propertize
+                      (symbol-name modi/fold-dwim--last-fn)
+                      'face 'font-lock-function-name-face)
+                     (current-column)))
+        (progn
+          (yafolding-toggle-element)
+          (setq modi/fold-dwim--last-fn #'yafolding-toggle-element)
+          (message "Folded at current indent level using %s."
+                   (propertize
+                    (symbol-name modi/fold-dwim--last-fn)
+                    'face 'font-lock-function-name-face)))))))
 ;; Below binding is made in global map and not in my minor mode as I want
 ;; other modes like org-mode to override that binding
 (bind-key "C-c C-f" #'modi/fold-dwim)
-(bind-key "C-c f"   #'modi/fold-dwim modi-mode-map)
+(bind-key "C-c &"   #'modi/fold-dwim modi-mode-map)
 
 (defun modi/unfold-if-last-command-fold (&rest args)
   "If the `last-command' was a folding command, undo that fold."
-  (let (last-cmd-was-fold)
+  (let ((message-log-max nil)
+        (msg "Undid the last fold.")
+        last-cmd-was-fold)
     (cond
      ;; if last command was a fold using `fold-this'
      ((or (and (eq modi/fold-dwim--last-fn #'fold-this)
@@ -205,7 +221,9 @@ If prefix argument is used, `set-selective-display' to the current column."
       (setq last-cmd-was-fold t))
      ;; otherwise do nothing
      (t
-      ))
+      (setq msg nil)))
+    (when msg
+      (message msg))
     last-cmd-was-fold))
 ;; Advice `undo-tree-undo' to unfold the previous fold
 (with-eval-after-load 'undo-tree
