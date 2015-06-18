@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 12:48:00 kmodi>
+;; Time-stamp: <2015-06-18 01:41:08 kmodi>
 
 ;;; Verilog
 
@@ -22,7 +22,8 @@
     (setq verilog-tab-always-indent        t)
     (setq verilog-minimum-comment-distance 10)
     (setq verilog-indent-begin-after-if    t)
-    (setq verilog-auto-lineup              'all)
+    ;; (setq verilog-auto-lineup              'declarations) ; default
+    (setq verilog-auto-lineup              nil)
     (setq verilog-align-ifelse             nil)
     ;; (setq verilog-align-ifelse             t)
     (setq verilog-auto-endcomments         t)
