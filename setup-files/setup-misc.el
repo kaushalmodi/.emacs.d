@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 09:43:47 kmodi>
+;; Time-stamp: <2015-06-18 12:11:35 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -141,7 +141,7 @@ If universal arg is used, load the `init.el'."
                                          (kill-buffer (current-buffer)))) ; only kill
 
 (defvar emacs-build-hash emacs-repository-version
-  "Git hash of the commit at which this version was emacs was built.")
+  "Git hash of the commit at which this version of emacs was built.")
 
 (defun modi/browse-current-build-git (log)
   "Browse to the emacs git page for the current build commit details.
