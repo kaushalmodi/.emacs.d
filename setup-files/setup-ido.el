@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 14:38:52 kmodi>
+;; Time-stamp: <2015-06-19 12:37:44 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -33,6 +33,10 @@
   (progn
     ;; Don't enable `ido-mode' when `ivy-mode' is intended to be used instead
     (when (bound-and-true-p disable-pkg-ivy)
+      ;; Disable ivy
+      (with-eval-after-load 'ivy
+        (ivy-mode -1))
+      ;; Enable ido
       (ido-mode 1))
 
     ;; Use flx-ido for better flex matching between words

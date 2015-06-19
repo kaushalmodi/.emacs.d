@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 23:10:21 kmodi>
+;; Time-stamp: <2015-06-19 12:37:05 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -6,11 +6,12 @@
   :if (not (bound-and-true-p disable-pkg-ivy))
   :config
   (progn
-    ;; Disable ido
-    (when (boundp 'ido)
-      (ido-mode -1))
-    ;; Enable ivy
-    (ivy-mode 1)
+    (when (not (bound-and-true-p disable-pkg-ivy))
+      ;; Disable ido
+      (with-eval-after-load 'ido
+        (ido-mode -1))
+      ;; Enable ivy
+      (ivy-mode 1))
 
     (setq ivy-use-virtual-buffers t)
 

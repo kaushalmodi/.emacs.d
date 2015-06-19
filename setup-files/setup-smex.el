@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-10 09:01:15 kmodi>
+;; Time-stamp: <2015-06-19 12:33:21 kmodi>
 
 ;; Smart M-x (smex)
 ;; https://github.com/nonsequitur/smex/
@@ -12,8 +12,9 @@
       ("M-x" . smex)
       ("M-X" . smex-major-mode-commands))
     (bind-key "C-c C-c M-x" #'execute-extended-command) ; old M-x
-    ;; (key-chord-define-global ";'" #'smex) ; Alternative for `M-x'
-    ))
+    (when (bound-and-true-p disable-pkg-ivy)
+      (key-chord-define-global ";'" #'smex)))) ; Alternative for `M-x'
+
 
 (provide 'setup-smex)
 

@@ -1,8 +1,9 @@
-;; Time-stamp: <2015-06-12 23:47:39 kmodi>
+;; Time-stamp: <2015-06-19 12:21:39 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
 (use-package counsel
+  :if (not (bound-and-true-p disable-pkg-ivy))
   :config
   (progn
     (setq counsel-find-file-at-point t)
