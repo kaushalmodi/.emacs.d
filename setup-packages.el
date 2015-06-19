@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 16:34:44 kmodi>
+;; Time-stamp: <2015-06-19 12:25:03 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -18,7 +18,6 @@
 
 (add-to-list 'load-path (concat user-emacs-directory "elisp/"))
 (add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
-(add-to-list 'load-path user-personal-directory)
 
 ;; Create the package install directory if it doesn't exist
 (setq package-user-dir (concat user-emacs-directory "elpa_"

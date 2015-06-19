@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 09:49:49 kmodi>
+;; Time-stamp: <2015-06-19 12:38:04 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -146,6 +146,7 @@
 
 ;; Place `setup-var-overrides.el' with `(provide 'setup-var-overrides)' in
 ;; `user-personal-directory'
+(add-to-list 'load-path user-personal-directory)
 (require 'setup-var-overrides nil :noerror)
 
 (load custom-file :noerror :nomessage) ; Load the emacs `M-x customize` generated file
@@ -216,7 +217,7 @@
 (require 'setup-htmlize)
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
-(require 'setup-ido) ; setup ido first and then ivy
+(require 'setup-ido)
 (require 'setup-ivy)
 (require 'setup-iregister)
 (when (executable-find "git")
