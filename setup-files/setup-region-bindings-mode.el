@@ -1,7 +1,8 @@
-;; Time-stamp: <2015-02-23 10:51:03 kmodi>
+;; Time-stamp: <2015-06-19 10:23:28 kmodi>
 
 ;; Region Bindings Mode
 ;; https://github.com/fgallina/region-bindings-mode
+
 ;; Minor mode that enables the ability of having a custom keys for working with
 ;; regions. This is a pretty good way to keep the global bindings clean.
 
@@ -18,7 +19,8 @@
 
     (bind-keys
      :map region-bindings-mode-map
-     ("<C-SPC>" . modi/disable-rbm-deactivate-mark))
+      ("<C-SPC>" . modi/disable-rbm-deactivate-mark)
+      ("<S-SPC>" . clear-rectangle)) ; replace selection with spaces
     ))
 
 
