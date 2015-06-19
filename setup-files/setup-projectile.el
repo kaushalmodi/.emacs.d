@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 00:40:58 kmodi>
+;; Time-stamp: <2015-06-19 11:56:32 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -150,6 +150,27 @@ With prefix argument (`C-u'), also kill the special buffers."
                 (unless (string-match "^\\*\\(\\scratch\\|Messages\\)" buf-name)
                   (message "Killing buffer %s" buf-name)
                   (kill-buffer buf))))))))
+
+    ;; Use older version of `projectile-cache-current-file' that did not cache
+    ;; the true names.
+    ;; https://github.com/bbatsov/projectile/commit/924d73120bca6adc5b9bf3d79ad53075a63b5f1e
+    (defun projectile-cache-current-file ()
+      "Add the currently visited file to the cache."
+      (interactive)
+      (let* ((current-project (projectile-project-root))
+             (abs-current-file (buffer-file-name (current-buffer)))
+             (current-file (file-relative-name abs-current-file current-project)))
+        (when (gethash (projectile-project-root) projectile-projects-cache)
+          (unless (or (projectile-file-cached-p current-file current-project)
+                      (projectile-ignored-directory-p (file-name-directory abs-current-file))
+                      (projectile-ignored-file-p abs-current-file))
+            (puthash current-project
+                     (cons current-file (gethash current-project projectile-projects-cache))
+                     projectile-projects-cache)
+            (projectile-serialize-cache)
+            (message "File %s added to project %s cache."
+                     (propertize current-file 'face 'font-lock-keyword-face)
+                     (propertize current-project 'face 'font-lock-keyword-face))))))
 
     (projectile-global-mode)))
 
