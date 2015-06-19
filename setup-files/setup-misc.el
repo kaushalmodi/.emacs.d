@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 12:11:35 kmodi>
+;; Time-stamp: <2015-06-19 11:37:36 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -227,16 +227,13 @@ cycle _c_ase                _F_ollow^^                        fill col _i_ndicat
 (defhydra hydra-launch (:color teal
                         :hint  nil)
   "
-_a_g cwd             _cr_ Rpn calc            _eb_ eww bookmarks      _h_l line flash          _m_an               _u_pgrade packages          ^^_se_   emacs.SE
-_b_ookmark jump      _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
-_cq_ Quick calc      _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      _w_/_W_   quick/full weather
-_cc_ Calc            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd            ^^_<SPC>_ frequent
+_=_ Quick calc      _b_ookmark jump          _eb_ eww bookmarks      _h_l line flash          _m_anpage           _u_pgrade packages          ^^_se_   emacs.SE
+_+_ Calc            _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
+_-_ Rpn calc        _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      _w_/_W_   quick/full weather
+_a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd            ^^_<SPC>_ frequent
 "
   ("a"       ag-regexp-cwd)
   ("b"       bookmark-jump)
-  ("cq"      quick-calc)
-  ("cc"      calc)
-  ("cr"      rpn-calc)
   ("d"       dired-single-magic-buffer-current-dir)
   ("ed"      modi/ediff-dwim)
   ("ee"      eww)
@@ -249,7 +246,7 @@ _cc_ Calc            _ee_ eww                 ma_g_it status          _L_oad ini
   ("i"       counsel-git-grep)
   ("l"       xah-run-current-file)
   ("L"       (xah-run-current-file 4))
-  ("m"       man)
+  ("m"       woman)
   ("n"       neotree-toggle)
   ("o"       org-capture)
   ("p"       paradox-list-packages)
@@ -264,6 +261,9 @@ _cc_ Calc            _ee_ eww                 ma_g_it status          _L_oad ini
   ("W"       sunshine-forecast)
   ("<SPC>"   hydra-launch-freq/body)
   ("<s-SPC>" hydra-launch-freq/body)
+  ("="       quick-calc)
+  ("+"       calc)
+  ("-"       rpn-calc)
   (":"       eval-expression "eval")
   ("q"       nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
