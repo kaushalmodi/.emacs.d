@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 00:15:08 kmodi>
+;; Time-stamp: <2015-06-18 23:16:26 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -235,16 +235,10 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 ;; Below bindings are made in global map and not in my minor mode as I want
 ;; other modes to override those bindings.
 (bind-keys
- ("<M-up>"    . scroll-down-dont-move-point)
- ("<M-down>"  . scroll-up-dont-move-point)
- ;; Change the default `M-left` key binding from `left-word'
- ;; The same function anyways is also bound to `C-left`
- ("<M-left>"  . scroll-other-window-down-dont-move-point)
- ("<S-prior>" . scroll-other-window-down-dont-move-point) ; S-PgUp
- ;; Change the default `M-right` key binding from `right-word'
- ;; The same function anyways is also bound to `C-right`
- ("<M-right>" . scroll-other-window-up-dont-move-point)
- ("<S-next>"  . scroll-other-window-up-dont-move-point)) ; S-PgDown
+ ("<C-M-up>"    . scroll-down-dont-move-point)
+ ("<C-M-down>"  . scroll-up-dont-move-point)
+ ("<C-M-left>"  . scroll-other-window-down-dont-move-point)
+ ("<C-M-right>" . scroll-other-window-up-dont-move-point))
 
 (bind-keys
  :map modi-mode-map
