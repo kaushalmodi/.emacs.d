@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 13:59:16 kmodi>
+;; Time-stamp: <2015-06-19 11:04:23 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -12,17 +12,18 @@
     (setq shackle-default-ratio 0.4) ; default 0.5
 
     (setq shackle-rules
-          ;; CONDITION(:regexp)              :select     :inhibit-window-quit   :ratio+:align|:other     :same|:popup
-          '((compilation-mode                :select nil                                                )
-            ("*undo-tree*"                                                      :ratio 0.25 :align right)
-            ("*Shell Command Output*"        :select nil                                                )
-            (occur-mode                      :select nil                                    :align t    )
-            ("*Help*"                        :select t   :inhibit-window-quit t :other t                )
-            ("*Completions*"                                                    :ratio 0.3  :align t    )
-            ("*Messages*"                    :select t   :inhibit-window-quit t :other t                )
-            ("\\*poporg.*\\*"      :regexp t :select t                          :other t                )
-            (".*COMMIT_EDITMSG"    :regexp t :select t                          :other t                )
-            ("\\`\\*helm.*?\\*\\'" :regexp t                                    :ratio 0.3  :align t    )
+          ;; CONDITION(:regexp)           :select     :inhibit-window-quit   :ratio+:align|:other     :same|:popup
+          '((compilation-mode             :select nil                                                )
+            ("*undo-tree*"                                                   :ratio 0.25 :align right)
+            ("*Shell Command Output*"     :select nil                                                )
+            (occur-mode                   :select nil                                    :align t    )
+            ("*Help*"                     :select t   :inhibit-window-quit t :other t                )
+            ("*Completions*"                                                 :ratio 0.3  :align t    )
+            ("*Messages*"                 :select t   :inhibit-window-quit t :other t                )
+            ("\\*[Wo]*Man.*\\*"   :regexp t :select t   :inhibit-window-quit t :other t                )
+            ("\\*poporg.*\\*"     :regexp t :select t                          :other t                )
+            (".*COMMIT_EDITMSG" :regexp t :select t                          :other t                )
+            ("\\`\\*helm.*?\\*\\'"  :regexp t                                    :ratio 0.3  :align t    )
             ))
 
     (shackle-mode 1)
