@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 01:41:08 kmodi>
+;; Time-stamp: <2015-06-19 10:06:06 kmodi>
 
 ;;; Verilog
 
@@ -358,9 +358,9 @@ http://emacs.stackexchange.com/a/8033/115"
             (delete-horizontal-space))
           match)))
     ;; Advise the indentation behavior of `indent-region' done using `C-M-\'
-    (advice-add #'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
+    (advice-add 'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
     ;; Advise the indentation done by hitting `TAB'
-    (advice-add #'verilog-indent-line          :before-until #'my/verilog-selective-indent)
+    (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
 
 ;;; hideshow
     (with-eval-after-load 'setup-fold

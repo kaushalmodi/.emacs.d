@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 10:24:26 kmodi>
+;; Time-stamp: <2015-06-19 10:06:06 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -717,7 +717,7 @@ abc |ghi        <-- point still after white space after calling this function."
           (t ; do nothing otherwise
            ))))
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
-(advice-add #'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
+(advice-add 'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
 
 (defmacro modi/add-whole-buffer-if-not-region-advice (symbol)
   "Advice SYMBOL function (that originally acts on a region) to act on the

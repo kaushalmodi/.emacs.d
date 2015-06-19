@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-08 17:24:28 kmodi>
+;; Time-stamp: <2015-06-19 10:06:06 kmodi>
 
 ;; Stripe Mode
 ;; https://github.com/sabof/stripe-buffer
@@ -16,7 +16,7 @@
 
     (defun my/stripe-hl-line-face-remap ()
       (face-remap-add-relative 'stripe-hl-line 'my/stripe-hl-line))
-    (advice-add #'stripe-listify-buffer :after #'my/stripe-hl-line-face-remap)
+    (advice-add 'stripe-listify-buffer :after #'my/stripe-hl-line-face-remap)
 
     (add-hook 'package-menu-mode-hook #'stripe-listify-buffer)
     ;; (add-hook 'dired-mode-hook #'stripe-listify-buffer)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 00:40:26 kmodi>
+;; Time-stamp: <2015-06-19 10:06:05 kmodi>
 
 ;;;; Fold setup
 
@@ -227,10 +227,10 @@ If prefix argument is used, `set-selective-display' to the current column."
     last-cmd-was-fold))
 ;; Advice `undo-tree-undo' to unfold the previous fold
 (with-eval-after-load 'undo-tree
-  (advice-add #'undo-tree-undo :before-until #'modi/unfold-if-last-command-fold))
+  (advice-add 'undo-tree-undo :before-until #'modi/unfold-if-last-command-fold))
 ;; Advice `undo' to unfold the previous fold
 (with-eval-after-load 'undo-tree
-  (advice-add #'undo :before-until #'modi/unfold-if-last-command-fold))
+  (advice-add 'undo :before-until #'modi/unfold-if-last-command-fold))
 
 
 (provide 'setup-fold)

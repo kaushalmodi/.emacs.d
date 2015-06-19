@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-09 13:39:35 kmodi>
+;; Time-stamp: <2015-06-19 10:06:06 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
@@ -51,7 +51,7 @@
         (setq-local sanityinc/fci-mode-suppressed fci-mode)
         (when fci-mode
           (turn-off-fci-mode)))
-      (advice-add #'popup-create :before #'sanityinc/suppress-fci-mode)
+      (advice-add 'popup-create :before #'sanityinc/suppress-fci-mode)
 
       (defun sanityinc/restore-fci-mode (&rest args)
         "Restore fci-mode when all popups have closed"
@@ -59,7 +59,7 @@
                    (null popup-instances))
           (setq-local sanityinc/fci-mode-suppressed nil)
           (turn-on-fci-mode)))
-      (advice-add #'popup-delete :after #'sanityinc/restore-fci-mode))
+      (advice-add 'popup-delete :after #'sanityinc/restore-fci-mode))
 
     (defun modi/fci-redraw-frame-all-buffers ()
       "Redraw the fill-column rule in all buffers on the selected frame.
