@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 16:08:57 kmodi>
+;; Time-stamp: <2015-06-22 14:58:05 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -41,7 +41,23 @@ there's a region, all lines that region covers will be duplicated."
 ;; at the time of saving
 ;; This is very useful for macro definitions in Verilog as for multi-line
 ;; macros, NO space is allowed after line continuation character "\"
-(add-hook 'write-file-functions #'delete-trailing-whitespace)
+(defvar do-not-delete-trailing-whitespace nil
+  "If nil, `delete-trailing-whitespace' function will be executed in the
+`write-file-functions' hook.
+
+Usage: If you do not want to automatically delete the trailing whitespace in
+any of the files in a given sub-directory, create a `.dir-locals.el' file in
+that sub-directory will the below contents:
+  ((\"sub-dir-name\"
+    . ((nil . ((do-not-delete-trailing-whitespace . t))))))
+")
+(make-variable-buffer-local 'do-not-delete-trailing-whitespace)
+(defun modi/delete-trailing-whitespace ()
+  "Call the `delete-trailing-whitespace' function only if the
+`do-not-delete-trailing-whitespace' variable is `nil' or unbound."
+  (when (not (bound-and-true-p do-not-delete-trailing-whitespace))
+    (call-interactively #'delete-trailing-whitespace)))
+(add-hook 'write-file-functions #'modi/delete-trailing-whitespace)
 
 ;; Untabify buffer
 (defun modi/untabify-buffer ()

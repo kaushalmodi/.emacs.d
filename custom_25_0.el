@@ -35,7 +35,8 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((eval add-hook
+    ((do-not-delete-trailing-whitespace . t)
+     (eval add-hook
            (quote write-file-functions)
            (function modi/outline-toc)
            nil :local)
