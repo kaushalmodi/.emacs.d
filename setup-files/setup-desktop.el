@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 14:16:12 kmodi>
+;; Time-stamp: <2015-06-19 16:46:04 kmodi>
 
 ;; Desktop save and restore
 
@@ -47,11 +47,19 @@
 
     ;; Don't save .gpg files. Restoring those files in emacsclients causes
     ;; a problem as the password prompt appears before the frame is loaded.
-    (setq desktop-files-not-to-save (concat "\\(^/[^/:]*:\\|(ftp)$\\)" ; original val
-                                            "\\|\\(\\.gpg$\\)"
-                                            "\\|\\(\\.plstore$\\)"
-                                            "\\|\\(\\.desktop$\\)"
-                                            "\\|\\(\\TAGS$\\)"))
+    (setq desktop-files-not-to-save
+          (concat "\\(^/[^/:]*:\\|(ftp)$\\)" ; original value
+                  "\\|\\(\\.gpg$\\)"
+                  "\\|\\(\\.plstore$\\)"
+                  "\\|\\(\\.desktop$\\)"
+                  ;; FIXME
+                  ;; If backup files with names like "file.sv.20150619_1641.bkp"
+                  ;; are saved to the desktop file, emacsclient crashes at launch
+                  ;; Need to debug why that's the case. But for now, simply not
+                  ;; saving the .bkp files to the desktop file is a workable
+                  ;; solution -- Fri Jun 19 16:45:50 EDT 2015 - kmodi
+                  "\\|\\(\\.bkp$\\)"
+                  "\\|\\(\\TAGS$\\)"))
 
     ;; Don't save the eww buffers
     (setq desktop-buffers-not-to-save (concat desktop-buffers-not-to-save
