@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 10:06:06 kmodi>
+;; Time-stamp: <2015-06-19 16:08:57 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -601,10 +601,14 @@ If the current buffer is not associated with a file, nothing's done."
   (if (buffer-file-name)
       (let* ((currentName (buffer-file-name))
              (backupName (concat currentName
-                                 "~" (format-time-string "%Y%m%d_%H%M") "~")))
+                                 "." (format-time-string "%Y%m%d_%H%M") ".bkp")))
         (copy-file currentName backupName :overwrite-if-already-exists)
         (message (concat "Backup saved as: " (file-name-nondirectory backupName))))
     (user-error "buffer is not a file.")))
+;; Also make emacs ignore that appended string to the backup files when
+;; deciding the major mode
+;; http://emacs.stackexchange.com/a/13285/115
+(add-to-list 'auto-mode-alist '("\\.[0-9_]+\\.bkp\\'" nil backup-file))
 (bind-to-modi-map "`" #'modi/make-backup)
 
 ;; Unicode
