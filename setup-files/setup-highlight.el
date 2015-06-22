@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 10:09:46 kmodi>
+;; Time-stamp: <2015-06-19 13:16:21 kmodi>
 
 ;; Highlight stuff
 
@@ -71,16 +71,15 @@ globally or locally (when called with prefix `C-u')."
 (use-package auto-highlight-symbol
   :config
   (progn
+    (setq ahs-default-range 'ahs-range-whole-buffer)
     (bind-keys
      :map modi-mode-map
       ("C-*"             . auto-highlight-symbol-mode)
       ("<C-kp-multiply>" . auto-highlight-symbol-mode))
     (bind-keys
      :map auto-highlight-symbol-mode-map
-      ("M-<left>"    . ahs-backward)
-      ("M-<right>"   . ahs-forward)
-      ("M-S-<left>"  . ahs-backward-definition)
-      ("M-S-<right>" . ahs-forward-definition)
+      ("M-<"         . ahs-backward)
+      ("M->"         . ahs-forward)
       ("M--"         . ahs-back-to-start)
       ("C-x C-'"     . ahs-change-range)
       ("C-x C-a"     . ahs-edit-mode))))
