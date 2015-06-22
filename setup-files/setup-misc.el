@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 11:37:36 kmodi>
+;; Time-stamp: <2015-06-22 14:48:15 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -119,9 +119,6 @@ If universal arg is used, load the `init.el'."
 ;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
 (>=e "24.4"
      (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
-
-;; Turn off dir local variables
-(setq enable-dir-local-variables nil)
 
 ;; Avert the "auto-notify not working" bug in emacs 24.5+
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20441
