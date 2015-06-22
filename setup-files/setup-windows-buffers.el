@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 23:16:26 kmodi>
+;; Time-stamp: <2015-06-19 12:57:58 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -453,7 +453,8 @@ buffers: *gtags-global*, *ag*, *Occur*."
   ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence' command
   ("C-x <delete>" . delete-current-buffer-file)
   ("C-x C-r"      . rename-current-buffer-file)
-  ("C-S-t"        . reopen-killed-file)) ; mimick reopen-closed-tab in browsers
+  ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
+  ("C-)"          . modi/kill-buffer-dwim))
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; http://stackoverflow.com/a/26629984/1219634
@@ -464,8 +465,8 @@ buffers: *gtags-global*, *ag*, *Occur*."
                                       (show-copy-buffer-file-name 4))
           mode-line-buffer-identification-keymap)
 
-;; Below bindings are made in global map and not in my minor mode as I want
-;; other modes to override those bindings.
+;; Below bindings are made in global map as I want them to work even when my
+;; minor mode is disabled
 (bind-keys
  ("<f5>"   . revert-buffer)
  ("<S-f5>" . revert-all-buffers)
