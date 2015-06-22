@@ -43,3 +43,6 @@
 [submodule "elisp/poporg"]
 	path = elisp/poporg
 	url = https://kaushalmodi@github.com/kaushalmodi/poporg
+[submodule "elisp/verilog-mode"]
+	path = elisp/verilog-mode
+	url = https://kaushalmodi@github.com/kaushalmodi/verilog-mode
