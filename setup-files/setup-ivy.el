@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 12:37:05 kmodi>
+;; Time-stamp: <2015-06-23 22:25:23 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -18,15 +18,19 @@
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
     ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
 
-    ;; overriding the `C-x C-o` binding with `delete-blank-lines'
-    (bind-key "C-x C-o" #'ivy-recentf modi-mode-map)
     ;; Revert the default bindings to C-j and C-m
     (bind-keys
      :map ivy-minibuffer-map
       ("C-m"   . ivy-alt-done) ; RET
       ("C-S-m" . ivy-immediate-done)
       ("C-j"   . ivy-done)
-      ("C-t"   . ivy-toggle-fuzzy))))
+      ("C-t"   . ivy-toggle-fuzzy))
+    (bind-keys
+     :map modi-mode-map
+      ;; Override the default binding for `upcase-word'
+      ("M-u"     . ivy-resume)
+      ;; Override the default binding for `delete-blank-lines'
+      ("C-x C-o" . ivy-recentf))))
 
 
 (provide 'setup-ivy)

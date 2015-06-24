@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 14:55:04 kmodi>
+;; Time-stamp: <2015-06-23 22:50:29 kmodi>
 
 ;; Search / Replace
 
@@ -84,16 +84,14 @@ happens within a region if one is selected."
 (use-package swiper
   :config
   (progn
-    (defun modi/swiper-dwim (arg)
+    (defun modi/swiper (arg)
       "Start swiper with input as the selected region or symbol at point by default.
 
-C-u     -> `ivy-resume' (resume from where you last left off swiper)
-C-u C-u -> Start swiper without any arguments (stock behavior)"
+If ARG is non-nil, start swiper without any arguments (stock behavior)."
       (interactive "P")
-      (cl-case (car arg)
-        (4  (ivy-resume)) ; C-u
-        (16 (swiper)) ; C-u C-u
-        (t  (swiper (modi/get-symbol-at-point)))))
+      (if arg
+          (swiper) ; C-u
+        (swiper (modi/get-symbol-at-point))))
 
     (defun isearch-swiper ()
       "Invoke `swiper' from isearch.
@@ -110,8 +108,8 @@ https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da
     (bind-key "M-i" #'isearch-swiper isearch-mode-map) ; isearch > swiper
     (bind-key "M-a" #'swiper-avy swiper-map) ; swiper > avy
 
-    (key-chord-define-global "'/" #'modi/swiper-dwim)
-    (bind-key "M-i" #'modi/swiper-dwim modi-mode-map)))
+    (key-chord-define-global "'/" #'modi/swiper)
+    (bind-key "M-i" #'modi/swiper modi-mode-map)))
 
 ;; Helm Swoop
 ;; https://github.com/ShingoFukuyama/helm-swoop
