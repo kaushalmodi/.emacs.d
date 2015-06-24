@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 09:56:11 kmodi>
+;; Time-stamp: <2015-06-24 14:33:28 kmodi>
 
 ;; Org Mode
 
@@ -417,7 +417,49 @@ Execute this command while the point is on or after the hyper-linked org link."
             ;; (setq org-html-htmlize-output-type 'inline-css) ; default
             (setq org-html-htmlize-output-type 'css)
             ;; (setq org-html-htmlize-font-prefix "") ; default
-            (setq org-html-htmlize-font-prefix "org-")))
+            (setq org-html-htmlize-font-prefix "org-")
+
+            (defvar modi/htmlize-html-file (concat user-home-directory
+                                                   "temp/htmlize_temp.html")
+              "Name of the html file exported by `modi/htmlize-region-as-html-file'.")
+            (defvar modi/htmlize-css-file (concat user-emacs-directory
+                                                  "misc/css/leuven_theme.css")
+              "CSS file to be embedded in the html file created using the
+             `modi/htmlize-region-as-html-file' function.")
+            (defun modi/htmlize-region-as-html-file (open-in-browser)
+              "Export the selected region to an html file. If a region is not
+             selected, export the whole buffer.
+
+             If OPEN-IN-BROWSER is non-nil, also open the exported html file in the
+             default browser."
+              (interactive "P")
+              (let ((org-html-htmlize-output-type 'css)
+                    (org-html-htmlize-font-prefix "org-")
+                    start end html-string)
+                (if (use-region-p)
+                    (progn
+                      (setq start (region-beginning))
+                      (setq end   (region-end)))
+                  (progn
+                    (setq start (point-min))
+                    (setq end   (point-max))))
+                (setq html-string (org-html-htmlize-region-for-paste start end))
+                (with-temp-buffer
+                  (insert-file-contents modi/htmlize-css-file nil nil nil :replace)
+                  (goto-char (point-min))
+                  (insert (concat "<!-- This file is generated using the "
+                                  "modi/htmlize-region-as-html-file function\n"
+                                  "from https://github.com/kaushalmodi/.emacs.d/"
+                                  "blob/master/setup-files/setup-org.el -->\n"))
+                  (insert "<html>\n<head>\n<style media=\"screen\" type=\"text/css\">\n")
+                  (goto-char (point-max))
+                  (insert "</style>\n</head>\n<body>\n")
+                  (insert html-string)
+                  (insert "</body>\n</html>\n")
+                  (write-file modi/htmlize-html-file)
+                  (when open-in-browser
+                    (browse-url-of-file modi/htmlize-html-file)))))
+            (bind-key "H" #'modi/htmlize-region-as-html-file region-bindings-mode-map)))
 
         ;; Beamer export
         (use-package ox-beamer

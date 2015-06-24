@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 16:15:46 kmodi>
+;; Time-stamp: <2015-06-24 13:26:59 kmodi>
 
 ;; Htmlize
 
@@ -35,17 +35,7 @@
       (when (fboundp 'flyspell-mode)
         (when modi/htmlize-initial-flyspell-state
           (flyspell-mode 1))))
-    (add-hook 'htmlize-after-hook #'modi/htmlize-after-hook-fn)
-
-    (defvar modi/htmlize-temp-html-dir (concat user-home-directory "temp/")
-      "Directory where the `modi/htmlize-region-as-html-file' saves the html files.")
-    (defun modi/htmlize-region-as-html-file (start end)
-      (interactive "r")
-      (let ((html-file (concat modi/htmlize-temp-html-dir "htmlize_temp.html"))
-            (html-string (htmlize-region-for-paste start end)))
-        (with-temp-buffer
-          (insert html-string)
-          (write-file html-file))))))
+    (add-hook 'htmlize-after-hook #'modi/htmlize-after-hook-fn)))
 
 
   (provide 'setup-htmlize)
