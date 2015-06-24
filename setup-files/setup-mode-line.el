@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 12:33:30 kmodi>
+;; Time-stamp: <2015-06-23 22:40:04 kmodi>
 
 ;; Customize the mode-line
 
@@ -115,17 +115,22 @@ If nil, show the same in the minibuffer.")
                 " GG"           ; ggtags
                 " hs"           ; hideshow
                 " hs+"          ;
+                " ez-esc"       ; easy-escape
+                " ivy"          ; ivy
                 ))
-        (add-to-list 'rm-text-properties '("Abbrev\\'"  'display " @")) ; Abbrev
-        (add-to-list 'rm-text-properties '("Ind\\'"     'display " *>")) ; org indent
-        (add-to-list 'rm-text-properties '("Outl\\'"    'display " ø")) ; outline
-        (add-to-list 'rm-text-properties '("Server\\'"  'display " Σ")) ; Server
+        (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face))) ; default
+        (add-to-list 'rm-text-properties '("\\` Abbrev\\'" 'display "​@")) ; Abbrev
+        (add-to-list 'rm-text-properties '("\\` Ind\\'"    'display "​*>")) ; org indent
+        (add-to-list 'rm-text-properties '("\\` Outl\\'"   'display "​ø")) ; outline
+        (add-to-list 'rm-text-properties '("\\` Server\\'" 'display "​Σ")) ; Server
+        (add-to-list 'rm-text-properties '("\\` μ\\'"      'display "​μ")) ; modi-mode
         (with-eval-after-load 'setup-symbola
           (when font-symbola-p
-            (add-to-list 'rm-text-properties '("ez-esc\\'" 'display " ⑊")) ; easy-escape
-            (add-to-list 'rm-text-properties '("Vis\\'" 'display " 👀")) ; visible-mode
-            (add-to-list 'rm-text-properties '("ivy\\'" 'display " 🍁")))) ; ivy
-        ))
+            (add-to-list 'rm-text-properties '("\\` Wg\\'"  'display "​w")) ; writegood
+            (add-to-list 'rm-text-properties '("\\` rk\\'"  'display "​▯")) ; region bindings
+            (add-to-list 'rm-text-properties '("\\` =>\\'"  'display "​󠁡а")) ; aggressive indent
+            (add-to-list 'rm-text-properties '("\\` Vis\\'" 'display "​◉")) ; visible-mode
+            ))))
 
     (sml/setup)))
 

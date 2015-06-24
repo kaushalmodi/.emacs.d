@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 11:04:23 kmodi>
+;; Time-stamp: <2015-06-23 14:27:31 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -7,6 +7,7 @@
   :if (not (bound-and-true-p disable-pkg-shackle))
   :config
   (progn
+    (setq shackle-lighter "")
     (setq shackle-select-reused-windows nil) ; default nil
     (setq shackle-default-alignment 'below) ; default below
     (setq shackle-default-ratio 0.4) ; default 0.5
@@ -26,11 +27,7 @@
             ("\\`\\*helm.*?\\*\\'"  :regexp t                                    :ratio 0.3  :align t    )
             ))
 
-    (shackle-mode 1)
-
-    (with-eval-after-load 'setup-symbola
-      (unless font-symbola-p
-        (setq shackle-lighter " §")))))
+    (shackle-mode 1)))
 
 
 (provide 'setup-shackle)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 11:56:32 kmodi>
+;; Time-stamp: <2015-06-23 22:33:35 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -102,7 +102,7 @@ getting a list of all files in a project."
     ;; (setq projectile-mode-line '(:eval (format " Projectile[%s]" (projectile-project-name))))
     ;; (setq projectile-mode-line " ∏")
     ;; (setq projectile-mode-line " ℙ")
-    (setq projectile-mode-line " ρ")
+    (setq projectile-mode-line "​P")
 
     (when (fboundp 'ggtags-mode)
       (defun projectile-visit-project-tags-table ()

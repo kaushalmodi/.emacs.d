@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:30 kmodi>
+;; Time-stamp: <2015-06-23 19:44:00 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority

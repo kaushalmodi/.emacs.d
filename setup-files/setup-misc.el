@@ -268,26 +268,44 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
 (key-chord-define-global "jk" #'hydra-launch/body)
 
 ;; Organize The Order Of Minor Mode Lighters
-(when (featurep 'multiple-cursors)
-  (defun modi/promote-multiple-cursors-mode-line ()
-    (interactive)
-    ;; The `multiple-cursors-mode' lighter is very useful in showing how many
-    ;; cursors are created or if multiple-cursors-mode is enabled. Move that
-    ;; lighter to the foremost position in the mode-line. That is done by
-    ;; moving it to the beginning of the `minor-mode-alist'.
+(defvar mode-line-space-mode-lighter " "
+  "Lighter for `mode-line-space-mode'." )
+(define-minor-mode mode-line-space-mode
+  "A minor mode whose sole purpose is to retain a space between the major mode
+name and the bunch of minor mode lighters in the mode line."
+  :init-value t
+  :lighter    mode-line-space-mode-lighter
+  :global     t)
+(mode-line-space-mode)
 
-    ;; If `multiple-cursors-mode is not the first in `minor-mode-alist' ..
+(defun modi/organize-minor-mode-lighters ()
+  "The `multiple-cursors-mode' lighter is very useful in showing how many cursors
+are created or if multiple-cursors-mode is enabled. Move that lighter to the
+foremost position in the `minor-mode-alist'.
+
+Move the `mode-line-space-mode' lighter to the second-foremost position
+in the mode line."
+    (interactive)
+
+  ;; If `mode-line-space-mode' is not the first in `minor-mode-alist' ..
+  (when (not (equal 'mode-line-space-mode (car (car minor-mode-alist))))
+    ;; First remove it from the alist
+    (setq minor-mode-alist (assq-delete-all 'mode-line-space-mode minor-mode-alist))
+    ;; Now add it back but to the beginning of the alist
+    (add-to-list 'minor-mode-alist '(mode-line-space-mode mode-line-space-mode-lighter)))
+
+  ;; If `multiple-cursors-mode' is not the first in `minor-mode-alist' ..
+  (with-eval-after-load 'multiple-cursors
     (when (not (equal 'multiple-cursors-mode (car (car minor-mode-alist))))
       ;; First remove it from the alist
       (setq minor-mode-alist (assq-delete-all 'multiple-cursors-mode minor-mode-alist))
       ;; Now add it back but to the beginning of the alist
-      (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line))))
+      (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line)))))
 
-  (modi/promote-multiple-cursors-mode-line)
-  ;; Also add the above fn to `after-revert-hook'. So in the event you don't find
-  ;; `multiple-cursors-mode' to be the primary minor mode in the mode-line,
-  ;; simply revert the buffer
-  (add-hook 'after-revert-hook #'modi/promote-multiple-cursors-mode-line))
+(modi/organize-minor-mode-lighters)
+;; Also add the above fn to `after-revert-hook'. So in the event you don't find
+;; the minor-mode lighters in right order, simply revert the buffer.
+(add-hook 'after-revert-hook #'modi/organize-minor-mode-lighters)
 
 ;; Exiting emacs
 (when (null desktop-save-mode)
