@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-23 22:40:04 kmodi>
+;; Time-stamp: <2015-06-24 00:42:23 Kaushal>
 
 ;; Customize the mode-line
 
@@ -124,13 +124,16 @@ If nil, show the same in the minibuffer.")
         (add-to-list 'rm-text-properties '("\\` Outl\\'"   'display "​ø")) ; outline
         (add-to-list 'rm-text-properties '("\\` Server\\'" 'display "​Σ")) ; Server
         (add-to-list 'rm-text-properties '("\\` μ\\'"      'display "​μ")) ; modi-mode
+        (add-to-list 'rm-text-properties '("\\` Wg\\'"     'display "​w")) ; writegood
+        (add-to-list 'rm-text-properties '("\\` =>\\'"     'display "​a")) ; aggressive indent
         (with-eval-after-load 'setup-symbola
-          (when font-symbola-p
-            (add-to-list 'rm-text-properties '("\\` Wg\\'"  'display "​w")) ; writegood
-            (add-to-list 'rm-text-properties '("\\` rk\\'"  'display "​▯")) ; region bindings
-            (add-to-list 'rm-text-properties '("\\` =>\\'"  'display "​󠁡а")) ; aggressive indent
-            (add-to-list 'rm-text-properties '("\\` Vis\\'" 'display "​◉")) ; visible-mode
-            ))))
+          (if font-symbola-p
+              (progn
+                (add-to-list 'rm-text-properties '("\\` rk\\'"  'display "​▯")) ; region bindings
+                (add-to-list 'rm-text-properties '("\\` Vis\\'" 'display "​◉"))) ; visible-mode
+            (progn
+              (add-to-list 'rm-text-properties '("\\` rk\\'"  'display "​r"))
+              (add-to-list 'rm-text-properties '("\\` Vis\\'" 'display "​v")))))))
 
     (sml/setup)))
 
