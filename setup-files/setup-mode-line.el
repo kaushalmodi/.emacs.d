@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 00:42:23 Kaushal>
+;; Time-stamp: <2015-06-24 09:41:33 kmodi>
 
 ;; Customize the mode-line
 
@@ -129,11 +129,13 @@ If nil, show the same in the minibuffer.")
         (with-eval-after-load 'setup-symbola
           (if font-symbola-p
               (progn
-                (add-to-list 'rm-text-properties '("\\` rk\\'"  'display "​▯")) ; region bindings
-                (add-to-list 'rm-text-properties '("\\` Vis\\'" 'display "​◉"))) ; visible-mode
+                (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​𝘵")) ; temp
+                (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​▯")) ; region bindings
+                (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​◉"))) ; visible-mode
             (progn
-              (add-to-list 'rm-text-properties '("\\` rk\\'"  'display "​r"))
-              (add-to-list 'rm-text-properties '("\\` Vis\\'" 'display "​v")))))))
+              (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​t"))
+              (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​r"))
+              (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​v")))))))
 
     (sml/setup)))
 
