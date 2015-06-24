@@ -126,17 +126,6 @@ If universal arg is used, load the `init.el'."
      (with-eval-after-load 'autorevert
        (setq-default auto-revert-use-notify nil)))
 
-;; Special Mode Map
-;; `special-mode' is a read-only major mode (simple.el)
-(define-key special-mode-map (kbd "z") #'quit-window) ; quit + bury
-(define-key special-mode-map (kbd "y") #'bury-buffer) ; only bury
-(define-key special-mode-map (kbd "q") (lambda ()
-                                         (interactive)
-                                         (quit-window :kill))) ; quit + kill
-(define-key special-mode-map (kbd "k") (lambda ()
-                                         (interactive)
-                                         (kill-buffer (current-buffer)))) ; only kill
-
 (defvar emacs-build-hash emacs-repository-version
   "Git hash of the commit at which this version of emacs was built.")
 
@@ -285,7 +274,7 @@ foremost position in the `minor-mode-alist'.
 
 Move the `mode-line-space-mode' lighter to the second-foremost position
 in the mode line."
-    (interactive)
+  (interactive)
 
   ;; If `mode-line-space-mode' is not the first in `minor-mode-alist' ..
   (when (not (equal 'mode-line-space-mode (car (car minor-mode-alist))))

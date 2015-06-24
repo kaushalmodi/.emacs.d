@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 12:57:58 kmodi>
+;; Time-stamp: <2015-06-23 16:35:51 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -445,6 +445,22 @@ buffers: *gtags-global*, *ag*, *Occur*."
       (kill-buffer (next-error-find-buffer))
     (kill-buffer (current-buffer))))
 
+(defun modi/quit-and-kill-window ()
+  (interactive)
+  (quit-window :kill))
+
+;; Update bindings in few read-only modes
+;; http://stackoverflow.com/a/27091776/1219634
+;; Cannot set below to `'(map1 map2)'; it has to be `(list map1 map2)'.
+(defconst modi/read-only-mode-maps (list special-mode-map
+                                         tabulated-list-mode-map)
+  "List of read-only mode maps in which few key bindings need to be updated.")
+(dolist (map modi/read-only-mode-maps)
+  (define-key map (kbd "y") #'bury-buffer) ; only bury
+  (define-key map (kbd "k") #'modi/kill-buffer-dwim) ; only kill
+  (define-key map (kbd "z") #'quit-window) ; quit + bury
+  (define-key map (kbd "q") #'modi/quit-and-kill-window)) ; quit + kill
+
 (bind-keys
  :map modi-mode-map
   ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
@@ -454,6 +470,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
   ("C-x <delete>" . delete-current-buffer-file)
   ("C-x C-r"      . rename-current-buffer-file)
   ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
+  ("C-("          . toggle-between-buffers)
   ("C-)"          . modi/kill-buffer-dwim))
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
