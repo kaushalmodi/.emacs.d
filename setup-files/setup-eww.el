@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-01 11:09:23 kmodi>
+;; Time-stamp: <2015-06-24 09:00:48 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -161,10 +161,7 @@ Else perform the default backspace action."
     ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
     (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
     (>=e "25.0"
-         (bind-key "R" #'eww-readable eww-mode-map)
-         ;; Refresh the page with `eww-reload' or `g' to switch back to
-         ;; the default view
-         )
+        (bind-key "R" #'eww-readable eww-mode-map)) ; hit `g' to revert to default view
     (bind-keys
      :map eww-text-map ; For single line text fields
       ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 13:16:21 kmodi>
+;; Time-stamp: <2015-06-24 08:59:54 kmodi>
 
 ;; Highlight stuff
 
@@ -85,25 +85,25 @@ globally or locally (when called with prefix `C-u')."
       ("C-x C-a"     . ahs-edit-mode))))
 
 (>=e "24.4"
-     ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
-     ;; highlight color automatically
-     (defun hi-lock-face-buffer (regexp)
-       "Interactively, prompt for REGEXP using `read-regexp'. Uses the
+    ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
+    ;; highlight color automatically
+    (defun hi-lock-face-buffer (regexp)
+      "Interactively, prompt for REGEXP using `read-regexp'. Uses the
    next face from `hi-lock-face-defaults' without prompting.
 
 Use Font lock mode, if enabled, to highlight REGEXP.  Otherwise, use
 overlays for highlighting.  If overlays are used, the highlighting
 will not update as you type."
-       (interactive
-        (list
-         (hi-lock-regexp-okay
-          ;; (read-regexp "Regexp to highlight" 'regexp-history-last))))
-          (read-from-minibuffer "Regexp to highlight: " (modi/get-symbol-at-point)))))
-       (let* ((hi-lock-auto-select-face t)
-              (face (hi-lock-read-face-name)))
-         (or (facep face) (setq face 'hi-yellow))
-         (unless hi-lock-mode (hi-lock-mode 1))
-         (hi-lock-set-pattern regexp face))))
+      (interactive
+       (list
+        (hi-lock-regexp-okay
+         ;; (read-regexp "Regexp to highlight" 'regexp-history-last))))
+         (read-from-minibuffer "Regexp to highlight: " (modi/get-symbol-at-point)))))
+      (let* ((hi-lock-auto-select-face t)
+             (face (hi-lock-read-face-name)))
+        (or (facep face) (setq face 'hi-yellow))
+        (unless hi-lock-mode (hi-lock-mode 1))
+        (hi-lock-set-pattern regexp face))))
 
 ;; hl-line+
 (use-package hl-line+

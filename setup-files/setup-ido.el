@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 12:37:44 kmodi>
+;; Time-stamp: <2015-06-24 08:58:07 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -142,8 +142,8 @@ This is merged into emacs 25.0."
         ("C-b"    . ido-magic-backward-char)
         ("C-i"    . ido-toggle-ignore))
       (>=e "25.0"
-           (bind-key "C-S-b" #'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
-           (bind-key "C-S-b" #'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0
+          (bind-key "C-S-b" #'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
+        (bind-key "C-S-b" #'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0
     (add-hook 'ido-setup-hook #'ido-define-keys)))
 
 

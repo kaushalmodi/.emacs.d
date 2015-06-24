@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-23 15:35:41 kmodi>
+;; Time-stamp: <2015-06-24 08:59:16 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -16,12 +16,12 @@
 ;; Clipboard
 ;; after copy Ctrl+c in X11 apps, you can paste by 'yank' in emacs"
 (>=e "25.0"
-     (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
-     (setq x-select-enable-clipboard t)) ; if older
+    (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
+  (setq x-select-enable-clipboard t)) ; if older
 ;; after mouse selection in X11, you can paste by 'yank' in emacs"
 (>=e "25.0"
-     (setq select-enable-primary t)  ; if emacs 25.0 or newer
-     (setq x-select-enable-primary t)) ; if older
+    (setq select-enable-primary t)  ; if emacs 25.0 or newer
+  (setq x-select-enable-primary t)) ; if older
 
 ;; Save stuff copied from an external program to the kill ring before killing
 ;; new stuff from within emacs
@@ -101,9 +101,9 @@ If universal arg is used, load the `init.el'."
 ;; C-u C-x = <-- `describe-char'
 
 (>=e "25.0"
-     (use-package saveplace
-       :config
-       (save-place-mode 1)))
+    (use-package saveplace
+      :config
+      (save-place-mode 1)))
 
 ;; Unset keys
 (global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
@@ -118,13 +118,13 @@ If universal arg is used, load the `init.el'."
 ;; Below enables ElDoc inside the `eval-expression' minibuffer.
 ;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
 (>=e "24.4"
-     (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
+    (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
 
 ;; Avert the "auto-notify not working" bug in emacs 24.5+
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20441
 (>=e "24.4" ; The `auto-revert-use-notify' variable was introduced in emacs 24.4
-     (with-eval-after-load 'autorevert
-       (setq-default auto-revert-use-notify nil)))
+    (with-eval-after-load 'autorevert
+      (setq-default auto-revert-use-notify nil)))
 
 (defvar emacs-build-hash emacs-repository-version
   "Git hash of the commit at which this version of emacs was built.")

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-23 10:39:41 kmodi>
+;; Time-stamp: <2015-06-24 09:03:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -205,7 +205,7 @@
 (require 'setup-drag-stuff)
 (require 'setup-elfeed)
 (>=e "24.4"
-     (require 'setup-eww))
+    (require 'setup-eww))
 (require 'setup-elisp-slime-nav)
 (require 'setup-expand-region)
 (require 'setup-fci)

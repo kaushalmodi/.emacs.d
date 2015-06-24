@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:07:03 kmodi>
+;; Time-stamp: <2015-06-24 09:02:02 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -8,8 +8,9 @@
 'else' (emacs version older than V) blocks.
 
 Usage: (>=e \"25.0\"
-            (defun-compatible-with-25.0)
-            (defun-not-compatible-in-older-version))"
+           (defun-compatible-with-25.0)
+         (defun-not-compatible-in-older-version))"
+  (declare (indent 2)) ; `if'-style indentation where this macro is used
   `(if (version<= ,V emacs-version)
        ,@body))
 

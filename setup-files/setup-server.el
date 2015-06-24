@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 11:53:42 kmodi>
+;; Time-stamp: <2015-06-24 08:58:33 kmodi>
 
 ;; server setup
 
@@ -20,9 +20,9 @@
     ;; Suppress error "directory  ~/.emacs.d/server is unsafe" when
     ;; running on cygwin
     (>=e "23.0"
-         (when (equal window-system 'x)
-           (setq server-use-tcp t)
-           (defun server-ensure-safe-dir (dir) "Noop" t)))
+        (when (equal window-system 'x)
+          (setq server-use-tcp t)
+          (defun server-ensure-safe-dir (dir) "Noop" t)))
 
     ;; start a server only if one is not already running
     ;; `server-running-p' returns "t" if a server is already running
