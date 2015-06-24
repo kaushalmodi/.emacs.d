@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 09:03:30 kmodi>
+;; Time-stamp: <2015-06-24 09:17:00 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -27,7 +27,6 @@
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
         ;; outshine ; < forked
         ;; popwin ; < shackle
-        ;; hl-anything ; temporarily removing it, bugs
         ;; poporg ; edit comments from any other mode in org mode < forked
         ace-jump-mode ; < avy
         ace-window
@@ -71,6 +70,7 @@
         help-fns+
         hideshow-org hideshowvis
         htmlize
+        hl-anything ; cautious, buggy
         hl-line+
         hungry-delete
         hydra

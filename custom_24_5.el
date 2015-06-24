@@ -32,7 +32,11 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((eval when
+    ((eval add-hook
+           (quote write-file-functions)
+           (function modi/outline-toc)
+           nil :local)
+     (eval when
            (featurep
             (quote aggressive-indent))
            (aggressive-indent-mode -1))
@@ -109,7 +113,8 @@
      (360 . "#DC8CC3"))) t)
  '(vc-annotate-very-old-color "#DC8CC3" t)
  '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error"))
- (custom-set-faces
+
+(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.

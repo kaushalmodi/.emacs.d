@@ -1,14 +1,15 @@
-;; Time-stamp: <2015-06-23 22:50:29 kmodi>
+;; Time-stamp: <2015-06-24 09:27:14 kmodi>
 
 ;; Search / Replace
 
 (setq-default case-fold-search t) ; Ignore case when searching
 
 ;; replace.el patches
-(load (expand-file-name
-       "replace.el"
-       (concat user-emacs-directory "elisp/patches/"))
-      nil :nomessage)
+(>=e "25.0"
+    (load (expand-file-name
+           "replace.el"
+           (concat user-emacs-directory "elisp/patches/"))
+          nil :nomessage))
 
 ;; Anzu mode
 ;; https://github.com/syohex/emacs-anzu
