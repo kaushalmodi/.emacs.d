@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-22 14:48:15 kmodi>
+;; Time-stamp: <2015-06-23 15:35:41 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -152,7 +152,7 @@ If LOG is non-nil, browse to the log page having the current build commit."
 _ai_ aggressive indent      _d_/_D_ debug on error/entry      indent _g_uide                 _k_ey chord         _r_ead only             _v_isible mode
 _aw_ adaptive wrap          _e_debug^^                        _h_ideshow                     _l_ine num          _S_tripe buffer         _<SPC>_ whitespace
 menu _b_ar                  _f_ill^^                          _H_ardcore (allow arrows)      _m_odi mode         _t_ truncate lines
-cycle _c_ase                _F_ollow^^                        fill col _i_ndicator           _p_resentation      _C-t_ theme
+cycle _c_ase                _F_ollow^^                        _i_menu list                   _p_resentation      _C-t_ theme
 "
   ("ai"    aggressive-indent-mode)
   ("aw"    adaptive-wrap-prefix-mode)
@@ -166,7 +166,7 @@ cycle _c_ase                _F_ollow^^                        fill col _i_ndicat
   ("g"     indent-guide-mode)
   ("h"     modi/hideshow-mode)
   ("H"     hardcore-mode)
-  ("i"     fci-mode)
+  ("i"     modi/imenu-list-display-toggle)
   ("k"     key-chord-mode :color red)
   ("l"     modi/toggle-linum)
   ("m"     modi-mode)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 12:38:04 kmodi>
+;; Time-stamp: <2015-06-23 10:39:41 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -76,6 +76,7 @@
         hydra
         ibuffer-projectile
         ido-vertical-mode flx-ido ido-ubiquitous
+        imenu-list
         indent-guide
         interleave ; takes notes associated to pdf files in org mode
         iregister ; Interactive access to registers
@@ -85,6 +86,7 @@
         keyfreq ; find which commands you use the most
         kurecolor ; library to tweak colors
         linum-relative
+        list-environment
         magit ; for git management
         manage-minor-mode
         markdown-mode
@@ -218,6 +220,7 @@
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
 (require 'setup-ido)
+(require 'setup-imenu-list)
 (require 'setup-ivy)
 (require 'setup-iregister)
 (when (executable-find "git")
@@ -227,6 +230,7 @@
   (require 'setup-git-timemachine))
 (require 'setup-keyfreq)
 (require 'setup-kurecolor)
+(require 'setup-list-environment)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
