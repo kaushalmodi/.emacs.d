@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:47 kmodi>
+;; Time-stamp: <2015-06-25 14:24:47 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -56,7 +56,7 @@
     ;; ;; To save buffer automatically when `wgrep-finish-edit'
     ;; (setq wgrep-auto-save-buffer t)
 
-    (when (featurep 'projectile)
+    (with-eval-after-load 'projectile
       ;; Override the default function to use the projectile function instead
       (defun ag/project-root (file-path)
         (let ((proj-name (projectile-project-root)))
