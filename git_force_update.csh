@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-06-22 12:36:52 kmodi>
+# Time-stamp: <2015-06-25 10:23:30 kmodi>
 
 # Usage: source git_force_update.csh <YOUR .emacs.d PATH>
 # Example: source git_force_update.csh ~/.emacs.d
@@ -59,7 +59,7 @@ endif
 
 ################################################################################
 # List of package forks to be updated from http://www.github.com/kaushalmodi
-set git_submodules = ( verilog-mode poporg deft org-tree-slide outshine smyx unfill zenburn-emacs )
+set git_submodules = ( poporg deft org-tree-slide outshine smyx unfill zenburn-emacs )
 foreach pkg (${git_submodules})
     set pkg_dir = "${emacs_config_dir}/elisp/${pkg}"
     if ( ! -d ${pkg_dir}/.git ) then
