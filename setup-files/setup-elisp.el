@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 12:41:23 kmodi>
+;; Time-stamp: <2015-06-25 15:15:32 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -11,7 +11,7 @@
   "List of functions for which `edebug' is instrumented.")
 
 (defconst modi/fns-regexp (concat "(\\s-*"
-                                  "\\(defun\\|defmacro\\)\\s-+"
+                                  "\\(defun\\|defmacro\\)\\**\\s-+"
                                   "\\(?1:\\(\\w\\|\\s_\\)+\\)\\_>") ; word or symbol char
   "Regexp to find defun or defmacro definition.")
 
