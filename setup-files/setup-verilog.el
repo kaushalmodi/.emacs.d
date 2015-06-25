@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 10:06:06 kmodi>
+;; Time-stamp: <2015-06-25 14:37:05 kmodi>
 
 ;;; Verilog
 
@@ -341,20 +341,28 @@ the project."
     (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
 
 ;;; my/verilog-selective-indent
+    ;; http://emacs.stackexchange.com/a/8033/115
     (defun my/verilog-selective-indent (&rest args)
-      "Return t if the current line starts with '// *'.
-If the line matches '// *' delete any preceding white space too.
+      "Return t if either of the below is true:
+- The current line starts with optional whitespace and then `// *'
+- The current line contains `//.'
+
+If the first match above is true, also delete any preceding white space too.
 
 Tweak the verilog-mode indentation to skip the lines that begin with
 “<optional-white-space>// *” in order to not break any `outline-mode'
 or `outshine' functionality.
 
-http://emacs.stackexchange.com/a/8033/115"
+The match with `//.' resolves this issue:
+  http://www.veripool.org/issues/922-Verilog-mode-Consistent-comment-column
+"
       (interactive)
       (save-excursion
         (beginning-of-line)
-        (let ((match (looking-at "^[[:blank:]]*// \\*")))
-          (when match
+        (let* ((match1 (looking-at "^[[:blank:]]*// \\*")) ; // *
+               (match2 (looking-at "^.*//\\.")) ; //.
+               (match (or match1 match2)))
+          (when match1
             (delete-horizontal-space))
           match)))
     ;; Advise the indentation behavior of `indent-region' done using `C-M-\'
