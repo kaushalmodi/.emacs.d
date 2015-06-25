@@ -1,6 +1,11 @@
-;; Time-stamp: <2015-06-23 16:35:51 kmodi>
+;; Time-stamp: <2015-06-25 09:07:46 kmodi>
 
 ;; Functions to manipulate windows and buffers
+
+;; When multiple buffers are visible (like in a frame with 2 or more windows),
+;; do not display an already visible buffer when switching to next/previous
+;; buffers or after killing buffers.
+(setq switch-to-visible-buffer nil)
 
 ;; http://www.emacswiki.org/emacs/WinnerMode
 ;; Winner Mode is a global minor mode. When activated, it allows to “undo”
