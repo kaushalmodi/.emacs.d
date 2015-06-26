@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-25 09:07:46 kmodi>
+;; Time-stamp: <2015-06-26 11:55:13 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -180,7 +180,7 @@ of the buffer from where this function is called.
 C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
   (interactive "P")
   (if (and (null arg)
-           (string-match "\*scratch" (buffer-name)))
+           (string-match-p "\\*scratch" (buffer-name)))
       (switch-to-buffer (other-buffer))
     (let (mode-str)
       (cl-case (car arg)
