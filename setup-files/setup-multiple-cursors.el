@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:47 kmodi>
+;; Time-stamp: <2015-06-29 09:02:45 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -26,7 +26,8 @@
         ("P" . mc/cycle-backward)
         ("N" . mc/cycle-forward)
         ("m" . mc/mark-more-like-this-extended)
-        ("h" . mc-hide-unmatched-lines-mode)))
+        ("h" . mc-hide-unmatched-lines-mode)
+        ("\\" . mc/vertical-align-with-space)))
 
     (bind-to-modi-map "m" #'mc/mark-all-like-this-dwim)
     (bind-to-modi-map "r" #'set-rectangular-region-anchor)))
