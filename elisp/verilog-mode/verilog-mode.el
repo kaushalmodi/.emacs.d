@@ -123,7 +123,7 @@
 ;;; Code:
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-06-22-d2ce9f3-vpo"
+(defconst verilog-mode-version "2015-06-29-5fc392a-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -4219,6 +4219,7 @@ Uses `verilog-scan' cache."
   "Label matching begin ... end, fork ... join and case ... endcase statements."
   (interactive)
   (let ((cnt 0)
+	(case-fold-search nil)
 	(oldpos (point))
 	(b (progn
 	     (verilog-beg-of-defun)
@@ -5397,6 +5398,7 @@ type of the current line, return that lines' indent level and its type.
 Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
   (save-excursion
     (let* ((starting_position (point))
+	   (case-fold-search nil)
 	   (par 0)
 	   (begin (looking-at "[ \t]*begin\\>"))
 	   (lim (save-excursion (verilog-re-search-backward "\\(\\<begin\\>\\)\\|\\(\\<module\\>\\)" nil t)))
@@ -5661,6 +5663,8 @@ Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
 	      (cond
 	       ((looking-at verilog-dpi-import-export-re)
 	        (throw 'continue 'foo))
+	       ((looking-at "\\<pure\\>\\s-+\\<virtual\\>\\s-+\\(?:\\<\\(local\\|protected\\|static\\)\\>\\s-+\\)?\\<\\(function\\|task\\)\\>\\s-+")
+	        (throw 'nesting 'statement))
 	       ((looking-at verilog-beg-block-re-ordered)
 	        (throw 'nesting 'block))
 	       (t
