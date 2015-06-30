@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 09:17:00 kmodi>
+;; Time-stamp: <2015-06-30 16:52:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -275,6 +275,7 @@
 (require 'setup-latex)
 (require 'setup-spice)
 (require 'setup-tcl)
+(require 'setup-conf)
 
 (require 'setup-editing)
 (require 'setup-windows-buffers)

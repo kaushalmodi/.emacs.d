@@ -1,15 +1,14 @@
-;; Time-stamp: <2015-06-09 16:25:03 kmodi>
+;; Time-stamp: <2015-06-30 16:48:54 kmodi>
 
 ;; Shell Script Mode
 
 (use-package sh-script
   :mode (("\\.alias\\'"       . shell-script-mode)
-         ("\\.setup.*\\'"     . shell-script-mode)
          ("\\.gpms\\'"        . shell-script-mode)
          ("\\.cfg\\'"         . shell-script-mode)
          ("\\.c*sh\\'"        . shell-script-mode)
          ("\\.[a-zA-Z]+rc\\'" . shell-script-mode)
-         ("crontab.*\\'"      . shell-script-mode))
+         ("crontab.*\\'"     . shell-script-mode))
   :config
   (progn
 
