@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-23 22:25:23 kmodi>
+;; Time-stamp: <2015-06-30 08:54:46 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -17,6 +17,38 @@
 
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
     ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+
+    (use-package ivy-hydra
+      :config
+      (progn
+        (defhydra hydra-ivy (:hint nil
+                             :color pink)
+          "
+^^_,_      _f_ollow  _i_nsert  ^^_c_alling %s(if ivy-calling \"on\" \"off\")
+_p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--regex-fuzzy) \"fuzzy\" \"ivy\")
+^^_._      _D_o it!  ^^        _<_/_>_ shrink/grow window
+"
+          ;; arrows
+          (","   ivy-beginning-of-buffer)
+          ("p"   ivy-previous-line)
+          ("n"   ivy-next-line)
+          ("."   ivy-end-of-buffer)
+          ;; actions
+          ("f"   ivy-alt-done         :exit nil)
+          ("C-m" ivy-alt-done         :exit nil) ; RET
+          ("d"   ivy-done             :exit t)
+          ("C-j" ivy-done             :exit t)
+          ("D"   ivy-immediate-done   :exit t)
+          ("c"   ivy-toggle-calling)
+          ("m"   ivy-toggle-fuzzy)
+          (">"   ivy-minibuffer-grow)
+          ("<"   ivy-minibuffer-shrink)
+          ;; quit hydra
+          ("i"   nil)
+          ("C-o" nil)
+          ;; quit ivy
+          ("q"   keyboard-escape-quit :exit t)
+          ("C-g" keyboard-escape-quit :exit t))))
 
     ;; Revert the default bindings to C-j and C-m
     (bind-keys
