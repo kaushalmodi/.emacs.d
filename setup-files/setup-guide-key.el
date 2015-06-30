@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-28 11:30:00 kmodi>
+;; Time-stamp: <2015-06-29 13:40:08 kmodi>
 
 ;; Guide Key
 ;; https://github.com/kai2nenobu/guide-key
@@ -22,6 +22,7 @@
                                          "M-#" ; outshine
                                          "C-h"
                                          "M-g" ; nav error
+                                         "M-s" ; search
                                          ))
 
     ;; guide-key can highlight commands which match a specified regular expression.
