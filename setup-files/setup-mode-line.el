@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 09:41:33 kmodi>
+;; Time-stamp: <2015-06-30 11:22:10 kmodi>
 
 ;; Customize the mode-line
 
@@ -129,10 +129,12 @@ If nil, show the same in the minibuffer.")
         (with-eval-after-load 'setup-symbola
           (if font-symbola-p
               (progn
+                (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​🢛")) ; auto revert tail
                 (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​𝘵")) ; temp
                 (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​▯")) ; region bindings
                 (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​◉"))) ; visible-mode
             (progn
+              (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​Tail|"))
               (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​t"))
               (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​r"))
               (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​v")))))))
