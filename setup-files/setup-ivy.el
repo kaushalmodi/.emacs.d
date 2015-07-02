@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-02 11:21:44 kmodi>
+;; Time-stamp: <2015-07-02 17:27:33 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -24,7 +24,7 @@
         (defhydra hydra-ivy (:hint nil
                              :color pink)
           "
-^^_,_      _f_ollow  _i_nsert  ^^_c_alling %s(if ivy-calling \"on\" \"off\")
+^^_,_      _f_ollow  _i_nsert  ^^_c_alling %s(if ivy-calling \"on\" \"off\")  _w_/_s_: %s(ivy-action-name)
 _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--regex-fuzzy) \"fuzzy\" \"ivy\")
 ^^_._      _D_o it!  ^^        _<_/_>_ shrink/grow window
 "
@@ -43,6 +43,8 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
           ("m"   ivy-toggle-fuzzy)
           (">"   ivy-minibuffer-grow)
           ("<"   ivy-minibuffer-shrink)
+          ("w"   ivy-prev-action)
+          ("s"   ivy-next-action)
           ;; quit hydra
           ("i"   nil)
           ("C-o" nil)
@@ -60,6 +62,15 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
       ("C-o"   . hydra-ivy/body))
     (key-chord-define ivy-minibuffer-map "m," #'ivy-beginning-of-buffer)
     (key-chord-define ivy-minibuffer-map ",." #'ivy-end-of-buffer)
+
+    ;; https://github.com/abo-abo/swiper/issues/164
+    (defun modi/ivy-kill-buffer ()
+      (interactive)
+      (ivy-set-action 'kill-buffer)
+      (ivy-done))
+    (bind-keys
+     :map ivy-switch-buffer-map
+      ("C-k" . modi/ivy-kill-buffer))
 
     (bind-keys
      :map modi-mode-map
