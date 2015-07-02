@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-30 11:39:50 kmodi>
+;; Time-stamp: <2015-07-01 09:56:05 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -45,6 +45,65 @@
           (setq-default eval-expression-print-level  nil)
           (edebug-defun)
           (message "Edebug: %s" fn))))))
+
+(defhydra hydra-edebug (:color amaranth
+                        :hint  nil)
+  "
+    EDEBUG MODE
+^^_<SPC>_ step             ^^_f_ forward sexp         _b_reakpoint set                previous _r_esult      _w_here                    ^^_d_ebug backtrace
+^^_n_ext                   ^^_._ jump here            _u_nset breakpoint              _e_val expression      bounce _p_oint             _q_ top level (_Q_ nonstop)
+_g_o (_G_ nonstop)         ^^_I_nstrument callee      next _B_reakpoint               _E_val list            _v_iew outside             ^^_a_bort recursive edit
+_t_race (_T_ fast)         step _i_n/_o_ut            _x_ conditional breakpoint      eval _l_ast sexp       toggle save _W_indows      ^^_S_top
+_c_ontinue (_C_ fast)      ^^^^                       _X_ global breakpoint
+"
+  ("<SPC>" edebug-step-mode)
+  ("n"     edebug-next-mode)
+  ("g"     edebug-go-mode)
+  ("G"     edebug-Go-nonstop-mode)
+  ("t"     edebug-trace-mode)
+  ("T"     edebug-Trace-fast-mode)
+  ("c"     edebug-continue-mode)
+  ("C"     edebug-Continue-fast-mode)
+
+  ;;("f"   edebug-forward) not implemented
+  ("f"     edebug-forward-sexp)
+  ("h"     edebug-goto-here)
+  ("."     edebug-goto-here)
+
+  ("I"     edebug-instrument-callee)
+  ("i"     edebug-step-in)
+  ("o"     edebug-step-out)
+
+  ;; breakpoints
+  ("b"     edebug-set-breakpoint)
+  ("u"     edebug-unset-breakpoint)
+  ("B"     edebug-next-breakpoint)
+  ("x"     edebug-set-conditional-breakpoint)
+  ("X"     edebug-set-global-break-condition)
+
+  ;; evaluation
+  ("r"     edebug-previous-result)
+  ("e"     edebug-eval-expression)
+  ("l"     edebug-eval-last-sexp)
+  ("E"     edebug-visit-eval-list)
+
+  ;; views
+  ("w"     edebug-where)
+  ("v"     edebug-view-outside) ;; maybe obsolete??
+  ("p"     edebug-bounce-point)
+  ("P"     edebug-view-outside) ;; same as v
+  ("W"     edebug-toggle-save-windows)
+
+  ;; misc
+  ("d"     edebug-backtrace)
+
+  ;; quitting and stopping
+  ("q"     top-level :color blue)
+  ("Q"     edebug-top-level-nonstop :color blue)
+  ("a"     abort-recursive-edit :color blue)
+  ("S"     edebug-stop :color blue))
+(with-eval-after-load 'edebug
+  (bind-key "?" #'hydra-edebug/body edebug-mode-map))
 
 ;; Debug on entry
 (defvar modi/fns-in-debug nil
