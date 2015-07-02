@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-18 10:56:08 kmodi>
+;; Time-stamp: <2015-07-01 14:37:36 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -230,9 +230,9 @@ C-u C-u `modi/avy' -> `avy-goto-line'
       (let ((avy-all-windows t) ; search in all windows
             (fci-state-orig (when (featurep 'fill-column-indicator) fci-mode))
             (fn (cl-case arg
-                  (4  'avy-goto-char-2) ; C-u
-                  (16 'avy-goto-line) ; C-u C-u
-                  (t  'avy-goto-word-1)))
+                  (4  #'avy-goto-char-2) ; C-u
+                  (16 #'avy-goto-line) ; C-u C-u
+                  (t  #'avy-goto-word-1)))
             (current-prefix-arg nil)) ; Don't pass on this wrapper's args to `fn'
         (if fci-state-orig
             (fci-mode 'toggle))
@@ -253,7 +253,8 @@ being executed."
         (if fci-state-orig
             (fci-mode 'toggle))))
 
-    (bind-key "M-a" #'avy-isearch isearch-mode-map) ; isearch > avy
+    (defalias 'isearch-avy 'avy-isearch) ; for consistency
+    (bind-key "M-a" #'isearch-avy isearch-mode-map) ; isearch > avy
 
     (bind-keys
      :map modi-mode-map
