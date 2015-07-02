@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 13:06:28 kmodi>
+;; Time-stamp: <2015-07-01 14:44:24 kmodi>
 
 ;;;; ctags
 ;; https://github.com/fishman/ctags
@@ -130,7 +130,8 @@
                       sh-mode-hook
                       cperl-mode-hook
                       c-mode-hook
-                      makefile-mode-hook))
+                      makefile-mode-hook
+                      conf-space-mode-hook))
         (add-hook hook #'ggtags-mode))
 
       ;; Don't consider ` (back quote) as part of `tag' when looking for a
