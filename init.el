@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-01 20:57:35 kmodi>
+;; Time-stamp: <2015-07-02 14:02:24 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -53,6 +53,7 @@
         eimp ; required by org-show
         elfeed
         elisp-slime-nav ; tag based code navigation for elisp; works even for compressed code
+        engine-mode ; search engines
         expand-region
         eww-lnum ; jump to links in eww buffer ace-jump style
         fill-column-indicator
@@ -208,6 +209,7 @@
 (>=e "24.4"
     (require 'setup-eww))
 (require 'setup-elisp-slime-nav)
+(require 'setup-engine-mode)
 (require 'setup-expand-region)
 (require 'setup-fci)
 (require 'setup-fold )
