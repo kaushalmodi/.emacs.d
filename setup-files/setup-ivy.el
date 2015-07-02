@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-30 08:54:46 kmodi>
+;; Time-stamp: <2015-07-02 11:21:44 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -14,7 +14,7 @@
       (ivy-mode 1))
 
     (setq ivy-use-virtual-buffers t)
-
+    (setq ivy-count-format "%d/%d ")
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
     ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
 
@@ -56,7 +56,11 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
       ("C-m"   . ivy-alt-done) ; RET
       ("C-S-m" . ivy-immediate-done)
       ("C-j"   . ivy-done)
-      ("C-t"   . ivy-toggle-fuzzy))
+      ("C-t"   . ivy-toggle-fuzzy)
+      ("C-o"   . hydra-ivy/body))
+    (key-chord-define ivy-minibuffer-map "m," #'ivy-beginning-of-buffer)
+    (key-chord-define ivy-minibuffer-map ",." #'ivy-end-of-buffer)
+
     (bind-keys
      :map modi-mode-map
       ;; Override the default binding for `upcase-word'
