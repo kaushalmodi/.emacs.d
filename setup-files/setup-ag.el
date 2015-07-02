@@ -19,7 +19,7 @@
         (add-hook 'ag-mode-hook #'wgrep-ag-setup)
         (bind-keys
          :map wgrep-mode-map
-          ("C-x s" . wgrep-save-all-buffers)
+          ("C-x s"   . wgrep-save-all-buffers)
           ("C-c C-c" . wgrep-finish-edit) ;; Apply changes to file buffers
           ("C-c C-e" . wgrep-finish-edit)
           ("C-x C-s" . wgrep-finish-edit)
@@ -38,6 +38,7 @@
                          "--nogroup"
                          "--column"
                          ;; Other args
+                         "--skip-vcs-ignores"
                          "--line-numbers"
                          "--smart-case"
                          "--follow" ; follow symlinks
