@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-30 16:52:01 kmodi>
+;; Time-stamp: <2015-07-01 20:57:35 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -137,6 +137,7 @@
         darktooth-theme ; coffee
         leuven-theme ; awesome white background theme
         planet-theme ; dark blue
+        tao-theme ; monochrome
         twilight-bright-theme
         twilight-anti-bright-theme
         writegood-mode ; highlight passive voice, weasel words and duplicates

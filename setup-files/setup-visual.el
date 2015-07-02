@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:47 kmodi>
+;; Time-stamp: <2015-07-01 16:44:52 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -33,6 +33,8 @@ This variable is to be updated when changing themes.")
                       (ample           'dark  "gray40")
                       (ample-flat      'dark  "gray40")
                       (planet          'dark  "gray40")
+                      (tao-yin         'dark  "gray40")
+                      (tao-yang        'light "gray")
                       (ample-light     'light "gray")
                       (leuven          'light "gray")
                       (twilight-bright 'light "gray")
