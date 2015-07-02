@@ -1,30 +1,10 @@
-;; Time-stamp: <2015-06-22 09:40:27 kmodi>
+;; Time-stamp: <2015-07-01 20:49:28 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
 
 (use-package magit
-  :commands (magit-status)
-  :preface
-  (progn
-    (setq magit-last-seen-setup-instructions "1.4.0"))
-  :config
-  (progn
-    (setq magit-completing-read-function #'magit-ido-completing-read)
-    (setq magit-auto-revert-mode         nil)
-    (setq magit-expand-staged-on-commit  nil) ; default = nil
-    (setq magit-repo-dirs                `( ,user-emacs-directory))
-    (setq magit-diff-options             nil) ; default
-    ;; (setq magit-diff-options             '("--ignore-space-change"))
-
-    ;; Make diffs not show whitespace difference when calling `magit-show-level-4'
-    ;; using the bindings like `4' in magit Status buffer
-    (defun modi/magit-ignore-whitespace-diff (orig-fun &rest args)
-      (let ((magit-diff-options '("--ignore-space-change")))
-        (apply orig-fun args)))
-    (advice-add 'magit-show-level-4 :around #'modi/magit-ignore-whitespace-diff)
-
-    (magit-auto-revert-mode -1)))
+  :commands (magit-status))
 
 
 (provide 'setup-magit)
