@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-30 16:48:54 kmodi>
+;; Time-stamp: <2015-07-06 09:53:24 kmodi>
 
 ;; Shell Script Mode
 
@@ -118,12 +118,6 @@ Calls the value of `sh-set-shell-hook' if set."
         (font-lock-flush))
       (setq sh-shell-process nil)
       (run-hooks 'sh-set-shell-hook))))
-
-;; Don't display async command execution windows
-;; http://emacs.stackexchange.com/a/5554/115
-(add-to-list 'display-buffer-alist
-             '("\\*Async Shell Command\\*.*" . ((display-buffer-no-window)
-                                                . ())))
 
 
 (provide 'setup-shell)

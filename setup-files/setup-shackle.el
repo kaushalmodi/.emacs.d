@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-23 14:27:31 kmodi>
+;; Time-stamp: <2015-07-06 10:33:17 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -13,18 +13,18 @@
     (setq shackle-default-ratio 0.4) ; default 0.5
 
     (setq shackle-rules
-          ;; CONDITION(:regexp)           :select     :inhibit-window-quit   :ratio+:align|:other     :same|:popup
-          '((compilation-mode             :select nil                                                )
-            ("*undo-tree*"                                                   :ratio 0.25 :align right)
-            ("*Shell Command Output*"     :select nil                                                )
-            (occur-mode                   :select nil                                    :align t    )
-            ("*Help*"                     :select t   :inhibit-window-quit t :other t                )
-            ("*Completions*"                                                 :ratio 0.3  :align t    )
-            ("*Messages*"                 :select t   :inhibit-window-quit t :other t                )
-            ("\\*[Wo]*Man.*\\*"   :regexp t :select t   :inhibit-window-quit t :other t                )
-            ("\\*poporg.*\\*"     :regexp t :select t                          :other t                )
-            (".*COMMIT_EDITMSG" :regexp t :select t                          :other t                )
-            ("\\`\\*helm.*?\\*\\'"  :regexp t                                    :ratio 0.3  :align t    )
+          ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :ratio+:align|:other     :same|:popup
+          '((compilation-mode              :select nil                                                )
+            ("*undo-tree*"                                                    :ratio 0.25 :align right)
+            ("*Shell Command Output*"      :select nil                                                )
+            ("\\*Async Shell.*\\*" :regexp t :ignore t                                                  )
+            (occur-mode                    :select nil                                    :align t    )
+            ("*Help*"                      :select t   :inhibit-window-quit t :other t                )
+            ("*Completions*"                                                  :ratio 0.3  :align t    )
+            ("*Messages*"                  :select t   :inhibit-window-quit t :other t                )
+            ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t                )
+            ("\\*poporg.*\\*"      :regexp t :select t                          :other t                )
+            ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :ratio 0.3  :align t    )
             ))
 
     (shackle-mode 1)))
@@ -61,6 +61,13 @@
 ;; |           |                        | with :same, but can also be used with other keys |
 ;; |           |                        | like :other as well.                             |
 ;; |-----------+------------------------+--------------------------------------------------|
+;; |           | :ignore t              | Skip handling the display of the buffer in       |
+;; |           |                        | question. Keep in mind that while this avoids    |
+;; |           |                        | switching buffers, popping up windows and        |
+;; |           |                        | displaying frames, it does not inhibit what may  |
+;; |           |                        | have preceded this command, such as the          |
+;; |           |                        | creation/update of the buffer to be displayed.   |
+;; |-----------+------------------------+--------------------------------------------------|
 ;; |           | :same t                | Display buffer in the current window.            |
 ;; |           | :popup t               | Pop up a new window instead of displaying        |
 ;; |           | *mutually exclusive*   | the buffer in the current one.                   |
@@ -90,10 +97,5 @@
 ;; |           | :frame t               | Pop buffer to a frame instead of a window.       |
 ;; |-----------+------------------------+--------------------------------------------------|
 
-;; http://emacs.stackexchange.com/a/2195/115
-;; While in "*magit..*" buffer on doing Commit (`c c'), the
-;; ".. COMMIT_EDITMSG" buffer opens and reuses the *magit window.
-;; This is not useful when you'd want to add details about what you
-;; are committing while reviewing the diff in "*magit .." window.
-;; So ensure that the ".. COMMIT_EDITMSG" buffer always pops up in
-;; a new window.
+;; http://emacs.stackexchange.com/a/13687/115
+;; Don't show Async Shell Command buffers
