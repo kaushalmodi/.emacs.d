@@ -51,6 +51,13 @@
     (setq org-indent-indentation-per-level 1) ; default = 2
     (setq org-export-headline-levels 4)
 
+    ;; Number of empty lines needed to keep an empty line between collapsed trees.
+    ;; If you leave an empty line between the end of a subtree and the following
+    ;; headline, this empty line is hidden when the subtree is folded.
+    ;; Org-mode will leave (exactly) one empty line visible if the number of
+    ;; empty lines is equal or larger to the number given in this variable.
+    (setq org-cycle-separator-lines 1) ; default = 2
+
     ;; CAPTURE
     ;; http://orgmode.org/manual/Template-elements.html
     ;; http://orgmode.org/manual/Template-expansion.html
