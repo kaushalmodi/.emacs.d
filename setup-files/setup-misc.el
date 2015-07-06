@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 08:59:16 kmodi>
+;; Time-stamp: <2015-07-06 14:56:59 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -89,16 +89,18 @@ If universal arg is used, load the `init.el'."
 (bind-to-modi-map "l" #'xah-run-current-file)
 
 ;; Help Functions +
+;; http://www.emacswiki.org/emacs/HelpPlus
 (use-package help-fns+
   :config
   (progn
     (bind-keys
      :map help-map
       ("c"   . describe-key-briefly)
-      ("C-c" . describe-command))))
-(bind-key "C" #'describe-char help-map)
-;;     C-x = <-- `what-cursor-position' ; default binding
-;; C-u C-x = <-- `describe-char'
+      ("C-c" . describe-command))
+    (>=e "25.0"
+        (bind-keys
+         :map help-map
+          ("o" . describe-symbol)))))
 
 (>=e "25.0"
     (use-package saveplace
@@ -350,3 +352,6 @@ in the mode line."
 ;; far (i.e. before the first replacement it's 0, before the second
 ;; replacement it's 1, and so on). To start the numbering at one, we
 ;; just add one to it with the function 1+.
+;;
+;; (10) C-x =     <-- `what-cursor-position' ; default binding
+;;      C-u C-x = <-- `describe-char'
