@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-02 17:37:07 kmodi>
+;; Time-stamp: <2015-07-06 09:05:13 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -14,29 +14,12 @@
            ;; file names ending with # or ~
            ;; but still allow backup files named like abc.el~timestamp~
            "\\|\\(?:\\`[^~]+?[#~]\\'\\)"))
+    (setq counsel-find-file-ignore-regexp nil)
 
-    (defun counsel-find-file ()
-      "Forward to `find-file'."
-      (interactive)
-      (ivy-read "Find file: " 'read-file-name-internal
-                :matcher #'counsel--find-file-matcher
-                :action (cons
-                         1
-                         `(("default"
-                            (lambda (x)
-                              (find-file
-                               (expand-file-name x ivy--directory))))
-                           (,(propertize "delete"
-                                         'face 'font-lock-warning-face)
-                            (lambda (x)
-                              (delete-file
-                               (expand-file-name x ivy--directory))))))
-                :preselect (when counsel-find-file-at-point
-                             (require 'ffap)
-                             (ffap-guesser))
-                :require-match 'confirm-after-completion
-                :history 'file-name-history
-                :keymap counsel-find-file-map))
+    (ivy-set-actions
+     'counsel-find-file
+     `((,(propertize "delete" 'face 'font-lock-warning-face)
+        (lambda (x) (delete-file (expand-file-name x ivy--directory))))))
 
     (bind-keys
      :map modi-mode-map
