@@ -1,10 +1,11 @@
-;; Time-stamp: <2015-06-24 08:59:54 kmodi>
+;; Time-stamp: <2015-07-06 10:25:21 kmodi>
 
 ;; Highlight stuff
 
 (global-hi-lock-mode 1)
 
 ;; Highlight Anything
+;; https://github.com/boyw165/hl-anything
 (use-package hl-anything
   :if (not (bound-and-true-p disable-pkg-hl-anything))
   ;; This package has known to cause issues with the `list-colors-display'
@@ -20,44 +21,50 @@
   (progn
     (hl-highlight-mode 1)
 
-    (defun my/hl-anything (&optional arg)
-      "Wrapper function to call functions to highlight the thing at point either
-globally or locally (when called with prefix `C-u')."
-      (interactive "p")
-      (if (eq arg 4)
+    (defun my/hl-anything (local)
+      "Highlight the thing at point globally in all buffers.
+
+If LOCAL is non-nil, highlight only in the current buffer."
+      (interactive "P")
+      (if local
           (hl-highlight-thingatpt-local)
         (hl-highlight-thingatpt-global)))
 
-    (defun my/unhl-anything (&optional arg)
-      "Wrapper function to call functions to unhighlight all either
-globally or locally (when called with prefix `C-u')."
-      (interactive "p")
-      (if (eq arg 4)
+    (defun my/unhl-anything (local)
+      "Un-highlight the thing at point globally in all buffers.
+
+If LOCAL is non-nil, un-highlight only in the current buffer."
+      (interactive "P")
+      (if local
           (hl-unhighlight-all-local)
         (hl-unhighlight-all-global)))
 
-    (defhydra hydra-hl-anything (:color red)
-      "hl-anything"
-      ("h" my/hl-anything             "hl-global")
-      ("H" (my/hl-anything 4)         "hl-local")
-      ("u" my/unhl-anything           "unhl-global" :color blue)
-      ("U" (my/unhl-anything 4)       "unhl-local" :color blue)
-      ("n" hl-find-next-thing         "next")
-      ("p" hl-find-prev-thing         "prev")
-      ("s" hl-save-highlights         "save" :color blue)
-      ("r" hl-restore-highlights      "restore" :color blue)
-      ("t" hl-global-highlight-on/off "toggle")
-      ("q" nil                        "cancel" :color blue))
-    (bind-to-modi-map "h" #'hydra-hl-anything/body)))
+    (defhydra hydra-hl-anything (:color red
+                                 :hint nil)
+      "
+_h_/_H_ighlight (global/local)           _n_ext hightlight           _s_ave highlights           _t_oggle highlights
+_u_/_U_n-highlight (global/local)        _p_revious highlight        _r_estore highlights
+"
+      ("h" my/hl-anything)
+      ("H" (my/hl-anything :local))
+      ("u" my/unhl-anything            :color blue)
+      ("U" (my/unhl-anything :local)   :color blue)
+      ("n" hl-find-next-thing)
+      ("p" hl-find-prev-thing)
+      ("s" hl-save-highlights          :color blue)
+      ("r" hl-restore-highlights       :color blue)
+      ("t" hl-global-highlight-on/off)
+      ("q" nil "cancel" :color blue))
+    (bind-key "C-c h" #'hydra-hl-anything/body modi-mode-map)))
 
-;; Alternative highlighting package when `hl-anything' has issues
-(when (not (featurep 'hl-anything))
-  (use-package highlight-global
-    :load-path "elisp/highlight-global"
-    :config
-    (progn
-      (bind-to-modi-map "h" #'highlight-frame-toggle)
-      (bind-to-modi-map "H" #'clear-highlight-frame))))
+;; Alternative highlighting package
+;; https://github.com/glen-dai/highlight-global
+(use-package highlight-global
+  :load-path "elisp/highlight-global"
+  :config
+  (progn
+    (bind-to-modi-map "h" #'highlight-frame-toggle)
+    (bind-to-modi-map "H" #'clear-highlight-frame)))
 
 ;; Volatile Highlights
 ;; https://github.com/k-talo/volatile-highlights.el
@@ -78,11 +85,11 @@ globally or locally (when called with prefix `C-u')."
       ("<C-kp-multiply>" . auto-highlight-symbol-mode))
     (bind-keys
      :map auto-highlight-symbol-mode-map
-      ("M-<"         . ahs-backward)
-      ("M->"         . ahs-forward)
-      ("M--"         . ahs-back-to-start)
-      ("C-x C-'"     . ahs-change-range)
-      ("C-x C-a"     . ahs-edit-mode))))
+      ("M-<"     . ahs-backward)
+      ("M->"     . ahs-forward)
+      ("M--"     . ahs-back-to-start)
+      ("C-x C-'" . ahs-change-range)
+      ("C-x C-a" . ahs-edit-mode))))
 
 (>=e "24.4"
     ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
@@ -106,6 +113,7 @@ will not update as you type."
         (hi-lock-set-pattern regexp face))))
 
 ;; hl-line+
+;; http://www.emacswiki.org/emacs/hl-line+.el
 (use-package hl-line+
   :config
   (progn
