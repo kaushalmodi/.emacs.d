@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-22 17:32:43 kmodi>
+;; Time-stamp: <2015-07-06 09:09:17 kmodi>
 
 ;; Imenu-list
 ;; https://github.com/bmag/imenu-list
@@ -34,10 +34,9 @@ If NOSELECT is non-nil, do not select the imenu-list buffer."
       (interactive)
       (imenu-list-goto-entry)
       (modi/imenu-list-hide))
-    (bind-key "C-<return>" #'modi/imenu-list-goto-entry-and-hide imenu-list-major-mode-map)
-
-    (imenu-list-minor-mode) ; global minor mode
-    (modi/imenu-list-hide)))
+    (bind-key "C-<return>"
+              #'modi/imenu-list-goto-entry-and-hide
+              imenu-list-major-mode-map)))
 
 
 (provide 'setup-imenu-list)
