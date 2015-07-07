@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-02 14:02:24 kmodi>
+;; Time-stamp: <2015-07-07 17:14:10 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -35,6 +35,7 @@
                                         ; wgrep+wgrep-ag allow editing files
                                         ; directly in ag buffer
         aggressive-indent
+        all all-ext ; edit ALL lines matching regex
         anzu   ; shows total search hits in mode line, > query-replace
         auto-complete fuzzy
         auto-highlight-symbol
@@ -195,6 +196,7 @@
 (when (executable-find "ag")
   (require 'setup-ag))
 (require 'setup-aggressive-indent)
+(require 'setup-all)
 (require 'setup-auto-complete)
 (require 'setup-counsel)
 (require 'setup-big-fringe)
