@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-30 11:22:10 kmodi>
+;; Time-stamp: <2015-07-07 12:40:04 kmodi>
 
 ;; Customize the mode-line
 
@@ -27,10 +27,21 @@ If nil, show the same in the minibuffer.")
                                         ; when launching emacsclient
   :init
   (progn
-    (setq minibuffer-line-format '((:eval (format-time-string "%l:%M %b %d %a")))))
+    (setq minibuffer-line-format '((:eval
+                                    (format-time-string "%l:%M %b %d %a"))))
+    (defconst modi/time-alert "05:15pm"
+      "Time when to modify the time face to alert the user about something,
+like time to leave for home.")
+    (defconst modi/time-reset "07:00am"
+      "Time when to modify the time face to remove the alert face."))
   :config
   (progn
-    (set-face-attribute 'minibuffer-line nil :inherit font-lock-type-face)
+    (run-at-time modi/time-reset nil
+                 (lambda () (set-face-attribute 'minibuffer-line nil
+                                           :inherit font-lock-type-face)))
+    (run-at-time modi/time-alert nil
+                 (lambda () (set-face-attribute 'minibuffer-line nil
+                                           :inherit font-lock-warning-face)))
     (minibuffer-line-mode)))
 
 ;; smart-mode-line
