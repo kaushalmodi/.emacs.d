@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 14:33:28 kmodi>
+;; Time-stamp: <2015-07-07 13:24:38 kmodi>
 
 ;; Org Mode
 
@@ -56,7 +56,7 @@
     ;; headline, this empty line is hidden when the subtree is folded.
     ;; Org-mode will leave (exactly) one empty line visible if the number of
     ;; empty lines is equal or larger to the number given in this variable.
-    (setq org-cycle-separator-lines 1) ; default = 2
+    (setq org-cycle-separator-lines 2) ; default = 2
 
     ;; CAPTURE
     ;; http://orgmode.org/manual/Template-elements.html
