@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-08 11:22:07 kmodi>
+;; Time-stamp: <2015-07-08 13:45:23 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -37,6 +37,7 @@
         aggressive-indent
         all all-ext ; edit ALL lines matching regex
         anzu   ; shows total search hits in mode line, > query-replace
+        ascii-art-to-unicode
         auto-complete fuzzy
         auto-highlight-symbol
         avy ; better than ace-jump-mode
@@ -198,6 +199,7 @@
   (require 'setup-ag))
 (require 'setup-aggressive-indent)
 (require 'setup-all)
+(require 'setup-artist)
 (require 'setup-auto-complete)
 (require 'setup-counsel)
 (require 'setup-big-fringe)
