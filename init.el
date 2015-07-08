@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-08 13:45:23 kmodi>
+;; Time-stamp: <2015-07-08 14:23:59 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -64,7 +64,6 @@
         gist
         git-link ; get git links with line numbers and commit-hash/branch
         git-timemachine ; walk through git revisions
-        google-contacts
         gplusify ; copy region with formatting for G+ posts
         ggtags etags-select etags-table ctags-update helm-gtags
         guide-key
@@ -219,7 +218,6 @@
 (require 'setup-fci)
 (require 'setup-fold )
 (require 'setup-gist)
-(require 'setup-google-contacts)
 (require 'setup-guide-key)
 (require 'setup-hardcore)
 (require 'setup-header2)
