@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-08 11:21:59 kmodi>
+;; Time-stamp: <2015-07-08 12:18:13 kmodi>
 
 ;; https://github.com/joodland/bm
 (use-package bm
@@ -40,6 +40,15 @@
       ;; Make sure bookmarks is saved before check-in (and revert-buffer)
       (add-hook 'vc-before-checkin-hook #'bm-buffer-save))
 
+    (define-fringe-bitmap 'bm-marker-left [#xF8   ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+                                           #xFC   ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                           #xFE   ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                           #x0F   ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                           #x0F   ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                           #xFE   ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                           #xFC   ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                           #xF8]) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+
     (setq bm-highlight-style 'bm-highlight-only-fringe)
     (setq bm-cycle-all-buffers t) ; search all open buffers for bookmarks
 
@@ -56,17 +65,18 @@
                         :body-pre (when (not (use-region-p)) (push-mark)))
       "
       Bookmark
-    _n_ext (_N_ in lifo order)            _t_oggle          ^^_/_ bm lines matching regexp                               _r_eturn to from where you started
-    _p_revious (_P_ in lifo order)        _a_nnotate        _x_/_X_ remove all bm from current/all open buffer(s)
+    _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm lines matching regexp                               toggle per_s_istence
+    _p_revious (_P_ in lifo order)        _a_nnotate               _x_/_X_ remove all bm from current/all open buffer(s)        _r_eturn to from where you started
     "
-      ("t"   bm-toggle :color blue)
-      ("m"   bm-toggle :color blue)
+      ("m"   bm-toggle)
+      ("M"   bm-toggle :color blue)
       ("a"   bm-bookmark-annotate :color blue)
       ("n"   bm-common-next)
       ("N"   bm-lifo-next)
       ("p"   bm-common-previous)
       ("P"   bm-lifo-previous)
       ("/"   modi/bm-bookmark-regexp :color blue)
+      ("s"   bm-toggle-buffer-persistence)
       ("x"   bm-remove-all-current-buffer :color blue)
       ("X"   bm-remove-all-all-buffers :color blue)
       ("r"   pop-to-mark-command :color blue)
