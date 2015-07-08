@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-07 17:14:10 kmodi>
+;; Time-stamp: <2015-07-08 11:22:07 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -41,6 +41,7 @@
         auto-highlight-symbol
         avy ; better than ace-jump-mode
         benchmark-init
+        bm ; visual bookmarks
         bookmark+ ; able to bookmark desktop sessions
         buffer-move
         cperl-mode
@@ -200,7 +201,7 @@
 (require 'setup-auto-complete)
 (require 'setup-counsel)
 (require 'setup-big-fringe)
-(require 'setup-bookmark+)
+(require 'setup-bookmarks)
 (require 'setup-buffer-move)
 (require 'setup-de-ansi)
 (require 'setup-deft)
