@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:48 kmodi>
+;; Time-stamp: <2015-07-09 13:11:44 kmodi>
 
 ;; IRegister (Interactive Register)
 ;; https://github.com/atykhonov/iregister.el
@@ -46,31 +46,28 @@
             (deactivate-mark))
         (message "!Region is not active.")))
 
-    (defhydra hydra-append (:color pink)
-      "append"
+    (defhydra hydra-append (:color pink
+                            :hint nil)
+      "
+   seperator ->        ^^None      ^^Space      ^^Newline
+Copy and Append        _._         _s_          _n_
+Cut  and Append        _x._        _xs_         _xn_
+"
       ;; Copy the selection and append to the latest register
-      ("."  my/iregister-copy-append                         "Rcopy-nil-r")
-      ("s"  (lambda (beg end)
-              (interactive "r")
-              (my/iregister-copy-append-sep beg end " "))    "Rcopy-SPC-r")
-      ("n"  (lambda (beg end)
-              (interactive "r")
-              (my/iregister-copy-append-sep beg end "\n"))   "Rcopy-newl-r")
+      ("."  my/iregister-copy-append)
+      ("s"  (lambda (b e) (interactive "r") (my/iregister-copy-append-sep b e " ")))
+      ("n"  (lambda (b e) (interactive "r") (my/iregister-copy-append-sep b e "\n")))
       ;; Delete the selection and append to the latest register
-      ("x." my/iregister-delete-append                       "Rdel-nil-r")
-      ("xs" (lambda (beg end)
-              (interactive "r")
-              (my/iregister-delete-append-sep beg end " "))  "Rdel-SPC-r")
-      ("xn" (lambda (beg end)
-              (interactive "r")
-              (my/iregister-delete-append-sep beg end "\n")) "Rdel-newl-r")
-      ("q"  nil                                              "cancel" :color blue))
+      ("x." my/iregister-delete-append)
+      ("xs" (lambda (b e) (interactive "r") (my/iregister-delete-append-sep b e " ")))
+      ("xn" (lambda (b e) (interactive "r") (my/iregister-delete-append-sep b e "\n")))
+      ("q"  nil "cancel" :color blue))
 
     (bind-keys
-     ;; If region is active then `iregister-point-or-text-to-register' command
-     ;; stores a text to any empty register, otherwise it stores a point.
-     ("M-w"     . my/iregister-copy) ; Replace normal copy function
-     ("C-w"     . my/iregister-cut) ; Replace normal 'cut' function
+     ;; If region is active then `my/iregister-copy' will store the selected
+     ;; text to any empty register, otherwise it stores the point.
+     ("C-c w"   . my/iregister-copy) ; Works like `M-w'
+     ("C-c W"   . my/iregister-cut) ; Works like `C-w'
      ("C-x r a" . hydra-append/body))
 
     (bind-to-modi-map "i" #'iregister-latest-text)))
