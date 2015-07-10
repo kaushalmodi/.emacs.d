@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-09 14:37:35 kmodi>
+;; Time-stamp: <2015-07-10 10:20:31 kmodi>
 
 ;; PDF
 
@@ -53,18 +53,6 @@ instead of the one present in `package-user-dir'."
                       ;; break the `dotimes' loop on finding this directory
                       ;; and return its full path
                       (throw 'break pdf-tools-epdfinfo-dir))))))))))
-
-    ;; The default value `t' of `character-fold-search' in emacs 25+ breaks
-    ;; the isearch in `pdf-isearch-minor-mode'; fix it
-    (>=e "25.0"
-        (progn
-          (defun modi/pdf-isearch-no-char-fold (orig-fun &rest args)
-            (let* ((character-fold-search-orig character-fold-search)
-                   (character-fold-search character-fold-search-orig))
-              (when pdf-isearch-minor-mode
-                (setq character-fold-search nil))
-              (apply orig-fun args)))
-          (advice-add 'isearch-mode :around #'modi/pdf-isearch-no-char-fold)))
 
     (defun my/pdf-tools-install ()
       (interactive)
