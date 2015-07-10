@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-08 14:23:59 kmodi>
+;; Time-stamp: <2015-07-10 18:02:53 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -12,12 +12,15 @@
 (setq emacs-version-short     (replace-regexp-in-string
                                "\\([0-9]+\\)\\.\\([0-9]+\\).*"
                                "\\1_\\2" emacs-version)) ; 25.0.50.1 -> 25_0
-(setq org-directory           (concat user-home-directory "org/")) ; must end with /
+(setq org-directory           (let ((dir (concat user-home-directory
+                                                 "org/"))) ; must end with /
+                                (make-directory dir :parents)
+                                dir))
 (setq setup-packages-file     (locate-user-emacs-file "setup-packages.el"))
 (setq custom-file             (locate-user-emacs-file
                                (concat "custom_" emacs-version-short ".el")))
 (setq user-personal-directory (let ((dir (concat user-emacs-directory
-                                                 "personal/")))
+                                                 "personal/"))) ; must end with /
                                 (make-directory dir :parents)
                                 dir))
 

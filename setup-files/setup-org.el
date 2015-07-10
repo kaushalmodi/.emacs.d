@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-10 10:09:44 kmodi>
+;; Time-stamp: <2015-07-10 17:52:50 kmodi>
 
 ;; Org Mode
 
@@ -72,9 +72,16 @@
              entry (file (expand-file-name "uvm.org" org-directory))
              "\n* %?\n  Context:\n    %i\n  Entered on %U")))
 
-    (setq org-agenda-files (expand-file-name "agenda.files" org-directory))
+    (defvar modi/one-org-agenda-file (expand-file-name "agenda.files"
+                                                       org-directory)
+      "One file to contain a list of all org agenda files.")
+    (setq org-agenda-files modi/one-org-agenda-file)
+    (unless (file-exists-p modi/one-org-agenda-file)
+      ;; http://stackoverflow.com/a/14072295/1219634
+      ;; touch `modi/one-org-agenda-file'
+      (write-region "" :ignore modi/one-org-agenda-file))
 
-    ;; change the default app for opening pdf files from org
+    ;; Change the default app for opening pdf files from org
     ;; http://stackoverflow.com/a/9116029/1219634
     (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
     (add-to-list 'org-src-lang-modes '("dot"           . graphviz-dot))
