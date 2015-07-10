@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-22 14:58:05 kmodi>
+;; Time-stamp: <2015-07-10 18:06:48 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -440,13 +440,20 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
    :map region-bindings-mode-map
     ("~" . xah-cycle-letter-case)))
 
-(defhydra hydra-change-case(:color red)
-  "change-case"
-  ("c"   modi/capitalize       "Capitalize")
-  ("u"   modi/upcase           "UPCASE")
-  ("l"   modi/downcase         "downcase")
-  ("M-c" xah-cycle-letter-case "→Cap→UP→down→")
-  ("q"   nil                   "cancel" :color blue))
+(defhydra hydra-change-case (:color blue
+                             :hint nil)
+  "
+_C_apitalize        _U_PCASE        _d_owncase        _<SPC>_ →Cap→UP→down→
+"
+  ("C"     modi/capitalize)
+  ("c"     modi/capitalize)
+  ("U"     modi/upcase)
+  ("u"     modi/upcase)
+  ("d"     modi/downcase)
+  ("l"     modi/downcase)
+  ("<SPC>" xah-cycle-letter-case :color red)
+  ("M-c"   xah-cycle-letter-case :color red)
+  ("q"     nil "cancel" :color blue))
 
 (bind-keys
  :map modi-mode-map
