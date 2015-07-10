@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-07 13:24:38 kmodi>
+;; Time-stamp: <2015-07-10 10:09:44 kmodi>
 
 ;; Org Mode
 
@@ -93,6 +93,20 @@
       (local-unset-key (kbd "<C-f10>")))
     (add-hook 'org-mode-hook #'my-org-mode-customizations)
 
+    ;; http://emacs.stackexchange.com/a/13854/115
+    ;; Heading▮   --(C-c C-t)--> * TODO Heading▮
+    ;; * Heading▮ --(C-c C-t)--> * TODO Heading▮
+    (defun modi/org-first-convert-to-heading (orig-fun &rest args)
+      (let ((is-heading))
+        (save-excursion
+          (forward-line 0)
+          (when (looking-at "^\\*")
+            (setq is-heading t)))
+        (unless is-heading
+          (org-toggle-heading))
+        (apply orig-fun args)))
+    (advice-add 'org-todo :around #'modi/org-first-convert-to-heading)
+
     ;; Diagrams
     ;; http://pages.sachachua.com/.emacs.d/Sacha.html
     (setq org-ditaa-jar-path (expand-file-name
@@ -159,7 +173,6 @@ this with to-do items than with projects or headings."
     (bind-keys
      :map modi-mode-map
       ("C-c a" . org-agenda)
-      ("C-c b" . org-iswitchb)
       ("C-c c" . org-capture))
 
     ;; Make `org-return' repeat the number passed through the argument
@@ -649,3 +662,6 @@ _h_tml    ^^          _t_ext          _A_SCII:
 
 ;; Disable selected org-mode markup character on per-file basis
 ;; http://emacs.stackexchange.com/a/13231/115
+
+;; How to modify `org-emphasis-regexp-components'
+;; http://emacs.stackexchange.com/a/13828/115
