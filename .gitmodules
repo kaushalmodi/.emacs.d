@@ -46,3 +46,6 @@
 [submodule "elisp/verilog-mode"]
 	path = elisp/verilog-mode
 	url = https://kaushalmodi@github.com/kaushalmodi/verilog-mode
+[submodule "elisp/drag-stuff.el"]
+	path = elisp/drag-stuff.el
+	url = https://kaushalmodi@github.com/kaushalmodi/drag-stuff.el

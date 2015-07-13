@@ -1,9 +1,10 @@
-;; Time-stamp: <2015-06-15 10:09:37 kmodi>
+;; Time-stamp: <2015-07-13 13:59:36 kmodi>
 
 ;; Drag Stuff
 ;; https://github.com/rejeep/drag-stuff
 
 (use-package drag-stuff
+  :load-path "elisp/drag-stuff.el"
   :config
   (progn
     ;; Do not use `drag-stuff' keys

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-10 18:02:53 kmodi>
+;; Time-stamp: <2015-07-13 13:58:06 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -31,6 +31,7 @@
         ;; outshine ; < forked
         ;; popwin ; < shackle
         ;; poporg ; edit comments from any other mode in org mode < forked
+        ;; drag-stuff ; < forked
         ace-jump-mode ; < avy
         ace-window
         adaptive-wrap ; indented line wrapping
@@ -54,7 +55,6 @@
         diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
-        drag-stuff
         easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
         eimp ; required by org-show
         elfeed
