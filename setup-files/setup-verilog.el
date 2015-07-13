@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-25 14:37:05 kmodi>
+;; Time-stamp: <2015-07-13 15:53:55 kmodi>
 
 ;;; Verilog
 
@@ -322,24 +322,6 @@ the project."
     ;; backticks on multiple lines simultaneously in multiple-cursors mode
     (define-key verilog-mode-map "\`" nil)
 
-;;; my/verilog-mode-customizations
-    (defun my/verilog-mode-customizations ()
-      ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
-      (font-lock-add-keywords nil
-                              '(("\\b\\(FIXME\\|TODO\\|BUG\\)\\b" 1
-                                 font-lock-warning-face t)))
-      ;; Above solution highlights those keywords anywhere in the buffer (not
-      ;; just in comments). To do the highlighting intelligently, install the
-      ;; `fic-mode' package - https://github.com/lewang/fic-mode
-
-      ;; ;; Enable orgstruct mode
-      ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
-      ;; (turn-on-orgstruct++)
-
-      ;; Replace tabs with spaces when saving files in verilog-mode
-      (add-hook 'write-file-functions #'modi/untabify-buffer nil :local))
-    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
-
 ;;; my/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
     (defun my/verilog-selective-indent (&rest args)
@@ -369,6 +351,19 @@ The match with `//.' resolves this issue:
     (advice-add 'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
     ;; Advise the indentation done by hitting `TAB'
     (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
+
+;;; imenu support
+    ;; Imenu expression for Verilog mode.  See `imenu-generic-expression'
+    (defconst modi/verilog-imenu-generic-expression
+      '(("*Modules*"
+         "^\\s-*\\(\\(m\\(odule\\|acromodule\\)\\)\\|primitive\\)\\s-+\\(?1:[A-Za-z_][A-Za-z0-9_.:]+\\)" 1)
+        ("*Classes*"
+         "^\\s-*\\(\\(static\\|local\\|virtual\\|protected\\)\\b\\s-+\\)*class\\s-+\\(?1:[A-Za-z_][A-Za-z0-9_]+\\)" 1)
+        ("*Tasks*"
+         "^\\s-*\\(\\(static\\|local\\|virtual\\|protected\\)\\b\\s-+\\)*task\\s-+\\(\\(static\\|automatic\\)\\s-+\\)*\\(?1:[A-Za-z_][A-Za-z0-9_:]+\\)" 1)
+        ("*Functions*"
+         "^\\s-*\\(\\(static\\|local\\|virtual\\|protected\\)\\b\\s-+\\)*function\\s-+\\([a-z_]+\\s-+\\)*\\(?1:[A-Za-z_][A-Za-z0-9_:]+\\)" 1))
+      "Generic regular expression to parse Verilog elements for `imenu'.")
 
 ;;; hideshow
     (with-eval-after-load 'setup-fold
@@ -448,6 +443,42 @@ _a_lways         _f_or              _g_enerate         _O_utput
 
     ;; Reset the verilog-mode abbrev table
     (clear-abbrev-table verilog-mode-abbrev-table)
+
+;;; my/verilog-mode-customizations
+    (defun my/verilog-mode-customizations ()
+      ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
+      (font-lock-add-keywords nil
+                              '(("\\b\\(FIXME\\|TODO\\|BUG\\)\\b" 1
+                                 font-lock-warning-face t)))
+      ;; Above solution highlights those keywords anywhere in the buffer (not
+      ;; just in comments). To do the highlighting intelligently, install the
+      ;; `fic-mode' package - https://github.com/lewang/fic-mode
+
+      ;; ;; Enable orgstruct mode
+      ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
+      ;; (turn-on-orgstruct++)
+
+      (setq imenu-generic-expression
+            (append imenu-generic-expression
+                    modi/verilog-imenu-generic-expression))
+      ;; Replace tabs with spaces when saving files in verilog-mode
+      (add-hook 'write-file-functions #'modi/untabify-buffer nil :local))
+    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
+
+    ;; Force the `imenu-generic-expression' to be `modi/verilog-imenu-generic-expression'
+    ;; for `verilog-mode'
+    (defun modi/outshine-hook-mod (orig-fun &rest args)
+      (apply orig-fun args)
+      (when (derived-mode-p 'verilog-mode)
+        (setq imenu-generic-expression
+              (append '(("*Level 1*"
+                         "^// \\* \\(?1:.*$\\)" 1)
+                        ("*Level 2*"
+                         "^// \\*\\* \\(?1:.*$\\)" 1)
+                        ("*Level 3*"
+                         "^// \\*\\* \\(?1:.*$\\)" 1))
+                      modi/verilog-imenu-generic-expression))))
+    (advice-add 'outshine-hook-function :around #'modi/outshine-hook-mod)
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Macros saved as functions
