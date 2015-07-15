@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 09:00:48 kmodi>
+;; Time-stamp: <2015-07-15 10:57:47 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -147,12 +147,12 @@ Else perform the default backspace action."
       ("q"           . modi/eww-quit)
       ("r"           . eww-reload) ; Reload
       ("p"           . shr-previous-link)
-      ("<backtab>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
+      ("<BACKTAB>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
       ("n"           . shr-next-link)
-      ("<tab>"       . shr-next-link)
+      ("<TAB>"       . shr-next-link)
       ("N"           . eww-next-url)
       ("P"           . eww-previous-url)
-      ("<backspace>" . modi/eww-back-dwim)
+      ("<BACKSPACE>" . modi/eww-back-dwim)
       ("w"           . modi/eww-copy-url-dwim)
       ("\<"          . eww-back-url)
       ("\>"          . eww-forward-url)
@@ -244,6 +244,5 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
 ;; | w        | `eww-copy-page-url' (not documented)                                            |
 ;; | DEL      | Scroll text of selected window down ARG lines; or near full screen if no ARG.   |
 ;; | S-SPC    | Scroll text of selected window down ARG lines; or near full screen if no ARG.   |
-;; | <delete> | Scroll text of selected window down ARG lines; or near full screen if no ARG.   |
 ;; | C-M-i    | Skip to the previous link.                                                      |
 ;; |----------+---------------------------------------------------------------------------------|

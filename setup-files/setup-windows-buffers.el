@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-26 11:55:13 kmodi>
+;; Time-stamp: <2015-07-15 10:54:14 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -468,15 +468,15 @@ buffers: *gtags-global*, *ag*, *Occur*."
 
 (bind-keys
  :map modi-mode-map
-  ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
+  ("C-x 1"     . modi/toggle-one-window) ; default binding to `delete-other-windows'
   ;; overriding `C-x C-p' originally bound to `mark-page' command
-  ("C-x C-p"      . show-copy-buffer-file-name)
-  ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence' command
-  ("C-x <delete>" . delete-current-buffer-file)
-  ("C-x C-r"      . rename-current-buffer-file)
-  ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
-  ("C-("          . toggle-between-buffers)
-  ("C-)"          . modi/kill-buffer-dwim))
+  ("C-x C-p"   . show-copy-buffer-file-name)
+  ;; overriding `C-x <DEL>' originally bound to `backward-kill-sentence' command
+  ("C-x <DEL>" . delete-current-buffer-file)
+  ("C-x C-r"   . rename-current-buffer-file)
+  ("C-S-t"     . reopen-killed-file) ; mimick reopen-closed-tab in browsers
+  ("C-("       . toggle-between-buffers)
+  ("C-)"       . modi/kill-buffer-dwim))
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; http://stackoverflow.com/a/26629984/1219634

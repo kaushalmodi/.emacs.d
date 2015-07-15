@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-09 11:10:06 kmodi>
+;; Time-stamp: <2015-07-15 11:11:09 kmodi>
 
 ;; Customize the mode-line
 
@@ -160,7 +160,8 @@ are canceled and not restarted if TIME is \"nil\" or \"\"."
       :config
       (progn
         (setq rm-blacklist
-              '(" Guide"        ; guide-key mode
+              '(" Guide"        ; guide-key
+                " WK"           ; which-key
                 " hc"           ; hardcore mode
                 " AC"           ; auto-complete
                 " vl"           ; global visual line mode enabled

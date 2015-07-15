@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-13 13:58:06 kmodi>
+;; Time-stamp: <2015-07-15 10:51:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -69,7 +69,6 @@
         git-timemachine ; walk through git revisions
         gplusify ; copy region with formatting for G+ posts
         ggtags etags-select etags-table ctags-update helm-gtags
-        guide-key
         hardcore-mode
         header2
         helm helm-swoop
@@ -129,6 +128,7 @@
         visual-regexp
         volatile-highlights
         web-mode
+        which-key ; > guide-key
         wrap-region ; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
         xkcd ; comic
         yafolding ; indentation detected code folding
@@ -221,7 +221,6 @@
 (require 'setup-fci)
 (require 'setup-fold )
 (require 'setup-gist)
-(require 'setup-guide-key)
 (require 'setup-hardcore)
 (require 'setup-header2)
 (require 'setup-highlight)
@@ -263,6 +262,7 @@
 (require 'setup-tiny)
 (require 'setup-undo-tree)
 (require 'setup-which-func)
+(require 'setup-which-key)
 (require 'setup-wrap-region)
 (require 'setup-writegood)
 (require 'setup-xkcd)
