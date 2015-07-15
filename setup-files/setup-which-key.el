@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-15 11:18:44 kmodi>
+;; Time-stamp: <2015-07-15 11:35:12 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -9,6 +9,15 @@
   (progn
     (setq which-key-popup-type 'minibuffer) ; default
     ;; (setq which-key-popup-type 'side-window)
+
+    (setq which-key-key-replacement-alist
+          '(("<\\(\\(C-\\|M-\\)*.+\\)>" . "\\1")
+            ("left"  . "🡄")
+            ("right" . "🡆")
+            ("up"    . "🡅")
+            ("down"  . "🡇")))
+    (setq which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL"
+                                   "🡄" "🡆" "🡅" "🡇"))
 
     (which-key-mode 1)))
 
