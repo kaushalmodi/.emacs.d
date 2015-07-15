@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-23 19:44:00 kmodi>
+;; Time-stamp: <2015-07-15 15:23:36 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -7,12 +7,19 @@
 ;; http://stackoverflow.com/questions/683425/globally-override-key-binding-in-emacs
 ;; http://nullprogram.com/blog/2013/02/06/
 
-(defvar modi-mode-map (make-sparse-keymap)
-  "Keymap while modi-mode is active.")
+(defvar modi-special-keymap-prefix (kbd "C-x m")
+  "`modi-mode' keymap prefix.
+Overrides the default binding for `compose-mail'.")
 
-(defvar modi/pseudo-map-prefix "C-x m "
-  ;; overrides the default binding to `compose-mail'
-  "Prefix key binding for a `pseudo' keymap.")
+(defvar modi-mode-special-map (make-sparse-keymap)
+  "Special keymap for `modi-mode' whose bindings begin with
+`modi-special-keymap-prefix'.")
+(fset 'modi-mode-special-map modi-mode-special-map)
+
+(defvar modi-mode-map (let ((map (make-sparse-keymap)))
+                        (define-key map modi-special-keymap-prefix 'modi-mode-special-map)
+                        map)
+  "Keymap for `modi-mode'.")
 
 ;;;###autoload
 (define-minor-mode modi-mode
@@ -50,12 +57,10 @@
 ;; ###autoload
 ;; (add-hook 'text-mode-hook 'modi-mode)
 
-(require 'bind-key)
 (defmacro bind-to-modi-map (key fn)
-  "Bind a function to the `modi-mode-map'
-USAGE: (bind-to-modi-map \"f\" #'full-screen-center)
-"
-  `(bind-key (concat ,modi/pseudo-map-prefix " " ,key) ,fn modi-mode-map))
+  "Bind a function to the `modi-mode-special-map'.
+USAGE: (bind-to-modi-map \"f\" #'full-screen-center)."
+  `(define-key modi-mode-special-map (kbd ,key) ,fn))
 
 ;; http://emacs.stackexchange.com/a/12906/115
 (defun unbind-from-modi-map (key)
