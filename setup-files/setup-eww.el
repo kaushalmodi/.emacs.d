@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-15 10:57:47 kmodi>
+;; Time-stamp: <2015-07-16 08:46:17 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -147,12 +147,12 @@ Else perform the default backspace action."
       ("q"           . modi/eww-quit)
       ("r"           . eww-reload) ; Reload
       ("p"           . shr-previous-link)
-      ("<BACKTAB>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
+      ("<backtab>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
       ("n"           . shr-next-link)
-      ("<TAB>"       . shr-next-link)
+      ("<tab>"       . shr-next-link)
       ("N"           . eww-next-url)
       ("P"           . eww-previous-url)
-      ("<BACKSPACE>" . modi/eww-back-dwim)
+      ("<backspace>" . modi/eww-back-dwim)
       ("w"           . modi/eww-copy-url-dwim)
       ("\<"          . eww-back-url)
       ("\>"          . eww-forward-url)
