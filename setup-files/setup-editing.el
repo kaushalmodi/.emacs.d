@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-10 18:06:48 kmodi>
+;; Time-stamp: <2015-07-16 12:04:35 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -651,6 +651,9 @@ If the current buffer is not associated with a file, nothing's done."
                    ("<\""     . [?«]) ; left-pointing double angle quotation mark
                    ("<'"      . [?‹]) ; single left-pointing angle quotation mark
                    ("<h"      . [?☚]) ; black left pointing index
+                   ;; "
+                   ("\"`"     . [?“]) ; left double quotation mark
+                   ("\"'"     . [?”]) ; right double quotation mark
                    ;; arrows
                    ("<right>" . [?→]) ; rightwards arrow
                    ("<left>"  . [?←]) ; leftwards arrow
