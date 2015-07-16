@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-15 14:30:33 kmodi>
+;; Time-stamp: <2015-07-16 08:51:09 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -20,11 +20,12 @@
     (setq which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL"))
 
     (setq which-key-key-based-description-replacement-alist
-          '(("C-x 8" . "unicode")
-            ("C-x a" . "abbrev/expand")
-            ("C-x r" . "rect/reg")
-            ("C-x w" . "hi-lock-map")
-            ("C-c /" . "engine-mode-map")))
+          '(("C-x 8"   . "unicode")
+            ("C-x a"   . "abbrev/expand")
+            ("C-x r"   . "rect/reg")
+            ("C-x w"   . "hi-lock-map")
+            ("C-c /"   . "engine-mode-map")
+            ("C-x 8 0" . "ZWS")))
 
     (which-key-mode 1)))
 
