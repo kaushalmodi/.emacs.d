@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-17 11:39:05 kmodi>
+;; Time-stamp: <2015-07-16 12:35:51 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -17,8 +17,18 @@
     ;; http://emacs.stackexchange.com/a/2803/115
     (defun modi/outline-toc ()
       "Create a table of contents for outshine headers.
-Insert/update the TOC after the line that has the “<comment start> Contents:”
-string.
+
+For `emacs-lisp-mode':
+ - The Contents header has to be “;; Contents:”
+ - Level 1 headers will be of the form “;;; L1 Header”
+ - Level 2 headers will be of the form “;;;; L2 Header”
+ - ..
+
+For other major modes:
+ - The Contents header has to be “<comment-start> Contents:”
+ - Level 1 headers will be of the form “<comment-start> * L1 Header”
+ - Level 2 headers will be of the form “<comment-start> ** L2 Header”
+ - ..
 
 Don't add “Revision Control” heading to TOC."
       (interactive)
@@ -32,6 +42,7 @@ Don't add “Revision Control” heading to TOC."
                           ;; trim white space from comment-start
                           (replace-regexp-in-string " " "" comment-start)))
                        "\\)"))
+              (el-mode (derived-mode-p 'emacs-lisp-mode))
               parsed-outline-comment-start
               headings-list stars-list
               heading star)
@@ -39,15 +50,20 @@ Don't add “Revision Control” heading to TOC."
           (while (re-search-forward
                   (concat "^\\(?1:" ; beginning of line
                           outline-comment-start
-                          "\\s-\\{1\\}\\)" ; SINGLE white space
-                          "\\*\\(?2:\\**\\) " ; one or more * chars followed by space
+                          (if el-mode
+                              (concat "\\{2\\}\\)" ; 2 consecutive ; in `emacs-lisp-mode'
+                                      ";\\(?2:;*\\)") ; followed by one or more ; chars
+                            (concat "\\s-\\{1\\}\\)" ; SINGLE white space
+                                    "\\*\\(?2:\\**\\)")) ; followed by one or more * chars
+                          " " ; followed by a space
                           "\\(?3:.+\\)") ; followed by heading
                   nil :noerror)
             (setq parsed-outline-comment-start (match-string-no-properties 1))
             ;; Note that the below `star' var stores one less * than the actual;
-            ;; that's intentional
-            (setq star                         (match-string-no-properties 2))
-            (setq heading                      (match-string-no-properties 3))
+            ;; that's intentional. Also note that for `emacs-lisp-mode' the 3rd
+            ;; consecutive ; onwards is counted as a “star”.
+            (setq star    (match-string-no-properties 2))
+            (setq heading (match-string-no-properties 3))
             ;; (message "%s %s %s" parsed-outline-comment-start star heading)
             (when (not (string= heading "Revision Control"))
               (setq stars-list    (cons star stars-list))
@@ -57,7 +73,11 @@ Don't add “Revision Control” heading to TOC."
 
           (goto-char (point-min))
           (while (re-search-forward
-                  (concat "^" outline-comment-start " " "Contents:")
+                  (concat "^"
+                          outline-comment-start
+                          (when el-mode
+                            "\\{2\\}") ; 2 consecutive ; in `emacs-lisp-mode'
+                          " Contents:")
                   nil :noerror)
             (forward-line 1)
             ;; First delete old contents
@@ -73,16 +93,20 @@ Don't add “Revision Control” heading to TOC."
                            (delete-region p1 p2))))
                      (not (looking-at "^\n"))))
             ;; Then print table of contents
-            (insert (format "%s\n" parsed-outline-comment-start))
-            (let ((n 1))
-              (dolist (h headings-list)
-                ;; (insert (format "// %2d. %s\n" n heading))
-                (insert (format "%s %s%s\n"
-                                parsed-outline-comment-start
-                                (replace-regexp-in-string
-                                 "\\*" "  " (pop stars-list))
-                                h))
-                (setq n (1+ n))))))))
+            (let ((content-comment-prefix
+                   (if el-mode
+                       ";; " ; 2 consecutive ; in `emacs-lisp-mode'
+                     parsed-outline-comment-start)))
+              (insert (format "%s\n" content-comment-prefix))
+              (let ((n 1))
+                (dolist (h headings-list)
+                  ;; (insert (format "// %2d. %s\n" n heading))
+                  (insert (format "%s %s%s\n"
+                                  content-comment-prefix
+                                  (replace-regexp-in-string
+                                   (if el-mode ";" "\\*") "  " (pop stars-list))
+                                  h))
+                  (setq n (1+ n)))))))))
 
     (defvar modi/outline-mode-hooks '(verilog-mode-hook
                                       emacs-lisp-mode-hook)
