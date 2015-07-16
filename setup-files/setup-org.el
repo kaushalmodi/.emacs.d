@@ -1,11 +1,32 @@
-;; Time-stamp: <2015-07-10 17:52:50 kmodi>
+;; Time-stamp: <2015-07-16 12:56:10 kmodi>
 
 ;; Org Mode
+
+;; Contents:
+;;
+;;  Org Variables
+;;  Agenda and Capture
+;;  Source block languages
+;;  Defuns
+;;    org-linkid - Support markdown-style link ids
+;;  Diagrams
+;;  Confirm evaluate
+;;  epresent
+;;  org-tree-slide
+;;  Org Export
+;;    ox-latex - LaTeX export
+;;    ox-html - HTML export
+;;    ox-beamer - Beamer export
+;;    ox-reveal - Presentations using reveal.js
+;;    ox-odt - ODT, doc export
+;;    Custom Org Export related “packages”
+;;  Bindings
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :config
   (progn
+;;; Org Variables
     (setq org-agenda-archives-mode nil) ; required in org 8.0+
     (setq org-agenda-skip-comment-trees nil)
     (setq org-agenda-skip-function nil)
@@ -58,7 +79,7 @@
     ;; empty lines is equal or larger to the number given in this variable.
     (setq org-cycle-separator-lines 2) ; default = 2
 
-    ;; CAPTURE
+;;; Agenda and Capture
     ;; http://orgmode.org/manual/Template-elements.html
     ;; http://orgmode.org/manual/Template-expansion.html
     (setq org-capture-templates
@@ -81,67 +102,6 @@
       ;; touch `modi/one-org-agenda-file'
       (write-region "" :ignore modi/one-org-agenda-file))
 
-    ;; Change the default app for opening pdf files from org
-    ;; http://stackoverflow.com/a/9116029/1219634
-    (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
-    (add-to-list 'org-src-lang-modes '("dot"           . graphviz-dot))
-    ;; Change .pdf association directly within the alist
-    (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")
-
-    ;; (require 'org-latex) in org version < 8.0
-    ;; (setq org-export-latex-listings 'minted) in org version < 8.0
-    ;; (add-to-list 'org-export-latex-packages-alist '("" "minted")) in org version < 8.0
-
-    (defun my-org-mode-customizations ()
-      ;; Reset the `local-set-key' calls
-      (local-unset-key (kbd "<f10>"))
-      (local-unset-key (kbd "<s-f10>"))
-      (local-unset-key (kbd "<S-f10>"))
-      (local-unset-key (kbd "<C-f10>")))
-    (add-hook 'org-mode-hook #'my-org-mode-customizations)
-
-    ;; http://emacs.stackexchange.com/a/13854/115
-    ;; Heading▮   --(C-c C-t)--> * TODO Heading▮
-    ;; * Heading▮ --(C-c C-t)--> * TODO Heading▮
-    (defun modi/org-first-convert-to-heading (orig-fun &rest args)
-      (let ((is-heading))
-        (save-excursion
-          (forward-line 0)
-          (when (looking-at "^\\*")
-            (setq is-heading t)))
-        (unless is-heading
-          (org-toggle-heading))
-        (apply orig-fun args)))
-    (advice-add 'org-todo :around #'modi/org-first-convert-to-heading)
-
-    ;; Diagrams
-    ;; http://pages.sachachua.com/.emacs.d/Sacha.html
-    (setq org-ditaa-jar-path (expand-file-name
-                              "ditaa.jar"
-                              (concat user-emacs-directory "software/")))
-    (setq org-plantuml-jar-path (expand-file-name
-                                 "plantuml.jar"
-                                 (concat user-emacs-directory "software/")))
-
-    ;; (setq org-startup-with-inline-images t)
-    ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
-
-    (org-babel-do-load-languages
-     'org-babel-load-languages '((ditaa    . t)   ; activate ditaa
-                                 (plantuml . t)   ; activate plantuml
-                                 (latex    . t)   ; activate latex
-                                 (dot      . t))) ; activate graphviz
-
-    (defun my-org-confirm-babel-evaluate (lang body)
-      (and (not (string= lang "ditaa"))    ; don't ask for ditaa
-           (not (string= lang "plantuml")) ; don't ask for plantuml
-           (not (string= lang "latex"))    ; don't ask for latex
-           (not (string= lang "dot"))      ; don't ask for graphviz
-           ))
-    (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
-    (setq org-confirm-elisp-link-function 'yes-or-no-p)
-
-    ;; org-agenda related functions
     ;; http://sachachua.com/blog/2013/01/emacs-org-task-related-keyboard-shortcuts-agenda/
     (defun sacha/org-agenda-done (&optional arg)
       "Mark current TODO as done.
@@ -177,19 +137,35 @@ this with to-do items than with projects or headings."
                   ("X" . sacha/org-agenda-mark-done-and-add-followup)
                   ("N" . sacha/org-agenda-new))))
 
-    (bind-keys
-     :map modi-mode-map
-      ("C-c a" . org-agenda)
-      ("C-c c" . org-capture))
+;;; Source block languages
+    ;; Change the default app for opening pdf files from org
+    ;; http://stackoverflow.com/a/9116029/1219634
+    (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
+    (add-to-list 'org-src-lang-modes '("dot"           . graphviz-dot))
 
-    ;; Make `org-return' repeat the number passed through the argument
+    ;; Change .pdf association directly within the alist
+    (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")
+
+;;; Defuns
+    ;; http://emacs.stackexchange.com/a/13854/115
+    ;; Heading▮   --(C-c C-t)--> * TODO Heading▮
+    ;; * Heading▮ --(C-c C-t)--> * TODO Heading▮
+    (defun modi/org-first-convert-to-heading (orig-fun &rest args)
+      (let ((is-heading))
+        (save-excursion
+          (forward-line 0)
+          (when (looking-at "^\\*")
+            (setq is-heading t)))
+        (unless is-heading
+          (org-toggle-heading))
+        (apply orig-fun args)))
+    (advice-add 'org-todo :around #'modi/org-first-convert-to-heading)
+
     (defun modi/org-return-no-indent (&optional n)
+      "Make `org-return' repeat the number passed through the argument"
       (interactive "p")
       (dotimes (cnt n)
         (org-return nil)))
-    (bind-keys
-     :map org-mode-map
-      ("C-m" . modi/org-return-no-indent))
 
     ;; http://emacs.stackexchange.com/a/10712/115
     (defun modi/org-delete-link ()
@@ -212,11 +188,61 @@ Execute this command while the point is on or after the hyper-linked org link."
                 (replace-regexp "\\[\\[.*?\\(\\]\\[\\(.*?\\)\\)*\\]\\]" "\\2"
                                 nil start end)))))))
 
-    ;; epresent
+    ;; Update TODAY macro with current date
+    (defun modi/org-update-TODAY-macro (&rest ignore)
+      "Update TODAY macro to hold string with current date."
+      (interactive)
+      (when (derived-mode-p 'org-mode)
+        (save-excursion
+          (goto-char (point-min))
+          (while (re-search-forward
+                  "^\\s-*#\\+MACRO:\\s-+TODAY"
+                  nil 'noerror)
+            (forward-line 0)
+            (when (looking-at ".*TODAY\\(.*\\)")
+              (replace-match
+               (concat " "
+                       (format-time-string "%b %d %Y, %a" (current-time)))
+               :fixedcase :literal nil 1))))))
+    (add-hook 'org-export-before-processing-hook #'modi/org-update-TODAY-macro)
+
+;;;; org-linkid - Support markdown-style link ids
+    (use-package org-linkid
+      :load-path "elisp/org-linkid")
+
+;;; Diagrams
+    ;; http://pages.sachachua.com/.emacs.d/Sacha.html
+    (setq org-ditaa-jar-path (expand-file-name
+                              "ditaa.jar"
+                              (concat user-emacs-directory "software/")))
+    (setq org-plantuml-jar-path (expand-file-name
+                                 "plantuml.jar"
+                                 (concat user-emacs-directory "software/")))
+
+    ;; (setq org-startup-with-inline-images t)
+    ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+
+    (org-babel-do-load-languages
+     'org-babel-load-languages '((ditaa    . t)   ; activate ditaa
+                                 (plantuml . t)   ; activate plantuml
+                                 (latex    . t)   ; activate latex
+                                 (dot      . t))) ; activate graphviz
+
+;;; Confirm evaluate
+    (defun my-org-confirm-babel-evaluate (lang body)
+      (and (not (string= lang "ditaa"))    ; don't ask for ditaa
+           (not (string= lang "plantuml")) ; don't ask for plantuml
+           (not (string= lang "latex"))    ; don't ask for latex
+           (not (string= lang "dot"))      ; don't ask for graphviz
+           ))
+    (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+    (setq org-confirm-elisp-link-function 'yes-or-no-p)
+
+;;; epresent
     (use-package epresent
       :commands (epresent-run))
 
-    ;; org-tree-slide
+;;; org-tree-slide
     ;; https://github.com/takaxp/org-tree-slide
     (use-package org-tree-slide
       :load-path "elisp/org-tree-slide"
@@ -279,11 +305,13 @@ Execute this command while the point is on or after the hyper-linked org link."
         (bind-key "C-3"      #'org-tree-slide-simple-profile                                      org-tree-slide-mode-map)
         (bind-key "C-4"      #'org-tree-slide-presentation-profile                                org-tree-slide-mode-map)))
 
+;;; Org Export
     (use-package ox
       :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
       :config
       (progn
-        ;; LaTeX export
+
+;;;; ox-latex - LaTeX export
         (use-package ox-latex
           :config
           (progn
@@ -405,7 +433,7 @@ Execute this command while the point is on or after the hyper-linked org link."
             ;; acroread directly using the `C-c C-e l o` key binding
             ))
 
-        ;; HTML export
+;;;; ox-html - HTML export
         (use-package ox-html
           :config
           (progn
@@ -488,7 +516,7 @@ Execute this command while the point is on or after the hyper-linked org link."
                     (browse-url-of-file modi/htmlize-html-file)))))
             (bind-key "H" #'modi/htmlize-region-as-html-file region-bindings-mode-map)))
 
-        ;; Beamer export
+;;;; ox-beamer - Beamer export
         (use-package ox-beamer
           :commands (org-beamer-export-as-latex
                      org-beamer-export-to-latex
@@ -504,7 +532,7 @@ Execute this command while the point is on or after the hyper-linked org link."
                            ("\\subsection{%s}"     . "\\subsection*{%s}")
                            ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")))))
 
-        ;; Presentations using reveal.js
+;;;; ox-reveal - Presentations using reveal.js
         ;; Download reveal.js from https://github.com/hakimel/reveal.js/
         (use-package ox-reveal
           :config
@@ -514,7 +542,7 @@ Execute this command while the point is on or after the hyper-linked org link."
             (setq org-reveal-theme   "default") ; beige blood moon night serif simple sky solarized
             (setq org-reveal-mathjax t))) ; Use mathjax.org to render LaTeX equations
 
-        ;; ODT, doc export
+;;;; ox-odt - ODT, doc export
         ;; http://stackoverflow.com/a/22990257/1219634
         (use-package ox-odt
           ;; :disabled
@@ -531,6 +559,7 @@ Execute this command while the point is on or after the hyper-linked org link."
           (org-ascii-export-to-ascii)
           (org-latex-export-to-pdf))
 
+;;;; Custom Org Export related “packages”
         ;; Auto update line numbers for source code includes when exporting
         (use-package org-include-src-lines
           :load-path "elisp/org-include-src-lines")
@@ -544,28 +573,7 @@ Execute this command while the point is on or after the hyper-linked org link."
           :load-path "elisp/org-include-img-from-archive")
         ))
 
-    ;; Support markdown-style link ids
-    (use-package org-linkid
-      :load-path "elisp/org-linkid")
-
-    ;; Update TODAY macro with current date
-    (add-hook 'org-export-before-processing-hook #'modi/org-update-TODAY-macro)
-    (defun modi/org-update-TODAY-macro (&rest ignore)
-      "Update TODAY macro to hold string with current date."
-      (interactive)
-      (when (derived-mode-p 'org-mode)
-        (save-excursion
-          (goto-char (point-min))
-          (while (re-search-forward
-                  "^\\s-*#\\+MACRO:\\s-+TODAY"
-                  nil 'noerror)
-            (forward-line 0)
-            (when (looking-at ".*TODAY\\(.*\\)")
-              (replace-match
-               (concat " "
-                       (format-time-string "%b %d %Y, %a" (current-time)))
-               :fixedcase :literal nil 1))))))
-
+;;; Bindings
     ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
     ;; Pressing `C-x C-s' while editing org source code blocks saves and exits
     ;; the edit.
@@ -575,6 +583,11 @@ Execute this command while the point is on or after the hyper-linked org link."
     ;; http://orgmode.org/manual/Easy-Templates.html
     ;; http://oremacs.com/2015/03/07/hydra-org-templates
     ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
+    (defun hot-expand (str)
+      "Expand org template."
+      (insert str)
+      (org-try-structure-completion))
+
     (defhydra hydra-org-template (:color blue :hint nil)
       "
 _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
@@ -619,17 +632,30 @@ _h_tml    ^^          _t_ext          _A_SCII:
       ("<" self-insert-command "<")
       ("o" nil         "quit"))
 
-    (defun hot-expand (str)
-      "Expand org template."
-      (insert str)
-      (org-try-structure-completion))
+    (defun modi/org-template-maybe ()
+      "Insert org-template if point is at the beginning of the line,
+else call `self-insert-command'."
+      (interactive)
+      (if (looking-back "^")
+          (hydra-org-template/body)
+        (self-insert-command 1)))
 
-    (define-key org-mode-map "<" (lambda ()
-                                   (interactive)
-                                   (if (looking-back "^")
-                                       (hydra-org-template/body)
-                                     (self-insert-command 1))))
-    ))
+    (defun modi/reset-local-set-keys ()
+      (local-unset-key (kbd "<f10>"))
+      (local-unset-key (kbd "<s-f10>"))
+      (local-unset-key (kbd "<S-f10>"))
+      (local-unset-key (kbd "<C-f10>")))
+    (add-hook 'org-mode-hook #'modi/reset-local-set-keys)
+
+    (bind-keys
+     :map org-mode-map
+      ("C-m" . modi/org-return-no-indent)
+      (">"   . modi/org-template-maybe))
+
+    (bind-keys
+     :map modi-mode-map
+      ("C-c a" . org-agenda)
+      ("C-c c" . org-capture))))
 
 
 (provide 'setup-org)
