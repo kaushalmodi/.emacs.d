@@ -92,7 +92,8 @@
             nil t)
            (rainbow-mode 1))
      (py-indent-offset . 4)
-     (header-auto-update-enabled))))
+     (header-auto-update-enabled)
+     (lisp-indent-function . lisp-indent-function))))
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
  '(vc-annotate-background "#2B2B2B" t)
  '(vc-annotate-color-map
