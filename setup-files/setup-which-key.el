@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-16 08:51:09 kmodi>
+;; Time-stamp: <2015-07-17 12:57:27 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -9,6 +9,8 @@
   (progn
     (setq which-key-popup-type 'minibuffer) ; default
     ;; (setq which-key-popup-type 'side-window)
+
+    (setq which-key-sort t) ; sort keys alphabetically
 
     (setq which-key-key-replacement-alist
           '(("<\\(\\(C-\\|M-\\)*.+\\)>" . "\\1")
