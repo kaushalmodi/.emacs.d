@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-17 12:57:27 kmodi>
+;; Time-stamp: <2015-07-21 17:19:59 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -17,7 +17,9 @@
             ("left"  . "◀")
             ("right" . "▶")
             ("up"    . "▲")
-            ("down"  . "▼")))
+            ("down"  . "▼")
+            ("next"  . "PgDn")
+            ("prior" . "PgUp")))
 
     (setq which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL"))
 
@@ -27,7 +29,12 @@
             ("C-x r"   . "rect/reg")
             ("C-x w"   . "hi-lock-map")
             ("C-c /"   . "engine-mode-map")
+            ("C-c C-v" . "org-babel")
             ("C-x 8 0" . "ZWS")))
+
+    ;; Paging
+    (setq which-key-paging-prefixes '("C-x" "C-c"))
+    (setq which-key-paging-key "<next>") ; Pg Down
 
     (which-key-mode 1)))
 
