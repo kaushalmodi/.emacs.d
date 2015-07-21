@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-01 16:44:52 kmodi>
+;; Time-stamp: <2015-07-21 09:32:02 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -392,20 +392,24 @@ narrowed."
 ;; inconvenient when that mouse menu pops up when I don't need it
 ;; to. And actually I have never used that menu :P
 
-;; Usage: C-x - _ - 0 _ _ _ _ - - 0
-;; Usage: C-x _ _ 0 - _ - _ _ _ _ - - 0
-(defhydra hydra-font-resize
-  (nil "C-x"
-       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-       :color red)
-  "font-resize"
-  ("-"   modi/font-size-decr  "Decrease")
-  ("_"   modi/font-size-incr  "Increase")
-  ("="   modi/font-size-incr  "Increase" :bind nil)
-  ("+"   modi/font-size-incr  "Increase" :bind nil)
-  ("C-0" modi/font-size-reset "Reset to default size")
-  ("0"   modi/font-size-reset "Reset to default size" :bind nil)
-  ("q"   nil                  "cancel" :color blue))
+;; Usage: C-c - = - 0 = = = = - - 0
+;; Usage: C-c = = 0 - = - = = = = - - 0
+(defhydra hydra-font-resize (nil
+                             "C-c"
+                             :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+                             :color red
+                             :hint nil)
+  "
+[Font Size]     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset     _q_ Cancel
+"
+  ("C--" modi/font-size-decr)
+  ("-"   modi/font-size-decr :bind nil)
+  ("C-=" modi/font-size-incr)
+  ("="   modi/font-size-incr :bind nil)
+  ("+"   modi/font-size-incr :bind nil)
+  ("C-0" modi/font-size-reset :color blue)
+  ("0"   modi/font-size-reset :bind nil)
+  ("q"   nil :color blue))
 
 ;; Toggle menu bar
 ;; Below bkp/ vars are used to restore the original frame size after disabling
