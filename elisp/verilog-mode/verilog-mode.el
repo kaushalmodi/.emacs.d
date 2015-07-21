@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-07-20-0ae95aa-vpo"
+(defconst verilog-mode-version "2015-07-21-9c31eb3-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -831,6 +831,7 @@ first difference.")
 ;;
 
 (require 'compile)
+
 (defvar verilog-error-regexp-added nil)
 
 (defvar verilog-error-regexp-emacs-alist
@@ -1917,15 +1918,13 @@ find the errors."
 Called by `compilation-mode-hook'.  This allows \\[next-error] to
 find the errors."
   (interactive)
-  (if (boundp 'compilation-error-regexp-alist-alist)
-      (progn
-        (if (not (assoc 'verilog-xl-1 compilation-error-regexp-alist-alist))
-            (mapcar
-             (lambda (item)
-               (push (car item) compilation-error-regexp-alist)
-               (push item compilation-error-regexp-alist-alist)
-               )
-             verilog-error-regexp-emacs-alist)))))
+  (when (boundp 'compilation-error-regexp-alist-alist)
+    (when (not (assoc 'verilog-xl-1 compilation-error-regexp-alist-alist))
+      (mapcar
+       (lambda (item)
+         (push (car item) compilation-error-regexp-alist)
+         (push item compilation-error-regexp-alist-alist))
+       verilog-error-regexp-emacs-alist))))
 
 (if (featurep 'xemacs) (add-hook 'compilation-mode-hook 'verilog-error-regexp-add-xemacs))
 (if (featurep 'emacs) (add-hook 'compilation-mode-hook 'verilog-error-regexp-add-emacs))
@@ -6152,6 +6151,7 @@ Optional BOUND limits search."
     (if (equal (char-after (point) ) ?\\ )
         t
       nil)))
+
 (defun verilog-in-directive-p ()
   "Return true if in a directive."
   (save-excursion
@@ -6223,6 +6223,7 @@ Return >0 for nested struct."
           (verilog-at-constraint-p)
           )
       nil)))
+
 (defun verilog-at-close-constraint-p ()
   "If at the } that closes a constraint or covergroup, return true."
   (if (and
@@ -7604,6 +7605,7 @@ If search fails, other files are checked based on
 
 ;; Highlight helper functions
 (defconst verilog-directive-regexp "\\(translate\\|coverage\\|lint\\)_")
+
 (defun verilog-within-translate-off ()
   "Return point if within translate-off region, else nil."
   (and (save-excursion
@@ -8005,13 +8007,14 @@ Signals must be in standard (base vector) form."
 (defun verilog-signals-combine-bus (in-list)
   "Return a list of signals in IN-LIST, with buses combined.
 Duplicate signals are also removed.  For example A[2] and A[1] become A[2:1]."
-  (let (combo buswarn
-              out-list
-              sig highbit lowbit		; Temp information about current signal
-              sv-name sv-highbit sv-lowbit	; Details about signal we are forming
-              sv-comment sv-memory sv-enum sv-signed sv-type sv-multidim sv-busstring
-              sv-modport
-              bus)
+  (let (combo
+        buswarn
+	out-list
+	sig highbit lowbit		; Temp information about current signal
+	sv-name sv-highbit sv-lowbit	; Details about signal we are forming
+	sv-comment sv-memory sv-enum sv-signed sv-type sv-multidim sv-busstring
+	sv-modport
+	bus)
     ;; Shove signals so duplicated signals will be adjacent
     (setq in-list (sort in-list `verilog-signals-sort-compare))
     (while in-list
@@ -14301,6 +14304,7 @@ but instead, [[Fill in here]] happens!.
 ;; Local Variables:
 ;; checkdoc-permit-comma-termination-flag:t
 ;; checkdoc-force-docstrings-flag:nil
+;; indent-tabs-mode:nil
 ;; End:
 
 ;;; verilog-mode.el ends here
