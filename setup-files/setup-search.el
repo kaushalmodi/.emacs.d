@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 09:27:14 kmodi>
+;; Time-stamp: <2015-07-21 13:55:27 kmodi>
 
 ;; Search / Replace
 
@@ -86,13 +86,20 @@ happens within a region if one is selected."
   :config
   (progn
     (defun modi/swiper (arg)
-      "Start swiper with input as the selected region or symbol at point by default.
+      "Start swiper with input as the selected region.
 
-If ARG is non-nil, start swiper without any arguments (stock behavior)."
+If a region is not selected and,
+  - If ARG is nil, start swiper with the symbol at point as input.
+  - Elseswiper without any arguments (stock behavior)."
       (interactive "P")
-      (if arg
-          (swiper) ; C-u
-        (swiper (modi/get-symbol-at-point))))
+      (if (use-region-p)
+          (let ((b (region-beginning))
+                (e (region-end)))
+            (deactivate-mark)
+            (swiper (buffer-substring-no-properties b e)))
+        (if arg
+            (swiper) ; C-u
+          (swiper (modi/get-symbol-at-point)))))
 
     (defun isearch-swiper ()
       "Invoke `swiper' from isearch.
