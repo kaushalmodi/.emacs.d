@@ -263,22 +263,6 @@ being executed."
       ("C-c SPC" . modi/avy))
     (key-chord-define-global "l;" #'modi/avy)))
 
-;; Ace Jump
-;; http://www.emacswiki.org/emacs/AceJump
-(when (not (featurep 'avy))
-  (use-package ace-jump-mode
-    :config
-    (progn
-      (bind-keys
-       :map modi-mode-map
-        ;; Important to use my minor mode map as I want my bindings to override
-        ;; bindings in other major modes (esp org-mode)
-        ("C-c SPC" . ace-jump-mode))
-      (key-chord-define-global "l;" #'ace-jump-mode))))
-;;         `ace-jump-mode' -> `ace-jump-word-mode'
-;;     C-u `ace-jump-mode' -> `ace-jump-char-mode'
-;; C-u C-u `ace-jump-mode' -> `ace-jump-line-mode'
-
 (if (featurep 'avy)
     (bind-key "<f1>" #'modi/goto-line) ; bind in global map
   (bind-key "<f1>" #'goto-line))

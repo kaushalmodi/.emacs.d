@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 09:59:02 kmodi>
+;; Time-stamp: <2015-07-22 10:50:08 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -31,7 +31,6 @@
         ;; outshine ; < forked
         ;; popwin ; < shackle
         ;; poporg ; edit comments from any other mode in org mode < forked
-        ace-jump-mode ; < avy
         ace-window
         adaptive-wrap ; indented line wrapping
         ag wgrep wgrep-ag s ; ag > ack > grep
@@ -43,7 +42,7 @@
         ascii-art-to-unicode
         auto-complete fuzzy
         auto-highlight-symbol
-        avy ; better than ace-jump-mode
+        avy ; > ace-jump-mode
         benchmark-init
         bm ; visual bookmarks
         bookmark+ ; able to bookmark desktop sessions
