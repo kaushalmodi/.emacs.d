@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-08 09:01:36 kmodi>
+;; Time-stamp: <2015-07-22 11:07:02 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -221,37 +221,39 @@ If ARG is omitted or nil, move point forward one word."
     (setq avy-keys-alist '((avy-goto-line . (?a ?s ?d ?f ?g ?h ?j ?k ?l ?b ?n ?m))))
 
     (defun modi/avy (arg)
-      "
-        `modi/avy' -> `avy-goto-word-1'
-    C-u `modi/avy' -> `avy-goto-char-2'
-C-u C-u `modi/avy' -> `avy-goto-line'
-"
-      (interactive "p")
+      "Call `avy-goto-word-1' by default.
+
+If ARG is non-nil, call `avy-goto-char-2' instead.
+Temporarily disable FCI (if enabled) while the avy functions are executed."
+      (interactive "P")
       (let ((avy-all-windows t) ; search in all windows
             (fci-state-orig (when (featurep 'fill-column-indicator) fci-mode))
-            (fn (cl-case arg
-                  (4  #'avy-goto-char-2) ; C-u
-                  (16 #'avy-goto-line) ; C-u C-u
-                  (t  #'avy-goto-word-1)))
-            (current-prefix-arg nil)) ; Don't pass on this wrapper's args to `fn'
+            (current-prefix-arg nil) ; Don't pass on this wrapper's args to `fn'
+            (fn (if arg
+                    #'avy-goto-char-2 ; C-u
+                  #'avy-goto-word-1)))
         (if fci-state-orig
             (fci-mode 'toggle))
         (call-interactively fn)
         (if fci-state-orig
             (fci-mode 'toggle))))
 
-    (defun modi/goto-line ()
+    (defun modi/goto-line (line)
       "Call `avy-goto-line'.
-If `fci-mode' is enabled, disable it temporarily while `avy-goto-line' is
-being executed."
-      (interactive)
+
+If LINE is non-nil, go directly to line number LINE.
+Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
+      (interactive "P")
       (let ((avy-all-windows t) ; search in all windows
-            (fci-state-orig fci-mode))
-        (if fci-state-orig
-            (fci-mode 'toggle))
-        (avy-goto-line)
-        (if fci-state-orig
-            (fci-mode 'toggle))))
+            (fci-state-orig (when (featurep 'fill-column-indicator) fci-mode)))
+        (if line
+            (goto-line (if (listp line) (car line) line))
+          (progn
+            (if fci-state-orig
+                (fci-mode 'toggle))
+            (avy-goto-line)
+            (if fci-state-orig
+                (fci-mode 'toggle))))))
 
     (defalias 'isearch-avy 'avy-isearch) ; for consistency
     (bind-key "M-a" #'isearch-avy isearch-mode-map) ; isearch > avy
