@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-21 17:19:59 kmodi>
+;; Time-stamp: <2015-07-22 09:06:30 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -9,8 +9,6 @@
   (progn
     (setq which-key-popup-type 'minibuffer) ; default
     ;; (setq which-key-popup-type 'side-window)
-
-    (setq which-key-sort t) ; sort keys alphabetically
 
     (setq which-key-key-replacement-alist
           '(("<\\(\\(C-\\|M-\\)*.+\\)>" . "\\1")
@@ -33,8 +31,10 @@
             ("C-x 8 0" . "ZWS")))
 
     ;; Paging
-    (setq which-key-paging-prefixes '("C-x" "C-c"))
-    (setq which-key-paging-key "<next>") ; Pg Down
+    (dolist (prefix '("C-x" "C-c"))
+      (dolist (paging-key '("<next>" "<prior>")) ; Pg Down, Pg Up
+        (define-key which-key-mode-map
+          (kbd (concat prefix " " paging-key)) #'which-key-show-next-page)))
 
     (which-key-mode 1)))
 
