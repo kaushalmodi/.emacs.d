@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 10:03:12 kmodi>
+;; Time-stamp: <2015-07-22 10:36:09 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -771,22 +771,25 @@ whole buffer if a region is not selected."
 ;;        Numeric prefixes are supported too:
 ;;
 ;;        jj 5j 7j 2j j 7n n n j j p j n
-(defhydra hydra-comment (:color red)
+(defhydra hydra-comment (:color red
+                         :columns 4)
   "comment"
-  ("j"   endless/comment-line-or-region "toggle comment")
-  ("p"   previous-line                  "prev line")
-  ("n"   next-line                      "next line")
-  ("{"   backward-paragraph             "backward para")
-  ("P"   backward-paragraph             "backward para")
-  ("}"   forward-paragraph              "forward para")
-  ("N"   forward-paragraph              "forward para")
-  ("m"   set-mark-command               "set mark")
-  ("f"   mark-defun                     "mark defun")
-  ("k"   smart-kill-whole-line          "kill line")
-  ("s b" backward-sexp                  "backward sexp")
-  ("s f" forward-sexp                   "forward sexp")
-  ("q"   nil                            "cancel" :color blue))
+  ("j" endless/comment-line-or-region "toggle comment")
+  (";" endless/comment-line-or-region "toggle comment")
+  ("p" previous-line                  "prev line")
+  ("n" next-line                      "next line")
+  ("{" backward-paragraph             "backward para")
+  ("P" backward-paragraph             "backward para")
+  ("}" forward-paragraph              "forward para")
+  ("N" forward-paragraph              "forward para")
+  ("m" set-mark-command               "set mark")
+  ("d" mark-defun                     "mark defun")
+  ("k" kill-whole-line                "kill whole line")
+  ("b" backward-sexp                  "backward sexp")
+  ("f" forward-sexp                   "forward sexp")
+  ("q" nil                            "cancel" :color blue))
 (key-chord-define-global "jj" #'hydra-comment/body)
+(bind-key "C-c ;" #'hydra-comment/body modi-mode-map)
 
 
 (provide 'setup-editing)
