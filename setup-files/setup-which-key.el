@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 09:06:30 kmodi>
+;; Time-stamp: <2015-07-22 09:30:42 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -11,7 +11,7 @@
     ;; (setq which-key-popup-type 'side-window)
 
     (setq which-key-key-replacement-alist
-          '(("<\\(\\(C-\\|M-\\)*.+\\)>" . "\\1")
+          '(("<\\([[:alnum:]-]+\\)>" . "\\1")
             ("left"  . "◀")
             ("right" . "▶")
             ("up"    . "▲")
