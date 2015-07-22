@@ -256,11 +256,7 @@ being executed."
     (defalias 'isearch-avy 'avy-isearch) ; for consistency
     (bind-key "M-a" #'isearch-avy isearch-mode-map) ; isearch > avy
 
-    (bind-keys
-     :map modi-mode-map
-      ;; Important to use my minor mode map as I want my bindings to override
-      ;; bindings in other major modes (esp org-mode)
-      ("C-c SPC" . modi/avy))
+    (bind-key "C-c l" #'modi/avy modi-mode-map)
     (key-chord-define-global "l;" #'modi/avy)))
 
 (if (featurep 'avy)
