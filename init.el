@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-17 09:23:42 kmodi>
+;; Time-stamp: <2015-07-22 09:59:02 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -229,6 +229,7 @@
 (require 'setup-ibuffer)
 (require 'setup-ido)
 (require 'setup-imenu-list)
+(require 'setup-indent-guide)
 (require 'setup-ivy)
 (require 'setup-iregister)
 (when (executable-find "git")

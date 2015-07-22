@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-16 12:04:35 kmodi>
+;; Time-stamp: <2015-07-22 10:03:12 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -15,9 +15,10 @@
 (add-hook 'before-save-hook #'time-stamp)
 
 ;; Duplicate current line or region
-;; Source: http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
+;; http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
 (defun duplicate-current-line-or-region (arg)
   "Duplicates the current line or region ARG times.
+
 If there's no region, the current line will be duplicated. However, if
 there's a region, all lines that region covers will be duplicated."
   (interactive "p")
@@ -216,16 +217,8 @@ remove the comment characters from that line."
 ;; Enable conversion of the selected region to lower case using `C-x C-l`
 (put 'downcase-region 'disabled nil)
 
-;; ;; zap-to-char
-;; ;; Source: https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
-;; (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
-;; (bind-keys
-;;  :map modi-mode-map
-;;  ("M-z" . zap-up-to-char)
-;;  ("M-Z" . zap-to-char))
-
 ;; zop-to-char
-;; Source: https://github.com/thierryvolpiatto/zop-to-char
+;; https://github.com/thierryvolpiatto/zop-to-char
 (use-package zop-to-char
   :config
   (progn
@@ -240,33 +233,6 @@ remove the comment characters from that line."
      :map modi-mode-map
       ("M-z" . zop-up-to-char)
       ("M-Z" . zop-to-char))))
-
-;; indent-guide
-(use-package indent-guide
-  :config
-  (progn
-    (setq indent-guide-recursive t)
-    (setq indent-guide-char "|")
-
-    (defvar modi/indent-guide-mode-hooks '(verilog-mode-hook
-                                           emacs-lisp-mode-hook
-                                           python-mode-hook
-                                           sh-mode-hook
-                                           cperl-mode-hook)
-      "List of hooks of major modes in which indent-guide-mode should be enabled.")
-    (defun turn-on-indent-guide ()
-      "Turn on indent-guide-mode only for specific modes."
-      (interactive)
-      (dolist (hook modi/indent-guide-mode-hooks)
-        (add-hook hook #'indent-guide-mode)))
-    (defun turn-off-indent-guide ()
-      "Turn off indent-guide-mode only for specific modes."
-      (interactive)
-      (indent-guide-global-mode -1)
-      (dolist (hook modi/indent-guide-mode-hooks)
-        (remove-hook hook #'indent-guide-mode)))
-
-    (indent-guide-global-mode -1)))
 
 ;; http://stackoverflow.com/q/12165205/1219634
 (defun kill-with-linenum (beg end unicode)
@@ -482,7 +448,8 @@ Temporarily consider - and _ characters as part of the word when sorting."
 (use-package unfill
   :load-path "elisp/unfill")
 
-;; Forked version of https://github.com/jorgenschaefer/gplusify
+;; Copy region with formatting for G+ comments
+;; https://github.com/jorgenschaefer/gplusify
 (use-package gplusify
   :commands (gplusify-region-as-kill)
   :init
