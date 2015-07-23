@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-02 17:27:33 kmodi>
+;; Time-stamp: <2015-07-23 13:57:52 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -29,15 +29,16 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
 ^^_._      _D_o it!  ^^        _<_/_>_ shrink/grow window
 "
           ;; arrows
-          (","   ivy-beginning-of-buffer)
-          ("p"   ivy-previous-line)
-          ("n"   ivy-next-line)
-          ("."   ivy-end-of-buffer)
+          (","   ivy-beginning-of-buffer) ; default h
+          ("p"   ivy-previous-line) ; default j
+          ("n"   ivy-next-line) ; default k
+          ("."   ivy-end-of-buffer) ; default l
           ;; actions
           ("f"   ivy-alt-done         :exit nil)
-          ("C-m" ivy-alt-done         :exit nil) ; RET
+          ("C-m" ivy-alt-done         :exit nil) ; RET ; default C-j
+          ("C-j" ivy-done             :exit t) ; default C-m
           ("d"   ivy-done             :exit t)
-          ("C-j" ivy-done             :exit t)
+          ("g"   ivy-call)
           ("D"   ivy-immediate-done   :exit t)
           ("c"   ivy-toggle-calling)
           ("m"   ivy-toggle-fuzzy)
@@ -49,7 +50,7 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
           ("i"   nil)
           ("C-o" nil)
           ;; quit ivy
-          ("q"   keyboard-escape-quit :exit t)
+          ("q"   keyboard-escape-quit :exit t); default o
           ("C-g" keyboard-escape-quit :exit t))))
 
     ;; Revert the default bindings to C-j and C-m
@@ -89,3 +90,24 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
 ;;
 ;; This is useful especially when renaming files (and the name you want to
 ;; rename to partially matches one of the existing files).
+;;
+;; |----------------------------+-----------------------------------------------------|
+;; | Command                    | Function                                            |
+;; |----------------------------+-----------------------------------------------------|
+;; | ivy-done                   | Exit the minibuffer with the selected candidate.    |
+;; |                            | Try to leave `ivy' as soon as possible.             |
+;; | ivy-alt-done               | Exit the minibuffer with the selected candidate.    |
+;; |                            | When ARG is t, acts like `ivy-immediate-done'.      |
+;; |                            | Try NOT to leave `ivy' at the soonest. For          |
+;; |                            | instance, if a directory name completion is         |
+;; |                            | possible, do that and list that directory's         |
+;; |                            | content in `ivy' instead of opening that dir        |
+;; |                            | in `dired'.                                         |
+;; | ivy-immediate-done         | Exit the minibuffer with the current text,          |
+;; |                            | ignoring the candidates.                            |
+;; | ivy-call                   | Call the current action without exiting completion. |
+;; | ivy-next-line-and-call     | Move cursor vertically down ARG candidates.         |
+;; |                            | Call the permanent action if possible.              |
+;; | ivy-previous-line-and-call | Move cursor vertically up ARG candidates.           |
+;; |                            | Call the permanent action if possible.              |
+;; |----------------------------+-----------------------------------------------------|
