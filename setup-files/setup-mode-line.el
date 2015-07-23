@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-15 11:11:09 kmodi>
+;; Time-stamp: <2015-07-23 15:09:01 kmodi>
 
 ;; Customize the mode-line
 
@@ -30,9 +30,19 @@ If nil, show the same in the minibuffer.")
     (setq minibuffer-line-format '((:eval
                                     (format-time-string "%l:%M %b %d %a"))))
 
-    (defvar modi/time-go-home-reset "07:00am"
+    (defconst modi/today--day-sym (intern (format-time-string "%a"))
+      "Symbol containing 3-letter abbreviation of today's day.")
+
+    (defconst modi/time-go-home-reset "07:00am"
       "Time when to modify the time face to remove the alert face.")
-    (defvar modi/time-go-home-alert "05:15pm"
+
+    (defconst modi/time-go-home-alert '((Mon . "05:15pm")
+                                        (Tue . "05:15pm")
+                                        (Wed . "05:15pm")
+                                        (Thu . "04:20pm")
+                                        (Fri . "04:20pm")
+                                        (Sat . "")
+                                        (Sun . ""))
       "Time when to modify the time face to alert it's time to go home."))
   :config
   (progn
@@ -62,7 +72,8 @@ The timer is canceled and not restarted if TIME is \"nil\" or \"\"."
 The `modi/timer--go-home-reset' and `modi/timer--go-home-alert' timers
 are canceled and not restarted if TIME is \"nil\" or \"\"."
       (interactive "s'Go Home' alert time (e.g. 5:00pm): ")
-      (setq modi/time-go-home-alert time)
+      ;; http://emacs.stackexchange.com/a/3415/115
+      (setcdr (assq modi/today--day-sym modi/time-go-home-alert) time)
       (let (old-go-home-time old-go-home-time-str)
         (when (and (boundp 'modi/timer--go-home-alert) ; cancel the timer if
                    (timerp  modi/timer--go-home-alert)) ; already running
@@ -97,7 +108,8 @@ are canceled and not restarted if TIME is \"nil\" or \"\"."
     (minibuffer-line-mode)
 
     (modi/reset-go-home-alert modi/time-go-home-reset)
-    (modi/set-go-home-alert modi/time-go-home-alert)))
+    (modi/set-go-home-alert (cdr (assq modi/today--day-sym
+                                       modi/time-go-home-alert)))))
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
