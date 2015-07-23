@@ -1,10 +1,8 @@
-;; Time-stamp: <2015-07-22 10:50:08 kmodi>
+;; Time-stamp: <2015-07-23 09:58:25 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
 (setq *emacs-load-start* (current-time))
-
-;; (setq debug-on-message "Making tags")
 
 ;; Global variables
 (setq user-home-directory     (concat (getenv "HOME") "/")) ; must end with /
@@ -218,7 +216,7 @@
 (require 'setup-engine-mode)
 (require 'setup-expand-region)
 (require 'setup-fci)
-(require 'setup-fold )
+(require 'setup-fold)
 (require 'setup-gist)
 (require 'setup-hardcore)
 (require 'setup-header2)
