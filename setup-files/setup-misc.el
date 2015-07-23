@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 10:48:28 kmodi>
+;; Time-stamp: <2015-07-23 10:10:08 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -215,8 +215,8 @@ cycle _c_ase                _F_ollow^^                        _i_menu list      
 (defhydra hydra-launch (:color teal
                         :hint  nil)
   "
-_=_ Quick calc      _b_ookmark jump          _eb_ eww bookmarks      _h_l line flash          _m_anpage           _u_pgrade packages          ^^_se_   emacs.SE
-_+_ Calc            _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
+_*_ Calc            _b_ookmark jump          _eb_ eww bookmarks      _h_l line flash          _m_anpage           _u_pgrade packages          ^^_se_   emacs.SE
+_=_ Quick calc      _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
 _-_ Rpn calc        _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      _w_/_W_   quick/full weather
 _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd            ^^_<SPC>_ frequent
 "
@@ -249,8 +249,8 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
   ("W"       sunshine-forecast)
   ("<SPC>"   hydra-launch-freq/body)
   ("<s-SPC>" hydra-launch-freq/body)
+  ("*"       calc)
   ("="       quick-calc)
-  ("+"       calc)
   ("-"       rpn-calc)
   (":"       eval-expression "eval")
   ("q"       nil "cancel" :color blue))
