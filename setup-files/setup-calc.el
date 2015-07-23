@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-22 12:01:07 kmodi>
+;; Time-stamp: <2015-07-22 15:42:33 kmodi>
 
 ;; Calculator
 
@@ -59,6 +59,13 @@ because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
 
 
 (provide 'setup-calc)
+
+;; You can enter hex numbers in two ways (the same applies to numbers in other
+;; bases too)
+;; - Enter the hex number directly without switching base as: `16#12cafe'
+;; - Switch to hex base by doing `d6', and then enter a hex number as `#12cafe'
+;;   When you enter `#', it automatically becomes `16#' as you switch the base
+;;   to hex by doing `d6'.
 
 ;; calc bindings
 ;; |--------------------+-----------------------------------------------|
