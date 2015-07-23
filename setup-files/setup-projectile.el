@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-16 09:41:07 kmodi>
+;; Time-stamp: <2015-07-23 15:29:43 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -54,7 +54,18 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
     (bind-key "s-f" #'hydra-projectile/body modi-mode-map)
     (setq projectile-keymap-prefix (kbd "C-c P"))
     (bind-key "C-c p" #'hydra-projectile/body modi-mode-map)
-    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map))
+    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map)
+
+    ;; Patch
+    ;; https://github.com/bbatsov/projectile/pull/811
+    (defun projectile--detect-find-command ()
+      "Determine the appropriate default find command based on its capabilities.
+Needed because of the differences between GNU find and BSD find."
+      (let* (message-log-max
+             (readable-arg (if (zerop (shell-command "find /dev/null -readable"))
+                               "-readable"
+                             "-perm +444")))
+        (concat "find . \\! " readable-arg " -prune -o \\( -type f -print0 \\)"))))
   :config
   (progn
     (when (not (bound-and-true-p disable-pkg-ivy))
@@ -83,6 +94,7 @@ getting a list of all files in a project."
     ;; Don't consider my home dir as a project
     (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/"))
 
+    ;; Patch
     (defun projectile-cache-files-find-file-hook ()
       "Function for caching files with `find-file-hook'."
       (when (and projectile-enable-caching
@@ -114,6 +126,7 @@ Doing so prevents prevents the unnecessary call to `visit-tags-table' function
 and the subsequent `find-file' call for the `TAGS' file."
         ))
 
+    ;; Patch
     (defun projectile-project-name ()
       "Return project name.
 If the project root contains \"sos_\" or \"src\", remove the directory basename
@@ -151,6 +164,7 @@ With prefix argument (`C-u'), also kill the special buffers."
                   (message "Killing buffer %s" buf-name)
                   (kill-buffer buf))))))))
 
+    ;; Patch
     ;; Use older version of `projectile-cache-current-file' that did not cache
     ;; the true names.
     ;; https://github.com/bbatsov/projectile/commit/924d73120bca6adc5b9bf3d79ad53075a63b5f1e
