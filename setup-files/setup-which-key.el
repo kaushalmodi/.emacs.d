@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 09:30:42 kmodi>
+;; Time-stamp: <2015-07-22 15:33:58 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -7,8 +7,8 @@
   :defer 15
   :config
   (progn
-    (setq which-key-popup-type 'minibuffer) ; default
-    ;; (setq which-key-popup-type 'side-window)
+    (setq which-key-popup-type 'side-window) ; default
+    ;; (setq which-key-popup-type 'minibuffer)
 
     (setq which-key-key-replacement-alist
           '(("<\\([[:alnum:]-]+\\)>" . "\\1")
@@ -18,8 +18,6 @@
             ("down"  . "▼")
             ("next"  . "PgDn")
             ("prior" . "PgUp")))
-
-    (setq which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL"))
 
     (setq which-key-key-based-description-replacement-alist
           '(("C-x 8"   . "unicode")
