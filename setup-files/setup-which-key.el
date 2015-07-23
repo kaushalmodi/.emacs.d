@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 15:33:58 kmodi>
+;; Time-stamp: <2015-07-23 10:08:59 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -27,6 +27,19 @@
             ("C-c /"   . "engine-mode-map")
             ("C-c C-v" . "org-babel")
             ("C-x 8 0" . "ZWS")))
+
+    (with-eval-after-load 'setup-symbola
+      (if font-symbola-p
+          (setq which-key-description-replacement-alist
+                '(("Prefix Command" . "prefix")
+                  ("which-key-show-next-page" . "wk next pg")
+                  ;; Hide the "calc-" prefixes when listing keys for M-x calc
+                  ("\\`calc-" . "🖩")))
+        (setq which-key-description-replacement-alist
+              '(("Prefix Command" . "prefix")
+                ("which-key-show-next-page" . "wk next pg")
+                ;; Hide the "calc-" prefixes when listing keys for M-x calc
+                ("\\`calc-" . "")))))
 
     ;; Paging
     (dolist (prefix '("C-x" "C-c"))
