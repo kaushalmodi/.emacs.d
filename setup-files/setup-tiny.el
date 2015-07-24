@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-24 12:53:54 kmodi>
+;; Time-stamp: <2015-07-24 13:12:33 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 (use-package tiny
@@ -17,10 +17,20 @@ If prefix arg is non-nil, call `tiny-expand' directly."
                (read-string "Format [eg: %x | 0x%x | %c | %s | %(+ x x) | %014.2f | %03d]: "))))
       (when (null current-prefix-arg)
         (let ((tiny-key-binding (substitute-command-keys "\\[tiny-expand]"))
+              (begin-val-num (string-to-number begin-val))
+              (end-val-num (string-to-number end-val))
               tiny-expr
               tiny-expr-concise)
-          (when (string= end-val "0")
-            (setq end-val "10")) ; `end-val' cannot be 0
+          ;; Begin and end values cannot be same
+          (when (= end-val-num begin-val-num)
+            (error (concat "Begin and end values cannot be same; "
+                           "Begin value = " begin-val
+                           ", End value = " end-val ".")))
+          ;; End value has to be greater than the begin value
+          (when (< end-val-num begin-val-num)
+            (error (concat "End value has to be greater than the begin value; "
+                           "Begin value = " begin-val
+                           ", End value = " end-val ".")))
           (when (string= sep "")
             (setq sep " ")) ; `sep' cannot be empty string
           (when (and (string= begin-val "0")
@@ -101,6 +111,11 @@ If prefix arg is non-nil, call `tiny-expand' directly."
 ;; m5 10*xx or m5 10* x x or m5 10(* x x)
 ;; --------------------------------------------------------------------------------
 ;; 25 36 49 64 81 100
+
+;; ================================================================================
+;; m10-10x or m0 10(- 10 x) (decrementing numbers)
+;; --------------------------------------------------------------------------------
+;; 10 9 8 7 6 5 4 3 2 1 0
 
 ;; ================================================================================
 ;; m5 15*xx%x
