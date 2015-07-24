@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-24 09:48:58 kmodi>
+;; Time-stamp: <2015-07-24 17:39:19 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -630,9 +630,10 @@ If the current buffer is not associated with a file, nothing's done."
                    ("r"       . [?▯]) ; white vertical rectangle
                    ("R"       . [?▮]) ; black vertical rectangle
                    ("*r"      . [?₹]) ; indian rupee sign
+                   ("e"       . [?↵]) ; downwards arrow with corner leftwards
+                   ("E"       . [?⏎]) ; return symbol
                    ("1/3"     . [?⅓]) ; fraction one third
-                   ("0"       . [?​]) ; zero width space
-                   ))
+                   ("0"       . [?​]))) ; zero width space
   (define-key iso-transl-ctl-x-8-map (kbd (car binding)) (cdr binding)))
 ;; Unicode chars that can be entered using C-x 8 binding
 ;; |------------------+-------------------------|
