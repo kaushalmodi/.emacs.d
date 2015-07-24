@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-08 12:18:13 kmodi>
+;; Time-stamp: <2015-07-23 16:10:58 kmodi>
 
 ;; https://github.com/joodland/bm
 (use-package bm
@@ -64,9 +64,8 @@
                         :hint nil
                         :body-pre (when (not (use-region-p)) (push-mark)))
       "
-      Bookmark
-    _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm lines matching regexp                               toggle per_s_istence
-    _p_revious (_P_ in lifo order)        _a_nnotate               _x_/_X_ remove all bm from current/all open buffer(s)        _r_eturn to from where you started
+Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm lines matching regexp                          toggle per_s_istence
+         _p_revious (_P_ in lifo order)        _a_nnotate               _x_/_X_ remove all bm from current/all buffer(s)        _r_eturn to from where you started
     "
       ("m"   bm-toggle)
       ("M"   bm-toggle :color blue)
