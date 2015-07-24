@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-24 12:47:46 kmodi>
+;; Time-stamp: <2015-07-24 12:53:54 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 (use-package tiny
@@ -44,7 +44,8 @@ If prefix arg is non-nil, call `tiny-expand' directly."
                                             'face 'font-lock-keyword-face)
                                 (when (null tiny-key-binding)
                                   (propertize "M-x tiny-expand"
-                                              'face 'font-lock-keyword-face))))
+                                              'face 'font-lock-keyword-face))
+                                "."))
           (insert tiny-expr)))
       (tiny-expand))
 
