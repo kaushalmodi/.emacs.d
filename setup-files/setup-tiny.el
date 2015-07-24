@@ -1,23 +1,68 @@
-;; Time-stamp: <2015-03-24 15:58:53 kmodi>
+;; Time-stamp: <2015-07-24 12:47:46 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 (use-package tiny
   :config
   (progn
-    (key-chord-define-global "]\\" 'tiny-expand)))
+    (defun modi/tiny-helper (&optional end-val begin-val sep op fmt)
+      "Helper function for `tiny-expand'.
+
+If prefix arg is non-nil, call `tiny-expand' directly."
+      (interactive
+       (when (null current-prefix-arg)
+         (list (number-to-string (string-to-number (read-string "End value [default=10]: ")))
+               (number-to-string (string-to-number (read-string "Begin value [default=0]: ")))
+               (read-string "Separator [default=Space]: ")
+               (read-string "Operator [eg: *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))]: ")
+               (read-string "Format [eg: %x | 0x%x | %c | %s | %(+ x x) | %014.2f | %03d]: "))))
+      (when (null current-prefix-arg)
+        (let ((tiny-key-binding (substitute-command-keys "\\[tiny-expand]"))
+              tiny-expr
+              tiny-expr-concise)
+          (when (string= end-val "0")
+            (setq end-val "10")) ; `end-val' cannot be 0
+          (when (string= sep "")
+            (setq sep " ")) ; `sep' cannot be empty string
+          (when (and (string= begin-val "0")
+                     (string= sep " "))
+            (setq tiny-expr-concise (concat "m" end-val op fmt)))
+          (setq tiny-expr (concat "m" begin-val sep end-val op
+                                  (when (not (string= fmt "")) "|")
+                                  fmt))
+          (message "%s" (concat "This "
+                                (propertize "tiny"
+                                            'face 'font-lock-function-name-face)
+                                " expansion can also be done by typing "
+                                (when tiny-expr-concise
+                                  (concat (propertize tiny-expr-concise
+                                                      'face 'font-lock-keyword-face)
+                                          " or "))
+                                (propertize tiny-expr
+                                            'face 'font-lock-keyword-face)
+                                " and then "
+                                (propertize tiny-key-binding
+                                            'face 'font-lock-keyword-face)
+                                (when (null tiny-key-binding)
+                                  (propertize "M-x tiny-expand"
+                                              'face 'font-lock-keyword-face))))
+          (insert tiny-expr)))
+      (tiny-expand))
+
+    (bind-key "C-c =" #'modi/tiny-helper modi-mode-map)
+    (key-chord-define-global "]\\" #'tiny-expand)))
 
 
 (provide 'setup-tiny)
 
 ;; General Format
 ;; mBSEO|F
-;;  ||||||
-;;  |||||+--> (optional) Format - %x | 0x%x | %c | %s | %(+ x x) | %014.2f | %03d | %(date "Jan 16" (* x 7))
-;;  ||||+---> (optional) Pipe character to separate Format for reading clarity
-;;  |||+----> (optional) Operator - *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))
-;;  ||+-----> End value
-;;  |+------> (optional) Separator - Space | , | \n (default=Space)
-;;  +-------> (optional) Begin value (default=0)
+;;  ││││││
+;;  │││││└──> (optional) Format - %x | 0x%x | %c | %s | %(+ x x) | %014.2f | %03d | %(date "Jan 16" (* x 7))
+;;  ││││└───> (optional) Pipe character to separate Format for reading clarity
+;;  │││└────> (optional) Operator - *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))
+;;  ││└─────> End value
+;;  │└──────> (optional) Separator - Space | , | \n (default=Space)
+;;  └───────> (optional) Begin value (default=0)
 ;; - No space allowed between 'm' and 'B'
 ;; - No space allowed between 'E' and 'O'
 
