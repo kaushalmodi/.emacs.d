@@ -1,6 +1,7 @@
-;; Time-stamp: <2015-07-24 13:55:29 kmodi>
+;; Time-stamp: <2015-07-24 14:10:23 kmodi>
 
 ;; https://github.com/abo-abo/tiny
+
 (use-package tiny
   :config
   (progn
@@ -28,8 +29,9 @@ Usage: M-x COMMAND    RET   RET   RET        RET    RET -> 0 1 2 3 4 5 6 7 8 9
                (read-string (concat "Separator "
                                     "[default=Space; "
                                     "no math operators like - or = allowed]: "))
-               (read-string (concat "Operation "
-                                    "[eg: *xx | (+ x ?A) | *2+3x]: "))
+               (read-string (concat "Lisp Operation "
+                                    "[parentheses are optional; "
+                                    "eg: *xx | (+ x ?A) | *2+3x]: "))
                (read-string (concat "Format "
                                     "[eg: %x | 0x%x | %c | %s | %(+ x x) | "
                                     "%014.2f | %03d]: ")))))
@@ -57,8 +59,8 @@ Usage: M-x COMMAND    RET   RET   RET        RET    RET -> 0 1 2 3 4 5 6 7 8 9
                      (string= sep " "))
             (setq tiny-expr-concise (concat "m" end-val op fmt)))
           (setq tiny-expr (concat "m" begin-val sep end-val op
-                                  (when (not (string= fmt "")) "|")
-                                  fmt))
+                                  (when (and (not (string= op ""))
+                                             (not (string= fmt ""))) "|") fmt))
           (message "%s" (concat "This "
                                 (propertize "tiny"
                                             'face 'font-lock-function-name-face)
@@ -90,7 +92,7 @@ Usage: M-x COMMAND    RET   RET   RET        RET    RET -> 0 1 2 3 4 5 6 7 8 9
 ;;  ││││││
 ;;  │││││└──> (optional) Format - %x | 0x%x | %c | %s | %(+ x x) | %014.2f | %03d | %(date "Jan 16" (* x 7))
 ;;  ││││└───> (optional) Pipe character to separate Format for reading clarity
-;;  │││└────> (optional) Operation - *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))
+;;  │││└────> (optional) Lisp Operation - *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))
 ;;  ││└─────> End value
 ;;  │└──────> (optional) Separator - Space | , | \n (default=Space)
 ;;  └───────> (optional) Begin value (default=0)
