@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-24 13:12:33 kmodi>
+;; Time-stamp: <2015-07-24 13:55:29 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 (use-package tiny
@@ -7,14 +7,32 @@
     (defun modi/tiny-helper (&optional end-val begin-val sep op fmt)
       "Helper function for `tiny-expand'.
 
-If prefix arg is non-nil, call `tiny-expand' directly."
+If prefix arg is non-nil, call `tiny-expand' directly.
+
+Usage: M-x COMMAND    RET   RET   RET        RET    RET -> 0 1 2 3 4 5 6 7 8 9
+       M-x COMMAND 9  RET 2 RET _ RET +1*x2  RET    RET -> 5_7_9_11_13_15_17_19
+       M-x COMMAND 15 RET 1 RET   RET -30*2x RET %x RET -> 1c 1a 18 16 14 12 10 e c a 8 6 4 2 0
+"
       (interactive
        (when (null current-prefix-arg)
-         (list (number-to-string (string-to-number (read-string "End value [default=10]: ")))
-               (number-to-string (string-to-number (read-string "Begin value [default=0]: ")))
-               (read-string "Separator [default=Space]: ")
-               (read-string "Operator [eg: *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))]: ")
-               (read-string "Format [eg: %x | 0x%x | %c | %s | %(+ x x) | %014.2f | %03d]: "))))
+         (list (number-to-string (string-to-number
+                                  (read-string
+                                   (concat "END value "
+                                           "[default=0; auto-set to 9 if both "
+                                           "begin and end values are 0]: "))))
+               (number-to-string (string-to-number
+                                  (read-string
+                                   (concat "BEGIN value "
+                                           "[default=0; this has to be "
+                                           "*smaller* than the end value]: "))))
+               (read-string (concat "Separator "
+                                    "[default=Space; "
+                                    "no math operators like - or = allowed]: "))
+               (read-string (concat "Operation "
+                                    "[eg: *xx | (+ x ?A) | *2+3x]: "))
+               (read-string (concat "Format "
+                                    "[eg: %x | 0x%x | %c | %s | %(+ x x) | "
+                                    "%014.2f | %03d]: ")))))
       (when (null current-prefix-arg)
         (let ((tiny-key-binding (substitute-command-keys "\\[tiny-expand]"))
               (begin-val-num (string-to-number begin-val))
@@ -23,9 +41,11 @@ If prefix arg is non-nil, call `tiny-expand' directly."
               tiny-expr-concise)
           ;; Begin and end values cannot be same
           (when (= end-val-num begin-val-num)
-            (error (concat "Begin and end values cannot be same; "
-                           "Begin value = " begin-val
-                           ", End value = " end-val ".")))
+            (if (zerop end-val-num) ; if both are zero, set the end value to 9
+                (setq end-val "9")
+              (error (concat "Begin and end values cannot be same; "
+                             "Begin value = " begin-val
+                             ", End value = " end-val "."))))
           ;; End value has to be greater than the begin value
           (when (< end-val-num begin-val-num)
             (error (concat "End value has to be greater than the begin value; "
@@ -70,7 +90,7 @@ If prefix arg is non-nil, call `tiny-expand' directly."
 ;;  ││││││
 ;;  │││││└──> (optional) Format - %x | 0x%x | %c | %s | %(+ x x) | %014.2f | %03d | %(date "Jan 16" (* x 7))
 ;;  ││││└───> (optional) Pipe character to separate Format for reading clarity
-;;  │││└────> (optional) Operator - *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))
+;;  │││└────> (optional) Operation - *xx | (* x x) | (+ x ?A) | *2+3x | (* 2 (+ 3 x))
 ;;  ││└─────> End value
 ;;  │└──────> (optional) Separator - Space | , | \n (default=Space)
 ;;  └───────> (optional) Begin value (default=0)
