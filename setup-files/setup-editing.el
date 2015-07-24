@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 10:36:09 kmodi>
+;; Time-stamp: <2015-07-24 09:48:58 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -716,26 +716,50 @@ abc |ghi        <-- point still after white space after calling this function."
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
 (advice-add 'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
 
-(defmacro modi/add-whole-buffer-if-not-region-advice (symbol)
-  "Advice SYMBOL function (that originally acts on a region) to act on the
-whole buffer if a region is not selected."
-  `(advice-add ,symbol :around (lambda (orig-fn &rest args)
-                                 (save-excursion
-                                   ;; Execute the original SYMBOL function if
-                                   ;; it is called indirectly. Example: we do
-                                   ;; not want to trigger this advice if
-                                   ;; `eval-region' is called via `eval-defun'.
-                                   (if (or (not (eq ,symbol this-command))
-                                           (use-region-p))
-                                       (apply orig-fn args)
-                                     (apply orig-fn (list (point-min) (point-max)))
-                                     (message "Executed %s on the whole buffer."
-                                              (propertize
-                                               (symbol-name ,symbol)
-                                               'face
-                                               'font-lock-function-name-face)))))))
-(modi/add-whole-buffer-if-not-region-advice #'indent-region)
-(modi/add-whole-buffer-if-not-region-advice #'eval-region)
+(defvar modi/whole-buffer-if-not-region-fns '(indent-region
+                                              eval-region)
+  "List of functions to advice so that they act on the whole buffer if a
+region is not selected.")
+
+(defvar modi/whole-buffer-if-not-region-adv-fn-name-format
+  "modi/adv-%s--whole-buffer-if-not-region"
+  "Format for naming the auto generated advice functions for the functions
+listed in `modi/whole-buffer-if-not-region-fns'.")
+
+(defun modi/gen-whole-buffer-if-not-region-adv-fn (symbol)
+  "Function to generate a function that applies the function represented by
+SYMBOL to the whole buffer if region is not selected."
+  (let ((fn-name (intern
+                  (format
+                   modi/whole-buffer-if-not-region-adv-fn-name-format symbol))))
+    `(defun ,fn-name (orig-fn &rest args)
+       (save-excursion
+         ;; Execute the original SYMBOL function if it is called indirectly.
+         ;; Example: We do not want to trigger this advice if `eval-region'
+         ;;          is called via `eval-defun'.
+         (if (or (not (eq ',symbol this-command))
+                 (use-region-p))
+             (apply orig-fn args)
+           (progn
+             (apply orig-fn (list (point-min) (point-max)))
+             (message "Executed %s on the whole buffer."
+                      (propertize (symbol-name ',symbol)
+                                  'face 'font-lock-function-name-face))))))))
+
+(defmacro modi/add-whole-buffer-if-not-region-advice ()
+  "Generate advice functions for each fn in `modi/whole-buffer-if-not-region-fns'."
+  `(progn ,@(mapcar
+             (lambda (x) (modi/gen-whole-buffer-if-not-region-adv-fn x))
+             modi/whole-buffer-if-not-region-fns)))
+(modi/add-whole-buffer-if-not-region-advice)
+
+;; Advice functions (that originally act on a region) to act on the whole
+;; buffer if a region is not selected.
+(dolist (fn modi/whole-buffer-if-not-region-fns)
+  (let ((adv-fn (intern
+                 (format
+                  modi/whole-buffer-if-not-region-adv-fn-name-format fn))))
+    (advice-add fn :around adv-fn)))
 
 (bind-keys
  :map modi-mode-map
