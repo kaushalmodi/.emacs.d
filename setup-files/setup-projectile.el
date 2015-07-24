@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-23 16:00:42 kmodi>
+;; Time-stamp: <2015-07-24 08:46:29 kmodi>
 
 ;; Projectile
 ;; Source: https://github.com/bbatsov/projectile
@@ -54,26 +54,7 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
     (bind-key "s-f" #'hydra-projectile/body modi-mode-map)
     (setq projectile-keymap-prefix (kbd "C-c P"))
     (bind-key "C-c p" #'hydra-projectile/body modi-mode-map)
-    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map)
-
-    ;; https://github.com/bbatsov/projectile/pull/811
-    (defun modi/projectile--detect-find-command ()
-      "Determine the appropriate default find command based on its capabilities.
-Needed because of the differences between GNU find and BSD find."
-      (let* (message-log-max
-             bufs
-             (readable-arg (if (zerop (shell-command
-                                       "find /dev/null -readable"
-                                       "*Shell Output Temp*"
-                                       "*Shell Error Temp*"))
-                               "-readable"
-                             "-perm +444")))
-        (concat "find . \\! " readable-arg " -prune -o \\( -type f -print0 \\)")
-        (setq bufs (delete-dups (buffer-list (selected-frame))))
-        (dolist (buf bufs)
-          (when (string-match-p "\\`\\*Shell.*Temp\\*\\'" (buffer-name buf))
-            (kill-buffer buf)))))
-    (setq projectile-generic-command (modi/projectile--detect-find-command)))
+    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map))
   :config
   (progn
     (when (not (bound-and-true-p disable-pkg-ivy))
