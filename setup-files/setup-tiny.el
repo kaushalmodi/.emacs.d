@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-24 17:48:37 kmodi>
+;; Time-stamp: <2015-07-26 17:36:56 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
@@ -8,14 +8,16 @@
     (defun modi/tiny-helper (&optional end-val begin-val sep op fmt)
       "Helper function for `tiny-expand'.
 
-If prefix arg is non-nil, call `tiny-expand' directly.
+If `tiny' expansion is possible at point, do it. Otherwise activate the helper
+to generate a valid “tiny expression” and expand that.
 
 Usage: M-x COMMAND ↵↵↵↵↵            -> 0 1 2 3 4 5 6 7 8 9
        M-x COMMAND 9↵2↵_↵+1*x2↵↵    -> 5_7_9_11_13_15_17_19
        M-x COMMAND 15↵1↵↵-30*2x↵%x↵ -> 1c 1a 18 16 14 12 10 e c a 8 6 4 2 0
 "
       (interactive
-       (when (null current-prefix-arg)
+       (when (null (tiny-mapconcat)) ; enable the helper only if tiny expansion is
+                                        ; not possible at point.
          (list (number-to-string (string-to-number
                                   (read-string
                                    (concat "END value "
@@ -36,12 +38,13 @@ Usage: M-x COMMAND ↵↵↵↵↵            -> 0 1 2 3 4 5 6 7 8 9
                                     "[eg: %x | 0x%x | %c | %s | %(+ x x) | "
                                     "%014.2f | %03d; parentheses required "
                                     "here for sexps]: ")))))
-      (when (null current-prefix-arg)
-        (let ((tiny-key-binding (substitute-command-keys "\\[tiny-expand]"))
+      (when (null (tiny-mapconcat)) ; enable the helper only if tiny expansion is
+                                        ; not possible at point.
+        (let ((tiny-key-binding (or (substitute-command-keys "\\[modi/tiny-helper]")
+                                    (substitute-command-keys "\\[tiny-expand]")))
               (begin-val-num (string-to-number begin-val))
               (end-val-num (string-to-number end-val))
-              tiny-expr
-              tiny-expr-concise)
+              tiny-expr)
           ;; Begin and end values cannot be same
           (when (= end-val-num begin-val-num)
             (if (zerop end-val-num) ; if both are zero, set the end value to 9
@@ -59,32 +62,34 @@ Usage: M-x COMMAND ↵↵↵↵↵            -> 0 1 2 3 4 5 6 7 8 9
           (when (not (string= fmt ""))
             ;; When non-nil, prefix `fmt' with the `|' char for reading clarity
             (setq fmt (concat "|" fmt)))
-          (when (and (string= begin-val "0")
-                     (string= sep " "))
-            (setq tiny-expr-concise (concat "m" end-val op fmt)))
+          (when (string= begin-val "0")
+            (setq begin-val "") ; it's OK to not specify begin-val if it is 0
+            (when (string= sep " ")
+              (setq sep "")))
           (setq tiny-expr (concat "m" begin-val sep end-val op fmt))
           (message "%s" (concat "This "
                                 (propertize "tiny"
                                             'face 'font-lock-function-name-face)
                                 " expansion can also be done by typing "
-                                (when tiny-expr-concise
-                                  (concat (propertize tiny-expr-concise
-                                                      'face 'font-lock-keyword-face)
-                                          " or "))
                                 (propertize tiny-expr
                                             'face 'font-lock-keyword-face)
                                 " and then "
                                 (propertize tiny-key-binding
                                             'face 'font-lock-keyword-face)
                                 (when (null tiny-key-binding)
-                                  (propertize "M-x tiny-expand"
-                                              'face 'font-lock-keyword-face))
+                                  (concat
+                                   (propertize "M-x modi/tiny-helper"
+                                               'face 'font-lock-keyword-face)
+                                   " or "
+                                   (propertize "M-x tiny-expand"
+                                               'face 'font-lock-keyword-face)))
                                 "."))
-          (insert tiny-expr)))
+          (insert tiny-expr)
+          (undo-boundary)))
       (tiny-expand))
 
     (bind-key "C-c \\" #'modi/tiny-helper modi-mode-map)
-    (key-chord-define-global "]\\" #'tiny-expand)))
+    (key-chord-define-global "]\\" #'modi/tiny-helper)))
 
 
 (provide 'setup-tiny)
