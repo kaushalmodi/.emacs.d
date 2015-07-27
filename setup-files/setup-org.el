@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-16 12:56:10 kmodi>
+;; Time-stamp: <2015-07-27 11:56:43 kmodi>
 
 ;; Org Mode
 
@@ -23,7 +23,12 @@
 ;;  Bindings
 
 (use-package org
+  :load-path "elisp/org-mode/lisp"
   :mode ("\\.org\\'" . org-mode)
+  :init
+  (progn
+    (use-package org-element ; required in org 8.3beta
+      :load-path "elisp/org-mode/lisp"))
   :config
   (progn
 ;;; Org Variables
@@ -101,6 +106,9 @@
       ;; http://stackoverflow.com/a/14072295/1219634
       ;; touch `modi/one-org-agenda-file'
       (write-region "" :ignore modi/one-org-agenda-file))
+
+    (add-hook 'org-capture-mode-hook
+              (lambda () (setq-local org-complete-tags-always-offer-all-agenda-tags t)))
 
     ;; http://sachachua.com/blog/2013/01/emacs-org-task-related-keyboard-shortcuts-agenda/
     (defun sacha/org-agenda-done (&optional arg)
@@ -295,15 +303,15 @@ Execute this command while the point is on or after the hyper-linked org link."
         (add-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
         ;; (remove-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
 
-        (bind-key "<left>"   #'org-tree-slide-move-previous-tree                                  org-tree-slide-mode-map)
-        (bind-key "<right>"  #'org-tree-slide-move-next-tree                                      org-tree-slide-mode-map)
+        (bind-key "<left>"   #'org-tree-slide-move-previous-tree                             org-tree-slide-mode-map)
+        (bind-key "<right>"  #'org-tree-slide-move-next-tree                                 org-tree-slide-mode-map)
         (bind-key "C-0"      (lambda () (interactive) (text-scale-set org-tree-slide-text-scale)) org-tree-slide-mode-map)
         (bind-key "C-="      (lambda () (interactive) (text-scale-increase 1))                    org-tree-slide-mode-map)
         (bind-key "C--"      (lambda () (interactive) (text-scale-decrease 1))                    org-tree-slide-mode-map)
-        (bind-key "C-1"      #'org-tree-slide-content                                             org-tree-slide-mode-map)
-        (bind-key "C-2"      #'org-tree-slide-my-profile                                          org-tree-slide-mode-map)
-        (bind-key "C-3"      #'org-tree-slide-simple-profile                                      org-tree-slide-mode-map)
-        (bind-key "C-4"      #'org-tree-slide-presentation-profile                                org-tree-slide-mode-map)))
+        (bind-key "C-1"      #'org-tree-slide-content                                        org-tree-slide-mode-map)
+        (bind-key "C-2"      #'org-tree-slide-my-profile                                     org-tree-slide-mode-map)
+        (bind-key "C-3"      #'org-tree-slide-simple-profile                                 org-tree-slide-mode-map)
+        (bind-key "C-4"      #'org-tree-slide-presentation-profile                           org-tree-slide-mode-map)))
 
 ;;; Org Export
     (use-package ox
@@ -698,3 +706,7 @@ else call `self-insert-command'."
 
 ;; How to modify `org-emphasis-regexp-components'
 ;; http://emacs.stackexchange.com/a/13828/115
+
+;; Local Variables:
+;; eval: (aggressive-indent-mode -1)
+;; End:

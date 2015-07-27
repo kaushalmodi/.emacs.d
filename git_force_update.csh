@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-07-17 09:23:24 kmodi>
+# Time-stamp: <2015-07-27 12:22:50 kmodi>
 
 # Usage: source git_force_update.csh <YOUR .emacs.d PATH>
 # Example: source git_force_update.csh ~/.emacs.d
@@ -89,6 +89,20 @@ if ( ! -d ${pkg_dir}/.git ) then
 else
     echo "Force updating transpose-frame to ${pkg_dir} .."
     cd ${pkg_dir}; gfu
+endif
+echo ''
+
+# org-mode git master
+set pkg_dir = "${emacs_config_dir}/elisp/org-mode"
+if ( ! -d ${pkg_dir}/.git ) then
+    if ( -d ${pkg_dir} ) then
+        \rm -rf ${pkg_dir}
+    endif
+    echo "Cloning org-mode to ${pkg_dir} .."
+    git clone http://repo.or.cz/r/org-mode.git ${pkg_dir}
+else
+    echo "Force updating org-mode to ${pkg_dir} .."
+    cd ${pkg_dir}; gfu; make
 endif
 echo ''
 
