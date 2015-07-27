@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-23 10:08:59 kmodi>
+;; Time-stamp: <2015-07-27 09:10:37 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -40,12 +40,6 @@
                 ("which-key-show-next-page" . "wk next pg")
                 ;; Hide the "calc-" prefixes when listing keys for M-x calc
                 ("\\`calc-" . "")))))
-
-    ;; Paging
-    (dolist (prefix '("C-x" "C-c"))
-      (dolist (paging-key '("<next>" "<prior>")) ; Pg Down, Pg Up
-        (define-key which-key-mode-map
-          (kbd (concat prefix " " paging-key)) #'which-key-show-next-page)))
 
     (which-key-mode 1)))
 
