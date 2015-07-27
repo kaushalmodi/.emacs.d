@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-23 15:09:01 kmodi>
+;; Time-stamp: <2015-07-27 12:50:07 kmodi>
 
 ;; Customize the mode-line
 
@@ -33,7 +33,7 @@ If nil, show the same in the minibuffer.")
     (defconst modi/today--day-sym (intern (format-time-string "%a"))
       "Symbol containing 3-letter abbreviation of today's day.")
 
-    (defconst modi/time-go-home-reset "07:00am"
+    (defconst modi/time-go-home-reset "12:01am"
       "Time when to modify the time face to remove the alert face.")
 
     (defconst modi/time-go-home-alert '((Mon . "05:15pm")
@@ -51,6 +51,14 @@ If nil, show the same in the minibuffer.")
     (defun modi/minibuffer-line-set-alert-face ()
       (set-face-attribute 'minibuffer-line nil :inherit font-lock-warning-face))
 
+    (defun modi/update-go-home-alert ()
+      "Reset the `minibuffer-line' face to default and update the 'Go Home'
+alert time."
+      (modi/minibuffer-line-set-default-face)
+      (setq modi/today--day-sym (intern (format-time-string "%a")))
+      (modi/set-go-home-alert (cdr (assq modi/today--day-sym
+                                         modi/time-go-home-alert))))
+
     (defun modi/reset-go-home-alert (time)
       "Reset the 'go home' alert time interactively.
 The timer is canceled and not restarted if TIME is \"nil\" or \"\"."
@@ -61,11 +69,11 @@ The timer is canceled and not restarted if TIME is \"nil\" or \"\"."
         (cancel-timer modi/timer--go-home-reset))
       (if (or (string= time "")
               (string= time "nil"))
-          (set-face-attribute 'minibuffer-line nil :inherit font-lock-type-face)
+          (modi/minibuffer-line-set-default-face)
         (let ((daily (* 60 60 24)))
           (setq modi/timer--go-home-reset (run-at-time
                                            time daily
-                                           #'modi/minibuffer-line-set-default-face)))))
+                                           #'modi/update-go-home-alert)))))
 
     (defun modi/set-go-home-alert (time)
       "Set the 'go home' alert time interactively.
@@ -87,7 +95,7 @@ are canceled and not restarted if TIME is \"nil\" or \"\"."
             (progn
               (modi/reset-go-home-alert "nil")
               (setq modi/timer--go-home-alert nil)
-              (message "'Go Home' alert removed."))
+              (message "%s: 'Go Home' alert removed." modi/today--day-sym))
           (let ((daily (* 60 60 24))
                 new-go-home-time new-go-home-time-str)
             (setq modi/timer--go-home-alert (run-at-time
@@ -101,15 +109,15 @@ are canceled and not restarted if TIME is \"nil\" or \"\"."
                 (if (string= new-go-home-time-str old-go-home-time-str)
                     (message "'Go Home' alert time unchanged: %s"
                              new-go-home-time-str)
-                  (message "Changed 'Go Home' alert time from %s to %s."
+                  (message "%s: Changed 'Go Home' alert time from %s to %s."
+                           modi/today--day-sym
                            old-go-home-time-str new-go-home-time-str))
-              (message "'Go Home' alert time set to %s." new-go-home-time-str))))))
+              (message "%s: 'Go Home' alert time set to %s."
+                       modi/today--day-sym new-go-home-time-str))))))
 
     (minibuffer-line-mode)
 
-    (modi/reset-go-home-alert modi/time-go-home-reset)
-    (modi/set-go-home-alert (cdr (assq modi/today--day-sym
-                                       modi/time-go-home-alert)))))
+    (modi/reset-go-home-alert modi/time-go-home-reset)))
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
@@ -127,7 +135,7 @@ are canceled and not restarted if TIME is \"nil\" or \"\"."
     (setq sml/replacer-regexp-list
           `(
             ("^~/org/"                          ":Org:")
-            ("^~/\\.emacs\\.d/"                 ":ED:")
+            ("^~/\\.emacs\\.d/"                   ":ED:")
             ("^~/.*box/uvm/uvm_examples/"       ":UVM_EX:")
             ("^~/.*box/uvm/adsim_uvm_examples/" ":AD_UVM_EX:")
             (":\\(.*_EX\\):\\([a-z0-9_]\\{3\\}\\).*?/"
