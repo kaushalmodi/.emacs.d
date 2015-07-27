@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 11:44:45 kmodi>
+;; Time-stamp: <2015-07-27 14:28:56 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -99,7 +99,7 @@
         neotree
         nlinum ; reviews say it's better than linum
         number ; number manipulation
-        ;; org-plus-contrib ; using org git master instead
+        org-plus-contrib ; latest stable version of org-mode
         org-tree-slide
         ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         outorg navi-mode ; supporting packages for outshine
