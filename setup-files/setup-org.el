@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 11:56:43 kmodi>
+;; Time-stamp: <2015-07-27 14:45:34 kmodi>
 
 ;; Org Mode
 
@@ -23,12 +23,8 @@
 ;;  Bindings
 
 (use-package org
-  :load-path "elisp/org-mode/lisp"
+  ;; :load-path "elisp/org-mode/lisp" ; org git master
   :mode ("\\.org\\'" . org-mode)
-  :init
-  (progn
-    (use-package org-element ; required in org 8.3beta
-      :load-path "elisp/org-mode/lisp"))
   :config
   (progn
 ;;; Org Variables
@@ -84,6 +80,22 @@
     ;; empty lines is equal or larger to the number given in this variable.
     (setq org-cycle-separator-lines 2) ; default = 2
 
+    (when (version<= (org-version) "8.2.99")
+      ;; Re-define `org-get-buffer-tags' as defined in org-mode version 8.3+
+      ;; for `counsel-org-tag' to work correctly in org-mode version 8.2.
+      (defun org-get-buffer-tags ()
+        "Get a table of all tags used in the buffer, for completion."
+        (org-with-wide-buffer
+         (goto-char (point-min))
+         (let ((tag-re (concat org-outline-regexp-bol
+                               "\\(?:.*?[ \t]\\)?"
+                               (org-re ":\\([[:alnum:]_@#%:]+\\):[ \t]*$")))
+               tags)
+           (while (re-search-forward tag-re nil t)
+             (dolist (tag (org-split-string (org-match-string-no-properties 1) ":"))
+               (push tag tags)))
+           (mapcar #'list (append org-file-tags (org-uniquify tags)))))))
+
 ;;; Agenda and Capture
     ;; http://orgmode.org/manual/Template-elements.html
     ;; http://orgmode.org/manual/Template-expansion.html
@@ -106,9 +118,6 @@
       ;; http://stackoverflow.com/a/14072295/1219634
       ;; touch `modi/one-org-agenda-file'
       (write-region "" :ignore modi/one-org-agenda-file))
-
-    (add-hook 'org-capture-mode-hook
-              (lambda () (setq-local org-complete-tags-always-offer-all-agenda-tags t)))
 
     ;; http://sachachua.com/blog/2013/01/emacs-org-task-related-keyboard-shortcuts-agenda/
     (defun sacha/org-agenda-done (&optional arg)
@@ -315,14 +324,16 @@ Execute this command while the point is on or after the hyper-linked org link."
 
 ;;; Org Export
     (use-package ox
-      :commands (org-export-dispatch) ; bound to `C-c C-e' in org-mode
       :config
       (progn
-
 ;;;; ox-latex - LaTeX export
         (use-package ox-latex
           :config
           (progn
+            (when (not (version<= (org-version) "8.2.99"))
+              ;; org-mode version 8.3+
+              (setq org-latex-prefer-user-labels t))
+
             ;; ox-latex patches
             (load (expand-file-name
                    "ox-latex-patches.el"
@@ -553,7 +564,7 @@ Execute this command while the point is on or after the hyper-linked org link."
 ;;;; ox-odt - ODT, doc export
         ;; http://stackoverflow.com/a/22990257/1219634
         (use-package ox-odt
-          ;; :disabled
+          :disabled
           :config
           (progn
             ;; Auto convert the exported .odt to .doc (MS Word 97) format
