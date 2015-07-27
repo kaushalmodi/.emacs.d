@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-23 09:20:18 kmodi>
+;; Time-stamp: <2015-07-27 13:17:40 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -26,6 +26,10 @@
       ("C-h v"   . counsel-describe-variable)
       ("C-h f"   . counsel-describe-function)
       ("C-c u"   . counsel-unicode-char))
+    (with-eval-after-load 'org
+      (bind-keys
+       :map org-mode-map
+        ("C-c C-q" . counsel-org-tag)))
     (key-chord-define-global ";'" #'counsel-M-x)))
 
 
