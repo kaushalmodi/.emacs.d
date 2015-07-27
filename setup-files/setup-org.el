@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 14:45:34 kmodi>
+;; Time-stamp: <2015-07-27 15:56:00 kmodi>
 
 ;; Org Mode
 
@@ -22,8 +22,11 @@
 ;;    Custom Org Export related “packages”
 ;;  Bindings
 
+(when (bound-and-true-p org-load-beta-version)
+  (add-to-list 'load-path (concat user-emacs-directory
+                                 "elisp/org-mode/lisp/")))
+
 (use-package org
-  ;; :load-path "elisp/org-mode/lisp" ; org git master
   :mode ("\\.org\\'" . org-mode)
   :config
   (progn
