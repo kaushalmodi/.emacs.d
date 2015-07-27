@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-23 09:58:25 kmodi>
+;; Time-stamp: <2015-07-27 10:56:31 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -127,6 +127,7 @@
         web-mode
         which-key ; > guide-key
         wrap-region ; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
+        writegood-mode ; highlight passive voice, weasel words and duplicates
         xkcd ; comic
         yafolding ; indentation detected code folding
         yaml-mode ; Useful for editing Octopress' _config.yml
@@ -143,7 +144,6 @@
         tao-theme ; monochrome
         twilight-bright-theme
         twilight-anti-bright-theme
-        writegood-mode ; highlight passive voice, weasel words and duplicates
         ))
 
 ;; Basic requires
