@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-23 10:10:08 kmodi>
+;; Time-stamp: <2015-07-27 09:28:16 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -220,7 +220,7 @@ _=_ Quick calc      _d_ired current dir      _el_ eww Lucky          g_i_t grep 
 _-_ Rpn calc        _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      _w_/_W_   quick/full weather
 _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd            ^^_<SPC>_ frequent
 "
-  ("a"       ag-regexp-cwd)
+  ("a"       counsel-ag)
   ("b"       bookmark-jump)
   ("d"       dired-single-magic-buffer-current-dir)
   ("ed"      modi/ediff-dwim)
