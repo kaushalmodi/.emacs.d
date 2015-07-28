@@ -1,23 +1,25 @@
 #+TITLE: modi .emacs.d
 
 * Using my emacs setup
-You can clone my emacs setup by running
-#+BEGIN_SRC sh
-source git_force_update.csh PATH/WHERE/YOU/WANT/TO/DOWNLOAD/THE/CONFIG
-#+END_SRC
-For example, you can run
-#+BEGIN_SRC sh
-source git_force_update.csh ~/.emacs.d
-#+END_SRC
-/If a =​~/​.emacs.d= directory already exists, it will be =\cp -rf= ed to =~/​.emacs.dbkpauto=./
+You can start using my emacs setup by following these steps:
+
+1. =curl https://github.com/kaushalmodi/.emacs.d/blob/master/git_force_update.csh > ! git_force_update.csh && chmod 744 git_force_update.csh=. This script basically /git clones/ my config and all sub-modules that I rely on (mine + others).
+2. =source git_force_update.csh ~/e-temp= if you want to download this config to =~/e-temp/= directory. /If the download location you specify already exists, a backup of it will be created first. In this case, if =e-temp= already exists, it will first be backed up./
+3. *IMP: Edit the =user-emacs-directory= and =org-directory= vars in the downloaded =init.el= as needed -BEFORE- starting emacs using this config.*
+4. Start emacs with =~/e-temp/init.el= as its init by doing =\emacs -Q -l ~/e-temp/init.el=. If you did  =source git_force_update.csh ~/.emacs.d=, you can start emacs as normal by doing =\emacs=.
+5. That's it. The first start will take a couple of minutes as it auto-installs all packages in the =all-packages= list defined in the =init.el=.
+
+
+* Few notes
 - Few setup files have setup done as per my personal tastes and needs:
-    - =setup-files/setup-misc.el=
-    - =setup-files/setup-mode-line.el=
-    - =setup-files/setup-registers.el=
+  - =setup-files/setup-misc.el=
+  - =setup-files/setup-mode-line.el=
+  - =setup-files/setup-registers.el=
 - If you want to change the default theme, font size, etc, you would want to edit =setup-files/setup-visual.el=
 - Any of the variables or global minor modes set in my config can be overridden in =setup-personal.el= which you need to create in the directory pointed by the variable =user-personal-directory=. /By default, this directory is =~/​.emacs.d/personal/​=./
 - You can also choose to override certain variables in the very beginning of the =init.el= by customizing the variables in a =setup-var-overrides.el= file placed in =user-personal-directory=. You can refer to an example of this file [[https://github.com/kaushalmodi/.emacs.d/blob/master/personal/setup-var-overrides-EXAMPLE.el][here]].
-- =setup-editing.el= has interesting elisp snippets that I created+borrowed over time for functions related to general editing.
+- =setup-editing.el= has interesting elisp snippets that I created + borrowed over time for functions related to general editing.
+
 
 * Key points
 - Use of my minor mode =modi-mode= to enable my custom key-bindings. Doing so allows me to force override my bindings in all major and minor modes. If I ever need to try out the default emacs bindings, I can simply disable =modi-mode= by doing =M-x modi-mode=. /It is enabled globally by default./
@@ -33,10 +35,9 @@ source git_force_update.csh ~/.emacs.d
   - =ps2pdf=
   - =xelatex=
 
-* Future plan
-- Pack my whole emacs setup into a single org file.
 
 * Feedback
 I am looking forward to suggestions, corrections.
+
 
 Thanks!

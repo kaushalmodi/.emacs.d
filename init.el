@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 14:28:56 kmodi>
+;; Time-stamp: <2015-07-28 08:46:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Record the start time
@@ -191,7 +191,7 @@
     (require 'setup-popwin)
   (require 'setup-shackle))
 
-;; Set up extensions/packages
+;; Set up packages
 (require 'setup-abbrev)
 (require 'setup-ace-window)
 (when (executable-find "ag")
@@ -200,10 +200,11 @@
 (require 'setup-all)
 (require 'setup-artist)
 (require 'setup-auto-complete)
-(require 'setup-counsel)
 (require 'setup-big-fringe)
 (require 'setup-bookmarks)
 (require 'setup-buffer-move)
+(require 'setup-calc)
+(require 'setup-counsel)
 (require 'setup-de-ansi)
 (require 'setup-deft)
 (require 'setup-dired)
@@ -218,6 +219,11 @@
 (require 'setup-fci)
 (require 'setup-fold)
 (require 'setup-gist)
+(when (executable-find "git")
+  (require 'setup-diff-hl)
+  (require 'setup-git-link)
+  (require 'setup-git-timemachine)
+  (require 'setup-magit))
 (require 'setup-hardcore)
 (require 'setup-header2)
 (require 'setup-highlight)
@@ -227,13 +233,8 @@
 (require 'setup-ido)
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
-(require 'setup-ivy)
 (require 'setup-iregister)
-(when (executable-find "git")
-  (require 'setup-magit)
-  (require 'setup-diff-hl)
-  (require 'setup-git-link)
-  (require 'setup-git-timemachine))
+(require 'setup-ivy)
 (require 'setup-keyfreq)
 (require 'setup-kurecolor)
 (require 'setup-list-environment)
@@ -265,37 +266,35 @@
 (require 'setup-writegood)
 (require 'setup-xkcd)
 (require 'setup-yasnippet)
-;; (require 'setup-fiplr)
-;; (require 'setup-workgroups2)
 
 ;; Languages
-(require 'setup-verilog)
-(require 'setup-perl)
-(require 'setup-python)
+(require 'setup-conf)
+(require 'setup-elisp)
+(require 'setup-latex)
+(require 'setup-markdown)
 (when (executable-find "matlab")
   (require 'setup-matlab))
-(require 'setup-markdown)
-(require 'setup-web-mode)
+(require 'setup-perl)
+(require 'setup-python)
 (require 'setup-shell)
-(require 'setup-elisp)
-(require 'setup-yaml-mode)
-(require 'setup-latex)
 (require 'setup-spice)
 (require 'setup-tcl)
-(require 'setup-conf)
+(require 'setup-verilog)
+(require 'setup-web-mode)
+(require 'setup-yaml-mode)
 
+;; Blend of other setup
 (require 'setup-editing)
-(require 'setup-windows-buffers)
-(require 'setup-registers)
+(require 'setup-image)
 (require 'setup-navigation)
-(require 'setup-search)
-(require 'setup-print)
 (require 'setup-pdf)
+(require 'setup-print)
+(require 'setup-registers)
+(require 'setup-search)
 (when (or (executable-find "aspell")
           (executable-find "hunspell"))
   (require 'setup-spell))
-(require 'setup-calc)
-(require 'setup-image)
+(require 'setup-windows-buffers)
 
 ;; Place `setup-work.el' with `(provide 'setup-work)' in `user-personal-directory'
 (require 'setup-work nil :noerror)
@@ -323,7 +322,7 @@
 
 (when (and (bound-and-true-p emacs-initialized)
            (featurep 'setup-visual))
-  (funcall default-theme-fn)) ; defined in setup-visual.el
+  (funcall default-theme-fn)) ; defined in `setup-visual.el'
 
 (setq emacs-initialized t)
 
