@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 08:58:07 kmodi>
+;; Time-stamp: <2015-07-28 19:01:30 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -59,9 +59,10 @@
       (progn
         (ido-ubiquitous-mode 1)))
 
-    ;; Sometimes when using ido-switch-buffer the *Messages* buffer get in the way,
-    ;; so we set it to be ignored (it can be accessed using `C-h e', so there is
-    ;; really no need for it in the buffer list).
+    ;; Sometimes when using ido-switch-buffer the *Messages* buffer get in the
+    ;; way, so we set it to be ignored (it can be accessed using `C-h e', so
+    ;; there is really no need for it in the buffer list).
+    ;;   Also left mouse click in the echo area brings up the *Messages* buffer.
     ;; https://github.com/larstvei/dot-emacs
     (add-to-list 'ido-ignore-buffers "*Messages*")
 
