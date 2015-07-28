@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 09:10:37 kmodi>
+;; Time-stamp: <2015-07-28 09:20:45 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -12,12 +12,21 @@
 
     (setq which-key-key-replacement-alist
           '(("<\\([[:alnum:]-]+\\)>" . "\\1")
-            ("left"  . "◀")
-            ("right" . "▶")
-            ("up"    . "▲")
-            ("down"  . "▼")
-            ("next"  . "PgDn")
-            ("prior" . "PgUp")))
+            ("left"                . "◀")
+            ("right"               . "▶")
+            ("up"                  . "▲")
+            ("down"                . "▼")
+            ("delete"              . "DLT") ; delete key
+            ("\\`DEL\\'"             . "BS") ; backspace key
+            ("next"                . "PgDn")
+            ("prior"               . "PgUp")))
+
+    (setq which-key-special-keys '("SPC"
+                                   "TAB"
+                                   "RET"
+                                   "DLT" ; delete key
+                                   "BS" ; backspace key
+                                   "ESC"))
 
     (setq which-key-key-based-description-replacement-alist
           '(("C-x 8"   . "unicode")
