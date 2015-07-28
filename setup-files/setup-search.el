@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-21 13:55:27 kmodi>
+;; Time-stamp: <2015-07-28 08:21:55 kmodi>
 
 ;; Search / Replace
 
@@ -101,19 +101,7 @@ If a region is not selected and,
             (swiper) ; C-u
           (swiper (modi/get-symbol-at-point)))))
 
-    (defun isearch-swiper ()
-      "Invoke `swiper' from isearch.
-
-https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
-"
-      (interactive)
-      (let (($query (if isearch-regexp
-                        isearch-string
-                      (regexp-quote isearch-string))))
-        (isearch-exit)
-        (swiper $query)))
-
-    (bind-key "M-i" #'isearch-swiper isearch-mode-map) ; isearch > swiper
+    (bind-key "M-i" #'swiper-from-isearch isearch-mode-map) ; isearch > swiper
     (bind-key "M-a" #'swiper-avy swiper-map) ; swiper > avy
 
     (key-chord-define-global "'/" #'modi/swiper)
