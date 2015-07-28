@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-07-21-9c31eb3-vpo"
+(defconst verilog-mode-version "2015-07-28-742b54b-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -4473,6 +4473,13 @@ More specifically, after a generate and before an endgenerate."
 		(setq nest (1+ nest)))))))
     (= nest 0) )) ; return nest
 
+(defun verilog-in-deferred-immediate-final-p ()
+  "Return true if inside an 'assert/assume/cover final' statement."
+  (interactive)
+  (and (looking-at "final")
+       (verilog-looking-back "\\<\\(?:assert\\|assume\\|cover\\)\\>\\s-+" nil))
+  )
+
 (defun verilog-backward-case-item (lim)
   "Skip backward to nearest enclosing case item.
 Limit search to point LIM."
@@ -5593,60 +5600,60 @@ Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
     (let ((re (concat "\\({\\|}\\|" verilog-indent-re "\\)"))
           (inconstraint (verilog-in-coverage-p)))
       (while (verilog-re-search-backward re nil 'move)
-	(catch 'continue
-	  (cond
-	   ((equal (char-after) ?\{)
+        (catch 'continue
+          (cond
+           ((equal (char-after) ?\{)
             ;; block type returned based on outer constraint { or inner
-	    (if (verilog-at-constraint-p)
+            (if (verilog-at-constraint-p)
                 (cond (inconstraint
                        (beginning-of-line nil)
                        (skip-chars-forward " \t")
                        (throw 'nesting 'constraint))
                       (t
                        (throw 'nesting 'statement)))))
-	   ((equal (char-after) ?\})
-	    (let (par-pos
+           ((equal (char-after) ?\})
+            (let (par-pos
                   (there (verilog-at-close-constraint-p)))
               (if there  ; we are at the } that closes a constraint.  Find the { that opens it
-		  (progn
-		    (if (> (verilog-in-paren-count) 0)
+                  (progn
+                    (if (> (verilog-in-paren-count) 0)
                         (forward-char 1))
                     (setq par-pos (verilog-parenthesis-depth))
                     (cond (par-pos
-			   (goto-char par-pos)
-			   (forward-char 1))
-			  (t
-			   (backward-char 1)))))))
+                           (goto-char par-pos)
+                           (forward-char 1))
+                          (t
+                           (backward-char 1)))))))
 
-	   ((looking-at verilog-beg-block-re-ordered)
-	    (cond
-	     ((match-end 2)  ; *sigh* could be "unique case" or "priority casex"
-	      (let ((here (point)))
-		(verilog-beg-of-statement)
-		(if (looking-at verilog-extended-case-re)
-		    (throw 'nesting 'case)
-		  (goto-char here)))
-	      (throw 'nesting 'case))
+           ((looking-at verilog-beg-block-re-ordered)
+            (cond
+             ((match-end 2)  ; *sigh* could be "unique case" or "priority casex"
+              (let ((here (point)))
+                (verilog-beg-of-statement)
+                (if (looking-at verilog-extended-case-re)
+                    (throw 'nesting 'case)
+                  (goto-char here)))
+              (throw 'nesting 'case))
 
-	     ((match-end 4)  ; *sigh* could be "disable fork"
-	      (let ((here (point)))
-		(verilog-beg-of-statement)
-		(if (looking-at verilog-disable-fork-re)
-		    t ; this is a normal statement
-		  (progn ; or is fork, starts a new block
-		    (goto-char here)
-		    (throw 'nesting 'block)))))
+             ((match-end 4)  ; *sigh* could be "disable fork"
+              (let ((here (point)))
+                (verilog-beg-of-statement)
+                (if (looking-at verilog-disable-fork-re)
+                    t ; this is a normal statement
+                  (progn ; or is fork, starts a new block
+                    (goto-char here)
+                    (throw 'nesting 'block)))))
 
-	     ((match-end 27)  ; *sigh* might be a clocking declaration
-	      (let ((here (point)))
-		(if (verilog-in-paren)
-		    t ; this is a normal statement
-		  (progn ; or is fork, starts a new block
-		    (goto-char here)
-		    (throw 'nesting 'block)))))
+             ((match-end 27)  ; *sigh* might be a clocking declaration
+              (let ((here (point)))
+                (if (verilog-in-paren)
+                    t ; this is a normal statement
+                  (progn ; or is fork, starts a new block
+                    (goto-char here)
+                    (throw 'nesting 'block)))))
 
-	     ;; need to consider typedef struct here...
-	     ((looking-at "\\<class\\|struct\\|function\\|task\\>")
+             ;; need to consider typedef struct here...
+             ((looking-at "\\<class\\|struct\\|function\\|task\\>")
               ;; *sigh* These words have an optional prefix:
               ;; extern {virtual|protected}? function a();
               ;; typedef class foo;
@@ -5655,52 +5662,53 @@ Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
               ;; property
               ;; ...
               ;; endfunction
-	      (verilog-beg-of-statement)
-	      (cond
-	       ((looking-at verilog-dpi-import-export-re)
-	        (throw 'continue 'foo))
-	       ((looking-at "\\<pure\\>\\s-+\\<virtual\\>\\s-+\\(?:\\<\\(local\\|protected\\|static\\)\\>\\s-+\\)?\\<\\(function\\|task\\)\\>\\s-+")
-	        (throw 'nesting 'statement))
-	       ((looking-at verilog-beg-block-re-ordered)
-	        (throw 'nesting 'block))
-	       (t
-	        (throw 'nesting 'defun))))
+              (verilog-beg-of-statement)
+              (cond
+               ((looking-at verilog-dpi-import-export-re)
+                (throw 'continue 'foo))
+               ((looking-at "\\<pure\\>\\s-+\\<virtual\\>\\s-+\\(?:\\<\\(local\\|protected\\|static\\)\\>\\s-+\\)?\\<\\(function\\|task\\)\\>\\s-+")
+                (throw 'nesting 'statement))
+               ((looking-at verilog-beg-block-re-ordered)
+                (throw 'nesting 'block))
+               (t
+                (throw 'nesting 'defun))))
 
-	     ;;
-	     ((looking-at "\\<property\\>")
+             ;;
+             ((looking-at "\\<property\\>")
               ;; *sigh*
               ;;    {assert|assume|cover} property (); are complete
               ;;   and could also be labeled: - foo: assert property
               ;; but
               ;;    property ID () ... needs end_property
-	      (verilog-beg-of-statement)
-	      (if (looking-at verilog-property-re)
-		  (throw 'continue 'statement) ; We don't need an endproperty for these
-		(throw 'nesting 'block)	;We still need an endproperty
-		))
+              (verilog-beg-of-statement)
+              (if (looking-at verilog-property-re)
+                  (throw 'continue 'statement) ; We don't need an endproperty for these
+                (throw 'nesting 'block)	;We still need an endproperty
+                ))
 
-	     (t              (throw 'nesting 'block))))
+             (t              (throw 'nesting 'block))))
 
-	   ((looking-at verilog-end-block-re)
-	    (verilog-leap-to-head)
-	    (if (verilog-in-case-region-p)
-		(progn
-		  (verilog-leap-to-case-head)
-		  (if (looking-at verilog-extended-case-re)
-		      (throw 'nesting 'case)))))
+           ((looking-at verilog-end-block-re)
+            (verilog-leap-to-head)
+            (if (verilog-in-case-region-p)
+                (progn
+                  (verilog-leap-to-case-head)
+                  (if (looking-at verilog-extended-case-re)
+                      (throw 'nesting 'case)))))
 
-	   ((looking-at verilog-defun-level-re)
-	    (if (looking-at verilog-defun-level-generate-only-re)
-		(if (verilog-in-generate-region-p)
-		    (throw 'continue 'foo)  ; always block in a generate - keep looking
-		  (throw 'nesting 'defun))
-	      (throw 'nesting 'defun)))
+           ((looking-at verilog-defun-level-re)
+            (if (looking-at verilog-defun-level-generate-only-re)
+                (if (or (verilog-in-generate-region-p)
+                        (verilog-in-deferred-immediate-final-p))
+                    (throw 'continue 'foo)  ; always block in a generate - keep looking
+                  (throw 'nesting 'defun))
+              (throw 'nesting 'defun)))
 
-	   ((looking-at verilog-cpp-level-re)
-	    (throw 'nesting 'cpp))
+           ((looking-at verilog-cpp-level-re)
+            (throw 'nesting 'cpp))
 
-	   ((bobp)
-	    (throw 'nesting 'cpp)))))
+           ((bobp)
+            (throw 'nesting 'cpp)))))
 
       (throw 'nesting 'cpp))))
 
