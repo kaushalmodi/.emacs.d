@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-24 17:39:19 kmodi>
+;; Time-stamp: <2015-07-28 17:47:52 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -251,24 +251,27 @@ instead of ASCII characters for adorning the copied snippet."
           (chars-n-dash              (if unicode "─"         "--"       ))
           (chars-m-dash              (if unicode "──"        "---"      ))
           (chars-pipe                (if unicode "│"         "|"        ))
-          (chunk                     (buffer-substring beg end)))
+          (chunk                     (buffer-substring beg end))
+          (buffer-or-file-name (or (buffer-file-name) (buffer-name)))
+          (user (getenv "USER")))
       (setq chunk (concat
                    (format "%s #%-d %s %s %s\n%s "
                            chars-start-of-code-block
                            (line-number-at-pos beg)
                            chars-n-dash
-                           (or (buffer-file-name) (buffer-name))
+                           (replace-regexp-in-string
+                            (concat "_" user) "_${USER}" buffer-or-file-name)
                            chars-m-dash
                            chars-pipe)
-                   (replace-regexp-in-string "\n" (format "\n%s " chars-pipe)
-                                             chunk)
+                   (replace-regexp-in-string
+                    "\n" (format "\n%s " chars-pipe) chunk)
                    (format "\n%s #%-d %s %s %s %s"
                            chars-end-of-code-block
                            (line-number-at-pos end)
                            chars-n-dash
                            (format-time-string "%Y/%m/%d")
                            chars-n-dash
-                           (getenv "USER"))))
+                           user)))
       (kill-new chunk)))
   (deactivate-mark))
 
