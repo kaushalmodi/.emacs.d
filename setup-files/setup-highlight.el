@@ -1,8 +1,36 @@
-;; Time-stamp: <2015-07-06 10:25:21 kmodi>
+;; Time-stamp: <2015-07-28 22:23:21 kmodi>
 
 ;; Highlight stuff
 
-(global-hi-lock-mode 1)
+;; Hi-Lock
+(use-package hi-lock
+  :config
+  (progn
+    (>=e "24.4"
+        ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
+        ;; highlight color automatically
+        (defun hi-lock-face-buffer (regexp)
+          "Interactively, prompt for REGEXP using `read-regexp'. Uses the
+next face from `hi-lock-face-defaults' without prompting.
+
+Use Font lock mode, if enabled, to highlight REGEXP.  Otherwise, use
+overlays for highlighting.  If overlays are used, the highlighting
+will not update as you type."
+          (interactive
+           (list
+            (hi-lock-regexp-okay
+             ;; (read-regexp "Regexp to highlight" 'regexp-history-last))))
+             (read-from-minibuffer "Regexp to highlight: " (modi/get-symbol-at-point)))))
+          (let* ((hi-lock-auto-select-face t)
+                 (face (hi-lock-read-face-name)))
+            (or (facep face) (setq face 'hi-yellow))
+            (unless hi-lock-mode (hi-lock-mode 1))
+            (hi-lock-set-pattern regexp face))))
+
+    ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing
+    (define-key hi-lock-map (kbd "C-x w") nil)
+
+    (global-hi-lock-mode 1)))
 
 ;; Highlight Anything
 ;; https://github.com/boyw165/hl-anything
@@ -90,27 +118,6 @@ _u_/_U_n-highlight (global/local)        _p_revious highlight        _r_estore h
       ("M--"     . ahs-back-to-start)
       ("C-x C-'" . ahs-change-range)
       ("C-x C-a" . ahs-edit-mode))))
-
-(>=e "24.4"
-    ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
-    ;; highlight color automatically
-    (defun hi-lock-face-buffer (regexp)
-      "Interactively, prompt for REGEXP using `read-regexp'. Uses the
-   next face from `hi-lock-face-defaults' without prompting.
-
-Use Font lock mode, if enabled, to highlight REGEXP.  Otherwise, use
-overlays for highlighting.  If overlays are used, the highlighting
-will not update as you type."
-      (interactive
-       (list
-        (hi-lock-regexp-okay
-         ;; (read-regexp "Regexp to highlight" 'regexp-history-last))))
-         (read-from-minibuffer "Regexp to highlight: " (modi/get-symbol-at-point)))))
-      (let* ((hi-lock-auto-select-face t)
-             (face (hi-lock-read-face-name)))
-        (or (facep face) (setq face 'hi-yellow))
-        (unless hi-lock-mode (hi-lock-mode 1))
-        (hi-lock-set-pattern regexp face))))
 
 ;; hl-line+
 ;; http://www.emacswiki.org/emacs/hl-line+.el
