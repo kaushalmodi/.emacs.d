@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-07-28-742b54b-vpo"
+(defconst verilog-mode-version "2015-07-29-119f1b9-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -3194,8 +3194,11 @@ See also `verilog-font-lock-extra-types'.")
                                                       'font-lock-preprocessor-face
                                                     'font-lock-type-face))
 		 ;; Fontify delays/numbers
-		 '("\\(@\\)\\|\\(#\\s-*\\(\\(\[0-9_.\]+\\('s?[hdxbo][0-9a-fA-F_xz]*\\)?\\)\\|\\(([^()]+)\\|\\sw+\\)\\)\\)"
+		 '("\\(@\\)\\|\\([ \t\n\f\r]#\\s-*\\(\\(\[0-9_.\]+\\('s?[hdxbo][0-9a-fA-F_xz]*\\)?\\)\\|\\(([^()]+)\\|\\sw+\\)\\)\\)"
 		   0 font-lock-type-face append)
+                 ;; Fontify property/sequence cycle delays - these start with '##'
+                 '("\\(##\\(\\sw+\\|\\[[^\]]+\\]\\)\\)"
+                   0 font-lock-type-face append)
 		 ;; Fontify instantiation names
 		 '("\\([A-Za-z][A-Za-z0-9_]*\\)\\s-*(" 1 font-lock-function-name-face)
 		 )))
@@ -6021,16 +6024,16 @@ Set point to where line starts."
 (defun verilog-backward-syntactic-ws-quick ()
   "As with `verilog-backward-syntactic-ws' but use `verilog-scan' cache."
   (while (cond ((bobp)
-		nil) ; Done
-	       ((> (skip-syntax-backward " ") 0)
-		t)
+                nil) ; Done
+               ((< (skip-syntax-backward " ") 0)
+                t)
                ((eq (preceding-char) ?\n)  ; \n's terminate // so aren't space syntax
-		(forward-char -1)
-		t)
-	       ((or (verilog-inside-comment-or-string-p (1- (point)))
-		    (verilog-inside-comment-or-string-p (point)))
+                (forward-char -1)
+                t)
+               ((or (verilog-inside-comment-or-string-p (1- (point)))
+                    (verilog-inside-comment-or-string-p (point)))
                 (re-search-backward "[/\"]" nil t)  ; Only way a comment or quote can begin
-		t))))
+                t))))
 
 (defun verilog-forward-syntactic-ws ()
   (verilog-skip-forward-comment-p)
@@ -6375,8 +6378,10 @@ Return >0 for nested struct."
                 (goto-char (- (point) 2))
                 t)  ; Let nth 4 state handle the rest
                ((and (not (bobp))
-                     (verilog-looking-back "\\*)" nil)
-                     (not (verilog-looking-back "(\\s-*\\*)" nil)))
+                     ;;(verilog-looking-back "\\*)" nil) ;; super slow, use two char-before instead
+                     (= (char-before) ?\))
+                     (= (char-before (1- (point))) ?\*)
+                     (not (verilog-looking-back "(\\s-*\\*)" nil))) ;; slow but unlikely to be called
                 (goto-char (- (point) 2))
                 (if (search-backward "(*" nil t)
                     (progn
