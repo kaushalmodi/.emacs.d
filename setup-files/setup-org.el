@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 15:56:00 kmodi>
+;; Time-stamp: <2015-07-29 17:51:13 kmodi>
 
 ;; Org Mode
 
@@ -24,7 +24,7 @@
 
 (when (bound-and-true-p org-load-beta-version)
   (add-to-list 'load-path (concat user-emacs-directory
-                                 "elisp/org-mode/lisp/")))
+                                  "elisp/org-mode/lisp/")))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
@@ -559,10 +559,35 @@ Execute this command while the point is on or after the hyper-linked org link."
         (use-package ox-reveal
           :config
           (progn
-            (setq org-reveal-root    (concat user-emacs-directory "software/reveal.js/"))
-            (setq org-reveal-hlevel  1)
-            (setq org-reveal-theme   "default") ; beige blood moon night serif simple sky solarized
-            (setq org-reveal-mathjax t))) ; Use mathjax.org to render LaTeX equations
+            (setq org-reveal-root (concat user-emacs-directory "software/reveal.js/"))
+            (setq org-reveal-hlevel 1)
+            (setq org-reveal-theme "default") ; beige blood moon night serif simple sky solarized
+            (setq org-reveal-mathjax t) ; Use mathjax.org to render LaTeX equations
+
+            ;; Override the `org-reveal-export-to-html' function to generate
+            ;; files with “_slides” suffix. So “man.org” will export to
+            ;; “man_slides.html”. That way we can have separate html files from
+            ;; html and reveal exports.
+            (defun org-reveal-export-to-html
+                (&optional async subtreep visible-only body-only ext-plist)
+              "Export current buffer to a reveal.js HTML file."
+              (interactive)
+              (let* ((extension (concat "_slides." org-html-extension))
+                     (file (org-export-output-file-name extension subtreep))
+                     (clientfile (org-export-output-file-name
+                                  (concat "_client" extension) subtreep)))
+
+                ;; export filename_client HTML file if multiplexing
+                (setq client-multiplex nil)
+                (setq retfile (org-export-to-file 'reveal file
+                                async subtreep visible-only body-only ext-plist))
+
+                ;; export the client HTML file if client-multiplex is set true
+                ;; by previous call to org-export-to-file
+                (if (eq client-multiplex t)
+                    (org-export-to-file 'reveal clientfile
+                      async subtreep visible-only body-only ext-plist))
+                (cond (t retfile))))))
 
 ;;;; ox-odt - ODT, doc export
         ;; http://stackoverflow.com/a/22990257/1219634
