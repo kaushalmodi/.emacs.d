@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 11:07:02 kmodi>
+;; Time-stamp: <2015-07-30 10:15:47 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -258,7 +258,7 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
     (defalias 'isearch-avy 'avy-isearch) ; for consistency
     (bind-key "M-a" #'isearch-avy isearch-mode-map) ; isearch > avy
 
-    (bind-key "C-c l" #'modi/avy modi-mode-map)
+    (bind-key "C-c C-SPC" #'modi/avy modi-mode-map)
     (key-chord-define-global "l;" #'modi/avy)))
 
 (if (featurep 'avy)

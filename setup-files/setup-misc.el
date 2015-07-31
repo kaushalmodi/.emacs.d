@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 09:28:16 kmodi>
+;; Time-stamp: <2015-07-30 10:15:25 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -256,6 +256,7 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
   ("q"       nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
 (bind-key "C-c SPC" #'hydra-launch/body modi-mode-map)
+(bind-key "C-c l" #'hydra-launch/body modi-mode-map)
 (key-chord-define-global "jk" #'hydra-launch/body)
 
 ;; Organize The Order Of Minor Mode Lighters
