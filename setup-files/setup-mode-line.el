@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-27 12:50:07 kmodi>
+;; Time-stamp: <2015-08-03 09:45:18 kmodi>
 
 ;; Customize the mode-line
 
@@ -60,16 +60,16 @@ alert time."
                                          modi/time-go-home-alert))))
 
     (defun modi/reset-go-home-alert (time)
-      "Reset the 'go home' alert time interactively.
-The timer is canceled and not restarted if TIME is \"nil\" or \"\"."
+      "Set the 'go home' alert reset time interactively.
+The `modi/timer--go-home-reset' timer is canceled and not restarted if
+TIME is \"nil\" or \"\"."
       (interactive "sReset alert time (e.g. 7:00am): ")
       (setq modi/time-go-home-reset time)
       (when (and (boundp 'modi/timer--go-home-reset) ; cancel the timer if
                  (timerp  modi/timer--go-home-reset)) ; already running
         (cancel-timer modi/timer--go-home-reset))
-      (if (or (string= time "")
-              (string= time "nil"))
-          (modi/minibuffer-line-set-default-face)
+      (when (not (or (string= time "")
+                     (string= time "nil")))
         (let ((daily (* 60 60 24)))
           (setq modi/timer--go-home-reset (run-at-time
                                            time daily
@@ -77,8 +77,8 @@ The timer is canceled and not restarted if TIME is \"nil\" or \"\"."
 
     (defun modi/set-go-home-alert (time)
       "Set the 'go home' alert time interactively.
-The `modi/timer--go-home-reset' and `modi/timer--go-home-alert' timers
-are canceled and not restarted if TIME is \"nil\" or \"\"."
+The `modi/timer--go-home-alert' timer is canceled and not restarted if
+TIME is \"nil\" or \"\"."
       (interactive "s'Go Home' alert time (e.g. 5:00pm): ")
       ;; http://emacs.stackexchange.com/a/3415/115
       (setcdr (assq modi/today--day-sym modi/time-go-home-alert) time)
@@ -93,7 +93,7 @@ are canceled and not restarted if TIME is \"nil\" or \"\"."
         (if (or (string= time "")
                 (string= time "nil"))
             (progn
-              (modi/reset-go-home-alert "nil")
+              (modi/minibuffer-line-set-default-face)
               (setq modi/timer--go-home-alert nil)
               (message "%s: 'Go Home' alert removed." modi/today--day-sym))
           (let ((daily (* 60 60 24))
