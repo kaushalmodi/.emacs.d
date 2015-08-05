@@ -635,13 +635,12 @@ Execute this command while the point is on or after the hyper-linked org link."
       (insert str)
       (org-try-structure-completion))
 
-    (defhydra hydra-org-template (:color blue :hint nil)
+    (defhydra hydra-org-template (:color blue
+                                  :hint nil)
       "
-_c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
-_l_atex   e_x_ample   _v_erilog       _i_ndex:
-_a_scii   _v_erse     _m_atlab        _I_NCLUDE:
-_s_rc     ^^          _S_hell         _H_TML:
-_h_tml    ^^          _t_ext          _A_SCII:
+org-template:  _c_enter        _s_rc          e_x_ample           _v_erilog        _t_ext           _I_NCLUDE:
+               _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
+               _a_scii         _q_uote        _e_macs-lisp        _S_hell          _i_ndex:         _A_SCII:
 "
       ("s" (hot-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
       ("e" (progn
