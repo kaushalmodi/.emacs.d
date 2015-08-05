@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-29 17:51:13 kmodi>
+;; Time-stamp: <2015-08-04 22:19:32 kmodi>
 
 ;; Org Mode
 
@@ -22,9 +22,15 @@
 ;;    Custom Org Export related “packages”
 ;;  Bindings
 
-(when (bound-and-true-p org-load-beta-version)
-  (add-to-list 'load-path (concat user-emacs-directory
-                                  "elisp/org-mode/lisp/")))
+(if (bound-and-true-p org-load-version-dev)
+    ;; if `org-load-version-dev' is non-nil
+    (add-to-list 'load-path (concat user-emacs-directory
+                                    "elisp/org-mode/lisp/"))
+  (when (bound-and-true-p org-load-version-8p2)
+    ;; if `org-load-version-dev' is nil AND
+    ;;    `org-load-version-8p2' is non-nil
+    (add-to-list 'load-path (concat user-emacs-directory
+                                    "elisp/org-mode-8p2/"))))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
