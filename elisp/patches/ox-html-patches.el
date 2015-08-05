@@ -1,79 +1,11 @@
-;; Time-stamp: <2015-07-27 14:31:24 kmodi>
+;; Time-stamp: <2015-08-05 09:20:41 kmodi>
 
 ;; `ox-html' needs to be required before `load'ing this patch file
 
 (if (version<= (org-version) "8.2.99")
     ;; org-mode version 8.2
     (progn
-      ;; Remove HTML tags from the title string; otherwise the tags show up
-      ;; verbatim in browser tabs3
-      (defun org-html--build-meta-info (info)
-        "Return meta tags for exported document.
-      INFO is a plist used as a communication channel."
-        (let ((protect-string
-               (lambda (str)
-                 (replace-regexp-in-string
-                  "\"" "&quot;" (org-html-encode-plain-text str))))
-              (title (org-export-data (plist-get info :title) info))
-              (author (and (plist-get info :with-author)
-                           (let ((auth (plist-get info :author)))
-                             (and auth
-                                  ;; Return raw Org syntax, skipping non
-                                  ;; exportable objects.
-                                  (org-element-interpret-data
-                                   (org-element-map auth
-                                       (cons 'plain-text org-element-all-objects)
-                                     'identity info))))))
-              (description (plist-get info :description))
-              (keywords (plist-get info :keywords))
-              (charset (or (and org-html-coding-system
-                                (fboundp 'coding-system-get)
-                                (coding-system-get org-html-coding-system
-                                                   'mime-charset))
-                           "iso-8859-1")))
-          (concat
-           ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-           ;; (format "<title>%s</title>\n" title) ;; ORIGINAL
-           ;; Remove HTML tags from `title' string
-           (format "<title>%s</title>\n"
-                   (replace-regexp-in-string ".*\\(<.*>\\).*" ""
-                                             title :fixedcase :literal 1))
-           ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-           (when (plist-get info :time-stamp-file)
-             (format-time-string
-              (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
-           (format
-            (if (org-html-html5-p info)
-                (org-html-close-tag "meta" " charset=\"%s\"" info)
-              (org-html-close-tag
-               "meta" " http-equiv=\"Content-Type\" content=\"text/html;charset=%s\""
-               info))
-            charset) "\n"
-            (org-html-close-tag "meta" " name=\"generator\" content=\"Org-mode\"" info)
-            "\n"
-            (and (org-string-nw-p author)
-                 (concat
-                  (org-html-close-tag "meta"
-                                      (format " name=\"author\" content=\"%s\""
-                                              (funcall protect-string author))
-                                      info)
-                  "\n"))
-            (and (org-string-nw-p description)
-                 (concat
-                  (org-html-close-tag "meta"
-                                      (format " name=\"description\" content=\"%s\"\n"
-                                              (funcall protect-string description))
-                                      info)
-                  "\n"))
-            (and (org-string-nw-p keywords)
-                 (concat
-                  (org-html-close-tag "meta"
-                                      (format " name=\"keywords\" content=\"%s\""
-                                              (funcall protect-string keywords))
-                                      info)
-                  "\n")))))
-
-      ;; Rename the use of "Listings" term in HTML exports
+      ;; Use "Code Snippet" string instead of "Listing" in HTML exports
       (defun org-html-list-of-listings (info)
         "Build a list of listings.
 INFO is a plist used as a communication channel.  Return the list
@@ -107,8 +39,7 @@ of listings as a string, or nil if it is empty."
                                       title))
                             "</li>")))
                        lol-entries "\n"))
-                    "\n</ul>\n</div>\n</div>"))))
-      )
+                    "\n</ul>\n</div>\n</div>")))))
   ;; org-mode version 8.3+
   (progn
     ;; `org-export-solidify-link-text' is deprecated
@@ -147,87 +78,4 @@ of listings as a string, or nil if it is empty."
                                     title))
                           "</li>")))
                      lol-entries "\n"))
-                  "\n</ul>\n</div>\n</div>"))))
-
-    (defun org-html--build-meta-info (info)
-      "Return meta tags for exported document.
-INFO is a plist used as a communication channel."
-      (let ((protect-string
-             (lambda (str)
-               (replace-regexp-in-string
-                "\"" "&quot;" (org-html-encode-plain-text str))))
-            (title (org-export-data (plist-get info :title) info))
-            (author (and (plist-get info :with-author)
-                         (let ((auth (plist-get info :author)))
-                           (and auth
-                                ;; Return raw Org syntax, skipping non
-                                ;; exportable objects.
-                                (org-element-interpret-data
-                                 (org-element-map auth
-                                     (cons 'plain-text org-element-all-objects)
-                                   'identity info))))))
-            (description (plist-get info :description))
-            (keywords (plist-get info :keywords))
-            (charset (or (and org-html-coding-system
-                              (fboundp 'coding-system-get)
-                              (coding-system-get org-html-coding-system
-                                                 'mime-charset))
-                         "iso-8859-1")))
-        (concat
-         (when (plist-get info :time-stamp-file)
-           (format-time-string
-            (concat "<!-- "
-                    (plist-get info :html-metadata-timestamp-format)
-                    " -->\n")))
-         (format
-          (if (org-html-html5-p info)
-              (org-html-close-tag "meta" " charset=\"%s\"" info)
-            (org-html-close-tag
-             "meta" " http-equiv=\"Content-Type\" content=\"text/html;charset=%s\""
-             info))
-          charset) "\n"
-          (let ((viewport-options
-                 (org-remove-if-not (lambda (cell) (org-string-nw-p (cadr cell)))
-                                    (plist-get info :html-viewport))))
-            (and viewport-options
-                 (concat
-                  (org-html-close-tag
-                   "meta"
-                   (format " name=\"viewport\" content=\"%s\""
-                           (mapconcat
-                            (lambda (elm) (format "%s=%s" (car elm) (cadr elm)))
-                            viewport-options ", "))
-                   info)
-                  "\n")))
-          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-          ;; (format "<title>%s</title>\n" title) ;; ORIGINAL
-          ;; Remove HTML tags from `title' string
-          (format "<title>%s</title>\n"
-                  (replace-regexp-in-string ".*\\(<.*>\\).*" ""
-                                            title :fixedcase :literal 1))
-          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-          (org-html-close-tag "meta" " name=\"generator\" content=\"Org-mode\"" info)
-          "\n"
-          (and (org-string-nw-p author)
-               (concat
-                (org-html-close-tag "meta"
-                                    (format " name=\"author\" content=\"%s\""
-                                            (funcall protect-string author))
-                                    info)
-                "\n"))
-          (and (org-string-nw-p description)
-               (concat
-                (org-html-close-tag "meta"
-                                    (format " name=\"description\" content=\"%s\"\n"
-                                            (funcall protect-string description))
-                                    info)
-                "\n"))
-          (and (org-string-nw-p keywords)
-               (concat
-                (org-html-close-tag "meta"
-                                    (format " name=\"keywords\" content=\"%s\""
-                                            (funcall protect-string keywords))
-                                    info)
-                "\n")))))
-    ))
+                  "\n</ul>\n</div>\n</div>"))))))
