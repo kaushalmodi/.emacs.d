@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 10:28:45 kmodi>
+;; Time-stamp: <2015-08-05 15:21:03 kmodi>
 
 ;; Org Mode
 
@@ -448,6 +448,16 @@ Execute this command while the point is on or after the hyper-linked org link."
                    "ox-html-patches.el"
                    (concat user-emacs-directory "elisp/patches/"))
                   nil :nomessage)
+
+            ;; Remove HTML tags from in-between <title>..</title> else they show
+            ;; up verbatim in the browser tabs e.g. "Text <br> More Text"
+            (defun modi/ox-html-remove-tags-from-title-tag (orig-return-val)
+              (replace-regexp-in-string ".*<title>.*\\(<.*>\\).*</title>.*"
+                                        ""
+                                        orig-return-val
+                                        :fixedcase :literal 1))
+            (advice-add 'org-html--build-meta-info :filter-return
+                        #'modi/ox-html-remove-tags-from-title-tag)
 
             (use-package ox-html-fancybox
               :load-path "elisp/ox-html-fancybox")
