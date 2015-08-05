@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 15:21:03 kmodi>
+;; Time-stamp: <2015-08-05 16:28:43 kmodi>
 
 ;; Org Mode
 
@@ -477,7 +477,15 @@ Execute this command while the point is on or after the hyper-linked org link."
             ;; Customize the HTML postamble
             (setq org-html-postamble t) ; default value = 'auto
             (setq org-html-postamble-format
-                  '(("en" "Exported using <div style=\"display: inline\" class=\"creator\">%c</div> on <div style=\"display: inline\"class=\"date\">%d</div> by %e.")))
+                  `(("en"
+                     ,(concat "Exported using "
+                              ;; "%c" is replaced with `org-html-creator-string'
+                              ;; Emacs <VERSION> (Org mode <VERSION>)
+                              "<div style=\"display: inline\" class=\"creator\">"
+                              "%c</div> "
+                              "by %e. — "
+                              "<div style=\"display: inline\" class=\"date\">"
+                              "%d</div>"))))
 
             ;; (setq org-html-htmlize-output-type 'inline-css) ; default
             (setq org-html-htmlize-output-type 'css)
