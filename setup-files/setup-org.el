@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 16:28:43 kmodi>
+;; Time-stamp: <2015-08-05 17:05:16 kmodi>
 
 ;; Org Mode
 
@@ -553,6 +553,7 @@ Execute this command while the point is on or after the hyper-linked org link."
 ;;;; ox-reveal - Presentations using reveal.js
         ;; Download reveal.js from https://github.com/hakimel/reveal.js/
         (use-package ox-reveal
+          :load-path "elisp/ox-reveal"
           :config
           (progn
             (setq org-reveal-root (concat user-emacs-directory "software/reveal.js/"))

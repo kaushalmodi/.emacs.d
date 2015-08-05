@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-07-27 14:40:40 kmodi>
+# Time-stamp: <2015-08-05 17:06:05 kmodi>
 
 # Usage: source git_force_update.csh <YOUR .emacs.d PATH>
 # Example: source git_force_update.csh ~/.emacs.d
@@ -116,6 +116,20 @@ if ( ! -d ${pkg_dir}/.git ) then
     git clone http://github.com/hakimel/reveal.js ${pkg_dir}
 else
     echo "Force updating reveal.js to ${pkg_dir} .."
+    cd ${pkg_dir}; gfu
+endif
+echo ''
+
+# ox-reveal package
+set pkg_dir = "${emacs_config_dir}/elisp/ox-reveal"
+if ( ! -d ${pkg_dir}/.git ) then
+    if ( -d ${pkg_dir} ) then
+        \rm -rf ${pkg_dir}
+    endif
+    echo "Cloning ox-reveal to ${pkg_dir} .."
+    git clone https://github.com/yjwen/org-reveal.git ${pkg_dir}
+else
+    echo "Force updating ox-reveal to ${pkg_dir} .."
     cd ${pkg_dir}; gfu
 endif
 echo ''

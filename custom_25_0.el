@@ -31,7 +31,7 @@
  '(outline-minor-mode-prefix "\243")
  '(package-selected-packages
    (quote
-    (org-plus-contrib drag-stuff which-key ascii-art-to-unicode bm all all-ext help-fns+ org-trello engine-mode tao-theme list-environment imenu-list git-timemachine easy-escape hl-anything writegood-mode hideshow-org hideshowvis deft counsel interleave git-link shackle minibuffer-line zop-to-char yasnippet yaml-mode yafolding xkcd wrap-region wgrep-ag web-mode volatile-highlights visual-regexp use-package undo-tree twilight-bright-theme twilight-anti-bright-theme tiny sx swiper sunshine stripe-buffer smex smart-mode-line smart-compile rpn-calc region-bindings-mode rectangle-utils rainbow-mode rainbow-delimiters planet-theme paradox page-break-lines ox-reveal outshine org-tree-slide number nlinum neotree navi-mode mwe-log-commands multiple-cursors multi-term manage-minor-mode magit linum-relative leuven-theme kurecolor keyfreq key-chord iy-go-to-char isend-mode iregister indent-guide ido-vertical-mode ido-ubiquitous ibuffer-projectile hydra hungry-delete htmlize hl-line+ helm-swoop helm-gtags header2 hardcore-mode gplusify gist ggtags fuzzy fold-this flx-ido fill-column-indicator expand-region eww-lnum etags-table etags-select elisp-slime-nav elfeed eimp discover-my-major dired-single dired+ diff-hl darktooth-theme ctags-update csv-nav buffer-move bookmark+ benchmark-init auto-highlight-symbol auto-complete anzu ample-theme aggressive-indent ag adaptive-wrap ace-window)))
+    (org-plus-contrib drag-stuff which-key ascii-art-to-unicode bm all all-ext help-fns+ org-trello engine-mode tao-theme list-environment imenu-list git-timemachine easy-escape hl-anything writegood-mode hideshow-org hideshowvis deft counsel interleave git-link shackle minibuffer-line zop-to-char yasnippet yaml-mode yafolding xkcd wrap-region wgrep-ag web-mode volatile-highlights visual-regexp use-package undo-tree twilight-bright-theme twilight-anti-bright-theme tiny sx swiper sunshine stripe-buffer smex smart-mode-line smart-compile rpn-calc region-bindings-mode rectangle-utils rainbow-mode rainbow-delimiters planet-theme paradox page-break-lines outshine org-tree-slide number nlinum neotree navi-mode mwe-log-commands multiple-cursors multi-term manage-minor-mode magit linum-relative leuven-theme kurecolor keyfreq key-chord iy-go-to-char isend-mode iregister indent-guide ido-vertical-mode ido-ubiquitous ibuffer-projectile hydra hungry-delete htmlize hl-line+ helm-swoop helm-gtags header2 hardcore-mode gplusify gist ggtags fuzzy fold-this flx-ido fill-column-indicator expand-region eww-lnum etags-table etags-select elisp-slime-nav elfeed eimp discover-my-major dired-single dired+ diff-hl darktooth-theme ctags-update csv-nav buffer-move bookmark+ benchmark-init auto-highlight-symbol auto-complete anzu ample-theme aggressive-indent ag adaptive-wrap ace-window)))
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
@@ -95,7 +95,7 @@
      (header-auto-update-enabled)
      (lisp-indent-function . lisp-indent-function))))
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
- '(vc-annotate-background "#2B2B2B" t)
+ '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
     ((20 . "#BC8383")
@@ -115,8 +115,8 @@
      (300 . "#7CB8BB")
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
-     (360 . "#DC8CC3"))) t)
- '(vc-annotate-very-old-color "#DC8CC3" t)
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3")
  '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

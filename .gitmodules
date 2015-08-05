@@ -49,3 +49,6 @@
 [submodule "elisp/drag-stuff.el"]
 	path = elisp/drag-stuff.el
 	url = https://kaushalmodi@github.com/kaushalmodi/drag-stuff.el
+[submodule "elisp/ox-reveal"]
+	path = elisp/ox-reveal
+	url = https://github.com/yjwen/org-reveal.git

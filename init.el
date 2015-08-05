@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 15:29:57 kmodi>
+;; Time-stamp: <2015-08-05 17:04:16 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -26,6 +26,7 @@
         ;; outshine ; < forked
         ;; popwin ; < shackle
         ;; poporg ; edit comments from any other mode in org mode < forked
+        ;; ox-reveal ; used to export to HTML slides; using latest from git
         ace-window
         adaptive-wrap ; indented line wrapping
         ag wgrep wgrep-ag s ; ag > ack > grep
@@ -98,7 +99,6 @@
         number ; number manipulation
         org-plus-contrib ; latest stable version of org-mode, includes org-eww
         org-tree-slide
-        ox-reveal ; Using branch 'stable' from github; used to export to HTML slides
         outorg navi-mode ; supporting packages for outshine
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
