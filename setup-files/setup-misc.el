@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-30 10:15:25 kmodi>
+;; Time-stamp: <2015-08-05 15:32:06 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -143,6 +143,11 @@ If LOG is non-nil, browse to the log page having the current build commit."
                       "/?id=" emacs-repository-version)))
     (kill-new url)
     (browse-url url)))
+
+;; https://github.com/kaushalmodi/.emacs.d/issues/7
+(defun modi/startup-time()
+  (message (format "init.el loaded in %s." (emacs-init-time))))
+(add-hook 'emacs-startup-hook #'modi/startup-time)
 
 ;; Toggles
 ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html

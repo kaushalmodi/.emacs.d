@@ -1,8 +1,5 @@
-;; Time-stamp: <2015-08-05 08:55:18 kmodi>
+;; Time-stamp: <2015-08-05 15:29:57 kmodi>
 ;; Author: Kaushal Modi
-
-;; Record the start time
-(setq *emacs-load-start* (current-time))
 
 ;; Global variables
 (setq user-home-directory     (concat (getenv "HOME") "/")) ; must end with /
@@ -325,10 +322,3 @@
   (funcall default-theme-fn)) ; defined in `setup-visual.el'
 
 (setq emacs-initialized t)
-
-;; Write out a message indicating how long it took to process the init script
-(message "init.el loaded in %ds"
-         (destructuring-bind (hi lo ms ps) (current-time)
-           (- (+ hi lo)
-              (+ (first *emacs-load-start*)
-                 (second *emacs-load-start*)))))
