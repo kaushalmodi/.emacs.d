@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-04 22:19:32 kmodi>
+;; Time-stamp: <2015-08-05 10:28:45 kmodi>
 
 ;; Org Mode
 
@@ -339,6 +339,9 @@ Execute this command while the point is on or after the hyper-linked org link."
         (use-package ox-latex
           :config
           (progn
+            (defvar modi/ox-latex-use-minted t
+              "Use `minted' package for listings.")
+
             (when (not (version<= (org-version) "8.2.99"))
               ;; org-mode version 8.3+
               (setq org-latex-prefer-user-labels t))
@@ -348,76 +351,82 @@ Execute this command while the point is on or after the hyper-linked org link."
                    "ox-latex-patches.el"
                    (concat user-emacs-directory "elisp/patches/"))
                   nil :nomessage)
+
             ;; Previewing latex fragments in org mode
             ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
             ;; (setq org-latex-create-formula-image-program 'dvipng) ; NOT Recommended
             (setq org-latex-create-formula-image-program 'imagemagick) ; Recommended
-            (setq org-latex-listings 'minted)
-            ;; (setq org-latex-listings 'lstlisting)
 
-            ;; Below will output tex files with \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
+            ;; Below will output tex files with
+            ;;   \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
             ;; The org-latex-packages-alist is a list of cells of the format:
-            ;; ("options" "package" snippet-flag)
-            ;; snippet-flag is non-nil by default. So unless this flag is set to nil, that
-            ;; package will be used even when previewing latex fragments using the `C-c C-x C-l`
-            ;; org mode key binding
+            ;;   ("options" "package" SNIPPET-FLAG)
+            ;; SNIPPET-FLAG is non-nil by default. So unless this flag is set
+            ;; to nil, that package will be used even when previewing latex
+            ;; fragments using the `C-c C-x C-l' binding
             (setq org-latex-packages-alist
                   '(
                     ;; % 0 paragraph indent, adds vertical space between paragraphs
                     ;; http://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting
-                    (""          "parskip")
-                    ;; ;; Replace default font with a much crisper font
-                    ;; ;; http://www.khirevich.com/latex/font/
-                    ;; (""          "charter")
-                    ;; ("expert"    "mathdesign")
-                    ;; Code blocks syntax highlighting
-                    ;; (""          "listings")
-                    ;; (""          "xcolor")
-                    (""          "minted") ; Comment this if org-latex-create-formula-image-program
-                    ;; is set to dvipng. minted package can't be loaded
-                    ;; when using dvipng to show latex previews
-                    ;; (""          "minted" nil) ; Uncomment this if org-latex-create-formula-image-program
-                    ;;                            ; is set to dvipng
+                    ("" "parskip")
                     ;; Graphics package for more complicated figures
-                    (""          "tikz")
-                    ;; Prevent tables/figures from one section to float into another section
-                    ;; http://tex.stackexchange.com/questions/279/how-do-i-ensure-that-figures-appear-in-the-section-theyre-associated-with
-                    ("section"   "placeins")
-                    ;; It doesn't seem below packages are required
-                    ;; ;; Packages suggested to be added for previewing latex fragments
-                    ;; ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
-                    ;; ("usenames"  "color") ; HAD TO COMMENT IT OUT BECAUSE OF CLASH WITH placeins pkg
-                    ("mathscr"   "eucal")
-                    (""          "latexsym")
-                    ;; Prevent an image from floating to a different location
-                    ;; http://tex.stackexchange.com/questions/8625/force-figure-placement-in-text
-                    (""          "float")
-                    (""          "caption")
-                    ))
+                    ("" "tikz")
+                    ("" "caption")
+                    ;;
+                    ;; Packages suggested to be added for previewing latex fragments
+                    ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+                    ("mathscr" "eucal")
+                    ("" "latexsym")))
 
-            ;; "H" option is from the `float' package. That prevents the images from floating around.
-            ;; (setq org-latex-default-figure-position "htb") ; default - figures are floating
+            ;; Prevent tables/figures from one section to float into another section
+            ;; http://tex.stackexchange.com/a/282/52678
+            (add-to-list 'org-latex-packages-alist '("section" "placeins"))
+
+            ;; Prevent an image from floating to a different location
+            ;; http://tex.stackexchange.com/a/8633/52678
+            (add-to-list 'org-latex-packages-alist '("" "float"))
+            ;; "H" option is from the `float' package.
+            ;; That prevents the images from floating around.
             (setq org-latex-default-figure-position "H") ; figures are NOT floating
+            ;; (setq org-latex-default-figure-position "htb") ; default - figures are floating
 
-            ;; In order to have that tex convert to pdf, you have to ensure that you have
-            ;; minted.sty in your TEXMF folder.
-            ;; -> To know if minted.sty in correct path do "kpsewhich minted.sty".
-            ;; -> If it is not found, download from http://www.ctan.org/tex-archive/macros/latex/contrib/minted
-            ;; -> Generate minted.sty by "tex minted.ins"
-            ;; -> To know your TEXMF folder, do "kpsewhich -var-value=TEXMFHOME"
-            ;; -> For me TEXMF folder was ~/texmf
-            ;; -> Move the minted.sty to your $TEXMF/tex/latex/commonstuff folder.
-            ;; -> Do mkdir -p ~/texmf/tex/latex/commonstuff if that folder hierarchy doesn't exist
-            ;; -> Do "mktexlsr" to refresh the sty database
-            ;; -> Generate pdf from the org exported tex by "pdflatex -shell-escape FILE.tex"
-            ;; Sources for org > tex > pdf conversion:
-            ;; -> http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
-            ;; -> http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
+            (if modi/ox-latex-use-minted
+                ;; using minted
+                ;; https://github.com/gpoore/minted
+                (progn
+                  (setq org-latex-listings 'minted) ; default nil
+                  (if (eq org-latex-create-formula-image-program 'dvipng)
+                      ;; If `org-latex-create-formula-image-program' is set to
+                      ;; `'dvipng', minted package cannot be used to show latex
+                      ;; previews.
+                      (add-to-list 'org-latex-packages-alist '("" "minted" nil))
+                    (add-to-list 'org-latex-packages-alist '("" "minted")))
 
-            ;; -shell-escape is required when converting a .tex file containing `minted'
-            ;; package to a .pdf
-            ;; Now org > tex > pdf conversion can happen with the org default
-            ;; `C-c C-e l p` key binding
+                  ;; minted package options (applied to embedded source codes)
+                  (setq org-latex-minted-options
+                        '(("linenos")
+                          ("numbersep"   "5pt")
+                          ("frame"       "none") ; box frame is created by the mdframed package
+                          ("framesep"    "2mm")
+                          ;; ("fontfamily"  "zi4") ; required only when using pdflatex
+                                        ; instead of xelatex
+                          ;; minted 2.0 specific features
+                          ("breaklines") ; line wrapping within code blocks
+                          )))
+              ;; not using minted
+              (progn
+                (add-to-list 'org-latex-packages-alist '("" "listings"))
+                ;; Commented out below because it clashes with `placeins' package
+                ;; (add-to-list 'org-latex-packages-alist '("" "color"))
+                ))
+
+            ;; `-shell-escape' is required when converting a .tex file
+            ;; containing `minted' package to a .pdf
+
+            ;; Run pdflatex multiple times to get the cross-references right
+            ;; (setq org-latex-pdf-process '("pdflatex -shell-escape %f"
+            ;;                               "pdflatex -shell-escape %f"
+            ;;                               "pdflatex -shell-escape %f"))
 
             ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
             ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
@@ -428,38 +437,7 @@ Execute this command while the point is on or after the hyper-linked org link."
             (setq org-latex-pdf-process '("xelatex -shell-escape %f"
                                           "xelatex -shell-escape %f"
                                           "xelatex -shell-escape %f"
-                                          "xelatex -shell-escape %f"))
-
-            ;; Run pdflatex multiple times to get the cross-references right
-            ;; (setq org-latex-pdf-process '("pdflatex -shell-escape %f"
-            ;; "pdflatex -shell-escape %f"
-            ;; "pdflatex -shell-escape %f"))
-
-            ;; minted package options (applied to embedded source codes)
-            ;; https://github.com/gpoore/minted
-            (setq org-latex-minted-options
-                  '(("linenos")
-                    ("numbersep"   "5pt")
-                    ("frame"       "none") ; box frame is created by the mdframed package
-                    ("framesep"    "2mm")
-                    ;; ("fontfamily"  "zi4") ; required only when using pdflatex
-                                        ; instead of xelatex
-                    ;; minted 2.0 specific features
-                    ("breaklines") ; line wrapping within code blocks
-                    ))
-            ;; (add-to-list 'org-latex-classes
-            ;;              '("article"
-            ;;                "\\documentclass[11pt,letterpaper]{article}"
-            ;;                ("\\section{%s}"        . "\\section*{%s}")
-            ;;                ("\\subsection{%s}"     . "\\subsection*{%s}")
-            ;;                ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")
-            ;;                ("\\paragraph{%s}"      . "\\paragraph*{%s}")
-            ;;                ("\\subparagraph{%s}"   . "\\subparagraph*{%s}"))
-            ;;              )
-
-            ;; You can also do the org > tex > pdf conversion and open the pdf file in
-            ;; acroread directly using the `C-c C-e l o` key binding
-            ))
+                                          "xelatex -shell-escape %f"))))
 
 ;;;; ox-html - HTML export
         (use-package ox-html
@@ -484,13 +462,7 @@ Execute this command while the point is on or after the hyper-linked org link."
                     :frame "hsides"
                     :align "center"
                     ;; below class requires bootstrap.css ( http://getbootstrap.com )
-                    :class "table-striped")
-                  ;; '(:border "2"
-                  ;;           :cellspacing "0"
-                  ;;           :cellpadding "6"
-                  ;;           :rules "groups"
-                  ;;           :frame "hsides")
-                  )
+                    :class "table-striped"))
 
             ;; Customize the HTML postamble
             (setq org-html-postamble t) ; default value = 'auto
@@ -712,7 +684,6 @@ else call `self-insert-command'."
 
 (provide 'setup-org)
 
-;; NOTES
 ;; C-c C-e l l <-- Do org > tex
 ;; C-c C-e l p <-- Do org > tex > pdf using the command specified in
 ;;                 `org-latex-pdf-process' list
@@ -724,7 +695,7 @@ else call `self-insert-command'."
 
 ;; C-c C-x f <-- Insert footnote
 
-;; C-c C-x C-l <-- Preview latex fragment in place; Press C-c C-c to exit that preview.
+;; C-c C-x C-l <-- Preview latex fragment in place; C-c C-c to exit that preview.
 
 ;; Auto-completions http://orgmode.org/manual/Completion.html
 ;; \ M-TAB <- TeX symbols
@@ -750,6 +721,23 @@ else call `self-insert-command'."
 
 ;; How to modify `org-emphasis-regexp-components'
 ;; http://emacs.stackexchange.com/a/13828/115
+
+;; Installing minted.sty
+;; In order to have that tex convert to pdf, you have to ensure that you have
+;; minted.sty in your TEXMF folder.
+;;  - To know if minted.sty in correct path do "kpsewhich minted.sty".
+;;  - If it is not found, download from http://www.ctan.org/tex-archive/macros/latex/contrib/minted
+;;  - Generate minted.sty by "tex minted.ins"
+;;  - To know your TEXMF folder, do "kpsewhich -var-value=TEXMFHOME"
+;;  - For me TEXMF folder was ~/texmf
+;;  - Move the minted.sty to your $TEXMF/tex/latex/commonstuff folder.
+;;  - Do mkdir -p ~/texmf/tex/latex/commonstuff if that folder hierarchy doesn't exist
+;;  - Do "mktexlsr" to refresh the sty database
+;;  - Generate pdf from the org exported tex by "pdflatex -shell-escape FILE.tex"
+
+;; Sources for org > tex > pdf conversion:
+;;  - http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
+;;  - http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
 
 ;; Local Variables:
 ;; eval: (aggressive-indent-mode -1)
