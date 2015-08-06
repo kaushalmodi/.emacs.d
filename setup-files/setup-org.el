@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 17:05:16 kmodi>
+;; Time-stamp: <2015-08-06 15:53:38 kmodi>
 
 ;; Org Mode
 
@@ -213,24 +213,6 @@ Execute this command while the point is on or after the hyper-linked org link."
                 (kill-new (match-string-no-properties 1)) ; Save link to kill-ring
                 (replace-regexp "\\[\\[.*?\\(\\]\\[\\(.*?\\)\\)*\\]\\]" "\\2"
                                 nil start end)))))))
-
-    ;; Update TODAY macro with current date
-    (defun modi/org-update-TODAY-macro (&rest ignore)
-      "Update TODAY macro to hold string with current date."
-      (interactive)
-      (when (derived-mode-p 'org-mode)
-        (save-excursion
-          (goto-char (point-min))
-          (while (re-search-forward
-                  "^\\s-*#\\+MACRO:\\s-+TODAY"
-                  nil 'noerror)
-            (forward-line 0)
-            (when (looking-at ".*TODAY\\(.*\\)")
-              (replace-match
-               (concat " "
-                       (format-time-string "%b %d %Y, %a" (current-time)))
-               :fixedcase :literal nil 1))))))
-    (add-hook 'org-export-before-processing-hook #'modi/org-update-TODAY-macro)
 
 ;;;; org-linkid - Support markdown-style link ids
     (use-package org-linkid
@@ -757,6 +739,10 @@ else call `self-insert-command'."
 ;; Sources for org > tex > pdf conversion:
 ;;  - http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
 ;;  - http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
+
+;; To have an org document auto update the #+DATE: keyword during exports, use:
+;;   #+DATE: {{{time(%b %d %Y\, %a)}}}
+;; The time format here can be anything as documented in `format-time-string' fn.
 
 ;; Local Variables:
 ;; eval: (aggressive-indent-mode -1)
