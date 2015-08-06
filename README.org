@@ -3,7 +3,7 @@
 * Using my emacs setup
 You can start using my emacs setup by following these steps:
 
-1. =curl https://github.com/kaushalmodi/.emacs.d/blob/master/git_force_update.csh > ! git_force_update.csh && chmod 744 git_force_update.csh=. This script basically /git clones/ my config and all sub-modules that I rely on (mine + others).
+1. =curl https://raw.githubusercontent.com/kaushalmodi/.emacs.d/master/git_force_update.csh >! git_force_update.csh && chmod 744 git_force_update.csh=. This script basically /git clones/ my config and all sub-modules that I rely on (mine + others).
 2. =source git_force_update.csh ~/e-temp= if you want to download this config to =~/e-temp/= directory. /If the download location you specify already exists, a backup of it will be created first. In this case, if =e-temp= already exists, it will first be backed up./
 3. *IMP: Edit the =user-emacs-directory= and =org-directory= vars in the downloaded =init.el= as needed -BEFORE- starting emacs using this config.*
 4. Start emacs with =~/e-temp/init.el= as its init by doing =\emacs -Q -l ~/e-temp/init.el=. If you did  =source git_force_update.csh ~/.emacs.d=, you can start emacs as normal by doing =\emacs=.
