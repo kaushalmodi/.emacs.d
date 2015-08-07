@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-28 17:47:52 kmodi>
+;; Time-stamp: <2015-08-07 09:36:41 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -583,7 +583,44 @@ After replacement text:
       (re-search-backward "\\b" nil :noerror))
     (map-query-replace-regexp regexp to-strings)))
 
-;; Make backups
+;; Backups
+
+;; When `vc-make-backup-files' is nil (default), backups are not made for
+;; version controlled (e.g. git) files. Set this to `t' to allow making backups
+;; using prefix args to `save-buffer' command.
+(setq vc-make-backup-files t)
+
+;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Numbered-Backups.html
+;; http://stackoverflow.com/a/151946/1219634
+;; `version-control' is nil by default; numbered backups are made only if the
+;; the visited file already has numbered backups. Below will always create
+;; numbered backups.
+(setq version-control :make-numbered-backups)
+
+(setq kept-new-versions 4) ; default 2
+(setq kept-old-versions 2) ; default 2
+;; If there are backups numbered 1, 2, 3, 5, and 7, and both of the above
+;; variables have the value 2, then the backups numbered 1 and 2 are kept
+;; as old versions and those numbered 5 and 7 are kept as new versions;
+;; backup version 3 is deleted after user confirmation.
+
+;; Excess backup deletion will happen silently, without user confirmation, if
+;; `delete-old-versions' is set to `t'.
+(setq delete-old-versions t) ; default nil
+
+;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Rename-or-Copy.html
+(setq backup-by-copying t) ; don't clobber symlinks
+
+(setq modi/backup-directory
+      (let ((dir (concat temporary-file-directory
+                         (getenv "USER") "/.backups/"))) ; must end with /
+        (make-directory dir :parents)
+        dir))
+
+;; Save all backups to `modi/backup-directory'
+(setq backup-directory-alist `(("." . ,modi/backup-directory)))
+(message (format "All backup files will be saved to %s." modi/backup-directory))
+
 ;; http://ergoemacs.org/emacs/elisp_make-backup.html
 (defun modi/make-backup ()
   "Make a backup copy of current file.
@@ -835,3 +872,12 @@ SYMBOL to the whole buffer if region is not selected."
 
 ;; (3) Toggle read-only-mode; toggles buffers between editable and read-only states.
 ;; `C-x C-q' or `M-x read-only-mode'
+
+;; (4) Backups using prefix args to `save-buffer' (C-x C-s)
+;;                 C-x C-s -> Makes the prev version into a backup file if
+;;                            previously requested or if this is the first save.
+;;             C-u C-x C-s -> Marks this version to become a backup when the
+;;                            next save is done.
+;;         C-u C-u C-x C-s -> Unconditionally makes the previous version into
+;;                            a backup file.
+;;     C-u C-u C-u C-x C-s -> Does both of what C-u prefix and C-u C-u prefix do.
