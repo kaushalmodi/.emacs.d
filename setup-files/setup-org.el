@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-07 13:07:40 kmodi>
+;; Time-stamp: <2015-08-07 14:50:48 kmodi>
 
 ;; Org Mode
 
@@ -88,6 +88,12 @@
     ;; Org-mode will leave (exactly) one empty line visible if the number of
     ;; empty lines is equal or larger to the number given in this variable.
     (setq org-cycle-separator-lines 2) ; default = 2
+
+    ;; Footnote auto adjustment after insertion/deletion
+    (setq org-footnote-auto-adjust t) ; `'sort' - only sort
+                                        ; `'renumber' - only renumber
+                                        ; `t' - sort and renumber
+                                        ; `nil' - do nothing (default)
 
     (when (version<= (org-version) "8.2.99")
       ;; Re-define `org-get-buffer-tags' as defined in org-mode version 8.3+
