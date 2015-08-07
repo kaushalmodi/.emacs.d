@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-06 15:53:38 kmodi>
+;; Time-stamp: <2015-08-07 13:07:40 kmodi>
 
 ;; Org Mode
 
@@ -469,11 +469,10 @@ Execute this command while the point is on or after the hyper-linked org link."
                               "<div style=\"display: inline\" class=\"date\">"
                               "%d</div>"))))
 
-            ;; (setq org-html-htmlize-output-type 'inline-css) ; default
-            (setq org-html-htmlize-output-type 'css)
-            ;; (setq org-html-htmlize-font-prefix "") ; default
-            (setq org-html-htmlize-font-prefix "org-")
+            (setq org-html-htmlize-output-type 'css) ; default: 'inline-css
+            (setq org-html-htmlize-font-prefix "org-") ; default: "org-"
 
+            ;; http://emacs.stackexchange.com/a/14560/115
             (defvar modi/htmlize-html-file (concat user-home-directory
                                                    "temp/htmlize_temp.html")
               "Name of the html file exported by `modi/htmlize-region-as-html-file'.")
@@ -485,8 +484,8 @@ Execute this command while the point is on or after the hyper-linked org link."
               "Export the selected region to an html file. If a region is not
              selected, export the whole buffer.
 
-             If OPEN-IN-BROWSER is non-nil, also open the exported html file in the
-             default browser."
+             If OPEN-IN-BROWSER is non-nil, also open the exported html file in
+             the default browser."
               (interactive "P")
               (let ((org-html-htmlize-output-type 'css)
                     (org-html-htmlize-font-prefix "org-")
@@ -500,16 +499,25 @@ Execute this command while the point is on or after the hyper-linked org link."
                     (setq end   (point-max))))
                 (setq html-string (org-html-htmlize-region-for-paste start end))
                 (with-temp-buffer
+                  ;; Insert the `modi/htmlize-css-file' contents in the temp buffer
                   (insert-file-contents modi/htmlize-css-file nil nil nil :replace)
+                  ;; Go to the beginning of the buffer and insert comments and
+                  ;; opening tags for `html', `head' and `style'. These are
+                  ;; inserted *above* the earlier inserted css code.
                   (goto-char (point-min))
                   (insert (concat "<!-- This file is generated using the "
                                   "modi/htmlize-region-as-html-file function\n"
                                   "from https://github.com/kaushalmodi/.emacs.d/"
                                   "blob/master/setup-files/setup-org.el -->\n"))
                   (insert "<html>\n<head>\n<style media=\"screen\" type=\"text/css\">\n")
+                  ;; Go to the end of the buffer (end of the css code) and
+                  ;; insert the closing tags for `style' and `head' and opening
+                  ;; tag for `body'.
                   (goto-char (point-max))
                   (insert "</style>\n</head>\n<body>\n")
+                  ;; Insert the HTML for fontified text in `html-string'.
                   (insert html-string)
+                  ;; Close the `body' and `html' tags.
                   (insert "</body>\n</html>\n")
                   (write-file modi/htmlize-html-file)
                   (when open-in-browser
