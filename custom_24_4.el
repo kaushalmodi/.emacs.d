@@ -30,7 +30,25 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((eval when
+    ((eval define-key temp-mode-map
+           (kbd "<C-f10>")
+           (function dv-docs-dis))
+     (eval define-key temp-mode-map
+           (kbd "<S-f10>")
+           (function dv-docs-ci))
+     (eval define-key temp-mode-map
+           (kbd "<s-f10>")
+           (function modi/org-export-to-html-txt-pdf))
+     (eval define-key temp-mode-map
+           (kbd "<f10>")
+           (function dv-docs-co))
+     (do-not-delete-trailing-whitespace . t)
+     (eval add-hook
+           (quote write-file-functions)
+           (function modi/outline-toc)
+           nil :local)
+     (checkdoc-minor-mode . t)
+     (eval when
            (featurep
             (quote aggressive-indent))
            (aggressive-indent-mode -1))
@@ -38,40 +56,6 @@
            (fboundp
             (quote rainbow-mode))
            (rainbow-mode 1))
-     (eval define-key temp-mode-map
-           (kbd "<f10>")
-           (quote dv-docs-ci))
-     (temp-mode . t)
-     (eval define-key temp-mode-map
-           (kbd "<C-f10>")
-           (quote dv-docs-dis))
-     (eval define-key temp-mode-map
-           (kbd "<S-f10>")
-           (quote dv-docs-ci))
-     (eval define-key temp-mode-map
-           (kbd "<s-f10>")
-           (quote modi/org-export-to-html-txt-pdf))
-     (eval define-key temp-mode-map
-           (kbd "<f10>")
-           (quote dv-docs-co))
-     (eval local-set-key
-           (kbd "<s-f10>")
-           (quote modi/org-export-to-html-txt-pdf))
-     (eval local-set-key
-           (kbd "<C-f10>")
-           (quote dv-docs-dis))
-     (eval local-set-key
-           (kbd "<S-f10>")
-           (quote dv-docs-ci))
-     (eval local-set-key
-           (kbd "<f10>")
-           (quote dv-docs-co))
-     (eval local-set-key "<C-f10>"
-           (quote dv-docs-dis))
-     (eval local-set-key "<S-f10>"
-           (quote dv-docs-ci))
-     (eval local-set-key "<f10>"
-           (quote dv-docs-co))
      (org-export-allow-bind-keywords . t)
      (org-confirm-babel-evaluate)
      (lisp-backquote-indentation . t)
@@ -81,10 +65,10 @@
             nil t)
            (rainbow-mode 1))
      (py-indent-offset . 4)
-     (header-auto-update-enabled))))
- '(save-place t nil (saveplace) "save the last cursor location for each file")
+     (header-auto-update-enabled)
+     (lisp-indent-function . lisp-indent-function))))
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
- '(vc-annotate-background "#2B2B2B" t)
+ '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
     ((20 . "#BC8383")
@@ -104,8 +88,8 @@
      (300 . "#7CB8BB")
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
-     (360 . "#DC8CC3"))) t)
- '(vc-annotate-very-old-color "#DC8CC3" t)
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3")
  '(visible-bell t nil nil "enable the visible bell or screen blink to happen when there's any error"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -35,7 +35,19 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((do-not-delete-trailing-whitespace . t)
+    ((eval define-key temp-mode-map
+           (kbd "<C-f10>")
+           (function dv-docs-dis))
+     (eval define-key temp-mode-map
+           (kbd "<S-f10>")
+           (function dv-docs-ci))
+     (eval define-key temp-mode-map
+           (kbd "<s-f10>")
+           (function modi/org-export-to-html-txt-pdf))
+     (eval define-key temp-mode-map
+           (kbd "<f10>")
+           (function dv-docs-co))
+     (do-not-delete-trailing-whitespace . t)
      (eval add-hook
            (quote write-file-functions)
            (function modi/outline-toc)
@@ -49,40 +61,6 @@
            (fboundp
             (quote rainbow-mode))
            (rainbow-mode 1))
-     (eval define-key temp-mode-map
-           (kbd "<f10>")
-           (quote dv-docs-ci))
-     (temp-mode . t)
-     (eval define-key temp-mode-map
-           (kbd "<C-f10>")
-           (quote dv-docs-dis))
-     (eval define-key temp-mode-map
-           (kbd "<S-f10>")
-           (quote dv-docs-ci))
-     (eval define-key temp-mode-map
-           (kbd "<s-f10>")
-           (quote modi/org-export-to-html-txt-pdf))
-     (eval define-key temp-mode-map
-           (kbd "<f10>")
-           (quote dv-docs-co))
-     (eval local-set-key
-           (kbd "<s-f10>")
-           (quote modi/org-export-to-html-txt-pdf))
-     (eval local-set-key
-           (kbd "<C-f10>")
-           (quote dv-docs-dis))
-     (eval local-set-key
-           (kbd "<S-f10>")
-           (quote dv-docs-ci))
-     (eval local-set-key
-           (kbd "<f10>")
-           (quote dv-docs-co))
-     (eval local-set-key "<C-f10>"
-           (quote dv-docs-dis))
-     (eval local-set-key "<S-f10>"
-           (quote dv-docs-ci))
-     (eval local-set-key "<f10>"
-           (quote dv-docs-co))
      (org-export-allow-bind-keywords . t)
      (org-confirm-babel-evaluate)
      (lisp-backquote-indentation . t)
