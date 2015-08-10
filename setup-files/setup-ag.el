@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-09 22:28:59 kmodi>
+;; Time-stamp: <2015-08-10 08:38:01 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -25,7 +25,8 @@
                              "killing the *ag* buffer."))))))
     (add-hook 'ag-search-finished-hook #'ag/jump-to-result-if-only-one-match)
 
-    ;; wgrep-ag : To allow editing in *ag* buffer
+    ;; wgrep-ag
+    ;; Allow editing in *ag* buffers
     ;; https://github.com/mhayashi1120/Emacs-wgrep
     (use-package wgrep-ag
       :commands (wgrep-ag-setup)
@@ -34,17 +35,7 @@
         (add-hook 'ag-mode-hook #'wgrep-ag-setup)
         (bind-keys
          :map wgrep-mode-map
-          ("C-x s"   . wgrep-save-all-buffers)
-          ("C-c C-c" . wgrep-finish-edit) ;; Apply changes to file buffers
-          ("C-c C-e" . wgrep-finish-edit)
-          ("C-x C-s" . wgrep-finish-edit)
-          ("C-c C-d" . wgrep-mark-deletion)
-          ("C-c C-p" . wgrep-toggle-readonly-area)
-          ("C-c C-r" . wgrep-remove-change)
-          ("C-c C-u" . wgrep-remove-all-change)
-          ("C-c C-[" . wgrep-remove-all-change)
-          ("C-c C-k" . wgrep-abort-changes)
-          ("C-x C-q" . wgrep-exit))))
+          ("C-x s" . wgrep-save-all-buffers))))
 
     ;; Set default ag arguments
     (setq ag-arguments '(
@@ -121,10 +112,23 @@ If called with a prefix, prompts for flags to pass to ag."
 
 (provide 'setup-ag)
 
-;; NOTES
 ;; Simply put an empty folder called `.git' at a location that you want to consider
 ;; as a "project root"; even if that is not revision controlled in git.
 ;; After that, if you are in any file under that path or under any of that path's
 ;; sub-directories, `ag-project' or `ag-project-regexp' will work right away!
 
-;; Default key binding when in wgrep mode
+;; Default key bindings in `wgrep-mode-map'
+;; |---------+---------------------------------------------------|
+;; | Binding | Command                                           |
+;; |---------+---------------------------------------------------|
+;; | C-c C-c | wgrep-finish-edit (Apply changes to file buffers) |
+;; | C-c C-e | wgrep-finish-edit                                 |
+;; | C-x C-s | wgrep-finish-edit                                 |
+;; | C-c C-d | wgrep-mark-deletion                               |
+;; | C-c C-p | wgrep-toggle-readonly-area                        |
+;; | C-c C-r | wgrep-remove-change                               |
+;; | C-c C-u | wgrep-remove-all-change                           |
+;; | C-c C-[ | wgrep-remove-all-change                           |
+;; | C-c C-k | wgrep-abort-changes                               |
+;; | C-x C-q | wgrep-exit                                        |
+;; |---------+---------------------------------------------------|
