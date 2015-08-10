@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-25 14:24:47 kmodi>
+;; Time-stamp: <2015-08-09 22:28:59 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -10,6 +10,21 @@
     (bind-to-modi-map "g" #'ag-project-regexp))
   :config
   (progn
+
+    (defun ag/jump-to-result-if-only-one-match ()
+      "Jump to the first ag result if that ag search came up with just one match."
+      (let (only-one-match)
+        (when (member "--stats" ag-arguments)
+          (save-excursion
+            (goto-char (point-min))
+            (setq only-one-match (re-search-forward "^1 matches\\s-*$" nil :noerror)))
+          (when only-one-match
+            (next-error)
+            (kill-buffer (current-buffer))
+            (message (concat "ag: Jumping to the only found match and "
+                             "killing the *ag* buffer."))))))
+    (add-hook 'ag-search-finished-hook #'ag/jump-to-result-if-only-one-match)
+
     ;; wgrep-ag : To allow editing in *ag* buffer
     ;; https://github.com/mhayashi1120/Emacs-wgrep
     (use-package wgrep-ag
