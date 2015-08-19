@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-24 09:02:02 kmodi>
+;; Time-stamp: <2015-08-18 09:02:17 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -19,8 +19,12 @@ Usage: (>=e \"25.0\"
 (defalias '^ 'expt)
 
 ;; Easier to remember aliases
-(defalias 'undefun 'fmakunbound) ; Set symbol's function definition to nil
-(defalias 'unsetq  'makunbound) ; Set symbol's value to nil
+;; Set symbol's function definition to nil
+(defalias 'undefun 'fmakunbound)
+;; Set symbol's value to nil
+(defalias 'unsetq  'makunbound)
+;; Cyclically replace "A" with "X", "Y", "Z", "X", "Y", ..
+(defalias 'query-replace-regexp-cyclic 'map-query-replace-regexp)
 
 ;; Source https://github.com/Wilfred/ag.el
 (defun modi/get-symbol-at-point ()
