@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-13 15:53:55 kmodi>
+;; Time-stamp: <2015-08-20 15:59:41 kmodi>
 
 ;;; Verilog
 
@@ -338,7 +338,6 @@ or `outshine' functionality.
 The match with `//.' resolves this issue:
   http://www.veripool.org/issues/922-Verilog-mode-Consistent-comment-column
 "
-      (interactive)
       (save-excursion
         (beginning-of-line)
         (let* ((match1 (looking-at "^[[:blank:]]*// \\*")) ; // *
