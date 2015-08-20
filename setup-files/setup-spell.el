@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-20 16:17:25 kmodi>
+;; Time-stamp: <2015-08-20 16:44:32 kmodi>
 ;;
 ;; Spell check
 ;; ispell, flyspell
@@ -43,18 +43,21 @@
      ((executable-find "hunspell")
       (setq ispell-program-name "hunspell")
       (setq ispell-extra-args   '("-d en_US"))))
+
     ;; Save a new word to personal dictionary without asking
     (setq ispell-silently-savep t)
 
     (use-package flyspell
-      :config
+      :init
       (progn
         (setq flyspell-use-meta-tab nil)
+        ;; Binding for `flyspell-auto-correct-previous-word'
+        (setq flyspell-auto-correct-binding (kbd "<f12>")))
+      :config
+      (progn
         ;; Stop flyspell overriding other key bindings
-        (define-key flyspell-mode-map (kbd "C-;") nil)
         (define-key flyspell-mode-map (kbd "C-,") nil)
         (define-key flyspell-mode-map (kbd "C-.") nil)
-        (define-key flyspell-mode-map "\M-\t"     nil)
 
         (add-hook 'prog-mode-hook #'flyspell-prog-mode)
         (with-eval-after-load 'auto-complete
@@ -70,11 +73,7 @@
           "Return `nil' if `ispell-program-name' is available; `t' otherwise."
           (not (executable-find ispell-program-name)))
         (advice-add 'turn-on-flyspell   :before-until #'modi/ispell-not-avail-p)
-        (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)
-
-        (bind-keys
-         :map modi-mode-map
-          ("<f12>" . flyspell-auto-correct-previous-word))))))
+        (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)))))
 
 
 (provide 'setup-spell)
