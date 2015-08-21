@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-07 09:36:41 kmodi>
+;; Time-stamp: <2015-08-21 13:55:48 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -801,6 +801,33 @@ SYMBOL to the whole buffer if region is not selected."
                  (format
                   modi/whole-buffer-if-not-region-adv-fn-name-format fn))))
     (advice-add fn :around adv-fn)))
+
+;; Update the `region-extract-function' variable defined in `simple.el'
+(setq region-extract-function
+      (lambda (delete)
+        (when (region-beginning)
+          ;; `delete' is set to `'delete-only' in `delete-backward-char' and
+          ;;  `delete-forward-char' functions.
+          (if (eq delete 'delete-only)
+              (delete-region (region-beginning) (region-end))
+            ;; `delete' is set to `'delete' in `kill-region' function
+            ;; `delete' is set to `nil' in `copy-region-as-kill' and
+            ;;  `deactivate-mark' functions.
+
+            ;; When doing `C-u M-w`, `C-u C-w', kill the region
+            ;; - with all trailing whitespace removed
+            ;; - also replace 2 or more spaces with single spaces
+            (if (eq 4 (prefix-numeric-value current-prefix-arg))
+                (let ((sel (filter-buffer-substring (region-beginning) (region-end) delete)))
+                  (with-temp-buffer
+                    (insert sel)
+                    ;; Removing trailing whitespace from the whole temp buffer
+                    (delete-trailing-whitespace)
+                    (goto-char (point-min))
+                    (while (re-search-forward "\\s-\\{2,\\}" nil :noerror)
+                      (replace-match " "))
+                    (buffer-string)))
+              (filter-buffer-substring (region-beginning) (region-end) delete))))))
 
 (bind-keys
  :map modi-mode-map
