@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-23 13:57:52 kmodi>
+;; Time-stamp: <2015-08-21 14:31:45 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -73,12 +73,9 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
      :map ivy-switch-buffer-map
       ("C-k" . modi/ivy-kill-buffer))
 
-    (bind-keys
-     :map modi-mode-map
-      ;; Override the default binding for `upcase-word'
-      ("M-u"     . ivy-resume)
-      ;; Override the default binding for `delete-blank-lines'
-      ("C-x C-o" . ivy-recentf))))
+    ;; Override the default binding for `upcase-word'
+    (bind-key "M-u" #'ivy-resume modi-mode-map)
+    (bind-key "M-o" #'ivy-recentf)))
 
 
 (provide 'setup-ivy)

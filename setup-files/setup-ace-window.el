@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-28 11:34:38 kmodi>
+;; Time-stamp: <2015-08-21 14:30:06 kmodi>
 
 ;; Ace Window
 ;; https://github.com/abo-abo/ace-window
@@ -30,8 +30,7 @@
      :map modi-mode-map
       ;; Important to use my minor mode map as I want my bindings to override
       ;; bindings in other major modes (esp org-mode)
-      ("C-x o" . ace-window)
-      ("M-o"   . ace-window))
+      ("C-x o" . ace-window))
 
     (ace-window-display-mode 1)))
 

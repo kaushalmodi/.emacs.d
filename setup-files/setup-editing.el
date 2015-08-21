@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-21 13:55:48 kmodi>
+;; Time-stamp: <2015-08-21 14:27:43 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -718,13 +718,14 @@ If the current buffer is not associated with a file, nothing's done."
 
 ;; Delete Blank Lines
 ;; http://www.masteringemacs.org/article/removing-blank-lines-buffer
-(defun modi/delete-blank-lines ()
-  "Call `delete-blank-lines' if no region is selected.
-If a region is selected, delete all blank lines in that region."
-  (interactive)
-  (if (use-region-p)
-      (flush-lines "^$" (region-beginning) (region-end))
-    (delete-blank-lines)))
+;; If a region is selected, delete all blank lines in that region.
+;; Else, call `delete-blank-lines'.
+(defun modi/delete-blank-lines-in-region ()
+  (let ((do-not-run-orig-fn (use-region-p)))
+    (when do-not-run-orig-fn
+      (flush-lines "^$" (region-beginning) (region-end)))
+    do-not-run-orig-fn))
+(advice-add 'delete-blank-lines :before-until #'modi/delete-blank-lines-in-region)
 
 (defun modi/space-as-i-mean ()
   "Function to manage white space with `kill-word' operations.
