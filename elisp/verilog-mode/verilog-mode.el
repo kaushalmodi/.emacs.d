@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-07-29-119f1b9-vpo"
+(defconst verilog-mode-version "2015-08-16-ce03c7a-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -1342,7 +1342,7 @@ If set will become buffer local.")
     (define-key map [(control 59)]    'electric-verilog-semi-with-comment)
     (define-key map ":"        'electric-verilog-colon)
     ;;(define-key map "="        'electric-verilog-equal)
-    (define-key map "\`"       'electric-verilog-tick)
+    (define-key map "`"        'electric-verilog-tick)
     (define-key map "\t"       'electric-verilog-tab)
     (define-key map "\r"       'electric-verilog-terminate-line)
     ;; backspace/delete key bindings
@@ -1356,9 +1356,9 @@ If set will become buffer local.")
     (define-key map "\M-\t"    'verilog-complete-word)
     (define-key map "\M-?"     'verilog-show-completions)
     ;; Note \C-c and letter are reserved for users
-    (define-key map "\C-c\`"   'verilog-lint-off)
-    (define-key map "\C-c\*"   'verilog-delete-auto-star-implicit)
-    (define-key map "\C-c\?"   'verilog-diff-auto)
+    (define-key map "\C-c`"    'verilog-lint-off)
+    (define-key map "\C-c*"    'verilog-delete-auto-star-implicit)
+    (define-key map "\C-c?"    'verilog-diff-auto)
     (define-key map "\C-c\C-r" 'verilog-label-be)
     (define-key map "\C-c\C-i" 'verilog-pretty-declarations)
     (define-key map "\C-c="    'verilog-pretty-expr)
@@ -4234,7 +4234,7 @@ Uses `verilog-scan' cache."
 	     (point-marker))))
     (goto-char (marker-position b))
     (if (> (- e b) 200)
-	(message  "Relabeling module..."))
+	(message "Relabeling module..."))
     (while (and
 	    (> (marker-position e) (point))
 	    (verilog-re-search-forward
@@ -4252,7 +4252,7 @@ Uses `verilog-scan' cache."
     (if (or
 	 (> (- e b) 200)
 	 (> cnt 20))
-	(message  "%d lines auto commented" cnt))))
+	(message "%d lines auto commented" cnt))))
 
 (defun verilog-beg-of-statement ()
   "Move backward to beginning of statement."
@@ -7568,7 +7568,7 @@ If search fails, other files are checked based on
 	(regexp "\\(module\\s-+\\w+\\s-*(\\)\\|\\(\\w+\\s-+\\w+\\s-*(\\)"))
     (with-output-to-temp-buffer "*Occur*"
       (save-excursion
-	(message (format "Searching for %s ..." regexp))
+	(message "Searching for %s ..." regexp)
 	;; Find next match, but give up if prev match was at end of buffer.
 	(while (and (not (= prevpos (point-max)))
 		    (verilog-re-search-forward regexp nil t))
