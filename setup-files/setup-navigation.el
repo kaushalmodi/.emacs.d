@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-30 10:15:47 kmodi>
+;; Time-stamp: <2015-08-24 11:05:54 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -251,7 +251,7 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
           (progn
             (if fci-state-orig
                 (fci-mode 'toggle))
-            (avy-goto-line)
+            (call-interactively #'avy-goto-line)
             (if fci-state-orig
                 (fci-mode 'toggle))))))
 
