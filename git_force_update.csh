@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-08-05 17:06:05 kmodi>
+# Time-stamp: <2015-08-26 08:44:22 kmodi>
 
 # Usage: source git_force_update.csh <YOUR .emacs.d PATH>
 # Example: source git_force_update.csh ~/.emacs.d
@@ -8,7 +8,7 @@ set called=($_)
 
 if ( "${called}" != "" ) then  # called by source
    set script_file_name=`readlink -f $called[2]`
-else # called by direct excution of the script
+else # called by direct execution of the script
    set script_file_name=`readlink -f $0`
 endif
 unset {called}
