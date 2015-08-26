@@ -56,7 +56,7 @@
 
 
 (require 'hi-lock)
-(setq hi-lock-file-patterns-policy 'never)
+;; (setq hi-lock-file-patterns-policy 'never)
 
 (defvar highlight-faces
   '(('hi-yellow . 0)
