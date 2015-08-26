@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-20 16:44:32 kmodi>
+;; Time-stamp: <2015-08-26 08:48:04 kmodi>
 ;;
 ;; Spell check
 ;; ispell, flyspell
@@ -55,6 +55,7 @@
         (setq flyspell-auto-correct-binding (kbd "<f12>")))
       :config
       (progn
+        (bind-key "<C-f12>" #'flyspell-goto-next-error flyspell-mode-map)
         ;; Stop flyspell overriding other key bindings
         (define-key flyspell-mode-map (kbd "C-,") nil)
         (define-key flyspell-mode-map (kbd "C-.") nil)
