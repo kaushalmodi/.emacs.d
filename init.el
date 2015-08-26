@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 17:04:16 kmodi>
+;; Time-stamp: <2015-08-26 09:51:27 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -102,6 +102,7 @@
         outorg navi-mode ; supporting packages for outshine
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
+        pomodoro
         projectile ; Better than fiplr
         rainbow-delimiters
         rainbow-mode
@@ -244,6 +245,7 @@
 (require 'setup-outshine)
 (require 'setup-page-break-lines)
 (require 'setup-pcache)
+(require 'setup-pomodoro)
 (require 'setup-poporg)
 (require 'setup-projectile)
 (require 'setup-rainbow-delimiters)
