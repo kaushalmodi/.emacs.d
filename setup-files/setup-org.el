@@ -1,4 +1,6 @@
-;; Time-stamp: <2015-08-07 14:50:48 kmodi>
+;; Time-stamp: <2015-08-26 14:59:50 kmodi>
+;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
+;; Hi-Lock: end
 
 ;; Org Mode
 

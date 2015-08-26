@@ -1,8 +1,11 @@
-;; Time-stamp: <2015-07-28 22:23:21 kmodi>
+;; Time-stamp: <2015-08-26 17:03:04 kmodi>
 
 ;; Highlight stuff
 
-;; Hi-Lock
+;; Example of using Hi-lock keyword:
+;; Hi-Lock: (("policy" (0 'hi-yellow prepend)))
+;; Hi-Lock: end
+
 (use-package hi-lock
   :config
   (progn
@@ -27,10 +30,50 @@ will not update as you type."
             (unless hi-lock-mode (hi-lock-mode 1))
             (hi-lock-set-pattern regexp face))))
 
+    ;; Don't scan the file beyond 1000 characters to look for the Hi-Lock
+    ;; patterns
+    (setq hi-lock-file-patterns-range 1000)
+
+    ;; Don't ask before highlighting any Hi-Lock: pattern found in a file
+    ;; Below, (lambda (pattern) t) simply always returns `t' regardless of
+    ;; what the `pattern' input is.
+    (setq hi-lock-file-patterns-policy (lambda (pattern) t))
+
+    ;; Automatically cycle through the highlighting faces listed in
+    ;; `hi-lock-face-defaults' instead of bothering the user to pick a face
+    ;; manually each time.
+    (setq hi-lock-auto-select-face t)
+
     ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing
     (define-key hi-lock-map (kbd "C-x w") nil)
 
-    (global-hi-lock-mode 1)))
+    (global-hi-lock-mode 1)
+
+    (defun modi/hi-lock-face-symbol-at-point-or-sel ()
+      "If a region is selected, highlight each instance of that.
+Else highlight each instance of the symbol at point.
+
+Uses the next face from `hi-lock-face-defaults' without prompting,
+unless you use a prefix argument. Uses `find-tag-default-as-symbol-regexp' to
+retrieve the symbol at point.
+
+This uses Font lock mode if it is enabled; otherwise it uses overlays,
+in which case the highlighting will not update as you type."
+      (interactive)
+      (let* ((regexp (hi-lock-regexp-okay
+                      (cond ((use-region-p)
+                             (buffer-substring-no-properties (region-beginning) (region-end)))
+                            (t
+                             (find-tag-default-as-symbol-regexp)))))
+             (hi-lock-auto-select-face t)
+             (face (hi-lock-read-face-name)))
+        (or (facep face) (setq face 'hi-yellow))
+        (unless hi-lock-mode (hi-lock-mode 1))
+        (hi-lock-set-pattern regexp face)))
+
+    (bind-keys
+     :map modi-mode-map
+      ("C-." . modi/hi-lock-face-symbol-at-point-or-sel))))
 
 ;; Highlight Anything
 ;; https://github.com/boyw165/hl-anything
@@ -132,3 +175,33 @@ _u_/_U_n-highlight (global/local)        _p_revious highlight        _r_estore h
 
 
 (provide 'setup-highlight)
+
+;; If `hi-lock-file-patterns-policy' is set to `nil' or `'never', you will need
+;; to call `M-x hi-lock-find-patterns' or `M-s h f' to highlighted all
+;; occurrences of Hi-Lock: patterns specified in the file.
+
+;; The Hi-Lock regexp forms are in the form of font lock keywords. Do
+;; `C-h v font-lock-keywords' to learn more.
+
+;; Hi-Lock: (("<REGEXP>" (<SUBEXP-0> '<FACE-0> [<OVERRIDE> [<LAXMATCH>]])
+;;                       (<SUBEXP-1> '<FACE-1> [<OVERRIDE> [<LAXMATCH>]])
+;;                       .. ))
+;; Hi-Lock: end
+
+;; OVERRIDE and LAXMATCH are flags.
+;; If OVERRIDE is t, existing fontification can be overwritten.
+;;   If `keep', only parts not already fontified are highlighted.
+;;   If `prepend', existing fontification is merged with the new, in
+;;     which the new fontification takes precedence.
+;;   If `append', existing fontification is merged with the new, in
+;;     which the existing fontification takes precedence.
+;; If LAXMATCH is non-nil, that means don't signal an error if there is
+;; no match for SUBEXP in REGEXP.
+
+;; Examples of Hi-Lock patterns:
+;; Highlight outshine headers in `shell-script-mode':
+;; # Hi-lock: (("\\(^\\s< *\\**\\)\\(\\* *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
+;; Highlight outshine headers in `verilog-mode':
+;; // Hi-lock: (("\\(^// \\**\\)\\(\\* *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
+;; Highlight outshine headers in `emacs-lisp-mode':
+;; ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
