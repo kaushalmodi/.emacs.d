@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-15 15:23:36 kmodi>
+;; Time-stamp: <2015-08-27 12:37:35 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -40,7 +40,7 @@ Overrides the default binding for `compose-mail'.")
 (defun turn-on-modi-mode ()
   "Turns on modi-mode."
   (interactive)
-  (modi-mode t))
+  (modi-mode 1))
 
 ;;;###autoload
 (defun turn-off-modi-mode ()
@@ -52,7 +52,7 @@ Overrides the default binding for `compose-mail'.")
 (define-globalized-minor-mode global-modi-mode modi-mode turn-on-modi-mode)
 
 ;; Turn off the minor mode in the minibuffer
-(add-hook 'minibuffer-setup-hook 'turn-off-modi-mode)
+(add-hook 'minibuffer-setup-hook #'turn-off-modi-mode)
 
 ;; ###autoload
 ;; (add-hook 'text-mode-hook 'modi-mode)
