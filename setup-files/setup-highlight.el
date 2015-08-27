@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-26 17:03:04 kmodi>
+;; Time-stamp: <2015-08-27 16:56:46 kmodi>
 
 ;; Highlight stuff
 
@@ -38,6 +38,10 @@ will not update as you type."
     ;; Below, (lambda (pattern) t) simply always returns `t' regardless of
     ;; what the `pattern' input is.
     (setq hi-lock-file-patterns-policy (lambda (pattern) t))
+
+    ;; Mark the `hi-lock-file-patterns' variable as safe so that it can be
+    ;; set in `.dir-locals.el' files
+    (put 'hi-lock-file-patterns 'safe-local-variable 'identity)
 
     ;; Automatically cycle through the highlighting faces listed in
     ;; `hi-lock-face-defaults' instead of bothering the user to pick a face
@@ -199,9 +203,27 @@ _u_/_U_n-highlight (global/local)        _p_revious highlight        _r_estore h
 ;; no match for SUBEXP in REGEXP.
 
 ;; Examples of Hi-Lock patterns:
+
 ;; Highlight outshine headers in `shell-script-mode':
 ;; # Hi-lock: (("\\(^\\s< *\\**\\)\\(\\* *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
-;; Highlight outshine headers in `verilog-mode':
-;; // Hi-lock: (("\\(^// \\**\\)\\(\\* *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
+
 ;; Highlight outshine headers in `emacs-lisp-mode':
 ;; ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
+
+;; Highlight outshine headers in `verilog-mode':
+;; // Hi-lock: (("\\(^// \\**\\)\\(\\* *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
+;; If you do not want to modify the source files with the Hi-Lock meta data,
+;; you can set the `hi-lock-file-patterns' variable using `.dir-locals.el' files
+;; as below:
+;;   (("PATH/TO/DIR"
+;;     . ((verilog-mode . ((hi-lock-file-patterns
+;;                          . (("\\(^// \\**\\)\\(\\* *.*\\)"
+;;                              (1 'org-hide prepend)
+;;                              (2 '(:inherit org-level-1
+;;                                   :height 1.3
+;;                                   :weight bold
+;;                                   :overline t
+;;                                   :underline t)
+;;                                 prepend))))
+;;                         ))))
+;;    )
