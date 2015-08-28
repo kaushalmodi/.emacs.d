@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-26 09:51:27 kmodi>
+;; Time-stamp: <2015-08-28 10:23:44 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -254,11 +254,11 @@
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-stripe-buffer)
-(require 'setup-sunshine)
 (require 'setup-sx)
 (require 'setup-term)
 (require 'setup-tiny)
 (require 'setup-undo-tree)
+(require 'setup-weather)
 (require 'setup-which-func)
 (require 'setup-which-key)
 (require 'setup-wrap-region)
