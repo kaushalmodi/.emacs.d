@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-28 12:28:00 kmodi>
+;; Time-stamp: <2015-08-28 14:32:10 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -726,7 +726,7 @@ If the current buffer is not associated with a file, nothing's done."
 (defun modi/delete-blank-lines-in-region ()
   (let ((do-not-run-orig-fn (use-region-p)))
     (when do-not-run-orig-fn
-      (flush-lines "^$" (region-beginning) (region-end)))
+      (flush-lines "^\\s-*$" (region-beginning) (region-end)))
     do-not-run-orig-fn))
 (advice-add 'delete-blank-lines :before-until #'modi/delete-blank-lines-in-region)
 
