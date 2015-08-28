@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-21 14:27:43 kmodi>
+;; Time-stamp: <2015-08-28 12:28:00 kmodi>
 
 ;; Functions related to editing text in the buffer
 
@@ -298,7 +298,6 @@ instead of ASCII characters for adorning the copied snippet."
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 (use-package rectangle-utils
-  ;; :load-path "elisp/rectangle-utils"
   :commands (extend-rectangle-to-end)
   :init
   (progn
@@ -307,13 +306,11 @@ instead of ASCII characters for adorning the copied snippet."
        :map region-bindings-mode-map
         ("|" . extend-rectangle-to-end)))))
 
-(defun copy-rectangle-as-kill-then-delete (start end)
-  "Copy the region-rectangle and save it as the last killed one.
-Then delete the rectangle, which will replaced the deleted region with blank
-spaces."
+(defun modi/kill-rectangle-replace-with-space (start end)
+  "Kill the rectangle and replace it with spaces."
   (interactive "r")
   (setq killed-rectangle (extract-rectangle start end))
-  (delete-rectangle start end)
+  (clear-rectangle start end)
   (setq deactivate-mark t)
   (if (called-interactively-p 'interactive)
       (indicate-copied-region (length (car killed-rectangle)))))
@@ -329,31 +326,37 @@ spaces."
 
 (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
                            :color pink
-                           :post (deactivate-mark))
+                           :post (deactivate-mark)
+                           :hint nil)
   "
-
-  ^_p_^     _d_   delete   _s_tring
-_b_   _f_   _k_   cut      _r_eset
-  ^_n_^     _w_   copy     e_x_change
-^^^^        _y_   paste    _e_xtend
+  Rectangle:
+  ^_p_^        _d_   delete      _s_tring        _c_/_C_ (delete/kill) and replace with space
+_b_   _f_      _k_   cut         _r_eset         _o_pen (create blank rectangle and push text in region to the right)
+  ^_n_^        _w_   copy        e_x_change      _X_ delete whitespace starting from the left edge of the rectangle
+^^^^           _y_   paste       _e_xtend        Prefix rectangle lines with _N_umbers
 "
-  ("b"   backward-char                      nil)
-  ("f"   forward-char                       nil)
-  ("p"   previous-line                      nil)
-  ("n"   next-line                          nil)
-  ("w"   copy-rectangle-as-kill             nil)
-  ("k"   kill-rectangle                     nil)
-  ("K"   copy-rectangle-as-kill-then-delete nil)
-  ("y"   yank-rectangle                     nil)
-  ("d"   delete-rectangle                   nil)
-  ("s"   string-rectangle                   nil)
-  ("t"   string-rectangle                   nil)
-  ("x"   ora-ex-point-mark                  nil)
+  ("b"   backward-char)
+  ("f"   forward-char)
+  ("p"   previous-line)
+  ("n"   next-line)
+
+  ("d"   delete-rectangle)
+  ("k"   kill-rectangle)
+  ("w"   copy-rectangle-as-kill)
+  ("y"   yank-rectangle)
+  ("s"   string-rectangle)
+  ("t"   string-rectangle)
   ("r"   (if (region-active-p)
              (deactivate-mark)
-           (rectangle-mark-mode 1))         nil)
-  ("e"   modi/extend-rectangle-to-end       nil)
-  ("q"   nil                                nil))
+           (rectangle-mark-mode 1)))
+  ("x"   ora-ex-point-mark)
+  ("e"   extend-rectangle-to-end)
+  ("c"   clear-rectangle)
+  ("C"   modi/kill-rectangle-replace-with-space)
+  ("o"   open-rectangle)
+  ("X"   delete-whitespace-rectangle)
+  ("N"   rectangle-number-lines)
+  ("q"   nil "cancel" :color blue))
 (bind-key "C-x SPC" #'hydra-rectangle/body modi-mode-map)
 
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
