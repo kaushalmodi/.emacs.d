@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-27 16:56:46 kmodi>
+;; Time-stamp: <2015-08-28 11:58:40 kmodi>
 
 ;; Highlight stuff
 
@@ -166,16 +166,23 @@ _u_/_U_n-highlight (global/local)        _p_revious highlight        _r_estore h
       ("C-x C-'" . ahs-change-range)
       ("C-x C-a" . ahs-edit-mode))))
 
-;; hl-line+
-;; http://www.emacswiki.org/emacs/hl-line+.el
-(use-package hl-line+
+;; Highlight line
+(use-package hl-line
   :config
   (progn
-    (toggle-hl-line-when-idle 1) ; Highlight line only when idle
-    ;; Number of seconds of idle time after when the line should be highlighted
-    (setq hl-line-idle-interval 5)
-    ;; Number of seconds for `hl-line-flash' to highlight the line
-    (setq hl-line-flash-show-period 3)))
+    ;; Highlight the line only in the active window
+    (setq hl-line-sticky-flag nil)
+
+    ;; hl-line+
+    ;; http://www.emacswiki.org/emacs/hl-line+.el
+    (use-package hl-line+
+      :config
+      (progn
+        (toggle-hl-line-when-idle 1) ; Highlight line only when idle
+        ;; Number of seconds of idle time after when the line should be highlighted
+        (setq hl-line-idle-interval 5)
+        ;; Number of seconds for `hl-line-flash' to highlight the line
+        (setq hl-line-flash-show-period 3)))))
 
 
 (provide 'setup-highlight)

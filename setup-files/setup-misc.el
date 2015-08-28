@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 15:32:06 kmodi>
+;; Time-stamp: <2015-08-28 12:32:28 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -156,10 +156,10 @@ If LOG is non-nil, browse to the log page having the current build commit."
                         :hint  nil)
   "
     TOGGLE ...
-_ai_ aggressive indent      _d_/_D_ debug on error/entry      indent _g_uide                 _k_ey chord         _r_ead only             _v_isible mode
-_aw_ adaptive wrap          _e_debug^^                        _h_ideshow                     _l_ine num          _S_tripe buffer         _<SPC>_ whitespace
-menu _b_ar                  _f_ill^^                          _H_ardcore (allow arrows)      _m_odi mode         _t_ truncate lines
-cycle _c_ase                _F_ollow^^                        _i_menu list                   _p_resentation      _C-t_ theme
+_ai_ aggressive indent      _d_/_D_ debug on error/entry      indent _g_uide                 _i_menu list        _p_resentation          _C-t_ theme
+_aw_ adaptive wrap          _e_debug^^                        _hl_ hl-line                   _k_ey chord         _r_ead only             _v_isible mode
+menu _b_ar                  _f_ill^^                          _hs_ hideshow                  _l_ine num          _S_tripe buffer         _<SPC>_ whitespace
+cycle _c_ase                _F_ollow^^                        _H_ardcore (allow arrows)      _m_odi mode         _t_ truncate lines
 "
   ("ai"    aggressive-indent-mode)
   ("aw"    adaptive-wrap-prefix-mode)
@@ -171,7 +171,8 @@ cycle _c_ase                _F_ollow^^                        _i_menu list      
   ("f"     toggle-fill-unfill)
   ("F"     follow-mode)
   ("g"     indent-guide-mode)
-  ("h"     modi/hideshow-mode)
+  ("hl"    hl-line-mode)
+  ("hs"    modi/hideshow-mode)
   ("H"     hardcore-mode)
   ("i"     modi/imenu-list-display-toggle)
   ("k"     key-chord-mode :color red)
