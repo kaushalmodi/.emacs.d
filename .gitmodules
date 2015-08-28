@@ -52,3 +52,6 @@
 [submodule "elisp/ox-reveal"]
 	path = elisp/ox-reveal
 	url = https://github.com/yjwen/org-reveal.git
+[submodule "elisp/forecast.el"]
+	path = elisp/forecast.el
+	url = https://kaushalmodi@github.com/kaushalmodi/forecast.el
