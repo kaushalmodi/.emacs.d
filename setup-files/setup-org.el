@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-26 14:59:50 kmodi>
+;; Time-stamp: <2015-08-28 08:41:15 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -691,7 +691,7 @@ else call `self-insert-command'."
     (bind-keys
      :map org-mode-map
       ("C-m" . modi/org-return-no-indent)
-      (">"   . modi/org-template-maybe))
+      ("<"   . modi/org-template-maybe))
 
     (bind-keys
      :map modi-mode-map
