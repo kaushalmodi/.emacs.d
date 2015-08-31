@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-28 08:41:15 kmodi>
+;; Time-stamp: <2015-08-31 12:55:10 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -20,6 +20,7 @@
 ;;    ox-html - HTML export
 ;;    ox-beamer - Beamer export
 ;;    ox-reveal - Presentations using reveal.js
+;;    ox-twbs - Twitter Bootstrap
 ;;    ox-odt - ODT, doc export
 ;;    Custom Org Export related “packages”
 ;;  Bindings
@@ -583,6 +584,13 @@ Execute this command while the point is on or after the hyper-linked org link."
                     (org-export-to-file 'reveal clientfile
                       async subtreep visible-only body-only ext-plist))
                 (cond (t retfile))))))
+
+;;;; ox-twbs - Twitter Bootstrap
+        ;; https://github.com/marsmining/ox-twbs
+        (use-package ox-twbs
+          :config
+          (progn
+            (setq org-twbs-link-org-files-as-html nil)))
 
 ;;;; ox-odt - ODT, doc export
         ;; http://stackoverflow.com/a/22990257/1219634

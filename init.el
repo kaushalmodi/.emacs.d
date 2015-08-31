@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-28 10:23:44 kmodi>
+;; Time-stamp: <2015-08-31 11:55:58 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -100,6 +100,7 @@
         org-plus-contrib ; latest stable version of org-mode, includes org-eww
         org-tree-slide
         outorg navi-mode ; supporting packages for outshine
+        ox-twbs ; export to twitter bootstrap html
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
         pomodoro
