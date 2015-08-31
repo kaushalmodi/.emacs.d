@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-28 12:32:28 kmodi>
+;; Time-stamp: <2015-09-02 11:29:23 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -197,7 +197,7 @@ cycle _c_ase                _F_ollow^^                        _H_ardcore (allow 
 (defhydra hydra-launch-freq (:color teal
                              :hint  nil)
   "
-._a_lias     _e_macs init     ._g_pms     _i_ndex.html     _j_ournal     _o_rg Manual     ._t_mux.conf     IEEE system_v_erilog Std     _V_erilog-mode.el
+._a_lias     _e_macs init     ._g_pms     _i_ndex.org     _j_ournal     _o_rg Manual     ._t_mux.conf     IEEE system_v_erilog Std     _V_erilog-mode.el
 "
   ("a" (find-file
         (expand-file-name ".alias" user-home-directory)))
@@ -206,7 +206,7 @@ cycle _c_ase                _F_ollow^^                        _H_ardcore (allow 
   ("g" (find-file
         (expand-file-name ".gpms" (concat user-home-directory "scripts/gpms/"))))
   ("i" (find-file
-        (expand-file-name "index.html" (concat user-home-directory "public_html/"))))
+        (expand-file-name "index.org" (concat user-home-directory "public_html/"))))
   ("j" (find-file
         (expand-file-name "journal.org" org-directory)))
   ("o" (find-file

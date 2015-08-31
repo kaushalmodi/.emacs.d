@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-16 17:27:04 kmodi>
+;; Time-stamp: <2015-08-31 12:50:09 kmodi>
 
 ;; Registers
 
@@ -14,7 +14,7 @@
 (set-register ?a (cons 'file (expand-file-name ".alias" user-home-directory ))) ; C-x r j a
 (set-register ?t (cons 'file (expand-file-name ".tmux.conf" user-home-directory ))) ; C-x r j t
 (set-register ?i (cons 'file (expand-file-name
-                              "index.html"
+                              "index.org"
                               (concat user-home-directory "public_html/")))) ; C-x r j i
 
 (set-register ?v (cons 'file (expand-file-name
