@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-08-16-ce03c7a-vpo"
+(defconst verilog-mode-version "2015-08-31-288da7a-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -346,10 +346,10 @@ wherever possible, since it is slow."
 
 (eval-when-compile
   (defun verilog-regexp-words (a)
-    "Call 'regexp-opt' with word delimiters for the words A."
+    "Call `regexp-opt' with word delimiters for the words A."
     (concat "\\<" (verilog-regexp-opt a t) "\\>")))
 (defun verilog-regexp-words (a)
-  "Call 'regexp-opt' with word delimiters for the words A."
+  "Call `regexp-opt' with word delimiters for the words A."
   ;; The FAQ references this function, so user LISP sometimes calls it
   (concat "\\<" (verilog-regexp-opt a t) "\\>"))
 
@@ -541,9 +541,9 @@ entry \"Fontify Buffer\").  XEmacs: turn off and on font locking."
 
 (defcustom verilog-auto-lineup 'declarations
   "Type of statements to lineup across multiple lines.
-If 'all' is selected, then all line ups described below are done.
+If `all' is selected, then all line ups described below are done.
 
-If 'declarations', then just declarations are lined up with any
+If `declarations', then just declarations are lined up with any
 preceding declarations, taking into account widths and the like,
 so or example the code:
 	reg [31:0] a;
@@ -552,7 +552,7 @@ would become
 	reg [31:0] a;
 	reg        b;
 
-If 'assignment', then assignments are lined up with any preceding
+If `assignment', then assignments are lined up with any preceding
 assignments, so for example the code
 	a_long_variable <= b + c;
 	d = e + f;
@@ -1054,7 +1054,7 @@ the MSB or LSB of a signal inside an AUTORESET.
 
 If nil, AUTORESET uses \"0\" as the constant.
 
-If 'unbased', AUTORESET used the unbased unsized literal \"'0\"
+If `unbased', AUTORESET used the unbased unsized literal \"\\='0\"
 as the constant. This setting is strongly recommended for
 SystemVerilog designs."
   :type 'boolean
@@ -1070,10 +1070,10 @@ SystemVerilog designs."
 
 (defcustom verilog-auto-arg-format 'packed
   "Formatting to use for AUTOARG signal names.
-If 'packed', then as many inputs and outputs that fit within
+If `packed', then as many inputs and outputs that fit within
 `fill-column' will be put onto one line.
 
-If 'single', then a single input or output will be put onto each
+If `single', then a single input or output will be put onto each
 line."
   :version "25.1"
   :type '(radio (const :tag "Line up Assignments and Declarations" packed)
@@ -1172,7 +1172,7 @@ was used for that port declaration.  This setting is suggested
 only for debugging use, as regular use may cause a large numbers
 of merge conflicts.
 
-If 'lhs', the comment will show the left hand side of the
+If `lhs', the comment will show the left hand side of the
 AUTO_TEMPLATE rule that is matched.  This is less precise than
 numbering (t) when multiple rules have the same pin name, but
 won't merge conflict."
@@ -3442,7 +3442,7 @@ Use filename, if current buffer being edited shorten to just buffer name."
   (verilog-forward-sexp))
 
 (defun verilog-forward-sexp-function (arg)
-  "Move forward a sexp."
+  "Move forward ARG sexps."
   ;; Used by hs-minor-mode
   (if (< arg 0)
       (verilog-backward-sexp)
@@ -8129,7 +8129,8 @@ Tieoff value uses `verilog-active-low-regexp' and
 ;;
 
 (defun verilog-decls-princ (decls &optional header prefix)
-  "For debug, dump the `verilog-read-decls' structure DECLS."
+  "For debug, dump the `verilog-read-decls' structure DECLS.
+Use optional HEADER and PREFIX."
   (when decls
     (if header (princ header))
     (setq prefix (or prefix ""))
@@ -8173,7 +8174,7 @@ Tieoff value uses `verilog-active-low-regexp' and
 	(princ "\n")))))
 
 (defun verilog-modport-princ (modports &optional header prefix)
-  "For debug, dump internal MODPORT structures, with HEADER and PREFIX."
+  "For debug, dump internal MODPORTS structures, with HEADER and PREFIX."
   (when modports
     (if header (princ header))
     (while modports
@@ -9285,8 +9286,8 @@ Parameters must be simple assignments to constants, or have their own
 \"parameter\" label rather than a list of parameters.  Thus:
 
     parameter X = 5, Y = 10;	// Ok
-    parameter X = {1'b1, 2'h2};	// Ok
-    parameter X = {1'b1, 2'h2}, Y = 10;	// Bad, make into 2 parameter lines
+    parameter X = {1\\='b1, 2\\='h2};	// Ok
+    parameter X = {1\\='b1, 2\\='h2}, Y = 10;	// Bad, make into 2 parameter lines
 
 Defines must be simple text substitutions, one on a line, starting
 at the beginning of the line.  Any ifdefs or multiline comments around the
@@ -9994,7 +9995,8 @@ and invalidating the cache."
 
 
 (defun verilog-modi-modport-lookup-one (modi name &optional ignore-error)
-  "Given a MODI, return the declarations related to the given modport NAME."
+  "Given a MODI, return the declarations related to the given modport NAME.
+Report errors unless optional IGNORE-ERROR."
   ;; Recursive routine - see below
   (let* ((realname (verilog-symbol-detick name t))
 	 (modport (assoc name (verilog-decls-get-modports (verilog-modi-get-decls modi)))))
@@ -13017,9 +13019,9 @@ An example of making a stub for another module:
 	/*AUTOINOUTMODULE(\"Foo\")*/
         /*AUTOTIEOFF*/
         // verilator lint_off UNUSED
-        wire _unused_ok = &{1'b0,
+        wire _unused_ok = &{1\\='b0,
                             /*AUTOUNUSED*/
-                            1'b0};
+                            1\\='b0};
         // verilator lint_on  UNUSED
     endmodule
 
@@ -13034,7 +13036,7 @@ Typing \\[verilog-auto] will make this into:
 
         /*AUTOTIEOFF*/
         // Beginning of autotieoff
-        wire [2:0] foo = 3'b0;
+        wire [2:0] foo = 3\\='b0;
         // End of automatics
         ...
     endmodule"
@@ -13159,7 +13161,7 @@ with \"unused\" in the signal name.
 
 To reduce simulation time, the _unused_ok signal should be forced to a
 constant to prevent wiggling.  The easiest thing to do is use a
-reduction-and with 1'b0 as shown.
+reduction-and with 1\\='b0 as shown.
 
 This way all unused signals are in one place, making it convenient to add
 your tool's specific pragmas around the assignment to disable any unused
@@ -13175,9 +13177,9 @@ An example of making a stub for another module:
 	/*AUTOINOUTMODULE(\"Examp\")*/
         /*AUTOTIEOFF*/
         // verilator lint_off UNUSED
-        wire _unused_ok = &{1'b0,
+        wire _unused_ok = &{1\\='b0,
                             /*AUTOUNUSED*/
-                            1'b0};
+                            1\\='b0};
         // verilator lint_on  UNUSED
     endmodule
 
@@ -13185,14 +13187,14 @@ Typing \\[verilog-auto] will make this into:
 
         ...
         // verilator lint_off UNUSED
-        wire _unused_ok = &{1'b0,
+        wire _unused_ok = &{1\\='b0,
                             /*AUTOUNUSED*/
 			    // Beginning of automatics
 			    unused_input_a,
 			    unused_input_b,
 			    unused_input_c,
 			    // End of automatics
-                            1'b0};
+                            1\\='b0};
         // verilator lint_on  UNUSED
     endmodule"
   (interactive)
@@ -13267,9 +13269,9 @@ An example:
 
 	//== State enumeration
 	parameter [2:0] // synopsys enum state_info
-			   SM_IDLE =  3'b000,
-			   SM_SEND =  3'b001,
-			   SM_WAIT1 = 3'b010;
+			   SM_IDLE =  3\\='b000,
+			   SM_SEND =  3\\='b001,
+			   SM_WAIT1 = 3\\='b010;
 	//== State variables
 	reg [2:0]  /* synopsys enum state_info */
 		   state_r;  /* synopsys state_vector state_r */
