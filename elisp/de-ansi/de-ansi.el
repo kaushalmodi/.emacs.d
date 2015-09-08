@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-17 18:11:46 kmodi>
+;; Time-stamp: <2015-09-04 15:31:28 kmodi>
 
 ;; De-ansi
 
@@ -28,7 +28,7 @@
                                       file-name)))
     (write-file temp-file-name-full nil) ; Save the current file as a temp file
     (auto-revert-mode 1) ; Enable auto-revert-mode for the temp file
-    (turn-on-temp-mode) ; Enable temp-mode
+    (temp-mode 1) ; Enable temp-mode
     ;; (key-chord-define-local "XX" 'de-ansi/delete-de-ansified)
     ;; (key-chord-define-local "AA" 'auto-revert-mode)
     (key-chord-define temp-mode-map "XX" 'de-ansi/delete-de-ansified)
