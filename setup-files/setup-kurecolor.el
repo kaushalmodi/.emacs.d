@@ -1,18 +1,20 @@
-;; Time-stamp: <2015-04-15 08:59:05 kmodi>
+;; Time-stamp: <2015-09-08 10:08:48 kmodi>
 
 ;; Kurecolor
 ;; https://github.com/emacsfodder/kurecolor
 
 (use-package kurecolor
-  :config
+  :commands (hydra-kurecolor/body)
+  :init
   (progn
     (defhydra hydra-kurecolor (:color pink
                                :hint  nil)
       "
-Inc/Dec _j_/_J_ brightness _k_/_K_ saturation _l_/_L_ hue
-Set     _sj_^^  brightness _sk_^^  saturation _sl_^^  hue
-Get     _gj_^^  brightness _gk_^^  saturation _gl_^^  hue
-_rh_ RGB → Hex   _hr_ Hex → RGB    _hR_ Hex → RGBA
+Inc/Dec      _j_/_J_ brightness      _k_/_K_ saturation      _l_/_L_ hue
+Set          _sj_ ^^ brightness      _sk_ ^^ saturation      _sl_ ^^ hue
+Get          _gj_ ^^ brightness      _gk_ ^^ saturation      _gl_ ^^ hue
+
+             _rh_ ^^ RGB → Hex       _hr_ ^^ Hex → RGB       _hR_ ^^ Hex → RGBA
 "
       ("j"  kurecolor-decrease-brightness-by-step)
       ("J"  kurecolor-increase-brightness-by-step)
@@ -31,8 +33,7 @@ _rh_ RGB → Hex   _hr_ Hex → RGB    _hR_ Hex → RGBA
       ("hR" kurecolor-hexcolor-at-point-or-region-to-css-rgba :color blue)
       ("q"  nil "cancel" :color blue))
     (bind-key "s-k" #'hydra-kurecolor/body modi-mode-map)
-    (bind-key "C-c k" #'hydra-kurecolor/body modi-mode-map)
-    ))
+    (bind-key "C-c k" #'hydra-kurecolor/body modi-mode-map)))
 
 
 (provide 'setup-kurecolor)
