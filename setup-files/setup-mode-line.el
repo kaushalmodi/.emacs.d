@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-03 09:45:18 kmodi>
+;; Time-stamp: <2015-09-08 22:33:16 kmodi>
 
 ;; Customize the mode-line
 
@@ -52,7 +52,7 @@ If nil, show the same in the minibuffer.")
       (set-face-attribute 'minibuffer-line nil :inherit font-lock-warning-face))
 
     (defun modi/update-go-home-alert ()
-      "Reset the `minibuffer-line' face to default and update the 'Go Home'
+      "Reset the `minibuffer-line' face to default and update the `Go Home'
 alert time."
       (modi/minibuffer-line-set-default-face)
       (setq modi/today--day-sym (intern (format-time-string "%a")))
@@ -60,7 +60,7 @@ alert time."
                                          modi/time-go-home-alert))))
 
     (defun modi/reset-go-home-alert (time)
-      "Set the 'go home' alert reset time interactively.
+      "Set the `go home' alert reset time interactively.
 The `modi/timer--go-home-reset' timer is canceled and not restarted if
 TIME is \"nil\" or \"\"."
       (interactive "sReset alert time (e.g. 7:00am): ")
@@ -76,7 +76,7 @@ TIME is \"nil\" or \"\"."
                                            #'modi/update-go-home-alert)))))
 
     (defun modi/set-go-home-alert (time)
-      "Set the 'go home' alert time interactively.
+      "Set the `go home' alert time interactively.
 The `modi/timer--go-home-alert' timer is canceled and not restarted if
 TIME is \"nil\" or \"\"."
       (interactive "s'Go Home' alert time (e.g. 5:00pm): ")
@@ -95,7 +95,7 @@ TIME is \"nil\" or \"\"."
             (progn
               (modi/minibuffer-line-set-default-face)
               (setq modi/timer--go-home-alert nil)
-              (message "%s: 'Go Home' alert removed." modi/today--day-sym))
+              (message "%s: `Go Home' alert removed." modi/today--day-sym))
           (let ((daily (* 60 60 24))
                 new-go-home-time new-go-home-time-str)
             (setq modi/timer--go-home-alert (run-at-time
@@ -107,12 +107,12 @@ TIME is \"nil\" or \"\"."
                                                   "%I:%M%p" new-go-home-time)))
             (if old-go-home-time
                 (if (string= new-go-home-time-str old-go-home-time-str)
-                    (message "'Go Home' alert time unchanged: %s"
+                    (message "`Go Home' time unchanged: %s"
                              new-go-home-time-str)
-                  (message "%s: Changed 'Go Home' alert time from %s to %s."
+                  (message "%s: Changed `Go Home' time from %s to %s."
                            modi/today--day-sym
                            old-go-home-time-str new-go-home-time-str))
-              (message "%s: 'Go Home' alert time set to %s."
+              (message "%s: `Go Home' alert time set to %s."
                        modi/today--day-sym new-go-home-time-str))))))
 
     (minibuffer-line-mode)
