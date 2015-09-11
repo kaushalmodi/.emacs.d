@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-21 14:31:45 kmodi>
+;; Time-stamp: <2015-09-04 15:22:01 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -13,6 +13,7 @@
       ;; Enable ivy
       (ivy-mode 1))
 
+    (setq ivy-display-style nil) ; default nil
     (setq ivy-use-virtual-buffers t)
     (setq ivy-count-format "%d/%d ")
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
