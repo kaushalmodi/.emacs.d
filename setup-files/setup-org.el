@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-31 12:55:10 kmodi>
+;; Time-stamp: <2015-09-11 15:04:12 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -113,6 +113,12 @@
              (dolist (tag (org-split-string (org-match-string-no-properties 1) ":"))
                (push tag tags)))
            (mapcar #'list (append org-file-tags (org-uniquify tags)))))))
+
+    ;; Make firefox the default web browser for applications like viewing
+    ;; an html file exported from org ( C-c C-e h o )
+    (when (executable-find "firefox")
+      (add-to-list 'org-file-apps '("\\.x?html\\'" . "firefox %s")))
+
 
 ;;; Agenda and Capture
     ;; http://orgmode.org/manual/Template-elements.html

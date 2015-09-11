@@ -1,8 +1,8 @@
-;; Time-stamp: <2015-09-02 11:29:23 kmodi>
+;; Time-stamp: <2015-09-11 15:44:51 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
-(fset 'yes-or-no-p 'y-or-n-p) ;; Use y or n instead of yes or no
+(fset 'yes-or-no-p 'y-or-n-p) ; Use y or n instead of yes or no
 
 (setq delete-by-moving-to-trash t)
 (setq trash-directory (concat "/tmp/trash/" (getenv "USER") "/emacs/"))
@@ -131,7 +131,11 @@ If universal arg is used, load the `init.el'."
 (defvar emacs-build-hash emacs-repository-version
   "Git hash of the commit at which this version of emacs was built.")
 
-(defun modi/browse-current-build-git (log)
+;; Set firefox as the default web browser
+(setq browse-url-generic-program (executable-find "firefox"))
+(setq browse-url-browser-function 'browse-url-generic)
+
+(defun modi/browse-current-build-emacs-git (log)
   "Browse to the emacs git page for the current build commit details.
 Also save the url to the kill-ring.
 
