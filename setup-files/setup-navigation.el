@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-24 11:05:54 kmodi>
+;; Time-stamp: <2015-09-08 14:15:37 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -63,16 +63,16 @@
 ;; `iy-go-to-char-continue-backward'.
 
 
-;; Make C-a toggle between beginning of line and indentation
 ;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
-(defun back-to-indentation-or-beginning-of-line (arg)
+(defun modi/beginning-of-line-or-indentation (arg)
   "Move point back to indentation of beginning of line.
 Move point to the first non-whitespace character on this line.
 If point is already there, move to the beginning of the line.
 Effectively toggle between the first non-whitespace character and
 the beginning of the line.
-If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-point reaches the beginning or end of the buffer, stop there."
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.
+If point reaches the beginning or end of the buffer, stop there."
   (interactive "^p")
   (setq arg (or arg 1))
 
@@ -287,8 +287,9 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
   ("M-["    . backward-paragraph))
 
 (bind-keys
- ;; Allow the `term-mode-map' to override the binding to `C-a'
- ("C-a" . back-to-indentation-or-beginning-of-line) ; default binding for `move-beginning-of-line'
+ ;; Bind in `global-map' to allow the `term-mode-map' to override the `C-a' binding
+ ("C-a"   . modi/beginning-of-line-or-indentation) ; default binding for `move-beginning-of-line'
+ ("C-S-a" . move-beginning-of-line)
  ;; The `M-}' and `M-{' bindings are useful in Ibuffer and dired to move to
  ;; next and previous marked items respectively. Bind them in global map so
  ;; that those major mode bindings can override the global bindings.
