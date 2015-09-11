@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-31 12:50:09 kmodi>
+;; Time-stamp: <2015-09-10 12:49:23 kmodi>
 
 ;; Registers
 
@@ -10,16 +10,6 @@
 (set-register ?e (cons 'file (expand-file-name "init.el" user-emacs-directory))) ; C-x r j e
 
 (set-register ?j (cons 'file (expand-file-name "journal.org" org-directory))) ; C-x r j j
-
-(set-register ?a (cons 'file (expand-file-name ".alias" user-home-directory ))) ; C-x r j a
-(set-register ?t (cons 'file (expand-file-name ".tmux.conf" user-home-directory ))) ; C-x r j t
-(set-register ?i (cons 'file (expand-file-name
-                              "index.org"
-                              (concat user-home-directory "public_html/")))) ; C-x r j i
-
-(set-register ?v (cons 'file (expand-file-name
-                              "IEEE_STD_1800-2012_SystemVerilog.pdf"
-                              (concat user-home-directory "docs/")))) ; C-x r j v
 
 
 (provide 'setup-registers)
