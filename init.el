@@ -284,6 +284,7 @@
 (require 'setup-yaml-mode)
 
 ;; Blend of other setup
+(require 'setup-backup)
 (require 'setup-editing)
 (require 'setup-image)
 (require 'setup-navigation)
@@ -294,6 +295,7 @@
 (when (or (executable-find "aspell")
           (executable-find "hunspell"))
   (require 'setup-spell))
+(require 'setup-unicode)
 (require 'setup-windows-buffers)
 
 ;; Place `setup-work.el' with `(provide 'setup-work)' in `user-personal-directory'

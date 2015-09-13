@@ -1,7 +1,42 @@
-;; Time-stamp: <2015-08-28 14:32:10 kmodi>
+;; Time-stamp: <2015-09-13 13:05:31 kmodi>
 
 ;; Functions related to editing text in the buffer
+;; Contents:
+;;
+;;  Time stamps
+;;  Duplicate current line or region
+;;  Managing white spaces and empty newlines
+;;  Untabify buffer
+;;  Align
+;;  Eval and replace last sexp
+;;  Toggle comment on current line or selected region
+;;  My modified basic functions
+;;    Kill Line
+;;    Open Line
+;;    Pull Up Line
+;;  Enable the disabled functions
+;;    Narrowing
+;;    Setting Goal Column
+;;    Upper/lower case conversion
+;;  zop-to-char
+;;  Kill with line numbers
+;;  Rectangle
+;;  Cycle Letter Case
+;;  Sort Words
+;;  Unfill
+;;  Gplusify
+;;  Insert date, time, user name
+;;  Replace identical strings with incremental number suffixes
+;;  Delete Blank Lines
+;;  Space Adjustment After Word Kills
+;;  Whole Buffer If Not Region
+;;  Smart Mark
+;;  C-u before M-w/C-w to trim white space
+;;  Saved Macros
+;;  Bindings
+;;  Comment Commander
 
+;;; Time stamps
 ;; Write time stamps when saving files
 ;; http://www.emacswiki.org/emacs/TimeStamp
 ;; You can arrange to put a time stamp in a file, so that it is updated
@@ -14,7 +49,7 @@
 (setq time-stamp-line-limit 20)
 (add-hook 'before-save-hook #'time-stamp)
 
-;; Duplicate current line or region
+;;; Duplicate current line or region
 ;; http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
 (defun duplicate-current-line-or-region (arg)
   "Duplicates the current line or region ARG times.
@@ -37,7 +72,7 @@ there's a region, all lines that region covers will be duplicated."
         (setq end (point)))
       (goto-char (+ origin (* (length region) arg) arg)))))
 
-;; Managing white spaces and empty newlines
+;;; Managing white spaces and empty newlines
 ;; Delete trailing white space in lines and empty new lines at the end of file
 ;; at the time of saving
 ;; This is very useful for macro definitions in Verilog as for multi-line
@@ -60,7 +95,7 @@ that sub-directory will the below contents:
     (call-interactively #'delete-trailing-whitespace)))
 (add-hook 'write-file-functions #'modi/delete-trailing-whitespace)
 
-;; Untabify buffer
+;;; Untabify buffer
 (defun modi/untabify-buffer ()
   "Untabify the current buffer."
   (interactive)
@@ -72,7 +107,7 @@ that sub-directory will the below contents:
   ;; functions in the `write-file-functions' is not returning `nil'.
   nil)
 
-;; Align
+;;; Align
 ;; http://stackoverflow.com/questions/6217153/aligning-or-prettifying-code-in-emacs
 ;; http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
 (defun modi/align-to-equals (begin end)
@@ -97,6 +132,7 @@ that sub-directory will the below contents:
   (align-regexp begin end "\\(\\s-+\\)[a-zA-Z0-9=(),?':`\.{}]" 1 1 t)
   (indent-region begin end)) ; indent the region correctly after alignment
 
+;;; Eval and replace last sexp
 ;; http://stackoverflow.com/a/3035574/1219634
 (defun eval-and-replace-last-sexp ()
   "Replace an emacs lisp expression (s-expression aka sexp) with its result.
@@ -109,7 +145,7 @@ this command."
     (insert (format "%s" value))))
 (bind-to-modi-map "x" #'eval-and-replace-last-sexp)
 
-;; Toggle comment on current line or selected region
+;;; Toggle comment on current line or selected region
 ;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
 ;; http://endlessparentheses.com/implementing-comment-line.html
 (defun endless/comment-line-or-region (n)
@@ -130,6 +166,9 @@ If region is active, apply to active region instead."
     (forward-line 1)
     (back-to-indentation)))
 
+;;; My modified basic functions
+
+;;;; Kill Line
 (defun modi/kill-line (&optional arg)
   "Kill line.
 
@@ -157,6 +196,7 @@ If ARG >  0, kill that many lines from point."
     (when bol-or-at-indentation-p
       (back-to-indentation))))
 
+;;;; Open Line
 (defun modi/smart-open-line (&optional n)
   "Move the current line down if there are no word chars between the start of
 line and the cursor. Else, insert empty line after the current line."
@@ -180,6 +220,7 @@ line and the cursor. Else, insert empty line after the current line."
             (newline-and-indent))
           (previous-line (- n 1)))))))
 
+;;;; Pull Up Line
 ;; http://emacs.stackexchange.com/q/7519/115
 (defun modi/pull-up-line ()
   "Join the following line onto the current one (analogous to `C-e', `C-d') or
@@ -201,23 +242,24 @@ remove the comment characters from that line."
       (insert-char ? ) ; insert space
       )))
 
-;; Enable narrowing
+;;; Enable the disabled functions
+
+;;;; Narrowing
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-defun  'disabled nil)
 (put 'narrow-to-page   'disabled nil)
 
-;; Enable setting goal column
+;;;; Setting Goal Column
 ;; http://emacsblog.org/2007/03/17/quick-tip-set-goal-column/
 (put 'set-goal-column  'disabled nil)
 ;;     C-x C-n <- Set goal column
 ;; C-u C-x C-n <- Unset goal column
 
-;; Enable conversion of the selected region to upper case using `C-x C-u`
+;;;; Upper/lower case conversion
 (put 'upcase-region   'disabled nil)
-;; Enable conversion of the selected region to lower case using `C-x C-l`
 (put 'downcase-region 'disabled nil)
 
-;; zop-to-char
+;;; zop-to-char
 ;; https://github.com/thierryvolpiatto/zop-to-char
 (use-package zop-to-char
   :config
@@ -234,6 +276,7 @@ remove the comment characters from that line."
       ("M-z" . zop-up-to-char)
       ("M-Z" . zop-to-char))))
 
+;;; Kill with line numbers
 ;; http://stackoverflow.com/q/12165205/1219634
 (defun kill-with-linenum (beg end unicode)
   "Copy the selected region with file name, starting and ending
@@ -288,12 +331,7 @@ instead of ASCII characters for adorning the copied snippet."
     ("c" . kill-with-linenum)
     ("C" . kill-with-linenum-unicode)))
 
-;; Convert the decimal values in the whole buffer to 16-bit 2's complement hex
-(fset 'modi/convert-dec-to-twos-comp-16-bit-hex
-      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([escape 58 40 114 101 97 100 45 111 110 108 121 45 109 111 100 101 32 45 49 41 return 109 44 19 45 return 67108896 2 97 67108896 40 6 32 40 94 32 50 32 49 54 41 32 5 41 24 109 120 return 24 104 33554435 33554435 40 102 111 114 109 97 116 32 34 37 88 34 5 41 24 109 120 return] 0 "%d")) arg)))
-
-;; RECTANGLE
-
+;;; Rectangle
 ;; How to position the cursor after the end of line; useful for copying/killing
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
@@ -359,6 +397,7 @@ _b_   _f_      _k_   cut         _r_eset         _o_pen (create blank rectangle 
   ("q"   nil "cancel" :color blue))
 (bind-key "C-x SPC" #'hydra-rectangle/body modi-mode-map)
 
+;;; Cycle Letter Case
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
 (defun xah-cycle-letter-case (arg)
   "Cycle the letter case of the selected region or the current word.
@@ -433,6 +472,7 @@ _C_apitalize        _U_PCASE        _d_owncase        _<SPC>_ →Cap→UP→down
   ("C-x C-l" . modi/downcase)
   ("M-c"     . hydra-change-case/body))
 
+;;; Sort Words
 ;; http://www.emacswiki.org/emacs/SortWords
 ;; http://emacs.stackexchange.com/a/7550/115
 (defun sort-words (reverse beg end)
@@ -450,10 +490,12 @@ Temporarily consider - and _ characters as part of the word when sorting."
       (modify-syntax-entry ?_ "w" temp-table)
       (sort-regexp-fields reverse "\\w+" "\\&" beg end))))
 
+;;; Unfill
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
   :load-path "elisp/unfill")
 
+;;; Gplusify
 ;; Copy region with formatting for G+ comments
 ;; https://github.com/jorgenschaefer/gplusify
 (use-package gplusify
@@ -465,7 +507,7 @@ Temporarily consider - and _ characters as part of the word when sorting."
        :map region-bindings-mode-map
         ("G" . gplusify-region-as-kill)))))
 
-;; Insert date, time, user name
+;;; Insert date, time, user name
 (defun modi/insert-time-stamp (option)
   "Insert date, time, user name - DWIM.
 
@@ -524,7 +566,7 @@ C-u C-u C-u -> Both prefix and user name are not inserted."
       (insert " "))))
 (bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
 
-;; Replace identical strings with incremental number suffixes
+;;; Replace identical strings with incremental number suffixes
 (defvar modi/replace-with-incr-num-suffix-max 100
   "Default maximum number till which the number suffixes will increment in the
 replacements.")
@@ -586,140 +628,7 @@ After replacement text:
       (re-search-backward "\\b" nil :noerror))
     (map-query-replace-regexp regexp to-strings)))
 
-;; Backups
-
-;; When `vc-make-backup-files' is nil (default), backups are not made for
-;; version controlled (e.g. git) files. Set this to `t' to allow making backups
-;; using prefix args to `save-buffer' command.
-(setq vc-make-backup-files t)
-
-;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Numbered-Backups.html
-;; http://stackoverflow.com/a/151946/1219634
-;; `version-control' is nil by default; numbered backups are made only if the
-;; the visited file already has numbered backups. Below will always create
-;; numbered backups.
-(setq version-control :make-numbered-backups)
-
-(setq kept-new-versions 4) ; default 2
-(setq kept-old-versions 2) ; default 2
-;; If there are backups numbered 1, 2, 3, 5, and 7, and both of the above
-;; variables have the value 2, then the backups numbered 1 and 2 are kept
-;; as old versions and those numbered 5 and 7 are kept as new versions;
-;; backup version 3 is deleted after user confirmation.
-
-;; Excess backup deletion will happen silently, without user confirmation, if
-;; `delete-old-versions' is set to `t'.
-(setq delete-old-versions t) ; default nil
-
-;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Rename-or-Copy.html
-(setq backup-by-copying t) ; don't clobber symlinks
-
-(setq modi/backup-directory
-      (let ((dir (concat temporary-file-directory
-                         (getenv "USER") "/.backups/"))) ; must end with /
-        (make-directory dir :parents)
-        dir))
-
-;; Save all backups to `modi/backup-directory'
-(setq backup-directory-alist `(("." . ,modi/backup-directory)))
-(message (format "All backup files will be saved to %s." modi/backup-directory))
-
-;; http://ergoemacs.org/emacs/elisp_make-backup.html
-(defun modi/make-backup ()
-  "Make a backup copy of current file.
-The backup file name has the form ‹name›~‹timestamp›~, in the same dir.
-If such a file already exist, it's overwritten.
-If the current buffer is not associated with a file, nothing's done."
-  (interactive)
-  (if (buffer-file-name)
-      (let* ((currentName (buffer-file-name))
-             (backupName (concat currentName
-                                 "." (format-time-string "%Y%m%d_%H%M") ".bkp")))
-        (copy-file currentName backupName :overwrite-if-already-exists)
-        (message (concat "Backup saved as: " (file-name-nondirectory backupName))))
-    (user-error "buffer is not a file.")))
-;; Also make emacs ignore that appended string to the backup files when
-;; deciding the major mode
-;; http://emacs.stackexchange.com/a/13285/115
-(add-to-list 'auto-mode-alist '("\\.[0-9_]+\\.bkp\\'" nil backup-file))
-(bind-to-modi-map "`" #'modi/make-backup)
-
-;; Unicode
-(require 'iso-transl)
-;; Add custom bindings to "C-x 8" map
-(dolist (binding '(;; >
-                   (">"       . nil) ; First unbind ">" from the map
-                   (">="      . [?≥]) ; greater than or equal to
-                   (">>"      . [?≫]) ; much greater than
-                   (">\""     . [?»]) ; right-pointing double angle quotation mark
-                   (">'"      . [?›]) ; single right-pointing angle quotation mark
-                   (">h"      . [?☛]) ; black right pointing index
-                   ;; <
-                   ("<"       . nil) ; First unbind "<" from the map
-                   ("<="      . [?≤]) ; less than or equal to
-                   ("<<"      . [?≪]) ; much less than
-                   ("<\""     . [?«]) ; left-pointing double angle quotation mark
-                   ("<'"      . [?‹]) ; single left-pointing angle quotation mark
-                   ("<h"      . [?☚]) ; black left pointing index
-                   ;; "
-                   ("\"`"     . [?“]) ; left double quotation mark
-                   ("\"'"     . [?”]) ; right double quotation mark
-                   ;; arrows
-                   ("<right>" . [?→]) ; rightwards arrow
-                   ("<left>"  . [?←]) ; leftwards arrow
-                   ("<up>"    . [?↑]) ; upwards arrow
-                   ("<down>"  . [?↓]) ; downwards arrow
-                   ;; misc
-                   ("r"       . [?▯]) ; white vertical rectangle
-                   ("R"       . [?▮]) ; black vertical rectangle
-                   ("*r"      . [?₹]) ; indian rupee sign
-                   ("e"       . [?↵]) ; downwards arrow with corner leftwards
-                   ("E"       . [?⏎]) ; return symbol
-                   ("1/3"     . [?⅓]) ; fraction one third
-                   ("0"       . [?​]))) ; zero width space
-  (define-key iso-transl-ctl-x-8-map (kbd (car binding)) (cdr binding)))
-;; Unicode chars that can be entered using C-x 8 binding
-;; |------------------+-------------------------|
-;; | C-x 8 prefix map | Unicode                 |
-;; | binding          | character               |
-;; |------------------+-------------------------|
-;; | {                | “                       |
-;; | }                | ”                       |
-;; | ^1               | ¹                       |
-;; | ^2               | ²                       |
-;; | ^3               | ³                       |
-;; | .                | ·                       |
-;; | **               | •                       |
-;; | o                | ° (degree)              |
-;; | ~=               | ≈                       |
-;; | /=               | ≠                       |
-;; | +                | ±                       |
-;; | /o               | ø                       |
-;; | 1/2              | ½                       |
-;; | 1/4              | ¼                       |
-;; | 3/4              | ¾                       |
-;; | R                | ®                       |
-;; | C                | ©                       |
-;; | m                | µ                       |
-;; | 'a               | á                       |
-;; | 'e               | é                       |
-;; | 'i               | í                       |
-;; | 'o               | ó                       |
-;; | 'u               | ú                       |
-;; | "u               | ü                       |
-;; | ~n               | ñ                       |
-;; | ?                | ¿                       |
-;; | !                | ¡                       |
-;; | _n               | – (en dash)             |
-;; | _m               | — (em dash)             |
-;; | _h               | ‐ (hyphen)              |
-;; | _H               | ‑ (non-breaking hyphen) |
-;; | _-               | − (minus sign)          |
-;; | a>               | →                       |
-;; | a<               | ←                       |
-;; |------------------+-------------------------|
-
-;; Delete Blank Lines
+;;; Delete Blank Lines
 ;; http://www.masteringemacs.org/article/removing-blank-lines-buffer
 ;; If a region is selected, delete all blank lines in that region.
 ;; Else, call `delete-blank-lines'.
@@ -730,6 +639,7 @@ If the current buffer is not associated with a file, nothing's done."
     do-not-run-orig-fn))
 (advice-add 'delete-blank-lines :before-until #'modi/delete-blank-lines-in-region)
 
+;;; Space Adjustment After Word Kills
 (defun modi/space-as-i-mean ()
   "Function to manage white space with `kill-word' operations.
 
@@ -761,6 +671,7 @@ abc |ghi        <-- point still after white space after calling this function."
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
 (advice-add 'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
 
+;;; Whole Buffer If Not Region
 (defvar modi/whole-buffer-if-not-region-fns '(indent-region
                                               eval-region)
   "List of functions to advice so that they act on the whole buffer if a
@@ -806,6 +717,8 @@ SYMBOL to the whole buffer if region is not selected."
                   modi/whole-buffer-if-not-region-adv-fn-name-format fn))))
     (advice-add fn :around adv-fn)))
 
+
+;;; C-u before M-w/C-w to trim white space
 ;; Update the `region-extract-function' variable defined in `simple.el'
 (setq region-extract-function
       (lambda (delete)
@@ -833,6 +746,12 @@ SYMBOL to the whole buffer if region is not selected."
                     (buffer-string)))
               (filter-buffer-substring (region-beginning) (region-end) delete))))))
 
+;;; Saved Macros
+;; Convert the decimal values in the whole buffer to 16-bit 2's complement hex
+(fset 'modi/convert-dec-to-twos-comp-16-bit-hex
+      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([escape 58 40 114 101 97 100 45 111 110 108 121 45 109 111 100 101 32 45 49 41 return 109 44 19 45 return 67108896 2 97 67108896 40 6 32 40 94 32 50 32 49 54 41 32 5 41 24 109 120 return 24 104 33554435 33554435 40 102 111 114 109 97 116 32 34 37 88 34 5 41 24 109 120 return] 0 "%d")) arg)))
+
+;;; Bindings
 (bind-keys
  :map modi-mode-map
   ;; override the binding of `M-;' for `comment-dwim'
@@ -854,7 +773,7 @@ SYMBOL to the whole buffer if region is not selected."
   ("<M-delete>" . backward-kill-word))
 (bind-to-modi-map "=" #'modi/align-to-equals)
 
-;; Comment Commander
+;;; Comment Commander
 ;; Usage: Quickly pressing `j' twice will toggle comment on the current line or
 ;;        region and proceed the cursor to the next line.
 ;;        Now each consecutive pressing of `j', will toggle the comment on that
@@ -889,9 +808,6 @@ SYMBOL to the whole buffer if region is not selected."
 
 
 (provide 'setup-editing)
-
-
-;; TIPS
 
 ;; (1) Commented new line
 ;; `M-j'/`C-M-j' - `indent-new-comment-line' (aliased to `comment-indent-new-line')
