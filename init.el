@@ -1,7 +1,11 @@
-;; Time-stamp: <2015-08-31 11:55:58 kmodi>
+;; Time-stamp: <2015-09-13 18:29:39 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
+;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
+(setq gc-cons-threshold--orig gc-cons-threshold)
+(setq gc-cons-threshold (* 100 1024 1024)) ; 100 MB before garbage collection
+
 (setq user-home-directory     (concat (getenv "HOME") "/")) ; must end with /
 (setq user-emacs-directory    (concat user-home-directory ".emacs.d/")) ; must end with /
 (setq emacs-version-short     (replace-regexp-in-string
@@ -328,3 +332,9 @@
   (funcall default-theme-fn)) ; defined in `setup-visual.el'
 
 (setq emacs-initialized t)
+
+(run-with-idle-timer 5 nil
+                     (lambda ()
+                       (setq gc-cons-threshold gc-cons-threshold--orig)
+                       (message "gc-cons-threshold restored to %S bytes."
+                                gc-cons-threshold--orig)))
