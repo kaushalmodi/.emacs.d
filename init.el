@@ -112,6 +112,7 @@
         rpn-calc
         shackle
         smart-compile
+        smart-mark
         smart-mode-line popup rich-minority
         smex ; smart M-x
         stripe-buffer

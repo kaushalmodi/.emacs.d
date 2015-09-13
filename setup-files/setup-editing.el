@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 13:05:31 kmodi>
+;; Time-stamp: <2015-09-13 18:20:32 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -717,6 +717,12 @@ SYMBOL to the whole buffer if region is not selected."
                   modi/whole-buffer-if-not-region-adv-fn-name-format fn))))
     (advice-add fn :around adv-fn)))
 
+;;; Smart Mark
+;; C-g after `mark-whole-buffer' brings the point back to where it originally was.
+(use-package smart-mark
+  :config
+  (progn
+    (smart-mark-mode 1)))
 
 ;;; C-u before M-w/C-w to trim white space
 ;; Update the `region-extract-function' variable defined in `simple.el'
