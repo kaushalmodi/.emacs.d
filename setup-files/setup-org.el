@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-11 15:04:12 kmodi>
+;; Time-stamp: <2015-09-14 11:46:32 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -28,7 +28,8 @@
 (if (bound-and-true-p org-load-version-dev)
     ;; if `org-load-version-dev' is non-nil
     (add-to-list 'load-path (concat user-emacs-directory
-                                    "elisp/org-mode/lisp/"))
+                                    "elisp/org-mode/lisp_"
+                                    emacs-version-short "/"))
   (when (bound-and-true-p org-load-version-8p2)
     ;; if `org-load-version-dev' is nil AND
     ;;    `org-load-version-8p2' is non-nil
