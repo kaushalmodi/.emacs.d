@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-21 09:32:02 kmodi>
+;; Time-stamp: <2015-09-14 17:28:05 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -412,30 +412,30 @@ narrowed."
   ("q"   nil :color blue))
 
 ;; Toggle menu bar
-;; Below bkp/ vars are used to restore the original frame size after disabling
-;; menu bar
-(defvar bkp/frame-height-pixel nil)
-(defvar bkp/frame-width-pixel nil)
+(defvar bkp--frame-height-px (frame-pixel-height)
+  "Backup of the frame height in pixels.")
+(defvar bkp--frame-width-px (frame-pixel-width)
+  "Backup of the frame width in pixels.")
+
 (defun modi/toggle-menu-bar ()
-  "Toggle the menu bar. Also restore the original frame size when disabling the
-menu bar."
+  "Toggle the menu bar.
+Also restore the original frame size when disabling the menu bar."
   (interactive)
   (let ((frame-resize-pixelwise t))
-    (if menu-bar-mode
-        (progn ; if menu bar is visible before toggle
-          (menu-bar-mode -1))
-      (progn ; if menu bar is hidden before toggle
-        (setq bkp/frame-height-pixel (frame-pixel-height))
-        ;; `frame-pixel-width' is returning a value higher by 2 char widths in
-        ;; pixels compared to that set using `set-frame-size'. So the below
-        ;; adjustment has to be made.
-        (setq bkp/frame-width-pixel  (- (frame-pixel-width) (* 2 (frame-char-width))))
-        (menu-bar-mode 1)))
-    (when (not menu-bar-mode) ; restore frame size if menu bar is hidden after toggle
-      (set-frame-size (selected-frame)
-                      bkp/frame-width-pixel
-                      bkp/frame-height-pixel
-                      :pixelwise))))
+    ;; If the menu bar is hidden currently, take a backup of the frame height.
+    (when (null menu-bar-mode)
+      (setq bkp--frame-height-px (frame-pixel-height))
+      (setq bkp--frame-width-px (frame-pixel-width))
+      ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
+      ;; `frame-pixel-width' is returning a value higher by 16 pixels compared
+      ;; to that set using `set-frame-size'. So the below adjustment has to be made.
+      (setq bkp--frame-width-px (- (frame-pixel-width) 16))
+      ;;
+      )
+    (menu-bar-mode 'toggle)
+    ;; Restore frame size if menu bar is hidden after toggle
+    (when (null menu-bar-mode)
+      (set-frame-size nil bkp--frame-width-px bkp--frame-height-px :pixelwise))))
 
 ;; Prettify symbols
 (defvar modi/prettify-symbols-mode-hooks '(emacs-lisp-mode-hook)
