@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-11 15:44:51 kmodi>
+;; Time-stamp: <2015-09-14 00:14:52 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -252,7 +252,7 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
   ("P"       modi/set-file-permissions)
   ("sa"      async-shell-command)
   ("ss"      shell-command)
-  ("se"      (sx-tab-newest nil "emacs"))
+  ("se"      (sx-tab-all-questions nil "emacs"))
   ("t"       multi-term)
   ("u"       paradox-upgrade-packages)
   ("w"       sunshine-quick-forecast)
