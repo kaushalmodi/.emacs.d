@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-18 09:02:17 kmodi>
+;; Time-stamp: <2015-09-14 09:59:52 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -36,13 +36,25 @@ Otherwise, get the symbol at point, as a string."
          (substring-no-properties
           (symbol-name (symbol-at-point))))))
 
-;; Kill emacs when running in daemon mode or not
+;; Based on `tv-stop-emacs' function from
 ;; http://lists.gnu.org/archive/html/emacs-devel/2011-11/msg00348.html
-(defun tv-stop-emacs ()
-  (interactive)
+(defun modi/quit-emacs (skip-desktop-save)
+  "Kill emacs when running in daemon mode or not.
+If `desktop-save-mode' is non-nil, save the desktop before killing emacs.
+
+If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
+  (interactive "P")
+  (when (and (not skip-desktop-save)
+             (bound-and-true-p desktop-save-mode))
+    (desktop-save-in-desktop-dir))
   (if (daemonp)
       (save-buffers-kill-emacs)
     (save-buffers-kill-terminal)))
+
+(defun modi/quit-emacs-no-desktop-save ()
+  "Kill emacs when running in daemon mode or not without saving the desktop."
+  (interactive)
+  (modi/quit-emacs :skip-desktop-save))
 
 ;; `with-eval-after-load' macro was introduced in emacs 24.4
 ;; Below code makes this macro compatible with older versions of emacsen

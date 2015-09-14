@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-14 00:14:52 kmodi>
+;; Time-stamp: <2015-09-14 09:58:24 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -309,13 +309,15 @@ in the mode line."
 ;; the minor-mode lighters in right order, simply revert the buffer.
 (add-hook 'after-revert-hook #'modi/organize-minor-mode-lighters)
 
-;; Exiting emacs
-(when (null desktop-save-mode)
-  (bind-key "C-x C-c" #'tv-stop-emacs))
+(bind-keys
+ ;; Override the default binding of C-x C-c to `save-buffer-kill-terminal'
+ ;; `save-buffers-kill-terminal' kills only the current frame; it will NOT
+ ;; kill the emacs server.
+ ("C-x C-c" . modi/quit-emacs)
+ ("C-x M-c" . modi/quit-emacs-no-desktop-save))
 
 
 (provide 'setup-misc)
-
 
 ;; TIPS
 ;;
