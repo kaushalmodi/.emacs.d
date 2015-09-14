@@ -1,13 +1,20 @@
-;; Time-stamp: <2015-06-19 16:46:04 kmodi>
+;; Time-stamp: <2015-09-14 10:17:25 kmodi>
 
 ;; Desktop save and restore
-
-;; Type ‘M-x session-save’, or ‘M-x session-restore’ whenever you want to save
-;; or restore a desktop. Restored desktops are deleted from disk.
 
 (use-package desktop
   :config
   (progn
+    (defvar modi/no-desktop-read-at-startup nil
+      "Set this variable to a non-nil value if you do not want to enable
+`desktop-save-mode'.
+
+This variable can be used to start emacs without reading the previously
+saved desktop at startup:
+
+> emacs --eval \"(setq modi/no-desktop-read-at-startup t)\"
+")
+
     (setq desktop-base-file-name (concat "emacs_" emacs-version-short
                                          ".desktop"))
     (setq desktop-base-lock-name (concat "emacs_" emacs-version-short
@@ -17,8 +24,8 @@
     (setq desktop-restore-frames nil)
 
     ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-sessions.el
-    ;; save a bunch of variables to the desktop file
-    ;; for lists specify the len of the maximal saved data also
+    ;; Save a bunch of variables to the desktop file.
+    ;; For lists, specify the length of the maximal saved data too.
     (setq desktop-globals-to-save
           (append '((comint-input-ring . 50)
                     desktop-missing-file-warning
@@ -95,78 +102,19 @@
               buf)
           nil)))
 
-    (defun save-desktop-save-buffers-stop-emacs ()
-      "Save buffers and current desktop every time when quitting emacs."
+    (defun modi/restore-last-saved-desktop ()
+      "Enable `desktop-save-mode' and restore the last saved desktop."
       (interactive)
-      (desktop-save-in-desktop-dir)
-      (tv-stop-emacs))
+      (desktop-save-mode 1)
+      (desktop-read))
 
-    (desktop-save-mode 1)
-    (when desktop-save-mode (desktop-read))
+    (when (null modi/no-desktop-read-at-startup)
+      (modi/restore-last-saved-desktop))
 
     (bind-keys
      :map modi-mode-map
-      ("<S-f2>" . desktop-save-in-desktop-dir))
-
-    ;; The emacs-quitting feature is useful whether or not my minor map is loaded
-    ;; So bind the keys globally instead of to the minor mode map.
-    (when desktop-save-mode
-      (bind-keys
-       ;; ("C-x C-c" . save-buffers-kill-terminal) ; default binding
-                                        ; `save-buffers-kill-terminal' kills
-                                        ; only the current frame; it will not
-                                        ; kill the emacs server.
-       ("C-x C-c" . save-desktop-save-buffers-stop-emacs)
-       ("C-x M-c" . tv-stop-emacs))))) ; quit without saving desktop
+      ("<S-f2>" . desktop-save-in-desktop-dir)
+      ("<C-f2>" . modi/restore-last-saved-desktop))))
 
 
 (provide 'setup-desktop)
-
-;; (desktop-save-mode nil)
-;; comment (desktop-save-mode 1) is you want to use only one desktop
-;; using the below code
-
-;; ;; use only one desktop
-;; (setq desktop-dirname user-emacs-directory)
-;; (setq desktop-path (list desktop-dirname))
-;; (setq desktop-base-file-name "emacs-desktop")
-;; (setq desktop-file-name (expand-file-name desktop-base-file-name desktop-dirname))
-
-;; ;; remove desktop after it's been read
-;; (add-hook 'desktop-after-read-hook
-;; 	  '(lambda ()
-;; 	     ;; desktop-remove clears desktop-dirname
-;; 	     (setq desktop-dirname-tmp desktop-dirname)
-;; 	     (desktop-remove)
-;; 	     (setq desktop-dirname desktop-dirname-tmp)))
-
-;; (defun saved-session ()
-;;   (file-exists-p desktop-file-name))
-
-;; ;; use session-restore to restore the desktop manually
-;; (defun session-restore ()
-;;   "Restore a saved emacs session."
-;;   (interactive)
-;;   (if (saved-session)
-;;       (desktop-read)
-;;     (message "No desktop found.")))
-
-;; ;; use session-save to save the desktop manually
-;; (defun session-save (&optional noconfirm)
-;;   "Save an emacs session."
-;;   (interactive)
-;;   (if (saved-session)
-;;       (if noconfirm
-;;           (desktop-save-in-desktop-dir)
-;;         ;; else
-;;         (if (y-or-n-p "Overwrite existing desktop? ")
-;;             (desktop-save-in-desktop-dir)
-;;           (message "Session not saved.")))
-;;     (desktop-save-in-desktop-dir)))
-
-;; ;; ask user whether to restore desktop at start-up
-;; (add-hook 'after-init-hook
-;; 	  '(lambda ()
-;; 	     (if (saved-session)
-;; 		 (if (y-or-n-p "Restore desktop? ")
-;; 		     (session-restore)))))
