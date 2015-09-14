@@ -1,19 +1,31 @@
-;; Time-stamp: <2015-07-01 14:44:24 kmodi>
+;; Time-stamp: <2015-09-13 23:47:21 kmodi>
 
-;;;; ctags
-;; https://github.com/fishman/ctags
-;; Use Exuberant ctags from github instead of the ctags that comes with emacs.
+;; Contents:
+;;
+;;  ctags
+;;    etags-table
+;;    etags-select
+;;    ctags-update
+;;  gtags, GNU global
+;;    ggtags
+;;  modi/find-tag
+
+;;; ctags
+;; https://github.com/universal-ctags/ctags
+;; Use Universal (earlier called Exuberant) ctags from github instead of the
+;; ctags that comes with emacs.
 
 ;; Don't ask before rereading the TAGS files if they have changed
 (setq tags-revert-without-query t)
 (setq tags-case-fold-search nil) ; t=case-insensitive, nil=case-sensitive
+
 ;; Increase the warning threshold to be more than normal TAGS file sizes
-(setq large-file-warning-threshold 50000000) ; 50MB
+(setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
 
 (when (executable-find "ctags")
-;;; etags-table
-  ;; Depending on the location of the file in buffer, the respective TAGS file is
-  ;; opened on doing a tag find.
+;;;; etags-table
+  ;; Depending on the location of the file in buffer, the respective TAGS file
+  ;; is opened on doing a tag find.
   (use-package etags-table
     :config
     (progn
@@ -24,16 +36,10 @@
                    `(,(concat user-emacs-directory ".*")
                      ,(concat user-emacs-directory "TAGS")))
 
-      ;; add-to-list if uvm-source-code-dir symbol is defined
-      (when (boundp 'uvm-source-code-dir)
-        (add-to-list 'etags-table-alist
-                     `(,(concat uvm-source-code-dir ".*")
-                       ,(concat uvm-source-code-dir "TAGS"))
-                     t))
       ;; Max depth to search up for a tags file; nil means don't search
       (setq etags-table-search-up-depth 15)
 
-;;; etags-select
+;;;; etags-select
       ;; http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags
       (use-package etags-select
         :config
@@ -43,16 +49,6 @@
             ("C-g" . etags-select-quit)
             ("C-p" . etags-select-previous-tag)
             ("C-n" . etags-select-next-tag))
-          ;; default etags-select bindings
-          ;;  Return -> 'etags-select-goto-tag
-          ;;  M-Return -> 'etags-select-goto-tag-other-window
-          ;;  p -> 'etags-select-previous-tag
-          ;;  n -> 'etags-select-next-tag
-          ;;  q -> 'etags-select-quit
-          ;;  0 -> (etags-select-by-tag-number "0")
-          ;;  1 -> (etags-select-by-tag-number "1")
-          ;;  ..                               ..
-          ;;  9 -> (etags-select-by-tag-number "9")
 
           ;; Below function comes useful when you change the project-root
           ;; symbol to a different value (when switching projects)
@@ -66,7 +62,7 @@
                            t))
             (etags-select-find-tag-at-point))))))
 
-;;; ctags-update
+;;;; ctags-update
   ;; https://github.com/jixiuf/helm-etags-plus
   (use-package ctags-update
     :config
@@ -75,24 +71,16 @@
       (setq ctags-update-delay-seconds (* 30 60)) ; every 1/2 hour
       (add-hook 'verilog-mode-hook    #'turn-on-ctags-auto-update-mode)
       (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode))))
-;; `ctags-update'
-;;   update TAGS in parent directory using `exuberant-ctags'.
-;; `ctags-auto-update-mode'
-;;   auto update TAGS using `exuberant-ctags' in parent directory.
-;; `turn-on-ctags-auto-update-mode'
-;;   turn on `ctags-auto-update-mode'.
 
-
-;;;; gtags, GNU global
+;;; gtags, GNU global
 
 (when (executable-find "global")
-
-;;; ggtags
+;;;; ggtags
+  ;; https://github.com/leoliu/ggtags
   (use-package ggtags
     :config
     (progn
-      ;; Requires global 6.5+
-      (setq ggtags-sort-by-nearness t)
+      (setq ggtags-sort-by-nearness t) ; Requires global 6.5+
 
       (defun my/ggtags-project-name ()
         "Return gtags project name."
@@ -117,7 +105,8 @@
                            (propertize name
                                        'face font-lock-type-face
                                        'help-echo (if (stringp ggtags-project-root)
-                                                      (concat "mouse-1 to visit " ggtags-project-root)
+                                                      (concat "mouse-1 to visit "
+                                                              ggtags-project-root)
                                                     "mouse-1 to set project")
                                        'mouse-face 'mode-line-highlight
                                        'keymap ggtags-mode-line-project-keymap)))
@@ -149,28 +138,37 @@
       ;; Remove the default binding for `M-.' in `ggtags-mode-map'
       (define-key ggtags-mode-map (kbd "M-.") nil)
 
-      (key-chord-define-global "??" #'ggtags-show-definition)))
+      (key-chord-define-global "??" #'ggtags-show-definition))))
 
-;;; helm-gtags
-  (use-package helm-gtags
-    :commands (helm-gtags-find-tag
-               helm-gtags-dwim)))
+;;; modi/find-tag
 
-(defun modi/find-tag (&optional arg)
-  "Use `helm-gtags' if available.
-Else use `ctags' to find tags.
+(defun modi/find-tag (&optional use-ctags)
+  "Use `ggtags' if available, else use `ctags' to find tags.
 
-If prefix arg is used, use `ctags'."
+If USE-CTAGS is non-nil, use `ctags'."
   (interactive "P")
-  (if (and (null arg)
-           (featurep 'ggtags))
-      (call-interactively #'ggtags-find-tag-dwim)
-    ;; (featurep 'helm-gtags))
-    ;; (helm-gtags-find-tag (helm-gtags--token-at-point 'tag))
-    (update-etags-table-then-find-tag)))
+  (if (or use-ctags
+          (not (featurep 'ggtags)))
+      (update-etags-table-then-find-tag)
+    (call-interactively #'ggtags-find-tag-dwim)))
 (bind-key "M-." #'modi/find-tag)
 
 
 (provide 'setup-tags)
 
 ;; Emacs rereads the TAGS file (ctags) during every tag find operation.
+
+;; Default `etags-select' bindings
+;; |---------+------------------------------------|
+;; | Binding | Description                        |
+;; |---------+------------------------------------|
+;; | RET     | etags-select-goto-tag              |
+;; | M-RET   | etags-select-goto-tag-other-window |
+;; | p       | etags-select-previous-tag          |
+;; | n       | etags-select-next-tag              |
+;; | q       | etags-select-quit                  |
+;; | 0       | (etags-select-by-tag-number "0")   |
+;; | 1       | (etags-select-by-tag-number "1")   |
+;; | ..      | ..                                 |
+;; | 9       | (etags-select-by-tag-number "9")   |
+;; |---------+------------------------------------|

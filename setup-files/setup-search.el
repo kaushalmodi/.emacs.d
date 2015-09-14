@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 21:36:53 kmodi>
+;; Time-stamp: <2015-09-13 23:35:52 kmodi>
 
 ;; Search / Replace
 
@@ -98,36 +98,6 @@ If a region is not selected and,
         (if arg
             (swiper) ; C-u
           (swiper (modi/get-symbol-at-point)))))))
-
-;; Helm Swoop
-;; https://github.com/ShingoFukuyama/helm-swoop
-(use-package helm-swoop
-  ;; Fix free variable warning
-  :preface
-  (progn
-    (defvar helm-swoop-pattern            nil)
-    (defvar helm-swoop-last-prefix-number nil))
-  :commands (helm-swoop helm-multi-swoop-all helm-swoop-from-isearch)
-  :init
-  (progn
-    (if (featurep 'swiper)
-        (progn
-          (bind-key "M-I" #'helm-swoop-from-isearch isearch-mode-map) ; isearch > helm-swoop
-          (bind-key "M-I" #'helm-swoop modi-mode-map))
-      (progn
-        (bind-key "M-i" #'helm-swoop-from-isearch isearch-mode-map) ; isearch > helm-swoop
-        (bind-key "M-i" #'helm-swoop modi-mode-map))))
-  :config
-  (progn
-    ;; Disable helm
-    (with-eval-after-load 'setup-ido
-      (helm-mode -1)
-      (ido-mode (if (bound-and-true-p disable-pkg-ivy) 1 -1)))
-    (setq helm-swoop-split-direction 'split-window-vertically)
-    (setq helm-swoop-speed-or-color nil) ; If nil, boosts speed in exchange for color
-    ;; While doing `helm-swoop` press `C-c C-e` to edit mode, apply changes to
-    ;; original buffer by `C-x C-s`
-    ))
 
 ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
 ;; DEL during isearch should edit the search string, not jump back to

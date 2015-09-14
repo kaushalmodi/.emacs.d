@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 20:45:52 kmodi>
+;; Time-stamp: <2015-09-13 23:38:15 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -31,6 +31,8 @@
         ;; popwin ; < shackle
         ;; poporg ; edit comments from any other mode in org mode < forked
         ;; ox-reveal ; used to export to HTML slides; using latest from git
+        ;; helm helm-swoop ; < swiper
+        ;; helm-gtags ; < ggtags
         ace-window
         adaptive-wrap ; indented line wrapping
         ag wgrep wgrep-ag s ; ag > ack > grep
@@ -67,10 +69,9 @@
         git-link ; get git links with line numbers and commit-hash/branch
         git-timemachine ; walk through git revisions
         gplusify ; copy region with formatting for G+ posts
-        ggtags etags-select etags-table ctags-update helm-gtags
+        ggtags etags-select etags-table ctags-update
         hardcore-mode
         header2
-        helm helm-swoop
         help-fns+
         hideshow-org hideshowvis
         htmlize
