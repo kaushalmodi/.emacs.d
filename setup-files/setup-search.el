@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-28 08:21:55 kmodi>
+;; Time-stamp: <2015-09-13 21:36:53 kmodi>
 
 ;; Search / Replace
 
@@ -14,43 +14,34 @@
 ;; Anzu mode
 ;; https://github.com/syohex/emacs-anzu
 (use-package anzu
+  :init
+  (progn
+    (bind-keys
+     :map modi-mode-map
+      ("C-c r" . anzu-query-replace)))
   :config
   (progn
-    (global-anzu-mode 1)
-
-    (set-face-attribute 'anzu-mode-line nil :foreground "lightblue" :weight 'bold)
     (setq anzu-mode-lighter                "")
     (setq anzu-search-threshold            1000)
     (setq anzu-replace-to-string-separator " => ")
 
-    (bind-keys
-     :map modi-mode-map
-      ("C-c r" . anzu-query-replace))
-
-    (when (featurep 'region-bindings-mode)
-      (bind-keys
-       :map region-bindings-mode-map
-        ("]" . anzu-query-replace-at-cursor-thing)))))
+    (global-anzu-mode 1)))
 
 ;; Visual Regular Expression search/replace
 (use-package visual-regexp
-  :config
+  :commands (vr/query-replace vr/mc-mark vr/replace)
+  :init
   (progn
-    (setq vr/default-feedback-limit 300)
-
     (bind-keys
      :map modi-mode-map
       ("C-c q" . vr/query-replace))
-
-    (when (featurep 'multiple-cursors)
+    (with-eval-after-load 'multiple-cursors
       (bind-keys
        :map modi-mode-map
-        ("C-c M" . vr/mc-mark)))
-
-    (when (featurep 'region-bindings-mode)
-      (bind-keys
-       :map region-bindings-mode-map
-        ("}" . vr/query-replace)))))
+        ("C-c M" . vr/mc-mark))))
+  :config
+  (progn
+    (setq vr/default-feedback-limit 300)))
 
 ;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
 ;; `query-replace-regexp' from replace.el
@@ -83,6 +74,13 @@ happens within a region if one is selected."
 ;; Swiper
 ;; https://github.com/abo-abo/swiper
 (use-package swiper
+  :commands (modi/swiper swiper swiper-from-isearch swiper-avy)
+  :init
+  (progn
+    (bind-key "M-i" #'swiper-from-isearch isearch-mode-map) ; isearch > swiper
+    (bind-key "M-a" #'swiper-avy swiper-map) ; swiper > avy
+    (key-chord-define-global "'/" #'modi/swiper)
+    (bind-key "M-i" #'modi/swiper modi-mode-map))
   :config
   (progn
     (defun modi/swiper (arg)
@@ -99,13 +97,7 @@ If a region is not selected and,
             (swiper (buffer-substring-no-properties b e)))
         (if arg
             (swiper) ; C-u
-          (swiper (modi/get-symbol-at-point)))))
-
-    (bind-key "M-i" #'swiper-from-isearch isearch-mode-map) ; isearch > swiper
-    (bind-key "M-a" #'swiper-avy swiper-map) ; swiper > avy
-
-    (key-chord-define-global "'/" #'modi/swiper)
-    (bind-key "M-i" #'modi/swiper modi-mode-map)))
+          (swiper (modi/get-symbol-at-point)))))))
 
 ;; Helm Swoop
 ;; https://github.com/ShingoFukuyama/helm-swoop
@@ -144,41 +136,43 @@ If a region is not selected and,
 
 ;; Search for the highlighted string in ALL buffers `search-all-buffers'
 ;; http://stackoverflow.com/a/2642655/1219634
-(require 'grep)
-(defcustom search-all-buffers-ignored-files (list (rx-to-string
-                                                   '(and bos
-                                                         (or ".bash_history"
-                                                             "TAGS")
-                                                         eos)))
-  "Files to ignore when searching buffers via \\[search-all-buffers]."
-  :type 'editable-list)
-(defun search-all-buffers (regexp prefix)
-  "Searches file-visiting buffers for occurence of REGEXP.  With
+(use-package grep
+  :config
+  (progn
+    (defcustom search-all-buffers-ignored-files (list (rx-to-string
+                                                       '(and bos
+                                                             (or ".bash_history"
+                                                                 "TAGS")
+                                                             eos)))
+      "Files to ignore when searching buffers via \\[search-all-buffers]."
+      :type 'editable-list)
+    (defun search-all-buffers (regexp prefix)
+      "Searches file-visiting buffers for occurence of REGEXP.  With
 prefix > 1 (i.e., if you type C-u \\[search-all-buffers]),
 searches all buffers."
-  (interactive (list (grep-read-regexp)
-                     current-prefix-arg))
-  (message "Regexp is %s; prefix is %s" regexp prefix)
-  (multi-occur
-   (if (member prefix '(4 (4)))
-       (buffer-list)
-     (remove-if
-      (lambda (b)
-        (some
-         (lambda (rx)
-           (string-match rx (file-name-nondirectory
-                             (buffer-file-name b))))
-         search-all-buffers-ignored-files))
-      (remove-if-not 'buffer-file-name (buffer-list))))
-   regexp))
-(bind-to-modi-map "s" #'search-all-buffers)
+      (interactive (list (grep-read-regexp)
+                         current-prefix-arg))
+      (message "Regexp is %s; prefix is %s" regexp prefix)
+      (multi-occur
+       (if (member prefix '(4 (4)))
+           (buffer-list)
+         (remove-if
+          (lambda (b)
+            (some
+             (lambda (rx)
+               (string-match rx (file-name-nondirectory
+                                 (buffer-file-name b))))
+             search-all-buffers-ignored-files))
+          (remove-if-not 'buffer-file-name (buffer-list))))
+       regexp))
+    (bind-to-modi-map "s" #'search-all-buffers)))
 
 (defun modi/isearch-backward-symbol-at-point ()
   "Do incremental search backward for a symbol found near point.
 Like ordinary incremental search except that the symbol found at point
 is added to the search string initially as a regexp surrounded
 by symbol boundary constructs \\_< and \\_>.
-See the command `isearch-backward-symbol' for more information."
+See the command `isearch-forward-symbol' for more information."
   (interactive)
   (isearch-mode (not :forward) nil nil nil 'isearch-symbol-regexp)
   (let ((bounds (find-tag-default-bounds)))

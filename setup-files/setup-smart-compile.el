@@ -1,8 +1,9 @@
-;; Time-stamp: <2015-02-23 11:25:05 kmodi>
+;; Time-stamp: <2015-09-13 21:20:27 kmodi>
 
 ;; Smart Compile
 
 (use-package smart-compile
+  :commands (smart-compile)
   :config
   (progn
     ;; http://stackoverflow.com/a/15724162/1219634
@@ -18,9 +19,8 @@
       (interactive)
       (lexical-let ((exe (smart-compile-string "./%n"))
                     finish-callback)
-        ;; when compilation is done, execute the program
-        ;; and remove the callback from
-        ;; compilation-finish-functions
+        ;; When compilation is done, execute the program and remove the
+        ;; callback from `compilation-finish-functions'
         (setq finish-callback
               (lambda (buf msg)
                 (do-execute exe)

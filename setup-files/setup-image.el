@@ -1,7 +1,7 @@
-;; Time-stamp: <2015-03-03 09:42:27 kmodi>
+;; Time-stamp: <2015-09-13 19:28:29 kmodi>
 
 (use-package image-mode
-    :config
+  :config
   (progn
     ;; Force Imagemagick for viewing all images
     ;; I was unable to use Imagemagick required functions to do stuff like
@@ -39,13 +39,13 @@
             ("\\`\377\330" . imagemagick)    ; jpeg
             (,(let* ((incomment-re "\\(?:[^-]\\|-[^-]\\)")
                      (comment-re (concat "\\(?:!--" incomment-re "*-->[ \t\r\n]*<\\)")))
-                    (concat "\\(?:<\\?xml[ \t\r\n]+[^>]*>\\)?[ \t\r\n]*<"
-                            comment-re "*"
-                            "\\(?:!DOCTYPE[ \t\r\n]+[^>]*>[ \t\r\n]*<[ \t\r\n]*" comment-re "*\\)?"
-                            "[Ss][Vv][Gg]"))
-              ;; . svg)  ; Uncomment this (and comment the below line) to
+                (concat "\\(?:<\\?xml[ \t\r\n]+[^>]*>\\)?[ \t\r\n]*<"
+                        comment-re "*"
+                        "\\(?:!DOCTYPE[ \t\r\n]+[^>]*>[ \t\r\n]*<[ \t\r\n]*" comment-re "*\\)?"
+                        "[Ss][Vv][Gg]"))
+             ;; . svg)  ; Uncomment this (and comment the below line) to
                                         ; enable inline svg images in org-mode
-              . imagemagick) ; svg
+             . imagemagick) ; svg
             ))
 
     ;; http://emacs.stackexchange.com/a/2458/115
@@ -54,7 +54,7 @@
 Imagemagick is required to run this function."
       (interactive)
       (let* ( (img-size (image-display-size (image-get-display-property) t))
-             (img-width (car img-size))
+              (img-width (car img-size))
               (img-height (cdr img-size))
               (img-h/w-ratio (/ (float img-height) (float img-width)))
               (win-width (- (nth 2 (window-inside-pixel-edges))
@@ -75,7 +75,7 @@ Imagemagick is required to run this function."
           (image-transform-fit-to-height))))
     (bind-keys
      :map image-mode-map
-     ("r" . modi/image-transform-fit-to-window))))
+      ("r" . modi/image-transform-fit-to-window))))
 
 
 (provide 'setup-image)

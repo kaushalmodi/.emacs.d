@@ -1,9 +1,15 @@
-;; Time-stamp: <2015-06-15 17:08:47 kmodi>
+;; Time-stamp: <2015-09-13 19:40:38 kmodi>
 
 ;; Printing
 ;; http://www.emacswiki.org/emacs/PsPrintPackage-23
 
 (use-package ps-print
+  :init
+  (progn
+    (bind-to-modi-map "p" #'modi/pdf-print-buffer-with-faces)
+    ;; Print to printer defined by env var `PRINTER'
+    (bind-to-modi-map "P" #'ps-print-buffer-with-faces))
+  :commands (modi/pdf-print-buffer-with-faces ps-print-buffer-with-faces)
   :config
   (progn
     ;; Print configuration
@@ -54,11 +60,7 @@ converted to PDF at the same location."
         (shell-command (concat "ps2pdf " filename))
         (delete-file filename)
         (message "Deleted %s" filename)
-        (message "Wrote %s" (concat (file-name-sans-extension filename) ".pdf")))
-      (bind-to-modi-map "p" #'modi/pdf-print-buffer-with-faces))
-
-    ;; Print to printer defined by env var `PRINTER'
-    (bind-to-modi-map "P" #'ps-print-buffer-with-faces)))
+        (message "Wrote %s" (concat (file-name-sans-extension filename) ".pdf"))))))
 
 
 (provide 'setup-print)

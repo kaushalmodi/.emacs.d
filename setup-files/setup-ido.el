@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-21 14:30:43 kmodi>
+;; Time-stamp: <2015-09-13 19:29:49 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -14,6 +14,7 @@
     (defvar inherit-input-method       nil)
     (defvar ido-cur-list               nil)
     (defvar ido-context-switch-command nil))
+  :commands (ido-mode)
   :init
   (progn
     (setq ido-enable-flex-matching  t) ; enable fuzzy search
@@ -52,6 +53,7 @@
         (ido-vertical-mode 1))) ; flx-ido looks better with ido-vertical-mode
 
     (use-package ido-ubiquitous
+      :disabled
       :preface
       (progn
         (defvar ido-ubiquitous-debug-mode nil))

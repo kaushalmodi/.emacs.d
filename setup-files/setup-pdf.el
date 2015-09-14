@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-10 10:20:31 kmodi>
+;; Time-stamp: <2015-09-13 19:24:35 kmodi>
 
 ;; PDF
 
@@ -11,7 +11,7 @@
   :preface
   (progn
     (defvar pdf-tools-github-version-name "pdf-tools-0.60"))
-  ;; :load-path "elisp/pdf-tools/pdf-tools-0.60"
+  :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (progn
 

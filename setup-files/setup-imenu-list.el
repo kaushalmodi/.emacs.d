@@ -1,9 +1,12 @@
-;; Time-stamp: <2015-07-15 09:33:26 kmodi>
+;; Time-stamp: <2015-09-13 23:52:13 kmodi>
 
 ;; Imenu-list
 ;; https://github.com/bmag/imenu-list
 
 (use-package imenu-list
+  :commands (imenu-list
+             imenu-list-noselect
+             modi/imenu-list-display-toggle)
   :config
   (progn
     (setq imenu-list-size     0.2)

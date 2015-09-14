@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-28 13:23:45 kmodi>
+;; Time-stamp: <2015-09-13 19:04:16 kmodi>
 
 ;; Weather Forecast
 
@@ -20,9 +20,10 @@
 ;; https://github.com/cadadr/forecast.el
 
 (use-package forecast
-  :defer 1 ; Wait for at least a second after emacs has loaded.
-                                        ; The emacs frame needs to be set up
-                                        ; properly before the `find-font' call.
+  ;; deferring not needed as the package is set to autoload on M-x forecast
+  ;; :defer 1 ; Wait for at least a second after emacs has loaded.
+  ;;                                       ; The emacs frame needs to be set up
+  ;;                                       ; properly before the `find-font' call.
   :load-path "elisp/forecast.el"
   :commands (forecast)
   :config

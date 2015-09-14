@@ -1,9 +1,10 @@
-;; Time-stamp: <2015-06-18 09:08:33 kmodi>
+;; Time-stamp: <2015-09-13 19:19:15 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
 
 (use-package header2
+  :defer 10
   :config
   (progn
 

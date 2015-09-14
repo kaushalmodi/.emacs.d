@@ -1,10 +1,11 @@
-;; Time-stamp: <2015-06-12 23:52:52 kmodi>
+;; Time-stamp: <2015-09-13 19:17:49 kmodi>
 
 ;; multi-term
 ;; Source: http://www.emacswiki.org/emacs/multi-term.el
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 
 (use-package multi-term
+  :commands (multi-term)
   :config
   (progn
     ;; term

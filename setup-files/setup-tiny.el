@@ -1,8 +1,9 @@
-;; Time-stamp: <2015-07-26 17:36:56 kmodi>
+;; Time-stamp: <2015-09-13 23:53:30 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
 (use-package tiny
+  :commands (modi/tiny-helper tiny-expand)
   :config
   (progn
     (defun modi/tiny-helper (&optional end-val begin-val sep op fmt)

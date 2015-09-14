@@ -1,9 +1,12 @@
-;; Time-stamp: <2015-07-22 10:00:58 kmodi>
+;; Time-stamp: <2015-09-13 23:58:25 kmodi>
 
 ;; Indent Guide
 ;; https://github.com/zk-phi/indent-guide
 
 (use-package indent-guide
+  :commands (indent-guide-mode
+             indent-guide-global-mode
+             modi/turn-on-indent-guide)
   :config
   (progn
     (setq indent-guide-recursive t)
@@ -16,13 +19,13 @@
                                            cperl-mode-hook)
       "List of hooks of major modes in which indent-guide-mode should be enabled.")
 
-    (defun turn-on-indent-guide ()
+    (defun modi/turn-on-indent-guide ()
       "Turn on indent-guide-mode only for specific modes."
       (interactive)
       (dolist (hook modi/indent-guide-mode-hooks)
         (add-hook hook #'indent-guide-mode)))
 
-    (defun turn-off-indent-guide ()
+    (defun modi/turn-off-indent-guide ()
       "Turn off indent-guide-mode only for specific modes."
       (interactive)
       (indent-guide-global-mode -1)

@@ -1,8 +1,9 @@
-;; Time-stamp: <2015-09-13 13:01:52 kmodi>
+;; Time-stamp: <2015-09-13 19:07:23 kmodi>
 
 ;; Unicode
 
 (use-package iso-transl
+  :defer 10
   :config
   (progn
     ;; Add custom bindings to "C-x 8" map

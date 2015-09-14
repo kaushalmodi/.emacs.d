@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 18:29:39 kmodi>
+;; Time-stamp: <2015-09-13 20:45:52 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -333,8 +333,4 @@
 
 (setq emacs-initialized t)
 
-(run-with-idle-timer 5 nil
-                     (lambda ()
-                       (setq gc-cons-threshold gc-cons-threshold--orig)
-                       (message "gc-cons-threshold restored to %S bytes."
-                                gc-cons-threshold--orig)))
+(run-with-idle-timer 5 nil (lambda () (setq gc-cons-threshold gc-cons-threshold--orig)))
