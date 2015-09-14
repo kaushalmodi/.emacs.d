@@ -1,6 +1,22 @@
-;; Time-stamp: <2015-08-20 15:59:41 kmodi>
+;; Time-stamp: <2015-09-13 23:08:57 kmodi>
 
-;;; Verilog
+;; Verilog
+
+;; Contents:
+;;
+;;  Variables
+;;  modi/verilog-find-module-instance
+;;  modi/verilog-get-header
+;;  modi/verilog-jump-to-header-dwim
+;;  modi/verilog-which-func
+;;  modi/verilog-update-which-func-format
+;;  modi/verilog-jump-to-module-at-point
+;;  modi/verilog-find-parent-module
+;;  my/verilog-selective-indent
+;;  imenu support
+;;  hideshow
+;;  hydra-verilog-template
+;;  my/verilog-mode-customizations
 
 (use-package verilog-mode
   :load-path "elisp/verilog-mode"
@@ -11,24 +27,22 @@
   (progn
 
 ;;; Variables
-    (setq verilog-indent-level             3)
-    (setq verilog-indent-level-module      3)
-    (setq verilog-indent-level-declaration 3)
-    (setq verilog-indent-level-behavioral  3)
-    (setq verilog-indent-level-directive   3)
-    (setq verilog-case-indent              2)
-    (setq verilog-auto-newline             nil)
-    (setq verilog-auto-indent-on-newline   t)
-    (setq verilog-tab-always-indent        t)
-    (setq verilog-minimum-comment-distance 10)
-    (setq verilog-indent-begin-after-if    t)
-    ;; (setq verilog-auto-lineup              'declarations) ; default
-    (setq verilog-auto-lineup              nil)
-    (setq verilog-align-ifelse             nil)
-    ;; (setq verilog-align-ifelse             t)
-    (setq verilog-auto-endcomments         t)
-    (setq verilog-tab-to-comment           t)
-    (setq verilog-date-scientific-format   t)
+    (setq verilog-indent-level             3)   ; 3 (default)
+    (setq verilog-indent-level-module      3)   ; 3
+    (setq verilog-indent-level-declaration 3)   ; 3
+    (setq verilog-indent-level-behavioral  3)   ; 3
+    (setq verilog-indent-level-directive   3)   ; 1
+    (setq verilog-case-indent              2)   ; 2
+    (setq verilog-auto-newline             nil) ; t
+    (setq verilog-auto-indent-on-newline   t)   ; t
+    (setq verilog-tab-always-indent        t)   ; t
+    (setq verilog-minimum-comment-distance 10)  ; 10
+    (setq verilog-indent-begin-after-if    t)   ; t
+    (setq verilog-auto-lineup              nil) ; 'declarations
+    (setq verilog-align-ifelse             nil) ; nil
+    (setq verilog-auto-endcomments         t)   ; t
+    (setq verilog-tab-to-comment           nil) ; nil
+    (setq verilog-date-scientific-format   t)   ; t
 
     (defconst modi/verilog-identifier-re "\\b[a-zA-Z][a-zA-Z0-9:_]*"
       ;; The : is to allow parsing extern methods like class::task
