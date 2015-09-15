@@ -1,8 +1,9 @@
-;; Time-stamp: <2015-06-26 16:51:23 kmodi>
+;; Time-stamp: <2015-09-15 12:09:27 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
-;; http://jblevins.org/projects/deft/
+;; http://jblevins.org/projects/deft
+;; https://github.com/jrblevin/deft
 
 (use-package deft
   :commands (modi/deft-dwim deft deft-new-file deft-find-file)
@@ -14,9 +15,9 @@
   (progn
     (setq deft-directory (concat org-directory "notes/"))
     (setq deft-extensions '("org"))
-    (setq deft-use-filename-as-title nil) ; show actual titles in deft buf
+    (setq deft-use-filename-as-title nil) ; show actual titles in *Deft* buffer
     (setq deft-use-filter-string-for-filename t)
-    (setq deft-auto-save-interval 0) ; default: 1.0; 0 to disable auto-save
+    (setq deft-auto-save-interval 0) ; default is 1.0, 0 to disable auto-save
     (setq deft-file-naming-rules '((nospace . "_")
                                    (case-fn . downcase)))
 
@@ -78,23 +79,38 @@ If NEW-FILE is non-nil, call `deft-new-file'."
       (if new-file
           (deft-new-file)
         (deft-complete)))
-    (bind-key "RET" #'modi/deft-complete deft-mode-map)))
+
+    ;; Unbind the "C-o" key from `deft-mode-map'
+    (define-key deft-mode-map (kbd "C-o") nil)
+    (bind-keys
+     :map deft-mode-map
+      ("RET"     . modi/deft-complete)
+      ("C-c C-o" . deft-open-file-other-window))))
 
 
 (provide 'setup-deft)
 
-;; |-------------------+--------------------------------|
-;; | deft mode binding | Description                    |
-;; |-------------------+--------------------------------|
-;; | C-c C-n           | deft-new-file                  |
-;; | C-c C-m           | deft-new-file-named            |
-;; | <C-return>        | deft-new-file-named            |
-;; | C-c C-d           | deft-delete-file               |
-;; | C-c C-r           | deft-rename-file               |
-;; | C-c C-f           | deft-find-file                 |
-;; | C-c C-a           | deft-archive-file              |
-;; | C-c C-t           | deft-toggle-incremental-search |
-;; | C-c C-s           | deft-toggle-sort-method        |
-;; | C-c C-g           | deft-refresh                   |
-;; | C-c C-q           | quit-window                    |
-;; |-------------------+--------------------------------|
+;; Deft Mode bindings
+;; |---------+------------------------------------------------------------------------|
+;; | Binding | Description                                                            |
+;; |---------+------------------------------------------------------------------------|
+;; | C-c C-n | `deft-new-file' - Create new file quickly (based on filter if present) |
+;; |         | without prompting the user.                                            |
+;; | C-c C-m | `deft-new-file-named' - Create new file with name the user enters      |
+;; | C-RET   | in the minibuffer.                                                     |
+;; |---------+------------------------------------------------------------------------|
+;; | C-c C-d | `deft-delete-file'                                                     |
+;; | C-c C-r | `deft-rename-file'                                                     |
+;; | C-c C-f | `deft-find-file'                                                       |
+;; | C-c C-a | `deft-archive-file' - Move the file under point to                     |
+;; |         | `deft-archive-directory'.                                              |
+;; |---------+------------------------------------------------------------------------|
+;; | C-c C-l | `deft-filter' - Enter the filter string in the minibuffer.             |
+;; | C-c C-c | `deft-filter-clear' - Reset the filter.                                |
+;; |---------+------------------------------------------------------------------------|
+;; | C-c C-t | `deft-toggle-incremental-search'                                       |
+;; | C-c C-s | `deft-toggle-sort-method'                                              |
+;; |---------+------------------------------------------------------------------------|
+;; | C-c C-g | `deft-refresh'                                                         |
+;; | C-c C-q | `quit-window'                                                          |
+;; |---------+------------------------------------------------------------------------|
