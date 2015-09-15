@@ -1,10 +1,41 @@
-;; Time-stamp: <2015-09-14 17:28:05 kmodi>
+;; Time-stamp: <2015-09-15 10:40:05 kmodi>
 
 ;; Set up the looks of emacs
 
-;; Highlight closing parentheses; show the name of the body being closed with
-;; the closing parentheses in the minibuffer.
-(show-paren-mode 1)
+;; Contents:
+;;
+;;  Variables
+;;  Show Paren
+;;  Bars
+;;    Menu bar
+;;    Tool bar
+;;    Scroll bar
+;;  Themes
+;;  Frame Title
+;;  Fonts
+;;    Font Lock
+;;      Syntax highlight .vimrc files (I know, blasphemy!)
+;;    Fix italics
+;;    Windows Font
+;;    Global Font Resize
+;;  Line truncation
+;;  Visual Line Mode
+;;  Adaptive Wrap
+;;  Cursor
+;;  Prez Mode
+;;  Hidden Mode Line Mode
+;;  Show mode line in header
+;;  Fringes
+;;  Coloring regions with ANSI color codes
+;;  Show long lines
+;;  Narrow/Widen
+;;  Prettify symbols
+
+;;; Variables
+(setq inhibit-startup-message t) ; No splash screen at startup
+(setq scroll-step 1) ; scroll 1 line at a time
+(setq tooltip-mode nil) ; disable tooltip appearance on mouse hover
+(setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
 
 (defvar default-font-size-pt 13
   "Default font size in points.")
@@ -13,19 +44,55 @@
   "Variable to store the nature of theme whether it is light or dark.
 This variable is to be updated when changing themes.")
 
-(setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
+;;; Show Paren
+;; Highlight closing parentheses; show the name of the body being closed with
+;; the closing parentheses in the minibuffer.
+(show-paren-mode 1)
 
-;; MENU/TOOL/SCROLL BARS
-;; Turn off mouse interface early in startup to avoid momentary display
+;;; Bars
+
+;;;; Menu bar
 (if (fboundp 'menu-bar-mode)   (menu-bar-mode -1)) ; do not show the menu bar with File|Edit|Options|...
+;; Toggle menu bar
+(>=e "25.0"
+    (progn
+      ;; Do not resize the frame when `menu-bar-mode' is toggled.
+      (add-to-list 'frame-inhibit-implied-resize 'menu-bar-lines) ; default nil on GTK+
+      (bind-key "<f2>" #'menu-bar-mode modi-mode-map)
+      (key-chord-define-global "2w" #'menu-bar-mode)) ; alternative to F2
+  (progn
+    (defvar bkp--frame-text-height-px (frame-text-height)
+      "Backup of the frame text height in pixels.")
+    (defvar bkp--frame-text-width-px (frame-text-width)
+      "Backup of the frame text width in pixels.")
+
+    (defun modi/toggle-menu-bar ()
+      "Toggle the menu bar.
+Also restore the original frame size when disabling the menu bar."
+      (interactive)
+      (let ((frame-resize-pixelwise t))
+        ;; If the menu bar is hidden currently, take a backup of the frame height.
+        (when (null menu-bar-mode)
+          ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
+          (setq bkp--frame-text-height-px (frame-text-height))
+          (setq bkp--frame-text-width-px (frame-text-width)))
+        (menu-bar-mode 'toggle)
+        ;; Restore frame size if menu bar is hidden after toggle
+        (when (null menu-bar-mode)
+          (set-frame-size nil bkp--frame-text-width-px bkp--frame-text-height-px :pixelwise))))
+    (bind-key "<f2>" #'modi/toggle-menu-bar modi-mode-map)
+    (key-chord-define-global "2w" #'modi/toggle-menu-bar))) ; alternative to F2
+
+;;;; Tool bar
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode -1)) ; do not show the tool bar with icons on the top
+(>=e "25.0"
+    ;; Do not resize the frame when toggling `tool-bar-mode'
+    (add-to-list 'frame-inhibit-implied-resize 'tool-bar-lines))
+
+;;;; Scroll bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) ; disable the scroll bars
 
-(setq inhibit-startup-message t ; No splash screen at startup
-      scroll-step 1 ; scroll 1 line at a time
-      tooltip-mode nil ; disable tooltip appearance on mouse hover
-      )
-
+;;; Themes
 ;;                     THEME-NAME      DARK   FCI-RULE-COLOR
 (defconst my/themes '((smyx            'dark  "gray40")
                       (zenburn         'dark  "gray40")
@@ -119,6 +186,7 @@ the smart-mode-line theme."
 ;;                                         (funcall default-theme-fn)))
 (add-hook 'window-setup-hook (lambda () (funcall default-theme-fn)))
 
+;;; Frame Title
 (defun modi/update-frame-title ()
   (interactive)
   ;; Frame title bar format
@@ -130,44 +198,113 @@ the smart-mode-line theme."
                                    (dired-directory dired-directory "%b")))))
 (add-hook 'after-init-hook #'modi/update-frame-title)
 
+;;; Fonts
+
+;;;; Font Lock
 ;; Enable font-lock or syntax highlighting globally
 (global-font-lock-mode 1)
 ;; Use the maximum decoration level available for color highlighting
 (setq font-lock-maximum-decoration t)
 
-;; FONTS
+;;;;; Syntax highlight .vimrc files (I know, blasphemy!)
+;; http://stackoverflow.com/a/4238738/1219634
+(define-generic-mode 'vimrc-generic-mode
+  '()
+  '()
+  '(("^[\t ]*:?\\(!\\|ab\\|map\\|unmap\\)[^\r\n\"]*\"[^\r\n\"]*\\(\"[^\r\n\"]*\"[^\r\n\"]*\\)*$"
+     (0 font-lock-warning-face))
+    ("\\(^\\|[\t ]\\)\\(\".*\\)$"
+     (2 font-lock-comment-face))
+    ("\"\\([^\n\r\"\\]\\|\\.\\)*\""
+     (0 font-lock-string-face)))
+  '("/vimrc\\'" "\\.vim\\(rc\\)?\\'")
+  '((lambda ()
+      (modify-syntax-entry ?\" ".")))
+  "Generic mode for Vim configuration files.")
+
+(setq auto-mode-alist (append '(("\\.vimrc.*\\'" . vimrc-generic-mode)
+                                ("\\.vim\\'"     . vimrc-generic-mode))
+                              auto-mode-alist))
+
+;;;; Fix italics
 ;; Make the italics show as actual italics. For some unknown reason, the below
 ;; is needed to render the italics in org-mode. The issue could be related to
 ;; the fonts in use. But having this doesn't hurt regardless.
 (set-face-attribute 'italic nil :inherit nil :slant 'italic)
 
-;; Default fonts for Windows
+;;;; Windows Font
 (when (eq system-type 'windows-nt)
   (set-face-attribute 'default nil :family "Consolas"))
 
-(defun modi/font-size-adj (&optional arg)
-  "The default C-x C-0/-/= bindings do an excellent job of font resizing.
-They, though, do not change the font sizes for the text outside the buffer,
-example in mode-line. Below function changes the font size in those areas too.
+;;;; Global Font Resize
+(defun modi/global-font-size-adj (scale &optional absolute)
+  "Adjust the font sizes globally: in all the buffers, mode line, echo area, etc.
 
-M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
-                               decreases font size by NUM points if NUM is -ve
-                               resets    font size if NUM is 0."
+The inbuilt `text-scale-adjust' function (bound to C-x C-0/-/= by default)
+does an excellent job of font resizing. But it does not change the font sizes
+of text outside the current buffer; for example, in the mode line.
+
+M-<SCALE> COMMAND increases font size by SCALE points if SCALE is +ve,
+                  decreases font size by SCALE points if SCALE is -ve
+                  resets    font size if SCALE is 0.
+
+If ABSOLUTE is non-nil, text scale is applied relative to the default font size
+`default-font-size-pt'. Else, the text scale is applied relative to the current
+font size."
   (interactive "p")
-  (if (= arg 0)
+  (if (= scale 0)
       (setq font-size-pt default-font-size-pt)
-    (setq font-size-pt (+ font-size-pt arg)))
+    (if (bound-and-true-p absolute)
+        (setq font-size-pt (+ default-font-size-pt scale))
+      (setq font-size-pt (+ font-size-pt scale))))
   ;; The internal font size value is 10x the font size in points unit.
   ;; So a 10pt font size is equal to 100 in internal font size value.
   (set-face-attribute 'default nil :height (* font-size-pt 10)))
 
-(defun modi/font-size-incr ()  (interactive) (modi/font-size-adj +1))
-(defun modi/font-size-decr ()  (interactive) (modi/font-size-adj -1))
-(defun modi/font-size-reset () (interactive) (modi/font-size-adj 0))
+(defun modi/global-font-size-incr ()  (interactive) (modi/global-font-size-adj +1))
+(defun modi/global-font-size-decr ()  (interactive) (modi/global-font-size-adj -1))
+(defun modi/global-font-size-reset () (interactive) (modi/global-font-size-adj 0))
 
-(modi/font-size-reset) ; Initialize font-size-pt var to the default value
+;; Initialize font-size-pt var to the default value
+(modi/global-font-size-reset)
 
-;; Line truncation
+;; Usage: C-c - = - 0 = = = = - - 0
+;; Usage: C-c = = 0 - = - = = = = - - 0
+(defhydra hydra-font-resize (nil
+                             "C-c"
+                             :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
+                             :color red
+                             :hint nil)
+  "
+[Font Size]     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset     _q_ Cancel
+"
+  ("C--" modi/global-font-size-decr)
+  ("-"   modi/global-font-size-decr :bind nil)
+  ("C-=" modi/global-font-size-incr)
+  ("="   modi/global-font-size-incr :bind nil)
+  ("+"   modi/global-font-size-incr :bind nil)
+  ("C-0" modi/global-font-size-reset :color blue)
+  ("0"   modi/global-font-size-reset :bind nil)
+  ("q"   nil :color blue))
+
+(global-unset-key (kbd "<C-down-mouse-1>"))
+;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
+;; inconvenient when that mouse menu pops up when I don't need it
+;; to. And actually I have never used that menu :P
+
+(bind-keys
+ :map modi-mode-map
+  ;; Make Control+mousewheel do increase/decrease font-size
+  ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
+  ("<C-mouse-1>" . modi/global-font-size-reset) ; C + left mouse click
+  ("<C-mouse-4>" . modi/global-font-size-incr) ; C + wheel-up
+  ("<C-mouse-5>" . modi/global-font-size-decr)) ; C + wheel-down
+
+(>=e "25.0"
+    ;; Do not resize the frame when adjusting the font size
+    (add-to-list 'frame-inhibit-implied-resize 'font))
+
+;;; Line truncation
 ;; Enable truncation. This setting does NOT apply to windows split using `C-x 3`
 (setq-default truncate-lines t)
 ;; Do `M-x toggle-truncate-lines` to toggle truncation mode.
@@ -175,7 +312,9 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 ;; to work even in split windows
 (setq-default truncate-partial-width-windows nil)
 
-;; Visual Line Mode
+(bind-key "C-x t" #'toggle-truncate-lines modi-mode-map)
+
+;;; Visual Line Mode
 ;; Do word wrapping only at word boundaries
 (defconst modi/visual-line-mode-hooks '(org-mode-hook
                                         markdown-mode-hook)
@@ -199,7 +338,7 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
 (setq-default visual-line-fringe-indicators '(left-curly-arrow
                                               right-curly-arrow))
 
-;; Adaptive Wrap
+;;; Adaptive Wrap
 ;; `adaptive-wrap-prefix-mode' indents the visual lines to
 ;; the level of the actual line plus `adaptive-wrap-extra-indent'. Thus line
 ;; truncation has to be off for adaptive wrap to be in effect.
@@ -217,7 +356,7 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
       turn-on-adaptive-wrap-prefix-mode)
     (global-adaptive-wrap-prefix-mode 1)))
 
-;; CURSOR
+;;; Cursor
 ;; Change cursor color according to mode:
 ;;   read-only buffer / overwrite / regular (insert) mode
 (blink-cursor-mode -1) ; Don't blink the cursor, it's distracting!
@@ -242,41 +381,53 @@ M-<NUM> M-x modi/font-size-adj increases font size by NUM points if NUM is +ve,
       (setq hcz-set-cursor-color-buffer (buffer-name)))))
 (add-hook 'post-command-hook #'hcz-set-cursor-color-according-to-mode)
 
-;; Presentation mode
-(defvar prez-mode-enabled-once nil
-  "Flag to indicate if prez-mode has been enabled at least once.")
+;;; Prez Mode
+(defvar prez-mode--buffer-name nil
+  "Variable to store the name of the buffer in which the `prez-mode' was enabled.")
+
+(defvar prez-mode--frame-configuration nil
+  "Variable to store the frame configuration before `prez-mode' was enabled.")
 
 (define-minor-mode prez-mode
-  "Minor mode to change to light theme with bigger fonts for better readability
-during presentations."
+  "Minor mode for presentations.
+
+- The frame size is reduced.
+- All windows other than the current one are deleted.
+- Font size is increased.
+- Theme is toggled from the default dark theme to light theme.
+
+Toggling off this mode reverts everything to their original states."
   :init-value nil
   :lighter    " Prez"
   (if prez-mode
       ;; Enable prez mode
       (progn
-        (set-face-attribute 'default nil :height (* (+ 3 default-font-size-pt) 10))
-        (set-frame-size (selected-frame) 80 25) ; rows and columns w h
+        (setq prez-mode--buffer-name (buffer-name))
+        (setq prez-mode--frame-configuration (current-frame-configuration))
+        (set-frame-size nil 110 40) ; rows and columns w h
         (delete-other-windows)
-        (setq prez-mode-enabled-once t))
+        (modi/global-font-size-adj +3 :absolute)
+        (toggle-theme))
     ;; Disable prez mode
     (progn
-      (when prez-mode-enabled-once
-        (modi/font-size-reset)
-        (full-screen-center)
-        (split-window-right)
-        (other-window 1)
-        (toggle-between-buffers)))))
+      (set-frame-configuration prez-mode--frame-configuration)
+      (switch-to-buffer prez-mode--buffer-name)
+      (modi/global-font-size-reset)
+      (toggle-theme))))
+
 (defun turn-on-prez-mode ()
   "Turns on prez-mode."
   (interactive)
   (prez-mode 1))
-(defun turn-off-prez-mode ()
-  "Turns off prez-mode."
-  (interactive)
-  (prez-mode -1))
+
 (define-globalized-minor-mode global-prez-mode prez-mode turn-on-prez-mode)
 
-;; Hidden Mode Line Mode (Minor Mode)
+;; F8 key can't be used as it launches the VNC menu
+;; It can though be used with shift/ctrl/alt keys
+(bind-key "<S-f8>" #'prez-mode modi-mode-map)
+(key-chord-define-global "8i" #'prez-mode) ; alternative to S-F8
+
+;;; Hidden Mode Line Mode
 ;; (works only when one window is open)
 ;; FIXME: Make this activate only if one window is open
 ;; See http://bzg.fr/emacs-hide-mode-line.html
@@ -301,7 +452,7 @@ during presentations."
 ;; ;; Activate hidden-mode-line-mode
 ;; (hidden-mode-line-mode 1)
 
-;; Show mode line in header
+;;; Show mode line in header
 ;; http://bzg.fr/emacs-strip-tease.html
 ;; Careful: you need to deactivate hidden-mode-line-mode
 (defun mode-line-in-header ()
@@ -311,42 +462,23 @@ during presentations."
     (setq header-line-format nil))
   (force-mode-line-update))
 
-;; Enable / Disable Fringe
+;;; Fringes
 (defun enable-fringe ()
   (interactive)
   (fringe-mode '(nil . nil) ))
+
 (defun disable-fringe ()
   (interactive)
   (fringe-mode '(0 . 0) ))
 
-;; Generic mode to syntax highlight .vimrc files (I know, blasphemy!)
-;; http://stackoverflow.com/a/4238738/1219634
-(define-generic-mode 'vimrc-generic-mode
-  '()
-  '()
-  '(("^[\t ]*:?\\(!\\|ab\\|map\\|unmap\\)[^\r\n\"]*\"[^\r\n\"]*\\(\"[^\r\n\"]*\"[^\r\n\"]*\\)*$"
-     (0 font-lock-warning-face))
-    ("\\(^\\|[\t ]\\)\\(\".*\\)$"
-     (2 font-lock-comment-face))
-    ("\"\\([^\n\r\"\\]\\|\\.\\)*\""
-     (0 font-lock-string-face)))
-  '("/vimrc\\'" "\\.vim\\(rc\\)?\\'")
-  '((lambda ()
-      (modify-syntax-entry ?\" ".")))
-  "Generic mode for Vim configuration files.")
-
-(setq auto-mode-alist (append '(("\\.vimrc.*\\'" . vimrc-generic-mode)
-                                ("\\.vim\\'"     . vimrc-generic-mode))
-                              auto-mode-alist))
-
-;; Coloring regions that have ANSI color codes in them
+;;; Coloring regions with ANSI color codes
 ;; http://unix.stackexchange.com/a/19505/57923
 (defun ansi-color-apply-on-region-int (beg end)
   "Colorize using the ANSI color codes."
   (interactive "r")
   (ansi-color-apply-on-region beg end))
 
-;; Show long lines
+;;; Show long lines
 ;; http://stackoverflow.com/a/6346547/1219634
 (use-package whitespace
   :commands (modi/show-long-lines)
@@ -363,6 +495,7 @@ during presentations."
                  (number-to-string (+ 1 whitespace-line-column))
                  "\\}") "hi-yellow")))))
 
+;;; Narrow/Widen
 ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun endless/narrow-or-widen-dwim (p)
   "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
@@ -387,80 +520,15 @@ narrowed."
                (t (org-narrow-to-subtree))))
         (t (narrow-to-defun))))
 
-(global-unset-key (kbd "<C-down-mouse-1>"))
-;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
-;; inconvenient when that mouse menu pops up when I don't need it
-;; to. And actually I have never used that menu :P
+;; This line actually replaces Emacs' entire narrowing keymap.
+(bind-key "C-x n" #'endless/narrow-or-widen-dwim modi-mode-map)
 
-;; Usage: C-c - = - 0 = = = = - - 0
-;; Usage: C-c = = 0 - = - = = = = - - 0
-(defhydra hydra-font-resize (nil
-                             "C-c"
-                             :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-                             :color red
-                             :hint nil)
-  "
-[Font Size]     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset     _q_ Cancel
-"
-  ("C--" modi/font-size-decr)
-  ("-"   modi/font-size-decr :bind nil)
-  ("C-=" modi/font-size-incr)
-  ("="   modi/font-size-incr :bind nil)
-  ("+"   modi/font-size-incr :bind nil)
-  ("C-0" modi/font-size-reset :color blue)
-  ("0"   modi/font-size-reset :bind nil)
-  ("q"   nil :color blue))
-
-;; Toggle menu bar
-(defvar bkp--frame-height-px (frame-pixel-height)
-  "Backup of the frame height in pixels.")
-(defvar bkp--frame-width-px (frame-pixel-width)
-  "Backup of the frame width in pixels.")
-
-(defun modi/toggle-menu-bar ()
-  "Toggle the menu bar.
-Also restore the original frame size when disabling the menu bar."
-  (interactive)
-  (let ((frame-resize-pixelwise t))
-    ;; If the menu bar is hidden currently, take a backup of the frame height.
-    (when (null menu-bar-mode)
-      (setq bkp--frame-height-px (frame-pixel-height))
-      (setq bkp--frame-width-px (frame-pixel-width))
-      ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
-      ;; `frame-pixel-width' is returning a value higher by 16 pixels compared
-      ;; to that set using `set-frame-size'. So the below adjustment has to be made.
-      (setq bkp--frame-width-px (- (frame-pixel-width) 16))
-      ;;
-      )
-    (menu-bar-mode 'toggle)
-    ;; Restore frame size if menu bar is hidden after toggle
-    (when (null menu-bar-mode)
-      (set-frame-size nil bkp--frame-width-px bkp--frame-height-px :pixelwise))))
-
-;; Prettify symbols
+;;; Prettify symbols
 (defvar modi/prettify-symbols-mode-hooks '(emacs-lisp-mode-hook)
   "List of hooks of major modes in which prettify-symbols-mode should be enabled.")
 
 (dolist (hook modi/prettify-symbols-mode-hooks)
   (add-hook hook #'prettify-symbols-mode))
-
-(bind-keys
- :map modi-mode-map
-  ("<f2>"        . modi/toggle-menu-bar)
-  ;; F8 key can't be used as it launches the VNC menu
-  ;; It can though be used with shift/ctrl/alt keys
-  ("<S-f8>"      . prez-mode)
-  ;; Make Control+mousewheel do increase/decrease font-size
-  ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
-  ("<C-mouse-1>" . modi/font-size-reset) ; C + left mouse click
-  ("<C-mouse-4>" . modi/font-size-incr) ; C + wheel-up
-  ("<C-mouse-5>" . modi/font-size-decr) ; C + wheel-down
-  ("C-x t"       . toggle-truncate-lines)
-  ;; This line actually replaces Emacs' entire narrowing keymap.
-  ("C-x n"       . endless/narrow-or-widen-dwim))
-
-(key-chord-define-global "2w" 'menu-bar-mode) ; alternative to F2
-(key-chord-define-global "8i" 'prez-mode) ; alternative to S-F8
 
 
 (provide 'setup-visual)
