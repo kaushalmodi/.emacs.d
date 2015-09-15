@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 16:47:08 kmodi>
+;; Time-stamp: <2015-09-15 11:03:30 kmodi>
 
 ;; Undo Tree
 ;; http://www.dr-qubit.org/emacs.php
@@ -6,19 +6,38 @@
 (use-package undo-tree
   :config
   (progn
-    ;; Persistent undo-tree history across emacs sessions
-    (setq modi/undo-tree-history-dir (let ((dir (concat user-emacs-directory
-                                                        "undo-tree-history/")))
-                                       (make-directory dir :parents)
-                                       dir))
-    (setq undo-tree-history-directory-alist `(("." . ,modi/undo-tree-history-dir)))
-    (setq undo-tree-auto-save-history t)
+    (defun modi/undo-tree-enable-save-history ()
+      "Enable auto saving of the undo history."
+      (interactive)
 
-    ;; Compress the history files as .gz files
-    ;; (advice-add 'undo-tree-make-history-save-file-name :filter-return
-    ;;             (lambda (return-val) (concat return-val ".gz")))
+      (setq undo-tree-auto-save-history t)
 
-    (global-undo-tree-mode)))
+      ;; Compress the history files as .gz files
+      ;; (advice-add 'undo-tree-make-history-save-file-name :filter-return
+      ;;             (lambda (return-val) (concat return-val ".gz")))
+
+      ;; Persistent undo-tree history across emacs sessions
+      (setq modi/undo-tree-history-dir (let ((dir (concat user-emacs-directory
+                                                          "undo-tree-history/")))
+                                         (make-directory dir :parents)
+                                         dir))
+      (setq undo-tree-history-directory-alist `(("." . ,modi/undo-tree-history-dir)))
+
+      (add-hook 'write-file-functions #'undo-tree-save-history-hook)
+      (add-hook 'find-file-hook #'undo-tree-load-history-hook))
+
+    (defun modi/undo-tree-disable-save-history ()
+      "Disable auto saving of the undo history."
+      (interactive)
+
+      (setq undo-tree-auto-save-history nil)
+
+      (remove-hook 'write-file-functions #'undo-tree-save-history-hook)
+      (remove-hook 'find-file-hook #'undo-tree-load-history-hook))
+
+    (modi/undo-tree-disable-save-history)
+
+    (global-undo-tree-mode 1)))
 
 
 (provide 'setup-undo-tree)
