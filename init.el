@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 23:38:15 kmodi>
+;; Time-stamp: <2015-09-15 16:15:40 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -238,6 +238,7 @@
 (require 'setup-ido)
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
+(require 'setup-info)
 (require 'setup-iregister)
 (require 'setup-ivy)
 (require 'setup-keyfreq)
