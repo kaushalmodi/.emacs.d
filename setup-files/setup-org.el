@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-14 11:46:32 kmodi>
+;; Time-stamp: <2015-09-16 13:31:08 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -24,6 +24,7 @@
 ;;    ox-odt - ODT, doc export
 ;;    Custom Org Export related “packages”
 ;;  Bindings
+;;  Notes
 
 (if (bound-and-true-p org-load-version-dev)
     ;; if `org-load-version-dev' is non-nil
@@ -716,6 +717,7 @@ else call `self-insert-command'."
 
 (provide 'setup-org)
 
+;;; Notes
 ;; C-c C-e l l <-- Do org > tex
 ;; C-c C-e l p <-- Do org > tex > pdf using the command specified in
 ;;                 `org-latex-pdf-process' list
@@ -774,6 +776,17 @@ else call `self-insert-command'."
 ;; To have an org document auto update the #+DATE: keyword during exports, use:
 ;;   #+DATE: {{{time(%b %d %Y\, %a)}}}
 ;; The time format here can be anything as documented in `format-time-string' fn.
+
+;; Controlling section numbering, levels in `ox-twbs' exports:
+;; https://github.com/marsmining/ox-twbs/issues/10#issuecomment-140324367
+;;
+;;   #+OPTIONS: num:5 whn:2 toc:4 H:6
+;;
+;; Above would mean,
+;; - Create section numbers up to level 5 (num).
+;; - Display section numbers up to level 2 (whn).
+;; - Display table of contents 4 deep (toc).
+;; - Consider sections after 6 to be "low-level" (H).
 
 ;; Local Variables:
 ;; eval: (aggressive-indent-mode -1)
