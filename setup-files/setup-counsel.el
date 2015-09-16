@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-18 17:28:23 kmodi>
+;; Time-stamp: <2015-09-16 00:19:40 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -41,9 +41,11 @@
     (bind-keys
      :map modi-mode-map
       ("M-x"     . counsel-M-x)
+      ("C-M-y"   . counsel-yank-pop)
       ("C-x C-f" . counsel-find-file)
       ("C-h v"   . counsel-describe-variable)
       ("C-h f"   . counsel-describe-function)
+      ("C-h S"   . counsel-info-lookup-symbol)
       ("C-c u"   . counsel-unicode-char))
 
     (with-eval-after-load 'org
