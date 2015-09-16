@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-15 10:40:05 kmodi>
+;; Time-stamp: <2015-09-16 17:07:32 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -27,7 +27,7 @@
 ;;  Show mode line in header
 ;;  Fringes
 ;;  Coloring regions with ANSI color codes
-;;  Show long lines
+;;  Whitespace Mode/Show Long Lines
 ;;  Narrow/Widen
 ;;  Prettify symbols
 
@@ -36,6 +36,9 @@
 (setq scroll-step 1) ; scroll 1 line at a time
 (setq tooltip-mode nil) ; disable tooltip appearance on mouse hover
 (setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
+
+(defvar modi/fill-column 80
+  "Fill column value used by `fci-rule-column', `whitespace-line-column'.")
 
 (defvar default-font-size-pt 13
   "Default font size in points.")
@@ -478,22 +481,36 @@ Toggling off this mode reverts everything to their original states."
   (interactive "r")
   (ansi-color-apply-on-region beg end))
 
-;;; Show long lines
-;; http://stackoverflow.com/a/6346547/1219634
+;;; Whitespace Mode/Show Long Lines
 (use-package whitespace
-  :commands (modi/show-long-lines)
-  :init
-  (progn
-    (bind-to-modi-map "L" #'modi/show-long-lines))
+  :commands (whitespace-mode global-whitespace-mode)
   :config
   (progn
-    (defun modi/show-long-lines()
+    (setq whitespace-line-column modi/fill-column)
+    (setq whitespace-style '(face
+                             ;; Visualize trailing white space
+                             trailing
+                             ;; Highlight only the portion of the lines
+                             ;; exceeding `whitespace-line-column'
+                             lines-tail
+                             tabs))
+
+    ;; Do word wrapping only at word boundaries
+    (defconst modi/whitespace-mode-hooks '(verilog-mode-hook
+                                           emacs-lisp-mode-hook)
+      "List of hooks of major modes in which whitespace-mode should be enabled.")
+
+    (defun modi/turn-on-whitespace-mode ()
+      "Turn on whitespace-mode only for specific modes."
       (interactive)
-      (let ((hi-lock-mode -1)) ; reset hi-lock mode
-        (highlight-lines-matching-regexp
-         (concat ".\\{"
-                 (number-to-string (+ 1 whitespace-line-column))
-                 "\\}") "hi-yellow")))))
+      (dolist (hook modi/whitespace-mode-hooks)
+        (add-hook hook #'whitespace-mode)))
+
+    (defun modi/turn-off-whitespace-mode ()
+      "Turn off whitespace-mode only for specific modes."
+      (interactive)
+      (dolist (hook modi/whitespace-mode-hooks)
+        (remove-hook hook #'whitespace-mode)))))
 
 ;;; Narrow/Widen
 ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html

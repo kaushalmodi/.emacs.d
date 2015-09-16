@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 10:06:06 kmodi>
+;; Time-stamp: <2015-09-16 17:09:38 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
@@ -7,6 +7,14 @@
   :if (not (bound-and-true-p disable-pkg-fci))
   :config
   (progn
+    ;; Set global default value for the local var `fci-handle-truncate-lines'
+    (setq-default fci-handle-truncate-lines t) ; Truncate lines in fci mode
+    ;; (setq-default fci-handle-truncate-lines nil) ; Do not truncate lines in fci mode
+
+    (setq fci-rule-width 1)
+
+    (with-eval-after-load 'setup-visual
+      (setq fci-rule-column modi/fill-column)) ; default 70
 
     (defconst modi/fci-mode-hooks '(verilog-mode-hook
                                     emacs-lisp-mode-hook
@@ -31,15 +39,6 @@
         (remove-hook hook #'fci-mode)))
 
     (modi/turn-on-fci-mode)
-    ;; Enable fci-mode automatically for all files
-    ;; (add-hook 'after-change-major-mode-hook #'fci-mode)
-
-    (setq-default fci-handle-truncate-lines t) ; Truncate lines in fci mode
-    ;; (setq-default fci-handle-truncate-lines nil) ; Do not truncate lines in fci mode
-    (setq-default fci-rule-width 1)
-    (setq-default fci-rule-use-dashes nil)
-    (setq-default fci-dash-pattern 0.3)
-    (setq-default fci-rule-column 80) ; default is 70
 
     ;; Turn off fci-mode when popups are activated
     ;; https://github.com/alpaker/Fill-Column-Indicator/issues/21#issuecomment-6959718
