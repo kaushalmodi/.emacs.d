@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 18:20:32 kmodi>
+;; Time-stamp: <2015-09-16 11:01:44 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -93,7 +93,7 @@ that sub-directory will the below contents:
 `do-not-delete-trailing-whitespace' variable is `nil' or unbound."
   (when (not (bound-and-true-p do-not-delete-trailing-whitespace))
     (call-interactively #'delete-trailing-whitespace)))
-(add-hook 'write-file-functions #'modi/delete-trailing-whitespace)
+(add-hook 'before-save-hook #'modi/delete-trailing-whitespace)
 
 ;;; Untabify buffer
 (defun modi/untabify-buffer ()

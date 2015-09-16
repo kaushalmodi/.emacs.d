@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 23:08:57 kmodi>
+;; Time-stamp: <2015-09-16 10:56:28 kmodi>
 
 ;; Verilog
 
@@ -475,7 +475,7 @@ _a_lways         _f_or              _g_enerate         _O_utput
             (append imenu-generic-expression
                     modi/verilog-imenu-generic-expression))
       ;; Replace tabs with spaces when saving files in verilog-mode
-      (add-hook 'write-file-functions #'modi/untabify-buffer nil :local))
+      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
     (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
 
     ;; Force the `imenu-generic-expression' to be `modi/verilog-imenu-generic-expression'
