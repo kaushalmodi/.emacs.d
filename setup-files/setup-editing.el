@@ -97,14 +97,33 @@ that sub-directory will the below contents:
 
 ;;; Untabify buffer
 (defun modi/untabify-buffer ()
-  "Untabify the current buffer."
+  "Untabify the current buffer.
+
+http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
+Note that the function's return value is set to nil because if this function is
+added to `write-file-functions' hook, emacs will stay stuck at at the
+\"Saving file ..\" message and the file won't be saved if any function added to
+`write-file-functions' returned a non-nil value.
+
+As per the suggestion in https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21492,
+for this purpose, it makes a better sense to use `before-save-hook' (a normal
+hook) instead of `write-file-functions' (an abnormal hook that relies on stuff
+like the function return values).
+
+So below would be a recommended way of using this function:
+
+    (defun my/verilog-mode-customizations ()
+      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
+    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
+
+Note that it is suggested to add this function to the `before-save-hook'
+*locally* within a hook for a major mode which does not require the use of
+tabs instead of spaces. Do NOT add this function to the hook globally,
+because it can cause issues with files like Makefiles that rely on the use of
+tabs explicitly."
   (interactive)
   (untabify (point-min) (point-max))
-  ;; http://www.veripool.org/issues/345-Verilog-mode-can-t-get-untabify-on-save-to-work
-  ;; Note that the function's return value is set to `nil' because if this
-  ;; function is added to `write-file-functions' hook, emacs will stay stuck at
-  ;; at the "Saving file .." message and the file won't be saved (as one of the
-  ;; functions in the `write-file-functions' is not returning `nil'.
+  ;; Return nil for the benefit of `write-file-functions'.
   nil)
 
 ;;; Align
