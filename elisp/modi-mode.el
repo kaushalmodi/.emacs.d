@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-27 12:37:35 kmodi>
+;; Time-stamp: <2015-09-16 16:50:39 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -42,7 +42,6 @@ Overrides the default binding for `compose-mail'.")
   (interactive)
   (modi-mode 1))
 
-;;;###autoload
 (defun turn-off-modi-mode ()
   "Turns off modi-mode."
   (interactive)
