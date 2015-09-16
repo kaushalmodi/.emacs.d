@@ -1,9 +1,13 @@
-;; Time-stamp: <2015-09-13 23:53:30 kmodi>
+;; Time-stamp: <2015-09-16 11:15:16 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
 (use-package tiny
   :commands (modi/tiny-helper tiny-expand)
+  :init
+  (progn
+    (bind-key "C-c \\" #'modi/tiny-helper modi-mode-map)
+    (key-chord-define-global "]\\" #'modi/tiny-helper))
   :config
   (progn
     (defun modi/tiny-helper (&optional end-val begin-val sep op fmt)
@@ -87,10 +91,7 @@ Usage: M-x COMMAND ↵↵↵↵↵            -> 0 1 2 3 4 5 6 7 8 9
                                 "."))
           (insert tiny-expr)
           (undo-boundary)))
-      (tiny-expand))
-
-    (bind-key "C-c \\" #'modi/tiny-helper modi-mode-map)
-    (key-chord-define-global "]\\" #'modi/tiny-helper)))
+      (tiny-expand))))
 
 
 (provide 'setup-tiny)
