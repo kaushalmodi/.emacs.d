@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-15 16:15:40 kmodi>
+;; Time-stamp: <2015-09-16 16:42:13 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -238,7 +238,6 @@
 (require 'setup-ido)
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
-(require 'setup-info)
 (require 'setup-iregister)
 (require 'setup-ivy)
 (require 'setup-keyfreq)
@@ -316,6 +315,7 @@
 ;; font detection does not work when emacs is launched in daemon mode while
 ;; the emacs frame has yet to load. So do those things after a safe estimate
 ;; delay of 1 second by which the frame should have loaded.
+(use-package setup-info    :defer 1)
 (use-package setup-linum   :defer 1)
 (use-package setup-symbola :defer 1)
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 11:33:28 kmodi>
+;; Time-stamp: <2015-09-16 16:49:08 kmodi>
 
 ;; Info
 
@@ -66,7 +66,11 @@ Info-mode:
       ("h"   Info-help "Info help")
       ("q"   Info-exit "Info exit")
       ("C-g" nil "cancel" :color blue))
-    (bind-key "?" #'hydra-info/body Info-mode-map)))
+    (bind-key "?" #'hydra-info/body Info-mode-map))
+  :config
+  (progn
+    (when (find-font (font-spec :name "DejaVu Sans Mono"))
+      (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))))
 
 
 (provide 'setup-info)
