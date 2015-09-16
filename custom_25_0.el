@@ -35,7 +35,11 @@
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
-    ((eval define-key temp-mode-map
+    ((eval add-hook
+           (quote before-save-hook)
+           (function modi/outline-toc)
+           nil :local)
+     (eval define-key temp-mode-map
            (kbd "<C-f10>")
            (function dv-docs-dis))
      (eval define-key temp-mode-map
@@ -48,10 +52,6 @@
            (kbd "<f10>")
            (function dv-docs-co))
      (do-not-delete-trailing-whitespace . t)
-     (eval add-hook
-           (quote write-file-functions)
-           (function modi/outline-toc)
-           nil :local)
      (checkdoc-minor-mode . t)
      (eval when
            (featurep
@@ -72,6 +72,7 @@
      (py-indent-offset . 4)
      (header-auto-update-enabled)
      (lisp-indent-function . lisp-indent-function))))
+ '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t nil (paren) "allow one to see matching pairs of parentheses; when point is on one of the paired characters, the other is highlighted")
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
