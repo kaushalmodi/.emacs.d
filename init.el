@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 16:42:13 kmodi>
+;; Time-stamp: <2015-09-17 11:01:20 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -178,10 +178,14 @@
   (setq use-package-always-ensure nil))
 (require 'bind-key)
 (require 'defuns)
-(require 'modi-mode)
-(require 'temp-mode)
-(require 'setup-paradox)
 
+;; Enable `modi-mode' unless `disable-pkg-modi-mode' is set to `t' in
+;; `setup-var-overrides.el'.
+(when (not (bound-and-true-p disable-pkg-modi-mode))
+  (require 'modi-mode))
+(require 'temp-mode)
+
+(require 'setup-paradox)
 (require 'setup-region-bindings-mode)
 (require 'setup-key-chord)
 (require 'setup-hydra)
@@ -326,8 +330,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'setup-misc) ; This MUST be the last required package
-
-(global-modi-mode t)
 
 (when (and (bound-and-true-p emacs-initialized)
            (featurep 'setup-visual))

@@ -1,11 +1,7 @@
-;; Time-stamp: <2015-09-16 16:50:39 kmodi>
+;; Time-stamp: <2015-09-17 11:50:47 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
-
-;; Sources:
-;; http://stackoverflow.com/questions/683425/globally-override-key-binding-in-emacs
-;; http://nullprogram.com/blog/2013/02/06/
 
 (defvar modi-special-keymap-prefix (kbd "C-x m")
   "`modi-mode' keymap prefix.
@@ -24,26 +20,26 @@ Overrides the default binding for `compose-mail'.")
 ;;;###autoload
 (define-minor-mode modi-mode
   "A minor mode so that my key settings override annoying major modes."
-  :init-value nil
+  ;; If init-value is not set to t, this mode does not get enabled in
+  ;; `fundamental-mode' buffers even after doing \"(global-modi-mode 1)\".
+  ;; More info: http://emacs.stackexchange.com/q/16693/115
+  :init-value t
   :lighter    " μ"
   :keymap     modi-mode-map)
 
-(defadvice load (after give-my-keybindings-priority)
-  "Try to ensure that my keybindings always have priority."
-  (if (not (eq (car (car minor-mode-map-alist)) 'modi-mode))
-      (let ((mykeys (assq 'modi-mode minor-mode-map-alist)))
-        (assq-delete-all 'modi-mode minor-mode-map-alist)
-        (add-to-list 'minor-mode-map-alist mykeys))))
-(ad-activate 'load)
+;; https://github.com/jwiegley/use-package/blob/master/bind-key.el
+;; The keymaps in `emulation-mode-map-alists' take precedence over
+;; `minor-mode-map-alist'
+(add-to-list 'emulation-mode-map-alists `((modi-mode . ,modi-mode-map)))
 
 ;;;###autoload
 (defun turn-on-modi-mode ()
-  "Turns on modi-mode."
+  "Turn on modi-mode."
   (interactive)
   (modi-mode 1))
 
 (defun turn-off-modi-mode ()
-  "Turns off modi-mode."
+  "Turn off modi-mode."
   (interactive)
   (modi-mode -1))
 
@@ -52,9 +48,6 @@ Overrides the default binding for `compose-mail'.")
 
 ;; Turn off the minor mode in the minibuffer
 (add-hook 'minibuffer-setup-hook #'turn-off-modi-mode)
-
-;; ###autoload
-;; (add-hook 'text-mode-hook 'modi-mode)
 
 (defmacro bind-to-modi-map (key fn)
   "Bind a function to the `modi-mode-special-map'.
@@ -78,3 +71,5 @@ USAGE: (unbind-from-modi-map \"C-x m f\")
 
 
 (provide 'modi-mode)
+
+;; Minor mode tutorial: http://nullprogram.com/blog/2013/02/06/

@@ -1,9 +1,8 @@
-;; Time-stamp: <2015-08-19 16:57:25 kmodi>
+;; Time-stamp: <2015-09-17 11:03:04 kmodi>
 
 ;; Variable overrides
 
 ;; This file can be used to override variables using `setq' forms.
-
 ;; An example use is to disable loading of selected packages.
 ;;   Format to be used: (setq disable-pkg-PKGNAME t)
 ;; *Note that all packages CANNOT be disabled in this manner.
@@ -15,6 +14,7 @@
 ;; (setq disable-pkg-shackle t)
 ;; (setq disable-pkg-fci t)
 ;; (setq disable-pkg-hl-anything t)
+;; (setq disable-pkg-modi-mode t)
 
 ;; (setq user-personal-directory "~/.emacs.d/personal/")
 
