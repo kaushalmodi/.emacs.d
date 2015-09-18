@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-14 09:58:24 kmodi>
+;; Time-stamp: <2015-09-18 12:32:52 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -225,13 +225,14 @@ cycle _c_ase                _F_ollow^^                        _H_ardcore (allow 
 (defhydra hydra-launch (:color teal
                         :hint  nil)
   "
-_*_ Calc            _b_ookmark jump          _eb_ eww bookmarks      _h_l line flash          _m_anpage           _u_pgrade packages          ^^_se_   emacs.SE
-_=_ Quick calc      _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
-_-_ Rpn calc        _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_   Async shell cmd      _w_/_W_   quick/full weather
-_a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_   Shell cmd            ^^_<SPC>_ frequent
+_c_  calc           _b_ookmark jump          _eb_ eww bookmarks      _h_l line flash          _m_anpage           _u_pgrade packages          ^^_se_ emacs.SE
+_qc_ quick calc     _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
+_rc_ RPN calc       _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_ Async shell cmd        _w_/_W_ quick/full weather
+_a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_ Shell cmd              ^^_<SPC>_ frequent
 "
   ("a"       counsel-ag)
   ("b"       bookmark-jump)
+  ("c"       calc)
   ("d"       dired-single-magic-buffer-current-dir)
   ("ed"      modi/ediff-dwim)
   ("ee"      eww)
@@ -250,6 +251,8 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
   ("p"       paradox-list-packages)
   ;; chmod usage: s-SPC 644 P, s-SPC 400 P
   ("P"       modi/set-file-permissions)
+  ("qc"      quick-calc)
+  ("rc"      rpn-calc)
   ("sa"      async-shell-command)
   ("ss"      shell-command)
   ("se"      (sx-tab-all-questions nil "emacs"))
@@ -259,11 +262,8 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
   ("W"       sunshine-forecast)
   ("<SPC>"   hydra-launch-freq/body)
   ("<s-SPC>" hydra-launch-freq/body)
-  ("*"       calc)
-  ("="       quick-calc)
-  ("-"       rpn-calc)
   (":"       eval-expression "eval")
-  ("q"       nil "cancel" :color blue))
+  ("C-g"     nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
 (bind-key "C-c SPC" #'hydra-launch/body modi-mode-map)
 (bind-key "C-c l" #'hydra-launch/body modi-mode-map)
