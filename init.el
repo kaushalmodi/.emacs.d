@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-17 11:01:20 kmodi>
+;; Time-stamp: <2015-09-20 22:56:21 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -83,6 +83,7 @@
         ido-vertical-mode flx-ido ido-ubiquitous
         imenu-list
         indent-guide
+        info+
         interleave ; takes notes associated to pdf files in org mode
         iregister ; Interactive access to registers
         isend-mode ; used in setup-perl.el

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 16:49:08 kmodi>
+;; Time-stamp: <2015-09-18 15:32:54 kmodi>
 
 ;; Info
 
@@ -70,7 +70,16 @@ Info-mode:
   :config
   (progn
     (when (find-font (font-spec :name "DejaVu Sans Mono"))
-      (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))))
+      (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))
+
+    (use-package info+
+      :config
+      (progn
+        ;; Override the Info-mode-map binding to "?" set by info+
+        (bind-key "?" #'hydra-info/body Info-mode-map)
+        ;; Allow mouse scrolling to do its normal thing
+        (define-key Info-mode-map [mouse-4] nil)
+        (define-key Info-mode-map [mouse-5] nil)))))
 
 
 (provide 'setup-info)

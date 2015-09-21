@@ -16,12 +16,12 @@
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
-   ["#282828" "#FAB1AB" "#D1FA71" "#FFA600" "#7b68ee" "#dc8cc3" "#96D9F1" "#F7F7F7"])
+   ["#282828" "#c75646" "#cdee69" "#d0b03c" "#72b3cc" "#992222" "#9cd9f0" "#f7f7f7"])
  '(auto-compression-mode t nil (jka-compr) "uncompress->edit->save->compress .gz, .bz2, .Z files on the fly")
  '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
  '(default-input-method "rfc1345")
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
- '(fci-rule-color "#585858")
+ '(fci-rule-color "#5d5d5d")
  '(fringe-mode nil nil (fringe))
  '(indent-tabs-mode nil nil nil "use spaces instead of tabs for indentation")
  '(indicate-buffer-boundaries (quote ((top . right) (bottom . right))) nil nil "show frame boundaries in the fringe; as the fringe is activated only for the right-hand side, the buffer boundaries (top, bottom) are marked on the right side")
@@ -31,7 +31,7 @@
  '(outline-minor-mode-prefix "\243")
  '(package-selected-packages
    (quote
-    (smart-mark ox-twbs org-pomodoro pomodoro org-plus-contrib drag-stuff which-key ascii-art-to-unicode bm all all-ext help-fns+ org-trello engine-mode tao-theme list-environment imenu-list git-timemachine easy-escape hl-anything writegood-mode hideshow-org hideshowvis deft counsel interleave git-link shackle minibuffer-line zop-to-char yasnippet yaml-mode yafolding xkcd wrap-region wgrep-ag web-mode volatile-highlights visual-regexp use-package undo-tree twilight-bright-theme twilight-anti-bright-theme tiny sx swiper sunshine stripe-buffer smex smart-mode-line smart-compile rpn-calc region-bindings-mode rectangle-utils rainbow-mode rainbow-delimiters planet-theme paradox page-break-lines outshine org-tree-slide number nlinum neotree navi-mode mwe-log-commands multiple-cursors multi-term manage-minor-mode magit linum-relative leuven-theme kurecolor keyfreq key-chord iy-go-to-char isend-mode iregister indent-guide ido-vertical-mode ido-ubiquitous ibuffer-projectile hydra hungry-delete htmlize hl-line+ header2 hardcore-mode gplusify gist ggtags fuzzy fold-this flx-ido fill-column-indicator expand-region eww-lnum etags-table etags-select elisp-slime-nav elfeed eimp discover-my-major dired-single dired+ diff-hl darktooth-theme ctags-update csv-nav buffer-move bookmark+ benchmark-init auto-highlight-symbol auto-complete anzu ample-theme aggressive-indent ag adaptive-wrap ace-window)))
+    (info+ smart-mark ox-twbs org-pomodoro pomodoro org-plus-contrib drag-stuff which-key ascii-art-to-unicode bm all all-ext help-fns+ org-trello engine-mode tao-theme list-environment imenu-list git-timemachine easy-escape hl-anything writegood-mode hideshow-org hideshowvis deft counsel interleave git-link shackle minibuffer-line zop-to-char yasnippet yaml-mode yafolding xkcd wrap-region wgrep-ag web-mode volatile-highlights visual-regexp use-package undo-tree twilight-bright-theme twilight-anti-bright-theme tiny sx swiper sunshine stripe-buffer smex smart-mode-line smart-compile rpn-calc region-bindings-mode rectangle-utils rainbow-mode rainbow-delimiters planet-theme paradox page-break-lines outshine org-tree-slide number nlinum neotree navi-mode mwe-log-commands multiple-cursors multi-term manage-minor-mode magit linum-relative leuven-theme kurecolor keyfreq key-chord iy-go-to-char isend-mode iregister indent-guide ido-vertical-mode ido-ubiquitous ibuffer-projectile hydra hungry-delete htmlize hl-line+ header2 hardcore-mode gplusify gist ggtags fuzzy fold-this flx-ido fill-column-indicator expand-region eww-lnum etags-table etags-select elisp-slime-nav elfeed eimp discover-my-major dired-single dired+ diff-hl darktooth-theme ctags-update csv-nav buffer-move bookmark+ benchmark-init auto-highlight-symbol auto-complete anzu ample-theme aggressive-indent ag adaptive-wrap ace-window)))
  '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
