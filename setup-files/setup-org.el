@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 13:31:08 kmodi>
+;; Time-stamp: <2015-09-20 22:58:56 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -10,7 +10,8 @@
 ;;  Agenda and Capture
 ;;  Source block languages
 ;;  Defuns
-;;    org-linkid - Support markdown-style link ids
+;;  Org Entities
+;;  org-linkid - Support markdown-style link ids
 ;;  Diagrams
 ;;  Confirm evaluate
 ;;  epresent
@@ -231,7 +232,50 @@ Execute this command while the point is on or after the hyper-linked org link."
                 (replace-regexp "\\[\\[.*?\\(\\]\\[\\(.*?\\)\\)*\\]\\]" "\\2"
                                 nil start end)))))))
 
-;;;; org-linkid - Support markdown-style link ids
+;;; Org Entities
+    ;; http://www.mail-archive.com/emacs-orgmode@gnu.org/msg100527.html
+    ;; http://emacs.stackexchange.com/a/16746/115
+    (defun modi/org-entity-get-name (char)
+      "Return the entity name for CHAR. For example, return \"ast\" for *."
+      (let ((ll (append org-entities-user
+                        org-entities))
+            e name utf8)
+        (catch 'break
+          (while ll
+            (setq e (pop ll))
+            (when (not (stringp e))
+              (setq utf8 (nth 6 e))
+              (when (string= char utf8)
+                (setq name (car e))
+                (throw 'break name)))))))
+
+    (defun modi/org-insert-org-entity-maybe (&rest args)
+      "When the universal prefix C-u is used before entering any character,
+insert the character's `org-entity' name if available.
+
+If C-u prefix is not used and if `org-entity' name is not available, the
+returned value `entity-name' will be nil."
+      (let ((pressed-key (this-command-keys))
+            entity-name)
+        (when (and (listp args) (eq 4 (car args)))
+          (setq entity-name (modi/org-entity-get-name pressed-key))
+          (when entity-name
+            (setq entity-name (concat "\\" entity-name "{}"))
+            (insert entity-name)
+            (message (concat "Inserted `org-entity' "
+                             (propertize entity-name
+                                         'face 'font-lock-function-name-face)
+                             " for the symbol "
+                             (propertize pressed-key
+                                         'face 'font-lock-function-name-face)
+                             "."))))
+        entity-name))
+
+    ;; Run `org-self-insert-command' only if `modi/org-insert-org-entity-maybe'
+    ;; returns nil.
+    (advice-add 'org-self-insert-command :before-until #'modi/org-insert-org-entity-maybe)
+
+;;; org-linkid - Support markdown-style link ids
     (use-package org-linkid
       :load-path "elisp/org-linkid")
 
