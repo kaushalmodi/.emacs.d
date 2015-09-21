@@ -1,5 +1,14 @@
-;; Time-stamp: <2015-07-23 16:10:58 kmodi>
+;; Time-stamp: <2015-09-18 16:24:04 kmodi>
 
+;; Bookmarks
+
+;; Contents:
+;;
+;;  bm
+;;  bookmark+ (bmkp)
+;;  Quickly save and restore point using registers
+
+;;; bm
 ;; https://github.com/joodland/bm
 (use-package bm
   :config
@@ -91,10 +100,13 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
      ("<left-fringe> <mouse-1>" . bm-toggle-mouse)
      ("<left-margin> <mouse-1>" . bm-toggle-mouse))))
 
+;;; bookmark+ (bmkp)
+;; http://www.emacswiki.org/BookmarkPlus
 (use-package bookmark+
-  :commands (bmkp-desktop-jump))
+  :defer 15
+  :commands (bookmark-set bookmark-jump bookmark-bmenu-list))
 
-;; Quickly save and restore point using registers
+;;; Quickly save and restore point using registers
 (defun modi/save-point (restore)
   "Save the current point to a bookmark.
 
