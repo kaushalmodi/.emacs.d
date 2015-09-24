@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-01 09:56:05 kmodi>
+;; Time-stamp: <2015-09-23 13:41:01 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -51,7 +51,7 @@
   "
     EDEBUG MODE
 ^^_<SPC>_ step             ^^_f_ forward sexp         _b_reakpoint set                previous _r_esult      _w_here                    ^^_d_ebug backtrace
-^^_n_ext                   ^^_._ jump here            _u_nset breakpoint              _e_val expression      bounce _p_oint             _q_ top level (_Q_ nonstop)
+^^_n_ext                   ^^goto _h_ere              _u_nset breakpoint              _e_val expression      bounce _p_oint             _q_ top level (_Q_ nonstop)
 _g_o (_G_ nonstop)         ^^_I_nstrument callee      next _B_reakpoint               _E_val list            _v_iew outside             ^^_a_bort recursive edit
 _t_race (_T_ fast)         step _i_n/_o_ut            _x_ conditional breakpoint      eval _l_ast sexp       toggle save _W_indows      ^^_S_top
 _c_ontinue (_C_ fast)      ^^^^                       _X_ global breakpoint
@@ -65,11 +65,8 @@ _c_ontinue (_C_ fast)      ^^^^                       _X_ global breakpoint
   ("c"     edebug-continue-mode)
   ("C"     edebug-Continue-fast-mode)
 
-  ;;("f"   edebug-forward) not implemented
   ("f"     edebug-forward-sexp)
   ("h"     edebug-goto-here)
-  ("."     edebug-goto-here)
-
   ("I"     edebug-instrument-callee)
   ("i"     edebug-step-in)
   ("o"     edebug-step-out)
@@ -89,12 +86,11 @@ _c_ontinue (_C_ fast)      ^^^^                       _X_ global breakpoint
 
   ;; views
   ("w"     edebug-where)
-  ("v"     edebug-view-outside) ;; maybe obsolete??
   ("p"     edebug-bounce-point)
-  ("P"     edebug-view-outside) ;; same as v
+  ("v"     edebug-view-outside) ; maybe obsolete??
+  ("P"     edebug-view-outside) ; same as v
   ("W"     edebug-toggle-save-windows)
 
-  ;; misc
   ("d"     edebug-backtrace)
 
   ;; quitting and stopping
