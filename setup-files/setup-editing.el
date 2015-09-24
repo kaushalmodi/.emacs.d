@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 11:01:44 kmodi>
+;; Time-stamp: <2015-09-21 12:58:20 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -88,12 +88,13 @@ that sub-directory will the below contents:
     . ((nil . ((do-not-delete-trailing-whitespace . t))))))
 ")
 (make-variable-buffer-local 'do-not-delete-trailing-whitespace)
-(defun modi/delete-trailing-whitespace ()
-  "Call the `delete-trailing-whitespace' function only if the
-`do-not-delete-trailing-whitespace' variable is `nil' or unbound."
-  (when (not (bound-and-true-p do-not-delete-trailing-whitespace))
-    (call-interactively #'delete-trailing-whitespace)))
-(add-hook 'before-save-hook #'modi/delete-trailing-whitespace)
+(defun modi/delete-trailing-whitespace-maybe (&rest args)
+  "Return nil if `do-not-delete-trailing-whitespace' is unbound or nil."
+  (bound-and-true-p do-not-delete-trailing-whitespace))
+;; Call the `delete-trailing-whitespace' function only if
+;; `modi/delete-trailing-whitespace-maybe' returns nil.
+(advice-add 'delete-trailing-whitespace :before-until #'modi/delete-trailing-whitespace-maybe)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 ;;; Untabify buffer
 (defun modi/untabify-buffer ()
