@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-18 15:32:54 kmodi>
+;; Time-stamp: <2015-09-23 22:08:07 kmodi>
 
 ;; Info
 
@@ -69,8 +69,9 @@ Info-mode:
     (bind-key "?" #'hydra-info/body Info-mode-map))
   :config
   (progn
-    (when (find-font (font-spec :name "DejaVu Sans Mono"))
-      (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))
+    (>=e "25.0"
+        (when (find-font (font-spec :name "DejaVu Sans Mono"))
+          (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono")))
 
     (use-package info+
       :config
