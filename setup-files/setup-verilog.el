@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 10:56:28 kmodi>
+;; Time-stamp: <2015-09-23 13:14:50 kmodi>
 
 ;; Verilog
 
@@ -335,6 +335,9 @@ the project."
     ;; With binding done to electric-verilog-tick, it's not possible to type
     ;; backticks on multiple lines simultaneously in multiple-cursors mode
     (define-key verilog-mode-map "\`" nil)
+    ;; Bind `verilog-header' to "C-c C-H" instead of to "C-c C-h"
+    (define-key verilog-mode-map (kbd "C-c C-h") nil)
+    (define-key verilog-mode-map (kbd "C-c C-S-h") #'verilog-header)
 
 ;;; my/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
