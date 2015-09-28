@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-08 22:33:16 kmodi>
+;; Time-stamp: <2015-09-28 11:44:19 kmodi>
 
 ;; Customize the mode-line
 
@@ -115,9 +115,12 @@ TIME is \"nil\" or \"\"."
               (message "%s: `Go Home' alert time set to %s."
                        modi/today--day-sym new-go-home-time-str))))))
 
-    (minibuffer-line-mode)
+    ;; To set the `Go Home' alert, put the below in `setup-personal.el'
+    ;; (with-eval-after-load 'setup-mode-line
+    ;;   (with-eval-after-load 'minibuffer-line
+    ;;     (modi/reset-go-home-alert modi/time-go-home-reset)))
 
-    (modi/reset-go-home-alert modi/time-go-home-reset)))
+    (minibuffer-line-mode)))
 
 ;; smart-mode-line
 ;; emacs modeline aka statusbar
