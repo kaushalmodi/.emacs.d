@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 00:19:40 kmodi>
+;; Time-stamp: <2015-09-29 11:42:59 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -26,9 +26,12 @@
       "Grep in the current directory for STRING."
       (if (< (length string) 3)
           (counsel-more-chars 3)
-        (let ((regex (counsel-unquote-regex-parens (ivy--regex string))))
+        (let ((regex (counsel-unquote-regex-parens
+                      (setq ivy--old-re
+                            (ivy--regex string)))))
           (counsel--async-command
            (format (concat "ag "
+                           "--noheading "
                            "--nogroup "
                            "--nocolor "
                            "--skip-vcs-ignores "
