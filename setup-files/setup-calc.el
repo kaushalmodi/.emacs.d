@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-22 15:42:33 kmodi>
+;; Time-stamp: <2015-10-02 22:28:40 kmodi>
 
 ;; Calculator
 
@@ -48,6 +48,42 @@
 because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
       (calcFunc-ceil (math-div (calcFunc-log10 x) (calcFunc-log10 2))))
 
+    ;; Patch `calc-yank' to prefix radix notation when used with specific
+    ;; numeric prefixes.
+    ;; http://emacs.stackexchange.com/a/16888/115
+    (defun calc-yank (radix)
+      "Yank a value into the Calculator buffer.
+If RADIX is nil, do not prepend any radix notation.
+
+If RADIX is 2, prepend \"2#\" - Binary.
+If RADIX is 8, prepend \"8#\" - Octal.
+If RADIX is 0, prepend \"10#\" - Decimal.
+If RADIX is 16, prepend \"16#\" - Hexadecimal. "
+      (interactive "P")
+      (calc-wrapper
+       (calc-pop-push-record-list
+        0 "yank"
+        (let* ((radix-notation (cl-case radix
+                                 (2 "2#")
+                                 (8 "8#")
+                                 (0 "10#")
+                                 (6 "16#")
+                                 (t "")))
+               (thing (concat radix-notation
+                              (if (fboundp 'current-kill)
+                                  (current-kill 0 t)
+                                (car kill-ring-yank-pointer)))))
+          (if (eq (car-safe calc-last-kill) thing)
+              (cdr calc-last-kill)
+            (if (stringp thing)
+                (let ((val (math-read-exprs (calc-clean-newlines thing))))
+                  (if (eq (car-safe val) 'error)
+                      (progn
+                        (setq val (math-read-exprs thing))
+                        (if (eq (car-safe val) 'error)
+                            (error "Bad format in yanked data")
+                          val))
+                    val))))))))
     ))
 
 (use-package rpn-calc
