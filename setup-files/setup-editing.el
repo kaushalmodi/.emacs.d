@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-21 12:58:20 kmodi>
+;; Time-stamp: <2015-10-05 14:40:17 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -259,8 +259,7 @@ remove the comment characters from that line."
                                  "\\|" (substring comment-start 0 1) ; first char of `comment-start'
                                  "\\|" "\\s-")) ; extra spaces
         (delete-forward-char 1))
-      (insert-char ? ) ; insert space
-      )))
+      (insert-char ? )))) ; insert space
 
 ;;; Enable the disabled functions
 
@@ -660,14 +659,14 @@ After replacement text:
 (advice-add 'delete-blank-lines :before-until #'modi/delete-blank-lines-in-region)
 
 ;;; Space Adjustment After Word Kills
-(defun modi/space-as-i-mean ()
-  "Function to manage white space with `kill-word' operations.
+(defun modi/just-one-space-post-kill-word (&rest _)
+  "Function to manage white space after `kill-word' operations.
 
 1. If point is at the beginning of the line after possibly some white space,
    remove that white space and re-indent that line.
-2. If point is at the end of the line before possibly some white space,
-   do not do anything.
-3. Otherwise, ensure that there is only 1 white space around the point.
+2. If there is space before or after the point, ensure that there is only
+   one white space around the point.
+3. Otherwise, do nothing.
 
 During the whole operation do not change the point position with respect to the
 surrounding white space.
@@ -676,20 +675,17 @@ abc|   def  ghi <-- point on the left of white space after 'abc'
 abc| ghi        <-- point still before white space after calling this function
 abc   |def  ghi <-- point on the right of white space before 'def'
 abc |ghi        <-- point still after white space after calling this function."
-  (interactive)
-  (save-excursion ; maintain the initial position of the point w.r.t. space
+  (save-excursion ; maintain the initial position of the pt with respect to space
     (cond ((looking-back "^ *") ; remove extra space at beginning of line
            (just-one-space 0)
            (indent-according-to-mode))
-          ((looking-at " *$") ; do nothing when point at end of line
-           )
           ((or (looking-at   " ")
                (looking-back " ")) ; adjust space only if it exists
            (just-one-space 1))
-          (t ; do nothing otherwise
+          (t ; do nothing otherwise, includes case where the point is at EOL
            ))))
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
-(advice-add 'kill-word :after (lambda (arg) (modi/space-as-i-mean)))
+(advice-add 'kill-word :after #'modi/just-one-space-post-kill-word)
 
 ;;; Whole Buffer If Not Region
 (defvar modi/whole-buffer-if-not-region-fns '(indent-region
