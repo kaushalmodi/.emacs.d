@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-20 22:56:21 kmodi>
+;; Time-stamp: <2015-10-05 09:32:59 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -127,11 +127,12 @@
         sx
         tiny
         undo-tree ; supercool undo visualization
-        use-package ; optimize package loading
+        use-package use-package-chords ; optimize package loading
         visual-regexp
         volatile-highlights
         web-mode
         which-key ; > guide-key
+        wordnut ; offline dictionary (requires installing Wordnet wn application)
         wrap-region ; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
         writegood-mode ; highlight passive voice, weasel words and duplicates
         xkcd ; comic
@@ -178,6 +179,7 @@
   (require 'use-package)
   (setq use-package-always-ensure nil))
 (require 'bind-key)
+(require 'use-package-chords)
 (require 'defuns)
 
 ;; Enable `modi-mode' unless `disable-pkg-modi-mode' is set to `t' in
@@ -273,6 +275,8 @@
 (require 'setup-weather)
 (require 'setup-which-func)
 (require 'setup-which-key)
+(when (executable-find "wn")
+  (require 'setup-wordnut))
 (require 'setup-wrap-region)
 (require 'setup-writegood)
 (require 'setup-xkcd)
