@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-04 11:25:56 kmodi>
+;; Time-stamp: <2015-10-05 09:19:08 kmodi>
 
 ;; Neotree
 ;; https://github.com/jaypei/emacs-neotree
@@ -14,23 +14,6 @@
     )
   :config
   (progn
-    ;; https://github.com/jaypei/emacs-neotree/issues/58
-    ;; FIX 1
-    ;; `neo-persist-show' has to be set to `nil' to prevent the "Attempt to
-    ;; delete minibuffer or sole ordinary window." error when hitting `TAB'
-    ;; in the minibuffer. TAB > ido-complete > ido-completion-help > popwin >
-    ;; delete-other-windows > activates the defadvice set in neotree.el.
-    ;; Setting below var to nil doesn't activate that defadvice.
-    ;; (setq-default neo-persist-show nil)
-    ;; FIX 2
-    ;; Fix from author: http://www.emacswiki.org/emacs/NeoTree (title Popwin)
-    (setq-default neo-persist-show t)
-    (when neo-persist-show
-      (add-hook 'popwin:before-popup-hook
-                (lambda () (setq neo-persist-show nil)))
-      (add-hook 'popwin:after-popup-hook
-                (lambda () (setq neo-persist-show t))))
-
     (setq neo-theme 'nerd) ; 'classic, 'nerd, 'ascii, 'arrow
 
     (setq neo-vc-integration '(face char))
