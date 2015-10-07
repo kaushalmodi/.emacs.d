@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-02 16:34:59 kmodi>
+;; Time-stamp: <2015-10-07 13:52:18 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
@@ -25,21 +25,26 @@ Usage: M-x COMMAND ↵↵↵↵↵            -> 0 1 2 3 4 5 6 7 8 9
          (list (number-to-string (string-to-number
                                   (read-string
                                    (concat "END value "
-                                           "[default=0; auto-set to 9 if both "
+                                           "[Hit RET for default=0; "
+                                           "auto-set to 9 if both "
                                            "begin and end values are 0]: "))))
                (number-to-string (string-to-number
                                   (read-string
                                    (concat "BEGIN value "
-                                           "[default=0; this has to be "
-                                           "*smaller* than the end value]: "))))
+                                           "[Hit RET for default=0; "
+                                           "this has to be *smaller* than the "
+                                           "end value]: "))))
                (read-string (concat "Separator "
-                                    "[default=Space; "
+                                    "[Hit RET for default=Space; "
+                                    "eg: \\n; "
                                     "no math operators like - or = allowed]: "))
                (read-string (concat "Lisp Operation "
-                                    "[parentheses are optional; "
+                                    "[Hit RET for default=no Lisp operation; "
+                                    "parentheses are optional; "
                                     "eg: *xx | (+ x ?A) | *2+3x]: "))
                (read-string (concat "Format "
-                                    "[eg: %x | 0x%x | %c | %s | %(+ x x) | "
+                                    "[Hit RET for default=%0d; "
+                                    "eg: %x | 0x%x | %c | %s | %(+ x x) | "
                                     "%014.2f | %03d; parentheses required "
                                     "here for sexps]: ")))))
       (when (null (tiny-mapconcat)) ; enable the helper only if tiny expansion is
