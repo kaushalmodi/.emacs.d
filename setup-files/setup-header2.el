@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 19:19:15 kmodi>
+;; Time-stamp: <2015-10-07 15:43:42 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -8,7 +8,7 @@
   :config
   (progn
 
-    (defvar modi/header-sep-line-char ?-
+    (defconst modi/header-sep-line-char ?-
       "Character to be used for creating separator lines in header.")
 
     (defconst modi/auto-headers-hooks '(verilog-mode-hook
@@ -104,22 +104,9 @@ is non-nil."
       (let ((header-multiline header-copyright-notice))
         (modi/header-multiline)))
 
-    (defcustom modi/header-revision-log-placeholder
-      "* Revision Control
-$Log: $"
-      "Placeholder for insertion of revision logs auto inserted on check-ins."
-      :type 'string :group 'Automatic-File-Header)
-
-    (defsubst modi/header-revision-log ()
-      "Insert placeholder for insertion of revision logs auto inserted on
-doing check-ins."
-      (let ((header-multiline modi/header-revision-log-placeholder))
-        (dotimes (i 1) (insert "\n"))
-        (modi/header-multiline)))
-
     (defsubst modi/header-position-point ()
-      "Bring the point into the body of the file (above the eof comments).
-Assume the separator line to have at least 10 characters."
+      "Bring the point into the body of the file (2 lines below the last
+separator line. It is assumed that the separator line has at least 10 characters."
       (goto-char (point-max))
       (re-search-backward (concat (char-to-string modi/header-sep-line-char)
                                   "\\{10,\\}")
@@ -137,7 +124,6 @@ Assume the separator line to have at least 10 characters."
                              modi/header-copyright
                              modi/header-sep-line
                              header-eof
-                             modi/header-revision-log
                              modi/header-position-point))
 
     (modi/turn-on-auto-headers)))
