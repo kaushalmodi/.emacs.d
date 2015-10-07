@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-05 15:23:48 kmodi>
+;; Time-stamp: <2015-10-07 14:06:38 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -176,22 +176,21 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
 If a scratch buffer does not exist, create it with the major mode set to that
 of the buffer from where this function is called.
 
-    C-u 0 COMMAND -> Open/switch to a scratch buffer in `fundamental-mode'
-    C-u   COMMAND -> Open/switch to a scratch buffer in `org-mode'
-C-u C-u   COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
-  (interactive "P")
-  (if (and (null arg)
+        COMMAND -> Open/switch to a scratch buffer in the current buffer's major mode
+    C-0 COMMAND -> Open/switch to a scratch buffer in `fundamental-mode'
+    C-u COMMAND -> Open/switch to a scratch buffer in `org-mode'
+C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
+  (interactive "p")
+  (if (and (= arg 1) ; no prefix
            (string-match-p "\\*scratch" (buffer-name)))
       (switch-to-buffer (other-buffer))
-    (let (mode-str)
-      (cl-case arg
-        (0  (setq mode-str "fundamental-mode"))
-        (4  (setq mode-str "org-mode"))
-        (16 (setq mode-str "emacs-lisp-mode"))
-        (t  (setq mode-str (format "%s" major-mode))))
+    (let ((mode-str (cl-case arg
+                      (0  "fundamental-mode") ; C-0
+                      (4  "org-mode") ; C-u
+                      (16 "emacs-lisp-mode") ; C-u C-u
+                      (t  (format "%s" major-mode))))) ; no prefix
       (switch-to-buffer (get-buffer-create
                          (concat "*scratch-" mode-str "*")))
-      (modi-mode) ; Set my minor mode to activate my key bindings
       (funcall (intern mode-str))))) ; http://stackoverflow.com/a/7539787/1219634
 
 ;; Perform the "C-g" action automatically when focus moves away from the minibuffer
