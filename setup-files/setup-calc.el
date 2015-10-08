@@ -1,20 +1,32 @@
-;; Time-stamp: <2015-10-02 22:28:40 kmodi>
+;; Time-stamp: <2015-10-08 16:04:57 kmodi>
 
 ;; Calculator
 
 (use-package calc
-  :commands (calc quick-calc)
+  :commands (calc quick-calc
+                  hydra-launch/calc-and-exit hydra-launch/quick-calc-and-exit)
+  :bind (:map modi-mode-map
+         ("C-`" . modi/calc))
   :init
   (progn
     (setq calc-settings-file (expand-file-name
                               "setup-calc-defaults.el"
-                              (concat user-emacs-directory "setup-files/")))
-
-    (bind-keys
-     :map modi-mode-map
-      ("C-`" . quick-calc)))
+                              (concat user-emacs-directory "setup-files/"))))
   :config
   (progn
+    (defun modi/calc (regular-calc)
+      "Launch `quick-calc' by default.
+
+But if REGULAR-CALC is 1 (C-1 or M-1 prefix),launch `calc`.
+
+Note that `C-u COMMAND' will launch `quick-calc', but
+also paste the results of the calculations in the current buffer."
+      (interactive "P")
+      (if (eq regular-calc 1) ; C-1 prefix
+          (let (current-prefix-arg)
+            (call-interactively #'calc))
+        (call-interactively #'quick-calc)))
+
     ;; Make alog10(0.3) give the antilog(base 10) in quick-calc
     ;; Same as exp10(0.3)
     (defalias 'calcFunc-alog10 'calcFunc-exp10)
@@ -48,50 +60,79 @@
 because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
       (calcFunc-ceil (math-div (calcFunc-log10 x) (calcFunc-log10 2))))
 
-    ;; Patch `calc-yank' to prefix radix notation when used with specific
-    ;; numeric prefixes.
-    ;; http://emacs.stackexchange.com/a/16888/115
-    (defun calc-yank (radix)
-      "Yank a value into the Calculator buffer.
-If RADIX is nil, do not prepend any radix notation.
+    (use-package calc-yank
+      :commands (calc-yank)
+      :config
+      (progn
+        ;; Patch `calc-yank' to prefix radix notation when used with specific
+        ;; numeric prefixes.
+        ;; http://emacs.stackexchange.com/a/16888/115
+        (defun calc-yank (radix)
+          "Yank a value into the Calculator buffer.
 
-If RADIX is 2, prepend \"2#\" - Binary.
-If RADIX is 8, prepend \"8#\" - Octal.
+Valid numeric prefixes for RADIX: 0, 2, 6, 8
+No radix notation is prepended for any other numeric prefix.
+
+If RADIX is 2, prepend \"2#\"  - Binary.
+If RADIX is 8, prepend \"8#\"  - Octal.
 If RADIX is 0, prepend \"10#\" - Decimal.
-If RADIX is 16, prepend \"16#\" - Hexadecimal. "
-      (interactive "P")
-      (calc-wrapper
-       (calc-pop-push-record-list
-        0 "yank"
-        (let* ((radix-notation (cl-case radix
-                                 (2 "2#")
-                                 (8 "8#")
-                                 (0 "10#")
-                                 (6 "16#")
-                                 (t "")))
-               (thing (concat radix-notation
-                              (if (fboundp 'current-kill)
+If RADIX is 6, prepend \"16#\" - Hexadecimal.
+
+If RADIX is a non-nil list (created using \\[universal-argument]), the user
+will be prompted to enter the radix in the minibuffer.
+
+If RADIX is nil or if the yanked string already has a calc radix prefix, the
+yanked string will be passed on directly to the Calculator buffer without any
+alteration."
+          (interactive "P")
+          (calc-wrapper
+           (calc-pop-push-record-list
+            0 "yank"
+            (let* (radix-notation
+                   (thing-raw (if (fboundp 'current-kill)
                                   (current-kill 0 t)
-                                (car kill-ring-yank-pointer)))))
-          (if (eq (car-safe calc-last-kill) thing)
-              (cdr calc-last-kill)
-            (if (stringp thing)
-                (let ((val (math-read-exprs (calc-clean-newlines thing))))
-                  (if (eq (car-safe val) 'error)
-                      (progn
-                        (setq val (math-read-exprs thing))
-                        (if (eq (car-safe val) 'error)
-                            (error "Bad format in yanked data")
-                          val))
-                    val))))))))
-    ))
+                                (car kill-ring-yank-pointer)))
+                   (thing (if (or (null radix)
+                                  (string-match-p "\\`[0-9]+#" thing-raw))
+                              thing-raw
+                            (progn
+                              (setq radix-notation
+                                    (if (listp radix)
+                                        (concat (number-to-string
+                                                 (read-number
+                                                  "Set radix for yanked number (2-36): "))
+                                                "#")
+                                      (cond ((eq radix 2) "2#")
+                                            ((eq radix 8) "8#")
+                                            ((eq radix 0) "10#")
+                                            ((eq radix 6) "16#")
+                                            (t (progn
+                                                 (message
+                                                  (concat "No radix is "
+                                                          "prepended for prefix "
+                                                          "value of %0d. Valid "
+                                                          "numeric prefixes are "
+                                                          "0, 2, 6, 8.")
+                                                  radix)
+                                                 "")))))
+                              (concat radix-notation thing-raw)))))
+              (if (eq (car-safe calc-last-kill) thing)
+                  (cdr calc-last-kill)
+                (if (stringp thing)
+                    (let ((val (math-read-exprs (calc-clean-newlines thing))))
+                      (if (eq (car-safe val) 'error)
+                          (progn
+                            (setq val (math-read-exprs thing))
+                            (if (eq (car-safe val) 'error)
+                                (error "Bad format in yanked data")
+                              val))
+                        val))))))))
+        ))))
 
 (use-package rpn-calc
-  :config
-  (progn
-    (bind-keys
-     :map modi-mode-map
-      ("C-~" . rpn-calc))))
+  :commands (hydra-launch/rpn-calc-and-exit)
+  :bind (:map modi-mode-map
+         ("C-~" . rpn-calc)))
 
 
 (provide 'setup-calc)
