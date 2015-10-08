@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-18 12:32:52 kmodi>
+;; Time-stamp: <2015-10-08 16:38:59 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -87,6 +87,16 @@ If universal arg is used, load the `init.el'."
             (shell-command cmdStr "*xah-run-current-file output*" ))
         (message "No recognized program file suffix for this file.")))))
 (bind-to-modi-map "l" #'xah-run-current-file)
+
+;; Set the major mode for plain text/log files
+(use-package text-mode
+  :mode (("\\.log\\'" . text-mode))
+  :config
+  (progn
+    ;; http://emacs.stackexchange.com/a/16854/115
+    (defun modi/text-mode-comments ()
+      (font-lock-add-keywords nil '(("#.+" . font-lock-comment-face))))
+    (add-hook 'text-mode-hook #'modi/text-mode-comments)))
 
 ;; Help Functions +
 ;; http://www.emacswiki.org/emacs/HelpPlus
