@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-28 11:58:40 kmodi>
+;; Time-stamp: <2015-10-08 16:37:21 kmodi>
 
 ;; Highlight stuff
 
@@ -74,6 +74,15 @@ in which case the highlighting will not update as you type."
         (or (facep face) (setq face 'hi-yellow))
         (unless hi-lock-mode (hi-lock-mode 1))
         (hi-lock-set-pattern regexp face)))
+
+    ;; Enable `hi-lock-mode' in `text-mode' too
+    ;; The hi-lock fontification will not be visible (the `font-lock-keywords'
+    ;; variable will not be updated unless `font-lock-fontified' is already `t'.
+    ;; This was derived by studying the definition of `hi-lock-font-lock-hook'
+    ;; function.
+    (defun modi/hi-lock-enable-in-text-mode ()
+      (setq-local font-lock-fontified t))
+    (add-hook 'text-mode-hook #'modi/hi-lock-enable-in-text-mode)
 
     (bind-keys
      :map modi-mode-map
