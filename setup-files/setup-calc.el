@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-08 16:04:57 kmodi>
+;; Time-stamp: <2015-10-09 13:14:57 kmodi>
 
 ;; Calculator
 
@@ -88,34 +88,69 @@ alteration."
           (calc-wrapper
            (calc-pop-push-record-list
             0 "yank"
-            (let* (radix-notation
-                   (thing-raw (if (fboundp 'current-kill)
-                                  (current-kill 0 t)
-                                (car kill-ring-yank-pointer)))
-                   (thing (if (or (null radix)
-                                  (string-match-p "\\`[0-9]+#" thing-raw))
-                              thing-raw
+            (let* (radix-num
+                   radix-notation
+                   valid-num-regexp
+                   (thing-raw
+                    (if (fboundp 'current-kill)
+                        (current-kill 0 t)
+                      (car kill-ring-yank-pointer)))
+                   (thing
+                    (if (or (null radix)
+                            ;; Support up to base 36 numbers
+                            (string-match-p "\\`\\-*[0-9a-zA-Z]+#" thing-raw))
+                        thing-raw
+                      (progn
+                        (if (listp radix)
+                            (progn
+                              (setq radix-num
+                                    (read-number
+                                     "Set radix for yanked content (2-36): "))
+                              (when (not (and (integerp radix-num)
+                                              (<= 2 radix-num)
+                                              (>= 36 radix-num)))
+                                (error (concat "The radix has to be an "
+                                               "integer between 2 and 36."))))
+                          (setq radix-num
+                                (cond ((eq radix 2) 2)
+                                      ((eq radix 8) 8)
+                                      ((eq radix 0) 10)
+                                      ((eq radix 6) 16)
+                                      (t (message
+                                          (concat "No radix prepended "
+                                                  "for invalid *numeric* "
+                                                  "prefix %0d.")
+                                          radix)
+                                         nil))))
+                        (if radix-num
                             (progn
                               (setq radix-notation
-                                    (if (listp radix)
-                                        (concat (number-to-string
-                                                 (read-number
-                                                  "Set radix for yanked number (2-36): "))
-                                                "#")
-                                      (cond ((eq radix 2) "2#")
-                                            ((eq radix 8) "8#")
-                                            ((eq radix 0) "10#")
-                                            ((eq radix 6) "16#")
-                                            (t (progn
-                                                 (message
-                                                  (concat "No radix is "
-                                                          "prepended for prefix "
-                                                          "value of %0d. Valid "
-                                                          "numeric prefixes are "
-                                                          "0, 2, 6, 8.")
-                                                  radix)
-                                                 "")))))
-                              (concat radix-notation thing-raw)))))
+                                    (concat (number-to-string radix-num) "#"))
+                              (setq valid-num-regexp
+                                    (cond
+                                     ;; radix 2 to 10
+                                     ((and (<= 2 radix-num)
+                                           (>= 10 radix-num))
+                                      (concat "[0-"
+                                              (number-to-string (1- radix-num))
+                                              "]+"))
+                                     ;; radix 11
+                                     ((= 11 radix-num) "[0-9aA]+")
+                                     ;; radix 12+
+                                     (t
+                                      (concat "[0-9"
+                                              "a-" (format "%c" (+ 86 radix-num))
+                                              "A-" (format "%c" (+ 54 radix-num))
+                                              "]+"))))
+                              ;; Ensure that the radix-notation is prefixed
+                              ;; correctly even for multi-line yanks like below,
+                              ;;   111
+                              ;;   1111
+                              (replace-regexp-in-string
+                               valid-num-regexp
+                               (concat radix-notation "\\&")
+                               thing-raw))
+                          thing-raw)))))
               (if (eq (car-safe calc-last-kill) thing)
                   (cdr calc-last-kill)
                 (if (stringp thing)
