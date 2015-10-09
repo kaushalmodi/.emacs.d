@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-29 11:43:48 kmodi>
+;; Time-stamp: <2015-10-09 16:36:43 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -13,9 +13,10 @@
       ;; Enable ivy
       (ivy-mode 1))
 
-    ;; (setq ivy-display-style nil) ; default
-    (setq ivy-display-style 'fancy)
+    ;; Show recently killed buffers when calling `ivy-switch-buffer'
     (setq ivy-use-virtual-buffers t)
+    (setq ivy-virtual-abbreviate 'full) ; Show the full virtual file paths
+
     (setq ivy-count-format "%d/%d ")
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
     ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
@@ -26,9 +27,9 @@
         (defhydra hydra-ivy (:hint nil
                              :color pink)
           "
-^^_,_      _f_ollow  _i_nsert  ^^_c_alling %s(if ivy-calling \"on\" \"off\")  _w_/_s_: %s(ivy-action-name)
-_p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--regex-fuzzy) \"fuzzy\" \"ivy\")
-^^_._      _D_o it!  ^^        _<_/_>_ shrink/grow window
+^^_,_      _f_ollow  _g_o      ^^_c_alling %-3s(if ivy-calling \"on\" \"off\")   _w_/_s_/_a_: %-14s(ivy-action-name)
+_p_/_n_    _d_one    _i_nsert  ^^_m_atcher %-27s(if (eq ivy--regex-function 'ivy--regex-fuzzy) \"fuzzy\" \"ivy\")
+^^_._      _D_o it!  _q_uit    _<_/_>_ shrink/grow window _t_runcate: %-11`truncate-lines
 "
           ;; arrows
           (","   ivy-beginning-of-buffer) ; default h
@@ -37,7 +38,7 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
           ("."   ivy-end-of-buffer) ; default l
           ;; actions
           ("f"   ivy-alt-done         :exit nil)
-          ("C-m" ivy-alt-done         :exit nil) ; RET ; default C-j
+          ("C-m" ivy-alt-done         :exit nil) ; RET, default C-j
           ("C-j" ivy-done             :exit t) ; default C-m
           ("d"   ivy-done             :exit t)
           ("g"   ivy-call)
@@ -48,6 +49,8 @@ _p_/_n_    _d_one    _q_uit    ^^_m_atcher %s(if (eq ivy--regex-function 'ivy--r
           ("<"   ivy-minibuffer-shrink)
           ("w"   ivy-prev-action)
           ("s"   ivy-next-action)
+          ("a"   ivy-read-action)
+          ("t"   (setq truncate-lines (not truncate-lines)))
           ;; quit hydra
           ("i"   nil)
           ("C-o" nil)
