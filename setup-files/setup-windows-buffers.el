@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-07 14:06:38 kmodi>
+;; Time-stamp: <2015-10-09 16:58:29 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -34,13 +34,64 @@
     (setq recentf-max-menu-items 2000)))
 
 (use-package windmove
+  :bind (:map modi-mode-map
+         ("S-<left>"  . windmove-left)
+         ("S-<right>" . windmove-right)
+         ("S-<up>"    . windmove-up)
+         ("S-<down>"  . windmove-down)
+         ("C-c ]"     . hydra-win-resize/body)
+         ("C-c ["     . hydra-win-resize/body))
+  :chords (("p[" . windmove-left)
+           ("[]" . windmove-right))
   :config
   (progn
     (setq windmove-wrap-around t) ; default = nil
-    (windmove-default-keybindings) ; Bind windmove nav to S-left/right/up/down
 
-    (key-chord-define-global "p[" #'windmove-left)
-    (key-chord-define-global "[]" #'windmove-right)))
+    ;; Move window splitters / Resize windows
+    ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
+    (defun hydra-move-splitter-left ()
+      "Move window splitter left."
+      (interactive)
+      (let ((windmove-wrap-around nil))
+        (if (windmove-find-other-window 'right)
+            (shrink-window-horizontally 1)
+          (enlarge-window-horizontally 1))))
+
+    (defun hydra-move-splitter-right ()
+      "Move window splitter right."
+      (interactive)
+      (let ((windmove-wrap-around nil))
+        (if (windmove-find-other-window 'right)
+            (enlarge-window-horizontally 1)
+          (shrink-window-horizontally 1))))
+
+    (defun hydra-move-splitter-up ()
+      "Move window splitter up."
+      (interactive)
+      (let ((windmove-wrap-around nil))
+        (if (windmove-find-other-window 'up)
+            (enlarge-window 1)
+          (shrink-window 1))))
+
+    (defun hydra-move-splitter-down ()
+      "Move window splitter down."
+      (interactive)
+      (let ((windmove-wrap-around nil))
+        (if (windmove-find-other-window 'up)
+            (shrink-window 1)
+          (enlarge-window 1))))
+
+    (defhydra hydra-win-resize (:color red)
+      "win-resize"
+      ("]"        hydra-move-splitter-right "→")
+      ("["        hydra-move-splitter-left  "←")
+      ("p"        hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
+      ("{"        hydra-move-splitter-up    "↑")
+      ("\\"        hydra-move-splitter-down  "↓")
+      ("}"        hydra-move-splitter-down  "↓")
+      ("="        balance-windows           "Balance")
+      ("q"        nil "cancel" :color blue)
+      ("<return>" nil "cancel" :color blue))))
 
 ;; Reopen Killed File
 ;; http://emacs.stackexchange.com/a/3334/115
@@ -280,55 +331,6 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 
 (setq mwheel-scroll-up-function   'scroll-up)
 (setq mwheel-scroll-down-function 'scroll-down)
-
-;; Move window splitters / Resize windows
-;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
-
-(defun hydra-move-splitter-left ()
-  "Move window splitter left."
-  (interactive)
-  (let ((windmove-wrap-around nil))
-    (if (windmove-find-other-window 'right)
-        (shrink-window-horizontally 1)
-      (enlarge-window-horizontally 1))))
-
-(defun hydra-move-splitter-right ()
-  "Move window splitter right."
-  (interactive)
-  (let ((windmove-wrap-around nil))
-    (if (windmove-find-other-window 'right)
-        (enlarge-window-horizontally 1)
-      (shrink-window-horizontally 1))))
-
-(defun hydra-move-splitter-up ()
-  "Move window splitter up."
-  (interactive)
-  (let ((windmove-wrap-around nil))
-    (if (windmove-find-other-window 'up)
-        (enlarge-window 1)
-      (shrink-window 1))))
-
-(defun hydra-move-splitter-down ()
-  "Move window splitter down."
-  (interactive)
-  (let ((windmove-wrap-around nil))
-    (if (windmove-find-other-window 'up)
-        (shrink-window 1)
-      (enlarge-window 1))))
-
-(defhydra hydra-win-resize (:color red)
-  "win-resize"
-  ("]"        hydra-move-splitter-right "→")
-  ("["        hydra-move-splitter-left  "←")
-  ("p"        hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
-  ("{"        hydra-move-splitter-up    "↑")
-  ("\\"       hydra-move-splitter-down  "↓")
-  ("}"        hydra-move-splitter-down  "↓")
-  ("="        balance-windows           "Balance")
-  ("q"        nil                       "cancel" :color blue)
-  ("<return>" nil                       "cancel" :color blue))
-(bind-key "C-c ]" #'hydra-win-resize/body modi-mode-map)
-(bind-key "C-c [" #'hydra-win-resize/body modi-mode-map)
 
 ;; Ediff
 (use-package ediff

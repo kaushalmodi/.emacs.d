@@ -1,9 +1,11 @@
-;; Time-stamp: <2015-06-01 14:19:31 kmodi>
+;; Time-stamp: <2015-10-09 16:49:24 kmodi>
 
 ;; Paradox
 ;; https://github.com/Malabarba/paradox
 
 (use-package paradox
+  :commands (package-list-packages
+             paradox-list-packages hydra-launch/paradox-list-packages-and-exit)
   :config
   (progn
     ;; The "paradox-token" file is supposed to contain this line:
