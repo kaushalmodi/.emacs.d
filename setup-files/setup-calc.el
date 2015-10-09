@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-09 13:14:57 kmodi>
+;; Time-stamp: <2015-10-09 13:33:35 kmodi>
 
 ;; Calculator
 
@@ -97,8 +97,8 @@ alteration."
                       (car kill-ring-yank-pointer)))
                    (thing
                     (if (or (null radix)
-                            ;; Support up to base 36 numbers
-                            (string-match-p "\\`\\-*[0-9a-zA-Z]+#" thing-raw))
+                            ;; Match examples: -2#10, 10\n(10#10,01)
+                            (string-match-p "^[-(]*[0-9]\\{1,2\\}#" thing-raw))
                         thing-raw
                       (progn
                         (if (listp radix)
