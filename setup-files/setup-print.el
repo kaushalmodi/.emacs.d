@@ -1,7 +1,6 @@
-;; Time-stamp: <2015-09-13 19:40:38 kmodi>
+;; Time-stamp: <2015-10-12 15:22:41 kmodi>
 
 ;; Printing
-;; http://www.emacswiki.org/emacs/PsPrintPackage-23
 
 (use-package ps-print
   :init
@@ -13,31 +12,26 @@
   :config
   (progn
     ;; Print configuration
-    (setq ps-paper-type             'letter)
-    (setq ps-print-color-p          'black-white)
-    (setq ps-font-family            'Courier)
-    (setq ps-font-size              8.5) ; default = 8.5
-    (setq ps-landscape-mode         nil)
-    (setq ps-number-of-columns      1)
+    (setq ps-paper-type        'letter) ; default = 'letter
+    (setq ps-print-color-p     'black-white)
+    (setq ps-font-family       'Courier)
+    (setq ps-font-size         8.5) ; default = 8.5
+    (setq ps-landscape-mode    nil) ; default = nil (portrait)
+    (setq ps-number-of-columns 1)
 
     ;; Header configuration
-    (setq ps-print-header           1)
+    (setq ps-print-header t)
+    (setq ps-header-lines 2) ; 1 = Show buffer name, page number
+                                        ; 2 = ^above + path to file, date
+                                        ; 3 = ^above + time
     (setq ps-print-header-frame     nil)
-    (setq ps-print-only-one-header  1)
+    (setq ps-print-only-one-header  t)
     (setq ps-header-font-family     'Courier)
     (setq ps-header-title-font-size 8.5)
     (setq ps-header-font-size       8.0)
-    (setq ps-header-lines           2 )
-    ;; |-----------------+------------------------------------------------------------|
-    ;; | ps-header-lines | Description                                                |
-    ;; |-----------------+------------------------------------------------------------|
-    ;; |               1 | Show buffer name, page number                              |
-    ;; |               2 | Show buffer name, page number, path to file, date          |
-    ;; |               3 | Show buffer name, page number, path to file, date and time |
-    ;; |-----------------+------------------------------------------------------------|
 
     ;; Line number configuration
-    (setq ps-line-number           1)
+    (setq ps-line-number           t)
     (setq ps-line-number-font      'Courier)
     (setq ps-line-number-font-size 8.0)
     (setq ps-line-number-color     '(0.65 0.65 0.65)) ; gray
@@ -45,22 +39,31 @@
     ;; ps-line-number-color '(1.0 1.0 1.0) ; white
 
     (when (executable-find "ps2pdf")
-      (defun modi/pdf-print-buffer-with-faces (&optional filename)
+      (defun modi/pdf-print-buffer-with-faces (option)
         "Print file in the current buffer as pdf, including font, color, and
-underline information.  This command works only if you are using a window system,
-so it has a way to determine color values.
+underline information.  This command works only if you are using a window
+system, so it has a way to determine color values.
 
-C-u COMMAND prompts user where to save the Postscript file (which is then
-converted to PDF at the same location."
-        (interactive (list (if current-prefix-arg
-                               (ps-print-preprint 4)
-                             (concat (file-name-sans-extension (buffer-file-name))
-                                     ".ps"))))
-        (ps-print-with-faces (point-min) (point-max) filename)
-        (shell-command (concat "ps2pdf " filename))
-        (delete-file filename)
-        (message "Deleted %s" filename)
-        (message "Wrote %s" (concat (file-name-sans-extension filename) ".pdf"))))))
+If OPTION is '(4), open the PDF file after generating it.
+
+If OPTION is '(16), prompt the user for the Postscript file save location,
+which is then converted to PDF at the same location."
+        (interactive "P")
+        (let* ((open-pdf (eq 4 (car option)))
+               (prompt-for-ps-filename (eq 16 (car option)))
+               (ps-filename (if prompt-for-ps-filename
+                                (ps-print-preprint 4)
+                              (concat (file-name-sans-extension (buffer-file-name))
+                                      ".ps")))
+               (pdf-filename (concat (file-name-sans-extension ps-filename)
+                                     ".pdf")))
+          (ps-print-with-faces (point-min) (point-max) ps-filename)
+          (shell-command (concat "ps2pdf " ps-filename))
+          (delete-file ps-filename)
+          (message "Deleted %s" ps-filename)
+          (message "Wrote %s" pdf-filename)
+          (when open-pdf
+            (find-file pdf-filename)))))))
 
 
 (provide 'setup-print)
