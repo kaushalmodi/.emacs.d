@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-08 14:12:24 kmodi>
+;; Time-stamp: <2015-10-12 12:19:29 kmodi>
 
 ;; wrap-region
 ;; https://github.com/rejeep/wrap-region.el
@@ -12,6 +12,25 @@
                     text-mode-hook
                     markdown-mode-hook))
       (add-hook hook #'wrap-region-mode))
+
+    ;; Override the default `wrap-region-define-wrappers' function so that it
+    ;; does not bind the "[", "{", "<" keys each time `wrap-region-mode' is
+    ;; enabled in a buffer.
+    (defun wrap-region-define-wrappers ()
+      "Defines defaults wrappers."
+      (mapc
+       (lambda (pair)
+         (apply 'wrap-region-add-wrapper pair))
+       '(("\"" "\"")
+         ("'"  "'")
+         ("("  ")")))
+      ;; Unbind the wrap region pairs which I am very unlikely to us.
+      ;; Doing so allows me to bind those to more useful functions in
+      ;; `region-bindings-mode-map'. See `setup-multiple-cursors.el' file
+      ;; for examples.
+      (wrap-region-unset-key "[")
+      (wrap-region-unset-key "{")
+      (wrap-region-unset-key "<"))
 
     (wrap-region-add-wrapper "`" "'" nil 'emacs-lisp-mode)
 
