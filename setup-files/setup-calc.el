@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-09 13:33:35 kmodi>
+;; Time-stamp: <2015-10-12 09:18:42 kmodi>
 
 ;; Calculator
 
@@ -58,111 +58,7 @@ also paste the results of the calculations in the current buffer."
     (defun calcFunc-next2pow (x)
       "Return the next 2's power index. If the input is 7, output is 3
 because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
-      (calcFunc-ceil (math-div (calcFunc-log10 x) (calcFunc-log10 2))))
-
-    (use-package calc-yank
-      :commands (calc-yank)
-      :config
-      (progn
-        ;; Patch `calc-yank' to prefix radix notation when used with specific
-        ;; numeric prefixes.
-        ;; http://emacs.stackexchange.com/a/16888/115
-        (defun calc-yank (radix)
-          "Yank a value into the Calculator buffer.
-
-Valid numeric prefixes for RADIX: 0, 2, 6, 8
-No radix notation is prepended for any other numeric prefix.
-
-If RADIX is 2, prepend \"2#\"  - Binary.
-If RADIX is 8, prepend \"8#\"  - Octal.
-If RADIX is 0, prepend \"10#\" - Decimal.
-If RADIX is 6, prepend \"16#\" - Hexadecimal.
-
-If RADIX is a non-nil list (created using \\[universal-argument]), the user
-will be prompted to enter the radix in the minibuffer.
-
-If RADIX is nil or if the yanked string already has a calc radix prefix, the
-yanked string will be passed on directly to the Calculator buffer without any
-alteration."
-          (interactive "P")
-          (calc-wrapper
-           (calc-pop-push-record-list
-            0 "yank"
-            (let* (radix-num
-                   radix-notation
-                   valid-num-regexp
-                   (thing-raw
-                    (if (fboundp 'current-kill)
-                        (current-kill 0 t)
-                      (car kill-ring-yank-pointer)))
-                   (thing
-                    (if (or (null radix)
-                            ;; Match examples: -2#10, 10\n(10#10,01)
-                            (string-match-p "^[-(]*[0-9]\\{1,2\\}#" thing-raw))
-                        thing-raw
-                      (progn
-                        (if (listp radix)
-                            (progn
-                              (setq radix-num
-                                    (read-number
-                                     "Set radix for yanked content (2-36): "))
-                              (when (not (and (integerp radix-num)
-                                              (<= 2 radix-num)
-                                              (>= 36 radix-num)))
-                                (error (concat "The radix has to be an "
-                                               "integer between 2 and 36."))))
-                          (setq radix-num
-                                (cond ((eq radix 2) 2)
-                                      ((eq radix 8) 8)
-                                      ((eq radix 0) 10)
-                                      ((eq radix 6) 16)
-                                      (t (message
-                                          (concat "No radix prepended "
-                                                  "for invalid *numeric* "
-                                                  "prefix %0d.")
-                                          radix)
-                                         nil))))
-                        (if radix-num
-                            (progn
-                              (setq radix-notation
-                                    (concat (number-to-string radix-num) "#"))
-                              (setq valid-num-regexp
-                                    (cond
-                                     ;; radix 2 to 10
-                                     ((and (<= 2 radix-num)
-                                           (>= 10 radix-num))
-                                      (concat "[0-"
-                                              (number-to-string (1- radix-num))
-                                              "]+"))
-                                     ;; radix 11
-                                     ((= 11 radix-num) "[0-9aA]+")
-                                     ;; radix 12+
-                                     (t
-                                      (concat "[0-9"
-                                              "a-" (format "%c" (+ 86 radix-num))
-                                              "A-" (format "%c" (+ 54 radix-num))
-                                              "]+"))))
-                              ;; Ensure that the radix-notation is prefixed
-                              ;; correctly even for multi-line yanks like below,
-                              ;;   111
-                              ;;   1111
-                              (replace-regexp-in-string
-                               valid-num-regexp
-                               (concat radix-notation "\\&")
-                               thing-raw))
-                          thing-raw)))))
-              (if (eq (car-safe calc-last-kill) thing)
-                  (cdr calc-last-kill)
-                (if (stringp thing)
-                    (let ((val (math-read-exprs (calc-clean-newlines thing))))
-                      (if (eq (car-safe val) 'error)
-                          (progn
-                            (setq val (math-read-exprs thing))
-                            (if (eq (car-safe val) 'error)
-                                (error "Bad format in yanked data")
-                              val))
-                        val))))))))
-        ))))
+      (calcFunc-ceil (math-div (calcFunc-log10 x) (calcFunc-log10 2))))))
 
 (use-package rpn-calc
   :commands (hydra-launch/rpn-calc-and-exit)
@@ -171,6 +67,10 @@ alteration."
 
 
 (provide 'setup-calc)
+
+;; Mon Oct 12 09:16:41 EDT 2015
+;; My commit to update `calc-yank' ( http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=ec0d4d24fd11b5040de9f7657b486c3b1e743071 )
+;; to allow specifying of radix when yanking ( http://emacs.stackexchange.com/a/16888/115 ).
 
 ;; You can enter hex numbers in two ways (the same applies to numbers in other
 ;; bases too)
