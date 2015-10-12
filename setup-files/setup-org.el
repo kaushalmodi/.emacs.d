@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-20 22:58:56 kmodi>
+;; Time-stamp: <2015-10-12 12:35:57 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -543,10 +543,10 @@ returned value `entity-name' will be nil."
              `modi/htmlize-region-as-html-file' function.")
             (defun modi/htmlize-region-as-html-file (open-in-browser)
               "Export the selected region to an html file. If a region is not
-             selected, export the whole buffer.
+selected, export the whole buffer.
 
-             If OPEN-IN-BROWSER is non-nil, also open the exported html file in
-             the default browser."
+If OPEN-IN-BROWSER is non-nil, also open the exported html file in
+the default browser."
               (interactive "P")
               (let ((org-html-htmlize-output-type 'css)
                     (org-html-htmlize-font-prefix "org-")
