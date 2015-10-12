@@ -1,8 +1,14 @@
-;; Time-stamp: <2015-09-08 14:15:37 kmodi>
+;; Time-stamp: <2015-10-12 10:42:56 kmodi>
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
 (use-package iy-go-to-char
+  ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
+  ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
+  :chords (("]'"  . iy-go-to-char)
+           ("}\"" . iy-go-to-or-up-to-continue)
+           ("[;"  . iy-go-to-char-backward)
+           ("{:"  . iy-go-to-or-up-to-continue-backward))
   :config
   (progn
     (setq iy-go-to-char-continue-when-repeating t)
@@ -10,12 +16,6 @@
     (setq iy-go-to-char-key-backward            ?\,)
     (setq iy-go-to-char-use-key-forward         t)
     (setq iy-go-to-char-key-forward             ?\.)
-    ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
-    ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-    (key-chord-define-global "]'"  #'iy-go-to-char)
-    (key-chord-define-global "}\"" #'iy-go-to-or-up-to-continue)
-    (key-chord-define-global "[;"  #'iy-go-to-char-backward)
-    (key-chord-define-global "{:"  #'iy-go-to-or-up-to-continue-backward)
     ;; To make `iy-go-to-char' works better with `multiple-cursors', add
     ;; `iy-go-to-char-start-pos' to `mc/cursor-specific-vars' when mc is loaded:
     (with-eval-after-load 'multiple-cursors
@@ -74,7 +74,6 @@ the beginning of the line.
 If ARG is not nil or 1, move forward ARG - 1 lines first.
 If point reaches the beginning or end of the buffer, stop there."
   (interactive "^p")
-  (setq arg (or arg 1))
 
   ;; Move lines first
   (when (/= arg 1)
@@ -117,17 +116,6 @@ If point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (ignore-errors (backward-word 5)))
 
-(require 'ffap)
-
-;; Patch `ffap-string-at-point-mode-alist' to support file paths with curly braces:
-;; ${HOME}/.emacs.d/init.el
-;; Delete from `ffap-string-at-point-mode-alist' all elements whose `car' is `file'
-(setq ffap-string-at-point-mode-alist
-      (assq-delete-all 'file ffap-string-at-point-mode-alist))
-;; and then add a new list `(file ..)' that supports the curly braces.
-(add-to-list 'ffap-string-at-point-mode-alist
-             '(file "--:\\\\$\\{\\}+<>@-Z_[:alpha:]~*?" "<@" "@>;.,!:"))
-
 ;; Patched version to fix this issue:
 ;; In Verilog/C/C++, comments can begin with //.
 ;; Here's an example comment,
@@ -141,41 +129,41 @@ If point reaches the beginning or end of the buffer, stop there."
 ;; find-file-at-point when my cursor is on a line where the first 2
 ;; non-space characters are //?
 ;; http://emacs.stackexchange.com/q/107/115
-(defun ffap-string-at-point (&optional mode)
-  (let* ((args
-          (cdr
-           (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
-               (assq 'file ffap-string-at-point-mode-alist))))
-         next-comment ; patch
-         (pt (point))
-         (beg (if (use-region-p)
-                  (region-beginning)
-                (save-excursion
-                  (skip-chars-backward (car args))
-                  (skip-chars-forward (nth 1 args) pt)
-                  ;; patch
-                  (save-excursion
-                    (setq next-comment
-                          (progn (comment-search-forward (line-end-position) :noerror)
-                                 (point))))
-                  ;; (message "next-comment = %d" next-comment)
-                  ;;
-                  (point))))
-         (end (if (use-region-p)
-                  (region-end)
-                (save-excursion
-                  (skip-chars-forward (car args))
-                  (skip-chars-backward (nth 2 args) pt)
-                  (point)))))
-    ;; patch
-    ;; (message "end = %d beg = %d" end beg)
-    (when (> end next-comment)
-      (setq beg next-comment))
-    ;;
-    (setq ffap-string-at-point
-          (buffer-substring-no-properties
-           (setcar ffap-string-at-point-region beg)
-           (setcar (cdr ffap-string-at-point-region) end)))))
+(use-package ffap
+  :commands (find-file-at-point ffap-guess-file-name-at-point)
+  :config
+  (progn
+    (defun ffap-string-at-point (&optional mode)
+      (let* ((args
+              (cdr
+               (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
+                   (assq 'file ffap-string-at-point-mode-alist))))
+             next-comment ; patch
+             (pt (point))
+             (beg (if (use-region-p)
+                      (region-beginning)
+                    (save-excursion
+                      (skip-chars-backward (car args))
+                      (skip-chars-forward (nth 1 args) pt)
+                      (save-excursion ; patch
+                        (setq next-comment ; patch
+                              (progn (comment-search-forward (line-end-position) :noerror) ; patch
+                                     (point)))) ; patch
+                      ;; (message "next-comment = %d" next-comment) ; patch
+                      (point))))
+             (end (if (use-region-p)
+                      (region-end)
+                    (save-excursion
+                      (skip-chars-forward (car args))
+                      (skip-chars-backward (nth 2 args) pt)
+                      (point)))))
+        ;; (message "end = %d beg = %d" end beg) ; patch
+        (when (> end next-comment) ; patch
+          (setq beg next-comment)) ; patch
+        (setq ffap-string-at-point
+              (buffer-substring-no-properties
+               (setcar ffap-string-at-point-region beg)
+               (setcar (cdr ffap-string-at-point-region) end)))))))
 
 ;; Inspired from this emacs.SE question: http://emacs.stackexchange.com/q/4271/115
 (defun modi/forward-word-begin(arg)
@@ -209,6 +197,13 @@ If ARG is omitted or nil, move point forward one word."
 ;; Avy Jump
 ;; https://github.com/abo-abo/avy
 (use-package avy
+  :bind (("<f1>" . modi/goto-line)) ; bind in global map
+  :bind (:map isearch-mode-map
+         ("M-a" . isearch-avy)) ; isearch > avy
+  :bind (:map modi-mode-map
+         ("C-c C-SPC" . modi/avy))
+  :chords (("l;" . modi/avy)
+           ("1q" . modi/goto-line)) ; alternative to F1
   :config
   (progn
     (setq avy-style 'pre)
@@ -219,6 +214,8 @@ If ARG is omitted or nil, move point forward one word."
     ;; case of a 2-window frame, it's possible to jump to any line using just
     ;; 2-char jump code
     (setq avy-keys-alist '((avy-goto-line . (?a ?s ?d ?f ?g ?h ?j ?k ?l ?b ?n ?m))))
+
+    (defalias 'isearch-avy 'avy-isearch) ; for consistency
 
     (defun modi/avy (arg)
       "Call `avy-goto-word-1' by default.
@@ -253,17 +250,7 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
                 (fci-mode 'toggle))
             (call-interactively #'avy-goto-line)
             (if fci-state-orig
-                (fci-mode 'toggle))))))
-
-    (defalias 'isearch-avy 'avy-isearch) ; for consistency
-    (bind-key "M-a" #'isearch-avy isearch-mode-map) ; isearch > avy
-
-    (bind-key "C-c C-SPC" #'modi/avy modi-mode-map)
-    (key-chord-define-global "l;" #'modi/avy)))
-
-(if (featurep 'avy)
-    (bind-key "<f1>" #'modi/goto-line) ; bind in global map
-  (bind-key "<f1>" #'goto-line))
+                (fci-mode 'toggle))))))))
 
 (bind-keys
  :map modi-mode-map
@@ -296,7 +283,10 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
  ("M-}" . forward-paragraph) ; default binding for `forward-paragraph'
  ("M-{" . backward-paragraph)) ; default binding for `backward-paragraph'
 
-(key-chord-define-global "1q" #'goto-line) ; alternative for F1
+(when (not (featurep 'avy))
+  (bind-key "<f1>" #'goto-line)
+  (key-chord-define-global "1q" #'goto-line)) ; alternative to F1
+
 (key-chord-define-global "m," #'beginning-of-buffer)
 (key-chord-define-global ",." #'end-of-buffer)
 
@@ -313,3 +303,14 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
 ;; In Follow mode, if you move point outside the portion visible in one window
 ;; and into the portion visible in the other window, that selects the other
 ;; window again, treating the two as if they were parts of one large window.
+
+;; Ref: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=19839
+;; My below patch `ffap-string-at-point-mode-alist' to support file paths with
+;; curly braces like "${HOME}/.emacs.d/init.el" was committed to emacs trunk
+;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=ba6c32b6decaa2a72a3d5f854efd513e8e82c118
+;; on 2015/04/08.
+;; (setq ffap-string-at-point-mode-alist
+;;       (assq-delete-all 'file ffap-string-at-point-mode-alist))
+;; ;; and then add a new list `(file ..)' that supports the curly braces.
+;; (add-to-list 'ffap-string-at-point-mode-alist
+;;              '(file "--:\\\\$\\{\\}+<>@-Z_[:alpha:]~*?" "<@" "@>;.,!:"))
