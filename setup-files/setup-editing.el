@@ -1,9 +1,10 @@
-;; Time-stamp: <2015-10-08 15:17:18 kmodi>
+;; Time-stamp: <2015-10-13 18:59:44 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
 ;;
 ;;  Time stamps
+;;    Insert time-stamp + user name
 ;;  Duplicate current line or region
 ;;  Managing white spaces and empty newlines
 ;;  Untabify buffer
@@ -25,7 +26,6 @@
 ;;  Sort Words
 ;;  Unfill
 ;;  Gplusify
-;;  Insert date, time, user name
 ;;  Replace identical strings with incremental number suffixes
 ;;  Delete Blank Lines
 ;;  Space Adjustment After Word Kills
@@ -47,6 +47,67 @@
 ;;      Time-stamp: " "
 (setq time-stamp-line-limit 20)
 (add-hook 'before-save-hook #'time-stamp)
+
+;;;; Insert time-stamp + user name
+;; http://emacs.stackexchange.com/a/17358/115
+(defun modi/insert-time-stamp (option)
+  "Insert time-stamp with user name - DWIM.
+
+If the point is not in a comment or string,
+  time-stamp + user name is inserted prefixed with `comment-start' characters.
+
+If the point is in a comment or string immediately after `comment-start' chars,
+or if the buffer's major-mode has `comment-start' set to nil,
+  time-stamp + user name is inserted without any prefix.
+
+If the point is in a comment or string, but *not* immediately after
+`comment-start' chars,
+  time-stamp + user name is inserted with `--' prefix.
+
+Additional control:
+
+        C-u -> Prefix (`comment-start' or `--') is not auto-inserted.
+    C-u C-u -> User name is not inserted.
+C-u C-u C-u -> All of the above."
+  (interactive "p")
+  (let ((current-date-time-format "%a %b %d %H:%M:%S %Z %Y")
+        (no-prefix (or (= option 4) ; C-u or C-u C-u C-u
+                       (= option 64)))
+        (no-user-name (or (= option 16) ; C-u C-u or C-u C-u C-u
+                          (= option 64))))
+    ;; Insert a space if there is no space to the left of the current point
+    ;; and it's not at the beginning of a line
+    (when (and (not (looking-back "^ *"))
+               (not (looking-back " ")))
+      (insert " "))
+    ;; Insert prefix only if `comment-start' is defined for the major mode
+    (when (stringp comment-start)
+      (if (or (nth 3 (syntax-ppss)) ; string
+              (nth 4 (syntax-ppss))) ; comment
+          ;; If the point is in a comment or string
+          (progn
+            ;; If the point is not immediately after `comment-start' chars
+            ;; (followed by optional space)
+            (when (and (not no-prefix)
+                       (not (looking-back (concat comment-start " *")))
+                       (not (looking-back "^ *")))
+              (insert "--")))
+        ;; If the point is NOT in a comment or string
+        (progn
+          (when (not no-prefix)
+            (insert comment-start)))))
+    ;; Insert a space if there is no space to the left of the current point
+    ;; and it's not at the beginning of a line
+    (when (and (not (looking-back "^ *"))
+               (not (looking-back " ")))
+      (insert " "))
+    (insert (format-time-string current-date-time-format (current-time)))
+    (when (not no-user-name)
+      (insert (concat " - " (getenv "USER"))))
+    ;; Insert a space after the time stamp if not at the end of the line
+    (when (not (looking-at " *$"))
+      (insert " "))))
+(bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
 
 ;;; Duplicate current line or region
 ;; http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
@@ -524,65 +585,6 @@ Temporarily consider - and _ characters as part of the word when sorting."
       (bind-keys
        :map region-bindings-mode-map
         ("G" . gplusify-region-as-kill)))))
-
-;;; Insert date, time, user name
-(defun modi/insert-time-stamp (option)
-  "Insert date, time, user name - DWIM.
-
-If the point is NOT in a comment/string, the time stamp is inserted prefixed
-with `comment-start' characters.
-
-If the point is IN a comment/string, the time stamp is inserted without the
-`comment-start' characters. If the time stamp is not being inserted immediately
-after the `comment-start' characters (followed by optional space),
-the time stamp is inserted with “--” prefix.
-
-If the buffer is in a major mode where `comment-start' var is nil, no prefix is
-added regardless.
-
-Additional control:
-
-        C-u -> Only `comment-start'/`--' prefixes are NOT inserted
-    C-u C-u -> Only user name is NOT inserted
-C-u C-u C-u -> Both prefix and user name are not inserted."
-  (interactive "P")
-  (let ((current-date-time-format "%a %b %d %H:%M:%S %Z %Y"))
-    ;; Insert a space if there is no space to the left of the current point
-    ;; and it's not at the beginning of a line
-    (when (and (not (looking-back "^ *"))
-               (not (looking-back " ")))
-      (insert " "))
-    ;; Insert prefix only if `comment-start' is defined for the major mode
-    (when (stringp comment-start)
-      (if (or (nth 3 (syntax-ppss)) ; string
-              (nth 4 (syntax-ppss))) ; comment
-          ;; If the point is already in a comment/string
-          (progn
-            ;; If the point is not immediately after `comment-start' chars
-            ;; (followed by optional space)
-            (when (and (not (or (equal option '(4)) ; C-u or C-u C-u C-u
-                                (equal option '(64))))
-                       (not (looking-back (concat comment-start " *")))
-                       (not (looking-back "^ *")))
-              (insert "--")))
-        ;; If the point is NOT in a comment
-        (progn
-          (when (not (or (equal option '(4)) ; C-u or C-u C-u C-u
-                         (equal option '(64))))
-            (insert comment-start)))))
-    ;; Insert a space if there is no space to the left of the current point
-    ;; and it's not at the beginning of a line
-    (when (and (not (looking-back "^ *"))
-               (not (looking-back " ")))
-      (insert " "))
-    (insert (format-time-string current-date-time-format (current-time)))
-    (when (not (or (equal option '(16)) ; C-u C-u or C-u C-u C-u
-                   (equal option '(64))))
-      (insert (concat " - " (getenv "USER"))))
-    ;; Insert a space after the time stamp if not at the end of the line
-    (when (not (looking-at " *$"))
-      (insert " "))))
-(bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
 
 ;;; Replace identical strings with incremental number suffixes
 (defvar modi/replace-with-incr-num-suffix-max 100
