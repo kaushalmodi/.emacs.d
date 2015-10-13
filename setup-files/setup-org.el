@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-12 12:35:57 kmodi>
+;; Time-stamp: <2015-10-13 12:48:36 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -46,33 +46,42 @@
     (setq org-agenda-archives-mode nil) ; required in org 8.0+
     (setq org-agenda-skip-comment-trees nil)
     (setq org-agenda-skip-function nil)
+
     (setq org-src-fontify-natively t) ; fontify code in code blocks
     ;; Display entities like \tilde, \alpha, etc in UTF-8 characters
     (setq org-pretty-entities t)
+    ;; Render subscripts and superscripts in org buffers
+    (setq org-pretty-entities-include-sub-superscripts t)
+
     ;; Allow _ and ^ characters to sub/super-script strings but only when
     ;; string is wrapped in braces
     (setq org-use-sub-superscripts         '{}) ; in-buffer rendering
     (setq org-export-with-sub-superscripts '{}) ; for exports
-    ;; Render subscripts and superscripts in org buffers
-    (setq org-pretty-entities-include-sub-superscripts t)
     (setq org-export-with-smart-quotes t)
-    ;; active single key command execution when at beginning of a headline
-    (setq org-use-speed-commands t)
-    (setq org-log-done 'timestamp) ; Insert only timestamp when closing an org TODO item
-    ;; (setq org-log-done 'note) ; Insert timestamp and note when closing an org TODO item
-    ;; http://orgmode.org/manual/Closing-items.html
+
+    ;; Single key command execution when at beginning of a headline
+    (setq org-use-speed-commands t) ; ? speed-key opens Speed Keys help
+    (setq org-speed-commands-user '(("m" . org-mark-subtree)))
+
     (setq org-hide-leading-stars  t)
     ;; Prevent auto insertion of blank lines before headings and list items
     (setq org-blank-before-new-entry '((heading)
                                        (plain-list-item)))
+
     (setq org-completion-use-ido t) ; use ido for auto completion
     (setq org-return-follows-link t) ; Hitting <RET> while on a link follows the link
+
     (setq org-startup-folded 'showall)
     ;; fold / overview  - collapse everything, show only level 1 headlines
     ;; content          - show only headlines
     ;; nofold / showall - expand all headlines except the ones with :archive:
     ;;                    tag and property drawers
     ;; showeverything   - same as above but without exceptions
+    (setq org-startup-indented t) ; http://orgmode.org/manual/Clean-view.html
+
+    (setq org-log-done 'timestamp) ; Insert only timestamp when closing an org TODO item
+    ;; (setq org-log-done 'note) ; Insert timestamp and note when closing an org TODO item
+    ;; http://orgmode.org/manual/Closing-items.html
     (setq org-todo-keywords '((sequence "TODO" "SOMEDAY" "CANCELED" "DONE")))
     (setq org-todo-keyword-faces
           '(("TODO"     . org-todo)
@@ -83,8 +92,8 @@
     ;; Block entries from changing state to DONE while they have children
     ;; that are not DONE - http://orgmode.org/manual/TODO-dependencies.html
     (setq org-enforce-todo-dependencies t)
+
     (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
-    (setq org-startup-indented t) ; http://orgmode.org/manual/Clean-view.html
     (setq org-indent-indentation-per-level 1) ; default = 2
     (setq org-export-headline-levels 4)
 
