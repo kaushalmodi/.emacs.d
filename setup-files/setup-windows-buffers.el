@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-09 16:58:29 kmodi>
+;; Time-stamp: <2015-10-13 18:14:56 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -34,13 +34,15 @@
     (setq recentf-max-menu-items 2000)))
 
 (use-package windmove
-  :bind (:map modi-mode-map
-         ("S-<left>"  . windmove-left)
+  ;; Bind in the global map so that the below S-arrow bindings can be
+  ;; overridden in org-mode
+  :bind (("S-<left>"  . windmove-left)
          ("S-<right>" . windmove-right)
          ("S-<up>"    . windmove-up)
-         ("S-<down>"  . windmove-down)
-         ("C-c ]"     . hydra-win-resize/body)
-         ("C-c ["     . hydra-win-resize/body))
+         ("S-<down>"  . windmove-down))
+  :bind (:map modi-mode-map
+         ("C-c ]" . hydra-win-resize/body)
+         ("C-c [" . hydra-win-resize/body))
   :chords (("p[" . windmove-left)
            ("[]" . windmove-right))
   :config
