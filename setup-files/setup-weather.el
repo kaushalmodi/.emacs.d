@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 19:04:16 kmodi>
+;; Time-stamp: <2015-10-14 11:11:18 kmodi>
 
 ;; Weather Forecast
 
@@ -6,13 +6,17 @@
 ;; https://github.com/aaronbieber/sunshine.el
 
 (use-package sunshine
-  :commands (sunshine-quick-forecast sunshine-forecast)
-  :init
-  (progn
-    (bind-to-modi-map "w" #'sunshine-quick-forecast)
-    (bind-to-modi-map "W" #'sunshine-forecast))
+  :commands (sunshine-quick-forecast
+             sunshine-forecast
+             hydra-launch/sunshine-quick-forecast-and-exit
+             hydra-launch/sunshine-forecast-and-exit)
   :config
   (progn
+    ;; The "openweathermap-api" file is supposed to contain this line:
+    ;;     (setq sunshine-appid "<YOUR_API>")
+    ;; Sign up at http://openweathermap.org/ to get your API KEY.
+    (load (locate-user-emacs-file "openweathermap-api") :noerror :nomessage)
+
     (setq sunshine-location "27278,USA")
     (setq sunshine-show-icons t)))
 
