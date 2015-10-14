@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-13 12:48:36 kmodi>
+;; Time-stamp: <2015-10-13 23:36:14 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -16,6 +16,7 @@
 ;;  Confirm evaluate
 ;;  epresent
 ;;  org-tree-slide
+;;  Org Cliplink
 ;;  Org Export
 ;;    ox-latex - LaTeX export
 ;;    ox-html - HTML export
@@ -382,6 +383,14 @@ returned value `entity-name' will be nil."
         (bind-key "C-2"      #'org-tree-slide-my-profile                                     org-tree-slide-mode-map)
         (bind-key "C-3"      #'org-tree-slide-simple-profile                                 org-tree-slide-mode-map)
         (bind-key "C-4"      #'org-tree-slide-presentation-profile                           org-tree-slide-mode-map)))
+
+;;; Org Cliplink
+    ;; https://github.com/rexim/org-cliplink
+    (use-package org-cliplink
+      :bind (:map org-mode-map
+             ;; "C-c C-l" is bound to `org-insert-link' by default
+             ;; "C-c C-L" is bound to `org-cliplink'
+             ("C-c C-S-l" . org-cliplink)))
 
 ;;; Org Export
     (use-package ox

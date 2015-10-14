@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-05 09:32:59 kmodi>
+;; Time-stamp: <2015-10-13 23:39:51 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -103,6 +103,7 @@
         neotree
         nlinum ; reviews say it's better than linum
         number ; number manipulation
+        org-cliplink ; paste copied links as well-formatted org-mode links with desc
         org-plus-contrib ; latest stable version of org-mode, includes org-eww
         org-tree-slide
         outorg navi-mode ; supporting packages for outshine
