@@ -1,60 +1,16 @@
-;; Time-stamp: <2015-07-24 08:46:29 kmodi>
+;; Time-stamp: <2015-10-15 14:18:08 kmodi>
 
 ;; Projectile
-;; Source: https://github.com/bbatsov/projectile
+;; https://github.com/bbatsov/projectile
 
 (use-package projectile
+  :bind (:map modi-mode-map
+         ("C-c p" . hydra-projectile/body)
+         ("C-c f" . hydra-projectile/body)
+         ("s-f"   . hydra-projectile/body))
   :init
   (progn
-    (defhydra hydra-projectile-other-window (:color teal)
-      "projectile-other-window"
-      ("f"  projectile-find-file-other-window        "file")
-      ("g"  projectile-find-file-dwim-other-window   "file dwim")
-      ("d"  projectile-find-dir-other-window         "dir")
-      ("b"  projectile-switch-to-buffer-other-window "buffer")
-      ("q"  nil                                      "cancel" :color blue))
-
-    (defhydra hydra-projectile (:color teal
-                                :hint  nil)
-      "
-     PROJECTILE: %(if (fboundp 'projectile-project-root) (projectile-project-root) \"TBD\")
-
-^^^^       Find               ^^   Search/Tags       ^^^^       Buffers               ^^   Cache
-^^^^--------------------------^^---------------------^^^^-----------------------------^^-----------------------
-_f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear
-^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project
-^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: Kill all buffers      _X_: cleanup non-existing
-^^    _r_: recent file        ^^                     ^^^^                             _z_: cache current
-^^    _D_: dir
-
-"
-      ("a"   projectile-ag)
-      ("b"   projectile-switch-to-buffer)
-      ("c"   projectile-invalidate-cache)
-      ("d"   projectile-find-file-in-directory)
-      ("f"   projectile-find-file)
-      ("s-f" projectile-find-file)
-      ("F"   projectile-find-file-dwim)
-      ("D"   projectile-find-dir)
-      ("g"   ggtags-update-tags)
-      ("i"   projectile-ibuffer)
-      ("K"   projectile-kill-buffers)
-      ("s-k" projectile-kill-buffers)
-      ("m"   projectile-multi-occur)
-      ("o"   projectile-multi-occur)
-      ("p"   projectile-switch-project "switch project")
-      ("s-p" projectile-switch-project "switch project")
-      ("s"   projectile-switch-project)
-      ("r"   projectile-recentf)
-      ("x"   projectile-remove-known-project)
-      ("X"   projectile-cleanup-known-projects)
-      ("z"   projectile-cache-current-file)
-      ("`"   hydra-projectile-other-window/body "other window")
-      ("q"   nil "cancel" :color blue))
-    (bind-key "s-f" #'hydra-projectile/body modi-mode-map)
-    (setq projectile-keymap-prefix (kbd "C-c P"))
-    (bind-key "C-c p" #'hydra-projectile/body modi-mode-map)
-    (bind-key "C-c f" #'hydra-projectile/body modi-mode-map))
+    (setq projectile-keymap-prefix (kbd "C-c P")))
   :config
   (progn
     (when (not (bound-and-true-p disable-pkg-ivy))
@@ -174,6 +130,52 @@ With prefix argument (`C-u'), also kill the special buffers."
             (message "File %s added to project %s cache."
                      (propertize current-file 'face 'font-lock-keyword-face)
                      (propertize current-project 'face 'font-lock-keyword-face))))))
+
+    (defhydra hydra-projectile-other-window (:color teal)
+      "projectile-other-window"
+      ("f"  projectile-find-file-other-window        "file")
+      ("g"  projectile-find-file-dwim-other-window   "file dwim")
+      ("d"  projectile-find-dir-other-window         "dir")
+      ("b"  projectile-switch-to-buffer-other-window "buffer")
+      ("q"  nil                                      "cancel" :color blue))
+
+    (defhydra hydra-projectile (:color teal
+                                :hint  nil)
+      "
+     PROJECTILE: %(if (fboundp 'projectile-project-root) (projectile-project-root) \"TBD\")
+
+^^^^       Find               ^^   Search/Tags       ^^^^       Buffers               ^^   Cache
+^^^^--------------------------^^---------------------^^^^-----------------------------^^-----------------------
+_f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear
+^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project
+^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: Kill all buffers      _X_: cleanup non-existing
+^^    _r_: recent file        ^^                     ^^^^                             _z_: cache current
+^^    _D_: dir
+
+"
+      ("a"   projectile-ag)
+      ("b"   projectile-switch-to-buffer)
+      ("c"   projectile-invalidate-cache)
+      ("d"   projectile-find-file-in-directory)
+      ("f"   projectile-find-file)
+      ("s-f" projectile-find-file)
+      ("F"   projectile-find-file-dwim)
+      ("D"   projectile-find-dir)
+      ("g"   ggtags-update-tags)
+      ("i"   projectile-ibuffer)
+      ("K"   projectile-kill-buffers)
+      ("s-k" projectile-kill-buffers)
+      ("m"   projectile-multi-occur)
+      ("o"   projectile-multi-occur)
+      ("p"   projectile-switch-project "switch project")
+      ("s-p" projectile-switch-project "switch project")
+      ("s"   projectile-switch-project)
+      ("r"   projectile-recentf)
+      ("x"   projectile-remove-known-project)
+      ("X"   projectile-cleanup-known-projects)
+      ("z"   projectile-cache-current-file)
+      ("4"   hydra-projectile-other-window/body "other window")
+      ("q"   nil "cancel" :color blue))
 
     (projectile-global-mode)))
 
