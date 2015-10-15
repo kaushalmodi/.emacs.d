@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-09 17:19:39 kmodi>
+;; Time-stamp: <2015-10-15 14:24:12 kmodi>
 
 ;; xkcd
 ;; https://github.com/vibhavp/emacs-xkcd
@@ -13,6 +13,14 @@
                            dir)))
   :config
   (progn
+    (defun xkcd-copy-link ()
+      "Save the link to the current comic to the kill-ring."
+      (interactive)
+      (let ((link (concat "http://xkcd.com/"
+                          (number-to-string xkcd-cur))))
+        (kill-new link)
+        (message link)))
+
     (bind-keys
      :map xkcd-mode-map
       ("/" . xkcd-get)
@@ -21,6 +29,7 @@
       ("p" . xkcd-prev)
       ("n" . xkcd-next)
       ("v" . xkcd-open-browser)
+      ("w" . xkcd-copy-link)
       ("?" . xkcd-open-explanation-browser))))
 
 
@@ -36,6 +45,7 @@
 ;; | n       | Next comic                     |
 ;; | r       | Random                         |
 ;; | v       | Open in browser                |
+;; | w       | Copy link                      |
 ;; | ?       | Explain the comic              |
 ;; | t       | Show alt text                  |
 ;; | q       | Quit                           |
