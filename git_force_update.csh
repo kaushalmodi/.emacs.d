@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-08-28 13:42:37 kmodi>
+# Time-stamp: <2015-10-16 15:58:13 kmodi>
 
 # Usage: source git_force_update.csh <YOUR .emacs.d PATH>
 # Example: source git_force_update.csh ~/.emacs.d
@@ -77,20 +77,6 @@ end
 
 ################################################################################
 # Other git clones
-
-# transpose-frame
-set pkg_dir = "${emacs_config_dir}/elisp/transpose-frame"
-if ( ! -d ${pkg_dir}/.git ) then
-    if ( -d ${pkg_dir} ) then
-        \rm -rf ${pkg_dir}
-    endif
-    echo "Cloning package transpose-frame to ${pkg_dir} .."
-    git clone http://github.com/emacsmirror/transpose-frame ${pkg_dir}
-else
-    echo "Force updating transpose-frame to ${pkg_dir} .."
-    cd ${pkg_dir}; gfu
-endif
-echo ''
 
 # # org-mode git master
 # set pkg_dir = "${emacs_config_dir}/elisp/org-mode"

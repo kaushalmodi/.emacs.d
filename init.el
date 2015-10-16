@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-13 23:39:51 kmodi>
+;; Time-stamp: <2015-10-16 15:57:50 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -127,6 +127,7 @@
         swiper counsel
         sx
         tiny
+        transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
         undo-tree ; supercool undo visualization
         use-package use-package-chords ; optimize package loading
         visual-regexp

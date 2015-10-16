@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-13 18:14:56 kmodi>
+;; Time-stamp: <2015-10-16 16:02:09 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -116,14 +116,11 @@
     (message "No recently killed file found to reopen.")))
 
 ;; Transpose Frame
+;; http://www.emacswiki.org/emacs/transpose-frame.el
 (use-package transpose-frame
-  :load-path "elisp/transpose-frame"
-  :config
-  (progn
-    (bind-keys
-     :map modi-mode-map
-      ("C-c o"    . rotate-frame)
-      ("C-c C-\\" . transpose-frame)))) ; toggles between horz/vert splits
+  :bind (:map modi-mode-map
+         ("C-c o"   . rotate-frame)
+         ("C-c C-\\" . transpose-frame))) ; toggles between horz/vert splits
 
 ;; http://www.whattheemacsd.com/
 (defun delete-current-buffer-file ()
