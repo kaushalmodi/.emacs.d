@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-23 13:14:50 kmodi>
+;; Time-stamp: <2015-10-15 18:57:32 kmodi>
 
 ;; Verilog
 
@@ -230,7 +230,7 @@ point."
       ("C-^" . modi/verilog-jump-to-header-dwim)
       ("C-&" . modi/verilog-jump-to-header-dwim-fwd))
 
-    (when (featurep 'which-func)
+    (with-eval-after-load 'which-func
       (add-to-list 'which-func-modes 'verilog-mode)
 
 ;;; modi/verilog-which-func
@@ -278,7 +278,7 @@ point."
                            help-echo ,modi/verilog-which-func-echo-help)
                           "]"))))))
 
-    (when (featurep 'projectile)
+    (with-eval-after-load 'projectile
 
 ;;; modi/verilog-jump-to-module-at-point
       (defun modi/verilog-jump-to-module-at-point ()
@@ -299,7 +299,7 @@ for this to work."
 
       (key-chord-define verilog-mode-map "\\\\" #'modi/verilog-jump-to-module-at-point) ; "\\"
 
-      (when (featurep 'ag)
+      (with-eval-after-load 'ag
 
 ;;; modi/verilog-find-parent-module
         (defun modi/verilog-find-parent-module ()
