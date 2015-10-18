@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-16 15:57:50 kmodi>
+;; Time-stamp: <2015-10-18 11:42:09 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -45,6 +45,7 @@
         auto-complete fuzzy
         auto-highlight-symbol
         avy ; > ace-jump-mode
+        beacon ; visual flash to show the cursor position
         benchmark-init
         bm ; visual bookmarks
         bookmark+ ; able to bookmark desktop sessions
@@ -214,6 +215,7 @@
 (require 'setup-all)
 (require 'setup-artist)
 (require 'setup-auto-complete)
+(require 'setup-beacon)
 (require 'setup-big-fringe)
 (require 'setup-bookmarks)
 (require 'setup-buffer-move)
