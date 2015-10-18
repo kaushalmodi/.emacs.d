@@ -1,26 +1,12 @@
-;; Time-stamp: <2015-10-15 14:24:12 kmodi>
+;; Time-stamp: <2015-10-18 11:38:33 kmodi>
 
 ;; xkcd
 ;; https://github.com/vibhavp/emacs-xkcd
 
 (use-package xkcd
   :commands (xkcd)
-  :init
-  (progn
-    (setq xkcd-cache-dir (let ((dir (concat user-emacs-directory
-                                            "xkcd/"))) ; must end with /
-                           (make-directory dir :parents)
-                           dir)))
   :config
   (progn
-    (defun xkcd-copy-link ()
-      "Save the link to the current comic to the kill-ring."
-      (interactive)
-      (let ((link (concat "http://xkcd.com/"
-                          (number-to-string xkcd-cur))))
-        (kill-new link)
-        (message link)))
-
     (bind-keys
      :map xkcd-mode-map
       ("/" . xkcd-get)
