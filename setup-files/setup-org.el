@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-13 23:36:14 kmodi>
+;; Time-stamp: <2015-10-18 11:38:51 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -324,7 +324,6 @@ returned value `entity-name' will be nil."
 ;;; org-tree-slide
     ;; https://github.com/takaxp/org-tree-slide
     (use-package org-tree-slide
-      :load-path "elisp/org-tree-slide"
       :commands (org-tree-slide-mode)
       :init
       (progn
