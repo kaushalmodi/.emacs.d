@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-18 11:41:54 kmodi>
+;; Time-stamp: <2015-10-19 09:42:35 kmodi>
 
 ;; Beacon
 ;; https://github.com/Malabarba/beacon
@@ -6,6 +6,12 @@
 (use-package beacon
   :config
   (progn
+    ;; Remove extra space from minor mode lighters
+    (setq beacon-lighter (cond
+                          ((char-displayable-p ?💡) "💡")
+                          ((char-displayable-p ?Λ) "Λ")
+                          (t "*")))
+
     (setq beacon-blink-when-point-moves nil) ; default nil
     (setq beacon-blink-when-buffer-changes t) ; default t
     (setq beacon-blink-when-window-scrolls t) ; default t
