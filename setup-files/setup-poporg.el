@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:48 kmodi>
+;; Time-stamp: <2015-10-19 19:41:53 kmodi>
 
 ;; poporg
 ;; https://github.com/QBobWatson/poporg
@@ -9,7 +9,6 @@
 ;; Python docstrings, in an org-mode buffer instead of in a comment or a string.
 
 (use-package poporg
-  :load-path "elisp/poporg"
   :commands (poporg-dwim)
   :init
   (progn

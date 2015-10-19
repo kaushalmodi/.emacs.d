@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-19 13:44:36 kmodi>
+;; Time-stamp: <2015-10-19 19:41:10 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -28,7 +28,6 @@
       '(
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
         ;; popwin ; < shackle
-        ;; poporg ; edit comments from any other mode in org mode < forked
         ;; ox-reveal ; used to export to HTML slides; using latest from git
         ;; helm helm-swoop ; < swiper
         ;; helm-gtags ; < ggtags
@@ -112,6 +111,7 @@
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
         pomodoro
+        poporg ; edit comments from any other mode in org mode
         projectile ; Better than fiplr
         rainbow-delimiters
         rainbow-mode
