@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-19 08:27:21 kmodi>
+;; Time-stamp: <2015-10-19 16:02:45 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -93,6 +93,10 @@
     ;; Block entries from changing state to DONE while they have children
     ;; that are not DONE - http://orgmode.org/manual/TODO-dependencies.html
     (setq org-enforce-todo-dependencies t)
+
+    ;; http://emacs.stackexchange.com/a/17513/115
+    (setq org-special-ctrl-a/e '(t ; For C-a. Possible values: nil, t, 'reverse
+                                  . t)) ; For C-e. Possible values: nil, t, 'reverse
 
     (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
     (setq org-indent-indentation-per-level 1) ; default = 2
