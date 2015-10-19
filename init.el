@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-18 11:42:09 kmodi>
+;; Time-stamp: <2015-10-19 13:44:36 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -27,7 +27,6 @@
 (setq my-packages
       '(
         ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
-        ;; outshine ; < forked
         ;; popwin ; < shackle
         ;; poporg ; edit comments from any other mode in org mode < forked
         ;; ox-reveal ; used to export to HTML slides; using latest from git
@@ -108,6 +107,7 @@
         org-plus-contrib ; latest stable version of org-mode, includes org-eww
         org-tree-slide
         outorg navi-mode ; supporting packages for outshine
+        outshine ; org-mode navigation and organization outside org-mode
         ox-twbs ; export to twitter bootstrap html
         paradox ; package menu improvements
         page-break-lines ; Convert the ^L (form feed) chars to horizontal lines

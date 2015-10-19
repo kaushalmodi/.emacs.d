@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 10:36:51 kmodi>
+;; Time-stamp: <2015-10-19 13:40:12 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -8,7 +8,6 @@
 ;; `outline' library is loaded (not `outshine').
 
 (use-package outshine
-  :load-path "elisp/outshine"
   :config
   (progn
     (setq outshine-use-speed-commands t)
