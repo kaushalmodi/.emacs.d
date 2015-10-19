@@ -109,7 +109,8 @@ Don't add “Revision Control” heading to TOC."
                   (setq n (1+ n)))))))))
 
     (defvar modi/outline-mode-hooks '(verilog-mode-hook
-                                      emacs-lisp-mode-hook)
+                                      emacs-lisp-mode-hook
+                                      conf-space-mode-hook) ; for .tmux.conf
       "List of hooks of major modes in which outline-mode should be enabled.")
 
     (defun modi/turn-on-outline-mode ()
