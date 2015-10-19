@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-08 16:38:59 kmodi>
+;; Time-stamp: <2015-10-19 08:10:22 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -275,7 +275,8 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
   (":"       eval-expression "eval")
   ("C-g"     nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
-(bind-key "C-c SPC" #'hydra-launch/body modi-mode-map)
+;; Bind C-c SPC in global-map so that the org-mode-map binding is not overridden.
+(bind-key "C-c SPC" #'hydra-launch/body)
 (bind-key "C-c l" #'hydra-launch/body modi-mode-map)
 (key-chord-define-global "jk" #'hydra-launch/body)
 

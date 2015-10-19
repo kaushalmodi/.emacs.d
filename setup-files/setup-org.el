@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-18 11:38:51 kmodi>
+;; Time-stamp: <2015-10-19 08:27:21 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -241,6 +241,19 @@ Execute this command while the point is on or after the hyper-linked org link."
                 (kill-new (match-string-no-properties 1)) ; Save link to kill-ring
                 (replace-regexp "\\[\\[.*?\\(\\]\\[\\(.*?\\)\\)*\\]\\]" "\\2"
                                 nil start end)))))))
+
+    ;; http://emacs.stackexchange.com/a/17477/115
+    (defun ia/dwim-org-table-blank-field (&rest args)
+      "Execute the “C-c SPC” binding from the global map if point is not in an
+org-table or if a prefix is used."
+      (let ((skip-orig-fn (or current-prefix-arg
+                              (not (org-at-table-p)))))
+        (when skip-orig-fn
+          ;; because `org-table-blank-field' is bound to "C-c SPC" in `org-mode-map'
+          (call-interactively (global-key-binding (kbd "C-c SPC"))))
+        skip-orig-fn))
+    (advice-add 'org-table-blank-field :before-until #'ia/dwim-org-table-blank-field)
+
 
 ;;; Org Entities
     ;; http://www.mail-archive.com/emacs-orgmode@gnu.org/msg100527.html
