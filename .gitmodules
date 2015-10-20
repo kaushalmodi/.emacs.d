@@ -25,3 +25,6 @@
 [submodule "elisp/forecast.el"]
 	path = elisp/forecast.el
 	url = https://kaushalmodi@github.com/kaushalmodi/forecast.el
+[submodule "elisp/highlight-global"]
+	path = elisp/highlight-global
+	url = http://www.github.com/kaushalmodi/highlight-global
