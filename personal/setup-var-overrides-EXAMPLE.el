@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-17 11:03:04 kmodi>
+;; Time-stamp: <2015-10-20 17:57:00 kmodi>
 
 ;; Variable overrides
 
@@ -13,7 +13,6 @@
 ;; (setq disable-pkg-ivy t)
 ;; (setq disable-pkg-shackle t)
 ;; (setq disable-pkg-fci t)
-;; (setq disable-pkg-hl-anything t)
 ;; (setq disable-pkg-modi-mode t)
 
 ;; (setq user-personal-directory "~/.emacs.d/personal/")

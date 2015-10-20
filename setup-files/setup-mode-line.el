@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 17:10:57 kmodi>
+;; Time-stamp: <2015-10-20 18:07:04 kmodi>
 
 ;; Customize the mode-line
 
@@ -185,30 +185,27 @@ TIME is \"nil\" or \"\"."
       :config
       (progn
         (setq rm-blacklist
-              '(" Guide"        ; guide-key
-                " WK"           ; which-key
-                " hc"           ; hardcore mode
-                " AC"           ; auto-complete
-                " vl"           ; global visual line mode enabled
-                " Wrap"         ; shows up if visual-line-mode is enabled for that buffer
-                " Omit"         ; omit mode in dired
-                " yas"          ; yasnippet
-                " drag"         ; drag-stuff-mode
-                " VHl"          ; volatile highlights
-                " ctagsU"       ; ctags update
-                " Undo-Tree"    ; undo tree
-                " wr"           ; Wrap Region
-                " SliNav"       ; elisp-slime-nav
-                " Fly"          ; Flycheck
-                " PgLn"         ; page-line-break
-                " ElDoc"        ; eldoc
-                " hl-highlight" ; hl-anything
-                " Helm"         ; Helm
-                " GG"           ; ggtags
-                " hs"           ; hideshow
-                " hs+"          ;
-                " ez-esc"       ; easy-escape
-                " ivy"          ; ivy
+              '(" WK"        ; which-key
+                " hc"        ; hardcore mode
+                " AC"        ; auto-complete
+                " vl"        ; global visual line mode enabled
+                " Wrap"      ; shows up if visual-line-mode is enabled for that buffer
+                " Omit"      ; omit mode in dired
+                " yas"       ; yasnippet
+                " drag"      ; drag-stuff-mode
+                " VHl"       ; volatile highlights
+                " ctagsU"    ; ctags update
+                " Undo-Tree" ; undo tree
+                " wr"        ; Wrap Region
+                " SliNav"    ; elisp-slime-nav
+                " Fly"       ; Flycheck
+                " PgLn"      ; page-line-break
+                " ElDoc"     ; eldoc
+                " GG"        ; ggtags
+                " hs"        ; hideshow
+                " hs+"       ;
+                " ez-esc"    ; easy-escape
+                " ivy"       ; ivy
                 ))
         (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face))) ; default
         (add-to-list 'rm-text-properties '("\\` Abbrev\\'" 'display "​@")) ; Abbrev
@@ -224,12 +221,14 @@ TIME is \"nil\" or \"\"."
                 (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​🢛")) ; auto revert tail
                 (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​𝘵")) ; temp
                 (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​▯")) ; region bindings
-                (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​◉"))) ; visible-mode
+                (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​◉")) ; visible-mode
+                (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​🞵"))) ; Hi-Lock
             (progn
               (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​Tail|"))
               (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​t"))
               (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​r"))
-              (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​v")))))))
+              (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​v"))
+              (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​H")))))))
 
     (sml/setup)))
 

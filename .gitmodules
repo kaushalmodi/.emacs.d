@@ -4,54 +4,24 @@
 [submodule "elisp/zop-to-char"]
 	path = elisp/zop-to-char
 	url = http://www.github.com/kaushalmodi/zop-to-char
-[submodule "elisp/org-tree-slide"]
-	path = elisp/org-tree-slide
-	url = https://www.github.com/kaushalmodi/org-tree-slide
 [submodule "elisp/smyx"]
 	path = elisp/smyx
 	url = https://www.github.com/kaushalmodi/smyx
 [submodule "elisp/unfill"]
 	path = elisp/unfill
 	url = https://github.com/kaushalmodi/unfill
-[submodule "elisp/transpose-frame"]
-	path = elisp/transpose-frame
-	url = https://github.com/emacsmirror/transpose-frame
-[submodule "elisp/rpn-calc"]
-	path = elisp/rpn-calc
-	url = https://github.com/kaushalmodi/rpn-calc
 [submodule "elisp/org-mode"]
 	path = elisp/org-mode
 	url = http://repo.or.cz/r/org-mode.git
 [submodule "software/reveal.js"]
 	path = software/reveal.js
 	url = http://github.com/hakimel/reveal.js
-[submodule "elisp/git-link"]
-	path = elisp/git-link
-	url = http://github.com/kaushalmodi/git-link
 [submodule "elisp/interleave"]
 	path = elisp/interleave
 	url = http://kaushalmodi@github.com/kaushalmodi/interleave
-[submodule "elisp/outshine"]
-	path = elisp/outshine
-	url = https://kaushalmodi@github.com/kaushalmodi/outshine
-[submodule "elisp/rectangle-utils"]
-	path = elisp/rectangle-utils
-	url = https://kaushalmodi@github.com/kaushalmodi/rectangle-utils
-[submodule "elisp/deft"]
-	path = elisp/deft
-	url = https://kaushalmodi@github.com/kaushalmodi/deft
-[submodule "elisp/poporg"]
-	path = elisp/poporg
-	url = https://kaushalmodi@github.com/kaushalmodi/poporg
 [submodule "elisp/verilog-mode"]
 	path = elisp/verilog-mode
 	url = https://kaushalmodi@github.com/kaushalmodi/verilog-mode
-[submodule "elisp/drag-stuff.el"]
-	path = elisp/drag-stuff.el
-	url = https://kaushalmodi@github.com/kaushalmodi/drag-stuff.el
-[submodule "elisp/ox-reveal"]
-	path = elisp/ox-reveal
-	url = https://github.com/yjwen/org-reveal.git
 [submodule "elisp/forecast.el"]
 	path = elisp/forecast.el
 	url = https://kaushalmodi@github.com/kaushalmodi/forecast.el

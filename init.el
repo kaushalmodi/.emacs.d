@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-19 19:41:10 kmodi>
+;; Time-stamp: <2015-10-20 17:56:48 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -74,7 +74,6 @@
         help-fns+
         hideshow-org hideshowvis
         htmlize
-        hl-anything ; cautious, buggy
         hl-line+
         hungry-delete
         hydra
