@@ -21,13 +21,11 @@
  '(delete-selection-mode t nil nil "typing anything after highlighting text overwrites that text; source: http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert/")
  '(fci-rule-color "#585858")
  '(fringe-mode nil nil (fringe))
- '(indent-tabs-mode nil nil nil "use spaces instead of tabs for indentation")
  '(indicate-buffer-boundaries (quote ((top . right) (bottom . right))) nil nil "show frame boundaries in the fringe; as the fringe is activated only for the right-hand side, the buffer boundaries (top, bottom) are marked on the right side")
  '(keyboard-coding-system (quote utf-8-unix) nil nil "default EOL system = that of Unix")
  '(next-line-add-newlines nil nil nil "Do not auto-add newlines at the end of the file on pressing `C-n` or down arrow")
  '(org-confirm-elisp-link-not-regexp "\\(.*switch\\-to\\-buffer.*\\|org-show\\)")
  '(outline-minor-mode-prefix "\243")
- '(require-final-newline nil nil nil "Do not auto-add a final newline (if one is not present) when saving/visiting a file")
  '(safe-local-variable-values
    (quote
     ((eval add-hook

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 11:55:19 kmodi>
+;; Time-stamp: <2015-10-20 15:38:00 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -26,6 +26,9 @@
 ;; Save stuff copied from an external program to the kill ring before killing
 ;; new stuff from within emacs
 (setq save-interprogram-paste-before-kill t)
+
+;; Make apropos commands search more extensively
+(setq apropos-do-all t)
 
 ;; url
 ;; First delete the old `url/' directory if present

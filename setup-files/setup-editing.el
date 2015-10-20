@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-13 18:59:44 kmodi>
+;; Time-stamp: <2015-10-20 16:54:11 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -7,7 +7,7 @@
 ;;    Insert time-stamp + user name
 ;;  Duplicate current line or region
 ;;  Managing white spaces and empty newlines
-;;  Untabify buffer
+;;  Untabify
 ;;  Align
 ;;  Eval and replace last sexp
 ;;  Toggle comment on current line or selected region
@@ -133,8 +133,10 @@ there's a region, all lines that region covers will be duplicated."
       (goto-char (+ origin (* (length region) arg) arg)))))
 
 ;;; Managing white spaces and empty newlines
+(setq require-final-newline t)
+
 ;; Delete trailing white space in lines and empty new lines at the end of file
-;; at the time of saving
+;; when saving files.
 ;; This is very useful for macro definitions in Verilog as for multi-line
 ;; macros, NO space is allowed after line continuation character "\"
 (defvar do-not-delete-trailing-whitespace nil
@@ -156,7 +158,9 @@ that sub-directory will the below contents:
 (advice-add 'delete-trailing-whitespace :before-until #'modi/delete-trailing-whitespace-maybe)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-;;; Untabify buffer
+;;; Untabify
+(setq-default indent-tabs-mode nil) ; Use spaces instead of tabs for indentation
+
 (defun modi/untabify-buffer ()
   "Untabify the current buffer.
 
