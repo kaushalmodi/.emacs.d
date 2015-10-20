@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-19 08:10:22 kmodi>
+;; Time-stamp: <2015-10-20 11:55:19 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -40,53 +40,53 @@
                                     dir))
 
 ;; Execute the script in current buffer
-;; Source: http://ergoemacs.org/emacs/elisp_run_current_file.html
-(defun xah-run-current-file (&optional eval-init)
+;; http://ergoemacs.org/emacs/elisp_run_current_file.html
+(defun modi/run-current-file (&optional eval-init)
   "Execute the current file.
+
+If EVAL-INIT is non-nil, load the `init.el'.
+
 For example, if the current buffer is the file xx.py, then it'll call
 “python xx.py” in a shell. The file can be php, perl, python, ruby,
-javascript, bash, ocaml, vb, elisp.  File suffix is used to determine
+javascript, bash, ocaml, vb, elisp.  File extension is used to determine
 what program to run.
 
-If the file is modified, ask if you want to save first.
+If the file is modified, user is asked to save it first.
 
-If the file is emacs lisp, run the byte compiled version if exist.
-
-If universal arg is used, load the `init.el'."
+If the buffer major-mode is `emacs-lisp-mode', run `eval-buffer'."
   (interactive "P")
-  (let* ((suffixMap `(("py"  . "python")
-                      ("rb"  . "ruby")
-                      ("sh"  . "bash")
-                      ("csh" . "tcsh")
-                      ("pl"  . "perl")))
-         (fName    (if eval-init
-                       (expand-file-name "init.el" user-emacs-directory)
-                     (buffer-file-name)))
-         (fSuffix  (file-name-extension fName))
-         (progName (cdr (assoc fSuffix suffixMap)))
-         (cmdStr   (concat progName " \""   fName "\""))
-         IsGPG)
+  (if eval-init
+      (load (locate-user-emacs-file "init.el"))
+    (progn
+      (when (buffer-modified-p)
+        (when (y-or-n-p "Buffer modified. Do you want to save first?")
+          (save-buffer)))
 
-    (when (buffer-modified-p)
-      (when (y-or-n-p "Buffer modified. Do you want to save first?")
-        (save-buffer) ) )
-
-    (when (string-equal fSuffix "gpg")
-      (setq IsGPG t)
-      (setq fName (replace-regexp-in-string "\.gpg$" "" fName))
-      (setq fSuffix (file-name-extension fName)))
-
-    (if (string-equal fSuffix "el") ; special case for emacs lisp
-        (if IsGPG
-            (load (buffer-file-name)) ; special case for .el.gpg files
-          (load (file-name-sans-extension fName)))
-      (if progName
+      (if (derived-mode-p 'emacs-lisp-mode) ; special case for emacs lisp
           (progn
-            ;; (view-echo-area-messages)
-            (message "Running…")
-            (shell-command cmdStr "*xah-run-current-file output*" ))
-        (message "No recognized program file suffix for this file.")))))
-(bind-to-modi-map "l" #'xah-run-current-file)
+            (eval-buffer) ; also works for .el.gz and .el.gpg files
+            (message "Evaluated `%0s'." (buffer-name)))
+        (let* ((suffix-map '(("py" . "python")
+                             ("rb" . "ruby")
+                             ("sh" . "bash")
+                             ("csh" . "tcsh")
+                             ("pl" . "perl")
+                             ("tex" . "pdflatex")
+                             ("latex" . "pdflatex")))
+               (file-name (progn
+                            ;; Save buffer as a file if it's not already a file.
+                            (when (null (buffer-file-name)) (save-buffer))
+                            (buffer-file-name)))
+               (file-ext (file-name-extension file-name))
+               (prog-name (cdr (assoc file-ext suffix-map)))
+               (cmd-str (concat prog-name " \"" file-name "\"")))
+          (if prog-name
+              (progn
+                ;; (view-echo-area-messages)
+                (message "Running ...")
+                (shell-command cmd-str "*run-current-file output*" ))
+            (message "No recognized program file suffix for this file.")))))))
+(bind-to-modi-map "l" #'modi/run-current-file)
 
 ;; Set the major mode for plain text/log files
 (use-package text-mode
@@ -124,7 +124,7 @@ If universal arg is used, load the `init.el'."
 ;; use emacs in -nw (no-window) mode in tmux if needed without any key binding
 ;; contention.
 
-;; Source: http://endlessparentheses.com/sweet-new-features-in-24-4.html
+;; http://endlessparentheses.com/sweet-new-features-in-24-4.html
 ;; Hook `eval-expression-minibuffer-setup-hook' is run by ;; `eval-expression'
 ;; on entering the minibuffer.
 ;; Below enables ElDoc inside the `eval-expression' minibuffer.
@@ -253,8 +253,8 @@ _a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init
   ("f"       browse-url-firefox)
   ("h"       hl-line-flash)
   ("i"       counsel-git-grep)
-  ("l"       xah-run-current-file)
-  ("L"       (xah-run-current-file 4))
+  ("l" modi/run-current-file)
+  ("L"       (modi/run-current-file 4))
   ("m"       woman)
   ("n"       neotree-toggle)
   ("o"       org-capture)
