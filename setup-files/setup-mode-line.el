@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-28 11:44:19 kmodi>
+;; Time-stamp: <2015-10-20 17:10:57 kmodi>
 
 ;; Customize the mode-line
 
@@ -119,6 +119,8 @@ TIME is \"nil\" or \"\"."
     ;; (with-eval-after-load 'setup-mode-line
     ;;   (with-eval-after-load 'minibuffer-line
     ;;     (modi/reset-go-home-alert modi/time-go-home-reset)))
+
+    (modi/minibuffer-line-set-default-face)
 
     (minibuffer-line-mode)))
 
