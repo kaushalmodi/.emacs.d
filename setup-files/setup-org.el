@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-19 16:02:45 kmodi>
+;; Time-stamp: <2015-10-20 14:45:31 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -28,16 +28,10 @@
 ;;  Bindings
 ;;  Notes
 
-(if (bound-and-true-p org-load-version-dev)
-    ;; if `org-load-version-dev' is non-nil
-    (add-to-list 'load-path (concat user-emacs-directory
-                                    "elisp/org-mode/lisp_"
-                                    emacs-version-short "/"))
-  (when (bound-and-true-p org-load-version-8p2)
-    ;; if `org-load-version-dev' is nil AND
-    ;;    `org-load-version-8p2' is non-nil
-    (add-to-list 'load-path (concat user-emacs-directory
-                                    "elisp/org-mode-8p2/"))))
+(when (bound-and-true-p org-load-version-dev)
+  (add-to-list 'load-path (concat user-emacs-directory
+                                  "elisp/org-mode/lisp_"
+                                  emacs-version-short "/")))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
@@ -96,7 +90,7 @@
 
     ;; http://emacs.stackexchange.com/a/17513/115
     (setq org-special-ctrl-a/e '(t ; For C-a. Possible values: nil, t, 'reverse
-                                  . t)) ; For C-e. Possible values: nil, t, 'reverse
+                                 . t)) ; For C-e. Possible values: nil, t, 'reverse
 
     (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
     (setq org-indent-indentation-per-level 1) ; default = 2
@@ -114,22 +108,6 @@
                                         ; `'renumber' - only renumber
                                         ; `t' - sort and renumber
                                         ; `nil' - do nothing (default)
-
-    (when (version<= (org-version) "8.2.99")
-      ;; Re-define `org-get-buffer-tags' as defined in org-mode version 8.3+
-      ;; for `counsel-org-tag' to work correctly in org-mode version 8.2.
-      (defun org-get-buffer-tags ()
-        "Get a table of all tags used in the buffer, for completion."
-        (org-with-wide-buffer
-         (goto-char (point-min))
-         (let ((tag-re (concat org-outline-regexp-bol
-                               "\\(?:.*?[ \t]\\)?"
-                               (org-re ":\\([[:alnum:]_@#%:]+\\):[ \t]*$")))
-               tags)
-           (while (re-search-forward tag-re nil t)
-             (dolist (tag (org-split-string (org-match-string-no-properties 1) ":"))
-               (push tag tags)))
-           (mapcar #'list (append org-file-tags (org-uniquify tags)))))))
 
     ;; Make firefox the default web browser for applications like viewing
     ;; an html file exported from org ( C-c C-e h o )
@@ -419,9 +397,7 @@ returned value `entity-name' will be nil."
             (defvar modi/ox-latex-use-minted t
               "Use `minted' package for listings.")
 
-            (when (not (version<= (org-version) "8.2.99"))
-              ;; org-mode version 8.3+
-              (setq org-latex-prefer-user-labels t))
+            (setq org-latex-prefer-user-labels t) ; org-mode version 8.3+
 
             ;; ox-latex patches
             (load (expand-file-name
@@ -636,11 +612,10 @@ the default browser."
                            ("\\subsubsection{%s}"  . "\\subsubsection*{%s}")))))
 
 ;;;; ox-reveal - Presentations using reveal.js
-        ;; Download reveal.js from https://github.com/hakimel/reveal.js/
         (use-package ox-reveal
-          :load-path "elisp/ox-reveal"
           :config
           (progn
+            ;; Download reveal.js from https://github.com/hakimel/reveal.js/
             (setq org-reveal-root (concat user-emacs-directory "software/reveal.js/"))
             (setq org-reveal-hlevel 1)
             (setq org-reveal-theme "default") ; beige blood moon night serif simple sky solarized
