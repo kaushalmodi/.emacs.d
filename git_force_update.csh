@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-10-21 10:07:45 kmodi>
+# Time-stamp: <2015-10-21 13:55:51 kmodi>
 
 # Usage: source git_force_update.csh <YOUR .emacs.d PATH>
 # Example: source git_force_update.csh ~/.emacs.d
@@ -53,72 +53,9 @@ else
 endif
 echo ''
 
-if ( ! -d ${emacs_config_dir}/elisp ) then
-    \mkdir -p ${emacs_config_dir}/elisp
-endif
-
-################################################################################
-# List of package forks to be updated from http://www.github.com/kaushalmodi
-set git_submodules = ( highlight-global unfill smyx zenburn-emacs )
-foreach pkg (${git_submodules})
-    set pkg_dir = "${emacs_config_dir}/elisp/${pkg}"
-    if ( ! -d ${pkg_dir}/.git ) then
-        if ( -d ${pkg_dir} ) then
-            \rm -rf ${pkg_dir}
-        endif
-        echo "Cloning package ${pkg} to ${pkg_dir} .."
-        git clone http://www.github.com/kaushalmodi/${pkg} ${pkg_dir}
-    else
-        echo "Force updating ${pkg} to ${pkg_dir} .."
-        cd ${pkg_dir}; gfu
-    endif
-    echo ''
-end
-
-################################################################################
-# Other git clones
-
-# # org-mode git master
-# set pkg_dir = "${emacs_config_dir}/elisp/org-mode"
-# if ( ! -d ${pkg_dir}/.git ) then
-#     if ( -d ${pkg_dir} ) then
-#         \rm -rf ${pkg_dir}
-#     endif
-#     echo "Cloning org-mode to ${pkg_dir} .."
-#     git clone http://repo.or.cz/r/org-mode.git ${pkg_dir}
-# else
-#     echo "Force updating org-mode to ${pkg_dir} .."
-#     cd ${pkg_dir}; gfu; make
-# endif
-# echo ''
-
-# reveal.js
-set pkg_dir = "${emacs_config_dir}/software/reveal.js"
-if ( ! -d ${pkg_dir}/.git ) then
-    if ( -d ${pkg_dir} ) then
-        \rm -rf ${pkg_dir}
-    endif
-    echo "Cloning reveal.js to ${pkg_dir} .."
-    git clone http://github.com/hakimel/reveal.js ${pkg_dir}
-else
-    echo "Force updating reveal.js to ${pkg_dir} .."
-    cd ${pkg_dir}; gfu
-endif
-echo ''
-
-# # ox-reveal package
-# set pkg_dir = "${emacs_config_dir}/elisp/ox-reveal"
-# if ( ! -d ${pkg_dir}/.git ) then
-#     if ( -d ${pkg_dir} ) then
-#         \rm -rf ${pkg_dir}
-#     endif
-#     echo "Cloning ox-reveal to ${pkg_dir} .."
-#     git clone https://github.com/yjwen/org-reveal.git ${pkg_dir}
-# else
-#     echo "Force updating ox-reveal to ${pkg_dir} .."
-#     cd ${pkg_dir}; gfu
-# endif
-# echo ''
+cd ${emacs_config_dir}
+git submodule init
+git submodule update --force
 
 cd ${start_dir}
 
@@ -129,8 +66,6 @@ if ( ${script_dir} == "/tmp" ) then
 endif
 
 unalias gfu
-unset {git_submodules}
-unset {pkg_dir}
 unset {emacs_autobkp_dir}
 unset {emacs_config_dir}
 unset {start_dir}
