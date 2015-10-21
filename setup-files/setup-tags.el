@@ -1,76 +1,16 @@
-;; Time-stamp: <2015-09-13 23:47:21 kmodi>
+;; Time-stamp: <2015-10-21 15:12:55 kmodi>
+
+;; Setup for different tags
 
 ;; Contents:
 ;;
-;;  ctags
-;;    etags-table
-;;    etags-select
-;;    ctags-update
 ;;  gtags, GNU global
 ;;    ggtags
+;;  ctags
+;;    etags-select
+;;      etags-table
+;;    ctags-update
 ;;  modi/find-tag
-
-;;; ctags
-;; https://github.com/universal-ctags/ctags
-;; Use Universal (earlier called Exuberant) ctags from github instead of the
-;; ctags that comes with emacs.
-
-;; Don't ask before rereading the TAGS files if they have changed
-(setq tags-revert-without-query t)
-(setq tags-case-fold-search nil) ; t=case-insensitive, nil=case-sensitive
-
-;; Increase the warning threshold to be more than normal TAGS file sizes
-(setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
-
-(when (executable-find "ctags")
-;;;; etags-table
-  ;; Depending on the location of the file in buffer, the respective TAGS file
-  ;; is opened on doing a tag find.
-  (use-package etags-table
-    :config
-    (progn
-      (setq etags-table-alist nil) ; initialize `etags-table-alist'
-
-      ;; emacs config
-      (add-to-list 'etags-table-alist
-                   `(,(concat user-emacs-directory ".*")
-                     ,(concat user-emacs-directory "TAGS")))
-
-      ;; Max depth to search up for a tags file; nil means don't search
-      (setq etags-table-search-up-depth 15)
-
-;;;; etags-select
-      ;; http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags
-      (use-package etags-select
-        :config
-        (progn
-          (bind-keys
-           :map etags-select-mode-map
-            ("C-g" . etags-select-quit)
-            ("C-p" . etags-select-previous-tag)
-            ("C-n" . etags-select-next-tag))
-
-          ;; Below function comes useful when you change the project-root
-          ;; symbol to a different value (when switching projects)
-          (defun update-etags-table-then-find-tag ()
-            "Update etags-table based on the current project directory."
-            (interactive)
-            (when (featurep 'projectile)
-              (add-to-list 'etags-table-alist
-                           `(,(concat (projectile-project-root) ".*")
-                             ,(concat (projectile-project-root) "TAGS"))
-                           t))
-            (etags-select-find-tag-at-point))))))
-
-;;;; ctags-update
-  ;; https://github.com/jixiuf/helm-etags-plus
-  (use-package ctags-update
-    :config
-    (progn
-      ;; Auto update
-      (setq ctags-update-delay-seconds (* 30 60)) ; every 1/2 hour
-      (add-hook 'verilog-mode-hook    #'turn-on-ctags-auto-update-mode)
-      (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode))))
 
 ;;; gtags, GNU global
 
@@ -139,6 +79,68 @@
       (define-key ggtags-mode-map (kbd "M-.") nil)
 
       (key-chord-define-global "??" #'ggtags-show-definition))))
+
+;;; ctags
+;; https://github.com/universal-ctags/ctags
+;; Use Universal (earlier called Exuberant) ctags from github instead of the
+;; ctags that comes with emacs.
+
+;; Don't ask before rereading the TAGS files if they have changed
+(setq tags-revert-without-query t)
+(setq tags-case-fold-search nil) ; t=case-insensitive, nil=case-sensitive
+
+;; Increase the warning threshold to be more than normal TAGS file sizes
+(setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
+
+(when (executable-find "ctags")
+;;;; etags-select
+  ;; http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags
+  (use-package etags-select
+    :commands (update-etags-table-then-find-tag)
+    :config
+    (progn
+
+;;;;; etags-table
+      ;; Depending on the location of the file in buffer, the respective TAGS
+      ;; file is opened on doing a tag find.
+      (use-package etags-table
+        :config
+        (progn
+          (setq etags-table-alist nil) ; initialize `etags-table-alist'
+
+          ;; emacs config
+          (add-to-list 'etags-table-alist
+                       `(,(concat user-emacs-directory ".*")
+                         ,(concat user-emacs-directory "TAGS")))
+
+          ;; Max depth to search up for a tags file; nil means don't search
+          (setq etags-table-search-up-depth 15)))
+
+      ;; Below function comes useful when you change the project-root
+      ;; symbol to a different value (when switching projects)
+      (defun update-etags-table-then-find-tag ()
+        "Update etags-table based on the current project directory."
+        (interactive)
+        (when (featurep 'projectile)
+          (add-to-list 'etags-table-alist
+                       `(,(concat (projectile-project-root) ".*")
+                         ,(concat (projectile-project-root) "TAGS"))
+                       t))
+        (etags-select-find-tag-at-point))
+
+      (bind-keys
+       :map etags-select-mode-map
+        ("C-g" . etags-select-quit))))
+
+;;;; ctags-update
+  ;; https://github.com/jixiuf/helm-etags-plus
+  (use-package ctags-update
+    :config
+    (progn
+      ;; Auto update
+      (setq ctags-update-delay-seconds (* 30 60)) ; every 1/2 hour
+      (add-hook 'verilog-mode-hook    #'turn-on-ctags-auto-update-mode)
+      (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode))))
 
 ;;; modi/find-tag
 
