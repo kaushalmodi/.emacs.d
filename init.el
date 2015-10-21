@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 17:56:48 kmodi>
+;; Time-stamp: <2015-10-21 10:05:48 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -123,7 +123,7 @@
         smart-mode-line popup rich-minority
         smex ; smart M-x
         stripe-buffer
-        sunshine ; weather
+        sunshine forecast ; weather
         swiper counsel
         sx
         tiny

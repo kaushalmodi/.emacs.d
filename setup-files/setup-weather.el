@@ -1,10 +1,9 @@
-;; Time-stamp: <2015-10-14 11:11:18 kmodi>
+;; Time-stamp: <2015-10-21 10:08:10 kmodi>
 
 ;; Weather Forecast
 
 ;; Sunshine
 ;; https://github.com/aaronbieber/sunshine.el
-
 (use-package sunshine
   :commands (sunshine-quick-forecast
              sunshine-forecast
@@ -22,13 +21,10 @@
 
 ;; Forecast
 ;; https://github.com/cadadr/forecast.el
-
 (use-package forecast
   ;; deferring not needed as the package is set to autoload on M-x forecast
   ;; :defer 1 ; Wait for at least a second after emacs has loaded.
-  ;;                                       ; The emacs frame needs to be set up
-  ;;                                       ; properly before the `find-font' call.
-  :load-path "elisp/forecast.el"
+  ;;          ; The emacs frame needs to be set up properly before `find-font' call.
   :commands (forecast)
   :config
   (progn
