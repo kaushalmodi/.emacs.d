@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-18 16:24:04 kmodi>
+;; Time-stamp: <2015-10-22 16:34:31 kmodi>
 
 ;; Bookmarks
 
@@ -11,6 +11,15 @@
 ;;; bm
 ;; https://github.com/joodland/bm
 (use-package bm
+  :bind (:map modi-mode-map
+         ("C-c b" . hydra-bm/body))
+  ;; bind left mouse clicks and scrolls in left margin/fringe
+  :bind (("<left-fringe> <mouse-5>" . bm-next-mouse)
+         ("<left-margin> <mouse-5>" . bm-next-mouse)
+         ("<left-fringe> <mouse-4>" . bm-previous-mouse)
+         ("<left-margin> <mouse-4>" . bm-previous-mouse)
+         ("<left-fringe> <mouse-1>" . bm-toggle-mouse)
+         ("<left-margin> <mouse-1>" . bm-toggle-mouse))
   :config
   (progn
     (setq-default bm-buffer-persistence t) ; buffer persistence on by default
@@ -89,21 +98,11 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
       ("X"   bm-remove-all-all-buffers :color blue)
       ("r"   pop-to-mark-command :color blue)
       ("RET" nil "cancel" :color blue)
-      ("q"   nil "cancel" :color blue))
-    (bind-key "C-c b" #'hydra-bm/body modi-mode-map)
-
-    (bind-keys ; bind left mouse clicks and scrolls in left margin/fringe
-     ("<left-fringe> <mouse-5>" . bm-next-mouse)
-     ("<left-margin> <mouse-5>" . bm-next-mouse)
-     ("<left-fringe> <mouse-4>" . bm-previous-mouse)
-     ("<left-margin> <mouse-4>" . bm-previous-mouse)
-     ("<left-fringe> <mouse-1>" . bm-toggle-mouse)
-     ("<left-margin> <mouse-1>" . bm-toggle-mouse))))
+      ("q"   nil "cancel" :color blue))))
 
 ;;; bookmark+ (bmkp)
 ;; http://www.emacswiki.org/BookmarkPlus
 (use-package bookmark+
-  :defer 15
   :commands (bookmark-set bookmark-jump bookmark-bmenu-list))
 
 ;;; Quickly save and restore point using registers
