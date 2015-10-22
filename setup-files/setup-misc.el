@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 15:38:00 kmodi>
+;; Time-stamp: <2015-10-22 13:41:11 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -56,7 +56,8 @@ what program to run.
 
 If the file is modified, user is asked to save it first.
 
-If the buffer major-mode is `emacs-lisp-mode', run `eval-buffer'."
+If the buffer major-mode is `emacs-lisp-mode', run `eval-buffer'.
+If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   (interactive "P")
   (if eval-init
       (load (locate-user-emacs-file "init.el"))
@@ -65,10 +66,14 @@ If the buffer major-mode is `emacs-lisp-mode', run `eval-buffer'."
         (when (y-or-n-p "Buffer modified. Do you want to save first?")
           (save-buffer)))
 
-      (if (derived-mode-p 'emacs-lisp-mode) ; special case for emacs lisp
-          (progn
-            (eval-buffer) ; also works for .el.gz and .el.gpg files
-            (message "Evaluated `%0s'." (buffer-name)))
+      (cond
+       ((derived-mode-p 'emacs-lisp-mode)
+        (eval-buffer) ; also works for .el.gz and .el.gpg files
+        (message "Evaluated `%0s'." (buffer-name)))
+       ((and (featurep 'cider)
+             (derived-mode-p 'clojure-mode))
+        (cider-load-buffer))
+       (t
         (let* ((suffix-map '(("py" . "python")
                              ("rb" . "ruby")
                              ("sh" . "bash")
@@ -88,7 +93,7 @@ If the buffer major-mode is `emacs-lisp-mode', run `eval-buffer'."
                 ;; (view-echo-area-messages)
                 (message "Running ...")
                 (shell-command cmd-str "*run-current-file output*" ))
-            (message "No recognized program file suffix for this file.")))))))
+            (message "No recognized program file suffix for this file."))))))))
 (bind-to-modi-map "l" #'modi/run-current-file)
 
 ;; Set the major mode for plain text/log files
