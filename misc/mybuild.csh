@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-10-01 16:03:31 kmodi>
+# Time-stamp: <2015-10-22 16:25:14 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -40,7 +40,7 @@ set emacs_rev       = "origin/master"
 set emacs_gdb_build = 0
 set no_git_update   = 0
 set dirty_make      = 0
-set install_sub_dir        = ""
+set install_sub_dir = ""
 set no_install      = 0
 set debug           = 0
 
@@ -51,7 +51,8 @@ while ($#argv)
             set emacs_rev = $argv[1]
             shift
             breaksw
-        case -gbd:
+        case -noopt: # no optimization for gdb debug
+            set no_install = 1
             set emacs_gdb_build = 1
             shift
             breaksw
@@ -104,6 +105,7 @@ if ( "${install_sub_dir}" == "" ) then
 endif
 setenv MY_EMACS_INSTALL_DIR "${HOME}/usr_local/apps/${MY_OSREV}/emacs/${install_sub_dir}"
 if ( ! $debug ) then
+    echo "Creating directory: ${MY_EMACS_INSTALL_DIR} .."
     mkdir -p ${MY_EMACS_INSTALL_DIR}
 endif
 
