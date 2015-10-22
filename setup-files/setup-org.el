@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 14:45:31 kmodi>
+;; Time-stamp: <2015-10-22 14:06:01 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -8,6 +8,7 @@
 ;;
 ;;  Org Variables
 ;;  Agenda and Capture
+;;  Org Goto
 ;;  Source block languages
 ;;  Defuns
 ;;  Org Entities
@@ -173,6 +174,16 @@ this with to-do items than with projects or headings."
                   ("X" . sacha/org-agenda-mark-done-and-add-followup)
                   ("N" . sacha/org-agenda-new))))
 
+;;; Org Goto
+    (defun modi/org-goto-override-bindings (&rest _)
+      "Override the bindings set by `org-goto-map' function."
+      (org-defkey org-goto-map "\C-p" #'outline-previous-visible-heading)
+      (org-defkey org-goto-map "\C-n" #'outline-next-visible-heading)
+      (org-defkey org-goto-map "\C-f" #'outline-forward-same-level)
+      (org-defkey org-goto-map "\C-b" #'outline-backward-same-level)
+      org-goto-map)
+    (advice-add 'org-goto-map :after #'modi/org-goto-override-bindings)
+
 ;;; Source block languages
     ;; Change the default app for opening pdf files from org
     ;; http://stackoverflow.com/a/9116029/1219634
@@ -225,7 +236,7 @@ Execute this command while the point is on or after the hyper-linked org link."
                                 nil start end)))))))
 
     ;; http://emacs.stackexchange.com/a/17477/115
-    (defun ia/dwim-org-table-blank-field (&rest args)
+    (defun ia/dwim-org-table-blank-field (&rest _args)
       "Execute the “C-c SPC” binding from the global map if point is not in an
 org-table or if a prefix is used."
       (let ((skip-orig-fn (or current-prefix-arg
