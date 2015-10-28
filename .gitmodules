@@ -1,30 +1,15 @@
 [submodule "elisp/zenburn-emacs"]
 	path = elisp/zenburn-emacs
 	url = http://github.com/kaushalmodi/zenburn-emacs
-[submodule "elisp/zop-to-char"]
-	path = elisp/zop-to-char
-	url = http://www.github.com/kaushalmodi/zop-to-char
 [submodule "elisp/smyx"]
 	path = elisp/smyx
 	url = https://www.github.com/kaushalmodi/smyx
 [submodule "elisp/unfill"]
 	path = elisp/unfill
 	url = https://github.com/kaushalmodi/unfill
-[submodule "elisp/org-mode"]
-	path = elisp/org-mode
-	url = http://repo.or.cz/r/org-mode.git
 [submodule "software/reveal.js"]
 	path = software/reveal.js
 	url = http://github.com/hakimel/reveal.js
-[submodule "elisp/interleave"]
-	path = elisp/interleave
-	url = http://kaushalmodi@github.com/kaushalmodi/interleave
-[submodule "elisp/verilog-mode"]
-	path = elisp/verilog-mode
-	url = https://kaushalmodi@github.com/kaushalmodi/verilog-mode
-[submodule "elisp/forecast.el"]
-	path = elisp/forecast.el
-	url = https://kaushalmodi@github.com/kaushalmodi/forecast.el
 [submodule "elisp/highlight-global"]
 	path = elisp/highlight-global
 	url = http://www.github.com/kaushalmodi/highlight-global
