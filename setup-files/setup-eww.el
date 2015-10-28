@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-05 08:54:44 kmodi>
+;; Time-stamp: <2015-10-28 11:04:56 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -137,6 +137,12 @@ Else perform the default backspace action."
       (if buffer-read-only
           (eww-back-url)
         (delete-backward-char 1)))
+
+    (defun modi/eww-browse-url-of-file ()
+      "Browse the current file using `eww'."
+      (interactive)
+      (let ((browse-url-browser-function 'eww-browse-url))
+        (call-interactively #'browse-url-of-file)))
 
     (bind-keys
      :map eww-mode-map
