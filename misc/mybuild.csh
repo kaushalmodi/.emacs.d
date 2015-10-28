@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-10-22 16:25:14 kmodi>
+# Time-stamp: <2015-10-27 18:46:07 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -17,6 +17,7 @@
 #   source mybuild.csh -subdir test -- Install in test/ dir
 #   source mybuild.csh -noupdate -- Install without updating from the git
 #   source mybuild.csh -noinstall -- Build but do not install in ${MY_EMACS_INSTALL_DIR}
+#   source mybuild.csh -noopt -subdir noimagemagick -- Build without optimization to a subdir "noimagemagick/"
 
 # Update the following environment variables post-installation:
 #   prepend PATH     with "${HOME}/usr_local/apps/${OSREV}/emacs/`basename ${MY_EMACS_INSTALL_DIR}`/bin"
@@ -52,7 +53,6 @@ while ($#argv)
             shift
             breaksw
         case -noopt: # no optimization for gdb debug
-            set no_install = 1
             set emacs_gdb_build = 1
             shift
             breaksw
@@ -97,11 +97,7 @@ endif
 if ( "${install_sub_dir}" == "" ) then
     # If ${emacs_rev} is master, basename ${emacs_rev} -> master
     # If ${emacs_rev} is origin/emacs-24.5, basename ${emacs_rev} -> emacs-24.5
-    if ( ${emacs_gdb_build} ) then
-        set install_sub_dir = "`basename ${emacs_rev}`_debug"
-    else
-        set install_sub_dir = "`basename ${emacs_rev}`"
-    endif
+    set install_sub_dir = "`basename ${emacs_rev}`"
 endif
 setenv MY_EMACS_INSTALL_DIR "${HOME}/usr_local/apps/${MY_OSREV}/emacs/${install_sub_dir}"
 if ( ! $debug ) then
@@ -112,7 +108,18 @@ endif
 # Basic configure command
 setenv MY_EMACS_CONFIGURE "./configure --prefix=${MY_EMACS_INSTALL_DIR}"
 
-# Initialize the configure flag vairables
+# # Fri Oct 23 15:17:10 EDT 2015 - kmodi
+# # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21738
+# # (eww "http://www.braveclojure.com/basic-emacs")
+# # Workaround to prevent emacs freeze when opening png files or browsing
+# # websites containing png files on eww.
+# setenv MY_EMACS_CONFIGURE "${MY_EMACS_CONFIGURE} --without-imagemagick"
+#
+# Tue Oct 27 18:45:32 EDT 2015 - kmodi
+# Now above is not required after building Imagemagick with --without-threads
+# configure option.
+
+# Initialize the configure flag variables
 set emacs_configure_CFLAGS   = ''
 set emacs_configure_CXXFLAGS = ''
 set emacs_configure_CPPFLAGS = ''
