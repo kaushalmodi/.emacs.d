@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-22 13:41:11 kmodi>
+;; Time-stamp: <2015-10-28 11:04:27 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -146,12 +146,12 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
     (with-eval-after-load 'autorevert
       (setq-default auto-revert-use-notify nil)))
 
-(defvar emacs-build-hash emacs-repository-version
-  "Git hash of the commit at which this version of emacs was built.")
-
 ;; Set firefox as the default web browser
 (setq browse-url-generic-program (executable-find "firefox"))
 (setq browse-url-browser-function 'browse-url-generic)
+
+(defvar emacs-build-hash emacs-repository-version
+  "Git hash of the commit at which this version of emacs was built.")
 
 (defun modi/browse-current-build-emacs-git (log)
   "Browse to the emacs git page for the current build commit details.
@@ -165,6 +165,21 @@ If LOG is non-nil, browse to the log page having the current build commit."
                       "/?id=" emacs-repository-version)))
     (kill-new url)
     (browse-url url)))
+
+(defun emacs-version-dev (here)
+  "Display emacs build info and also save it to the kill-ring.
+If HERE is non-nil, also insert the string at point."
+  (interactive "P")
+  (let ((emacs-build-info
+         (concat "Emacs version: " (emacs-version) ","
+                 " built using commit " emacs-repository-version ".\n\n"
+                 "./configure options:\n  " system-configuration-options "\n\n"
+                 "Features:\n  " system-configuration-features "\n")))
+    (kill-new emacs-build-info)
+    (message emacs-build-info)
+    (when here
+      (insert emacs-build-info))
+    emacs-build-info))
 
 ;; https://github.com/kaushalmodi/.emacs.d/issues/7
 (defun modi/startup-time()
@@ -241,45 +256,42 @@ cycle _c_ase                _F_ollow^^                        _H_ardcore (allow 
   ("V" (eww "http://www.veripool.org/ftp/verilog-mode.el"))
   ("q" nil "cancel" :color blue))
 (defhydra hydra-launch (:color teal
-                        :hint  nil)
-  "
-_c_  calc           _b_ookmark jump          _eb_ eww bookmarks      _h_l line flash          _m_anpage           _u_pgrade packages          ^^_se_ emacs.SE
-_qc_ quick calc     _d_ired current dir      _el_ eww Lucky          g_i_t grep               _n_eotree           _P_ermissions (chmod)       _t_erminal
-_rc_ RPN calc       _ed_iff dwim             _f_irefox               _l_oad current file      _o_rg capture       _sa_ Async shell cmd        _w_/_W_ quick/full weather
-_a_g cwd            _ee_ eww                 ma_g_it status          _L_oad init.el           _p_ackage list      _ss_ Shell cmd              ^^_<SPC>_ frequent
-"
-  ("a"       counsel-ag)
-  ("b"       bookmark-jump)
-  ("c"       calc)
-  ("d"       dired-single-magic-buffer-current-dir)
-  ("ed"      modi/ediff-dwim)
-  ("ee"      eww)
-  ("eb"      eww-list-bookmarks)
-  ("el"      modi/eww-im-feeling-lucky)
-  ("eu"      (eww (browse-url-url-at-point)))
-  ("g"       magit-status)
-  ("f"       browse-url-firefox)
-  ("h"       hl-line-flash)
-  ("i"       counsel-git-grep)
-  ("l" modi/run-current-file)
-  ("L"       (modi/run-current-file 4))
-  ("m"       woman)
-  ("n"       neotree-toggle)
-  ("o"       org-capture)
-  ("p"       paradox-list-packages)
+                        :columns 7)
+  "Launcher"
+  ("c"       calc "calc")
+  ("qc"      quick-calc "quick calc")
+  ("rc"      rpn-calc "RPN calc")
+  ("a"       counsel-ag "ag cwd")
+  ("b"       bookmark-jump "bookmark jump")
+  ("d"       dired-single-magic-buffer-current-dir "dired cwd")
+  ("ed"      modi/ediff-dwim "ediff dwim")
+  ("ee"      eww "eww")
+  ("eb"      eww-list-bookmarks "eww bookmarks")
+  ("el"      modi/eww-im-feeling-lucky "eww Lucky")
+  ("eu"      (eww (browse-url-url-at-point)) "eww url at point")
+  ("ev"      modi/eww-browse-url-of-file "eww current file")
+  ("ff"      browse-url-firefox "firefox")
+  ("fv"      browse-url-of-file "firefox current file")
+  ("g"       magit-status "magit status")
+  ("h"       hl-line-flash "flash line")
+  ("i"       counsel-git-grep "git grep")
+  ("l"        modi/run-current-file "load current file")
+  ("L"       (modi/run-current-file 4) "load emacs init")
+  ("m"       woman "man/woman")
+  ("n"       neotree-toggle "neotree")
+  ("o"       org-capture "org capture")
+  ("p"       paradox-list-packages "packages")
   ;; chmod usage: s-SPC 644 P, s-SPC 400 P
-  ("P"       modi/set-file-permissions)
-  ("qc"      quick-calc)
-  ("rc"      rpn-calc)
-  ("sa"      async-shell-command)
-  ("ss"      shell-command)
-  ("se"      (sx-tab-all-questions nil "emacs"))
-  ("t"       multi-term)
-  ("u"       paradox-upgrade-packages)
-  ("w"       sunshine-quick-forecast)
-  ("W"       sunshine-forecast)
-  ("<SPC>"   hydra-launch-freq/body)
-  ("<s-SPC>" hydra-launch-freq/body)
+  ("P"       modi/set-file-permissions "file permissions")
+  ("sa"      async-shell-command "shell async cmd")
+  ("ss"      shell-command "shell cmd")
+  ("se"      (sx-tab-all-questions nil "emacs") "emacs.SE")
+  ("t"       multi-term "terminal")
+  ("u"       paradox-upgrade-packages "upgrade packages")
+  ("w"       sunshine-quick-forecast "weather quick")
+  ("W"       sunshine-forecast "weather full")
+  ("<SPC>"   hydra-launch-freq/body "launch freq")
+  ("<s-SPC>" hydra-launch-freq/body nil)
   (":"       eval-expression "eval")
   ("C-g"     nil "cancel" :color blue))
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
