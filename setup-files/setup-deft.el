@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-23 22:10:07 kmodi>
+;; Time-stamp: <2015-10-13 12:23:19 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -6,21 +6,31 @@
 ;; https://github.com/jrblevin/deft
 
 (use-package deft
-  :commands (modi/deft-dwim deft deft-new-file deft-find-file)
-  :init
-  (progn
-    (bind-key "C-c d" #'modi/deft-dwim modi-mode-map)
-    (bind-key "<f6>"  #'modi/deft-dwim modi-mode-map))
+  :commands (deft deft-new-file deft-find-file)
+  :bind (:map modi-mode-map
+         ("C-c d" . modi/deft-dwim)
+         ("<f6>"  . modi/deft-dwim))
   :config
   (progn
     (setq deft-directory (concat org-directory "notes/"))
     (setq deft-extensions '("org"))
     (setq deft-default-extension (copy-sequence (car deft-extensions)))
+
     (setq deft-use-filename-as-title nil) ; show actual titles in *Deft* buffer
     (setq deft-use-filter-string-for-filename t)
+
     (setq deft-auto-save-interval 0) ; default is 1.0, 0 to disable auto-save
+
     (setq deft-file-naming-rules '((nospace . "_")
                                    (case-fn . downcase)))
+
+    (setq deft-strip-summary-regexp
+          (concat "\\("
+                  "[\n\t]" ; blank
+                  "\\|^#\\+[[:upper:]_]+:.*$" ; org-mode metadata
+                  "\\|^#\\s-+.*$" ; org-mode comments
+                  ;; "\\|^\\s-*:[[:upper:]_]:.*$" ; org-mode properties
+                  "\\)"))
 
     ;; http://pragmaticemacs.com/emacs/tweaking-deft-quicker-notes/
     (defvar modi/pre-deft-window-configuration nil
@@ -51,11 +61,11 @@ and restore the window config to the way it was before deft was invoked."
     (defun modi/deft-dwim (open-deft-buffer)
       "Launch deft or quit a deft opened file based on context.
 
-If major-mode is `deft-mode', bury the buffer.
-If in a deft-opened file buffer, call `modi/deft-quit'.
-Else call `deft'.
+If OPEN-DEFT-BUFFER is non-nil, open `deft'.
 
-With prefix argument, open `deft'."
+Else if major-mode is `deft-mode', bury the buffer.
+Else if in a deft-opened file buffer, call `modi/deft-quit'.
+Else call `deft'."
       (interactive "P")
       (cond
        (open-deft-buffer ; when using `C-u'
@@ -85,8 +95,10 @@ If NEW-FILE is non-nil, call `deft-new-file'."
     (define-key deft-mode-map (kbd "C-o") nil)
     (bind-keys
      :map deft-mode-map
-      ("RET"     . modi/deft-complete)
-      ("C-c C-o" . deft-open-file-other-window))))
+      ("RET"        . modi/deft-complete)
+      ("C-S-m"      . deft-new-file)
+      ("<S-return>" . deft-new-file)
+      ("C-c C-o"    . deft-open-file-other-window))))
 
 
 (provide 'setup-deft)
