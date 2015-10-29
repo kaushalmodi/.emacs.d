@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 16:54:11 kmodi>
+;; Time-stamp: <2015-10-29 11:37:06 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -591,17 +591,15 @@ Temporarily consider - and _ characters as part of the word when sorting."
         ("G" . gplusify-region-as-kill)))))
 
 ;;; Replace identical strings with incremental number suffixes
-(defvar modi/replace-with-incr-num-suffix-max 100
-  "Default maximum number till which the number suffixes will increment in the
-replacements.")
+(defvar modi/rwins-max 100
+  "Default maximum number of replacements.")
 
-(defvar modi/replace-with-incr-num-suffix-incr 1
+(defvar modi/rwins-incr 1
   "Default number by which the number suffixes will increment in the
 replacements.")
 
 (defun modi/replace-with-incr-num-suffix (start)
-  "Replace all instances of the selected region or the symbol under point with
-the same, but suffixed with an incrementing number.
+  "Replace selected region/symbol at point with incrementing number suffixes.
 
 If START is non-nil, the replacements will be suffixes with the START number
 and increment by 1 on each replacement.
@@ -612,45 +610,45 @@ the replacements will use that number as the START number.
 If START is nil and if the selected region or symbol does NOT end in a number,
 the replacements will use 1 as the START number.
 
-`modi/replace-with-incr-num-suffix-max' variable controls the maximum number
-till which the suffix number increments. After the max number is reached, the
-suffixes will restart from START (behavior of `map-query-replace-regexp').
+`modi/rwins-max' controls the maximum number till which the suffix number
+increments. After the max number is reached, the suffixes will restart from
+START (behavior of `map-query-replace-regexp').
 
-`modi/replace-with-incr-num-suffix-incr' variable controls the increments
-between the number suffixes in consecutive replacements.
+`modi/rwins-incr' controls the increments between the number suffixes in
+consecutive replacements.
 
-Example:
-Initial text:
-   Here3 Here3 Here3 Here3 Here3
-After replacement text:
-   Here3 Here4 Here5 Here6 Here7
-"
+  Example:
+  Initial text:
+     Here3 Here3 Here3 Here3 Here3
+  After replacement text:
+     Here3 Here4 Here5 Here6 Here7
+
+Note that the selected region cannot contain any spaces."
   (interactive "p")
-  (let ((regexp (cond ((use-region-p)
-                       (buffer-substring-no-properties (region-beginning)
-                                                       (region-end)))
-                      ((symbol-at-point)
-                       (substring-no-properties
-                        (symbol-name (symbol-at-point))))))
-        prefix
-        to-strings)
-    (if (string-match "\\b\\(\\w*?\\)\\([0-9]+\\)$" regexp)
+  (let (raw-str beg non-number-str to-strings)
+    (cond ((use-region-p)
+           (setq raw-str (buffer-substring-no-properties
+                          (region-beginning) (region-end)))
+           (setq beg (region-beginning)))
+          ((symbol-at-point)
+           (setq raw-str (substring-no-properties
+                          (symbol-name (symbol-at-point))))
+           (setq beg (car (bounds-of-thing-at-point 'symbol)))))
+    (if (string-match "\\b\\(\\w*?\\)\\([0-9]+\\)$" raw-str)
         (progn
-          (setq prefix (match-string-no-properties 1 regexp))
+          (setq non-number-str (match-string-no-properties 1 raw-str))
           (when (null current-prefix-arg)
-            (setq start (string-to-number (match-string-no-properties 2 regexp)))))
-      (progn
-        (setq prefix regexp)))
+            (setq start (string-to-number (match-string-no-properties 2 raw-str)))))
+      (setq non-number-str raw-str))
     ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Mapping-Functions.html
-    (setq to-strings (mapconcat (lambda (x) (concat prefix (number-to-string x)))
-                                (number-sequence start
-                                                 modi/replace-with-incr-num-suffix-max
-                                                 modi/replace-with-incr-num-suffix-incr)
+    (setq to-strings (mapconcat (lambda (x) (concat non-number-str (number-to-string x)))
+                                (number-sequence
+                                 start
+                                 (+ start (* modi/rwins-incr (1- modi/rwins-max)))
+                                 modi/rwins-incr)
                                 " "))
-    ;; Go to the start of the current word
-    (when (not (looking-back "\\b"))
-      (re-search-backward "\\b" nil :noerror))
-    (map-query-replace-regexp regexp to-strings)))
+    (goto-char beg) ; Go to the start of the selection/symbol
+    (map-query-replace-regexp (regexp-quote raw-str) to-strings)))
 
 ;;; Delete Blank Lines
 ;; http://www.masteringemacs.org/article/removing-blank-lines-buffer
