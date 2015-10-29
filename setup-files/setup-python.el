@@ -1,29 +1,34 @@
-;; Time-stamp: <2015-02-23 22:35:49 kmodi>
+;; Time-stamp: <2015-10-29 10:49:51 kmodi>
 
-;;Python
+;; Python
 
+;; Emacs built-in `python' mode
+(use-package python
+  :mode (("\\.py\\'" . python-mode))
+  :interpreter (("python" . python-mode)))
+
+;; https://github.com/emacsmirror/python-mode
 (use-package python-mode
-  :mode "\\.py\\'"
-  :interpreter "python"
+  :disabled
   :config
   (progn
-    ;; ; use IPython
+    ;; ;; Use IPython
     ;; (setq-default py-shell-name "ipython")
     ;; (setq-default py-which-bufname "IPython")
-                                        ; use python3
-    ;; ; use the wx backend, for both mayavi and matplotlib
+    ;; ;; Use python3
+    ;; ;; Use the wx backend, for both mayavi and matplotlib
     ;; (setq py-python-command-args
     ;;   '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
     ;; (setq-default py-shell-name "python3")
     ;; (setq-default py-which-bufname "Python3")
     (setq py-force-py-shell-name-p t)
-    ;; switch to the interpreter after executing code
+    ;; Switch to the interpreter after executing code
     (setq py-shell-switch-buffers-on-execute-p t)
-    ;; don't switch the code buffer to python shell
+    ;; Don't switch the code buffer to python shell
     (setq py-switch-buffers-on-execute-p nil)
-    ;; split windows
+    ;; Split windows
     (setq py-split-windows-on-execute-p t)
-    ;; try to automagically figure out indentation
+    ;; Try to automagically figure out indentation
     (setq py-smart-indentation t)))
 
 
