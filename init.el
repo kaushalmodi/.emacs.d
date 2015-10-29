@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-21 10:05:48 kmodi>
+;; Time-stamp: <2015-10-22 12:57:54 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -286,6 +286,8 @@
 (require 'setup-yasnippet)
 
 ;; Languages
+(when (executable-find "lein")
+  (require 'setup-clojure))
 (require 'setup-conf)
 (require 'setup-elisp)
 (require 'setup-latex)
