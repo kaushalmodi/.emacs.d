@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 17:09:38 kmodi>
+;; Time-stamp: <2015-10-29 23:50:11 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
@@ -21,7 +21,8 @@
                                     python-mode-hook
                                     sh-mode-hook
                                     ;; org-src-mode-hook
-                                    cperl-mode-hook)
+                                    cperl-mode-hook
+                                    d-mode-hook)
       "List of hooks of major modes in which fci mode should be enabled.")
 
     (defun modi/turn-on-fci-mode ()

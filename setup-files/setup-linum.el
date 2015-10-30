@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-01 10:36:36 kmodi>
+;; Time-stamp: <2015-10-29 21:21:02 kmodi>
 
 ;; Line number package manager
 
@@ -28,7 +28,8 @@ This variable is for internal use only, not to be set by user.")
                                   css-mode-hook
                                   makefile-gmake-mode-hook
                                   tcl-mode-hook
-                                  conf-space-mode-hook)
+                                  conf-space-mode-hook
+                                  d-mode-hook)
   "List of hooks of major modes in which a linum mode should be enabled.")
 
 ;; linum
