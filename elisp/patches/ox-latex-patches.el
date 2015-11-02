@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-10-20 14:46:54 kmodi>
+;; Time-stamp: <2015-11-02 11:38:11 kmodi>
 
 ;; `ox-latex' needs to be required before `load'ing this patch file
 
 ;; org-mode version 8.3+
-(defun org-latex-src-block (src-block contents info)
+(defun org-latex-src-block (src-block _contents info)
   "Transcode a SRC-BLOCK element from Org to LaTeX.
 CONTENTS holds the contents of the item.  INFO is a plist holding
 contextual information."
@@ -95,7 +95,7 @@ contextual information."
                                                           "\n")))))
                    (org-export-format-code
                     (car code-info)
-                    (lambda (loc num ref)
+                    (lambda (loc _num ref)
                       (concat
                        loc
                        (when ref
@@ -158,13 +158,13 @@ contextual information."
                                    (org-split-string (car code-info) "\n")))))
               (org-export-format-code
                (car code-info)
-               (lambda (loc num ref)
+               (lambda (loc _num ref)
                  (concat
                   loc
                   (when ref
                     ;; Ensure references are flushed to the right,
                     ;; separated with 6 spaces from the widest line of
                     ;; code
-                    (concat (make-string (+ (- max-width (length loc)) 6) ? )
+                    (concat (make-string (+ (- max-width (length loc)) 6) ? \s)
                             (format "(%s)" ref)))))
                nil (and retain-labels (cdr code-info))))))))))))
