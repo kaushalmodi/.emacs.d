@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-22 14:06:01 kmodi>
+;; Time-stamp: <2015-11-03 00:40:01 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -29,10 +29,15 @@
 ;;  Bindings
 ;;  Notes
 
+;; If `org-load-version-dev' is non-nil, remove the stable version of org
+;; from the `load-path'.
 (when (bound-and-true-p org-load-version-dev)
-  (add-to-list 'load-path (concat user-emacs-directory
-                                  "elisp/org-mode/lisp_"
-                                  emacs-version-short "/")))
+  (>=e "25.0" ; `directory-files-recursively' is not available in older emacsen
+      (let ((org-stable-install-path (car (directory-files-recursively
+                                           package-user-dir
+                                           "org-plus-contrib-[0-9]+"
+                                           :include-directories))))
+        (setq load-path (delete org-stable-install-path load-path)))))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
