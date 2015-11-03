@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 18:44:46 kmodi>
+;; Time-stamp: <2015-11-03 00:54:35 kmodi>
 
 ;; Highlight stuff
 
@@ -7,8 +7,6 @@
 ;; Hi-Lock: end
 
 (use-package hi-lock
-  :bind (:map modi-mode-map
-         ("C-." . modi/hi-lock-face-symbol-at-point-or-sel))
   :config
   (progn
     (>=e "24.4"
@@ -85,7 +83,11 @@ in which case the highlighting will not update as you type."
     ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing.
     (define-key hi-lock-map (kbd "C-x w") nil)
 
-    (global-hi-lock-mode 1)))
+    (global-hi-lock-mode 1)
+
+    (bind-keys
+     :map modi-mode-map
+      ("C-." . modi/hi-lock-face-symbol-at-point-or-sel))))
 
 ;; Highlight Global
 ;; https://github.com/glen-dai/highlight-global
