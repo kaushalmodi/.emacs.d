@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 23:52:13 kmodi>
+;; Time-stamp: <2015-11-03 17:33:10 kmodi>
 
 ;; Imenu-list
 ;; https://github.com/bmag/imenu-list
@@ -46,11 +46,12 @@ If NOSELECT is non-nil, do not select the imenu-list buffer."
 
     (defun modi/imenu-auto-update (orig-fun &rest args)
       "Auto update the *Ilist* buffer if visible."
-      (apply orig-fun args)
-      (when (modi/imenu-list-visible-p)
-        (imenu-list-update-safe))) ; update `imenu-list' buffer
+      (let ((ret-val (apply orig-fun args)))
+        (when (modi/imenu-list-visible-p)
+          (imenu-list-update-safe)) ; update `imenu-list' buffer
+        ret-val)) ; Do not mess up the original return value of `switch-to-buffer'
     (advice-add 'switch-to-buffer :around #'modi/imenu-auto-update)
     (advice-add 'revert-buffer    :around #'modi/imenu-auto-update)))
 
 
-(provide 'setup-imenu-list)
+    (provide 'setup-imenu-list)
