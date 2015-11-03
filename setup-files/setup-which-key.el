@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-18 12:42:58 kmodi>
+;; Time-stamp: <2015-11-03 15:26:17 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -33,8 +33,10 @@
             ("which-key-show-next-page" . "wk next pg")
             ("\\`calc-" . "") ; Hide "calc-" prefixes when listing M-x calc keys
             ("/body\\'" . "") ; Remove display the "/body" portion of hydra fn names
-            ("modi/" . "m/") ; The car is intentionally not "\\`modi/"
-            ("\\`hydra-" . "+h/")))
+            ("modi/" . "m/") ; The car is intentionally not "\\`modi/" to cover
+                                        ; cases like `hydra-toggle/modi/..'.
+            ("\\`hydra-" . "+h/")
+            ("\\`org-babel-" . "ob/")))
     ;; Use cool unicode characters if available
     (with-eval-after-load 'setup-symbola
       (when font-symbola-p
@@ -46,7 +48,6 @@
       "C-x 8"   "unicode"
       "C-x a"   "abbrev/expand"
       "C-x r"   "rect/reg"
-      "C-x w"   "hi-lock-map"
       "C-c /"   "engine-mode-map"
       "C-c C-v" "org-babel"
       "C-x 8 0" "ZWS")
