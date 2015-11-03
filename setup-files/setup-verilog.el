@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-15 18:57:32 kmodi>
+;; Time-stamp: <2015-11-03 12:54:59 kmodi>
 
 ;; Verilog
 
@@ -294,7 +294,9 @@ for this to work."
           ;; whose instance declaration the point is currently.
           (if (and (modi/verilog-find-module-instance)
                    modi/verilog-which-func-xtra)
-              (find-tag modi/verilog-which-func-xtra)
+              (progn
+                (modi/update-etags-table)
+                (find-tag modi/verilog-which-func-xtra))
             (pop-tag-mark))))
 
       (key-chord-define verilog-mode-map "\\\\" #'modi/verilog-jump-to-module-at-point) ; "\\"

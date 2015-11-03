@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-21 15:12:55 kmodi>
+;; Time-stamp: <2015-11-03 12:54:26 kmodi>
 
 ;; Setup for different tags
 
@@ -96,7 +96,7 @@
 ;;;; etags-select
   ;; http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags
   (use-package etags-select
-    :commands (update-etags-table-then-find-tag)
+    :commands (modi/update-etags-table)
     :config
     (progn
 
@@ -118,15 +118,14 @@
 
       ;; Below function comes useful when you change the project-root
       ;; symbol to a different value (when switching projects)
-      (defun update-etags-table-then-find-tag ()
-        "Update etags-table based on the current project directory."
+      (defun modi/update-etags-table ()
+        "Update `etags-table-alist' based on the current project directory."
         (interactive)
         (when (featurep 'projectile)
           (add-to-list 'etags-table-alist
                        `(,(concat (projectile-project-root) ".*")
                          ,(concat (projectile-project-root) "TAGS"))
-                       t))
-        (etags-select-find-tag-at-point))
+                       t)))
 
       (bind-keys
        :map etags-select-mode-map
@@ -151,7 +150,9 @@ If USE-CTAGS is non-nil, use `ctags'."
   (interactive "P")
   (if (or use-ctags
           (not (featurep 'ggtags)))
-      (update-etags-table-then-find-tag)
+      (progn
+        (modi/update-etags-table)
+        (etags-select-find-tag-at-point))
     (call-interactively #'ggtags-find-tag-dwim)))
 (bind-key "M-." #'modi/find-tag)
 
