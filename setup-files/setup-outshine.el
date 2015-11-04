@@ -1,11 +1,15 @@
-;; Time-stamp: <2015-10-19 13:40:12 kmodi>
+;; Time-stamp: <2015-11-03 22:48:54 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
 
-;; (defvar outline-minor-mode-prefix "\M-#")
-;; Above needs to be set using Customize so that it is set BEFORE the
-;; `outline' library is loaded (not `outshine').
+(use-package outline
+  ;; It is NECESSARY that the `outline-minor-mode-prefix' variable is set to
+  ;; "\M-#" BEFORE `outline' library is loaded. After loading the library,
+  ;; changing this prefix key requires manipulating keymaps.
+  :preface
+  (setq outline-minor-mode-prefix "\M-#")
+  :commands (outline-mode outline-minor-mode))
 
 (use-package outshine
   :config
@@ -107,29 +111,33 @@ Don't add “Revision Control” heading to TOC."
                                   h))
                   (setq n (1+ n)))))))))
 
-    (defvar modi/outline-mode-hooks '(verilog-mode-hook
-                                      emacs-lisp-mode-hook
-                                      conf-space-mode-hook) ; for .tmux.conf
-      "List of hooks of major modes in which outline-mode should be enabled.")
+    (defvar modi/outline-minor-mode-hooks '(verilog-mode-hook
+                                            emacs-lisp-mode-hook
+                                            conf-space-mode-hook) ; for .tmux.conf
+      "List of hooks of major modes in which `outline-minor-mode' should be enabled.")
 
-    (defun modi/turn-on-outline-mode ()
-      "Turn on outline-mode only for specific modes."
+    (defun modi/turn-on-outline-minor-mode ()
+      "Turn on `outline-minor-mode' only for specific modes."
       (interactive)
-      (dolist (hook modi/outline-mode-hooks)
-        (add-hook hook #'outline-minor-mode)
-        (add-hook hook (lambda () (add-hook 'before-save-hook #'modi/outline-toc nil :local)))))
+      (dolist (hook modi/outline-minor-mode-hooks)
+        (add-hook hook #'outline-minor-mode)))
 
-    (defun modi/turn-off-outline-mode ()
-      "Turn off outline-mode only for specific modes."
+    (defun modi/turn-off-outline-minor-mode ()
+      "Turn off `outline-minor-mode' only for specific modes."
       (interactive)
-      (dolist (hook modi/outline-mode-hooks)
-        (remove-hook hook #'outline-minor-mode)
-        (remove-hook hook (lambda () (remove-hook 'before-save-hook #'modi/outline-toc :local)))))
+      (dolist (hook modi/outline-minor-mode-hooks)
+        (remove-hook hook #'outline-minor-mode)))
 
-    (modi/turn-on-outline-mode)
+    (defun modi/outshine-hook-function ()
+      "Stuff I'd like to add to the `outshine-hook-function'."
+      ;; Auto-generate/update TOC on file saves
+      (add-hook 'before-save-hook #'modi/outline-toc nil :local))
+    (advice-add 'outshine-hook-function :after #'modi/outshine-hook-function)
 
-    ;; Hook `outshine' to `outline-mode'
+    ;; Always enable Outshine in `outline-minor-mode'
     (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
+
+    (modi/turn-on-outline-minor-mode)
 
     (with-eval-after-load 'outline
       (use-package foldout
@@ -159,9 +167,9 @@ Don't add “Revision Control” heading to TOC."
 ;; To Debug:
 ;; When outshine is enabled, it remaps self-insert-command to
 ;; outshine-self-insert-command. That works fine except that in
-;; emacs-lisp-mode when outline-mode is enabled (and thus outshine is
+;; `emacs-lisp-mode' when `outline-minor-mode' is enabled (and thus outshine is
 ;; enabled), the eldoc-mode is messed up.
 ;; Example: after typing `(define-key' followed by SPACE, the eldoc-mode
 ;; should show the hint for `define-key' in the echo area. But that
 ;; does not happen while outshine is enabled. It starts working fine
-;; if I disable outline-mode (and thus outshine too).
+;; if I disable `outline-minor-mode' (and thus outshine too).

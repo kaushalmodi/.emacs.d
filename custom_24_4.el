@@ -25,14 +25,9 @@
  '(keyboard-coding-system (quote utf-8-unix) nil nil "default EOL system = that of Unix")
  '(next-line-add-newlines nil nil nil "Do not auto-add newlines at the end of the file on pressing `C-n` or down arrow")
  '(org-confirm-elisp-link-not-regexp "\\(.*switch\\-to\\-buffer.*\\|org-show\\)")
- '(outline-minor-mode-prefix "\243")
  '(safe-local-variable-values
    (quote
-    ((eval add-hook
-           (quote before-save-hook)
-           (function modi/outline-toc)
-           nil :local)
-     (eval define-key temp-mode-map
+    ((eval define-key temp-mode-map
            (kbd "<C-f10>")
            (function dv-docs-dis))
      (eval define-key temp-mode-map
