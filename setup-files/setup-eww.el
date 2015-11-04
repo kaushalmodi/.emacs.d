@@ -1,21 +1,23 @@
-;; Time-stamp: <2015-10-28 11:04:56 kmodi>
+;; Time-stamp: <2015-11-04 12:38:18 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
 (use-package eww
-  :commands (eww eww-open-file eww-search-words
-                 modi/eww-copy-link-first-search-result
-                 modi/eww-im-feeling-lucky)
-  :init
-  (progn
-    (bind-keys
-     :map modi-mode-map
-      ("M-s M-w" . eww-search-words)
-      ("M-s M-l" . modi/eww-copy-link-first-search-result))
-    (key-chord-define-global "-=" #'eww))
+  :bind (:map modi-mode-map
+         ("M-s M-w" . eww-search-words)
+         ("M-s M-l" . modi/eww-copy-link-first-search-result))
+  :chords (("-=" . eww))
+  :commands (eww-open-file ; called by `modi/eww-open-file-with-auto-reload'
+             eww
+             hydra-launch/eww-and-exit
+             eww-list-bookmarks
+             hydra-launch/eww-list-bookmarks-and-exit
+             modi/eww-im-feeling-lucky
+             hydra-launch/modi/eww-im-feeling-lucky-and-exit
+             modi/eww-browse-url-of-file
+             hydra-launch/modi/eww-browse-url-of-file-and-exit)
   :config
   (progn
-    (setq modi/eww-file-notify-descriptors-list (quote nil))
     ;; (setq eww-search-prefix                 "https://duckduckgo.com/html/?q=")
     (setq eww-search-prefix                 "https://www.google.com/search?q=")
     (setq eww-download-directory            "~/downloads")
@@ -100,26 +102,6 @@ If OPTION is 16 (`C-u C-u'), copy the page url."
               ;; "No URL under point"
               (message "Copied page url: %s" (eww-copy-page-url))))))
 
-    ;; eww-lnum
-    (use-package eww-lnum
-      :commands (eww-lnum-follow eww-lnum-universal)
-      :init
-      (bind-keys
-       :map eww-mode-map
-        ("f" . eww-lnum-follow)
-        ("F" . eww-lnum-universal)))
-
-    ;; org-eww
-    ;; Copy text from html page for pasting in org mode file/buffer
-    ;; e.g. Copied HTML hyperlinks get converted to [[link][desc]] for org mode.
-    ;; http://emacs.stackexchange.com/a/8191/115
-    (use-package org-eww
-      :commands (org-eww-copy-for-org-mode)
-      :init
-      (bind-keys
-       :map eww-mode-map
-        ("o" . org-eww-copy-for-org-mode)))
-
     (defun modi/eww-keep-lines (regexp)
       "Show only the lines matching regexp in the web page.
 Call `eww-reload' to undo the filtering."
@@ -144,12 +126,25 @@ Else perform the default backspace action."
       (let ((browse-url-browser-function 'eww-browse-url))
         (call-interactively #'browse-url-of-file)))
 
+    ;; eww-lnum
+    (use-package eww-lnum
+      :bind (:map eww-mode-map
+             ("f" . eww-lnum-follow)
+             ("F" . eww-lnum-universal)))
+
+    ;; org-eww
+    ;; Copy text from html page for pasting in org mode file/buffer
+    ;; e.g. Copied HTML hyperlinks get converted to [[link][desc]] for org mode.
+    ;; http://emacs.stackexchange.com/a/8191/115
+    (use-package org-eww
+      :bind (:map eww-mode-map
+             ("o" . org-eww-copy-for-org-mode)))
+
     (bind-keys
      :map eww-mode-map
       ("G"           . eww) ; Go to URL
       ("g"           . eww-reload) ; Reload
       ("h"           . eww-list-histories) ; View history
-      ("q"           . modi/eww-quit)
       ("r"           . eww-reload) ; Reload
       ("p"           . shr-previous-link)
       ("<backtab>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
@@ -188,20 +183,25 @@ Else perform the default backspace action."
 ;; Auto-refreshing *eww* buffer
 ;; http://emacs.stackexchange.com/a/2566/115
 (use-package filenotify
+  :commands (modi/eww-open-file-with-auto-reload)
   :config
   (progn
-    (defun modi/eww-open-file-with-notify (file)
+    (defvar modi/eww-file-notify-descriptors-list ()
+      "List to store file-notify descriptor for all files that have an
+associated auto-reloading eww buffer.")
+
+    (defun modi/eww-open-file-with-auto-reload (file)
       "Open a file in eww and add `file-notify' watch for it."
       (interactive "fFile: ")
       (eww-open-file file)
       (file-notify-add-watch file
                              '(change attribute-change)
-                             #'modi/eww-notify-callback))
+                             #'modi/file-notify-callback-eww-reload))
 
-    (defun modi/eww-notify-callback (event)
-      "On getting triggered, switch to the *eww* buffer,
-reload and switch back to the working buffer. Also save
-the `file-notify-descriptor' of the triggering event."
+    (defun modi/file-notify-callback-eww-reload (event)
+      "On getting triggered, switch to the eww buffer, reload and switch
+back to the working buffer. Also save the `file-notify-descriptor' of the
+triggering event."
       (let* ((working-buffer (buffer-name)))
         (switch-to-buffer-other-window "eww")
         (eww-reload)
@@ -209,7 +209,7 @@ the `file-notify-descriptor' of the triggering event."
       ;; `(car event)' will return the event descriptor
       (add-to-list 'modi/eww-file-notify-descriptors-list (car event)))
 
-    (defun modi/eww-quit ()
+    (defun modi/eww-quit-and-update-fn-descriptors ()
       "When quitting `eww', also remove any saved file-notify descriptors
 specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
       (interactive)
@@ -218,7 +218,10 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
         (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
 
     (with-eval-after-load 'eww
-      (bind-key "C-c C-k" #'modi/eww-quit eww-mode-map))))
+      ;; Redefine the `q' binding in `eww-mode-map'
+      (bind-keys
+       :map eww-mode-map
+        "q" . modi/eww-quit-and-update-fn-descriptors ))))
 
 
 (provide 'setup-eww)
