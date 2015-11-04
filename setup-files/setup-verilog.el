@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-03 12:54:59 kmodi>
+;; Time-stamp: <2015-11-04 11:38:11 kmodi>
 
 ;; Verilog
 
@@ -447,6 +447,18 @@ _a_lways         _f_or              _g_enerate         _O_utput
     ;; Reset the verilog-mode abbrev table
     (clear-abbrev-table verilog-mode-abbrev-table)
 
+    (defun modi/verilog-outshine-imenu ()
+      "Update `imenu-generic-expression' when using outshine."
+      ;; `imenu-generic-expression' is a buffer-local variable
+      (setq imenu-generic-expression
+            (append '(("*Level 1*"
+                       "^// \\* \\(?1:.*$\\)" 1)
+                      ("*Level 2*"
+                       "^// \\*\\* \\(?1:.*$\\)" 1)
+                      ("*Level 3*"
+                       "^// \\*\\* \\(?1:.*$\\)" 1))
+                    modi/verilog-imenu-generic-expression)))
+
 ;;; my/verilog-mode-customizations
     (defun my/verilog-mode-customizations ()
       ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
@@ -465,23 +477,15 @@ _a_lways         _f_or              _g_enerate         _O_utput
             (append imenu-generic-expression
                     modi/verilog-imenu-generic-expression))
       ;; Replace tabs with spaces when saving files in verilog-mode
-      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
-    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
+      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
 
-    ;; Force the `imenu-generic-expression' to be `modi/verilog-imenu-generic-expression'
-    ;; for `verilog-mode'
-    (defun modi/outshine-hook-mod (orig-fun &rest args)
-      (apply orig-fun args)
-      (when (derived-mode-p 'verilog-mode)
-        (setq imenu-generic-expression
-              (append '(("*Level 1*"
-                         "^// \\* \\(?1:.*$\\)" 1)
-                        ("*Level 2*"
-                         "^// \\*\\* \\(?1:.*$\\)" 1)
-                        ("*Level 3*"
-                         "^// \\*\\* \\(?1:.*$\\)" 1))
-                      modi/verilog-imenu-generic-expression))))
-    (advice-add 'outshine-hook-function :around #'modi/outshine-hook-mod)
+      ;; Force the `imenu-generic-expression' to be
+      ;; `modi/verilog-imenu-generic-expression' for `verilog-mode' after
+      ;; `outshine-hook-function' runs.
+      (when (member 'outshine-hook-function outline-minor-mode-hook)
+        (add-hook 'outline-minor-mode-hook
+                  #'modi/verilog-outshine-imenu :append :local)))
+    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations :append)
 
     (bind-keys
      :map verilog-mode-map
