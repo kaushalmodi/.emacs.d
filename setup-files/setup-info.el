@@ -1,11 +1,15 @@
-;; Time-stamp: <2015-10-13 11:17:18 kmodi>
+;; Time-stamp: <2015-11-04 11:08:01 kmodi>
 
 ;; Info
 
 (use-package info
   :commands (info)
-  :init
+  :config
   (progn
+    (>=e "25.0"
+        (when (find-font (font-spec :name "DejaVu Sans Mono"))
+          (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono")))
+
     (defhydra hydra-info (:color blue
                           :hint nil)
       "
@@ -69,21 +73,18 @@ Info-mode:
       ("h"   Info-help "Info help")
       ("q"   Info-exit "Info exit")
       ("C-g" nil "cancel" :color blue))
-    (bind-key "?" #'hydra-info/body Info-mode-map))
-  :config
-  (progn
-    (>=e "25.0"
-        (when (find-font (font-spec :name "DejaVu Sans Mono"))
-          (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono")))
+    (bind-key "?" #'hydra-info/body Info-mode-map)
 
     (use-package info+
       :config
       (progn
-        ;; Override the Info-mode-map binding to "?" set by info+
-        (bind-key "?" #'hydra-info/body Info-mode-map)
-        ;; Allow mouse scrolling to do its normal thing
-        (define-key Info-mode-map [mouse-4] nil)
-        (define-key Info-mode-map [mouse-5] nil)))))
+        (bind-keys
+         :map Info-mode-map
+          ;; Allow mouse scrolling to do its normal thing
+          ("<mouse-4>" . nil)
+          ("<mouse-5>" . nil)
+          ;; Override the Info-mode-map binding to "?" set by info+
+          ("?" . hydra-info/body))))))
 
 
 (provide 'setup-info)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-15 17:08:48 kmodi>
+;; Time-stamp: <2015-11-04 11:47:29 kmodi>
 
 ;; Elisp Slime Nav
 ;; gtags/ctags like navigation into elisp source codes (even the compressed ones)
@@ -10,11 +10,6 @@
     (dolist (hook '(emacs-lisp-mode-hook
                     ielm-mode-hook))
       (add-hook hook #'elisp-slime-nav-mode))
-
-    ;; Unbind the default `elisp-slime-nav-mode-map' bindings
-    (define-key elisp-slime-nav-mode-map (kbd "C-c C-d d") nil)
-    (define-key elisp-slime-nav-mode-map (kbd "C-c C-d C-d") nil)
-    (define-key elisp-slime-nav-mode-map (kbd "C-c C-d") nil)
 
     ;;   (defun modi/elisp-slime-nav-find-elisp-interactive (sym-name)
     ;;       "Find the elisp thing at point, be it a function, variable, library or face
@@ -95,8 +90,14 @@
            (:else
             (progn
               (error "Don't know how to find '%s'" sym)))))))
+    (bind-to-modi-map "?" #'modi/elisp-slime-nav-find-elisp-interactive)
 
-    (bind-to-modi-map "?" #'modi/elisp-slime-nav-find-elisp-interactive)))
+    ;; Unbind the default `elisp-slime-nav-mode-map' bindings
+    (bind-keys
+     :map elisp-slime-nav-mode-map
+      ("C-c C-d d" . nil)
+      ("C-c C-d C-d" . nil)
+      ("C-c C-d" . nil))))
 
 
 (provide 'setup-elisp-slime-nav)

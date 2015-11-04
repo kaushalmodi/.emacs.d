@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-26 08:48:04 kmodi>
+;; Time-stamp: <2015-11-04 11:42:39 kmodi>
 ;;
 ;; Spell check
 ;; ispell, flyspell
@@ -55,11 +55,6 @@
         (setq flyspell-auto-correct-binding (kbd "<f12>")))
       :config
       (progn
-        (bind-key "<C-f12>" #'flyspell-goto-next-error flyspell-mode-map)
-        ;; Stop flyspell overriding other key bindings
-        (define-key flyspell-mode-map (kbd "C-,") nil)
-        (define-key flyspell-mode-map (kbd "C-.") nil)
-
         (add-hook 'prog-mode-hook #'flyspell-prog-mode)
         (with-eval-after-load 'auto-complete
           (ac-flyspell-workaround))
@@ -74,7 +69,14 @@
           "Return `nil' if `ispell-program-name' is available; `t' otherwise."
           (not (executable-find ispell-program-name)))
         (advice-add 'turn-on-flyspell   :before-until #'modi/ispell-not-avail-p)
-        (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)))))
+        (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)
+
+        (bind-keys
+         :map flyspell-mode-map
+          ;; Stop flyspell overriding other key bindings
+          ("C-," . nil)
+          ("C-." . nil)
+          ("<C-f12>" . flyspell-goto-next-error))))))
 
 
 (provide 'setup-spell)

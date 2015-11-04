@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-30 00:01:42 kmodi>
+;; Time-stamp: <2015-11-04 11:45:04 kmodi>
 
 ;; D
 ;; https://github.com/Emacs-D-Mode-Maintainers/Emacs-D-Mode
@@ -9,8 +9,10 @@
   :config
   (progn
     ;; Use my default bindings for `C-d' and `backspace'
-    (define-key d-mode-map (kbd "C-d") nil)
-    (define-key d-mode-map (kbd "<DEL>") nil)
+    (bind-keys
+     :map d-mode-map
+      ("C-d" . nil)
+      ("<DEL>" . nil))
 
     (defun modi/d-mode-stuff ()
       (setq-local compile-command (concat "dmd -de -w -unittest "

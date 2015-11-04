@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-03 12:54:26 kmodi>
+;; Time-stamp: <2015-11-04 11:44:18 kmodi>
 
 ;; Setup for different tags
 
@@ -76,7 +76,7 @@
              (buffer-substring beg end)))))
 
       ;; Remove the default binding for `M-.' in `ggtags-mode-map'
-      (define-key ggtags-mode-map (kbd "M-.") nil)
+      (bind-key "M-." nil ggtags-mode-map)
 
       (key-chord-define-global "??" #'ggtags-show-definition))))
 

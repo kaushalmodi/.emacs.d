@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-03 00:54:35 kmodi>
+;; Time-stamp: <2015-11-04 10:56:26 kmodi>
 
 ;; Highlight stuff
 
@@ -81,7 +81,7 @@ in which case the highlighting will not update as you type."
     (add-hook 'text-mode-hook #'modi/hi-lock-enable-in-text-mode)
 
     ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing.
-    (define-key hi-lock-map (kbd "C-x w") nil)
+    (bind-key "C-x w" nil hi-lock-map)
 
     (global-hi-lock-mode 1)
 

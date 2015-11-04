@@ -225,11 +225,6 @@ point."
       (interactive)
       (modi/verilog-jump-to-header-dwim :fwd))
 
-    (bind-keys
-     :map verilog-mode-map
-      ("C-^" . modi/verilog-jump-to-header-dwim)
-      ("C-&" . modi/verilog-jump-to-header-dwim-fwd))
-
     (with-eval-after-load 'which-func
       (add-to-list 'which-func-modes 'verilog-mode)
 
@@ -298,7 +293,6 @@ for this to work."
                 (modi/update-etags-table)
                 (find-tag modi/verilog-which-func-xtra))
             (pop-tag-mark))))
-
       (key-chord-define verilog-mode-map "\\\\" #'modi/verilog-jump-to-module-at-point) ; "\\"
 
       (with-eval-after-load 'ag
@@ -332,14 +326,6 @@ the project."
                                         ; don't highlight anything in (?=..)
               (ag-regexp module-instance-re (projectile-project-root)))))
         (key-chord-define verilog-mode-map "^^" #'modi/verilog-find-parent-module)))
-
-    ;; Unbind the backtick binding done to `electric-verilog-tick'
-    ;; With binding done to electric-verilog-tick, it's not possible to type
-    ;; backticks on multiple lines simultaneously in multiple-cursors mode
-    (define-key verilog-mode-map "\`" nil)
-    ;; Bind `verilog-header' to "C-c C-H" instead of to "C-c C-h"
-    (define-key verilog-mode-map (kbd "C-c C-h") nil)
-    (define-key verilog-mode-map (kbd "C-c C-S-h") #'verilog-header)
 
 ;;; my/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
@@ -453,7 +439,6 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ("D"   verilog-sk-define-signal)
       ("q"   nil nil :color blue)
       ("C-g" nil nil :color blue))
-    (bind-key "C-c C-t" #'hydra-verilog-template/body verilog-mode-map)
 
     ;; Uncomment the lines for which the advice needs to be removed
     ;; (advice-remove 'verilog-indent-line-relative #'my/verilog-selective-indent)
@@ -498,15 +483,22 @@ _a_lways         _f_or              _g_enerate         _O_utput
                       modi/verilog-imenu-generic-expression))))
     (advice-add 'outshine-hook-function :around #'modi/outshine-hook-mod)
 
-    ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Macros saved as functions
-    ;;
-    ;; Regex Search Expression - \$display(\(.*?\));\(.*\)
-    ;; Replace Expression - `uvm_info("REPLACE_THIS_GENERIC_ID", $sformatf(\1), UVM_MEDIUM) \2
-    (fset 'uvm-convert-display-to-uvm_info
-          (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([3 113 92 36 100 105 115 112 108 97 121 40 92 40 46 42 63 92 41 41 59 92 40 46 42 92 41 return 96 117 118 109 95 105 110 102 111 40 34 82 69 80 76 65 67 69 95 84 72 73 83 95 71 69 78 69 82 73 67 95 73 68 34 44 32 36 115 102 111 114 109 97 116 102 40 92 49 41 44 32 85 86 77 95 77 69 68 73 85 77 41 32 92 50 return 33] 0 "%d")) arg)))
-    ;;
-    ))
+    (bind-keys
+     :map verilog-mode-map
+      ;; Unbind the backtick binding done to `electric-verilog-tick'
+      ;; With binding done to electric-verilog-tick, it's not possible to type
+      ;; backticks on multiple lines simultaneously in multiple-cursors mode
+      ("`" . nil)
+      ;; Bind `verilog-header' to "C-c C-H" instead of to "C-c C-h"
+      ("C-c C-h" . nil)
+      ("C-c C-S-h" .  verilog-header)
+      ("C-c C-t" . hydra-verilog-template/body)
+      ("C-^" . modi/verilog-jump-to-header-dwim)
+      ("C-&" . modi/verilog-jump-to-header-dwim-fwd))))
 
 
 (provide 'setup-verilog)
+
+;; Convert $display statements to `uvm_info statements
+;; Regex Search Expression - \$display(\(.*?\));\(.*\)
+;; Replace Expression - `uvm_info("REPLACE_THIS_GENERIC_ID", $sformatf(\1), UVM_MEDIUM) \2

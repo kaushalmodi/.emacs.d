@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-02 16:31:01 kmodi>
+;; Time-stamp: <2015-11-04 10:57:22 kmodi>
 
 ;; Matlab
 
@@ -9,7 +9,7 @@
   (progn
     (with-eval-after-load 'matlab
       ;; Prevent conflict with the emacs default `search-map' binding `M-s'
-      (define-key matlab-mode-map (kbd "M-s") nil))))
+      (bind-key "M-s" nil matlab-mode-map))))
 
 
 (provide 'setup-matlab)
