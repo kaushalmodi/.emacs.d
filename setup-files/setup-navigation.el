@@ -1,4 +1,7 @@
-;; Time-stamp: <2015-10-12 10:42:56 kmodi>
+;; Time-stamp: <2015-11-03 00:49:36 kmodi>
+
+(>=e "25.0"
+    (setq fast-but-imprecise-scrolling t))
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
