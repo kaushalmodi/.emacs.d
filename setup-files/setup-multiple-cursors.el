@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-12 12:43:38 kmodi>
+;; Time-stamp: <2015-11-05 11:17:49 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -30,8 +30,8 @@
          ("h" . mc-hide-unmatched-lines-mode)
          ("\\" . mc/vertical-align-with-space)
          ("#" . mc/insert-numbers) ; use num prefix to set the starting number
-         ("<" . mc/edit-beginnings-of-lines)
-         (">" . mc/edit-ends-of-lines)))
+         ("^" . mc/edit-beginnings-of-lines)
+         ("$" . mc/edit-ends-of-lines)))
 
 
 (provide 'setup-multiple-cursors)
