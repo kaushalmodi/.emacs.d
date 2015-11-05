@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-04 11:47:29 kmodi>
+;; Time-stamp: <2015-11-05 12:44:18 kmodi>
 
 ;; Elisp Slime Nav
 ;; gtags/ctags like navigation into elisp source codes (even the compressed ones)
@@ -95,8 +95,6 @@
     ;; Unbind the default `elisp-slime-nav-mode-map' bindings
     (bind-keys
      :map elisp-slime-nav-mode-map
-      ("C-c C-d d" . nil)
-      ("C-c C-d C-d" . nil)
       ("C-c C-d" . nil))))
 
 
