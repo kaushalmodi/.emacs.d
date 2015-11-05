@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-05 17:48:07 kmodi>
+;; Time-stamp: <2015-11-05 13:12:37 kmodi>
 
 ;; Markdown Mode
 ;; http://jblevins.org/projects/markdown-mode/
@@ -32,3 +32,7 @@
 
 
 (provide 'setup-markdown)
+
+;; C-c C-s C-p - `markdown-pre-region'
+;;                Indent the selected region 4 spaces to the right
+;;                (code block formatting used on reddit, stackexchange, etc.)
