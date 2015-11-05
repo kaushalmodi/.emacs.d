@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-03 00:40:01 kmodi>
+;; Time-stamp: <2015-11-05 11:13:22 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -26,6 +26,7 @@
 ;;    ox-twbs - Twitter Bootstrap
 ;;    ox-odt - ODT, doc export
 ;;    Custom Org Export related “packages”
+;;  Easy Templates
 ;;  Bindings
 ;;  Notes
 
@@ -700,71 +701,125 @@ the default browser."
           :load-path "elisp/org-include-img-from-archive")
         ))
 
+;;; Easy Templates
+    ;; http://orgmode.org/manual/Easy-Templates.html
+    ;; http://oremacs.com/2015/03/07/hydra-org-templates
+    ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
+
+    (defun modi/org-template-expand (str &optional lang)
+      "Expand org template."
+      (let (beg old-beg end content)
+        ;; Save restriction to automatically undo the upcoming `narrow-to-region'
+        (save-restriction
+          (when (use-region-p)
+            (setq beg (region-beginning))
+            (setq end (region-end))
+            ;; Note that regardless of the direction of selection, we will always
+            ;; have (region-beginning) < (region-end).
+            (save-excursion
+              ;; If `point' is at `end', exchange point and mark so that now the
+              ;; `point' is now at `beg'
+              (when (> (point) (mark))
+                (exchange-point-and-mark))
+              ;; Insert a newline if `beg' is *not* at beginning of the line.
+              ;; Example: You have ^abc$ where ^ is bol and $ is eol.
+              ;;          "bc" is selected and <e is pressed to result in:
+              ;;            a
+              ;;            #+BEGIN_EXAMPLE
+              ;;            bc
+              ;;            #+END_EXAMPLE
+              (when (/= beg (line-beginning-position))
+                (electric-indent-just-newline 1)
+                (setq old-beg beg)
+                (setq beg (point))
+                ;; Adjust the `end' due to newline
+                (setq end (+ end (- beg old-beg)))))
+            (save-excursion
+              ;; If `point' is at `beg', exchange point and mark so that now the
+              ;; `point' is now at `end'
+              (when (< (point) (mark))
+                (exchange-point-and-mark))
+              ;; If the `end' position is at the beginning of a line decrement
+              ;; the position by 1, so that the resultant position is eol on
+              ;; the previous line.
+              (when (= end (line-beginning-position))
+                (setq end (1- end)))
+              ;; Insert a newline if `point'/`end' is *not* at end of the line.
+              ;; Example: You have ^abc$ where ^ is bol and $ is eol.
+              ;;          "a" is selected and <e is pressed to result in:
+              ;;            #+BEGIN_EXAMPLE
+              ;;            a
+              ;;            #+END_EXAMPLE
+              ;;            bc
+              (when (not (looking-at "\\s-*$"))
+                (electric-indent-just-newline 1)))
+            ;; Narrow to region so that the text surround the region does
+            ;; not mess up the upcoming `org-try-structure-completion' eval
+            (narrow-to-region beg end)
+            (setq content (delete-and-extract-region beg end)))
+          (insert str)
+          (org-try-structure-completion)
+          (when (string= "<s" str)
+            (cond
+             (lang
+              (insert lang)
+              (forward-line))
+             ((and content (not lang))
+              (insert "???")
+              (forward-line))
+             (t
+              )))
+          ;; At this point the cursor will be between the #+BEGIN and #+END lines
+          (when content
+            (insert content)
+            (deactivate-mark)))))
+
+    (defhydra hydra-org-template (:color blue
+                                  :hint nil)
+      "
+org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext           _I_NCLUDE:
+               _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
+               _a_scii         _q_uote        _E_macs-lisp        _S_hell          _i_ndex:         _A_SCII:
+"
+      ("s" (modi/org-template-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
+      ("E" (modi/org-template-expand "<s" "emacs-lisp"))
+      ("v" (modi/org-template-expand "<s" "systemverilog"))
+      ("m" (modi/org-template-expand "<s" "matlab"))
+      ("S" (modi/org-template-expand "<s" "sh"))
+      ("t" (modi/org-template-expand "<s" "text"))
+      ("e" (modi/org-template-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
+      ("x" (modi/org-template-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
+      ("q" (modi/org-template-expand "<q")) ; #+BEGIN_QUOTE ... #+END_QUOTE
+      ("V" (modi/org-template-expand "<v")) ; #+BEGIN_VERSE ... #+END_VERSE
+      ("c" (modi/org-template-expand "<c")) ; #+BEGIN_CENTER ... #+END_CENTER
+      ("l" (modi/org-template-expand "<l")) ; #+BEGIN_LaTeX ... #+END_LaTeX
+      ("L" (modi/org-template-expand "<L")) ; #+LaTeX:
+      ("h" (modi/org-template-expand "<h")) ; #+BEGIN_HTML ... #+END_HTML
+      ("H" (modi/org-template-expand "<H")) ; #+HTML:
+      ("a" (modi/org-template-expand "<a")) ; #+BEGIN_ASCII ... #+END_ASCII
+      ("A" (modi/org-template-expand "<A")) ; #+ASCII:
+      ("i" (modi/org-template-expand "<i")) ; #+INDEX: line
+      ("I" (modi/org-template-expand "<I")) ; #+INCLUDE: line
+      ("<" self-insert-command "<")
+      ("o" nil "quit"))
+
+    (defun modi/org-template-maybe ()
+      "Insert org-template if point is at the beginning of the line, or is a
+region is selected. Else call `self-insert-command'."
+      (interactive)
+      (let ((regionp (use-region-p)))
+        (if (or regionp
+                (and (not regionp)
+                     (looking-back "^")))
+            (hydra-org-template/body)
+          (self-insert-command 1))))
+
 ;;; Bindings
     ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
     ;; Pressing `C-x C-s' while editing org source code blocks saves and exits
     ;; the edit.
     (with-eval-after-load 'org-src
       (bind-key "C-x C-s" #'org-edit-src-exit org-src-mode-map))
-
-    ;; http://orgmode.org/manual/Easy-Templates.html
-    ;; http://oremacs.com/2015/03/07/hydra-org-templates
-    ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
-    (defun hot-expand (str)
-      "Expand org template."
-      (insert str)
-      (org-try-structure-completion))
-
-    (defhydra hydra-org-template (:color blue
-                                  :hint nil)
-      "
-org-template:  _c_enter        _s_rc          e_x_ample           _v_erilog        _t_ext           _I_NCLUDE:
-               _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
-               _a_scii         _q_uote        _e_macs-lisp        _S_hell          _i_ndex:         _A_SCII:
-"
-      ("s" (hot-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
-      ("e" (progn
-             (hot-expand "<s")
-             (insert "emacs-lisp")
-             (forward-line)))
-      ("v" (progn
-             (hot-expand "<s")
-             (insert "systemverilog")
-             (forward-line)))
-      ("m" (progn
-             (hot-expand "<s")
-             (insert "matlab")
-             (forward-line)))
-      ("S" (progn
-             (hot-expand "<s")
-             (insert "sh")
-             (forward-line)))
-      ("t" (progn
-             (hot-expand "<s")
-             (insert "text")
-             (forward-line)))
-      ("x" (hot-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
-      ("q" (hot-expand "<q")) ; #+BEGIN_QUOTE ... #+END_QUOTE
-      ("V" (hot-expand "<v")) ; #+BEGIN_VERSE ... #+END_VERSE
-      ("c" (hot-expand "<c")) ; #+BEGIN_CENTER ... #+END_CENTER
-      ("l" (hot-expand "<l")) ; #+BEGIN_LaTeX ... #+END_LaTeX
-      ("L" (hot-expand "<L")) ; #+LaTeX:
-      ("h" (hot-expand "<h")) ; #+BEGIN_HTML ... #+END_HTML
-      ("H" (hot-expand "<H")) ; #+HTML:
-      ("a" (hot-expand "<a")) ; #+BEGIN_ASCII ... #+END_ASCII
-      ("A" (hot-expand "<A")) ; #+ASCII:
-      ("i" (hot-expand "<i")) ; #+INDEX: line
-      ("I" (hot-expand "<I")) ; #+INCLUDE: line
-      ("<" self-insert-command "<")
-      ("o" nil         "quit"))
-
-    (defun modi/org-template-maybe ()
-      "Insert org-template if point is at the beginning of the line,
-else call `self-insert-command'."
-      (interactive)
-      (if (looking-back "^")
-          (hydra-org-template/body)
-        (self-insert-command 1)))
 
     (defun modi/reset-local-set-keys ()
       (local-unset-key (kbd "<f10>"))
