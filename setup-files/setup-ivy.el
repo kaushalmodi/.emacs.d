@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-09 16:36:43 kmodi>
+;; Time-stamp: <2015-11-05 11:30:28 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -27,9 +27,9 @@
         (defhydra hydra-ivy (:hint nil
                              :color pink)
           "
-^^_,_      _f_ollow  _g_o      ^^_c_alling %-3s(if ivy-calling \"on\" \"off\")   _w_/_s_/_a_: %-14s(ivy-action-name)
-_p_/_n_    _d_one    _i_nsert  ^^_m_atcher %-27s(if (eq ivy--regex-function 'ivy--regex-fuzzy) \"fuzzy\" \"ivy\")
-^^_._      _D_o it!  _q_uit    _<_/_>_ shrink/grow window _t_runcate: %-11`truncate-lines
+^^_,_        _f_ollow      occ_u_r      _g_o          ^^_c_alling %-7s(if ivy-calling \"on\" \"off\")      _w_/_s_/_a_: %-14s(ivy-action-name)
+_p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matcher-desc)^^^^^^^^^^^^      _C_ase-fold: %-10`ivy-case-fold-search
+^^_._        _D_o it!      ^^           _q_uit        _<_/_>_ shrink/grow^^^^^^^^^^^^^^^^^^^^^^^^^^^^      _t_runcate: %-11`truncate-lines
 "
           ;; arrows
           (","   ivy-beginning-of-buffer) ; default h
@@ -51,6 +51,8 @@ _p_/_n_    _d_one    _i_nsert  ^^_m_atcher %-27s(if (eq ivy--regex-function 'ivy
           ("s"   ivy-next-action)
           ("a"   ivy-read-action)
           ("t"   (setq truncate-lines (not truncate-lines)))
+          ("C"   ivy-toggle-case-fold)
+          ("u"   ivy-occur :exit t)
           ;; quit hydra
           ("i"   nil)
           ("C-o" nil)
@@ -58,12 +60,12 @@ _p_/_n_    _d_one    _i_nsert  ^^_m_atcher %-27s(if (eq ivy--regex-function 'ivy
           ("q"   keyboard-escape-quit :exit t); default o
           ("C-g" keyboard-escape-quit :exit t))))
 
-    ;; Revert the default bindings to C-j and C-m
+    ;; Exchange the default bindings for C-j and C-m
     (bind-keys
      :map ivy-minibuffer-map
       ("C-m"   . ivy-alt-done) ; RET
-      ("C-S-m" . ivy-immediate-done)
       ("C-j"   . ivy-done)
+      ("C-S-m" . ivy-immediate-done)
       ("C-t"   . ivy-toggle-fuzzy)
       ("C-o"   . hydra-ivy/body))
     (key-chord-define ivy-minibuffer-map "m," #'ivy-beginning-of-buffer)
