@@ -1,30 +1,27 @@
-;; Time-stamp: <2015-06-24 08:58:33 kmodi>
+;; Time-stamp: <2015-11-05 12:12:04 kmodi>
 
-;; server setup
+;; server/daemon setup
 
-;; Start emacs server
-;; Now all new opened files will open in the same emacs instance if
-;; opened using `emacsclient FILENAME&`
-
-;; create the server directory if it doesn't exist
 (use-package server
   :init
   (progn
-    (setq server-auth-dir (concat user-emacs-directory "server_"
-                                  emacs-version-short "/"))
-
-    (unless (file-exists-p server-auth-dir)
-      (make-directory server-auth-dir)))
+    (setq server-auth-dir (let ((dir (concat user-emacs-directory
+                                             "server_" emacs-version-short
+                                             "/"))) ; must end with /
+                            (make-directory dir :parents)
+                            dir)))
   :config
   (progn
-    ;; Suppress error "directory  ~/.emacs.d/server is unsafe" when
-    ;; running on cygwin
-    (>=e "23.0"
-        (when (equal window-system 'x)
-          (setq server-use-tcp t)
-          (defun server-ensure-safe-dir (dir) "Noop" t)))
+    ;; (setq server-use-tcp t)
+    (when (equal window-system 'w32)
+      ;; Suppress error "directory  ~/.emacs.d/server is unsafe". It is needed
+      ;; needed for the server to start on Windows.
+      ;;   On Windows, also set the EMACS_SERVER_FILE environment variable to
+      ;; point to the `server' file. For example, for emacs 25.0, that location
+      ;; would be "PATH\TO\.emacs.d\server_25_0\server".
+      (defun server-ensure-safe-dir (dir) "Noop" t))
 
-    ;; start a server only if one is not already running
+    ;; Start a server only if one is not already running
     ;; `server-running-p' returns "t" if a server is already running
     (defvar modi/server-temp nil
       "If t, start a “temp” server if a server is already running;
@@ -39,4 +36,4 @@ otherwise do nothing.")
           (server-start))))))
 
 
-(provide 'setup-server)
+  (provide 'setup-server)
