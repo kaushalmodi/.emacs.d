@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-04 12:38:18 kmodi>
+;; Time-stamp: <2015-11-05 11:16:13 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -221,7 +221,7 @@ specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
       ;; Redefine the `q' binding in `eww-mode-map'
       (bind-keys
        :map eww-mode-map
-        "q" . modi/eww-quit-and-update-fn-descriptors ))))
+        ("q" . modi/eww-quit-and-update-fn-descriptors )))))
 
 
 (provide 'setup-eww)
