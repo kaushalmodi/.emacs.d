@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-03 15:36:43 kmodi>
+;; Time-stamp: <2015-11-06 11:26:47 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -49,6 +49,7 @@
         bm ; visual bookmarks
         bookmark+ ; able to bookmark desktop sessions
         buffer-move
+        command-log-mode ; for logging commands; useful when demoing emacs
         cperl-mode
         csv-nav ; editing csv files
         diff-hl
@@ -97,7 +98,6 @@
         minibuffer-line
         multi-term
         multiple-cursors
-        mwe-log-commands ; for logging commands; useful when demoing emacs
         neotree
         nlinum ; reviews say it's better than linum
         number ; number manipulation
@@ -219,6 +219,7 @@
 (require 'setup-bookmarks)
 (require 'setup-buffer-move)
 (require 'setup-calc)
+(require 'setup-command-log-mode)
 (require 'setup-counsel)
 (require 'setup-de-ansi)
 (require 'setup-deft)
