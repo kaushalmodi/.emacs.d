@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-06 11:26:47 kmodi>
+;; Time-stamp: <2015-11-09 11:05:31 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -100,7 +100,6 @@
         multiple-cursors
         neotree
         nlinum ; reviews say it's better than linum
-        number ; number manipulation
         org-cliplink ; paste copied links as well-formatted org-mode links with desc
         org-plus-contrib ; latest stable version of org-mode, includes org-eww
         org-tree-slide
@@ -257,7 +256,6 @@
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
-(require 'setup-number)
 (require 'setup-org)
 (require 'setup-orgstruct)
 (require 'setup-outshine)
