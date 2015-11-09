@@ -1,15 +1,20 @@
-;; Time-stamp: <2015-11-05 13:14:57 kmodi>
+;; Time-stamp: <2015-11-09 09:58:01 kmodi>
 
 ;; server/daemon setup
 
 (use-package server
   :init
   (progn
-    (setq server-auth-dir (let ((dir (concat user-emacs-directory
-                                             "server_" emacs-version-short
-                                             "/"))) ; must end with /
-                            (make-directory dir :parents)
-                            dir)))
+    (setq server-auth-dir
+          (let ((dir (concat user-emacs-directory
+                             "server_" emacs-version-short
+                             ;; Prevent server file clashes when the same emacs
+                             ;; config is shared simultaneously across different
+                             ;; machines (e.g. via Dropbox)
+                             "_" (>=e "25.0" (system-name) system-name)
+                             "/"))) ; must end with /
+            (make-directory dir :parents)
+            dir)))
   :config
   (progn
     ;; (setq server-use-tcp t)
