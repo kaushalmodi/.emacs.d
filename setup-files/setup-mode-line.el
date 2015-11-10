@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 18:07:04 kmodi>
+;; Time-stamp: <2015-11-10 16:22:55 kmodi>
 
 ;; Customize the mode-line
 
@@ -215,19 +215,20 @@ TIME is \"nil\" or \"\"."
         (add-to-list 'rm-text-properties '("\\` μ\\'"      'display "​μ")) ; modi-mode
         (add-to-list 'rm-text-properties '("\\` Wg\\'"     'display "​w")) ; writegood
         (add-to-list 'rm-text-properties '("\\` =>\\'"     'display "​a")) ; aggressive indent
+        (add-to-list 'rm-text-properties '("\\` Vis\\'"    'display "​V")) ; visible-mode
         (with-eval-after-load 'setup-symbola
           (if font-symbola-p
               (progn
                 (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​🢛")) ; auto revert tail
                 (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​𝘵")) ; temp
                 (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​▯")) ; region bindings
-                (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​◉")) ; visible-mode
+                (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​💡")) ; beacon
                 (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​🞵"))) ; Hi-Lock
             (progn
               (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​Tail|"))
               (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​t"))
               (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​r"))
-              (add-to-list 'rm-text-properties '("\\` Vis\\'"  'display "​v"))
+              (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​*"))
               (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​H")))))))
 
     (sml/setup)))
