@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-20 17:57:00 kmodi>
+;; Time-stamp: <2015-11-11 09:46:47 kmodi>
 
 ;; Variable overrides
 
@@ -9,6 +9,7 @@
 
 (setq disable-pkg-hardcore-mode t)
 (setq disable-pkg-pdf-tools t)
+(setq disable-pkg-ispell t)
 ;; (setq disable-pkg-yasnippet t)
 ;; (setq disable-pkg-ivy t)
 ;; (setq disable-pkg-shackle t)

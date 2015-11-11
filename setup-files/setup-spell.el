@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-04 11:42:39 kmodi>
+;; Time-stamp: <2015-11-11 09:46:29 kmodi>
 ;;
 ;; Spell check
 ;; ispell, flyspell
@@ -32,6 +32,7 @@
 ;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
 
 (use-package ispell
+  :if (not (bound-and-true-p disable-pkg-ispell))
   :defer 15
   :config
   (progn
