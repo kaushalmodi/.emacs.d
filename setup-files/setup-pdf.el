@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 19:24:35 kmodi>
+;; Time-stamp: <2015-11-11 14:05:25 kmodi>
 
 ;; PDF
 
@@ -11,6 +11,7 @@
   :preface
   (progn
     (defvar pdf-tools-github-version-name "pdf-tools-0.60"))
+  :commands (my/pdf-tools-install)
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (progn
