@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-11-07-0de4fd8-vpo"
+(defconst verilog-mode-version "2015-12-01-a4a2f25-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -3026,7 +3026,7 @@ See also `verilog-font-lock-extra-types'.")
   "Font lock mode face used to highlight AMS keywords."
   :group 'font-lock-highlighting-faces)
 
-(defvar verilog-font-grouping-keywords-face
+(defvar verilog-font-lock-grouping-keywords-face
   'verilog-font-lock-grouping-keywords-face
   "Font to use for Verilog Grouping Keywords (such as begin..end).")
 (defface verilog-font-lock-grouping-keywords-face
@@ -3234,23 +3234,25 @@ A change is considered significant if it affects the buffer text
 in any way that isn't completely restored again.  Any
 user-visible changes to the buffer must not be within a
 `verilog-save-buffer-state'."
-  ;; From c-save-buffer-state
-  `(let* ((modified (buffer-modified-p))
-	  (buffer-undo-list t)
-	  (inhibit-read-only t)
-	  (inhibit-point-motion-hooks t)
-	  (inhibit-modification-hooks t)
-	  (verilog-no-change-functions t)
-	  before-change-functions ; XEmacs ignores inhibit-modification-hooks
-	  after-change-functions ; XEmacs ignores inhibit-modification-hooks
-	  deactivate-mark
-	  buffer-file-name ; Prevent primitives checking
-	  buffer-file-truename)	; for file modification
-     (unwind-protect
-	 (progn ,@body)
-       (and (not modified)
-	    (buffer-modified-p)
-	    (verilog-restore-buffer-modified-p nil)))))
+  `(let ((inhibit-point-motion-hooks t)
+         (verilog-no-change-functions t))
+     ,(if (fboundp 'with-silent-modifications)
+          `(with-silent-modifications ,@body)
+        ;; Backward compatible version of with-silent-modifications
+        `(let* ((modified (buffer-modified-p))
+                (buffer-undo-list t)
+                (inhibit-read-only t)
+                (inhibit-modification-hooks t)
+                ;; XEmacs ignores inhibit-modification-hooks.
+                before-change-functions after-change-functions
+                deactivate-mark
+                buffer-file-name        ; Prevent primitives checking
+                buffer-file-truename)	; for file modification
+           (unwind-protect
+               (progn ,@body)
+             (and (not modified)
+                  (buffer-modified-p)
+                  (verilog-restore-buffer-modified-p nil)))))))
 
 
 (defvar verilog-save-font-mod-hooked nil
@@ -3263,7 +3265,7 @@ Includes temporary disabling of `font-lock' to restore the buffer
 to full text form for parsing.  Additional actions may be specified with
 `verilog-before-save-font-hook' and `verilog-after-save-font-hook'.
 For insignificant changes, see instead `verilog-save-buffer-state'."
-  `(if verilog-save-font-mod-hooked ; A recursive call?
+  `(if verilog-save-font-mod-hooked ; Short-circuit a recursive call
        (progn ,@body)
      ;; Before version 20, match-string with font-lock returns a
      ;; vector that is not equal to the string.  IE if on "input"
@@ -3271,17 +3273,19 @@ For insignificant changes, see instead `verilog-save-buffer-state'."
      ;; Therefore we must remove and restore font-lock mode
      (verilog-run-hooks 'verilog-before-save-font-hook)
      (let* ((verilog-save-font-mod-hooked (- (point-max) (point-min)))
+            ;; Significant speed savings with no font-lock properties
             (fontlocked (when (and (boundp 'font-lock-mode) font-lock-mode)
                           (font-lock-mode 0)
-                          t))
-            (inhibit-point-motion-hooks t)
-            (inhibit-modification-hooks t)
-            (verilog-no-change-functions t)
-            before-change-functions ; XEmacs ignores inhibit-modification-hooks
-            after-change-functions) ; XEmacs ignores inhibit-modification-hooks
+                          t)))
        (run-hook-with-args 'before-change-functions (point-min) (point-max))
        (unwind-protect
-           (progn ,@body)
+           ;; Must inhibit and restore hooks before restoring font-lock
+           (let* ((inhibit-point-motion-hooks t)
+                  (inhibit-modification-hooks t)
+                  (verilog-no-change-functions t)
+                  ;; XEmacs and pre-Emacs 21 ignore inhibit-modification-hooks.
+                  before-change-functions after-change-functions)
+             (progn ,@body))
          ;; Unwind forms
          (run-hook-with-args 'after-change-functions (point-min) (point-max)
                              verilog-save-font-mod-hooked) ; old length
