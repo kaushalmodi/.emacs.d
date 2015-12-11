@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-10 16:22:55 kmodi>
+;; Time-stamp: <2015-12-11 09:43:58 kmodi>
 
 ;; Customize the mode-line
 
@@ -206,6 +206,7 @@ TIME is \"nil\" or \"\"."
                 " hs+"       ;
                 " ez-esc"    ; easy-escape
                 " ivy"       ; ivy
+                " h"         ; hungry-delete-mode
                 ))
         (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face))) ; default
         (add-to-list 'rm-text-properties '("\\` Abbrev\\'" 'display "​@")) ; Abbrev
