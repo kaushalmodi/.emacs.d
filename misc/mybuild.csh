@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-10-27 18:46:07 kmodi>
+# Time-stamp: <2015-12-10 11:43:01 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -37,7 +37,8 @@
 # and related files. This is necessary for XFT and related X11
 # features.. otherwise the fonts will look horrible.
 
-set emacs_rev       = "origin/master"
+# set emacs_rev       = "origin/master"
+set emacs_rev       = "origin/emacs-25"
 set emacs_gdb_build = 0
 set no_git_update   = 0
 set dirty_make      = 0
@@ -87,7 +88,8 @@ if ( $debug ) then
 endif
 
 if ( ! ${no_git_update} ) then
-    git checkout master
+    git fetch --all # fetch new branch names if any
+    git checkout ${emacs_rev}
     git fetch --all
     git reset --hard ${emacs_rev}
     echo "Waiting for 5 seconds .. "
