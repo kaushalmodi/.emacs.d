@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-09 11:05:31 kmodi>
+;; Time-stamp: <2015-12-11 09:38:30 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -57,7 +57,6 @@
         discover-my-major ; Discover key bindings for the major mode
         drag-stuff
         easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
-        eimp ; required by org-show
         elfeed
         elisp-slime-nav ; tag based code navigation for elisp; works even for compressed code
         engine-mode ; search engines
