@@ -13,6 +13,3 @@
 [submodule "elisp/highlight-global"]
 	path = elisp/highlight-global
 	url = http://www.github.com/kaushalmodi/highlight-global
-[submodule "elisp/deft"]
-	path = elisp/deft
-	url = https://kaushalmodi@github.com/kaushalmodi/deft

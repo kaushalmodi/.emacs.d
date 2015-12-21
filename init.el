@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-12-11 09:38:30 kmodi>
+;; Time-stamp: <2015-12-21 16:04:19 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -31,7 +31,6 @@
         ;; ox-reveal ; used to export to HTML slides; using latest from git
         ;; helm helm-swoop ; < swiper
         ;; helm-gtags ; < ggtags
-        ;; deft ; quick note taking and management ; < forked version
         ace-window
         adaptive-wrap ; indented line wrapping
         ag wgrep wgrep-ag s ; ag > ack > grep
@@ -52,6 +51,7 @@
         command-log-mode ; for logging commands; useful when demoing emacs
         cperl-mode
         csv-nav ; editing csv files
+        deft ; quick note taking and management
         diff-hl
         dired-single dired+
         discover-my-major ; Discover key bindings for the major mode
