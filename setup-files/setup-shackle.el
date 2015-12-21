@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-06 10:33:17 kmodi>
+;; Time-stamp: <2015-12-21 09:00:23 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -10,21 +10,21 @@
     (setq shackle-lighter "")
     (setq shackle-select-reused-windows nil) ; default nil
     (setq shackle-default-alignment 'below) ; default below
-    (setq shackle-default-ratio 0.4) ; default 0.5
+    (setq shackle-default-size 0.4) ; default 0.5
 
     (setq shackle-rules
-          ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :ratio+:align|:other     :same|:popup
+          ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
           '((compilation-mode              :select nil                                                )
-            ("*undo-tree*"                                                    :ratio 0.25 :align right)
+            ("*undo-tree*"                                                    :size 0.25 :align right)
             ("*Shell Command Output*"      :select nil                                                )
             ("\\*Async Shell.*\\*" :regexp t :ignore t                                                  )
             (occur-mode                    :select nil                                    :align t    )
             ("*Help*"                      :select t   :inhibit-window-quit t :other t                )
-            ("*Completions*"                                                  :ratio 0.3  :align t    )
+            ("*Completions*"                                                  :size 0.3  :align t    )
             ("*Messages*"                  :select t   :inhibit-window-quit t :other t                )
             ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t                )
             ("\\*poporg.*\\*"      :regexp t :select t                          :other t                )
-            ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :ratio 0.3  :align t    )
+            ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :size 0.3  :align t    )
             ))
 
     (shackle-mode 1)))
@@ -74,7 +74,7 @@
 ;; |-----------+------------------------+--------------------------------------------------|
 ;; |           | :other t               | Reuse the window `other-window' would select if  |
 ;; |           | *must not be used      | there's more than one window open, otherwise pop |
-;; |           | with :align, :ratio*   | up a new window. When used in combination with   |
+;; |           | with :align, :size*    | up a new window. When used in combination with   |
 ;; |           |                        | the :frame key, do the equivalent to             |
 ;; |           |                        | other-frame or a new frame                       |
 ;; |-----------+------------------------+--------------------------------------------------|
@@ -86,16 +86,16 @@
 ;; |           |                        | to be "dealt" with. This can either happen by    |
 ;; |           |                        | burying its buffer with q or by deleting its     |
 ;; |           |                        | window with C-x 0.                               |
-;; |           | :ratio                 | Aligned window use a default ratio of 0.5 to     |
+;; |           | :size                  | Aligned window use a default ratio of 0.5 to     |
 ;; |           | a floating point       | split up the original window in half             |
-;; |           | value between 0 and 1  | (customizable with `shackle-default-ratio'), the |
-;; |           |                        | ratio can be changed on a per-case basis by      |
-;; |           |                        | providing a different floating point value like  |
-;; |           |                        | 0.33 to make it occupy a third of the original   |
-;; |           |                        | window's size.                                   |
+;; |           | value between 0 and 1  | (customizable with `shackle-default-size'), the  |
+;; |           | is interpreted as a    | size can be changed on a per-case basis by       |
+;; |           | ratio. An integer >=1  | providing a different floating point value like  |
+;; |           | is interpreted as a    | 0.33 to make it occupy a third of the original   |
+;; |           | number of lines.       | window's size.                                   |
 ;; |-----------+------------------------+--------------------------------------------------|
 ;; |           | :frame t               | Pop buffer to a frame instead of a window.       |
 ;; |-----------+------------------------+--------------------------------------------------|
-
+;;
 ;; http://emacs.stackexchange.com/a/13687/115
 ;; Don't show Async Shell Command buffers
