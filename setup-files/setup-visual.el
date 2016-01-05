@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-16 17:07:32 kmodi>
+;; Time-stamp: <2016-01-05 15:21:20 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -543,6 +543,11 @@ narrowed."
 ;;; Prettify symbols
 (defvar modi/prettify-symbols-mode-hooks '(emacs-lisp-mode-hook)
   "List of hooks of major modes in which prettify-symbols-mode should be enabled.")
+
+(>=e "25.0"
+    ;; Temporarily unprettify the symbol if the cursor is on the symbol or on
+    ;; its right edge.
+    (setq prettify-symbols-unprettify-at-point 'right-edge))
 
 (dolist (hook modi/prettify-symbols-mode-hooks)
   (add-hook hook #'prettify-symbols-mode))
