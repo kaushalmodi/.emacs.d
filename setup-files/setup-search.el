@@ -1,10 +1,51 @@
-;; Time-stamp: <2015-10-12 09:25:30 kmodi>
+;; Time-stamp: <2016-01-05 11:38:47 kmodi>
 
 ;; Search / Replace
 
+;; Contents:
+;;
+;;  isearch
+;;  anzu
+;;  Visual Regular Expression search/replace
+;;  Query exchange
+;;  Swiper
+;;  grep
+;;  Key bindings
+
+;;; isearch
+
 (setq-default case-fold-search t) ; Ignore case when searching
 
-;; Anzu mode
+;; Fuzzy isearch
+;; https://www.reddit.com/r/emacs/comments/3yxk2x/flexible_isearch_without_a_package
+;; Isearch convenience, space matches anything (non-greedy)
+(setq search-whitespace-regexp ".*?")
+
+;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
+;; DEL during isearch should edit the search string, not jump back to
+;; the previous result
+(define-key isearch-mode-map [remap isearch-delete-char] #'isearch-del-char)
+
+(defun modi/isearch-backward-symbol-at-point ()
+  "Do incremental search backward for a symbol found near point.
+Like ordinary incremental search except that the symbol found at point
+is added to the search string initially as a regexp surrounded
+by symbol boundary constructs \\_< and \\_>.
+See the command `isearch-forward-symbol' for more information."
+  (interactive)
+  (isearch-mode (not :forward) nil nil nil 'isearch-symbol-regexp)
+  (let ((bounds (find-tag-default-bounds)))
+    (cond
+     (bounds
+      (when (< (car bounds) (point))
+        (goto-char (car bounds)))
+      (isearch-yank-string
+       (buffer-substring-no-properties (car bounds) (cdr bounds))))
+     (t
+      (setq isearch-error "No symbol at point")
+      (isearch-update)))))
+
+;;; anzu
 ;; https://github.com/syohex/emacs-anzu
 (use-package anzu
   :init
@@ -20,7 +61,7 @@
 
     (global-anzu-mode 1)))
 
-;; Visual Regular Expression search/replace
+;;; Visual Regular Expression search/replace
 (use-package visual-regexp
   :commands (vr/query-replace vr/mc-mark vr/replace)
   :init
@@ -36,10 +77,12 @@
   (progn
     (setq vr/default-feedback-limit 300)))
 
+;;; Query exchange
 ;; Inspired from http://www.emacswiki.org/emacs/QueryExchange and definition of
 ;; `query-replace-regexp' from replace.el
 (defun query-exchange (string-1 string-2 &optional delimited start end)
   "Exchange string-1 and string-2 interactively.
+
 The user is prompted at each instance like query-replace. Exchanging
 happens within a region if one is selected."
   (interactive
@@ -64,7 +107,7 @@ happens within a region if one is selected."
                               (if (match-string 1) string-2 string-1))
    t t delimited nil nil start end))
 
-;; Swiper
+;;; Swiper
 ;; https://github.com/abo-abo/swiper
 (use-package swiper
   :commands (modi/swiper swiper swiper-from-isearch swiper-avy)
@@ -92,26 +135,24 @@ If a region is not selected and,
             (swiper) ; C-u
           (swiper (modi/get-symbol-at-point)))))))
 
-;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
-;; DEL during isearch should edit the search string, not jump back to
-;; the previous result
-(define-key isearch-mode-map [remap isearch-delete-char] #'isearch-del-char)
-
-;; Search for the highlighted string in ALL buffers `search-all-buffers'
+;;; grep
+;; Search for the highlighted string in ALL buffers `offby1/search-all-buffers'
 ;; http://stackoverflow.com/a/2642655/1219634
 (use-package grep
+  :commands (offby1/search-all-buffers) ; need to require `grep' for `grep-read-regexp'
   :config
   (progn
-    (defcustom search-all-buffers-ignored-files (list (rx-to-string
-                                                       '(and bos
-                                                             (or ".bash_history"
-                                                                 "TAGS")
-                                                             eos)))
-      "Files to ignore when searching buffers via \\[search-all-buffers]."
+    (defcustom offby1/search-all-buffers-ignored-files
+      (list (rx-to-string
+             '(and bos
+                   (or ".bash_history" "TAGS")
+                   eos)))
+      "Files to ignore when searching buffers via \\[offby1/search-all-buffers]."
       :type 'editable-list)
-    (defun search-all-buffers (regexp prefix)
+
+    (defun offby1/search-all-buffers (regexp prefix)
       "Searches file-visiting buffers for occurence of REGEXP.  With
-prefix > 1 (i.e., if you type C-u \\[search-all-buffers]),
+prefix > 1 (i.e., if you type C-u \\[offby1/search-all-buffers]),
 searches all buffers."
       (interactive (list (grep-read-regexp)
                          current-prefix-arg))
@@ -125,30 +166,12 @@ searches all buffers."
              (lambda (rx)
                (string-match rx (file-name-nondirectory
                                  (buffer-file-name b))))
-             search-all-buffers-ignored-files))
+             offby1/search-all-buffers-ignored-files))
           (remove-if-not 'buffer-file-name (buffer-list))))
        regexp))
-    (bind-to-modi-map "s" #'search-all-buffers)))
+    (bind-to-modi-map "s" #'offby1/search-all-buffers)))
 
-(defun modi/isearch-backward-symbol-at-point ()
-  "Do incremental search backward for a symbol found near point.
-Like ordinary incremental search except that the symbol found at point
-is added to the search string initially as a regexp surrounded
-by symbol boundary constructs \\_< and \\_>.
-See the command `isearch-forward-symbol' for more information."
-  (interactive)
-  (isearch-mode (not :forward) nil nil nil 'isearch-symbol-regexp)
-  (let ((bounds (find-tag-default-bounds)))
-    (cond
-     (bounds
-      (when (< (car bounds) (point))
-        (goto-char (car bounds)))
-      (isearch-yank-string
-       (buffer-substring-no-properties (car bounds) (cdr bounds))))
-     (t
-      (setq isearch-error "No symbol at point")
-      (isearch-update)))))
-
+;;; Key bindings
 (bind-keys
  :map modi-mode-map
   ("C-S-s" . isearch-forward-symbol-at-point)
