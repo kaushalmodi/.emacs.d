@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-05 11:13:22 kmodi>
+;; Time-stamp: <2016-01-06 11:20:53 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -630,6 +630,7 @@ the default browser."
 
 ;;;; ox-reveal - Presentations using reveal.js
         (use-package ox-reveal
+          :load-path "elisp/ox-reveal"
           :config
           (progn
             ;; Download reveal.js from https://github.com/hakimel/reveal.js/
