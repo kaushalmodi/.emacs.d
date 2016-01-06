@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-06 14:37:18 kmodi>
+;; Time-stamp: <2016-01-06 17:44:42 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -290,20 +290,20 @@ font size."
   ("0"   modi/global-font-size-reset :bind nil)
   ("q"   nil :color blue))
 
-(global-unset-key (kbd "<C-down-mouse-1>"))
-;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
-;; inconvenient when that mouse menu pops up when I don't need it
-;; to. And actually I have never used that menu :P
-
 (bind-keys
  :map modi-mode-map
+  ;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
+  ;; inconvenient when that mouse menu pops up when I don't need it
+  ;; to. And actually I have never used that menu :P
+  ("<C-down-mouse-1>" . modi/global-font-size-reset) ; C + left mouse down event
+  ("<C-mouse-1>"      . modi/global-font-size-reset) ; C + left mouse up event
   ;; Make Control+mousewheel do increase/decrease font-size
   ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
-  ("<C-mouse-1>" . modi/global-font-size-reset) ; C + left mouse click
   ("<C-mouse-4>" . modi/global-font-size-incr) ; C + wheel-up
   ("<C-mouse-5>" . modi/global-font-size-decr)) ; C + wheel-down
 
 (>=e "25.0"
+    ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
     ;; Do not resize the frame when adjusting the font size
     (add-to-list 'frame-inhibit-implied-resize 'font))
 
