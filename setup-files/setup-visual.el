@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-05 15:21:20 kmodi>
+;; Time-stamp: <2016-01-06 14:37:18 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -20,7 +20,7 @@
 ;;    Global Font Resize
 ;;  Line truncation
 ;;  Visual Line Mode
-;;  Adaptive Wrap
+;;    Adaptive Wrap
 ;;  Cursor
 ;;  Prez Mode
 ;;  Hidden Mode Line Mode
@@ -341,23 +341,20 @@ font size."
 (setq-default visual-line-fringe-indicators '(left-curly-arrow
                                               right-curly-arrow))
 
-;;; Adaptive Wrap
+;;;; Adaptive Wrap
 ;; `adaptive-wrap-prefix-mode' indents the visual lines to
 ;; the level of the actual line plus `adaptive-wrap-extra-indent'. Thus line
 ;; truncation has to be off for adaptive wrap to be in effect.
 (use-package adaptive-wrap
+  :commands (visual-line-mode)
   :config
   (progn
+    ;; Need to set the below variable globally as it is a buffer-local variable.
     (setq-default adaptive-wrap-extra-indent 2)
 
-    (defun turn-on-adaptive-wrap-prefix-mode ()
-      "Turns on adaptive-wrap-prefix-mode."
-      (interactive)
-      (adaptive-wrap-prefix-mode 1))
-    (define-globalized-minor-mode global-adaptive-wrap-prefix-mode
-      adaptive-wrap-prefix-mode
-      turn-on-adaptive-wrap-prefix-mode)
-    (global-adaptive-wrap-prefix-mode 1)))
+    ;; Adaptive wrap anyways needs the `visual-line-mode' to be enabled. So
+    ;; enable it only when the latter is enabled.
+    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)))
 
 ;;; Cursor
 ;; Change cursor color according to mode:
