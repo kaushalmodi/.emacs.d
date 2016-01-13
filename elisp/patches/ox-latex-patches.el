@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-02 11:38:11 kmodi>
+;; Time-stamp: <2016-01-13 17:10:58 kmodi>
 
 ;; `ox-latex' needs to be required before `load'ing this patch file
 
@@ -43,13 +43,20 @@ contextual information."
                            (org-export-format-code-default src-block info))))))
        ;; Case 2.  Custom environment.
        (custom-env
-        (let ((caption-str (org-latex--caption/label-string src-block info)))
-          (format "\\begin{%s}\n%s\\end{%s}\n"
+        (let ((caption-str (org-latex--caption/label-string src-block info))
+              (formatted-src (org-export-format-code-default src-block info)))
+          (if (org-string-match-p "\\`[a-zA-Z0-9]+\\'" custom-env)
+	      (format "\\begin{%s}\n%s\\end{%s}\n"
                   custom-env
                   (concat (and caption-above-p caption-str)
-                          (org-export-format-code-default src-block info)
+                          formatted-src
                           (and (not caption-above-p) caption-str))
-                  custom-env)))
+                  custom-env)
+	    (format-spec custom-env
+			 `((?s . ,formatted-src)
+			   (?c . ,caption)
+			   (?f . ,float)
+			   (?l . ,(org-latex--label src-block info)))))))
        ;; Case 3.  Use minted package.
        ((eq listings 'minted)
         (let* ((caption-str (org-latex--caption/label-string src-block info))
