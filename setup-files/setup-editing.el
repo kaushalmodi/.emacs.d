@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-29 11:37:06 kmodi>
+;; Time-stamp: <2016-01-13 18:01:10 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -30,7 +30,9 @@
 ;;  Delete Blank Lines
 ;;  Space Adjustment After Word Kills
 ;;  Whole Buffer If Not Region
-;;  Smart Mark
+;;  Mark Management
+;;    Popping marks
+;;    Smart Mark
 ;;  C-u before M-w/C-w to trim white space
 ;;  Bindings
 ;;  Comment Commander
@@ -736,7 +738,25 @@ SYMBOL to the whole buffer if region is not selected."
                   modi/whole-buffer-if-not-region-adv-fn-name-format fn))))
     (advice-add fn :around adv-fn)))
 
-;;; Smart Mark
+;;; Mark Management
+
+;;;; Popping marks
+;; http://endlessparentheses.com/faster-pop-to-mark-command.html
+;; https://github.com/magnars/expand-region.el/issues/159#issuecomment-83538021
+(defun modi/multi-pop-to-mark (orig-fun &rest args)
+  "When popping the mark, continue popping until the cursor actually moves.
+Try the repeated popping up to 10 times."
+  (let ((p (point)))
+    (dotimes (i 10)
+      (when (= p (point))
+        (apply orig-fun args)))))
+(advice-add 'pop-to-mark-command :around #'modi/multi-pop-to-mark)
+
+;; Ensure that we can quickly pop the mark several times by typing
+;; C-u C-SPC C-SPC, instead of having to type C-u C-SPC C-u C-SPC.
+(setq set-mark-command-repeat-pop t)
+
+;;;; Smart Mark
 ;; C-g after `mark-whole-buffer' brings the point back to where it originally was.
 (use-package smart-mark
   :config
