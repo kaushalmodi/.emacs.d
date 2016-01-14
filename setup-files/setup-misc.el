@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-29 21:23:15 kmodi>
+;; Time-stamp: <2016-01-14 17:31:30 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -29,6 +29,10 @@
 
 ;; Make apropos commands search more extensively
 (setq apropos-do-all t)
+
+;; On saving, automatically make a file an executable if it begins with "#!"
+;; Example: #!/bin/csh
+(add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 
 ;; url
 ;; First delete the old `url/' directory if present

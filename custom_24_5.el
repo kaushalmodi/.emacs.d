@@ -10,9 +10,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ac-stop-words (quote ("/" "//" "/*" "//*" "///" "////")))
- '(after-save-hook
-   (quote
-    (executable-make-buffer-file-executable-if-script-p)))
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
