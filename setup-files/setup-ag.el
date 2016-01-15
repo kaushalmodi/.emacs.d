@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-10 08:38:01 kmodi>
+;; Time-stamp: <2016-01-15 14:21:29 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -38,21 +38,14 @@
           ("C-x s" . wgrep-save-all-buffers))))
 
     ;; Set default ag arguments
-    (setq ag-arguments '(
-                         ;; Mandatory arguments for ag.el
-                         ;; As per https://github.com/Wilfred/ag.el/issues/41
-                         "--nogroup"
-                         "--column"
-                         ;; Other args
-                         "--skip-vcs-ignores"
-                         "--line-numbers"
-                         "--smart-case"
-                         "--follow" ; follow symlinks
-                         "--stats"
-                         ;; It looks like the ~/.agignore is used when
-                         ;; launching ag from emacs too. So the ignores from
-                         ;; ~/.agignore don't have to be set here again.
-                         ))
+    ;; It looks like the ~/.agignore is used when launching ag from emacs too.
+    ;; So the ignores from ~/.agignore don't have to be set here again.
+    (setq ag-arguments (append modi/ag-arguments
+                               '("--column" ; print column numbers in results
+                                        ; mandatory argument for ag.el as per
+                                        ; https://github.com/Wilfred/ag.el/issues/41
+                                 "--stats")))
+
     (setq ag-highlight-search t)
     ;; By default, ag.el will open results in a different window in the frame, so
     ;; the results buffer is still visible. You can override this so the results

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-05 14:22:55 kmodi>
+;; Time-stamp: <2016-01-15 14:31:21 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -16,14 +16,14 @@
 
     ;; Redefine `counsel-ag-base-command' with my required options, especially
     ;; the `--follow' option to allow search through symbolic links.
-    (setq counsel-ag-base-command (concat "ag "
-                                          "--noheading "
-                                          "--nogroup "
-                                          "--nocolor "
-                                          "--skip-vcs-ignores "
-                                          "--smart-case "
-                                          "--follow " ; follow symlinks
-                                          "%S"))
+    (setq counsel-ag-base-command
+          ;; http://stackoverflow.com/a/12999828/1219634
+          (mapconcat 'identity
+                     (append '("\\ag") ; used unaliased version of `ag': \ag
+                             modi/ag-arguments
+                             '("--nocolor"
+                               "%S"))
+                     " "))
 
     (ivy-set-actions
      'counsel-find-file

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-14 09:59:52 kmodi>
+;; Time-stamp: <2016-01-15 14:17:43 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -73,6 +73,16 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
                                       "#f7f7f7" (face-foreground 'default))
                       :background (if (string= (face-background 'default) "unspecified-bg")
                                       "#282828" (face-background 'default))))
+
+(defconst modi/ag-arguments
+  '("--nogroup" ; mandatory argument for ag.el as per https://github.com/Wilfred/ag.el/issues/41
+    "--noheading" ; no file names above matching content
+    "--skip-vcs-ignores" ; Ignore files/dirs ONLY from `.agignore'
+    "--numbers" ; line numbers
+    "--smart-case"
+    "--follow") ; follow symlinks
+  "Default ag arguments used in the functions in `ag', `counsel' and `projectile'
+packages.")
 
 ;; Re-evaluatable `defvar's
 ;; Usage: When debugging/developing something in elisp, it is useful to have
