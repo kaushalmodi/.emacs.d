@@ -70,26 +70,20 @@ nothing.
 Doing so prevents prevents the unnecessary call to `visit-tags-table' function
 and the subsequent `find-file' call for the `TAGS' file."
         ))
+    (defun modi/projectile-project-name (project-root)
+      "Return project name after some modification if needed.
 
-    ;; Patch
-    (defun projectile-project-name ()
-      "Return project name.
-If the project root contains \"sos_\" or \"src\", remove the directory basename
-from the project root name. E.g. if `projectile-project-root' is \"/a/b/src\",
-remove the \"src\" portion from it and make it \"/a/b\"."
-      (let ((project-root
-             (condition-case nil
-                 (projectile-project-root)
-               (error default-directory)))
-            project-name)
-        (setq project-name (file-name-nondirectory
-                            (directory-file-name project-root)))
+If PROJECT-ROOT contains \"sos_\" or \"src\", remove the directory basename
+from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
+\"src\" portion from it and make it \"/a/b\"."
+      (let ((project-name (projectile-default-project-name project-root)))
         (while (string-match "\\(sos_\\|\\bsrc\\b\\)" project-name)
           (setq project-root (replace-regexp-in-string
                               "\\(.*\\)/.+/*$" "\\1" project-root))
           (setq project-name (file-name-nondirectory
                               (directory-file-name project-root))))
         project-name))
+    (setq projectile-project-name-function #'modi/projectile-project-name)
 
     ;; http://emacs.stackexchange.com/a/10187/115
     (defun modi/kill-non-project-buffers (&optional kill-special)
