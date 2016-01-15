@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-15 14:18:08 kmodi>
+;; Time-stamp: <2016-01-15 14:29:45 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -17,21 +17,8 @@
       (with-eval-after-load 'ivy
         (setq projectile-completion-system 'ivy)))
 
-
-    ;; Make the file list creation faster by NOT calling `projectile-get-sub-projects-files'
-    (defun projectile-get-repo-files ()
-      (projectile-files-via-ext-command (projectile-get-ext-command)))
-
     ;; Don't consider my home dir as a project
     (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/"))
-
-    ;; Patch
-    (defun projectile-cache-files-find-file-hook ()
-      "Function for caching files with `find-file-hook'."
-      (when (and projectile-enable-caching
-                 (projectile-project-p)
-                 (not (member (projectile-project-p) projectile-ignored-projects)))
-        (projectile-cache-current-file)))
 
     ;; (setq projectile-enable-caching nil)
     (setq projectile-enable-caching t) ; Enable caching, otherwise
@@ -47,15 +34,6 @@
     ;; (setq projectile-mode-line " ℙ")
     (setq projectile-mode-line "​P")
 
-    (when (fboundp 'ggtags-mode)
-      (defun projectile-visit-project-tags-table ()
-        "Visit the current project's tags table ONLY IF `ggtags-mode' is not loaded.
-If `ggtags-mode' function is defined, “empty” this definition so that it does
-nothing.
-
-Doing so prevents prevents the unnecessary call to `visit-tags-table' function
-and the subsequent `find-file' call for the `TAGS' file."
-        ))
     (defun modi/projectile-project-name (project-root)
       "Return project name after some modification if needed.
 
@@ -71,9 +49,6 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
         project-name))
     (setq projectile-project-name-function #'modi/projectile-project-name)
 
-    ;; http://emacs.stackexchange.com/a/10187/115
-    (defun modi/kill-non-project-buffers (&optional kill-special)
-      "Kill buffers that do not belong to a `projectile' project.
     (when (executable-find "ag")
       (defconst modi/projectile-ag-command
         (mapconcat 'identity
@@ -90,19 +65,10 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
 for getting a list of all files in a project."
         modi/projectile-ag-command))
 
-With prefix argument (`C-u'), also kill the special buffers."
-      (interactive "P")
-      (let ((bufs (buffer-list (selected-frame))))
-        (dolist (buf bufs)
-          (with-current-buffer buf
-            (let ((buf-name (buffer-name buf)))
-              (when (or (null (projectile-project-p))
-                        (and kill-special
-                             (string-match "^\*" buf-name)))
-                ;; Preserve buffers with names starting with *scratch or *Messages
-                (unless (string-match "^\\*\\(\\scratch\\|Messages\\)" buf-name)
-                  (message "Killing buffer %s" buf-name)
-                  (kill-buffer buf))))))))
+    ;; Patch
+    ;; Make the file list creation faster by NOT calling `projectile-get-sub-projects-files'
+    (defun projectile-get-repo-files ()
+      (projectile-files-via-ext-command (projectile-get-ext-command)))
 
     ;; Patch
     ;; Use older version of `projectile-cache-current-file' that did not cache
@@ -125,6 +91,44 @@ With prefix argument (`C-u'), also kill the special buffers."
             (message "File %s added to project %s cache."
                      (propertize current-file 'face 'font-lock-keyword-face)
                      (propertize current-project 'face 'font-lock-keyword-face))))))
+
+    ;; Patch
+    ;; Do not cache files from ignored projects.
+    (defun projectile-cache-files-find-file-hook ()
+      "Function for caching files with `find-file-hook'."
+      (when (and projectile-enable-caching
+                 (projectile-project-p)
+                 (not (member (projectile-project-p) projectile-ignored-projects)))
+        (projectile-cache-current-file)))
+
+    (when (fboundp 'ggtags-mode)
+      ;; Patch
+      (defun projectile-visit-project-tags-table ()
+        "Visit the current project's tags table ONLY IF `ggtags-mode' is not loaded.
+If `ggtags-mode' function is defined, “empty” this definition so that it does
+nothing.
+
+Doing so prevents prevents the unnecessary call to `visit-tags-table' function
+and the subsequent `find-file' call for the `TAGS' file."
+        ))
+
+    ;; http://emacs.stackexchange.com/a/10187/115
+    (defun modi/kill-non-project-buffers (&optional kill-special)
+      "Kill buffers that do not belong to a `projectile' project.
+
+With prefix argument (`C-u'), also kill the special buffers."
+      (interactive "P")
+      (let ((bufs (buffer-list (selected-frame))))
+        (dolist (buf bufs)
+          (with-current-buffer buf
+            (let ((buf-name (buffer-name buf)))
+              (when (or (null (projectile-project-p))
+                        (and kill-special
+                             (string-match "^\*" buf-name)))
+                ;; Preserve buffers with names starting with *scratch or *Messages
+                (unless (string-match "^\\*\\(\\scratch\\|Messages\\)" buf-name)
+                  (message "Killing buffer %s" buf-name)
+                  (kill-buffer buf))))))))
 
     (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
