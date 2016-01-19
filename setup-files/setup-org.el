@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-06 11:20:53 kmodi>
+;; Time-stamp: <2016-01-19 16:01:18 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -489,6 +489,24 @@ returned value `entity-name' will be nil."
                 ;; Commented out below because it clashes with `placeins' package
                 ;; (add-to-list 'org-latex-packages-alist '("" "color"))
                 ))
+
+            ;; Override `org-latex-format-headline-default-function' definition
+            ;; so that the TODO keyword in TODO marked headings is exported in
+            ;; bold red.
+            (defun org-latex-format-headline-default-function
+                (todo _todo-type priority text tags info)
+              "Default format function for a headline.
+See `org-latex-format-headline-function' for details."
+              (concat
+               ;; Tue Jan 19 16:00:58 EST 2016 - kmodi
+               ;; My only change to the original function was to add \\color{red}
+               (and todo (format "{\\color{red}\\bfseries\\sffamily %s} " todo))
+               (and priority (format "\\framebox{\\#%c} " priority))
+               text
+               (and tags
+                    (format "\\hfill{}\\textsc{%s}"
+                            (mapconcat (lambda (tag) (org-latex-plain-text tag info))
+                                       tags ":")))))
 
             ;; `-shell-escape' is required when converting a .tex file
             ;; containing `minted' package to a .pdf
