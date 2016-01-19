@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-04 10:56:26 kmodi>
+;; Time-stamp: <2016-01-19 15:47:00 kmodi>
 
 ;; Highlight stuff
 
@@ -80,10 +80,18 @@ in which case the highlighting will not update as you type."
       (setq-local font-lock-fontified t))
     (add-hook 'text-mode-hook #'modi/hi-lock-enable-in-text-mode)
 
-    ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing.
-    (bind-key "C-x w" nil hi-lock-map)
+    (defun modi/unhighlight-all-in-buffer ()
+      "Remove all highlights made by `hi-lock' from the current buffer.
+The same result can also be be achieved by \\[universal-argument] \\[unhighlight-regexp]."
+      (interactive)
+      ;; `unhighlight-regexp' is aliased to `hi-lock-unface-buffer'
+      (hi-lock-unface-buffer t))
+    (bind-key "h U" #'modi/unhighlight-all-in-buffer search-map)
 
     (global-hi-lock-mode 1)
+
+    ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing.
+    (bind-key "C-x w" nil hi-lock-map)
 
     (bind-keys
      :map modi-mode-map
