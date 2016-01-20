@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-05 13:12:37 kmodi>
+;; Time-stamp: <2016-01-19 22:40:31 kmodi>
 
 ;; Markdown Mode
 ;; http://jblevins.org/projects/markdown-mode/
@@ -11,7 +11,8 @@
     ;; http://daringfireball.net/projects/markdown/
     ;; Download the Markdown source from above, extract the .pl from that
     ;; and place it in one of the folders in the environment PATH
-    (setq markdown-command "Markdown.pl")
+    (when (executable-find "Markdown.pl")
+      (setq markdown-command "Markdown.pl"))
 
     ;; https://github.com/cadadr/emacs.d
     (defun gk-markdown-preview-buffer ()
