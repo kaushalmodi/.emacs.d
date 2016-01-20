@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-15 14:17:43 kmodi>
+;; Time-stamp: <2016-01-20 09:42:13 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -76,7 +76,6 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
 
 (defconst modi/ag-arguments
   '("--nogroup" ; mandatory argument for ag.el as per https://github.com/Wilfred/ag.el/issues/41
-    "--noheading" ; no file names above matching content
     "--skip-vcs-ignores" ; Ignore files/dirs ONLY from `.agignore'
     "--numbers" ; line numbers
     "--smart-case"

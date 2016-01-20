@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-15 14:31:21 kmodi>
+;; Time-stamp: <2016-01-20 09:42:35 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -21,7 +21,8 @@
           (mapconcat 'identity
                      (append '("\\ag") ; used unaliased version of `ag': \ag
                              modi/ag-arguments
-                             '("--nocolor"
+                             '("--noheading" ; no file names above matching content
+                               "--nocolor"
                                "%S"))
                      " "))
 
