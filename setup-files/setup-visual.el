@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-06 17:44:42 kmodi>
+;; Time-stamp: <2016-01-21 16:22:16 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -191,14 +191,22 @@ the smart-mode-line theme."
 
 ;;; Frame Title
 (defun modi/update-frame-title ()
+  "Set the frame title bar format."
   (interactive)
-  ;; Frame title bar format
-  ;; If buffer-file-name exists, show it;
-  ;; else if you are in dired mode, show the directory name
-  ;; else show only the buffer name (*scratch*, *Messages*, etc)
-  (setq frame-title-format (list '(buffer-file-name
-                                   "%f"
-                                   (dired-directory dired-directory "%b")))))
+  (setq frame-title-format
+        `("Emacs "
+          ,(number-to-string emacs-major-version)
+          "."
+          ,(number-to-string emacs-minor-version)
+          "   "
+          ;; If `buffer-file-name' exists, show it
+          (buffer-file-name "%f"
+                            ;; Else show the directory name if in dired mode
+                            (dired-directory dired-directory
+                                             ;; Else show the buffer name
+                                             ;; (*scratch*, *Messages*, etc)
+                                             "%b"))
+          "%*"))) ; *=modified, %=read-only, -=editable,not modified
 (add-hook 'after-init-hook #'modi/update-frame-title)
 
 ;;; Fonts
