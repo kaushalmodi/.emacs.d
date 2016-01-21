@@ -1,14 +1,11 @@
-;; Time-stamp: <2015-10-21 10:08:10 kmodi>
+;; Time-stamp: <2016-01-20 18:25:46 kmodi>
 
 ;; Weather Forecast
 
 ;; Sunshine
 ;; https://github.com/aaronbieber/sunshine.el
 (use-package sunshine
-  :commands (sunshine-quick-forecast
-             sunshine-forecast
-             hydra-launch/sunshine-quick-forecast-and-exit
-             hydra-launch/sunshine-forecast-and-exit)
+  :commands (sunshine-quick-forecast sunshine-forecast)
   :config
   (progn
     ;; The "openweathermap-api" file is supposed to contain this line:
@@ -45,6 +42,18 @@
     (setq forecast-city      "Hillsborough, NC")
     (setq forecast-country   "USA")
     (setq forecast-units     'us)))
+
+(defun modi/weather (arg)
+  "Display the weather in varying detail as specified by ARG.
+
+If ARG is nil,  call `sunshine-quick-forecast'.
+If ARG is (4),  call `sunshine-forecast'.
+If ARG is (16), call `forecast'."
+  (interactive "p")
+  (cl-case arg
+    (4  (call-interactively #'sunshine-forecast))
+    (16 (call-interactively #'forecast))
+    (t  (call-interactively #'sunshine-quick-forecast))))
 
 
 (provide 'setup-weather)

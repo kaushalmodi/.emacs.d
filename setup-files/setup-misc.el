@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-14 17:31:30 kmodi>
+;; Time-stamp: <2016-01-20 18:26:14 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -293,8 +293,7 @@ cycle _c_ase                _F_ollow^^                        _H_ardcore (allow 
   ("se"      (sx-tab-all-questions nil "emacs") "emacs.SE")
   ("t"       multi-term "terminal")
   ("u"       paradox-upgrade-packages "upgrade packages")
-  ("w"       sunshine-quick-forecast "weather quick")
-  ("W"       sunshine-forecast "weather full")
+  ("w"       modi/weather "weather")
   ("<SPC>"   hydra-launch-freq/body "launch freq")
   ("<s-SPC>" hydra-launch-freq/body nil)
   (":"       eval-expression "eval")
