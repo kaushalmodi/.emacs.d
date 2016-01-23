@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-13 18:01:10 kmodi>
+;; Time-stamp: <2016-01-22 23:48:17 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -33,7 +33,7 @@
 ;;  Mark Management
 ;;    Popping marks
 ;;    Smart Mark
-;;  C-u before M-w/C-w to trim white space
+;;  Tweaking `region-extract-function'
 ;;  Bindings
 ;;  Comment Commander
 
@@ -763,33 +763,60 @@ Try the repeated popping up to 10 times."
   (progn
     (smart-mark-mode 1)))
 
-;;; C-u before M-w/C-w to trim white space
-;; Update the `region-extract-function' variable defined in `simple.el'
-(setq region-extract-function
-      (lambda (delete)
-        (when (region-beginning)
-          ;; `delete' is set to `'delete-only' in `delete-backward-char' and
-          ;;  `delete-forward-char' functions.
-          (if (eq delete 'delete-only)
-              (delete-region (region-beginning) (region-end))
-            ;; `delete' is set to `'delete' in `kill-region' function
-            ;; `delete' is set to `nil' in `copy-region-as-kill' and
-            ;;  `deactivate-mark' functions.
+;;; Tweaking `region-extract-function'
 
-            ;; When doing `C-u M-w`, `C-u C-w', kill the region
-            ;; - with all trailing whitespace removed
-            ;; - also replace 2 or more spaces with single spaces
-            (if (eq 4 (prefix-numeric-value current-prefix-arg))
-                (let ((sel (filter-buffer-substring (region-beginning) (region-end) delete)))
-                  (with-temp-buffer
-                    (insert sel)
-                    ;; Removing trailing whitespace from the whole temp buffer
-                    (delete-trailing-whitespace)
-                    (goto-char (point-min))
-                    (while (re-search-forward "\\s-\\{2,\\}" nil :noerror)
-                      (replace-match " "))
-                    (buffer-string)))
-              (filter-buffer-substring (region-beginning) (region-end) delete))))))
+(defconst modi/enable-region-extract-function-tweak t
+  "Enable my customization of `region-extract-function' if non-nil.")
+
+(defun modi/region-extract-function (delete)
+  "Function to get the region's content.
+
+If DELETE is `bounds', then don't delete, but just return the
+boundaries of the region as a list of (START . END) positions.
+
+If DELETE is `delete-only', then only delete the region and the return value
+is undefined.
+
+If `modi/enable-region-extract-function-tweak' is non-nil and if
+\\[universal-argument] is used before \\[kill-ring-save] or \\[kill-region],
+kill the region with all trailing whitespace removed and also replace 2 or more
+spaces with single spaces.
+
+If DELETE is nil, just return the content as a string.
+If anything else, delete the region and return its content as a string,
+after filtering it with `filter-buffer-substring'."
+  (when (region-beginning)
+    (cond
+     ;; Below condition was added in emacs 25.0+
+     ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-25&id=31f6e939334180add7bc11240343615a2e6350f6
+     ((eq delete 'bounds)
+      (list (cons (region-beginning) (region-end))))
+
+     ;; `delete' is set to `'delete-only' in `delete-backward-char' and
+     ;;  `delete-forward-char' functions.
+     ((eq delete 'delete-only)
+      (delete-region (region-beginning) (region-end)))
+
+     ;; When doing `C-u M-w` or `C-u C-w', kill the region.
+     ((and modi/enable-region-extract-function-tweak
+           (eq 4 (prefix-numeric-value current-prefix-arg)))
+      (let ((sel (filter-buffer-substring (region-beginning) (region-end) delete)))
+        (with-temp-buffer
+          (insert sel)
+          ;; Removing trailing whitespace from the whole temp buffer
+          (delete-trailing-whitespace)
+          (goto-char (point-min))
+          (while (re-search-forward "\\s-\\{2,\\}" nil :noerror)
+            (replace-match " "))
+          (buffer-string))))
+
+     ;; `delete' is set to `'delete' in `kill-region' function.
+     ;; `delete' is set to `nil' in `copy-region-as-kill' and `deactivate-mark'
+     ;; functions.
+     (t
+      (filter-buffer-substring (region-beginning) (region-end) delete)))))
+
+(setq region-extract-function #'modi/region-extract-function)
 
 ;;; Bindings
 (bind-keys
