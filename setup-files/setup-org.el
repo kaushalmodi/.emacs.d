@@ -654,7 +654,7 @@ the default browser."
             ;; Download reveal.js from https://github.com/hakimel/reveal.js/
             (setq org-reveal-root (concat user-emacs-directory "software/reveal.js/"))
             (setq org-reveal-hlevel 1)
-            (setq org-reveal-theme "default") ; beige blood moon night serif simple sky solarized
+            (setq org-reveal-theme "simple") ; beige blood moon night serif simple sky solarized
             (setq org-reveal-mathjax t) ; Use mathjax.org to render LaTeX equations
 
             ;; Override the `org-reveal-export-to-html' function to generate
