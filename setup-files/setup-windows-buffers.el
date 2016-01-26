@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-16 16:02:09 kmodi>
+;; Time-stamp: <2016-01-26 18:25:58 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -43,8 +43,6 @@
   :bind (:map modi-mode-map
          ("C-c ]" . hydra-win-resize/body)
          ("C-c [" . hydra-win-resize/body))
-  :chords (("p[" . windmove-left)
-           ("[]" . windmove-right))
   :config
   (progn
     (setq windmove-wrap-around t) ; default = nil
