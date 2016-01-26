@@ -567,13 +567,11 @@ See `org-latex-format-headline-function' for details."
             (setq org-html-postamble-format
                   `(("en"
                      ,(concat "Exported using "
-                              ;; "%c" is replaced with `org-html-creator-string'
-                              ;; Emacs <VERSION> (Org mode <VERSION>)
                               "<div style=\"display: inline\" class=\"creator\">"
-                              "%c</div> "
-                              "by %e. — "
+                              "%c</div> " ; Emacs <VERSION> (Org mode <VERSION>)
+                              "by %a. — " ; Author name in #+AUTHOR:
                               "<div style=\"display: inline\" class=\"date\">"
-                              "%d</div>"))))
+                              "%d</div>")))) ; Date in #+DATE:
 
             (setq org-html-htmlize-output-type 'css) ; default: 'inline-css
             (setq org-html-htmlize-font-prefix "org-") ; default: "org-"
