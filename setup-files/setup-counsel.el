@@ -1,9 +1,19 @@
-;; Time-stamp: <2016-01-20 09:42:35 kmodi>
+;; Time-stamp: <2016-01-26 17:50:33 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
 (use-package counsel
   :if (not (bound-and-true-p disable-pkg-ivy))
+  :bind (:map modi-mode-map
+         ("M-x"     . counsel-M-x)
+         ("C-M-y"   . counsel-yank-pop)
+         ("C-x C-f" . counsel-find-file)
+         ("C-h v"   . counsel-describe-variable)
+         ("C-h f"   . counsel-describe-function)
+         ("C-h S"   . counsel-info-lookup-symbol)
+         ("C-c u"   . counsel-unicode-char))
+  :chords (("JJ" . counsel-imenu)
+           (";'" . counsel-M-x))
   :config
   (progn
     (setq counsel-find-file-at-point t)
@@ -32,22 +42,10 @@
         (lambda (x) (delete-file (expand-file-name x ivy--directory)))
         ,(propertize "delete" 'face 'font-lock-warning-face))))
 
-    (bind-keys
-     :map modi-mode-map
-      ("M-x"     . counsel-M-x)
-      ("C-M-y"   . counsel-yank-pop)
-      ("C-x C-f" . counsel-find-file)
-      ("C-h v"   . counsel-describe-variable)
-      ("C-h f"   . counsel-describe-function)
-      ("C-h S"   . counsel-info-lookup-symbol)
-      ("C-c u"   . counsel-unicode-char))
-
     (with-eval-after-load 'org
       (bind-key "C-c C-q" #'counsel-org-tag org-mode-map))
     (with-eval-after-load 'org-agenda
-      (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))
-
-    (key-chord-define-global ";'" #'counsel-M-x)))
+      (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))))
 
 
 (provide 'setup-counsel)

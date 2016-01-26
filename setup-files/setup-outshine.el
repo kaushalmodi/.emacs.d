@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-03 22:48:54 kmodi>
+;; Time-stamp: <2016-01-26 17:48:40 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -157,9 +157,7 @@ Don't add “Revision Control” heading to TOC."
       ("<M-up>"    . outline-move-subtree-up)
       ("<M-down>"  . outline-move-subtree-down)
       ("<M-left>"  . outline-promote)
-      ("<M-right>" . outline-demote))
-
-    (key-chord-define outline-minor-mode-map "JJ" #'outshine-imenu)))
+      ("<M-right>" . outline-demote))))
 
 
 (provide 'setup-outshine)
