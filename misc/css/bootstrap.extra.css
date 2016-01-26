@@ -1,0 +1,218 @@
+/*
+  Kaushal Modi
+  My CSS customizations to the bootstrap CSS
+*/
+
+/*
+  Set the width of HTML export to 50% and center it
+  http://stackoverflow.com/a/14476955/1219634
+*/
+body {
+    max-width:50%;
+    margin: auto;
+}
+
+/*
+  Fonts for code blocks
+*/
+code,
+kbd,
+pre,
+samp {
+    font-family: "Source Code Pro", Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/*
+  Formatting of the block with postamble id: Author, Created, Created by
+*/
+#postamble {
+    font-style: italic;
+    color: gray;
+}
+
+/*
+  Make the title bold
+*/
+h1.title {
+    font-weight: bold;
+}
+
+/*
+  CSS for floating table of contents like in http://tuhdo.github.io/emacs-tutor.html
+  Source: http://tuhdo.github.io/static/worg.css
+  TOC originally inspired by http://jashkenas.github.com/coffee-script
+*/
+#table-of-contents {
+    font-size: 10pt;
+    position: fixed;
+    right: 0em;
+    top: 0em;
+    background: white;
+    line-height: 12pt;
+    text-align: right;
+    box-shadow: 0 0 1em #777777;
+    -webkit-box-shadow: 0 0 1em #777777;
+    -moz-box-shadow: 0 0 1em #777777;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    /* ensure doesn't flow off the screen when expanded */
+    max-height: 80%;
+    overflow: auto; }
+#table-of-contents h2 {
+    font-size: 13pt;
+    max-width: 9em;
+    border: 0;
+    font-weight: normal;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.05em;
+    padding-bottom: 0.05em; }
+#table-of-contents #text-table-of-contents {
+    display: none;
+    text-align: left; }
+#table-of-contents:hover #text-table-of-contents {
+    display: block;
+    padding: 0.5em;
+    clear: left;
+    margin-top: 1em; }
+
+#list-of-tables {
+    font-size: 10pt;
+    position: fixed;
+    right: 0em;
+    top: 10em;
+    background: white;
+    line-height: 12pt;
+    text-align: right;
+    box-shadow: 0 0 1em #777777;
+    -webkit-box-shadow: 0 0 1em #777777;
+    -moz-box-shadow: 0 0 1em #777777;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    /* ensure doesn't flow off the screen when expanded */
+    max-height: 80%;
+    overflow: auto; }
+#list-of-tables h2 {
+    font-size: 13pt;
+    max-width: 9em;
+    border: 0;
+    font-weight: normal;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.05em;
+    padding-bottom: 0.05em; }
+#list-of-tables #text-list-of-tables {
+    display: none;
+    text-align: left; }
+#list-of-tables:hover #text-list-of-tables {
+    display: block;
+    padding: 0.5em;
+    clear: left;
+    margin-top: 1em; }
+
+#list-of-listings {
+    font-size: 10pt;
+    position: fixed;
+    right: 0em;
+    top: 5em;
+    background: white;
+    line-height: 12pt;
+    text-align: right;
+    box-shadow: 0 0 1em #777777;
+    -webkit-box-shadow: 0 0 1em #777777;
+    -moz-box-shadow: 0 0 1em #777777;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    /* ensure doesn't flow off the screen when expanded */
+    max-height: 80%;
+    overflow: auto; }
+#list-of-listings h2 {
+    font-size: 13pt;
+    max-width: 9em;
+    border: 0;
+    font-weight: normal;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.05em;
+    padding-bottom: 0.05em; }
+#list-of-listings #text-list-of-listings {
+    display: none;
+    text-align: left; }
+#list-of-listings:hover #text-list-of-listings {
+    display: block;
+    padding: 0.5em;
+    clear: left;
+    margin-top: 1em; }
+
+/*
+  Override the default properties for pre.src set by org-mode.
+  If this override is not done then the src blocks overlap the floating table
+*/
+
+pre.src {
+    position       : static;
+}
+
+/*
+  Wrap text in the pre tag
+  http://stackoverflow.com/a/248013/1219634
+*/
+pre.src {
+    white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+/*
+  Code text (wrapped between =CODE= in org-mode.
+*/
+div code {
+    padding-top    : 0px;
+    padding-right  : 0px;
+    padding-bottom : 0px;
+    padding-left   : 0px;
+}
+
+/*
+  Don't colorize the code text in headers, captions, TOC, hyperlinks
+*/
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+caption code,
+label code,
+a code,
+#table-of-contents code,
+#list-of-tables code,
+#list-of-listings code {
+    color            : inherit;
+    background-color : inherit;
+    border-radius    : 0px;
+}
+
+/*
+   Adjust padding between the border and content in tables
+*/
+td,
+th {
+    padding-top    : 3px;
+    padding-right  : 15px;
+    padding-bottom : 3px;
+    padding-left   : 15px;
+}
+
+/*
+  Made the h5 level headings bold (example: 4.3.2.1 Terminology)
+*/
+h5,
+.h5 {
+    font-weight: bold;
+}
+
+img {
+    max-width: 100%;
+}
