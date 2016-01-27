@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-05 11:38:47 kmodi>
+;; Time-stamp: <2016-01-27 00:15:13 kmodi>
 
 ;; Search / Replace
 
@@ -110,13 +110,11 @@ happens within a region if one is selected."
 ;;; Swiper
 ;; https://github.com/abo-abo/swiper
 (use-package swiper
-  :commands (modi/swiper swiper swiper-from-isearch swiper-avy)
-  :init
-  (progn
-    (bind-key "M-i" #'swiper-from-isearch isearch-mode-map) ; isearch > swiper
-    (bind-key "M-a" #'swiper-avy swiper-map) ; swiper > avy
-    (key-chord-define-global "'/" #'modi/swiper)
-    (bind-key "M-i" #'modi/swiper modi-mode-map))
+  :bind (:map isearch-mode-map
+         ("M-i" . swiper-from-isearch)) ; isearch > swiper
+  :bind (:map modi-mode-map
+         ("M-i" . modi/swiper))
+  :chords (("'/" . modi/swiper))
   :config
   (progn
     (defun modi/swiper (arg)
@@ -133,7 +131,9 @@ If a region is not selected and,
             (swiper (buffer-substring-no-properties b e)))
         (if arg
             (swiper) ; C-u
-          (swiper (modi/get-symbol-at-point)))))))
+          (swiper (modi/get-symbol-at-point)))))
+
+    (bind-key "M-a" #'swiper-avy swiper-map))) ; swiper > avy
 
 ;;; grep
 ;; Search for the highlighted string in ALL buffers `offby1/search-all-buffers'
