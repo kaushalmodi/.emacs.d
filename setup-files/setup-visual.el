@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-21 16:22:16 kmodi>
+;; Time-stamp: <2016-01-26 23:05:15 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -191,13 +191,17 @@ the smart-mode-line theme."
 
 ;;; Frame Title
 (defun modi/update-frame-title ()
-  "Set the frame title bar format."
+  "Update the `frame-title-format'."
   (interactive)
   (setq frame-title-format
-        `("Emacs "
-          ,(number-to-string emacs-major-version)
-          "."
-          ,(number-to-string emacs-minor-version)
+        `("emacs "
+          (emacs-git-branch
+           ;; If `emacs-git-branch' is non-nil, show that
+           ,(concat "[" emacs-git-branch "]")
+           ;; Else show the version number
+           ,(concat (number-to-string emacs-major-version)
+                    "."
+                    (number-to-string emacs-minor-version)))
           "   "
           ;; If `buffer-file-name' exists, show it
           (buffer-file-name "%f"
