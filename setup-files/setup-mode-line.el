@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-12-11 09:43:58 kmodi>
+;; Time-stamp: <2016-01-27 23:41:07 kmodi>
 
 ;; Customize the mode-line
 
@@ -27,8 +27,19 @@ If nil, show the same in the minibuffer.")
                                         ; when launching emacsclient
   :init
   (progn
-    (setq minibuffer-line-format '((:eval
-                                    (format-time-string "%l:%M %b %d %a"))))
+    (defconst modi/minibuffer-line-right-aligned nil
+      "If non-nil, right-align the minibuffer-line display.")
+
+    (setq minibuffer-line-format
+          '((:eval
+             (let ((time-string (format-time-string "%l:%M %b %d %a")))
+               ;; http://emacs.stackexchange.com/a/19856/115
+               (if modi/minibuffer-line-right-aligned
+                   (concat
+                    (make-string (- (frame-text-cols) (string-width time-string))
+                                 ? )
+                    time-string)
+                 time-string)))))
 
     (defconst modi/today--day-sym (intern (format-time-string "%a"))
       "Symbol containing 3-letter abbreviation of today's day.")
@@ -145,8 +156,8 @@ TIME is \"nil\" or \"\"."
             ("^~/.*box/uvm/adsim_uvm_examples/" ":AD_UVM_EX:")
             (":\\(.*_EX\\):\\([a-z0-9_]\\{3\\}\\).*?/"
              (lambda (string) (concat ":\\1:"
-                                 (match-string 2 string)
-                                 ":")))
+                                      (match-string 2 string)
+                                      ":")))
             ;; Prefix with first 2 letters and last letter of project name
             ;; To distinguish between projects that could have same first 3 letters
             ;; Using "\,(upcase ...)" only works when calling `replace-regexp` interactively.
