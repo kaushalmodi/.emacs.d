@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-19 16:01:18 kmodi>
+;; Time-stamp: <2016-01-27 23:38:41 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -563,15 +563,23 @@ See `org-latex-format-headline-function' for details."
                     :class "table-striped"))
 
             ;; Customize the HTML postamble
-            (setq org-html-postamble t) ; default value = 'auto
-            (setq org-html-postamble-format
-                  `(("en"
-                     ,(concat "Exported using "
-                              "<div style=\"display: inline\" class=\"creator\">"
-                              "%c</div> " ; Emacs <VERSION> (Org mode <VERSION>)
-                              "by %a. — " ; Author name in #+AUTHOR:
-                              "<div style=\"display: inline\" class=\"date\">"
-                              "%d</div>")))) ; Date in #+DATE:
+            ;; http://thread.gmane.org/gmane.emacs.orgmode/104502/focus=104526
+            (defun modi/org-html-postamble-fn (info)
+              "My custom postamble for org to HTML exports.
+INFO is the property list of export options."
+              (let ((author (car (plist-get info :author)))
+                    (creator (plist-get info :creator))
+                    (date (car (org-export-get-date info)))
+                    (d1 "<div style=\"display: inline\" ")
+                    (d2 "</div>"))
+                (concat "Exported using "
+                        d1 "class=\"creator\">" creator d2 ; emacs and org versions
+                        (when author
+                          (concat " by " author))
+                        (when date
+                          (concat " on " d1 "class=\"date\">" date d2))
+                        ".")))
+            (setq org-html-postamble #'modi/org-html-postamble-fn) ; default: 'auto
 
             (setq org-html-htmlize-output-type 'css) ; default: 'inline-css
             (setq org-html-htmlize-font-prefix "org-") ; default: "org-"
