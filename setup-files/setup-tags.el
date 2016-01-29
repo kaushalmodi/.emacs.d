@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-04 11:44:18 kmodi>
+;; Time-stamp: <2016-01-29 14:27:02 kmodi>
 
 ;; Setup for different tags
 
@@ -20,7 +20,7 @@
   (use-package ggtags
     :config
     (progn
-      (setq ggtags-sort-by-nearness t) ; Requires global 6.5+
+      (setq ggtags-sort-by-nearness nil) ; Enabling nearness requires global 6.5+
 
       (defun my/ggtags-project-name ()
         "Return gtags project name."
