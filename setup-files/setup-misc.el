@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-26 23:05:49 kmodi>
+;; Time-stamp: <2016-01-29 11:39:48 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -158,15 +158,27 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 (defvar emacs-build-hash emacs-repository-version
   "Git hash of the commit at which this version of emacs was built.")
 
-(defvar emacs-git-branch (when (and emacs-repository-version
-                                    emacs-git-source-directory)
-                           (let ((shell-return
-                                  (shell-command-to-string
-                                   (concat "cd " emacs-git-source-directory "; "
-                                           "git branch --contains "
-                                           emacs-repository-version))))
-                             (string-match ".*origin/\\(.+?\\))" shell-return)
-                             (match-string-no-properties 1 shell-return)))
+(defvar emacs-git-branch
+  (when (and emacs-repository-version
+             emacs-git-source-directory)
+    (let ((shell-return
+           (replace-regexp-in-string
+            "[\n)]" " " ; Replace newline and ) chars with spaces
+            (shell-command-to-string
+             (concat "cd " emacs-git-source-directory "; "
+                     "git branch --contains "
+                     emacs-repository-version)))))
+      ;; Below regexp is tested for following "git branch --contains" values
+      ;; Output for a commit in master branch too
+      ;;   "* (HEAD detached at origin/emacs-25)
+      ;;     master
+      ;;   "
+      ;; Output for a commit only in emacs-25 branch
+      ;;   "* (HEAD detached at origin/emacs-25)
+      ;;   "
+      ;; (message "%S" shell-return)
+      (string-match ".*[/ ]\\([^ ]+?\\)\\s-*$" shell-return)
+      (match-string-no-properties 1 shell-return)))
   "Name of git branch from which the current emacs is built.")
 
 (defun modi/browse-current-build-emacs-git (log)
