@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-07 15:43:42 kmodi>
+;; Time-stamp: <2016-01-29 16:47:08 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -16,6 +16,16 @@
                                         sh-mode-hook
                                         cperl-mode-hook)
       "List of hooks of major modes in which headers should be auto-inserted.")
+
+    (defvar modi/header-timestamp-cond (lambda () t)
+      "This variable should be set to a function that returns a non-nil
+value only when the time stamp is supposed to be inserted. By default, it's
+a `lambda' return `t', so the time stamp is always inserted.")
+
+    (defvar modi/header-version-cond (lambda () t)
+      "This variable should be set to a function that returns a non-nil
+value only when the version fields are supposed to be inserted. By default, it's
+a `lambda' return `t', so the version fields are always inserted.")
 
     (defun modi/turn-on-auto-headers ()
       "Turn on auto headers only for specific modes."
@@ -53,40 +63,6 @@
         (insert comment-end)
         (insert "\n")))
 
-    (defsubst modi/header-timestamp ()
-      "Insert field for timestamp"
-      (insert header-prefix-string  "Time-stamp: <>\n"))
-
-    (defsubst modi/header-projectname ()
-      "Insert \"Project\" line."
-      (insert header-prefix-string "Project     : "
-              (when (featurep 'projectile)
-                (replace-regexp-in-string "/proj/\\(.*?\\)/.*"
-                                          "\\1"
-                                          (projectile-project-root)))
-              "\n"))
-
-    (defsubst modi/header-file-name ()
-      "Insert \"Filename\" line, using buffer's file name."
-      (insert header-prefix-string "Filename    : "
-              (if (buffer-file-name)
-                  (file-name-nondirectory (buffer-file-name))
-                (buffer-name))
-              "\n"))
-
-    (defsubst modi/header-author ()
-      "Insert current user's name (`user-full-name') as this file's author."
-      (insert header-prefix-string
-              "Author      : "
-              (user-full-name) "@"
-              (replace-regexp-in-string ".*?\\(\\w+\\.\\w+\\)$" "\\1"
-                                        (getenv "HOST"))
-              "\n"))
-
-    (defsubst modi/header-description ()
-      "Insert \"Description\" line."
-      (insert header-prefix-string "Description : \n"))
-
     (defsubst modi/header-sep-line ()
       "Insert separator line"
       (insert header-prefix-string)
@@ -97,12 +73,56 @@
                       (current-column)))
       (insert "\n"))
 
+    (defsubst modi/header-timestamp ()
+      "Insert field for time stamp."
+      (when (funcall modi/header-timestamp-cond)
+        (insert header-prefix-string "Time-stamp: <>\n")
+        (header-blank)))
+
+    (defsubst modi/header-projectname ()
+      "Insert \"Project\" line."
+      (insert header-prefix-string "Project            : "
+              (when (featurep 'projectile)
+                (replace-regexp-in-string "/proj/\\(.*?\\)/.*"
+                                          "\\1"
+                                          (projectile-project-root)))
+              "\n"))
+
+    (defsubst modi/header-file-name ()
+      "Insert \"File Name\" line, using buffer's file name."
+      (insert header-prefix-string "File Name          : "
+              (if (buffer-file-name)
+                  (file-name-nondirectory (buffer-file-name))
+                (buffer-name))
+              "\n"))
+
+    (defsubst modi/header-author ()
+      "Insert current user's name (`user-full-name') as this file's author."
+      (insert header-prefix-string
+              "Original Author    : "
+              (user-full-name) "@"
+              (replace-regexp-in-string ".*?\\(\\w+\\.\\w+\\)$" "\\1"
+                                        (getenv "HOST"))
+              "\n"))
+
+    (defsubst modi/header-description ()
+      "Insert \"Description\" line."
+      (insert header-prefix-string "Description        : \n"))
+
     (defsubst modi/header-copyright ()
       "Insert the copyright block using `modi/header-multiline'.
 The copyright block will inserted only if the value of `header-copyright-notice'
 is non-nil."
       (let ((header-multiline header-copyright-notice))
         (modi/header-multiline)))
+
+    (defsubst modi/header-version ()
+      "Insert version info fields that will be auto-updated by SVN."
+      (when (funcall modi/header-version-cond)
+        (insert header-prefix-string "SVN Revision       : $Rev$\n")
+        (insert header-prefix-string "Last Commit Date   : $Date$\n")
+        (insert header-prefix-string "Last Commit Author : $Author$\n")
+        (modi/header-sep-line)))
 
     (defsubst modi/header-position-point ()
       "Bring the point into the body of the file (2 lines below the last
@@ -111,19 +131,19 @@ separator line. It is assumed that the separator line has at least 10 characters
       (re-search-backward (concat (char-to-string modi/header-sep-line-char)
                                   "\\{10,\\}")
                           nil :noerror)
-      (forward-line 2))
+      (forward-line 1)
+      (newline 1))
 
-    (setq make-header-hook '(modi/header-timestamp
-                             header-blank
-                             modi/header-sep-line
-                             modi/header-projectname
-                             modi/header-file-name
-                             modi/header-author
-                             modi/header-description
-                             modi/header-sep-line
-                             modi/header-copyright
-                             modi/header-sep-line
-                             header-eof
+    (setq make-header-hook '(modi/header-timestamp        ; // Time-stamp: <>
+                             modi/header-sep-line         ; // ---------------
+                             modi/header-projectname      ; // Project
+                             modi/header-file-name        ; // File Name
+                             modi/header-author           ; // Original Author
+                             modi/header-description      ; // Description
+                             modi/header-sep-line         ; // ---------------
+                             modi/header-version          ; // Revision
+                             modi/header-copyright        ; // Copyright (c)
+                             modi/header-sep-line         ; // ---------------
                              modi/header-position-point))
 
     (modi/turn-on-auto-headers)))
