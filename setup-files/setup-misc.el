@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-29 11:39:48 kmodi>
+;; Time-stamp: <2016-02-01 09:49:31 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -160,12 +160,12 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 
 (defvar emacs-git-branch
   (when (and emacs-repository-version
-             emacs-git-source-directory)
+             (file-exists-p source-directory))
     (let ((shell-return
            (replace-regexp-in-string
             "[\n)]" " " ; Replace newline and ) chars with spaces
             (shell-command-to-string
-             (concat "cd " emacs-git-source-directory "; "
+             (concat "cd " source-directory " && "
                      "git branch --contains "
                      emacs-repository-version)))))
       ;; Below regexp is tested for following "git branch --contains" values
