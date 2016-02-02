@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-27 23:38:41 kmodi>
+;; Time-stamp: <2016-02-02 17:38:32 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -693,7 +693,36 @@ the default browser."
         (use-package ox-twbs
           :config
           (progn
-            (setq org-twbs-link-org-files-as-html nil)))
+            (setq org-twbs-link-org-files-as-html nil)
+
+            ;; Postamble tweaks
+            (setq org-twbs-postamble #'modi/org-html-postamble-fn)
+
+            (defvar bkp/org-twbs-style-default
+              org-twbs-style-default
+              "Save the default `org-twbs-style-default'.")
+
+            (setq org-twbs-style-default
+                  (concat bkp/org-twbs-style-default
+                          "
+<style type=\"text/css\">
+/* Reduce the bottom margin; default is too big. */
+body {
+    margin-bottom : 35px;
+}
+footer {
+    height        : 35px;
+    text-align    : center;
+    /* vertical alignment trick: http://stackoverflow.com/a/16205949/1219634 */
+    line-height   : 35px;
+    font-style    : italic;
+}
+/* Remove the padding from in-between the div elements
+   in the footer. */
+footer > div {
+    padding: 0px;
+}
+</style>"))))
 
 ;;;; ox-odt - ODT, doc export
         ;; http://stackoverflow.com/a/22990257/1219634
