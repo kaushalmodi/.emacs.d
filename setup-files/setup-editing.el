@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-22 23:48:17 kmodi>
+;; Time-stamp: <2016-02-04 16:40:53 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -34,6 +34,7 @@
 ;;    Popping marks
 ;;    Smart Mark
 ;;  Tweaking `region-extract-function'
+;;  Mouse Copy
 ;;  Bindings
 ;;  Comment Commander
 
@@ -817,6 +818,18 @@ after filtering it with `filter-buffer-substring'."
       (filter-buffer-substring (region-beginning) (region-end) delete)))))
 
 (setq region-extract-function #'modi/region-extract-function)
+
+;;; Mouse Copy
+(use-package mouse-copy
+  :bind (:map modi-mode-map
+         ;; Mouse drag secondary pasting
+         ;; Put the point at one place, then click-drag using the below binding,
+         ;; and the selected region will be COPIED at the point location.
+         ("<s-down-mouse-1>" . mouse-drag-secondary-pasting)
+         ;; Mouse drag secondary moving
+         ;; Put the point at one place, then click-drag using the below binding,
+         ;; and the selected region will be MOVED to the point location.
+         ("<S-s-down-mouse-1>" . mouse-drag-secondary-moving)))
 
 ;;; Bindings
 (bind-keys
