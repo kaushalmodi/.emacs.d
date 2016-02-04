@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-15 08:34:20 kmodi>
+;; Time-stamp: <2016-02-04 11:10:19 kmodi>
 
 ;; Diff-hl
 ;; https://github.com/dgutov/diff-hl
@@ -30,4 +30,4 @@
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)))
 
 
-(provide 'setup-diff-hl)
+(provide 'setup-diff)

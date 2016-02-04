@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-12-21 16:04:19 kmodi>
+;; Time-stamp: <2016-02-04 11:09:21 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -234,7 +234,7 @@
 (require 'setup-fold)
 (require 'setup-gist)
 (when (executable-find "git")
-  (require 'setup-diff-hl)
+  (require 'setup-diff)
   (require 'setup-git-link)
   (require 'setup-git-timemachine)
   (require 'setup-magit))
