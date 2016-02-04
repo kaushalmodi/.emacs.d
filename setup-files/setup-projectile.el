@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-15 14:29:45 kmodi>
+;; Time-stamp: <2016-02-04 00:09:38 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -8,6 +8,7 @@
          ("C-c p" . hydra-projectile/body)
          ("C-c f" . hydra-projectile/body)
          ("s-f"   . hydra-projectile/body))
+  :commands (projectile-project-root)
   :init
   (progn
     (setq projectile-keymap-prefix (kbd "C-c P")))
