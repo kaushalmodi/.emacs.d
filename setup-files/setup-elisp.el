@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-23 13:41:01 kmodi>
+;; Time-stamp: <2016-02-04 00:01:34 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -218,8 +218,11 @@ Lisp function does not specify a special indentation."
                                      indent-point normal-indent))
               (method
                (funcall method indent-point state))))))))
-(add-hook 'emacs-lisp-mode-hook
-          (lambda () (setq-local lisp-indent-function #'Fuco1/lisp-indent-function)))
+
+(defun modi/set-emacs-lisp-indentation ()
+  "Customize the indentation for `emacs-lisp-mode'."
+  (setq-local lisp-indent-function #'Fuco1/lisp-indent-function))
+(add-hook 'emacs-lisp-mode-hook #'modi/set-emacs-lisp-indentation)
 
 ;; http://ergoemacs.org/emacs/emacs_byte_compile.html
 (defun byte-compile-current-buffer ()
