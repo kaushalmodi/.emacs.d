@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-15 11:18:22 kmodi>
+;; Time-stamp: <2016-02-04 18:19:36 kmodi>
 
 ;; Insert fancybox class to all images when exporting org to html
 ;; Usage: Add the below to org files
@@ -16,7 +16,7 @@
 #+HTML_HEAD: <script type=\"text/javascript\" src=\"common/js/fancybox/source/jquery.fancybox.pack.js?v=2.1.5\"></script>
 ")
 (setq modi/ox-html-fancybox-html-body "
-#+BEGIN_HTML
+#+BEGIN_EXPORT HTML
 <!-- Source for fixing the issue of image disappearing about launch of fancybox.
      Using $(\"a.fancybox\").fancybox(); instead of $(\"fancybox\").fancybox();
      The issue is caused because org-mode assign class=\"fancybox\" to both <a> and
@@ -27,7 +27,7 @@
 		$(\"a.fancybox\").fancybox();
 	});
 </script>
-#+END_HTML
+#+END_EXPORT
 ")
 (setq modi/ox-html-fancybox-img-file-prefix-regexp "\\(file\\|http\\|https\\)")
 (setq modi/ox-html-fancybox-img-file-regexp "\\(png\\|jpg\\|svg\\)")

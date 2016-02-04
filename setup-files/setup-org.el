@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-02 17:38:32 kmodi>
+;; Time-stamp: <2016-02-04 18:27:06 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -252,7 +252,6 @@ org-table or if a prefix is used."
           (call-interactively (global-key-binding (kbd "C-c SPC"))))
         skip-orig-fn))
     (advice-add 'org-table-blank-field :before-until #'ia/dwim-org-table-blank-field)
-
 
 ;;; Org Entities
     ;; http://www.mail-archive.com/emacs-orgmode@gnu.org/msg100527.html
@@ -846,11 +845,11 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("q" (modi/org-template-expand "<q")) ; #+BEGIN_QUOTE ... #+END_QUOTE
       ("V" (modi/org-template-expand "<v")) ; #+BEGIN_VERSE ... #+END_VERSE
       ("c" (modi/org-template-expand "<c")) ; #+BEGIN_CENTER ... #+END_CENTER
-      ("l" (modi/org-template-expand "<l")) ; #+BEGIN_LaTeX ... #+END_LaTeX
+      ("l" (modi/org-template-expand "<l")) ; #+BEGIN_EXPORT latex ... #+END_EXPORT
       ("L" (modi/org-template-expand "<L")) ; #+LaTeX:
-      ("h" (modi/org-template-expand "<h")) ; #+BEGIN_HTML ... #+END_HTML
+      ("h" (modi/org-template-expand "<h")) ; #+BEGIN_EXPORT html ... #+END_EXPORT
       ("H" (modi/org-template-expand "<H")) ; #+HTML:
-      ("a" (modi/org-template-expand "<a")) ; #+BEGIN_ASCII ... #+END_ASCII
+      ("a" (modi/org-template-expand "<a")) ; #+BEGIN_EXPORT ascii ... #+END_EXPORT
       ("A" (modi/org-template-expand "<A")) ; #+ASCII:
       ("i" (modi/org-template-expand "<i")) ; #+INDEX: line
       ("I" (modi/org-template-expand "<I")) ; #+INCLUDE: line
