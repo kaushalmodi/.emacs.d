@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 10:06:05 kmodi>
+;; Time-stamp: <2016-02-05 16:33:15 kmodi>
 
 ;;;; Fold setup
 
@@ -38,10 +38,10 @@
     (bind-keys
      :map fold-this-keymap
       ("<mouse-1>" . fold-this-unfold-at-point)) ; left-click on ellipsis to unfold
-    (when (featurep 'region-bindings-mode)
-      (bind-keys
-       :map region-bindings-mode-map
-        ("f" . fold-this)))))
+
+    (bind-keys
+     :map region-bindings-mode-map
+      ("f" . fold-this))))
 
 ;;; Yet Another Folding - Folding code blocks based on indentation
 ;; https://github.com/zenozeng/yafolding.el

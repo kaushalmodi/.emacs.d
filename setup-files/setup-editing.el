@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-05 16:21:07 kmodi>
+;; Time-stamp: <2016-02-05 16:32:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -408,27 +408,21 @@ instead of ASCII characters for adorning the copied snippet."
   (interactive "r")
   (kill-with-linenum beg end :unicode))
 
-(when (featurep 'region-bindings-mode)
-  (bind-keys
-   :map region-bindings-mode-map
-    ;; When region is selected, pressing `c' will copy the region
-    ;; with ASCII character adornment.
-    ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
-    ("c" . kill-with-linenum)
-    ("C" . kill-with-linenum-unicode)))
+(bind-keys
+ :map region-bindings-mode-map
+  ;; When region is selected, pressing `c' will copy the region
+  ;; with ASCII character adornment.
+  ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
+  ("c" . kill-with-linenum)
+  ("C" . kill-with-linenum-unicode))
 
 ;;; Rectangle
 ;; How to position the cursor after the end of line; useful for copying/killing
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 (use-package rectangle-utils
-  :commands (extend-rectangle-to-end)
-  :init
-  (progn
-    (when (featurep 'region-bindings-mode)
-      (bind-keys
-       :map region-bindings-mode-map
-        ("|" . extend-rectangle-to-end)))))
+  :bind (:map region-bindings-mode-map
+         ("|" . extend-rectangle-to-end)))
 
 (defun modi/kill-rectangle-replace-with-space (start end)
   "Kill the rectangle and replace it with spaces."
@@ -532,10 +526,9 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 (defun modi/downcase ()   (interactive) (xah-cycle-letter-case 16))
 (defun modi/capitalize () (interactive) (xah-cycle-letter-case 64))
 
-(when (featurep 'region-bindings-mode)
-  (bind-keys
-   :map region-bindings-mode-map
-    ("~" . xah-cycle-letter-case)))
+(bind-keys
+ :map region-bindings-mode-map
+  ("~" . xah-cycle-letter-case))
 
 (defhydra hydra-change-case (:color blue
                              :hint nil)
@@ -585,13 +578,8 @@ Temporarily consider - and _ characters as part of the word when sorting."
 ;; Copy region with formatting for G+ comments
 ;; https://github.com/jorgenschaefer/gplusify
 (use-package gplusify
-  :commands (gplusify-region-as-kill)
-  :init
-  (progn
-    (when (featurep 'region-bindings-mode)
-      (bind-keys
-       :map region-bindings-mode-map
-        ("G" . gplusify-region-as-kill)))))
+  :bind (:map region-bindings-mode-map
+         ("G" . gplusify-region-as-kill)))
 
 ;;; Replace identical strings with incremental number suffixes
 (defvar modi/rwins-max 100
