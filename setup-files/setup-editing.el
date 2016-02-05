@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-04 16:40:53 kmodi>
+;; Time-stamp: <2016-02-05 16:21:07 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -681,17 +681,19 @@ abc|   def  ghi <-- point on the left of white space after 'abc'
 abc| ghi        <-- point still before white space after calling this function
 abc   |def  ghi <-- point on the right of white space before 'def'
 abc |ghi        <-- point still after white space after calling this function."
-  (save-excursion ; maintain the initial position of the pt with respect to space
-    (cond ((looking-back "^ *") ; remove extra space at beginning of line
-           (just-one-space 0)
-           (indent-according-to-mode))
-          ((or (looking-at   " ")
-               (looking-back " ")) ; adjust space only if it exists
-           (just-one-space 1))
-          (t ; do nothing otherwise, includes case where the point is at EOL
-           ))))
+  (cond ((looking-back "^ *") ; remove extra space at beginning of line
+         (save-excursion ; maintain the initial position of the pt w.r.t. space
+           (just-one-space 0))
+         (indent-according-to-mode))
+        ((or (looking-at   " ")
+             (looking-back " ")) ; adjust space only if it exists
+         (save-excursion ; maintain the initial position of the pt w.r.t. space
+           (just-one-space 1)))
+        (t ; do nothing otherwise, includes the case where the point is at EOL
+         )))
 ;; Delete extra horizontal white space after `kill-word' and `backward-kill-word'
 (advice-add 'kill-word :after #'modi/just-one-space-post-kill-word)
+;; (advice-remove 'kill-word #'modi/just-one-space-post-kill-word)
 
 ;;; Whole Buffer If Not Region
 (defvar modi/whole-buffer-if-not-region-fns '(indent-region
