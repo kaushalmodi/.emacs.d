@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-05 23:05:56 kmodi>
+;; Time-stamp: <2016-02-05 23:42:34 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -743,20 +743,19 @@ Try the repeated popping up to 10 times."
 ;;; Tweaking `region-extract-function'
 (defun modi/region-extract-function--C-u-kill (orig delete)
   "When a region is selected,
-and DELETE is not \\='bounds,
-and DELETE is not \\='delete-only,
-and if \\[universal-argument] is used when killing the region (for example,
-when doing \\[kill-ring-save] or \\[kill-region]), kill the region with all
-trailing whitespace removed and also replace 2 or more spaces with single spaces.
+and if \\[universal-argument] is used,
+and DELETE is \\='delete (when doing \\[kill-region]), or
+    DELETE is nil (when doing \\[kill-ring-save]),
+kill the region with all trailing whitespace removed and also replace 2
+or more spaces with single spaces.
 Else, execute ORIG function."
   (if (and (region-beginning)
-           (not (eq delete 'bounds))
-           (not (eq delete 'delete-only))
-           (eq 4 (prefix-numeric-value current-prefix-arg)))
+           (eq 4 (prefix-numeric-value current-prefix-arg)) ; when using C-u, and
+           (or (eq delete 'delete) ; when cutting (C-w), or
+               (eq delete nil))) ; when copying (M-w)
       (let ((sel (filter-buffer-substring (region-beginning) (region-end) delete)))
         (with-temp-buffer
           (insert sel)
-          ;; Removing trailing whitespace from the whole temp buffer
           (delete-trailing-whitespace)
           (goto-char (point-min))
           (while (re-search-forward "\\s-\\{2,\\}" nil :noerror)
