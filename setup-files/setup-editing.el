@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-05 16:32:45 kmodi>
+;; Time-stamp: <2016-02-05 22:22:01 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -29,7 +29,7 @@
 ;;  Replace identical strings with incremental number suffixes
 ;;  Delete Blank Lines
 ;;  Space Adjustment After Word Kills
-;;  Whole Buffer If Not Region
+;;  Operate on Region or Whole Buffer
 ;;  Mark Management
 ;;    Popping marks
 ;;    Smart Mark
@@ -683,51 +683,37 @@ abc |ghi        <-- point still after white space after calling this function."
 (advice-add 'kill-word :after #'modi/just-one-space-post-kill-word)
 ;; (advice-remove 'kill-word #'modi/just-one-space-post-kill-word)
 
-;;; Whole Buffer If Not Region
-(defvar modi/whole-buffer-if-not-region-fns '(indent-region
-                                              eval-region)
-  "List of functions to advice so that they act on the whole buffer if a
-region is not selected.")
+;;; Operate on Region or Whole Buffer
+(defvar modi/region-or-whole-fns '(indent-region
+                                   eval-region)
+  "List of functions that need to act on the whole buffer if a region is
+not selected.")
 
-(defvar modi/whole-buffer-if-not-region-adv-fn-name-format
-  "modi/adv-%s--whole-buffer-if-not-region"
-  "Format for naming the auto generated advice functions for the functions
-listed in `modi/whole-buffer-if-not-region-fns'.")
+(defun modi/gen-region-or-whole-wrapper-fn (fn)
+  "Function to generate a wrapper function that applies the FN function to
+the whole buffer if a region is not selected."
+  (let ((wrapper-fn (intern (format "modi/%s-or-whole" fn))))
+    `(progn
+       (defun ,wrapper-fn ()
+         (interactive)
+         (let (bounds msg)
+           (if mark-active
+               (setq bounds (cons (region-beginning) (region-end)))
+             (setq bounds (cons (point-min) (point-max)))
+             (setq msg (format "Executed %s on the whole buffer."
+                               (propertize (symbol-name ',fn)
+                                           'face 'font-lock-function-name-face))))
+           (,fn (car bounds) (cdr bounds))
+           (when msg
+             (message msg))))
+       (define-key (current-global-map) [remap ,fn] #',wrapper-fn))))
 
-(defun modi/gen-whole-buffer-if-not-region-adv-fn (symbol)
-  "Function to generate a function that applies the function represented by
-SYMBOL to the whole buffer if region is not selected."
-  (let ((fn-name (intern
-                  (format
-                   modi/whole-buffer-if-not-region-adv-fn-name-format symbol))))
-    `(defun ,fn-name (orig-fn &rest args)
-       (save-excursion
-         ;; Execute the original SYMBOL function if it is called indirectly.
-         ;; Example: We do not want to trigger this advice if `eval-region'
-         ;;          is called via `eval-defun'.
-         (if (or (not (eq ',symbol this-command))
-                 (use-region-p))
-             (apply orig-fn args)
-           (progn
-             (apply orig-fn (list (point-min) (point-max)))
-             (message "Executed %s on the whole buffer."
-                      (propertize (symbol-name ',symbol)
-                                  'face 'font-lock-function-name-face))))))))
-
-(defmacro modi/add-whole-buffer-if-not-region-advice ()
-  "Generate advice functions for each fn in `modi/whole-buffer-if-not-region-fns'."
+(defmacro modi/define-region-or-whole-wrapper-fns ()
+  "Define a wrapper function for each fn in `modi/region-or-whole-fns'."
   `(progn ,@(mapcar
-             (lambda (x) (modi/gen-whole-buffer-if-not-region-adv-fn x))
-             modi/whole-buffer-if-not-region-fns)))
-(modi/add-whole-buffer-if-not-region-advice)
-
-;; Advice functions (that originally act on a region) to act on the whole
-;; buffer if a region is not selected.
-(dolist (fn modi/whole-buffer-if-not-region-fns)
-  (let ((adv-fn (intern
-                 (format
-                  modi/whole-buffer-if-not-region-adv-fn-name-format fn))))
-    (advice-add fn :around adv-fn)))
+             (lambda (x) (modi/gen-region-or-whole-wrapper-fn x))
+             modi/region-or-whole-fns)))
+(modi/define-region-or-whole-wrapper-fns)
 
 ;;; Mark Management
 
