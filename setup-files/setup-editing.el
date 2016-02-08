@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-07 12:41:10 kmodi>
+;; Time-stamp: <2016-02-08 12:28:52 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -707,7 +707,7 @@ function to the whole buffer if a region is not selected."
              ;;          is called via `eval-defun', because in that case, the
              ;;          ARGS are set by the wrapper function `eval-defun'.
              (when (null args)
-               (if mark-active ; when region is selected
+               (if (use-region-p) ; when region is selected
                    (setq args (list (region-beginning) (region-end)))
                  (progn
                    (setq args (list (point-min) (point-max)))
