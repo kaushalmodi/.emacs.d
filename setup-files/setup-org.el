@@ -61,8 +61,6 @@
     ;; Allow _ and ^ characters to sub/super-script strings but only when
     ;; string is wrapped in braces
     (setq org-use-sub-superscripts         '{}) ; in-buffer rendering
-    (setq org-export-with-sub-superscripts '{}) ; for exports
-    (setq org-export-with-smart-quotes t)
 
     ;; Single key command execution when at beginning of a headline
     (setq org-use-speed-commands t) ; ? speed-key opens Speed Keys help
@@ -72,9 +70,6 @@
     ;; Prevent auto insertion of blank lines before headings and list items
     (setq org-blank-before-new-entry '((heading)
                                        (plain-list-item)))
-
-    (setq org-completion-use-ido t) ; use ido for auto completion
-    (setq org-return-follows-link t) ; Hitting <RET> while on a link follows the link
 
     (setq org-startup-folded 'showall)
     ;; fold / overview  - collapse everything, show only level 1 headlines
@@ -104,7 +99,6 @@
 
     (setq org-catch-invisible-edits 'smart) ; http://emacs.stackexchange.com/a/2091/115
     (setq org-indent-indentation-per-level 1) ; default = 2
-    (setq org-export-headline-levels 4)
 
     ;; Number of empty lines needed to keep an empty line between collapsed trees.
     ;; If you leave an empty line between the end of a subtree and the following
@@ -409,6 +403,12 @@ returned value `entity-name' will be nil."
     (use-package ox
       :config
       (progn
+        ;; Require wrapping braces to interpret _ and ^ as sub/super-script
+        (setq org-export-with-sub-superscripts '{}) ; also #+OPTIONS: ^:{}
+        (setq org-export-with-smart-quotes t) ; also #+OPTIONS: ':t
+
+        (setq org-export-headline-levels 4)
+
 ;;;; ox-latex - LaTeX export
         (use-package ox-latex
           :config
@@ -492,6 +492,24 @@ returned value `entity-name' will be nil."
                 ;; (add-to-list 'org-latex-packages-alist '("" "color"))
                 ))
 
+            ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
+            ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
+            ;; automatically to resolve the cross-references.
+            ;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
+
+            ;; `org-latex-compiler' variable was introduced in org 9.0
+            ;; (setq org-latex-compiler "xelatex")
+            ;; (setq org-latex-pdf-process
+            ;;       ;; `-shell-escape' is required when using the `minted' package
+            ;;       '("%latex -interaction nonstopmode -shell-escape -output-directory %o %f"
+            ;;         "%latex -interaction nonstopmode -shell-escape -output-directory %o %f"
+            ;;         "%latex -interaction nonstopmode -shell-escape -output-directory %o %f"))
+
+            ;; Run xelatex multiple times to get the cross-references right
+            (setq org-latex-pdf-process '("xelatex -shell-escape %f"
+                                          "xelatex -shell-escape %f"
+                                          "xelatex -shell-escape %f"))
+
             ;; Override `org-latex-format-headline-default-function' definition
             ;; so that the TODO keyword in TODO marked headings is exported in
             ;; bold red.
@@ -508,26 +526,7 @@ See `org-latex-format-headline-function' for details."
                (and tags
                     (format "\\hfill{}\\textsc{%s}"
                             (mapconcat (lambda (tag) (org-latex-plain-text tag info))
-                                       tags ":")))))
-
-            ;; `-shell-escape' is required when converting a .tex file
-            ;; containing `minted' package to a .pdf
-
-            ;; Run pdflatex multiple times to get the cross-references right
-            ;; (setq org-latex-pdf-process '("pdflatex -shell-escape %f"
-            ;;                               "pdflatex -shell-escape %f"
-            ;;                               "pdflatex -shell-escape %f"))
-
-            ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
-            ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
-            ;; automatically to resolve the cross-references.
-            ;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
-
-            ;; Run xelatex multiple times to get the cross-references right
-            (setq org-latex-pdf-process '("xelatex -shell-escape %f"
-                                          "xelatex -shell-escape %f"
-                                          "xelatex -shell-escape %f"
-                                          "xelatex -shell-escape %f"))))
+                                       tags ":")))))))
 
 ;;;; ox-html - HTML export
         (use-package ox-html
