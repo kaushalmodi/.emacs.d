@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-04 18:27:06 kmodi>
+;; Time-stamp: <2016-02-11 00:21:30 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -467,12 +467,20 @@ returned value `entity-name' will be nil."
                 ;; https://github.com/gpoore/minted
                 (progn
                   (setq org-latex-listings 'minted) ; default nil
+                  ;; The default value of the `minted' package option `cachedir'
+                  ;; is "cachedir=_minted-\jobname". That clutters the working
+                  ;; directories with _minted* dirs. Instead create those cache
+                  ;; dirs in temp folders.
+                  (defvar latex-minted-cachedir (concat "cachedir="
+                                                        temporary-file-directory
+                                                        (getenv "USER")
+                                                        "/.minted/\\jobname"))
                   (if (eq org-latex-create-formula-image-program 'dvipng)
                       ;; If `org-latex-create-formula-image-program' is set to
                       ;; `'dvipng', minted package cannot be used to show latex
                       ;; previews.
-                      (add-to-list 'org-latex-packages-alist '("" "minted" nil))
-                    (add-to-list 'org-latex-packages-alist '("" "minted")))
+                      (add-to-list 'org-latex-packages-alist `(,latex-minted-cachedir "minted" nil))
+                    (add-to-list 'org-latex-packages-alist `(,latex-minted-cachedir "minted")))
 
                   ;; minted package options (applied to embedded source codes)
                   (setq org-latex-minted-options
@@ -482,7 +490,7 @@ returned value `entity-name' will be nil."
                           ("framesep"    "2mm")
                           ;; ("fontfamily"  "zi4") ; required only when using pdflatex
                                         ; instead of xelatex
-                          ;; minted 2.0 specific features
+                          ;; At least minted 2.0 required for `breaklines'
                           ("breaklines") ; line wrapping within code blocks
                           )))
               ;; not using minted
