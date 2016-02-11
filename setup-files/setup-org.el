@@ -38,7 +38,10 @@
                                            package-user-dir
                                            "org-plus-contrib-[0-9]+"
                                            :include-directories))))
-        (setq load-path (delete org-stable-install-path load-path)))))
+        (setq load-path (delete org-stable-install-path load-path))
+        ;; Also ensure that the associated path is removed from Info search list
+        (setq Info-directory-list (delete org-stable-install-path Info-directory-list))
+        )))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
