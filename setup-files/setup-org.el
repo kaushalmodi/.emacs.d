@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-11 00:21:30 kmodi>
+;; Time-stamp: <2016-02-11 18:37:04 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -416,6 +416,8 @@ returned value `entity-name' will be nil."
             (defvar modi/ox-latex-use-minted t
               "Use `minted' package for listings.")
 
+            (setq org-latex-compiler "xelatex") ; introduced in org 9.0
+
             (setq org-latex-prefer-user-labels t) ; org-mode version 8.3+
 
             ;; ox-latex patches
@@ -432,10 +434,15 @@ returned value `entity-name' will be nil."
             ;; Below will output tex files with
             ;;   \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
             ;; The org-latex-packages-alist is a list of cells of the format:
-            ;;   ("options" "package" SNIPPET-FLAG)
-            ;; SNIPPET-FLAG is non-nil by default. So unless this flag is set
-            ;; to nil, that package will be used even when previewing latex
-            ;; fragments using the `C-c C-x C-l' binding
+            ;;   ("options" "package" SNIPPET-FLAG COMPILERS)
+            ;; If SNIPPET-FLAG is non-nil, the package also needs to be included
+            ;; when compiling LaTeX snippets into images for inclusion into
+            ;; non-LaTeX output (like when previewing latex fragments using the
+            ;; "C-c C-x C-l" binding.
+            ;; COMPILERS is a list of compilers that should include the package,
+            ;; see `org-latex-compiler'.  If the document compiler is not in the
+            ;; list, and the list is non-nil, the package will not be inserted
+            ;; in the final document.
             (setq org-latex-packages-alist
                   '(
                     ;; % 0 paragraph indent, adds vertical space between paragraphs
@@ -468,19 +475,19 @@ returned value `entity-name' will be nil."
                 (progn
                   (setq org-latex-listings 'minted) ; default nil
                   ;; The default value of the `minted' package option `cachedir'
-                  ;; is "cachedir=_minted-\jobname". That clutters the working
-                  ;; directories with _minted* dirs. Instead create those cache
-                  ;; dirs in temp folders.
-                  (defvar latex-minted-cachedir (concat "cachedir="
-                                                        temporary-file-directory
+                  ;; is "_minted-\jobname". That clutters the working dirs with
+                  ;; _minted* dirs. So instead create them in temp folders.
+                  (defvar latex-minted-cachedir (concat temporary-file-directory
                                                         (getenv "USER")
                                                         "/.minted/\\jobname"))
-                  (if (eq org-latex-create-formula-image-program 'dvipng)
-                      ;; If `org-latex-create-formula-image-program' is set to
-                      ;; `'dvipng', minted package cannot be used to show latex
-                      ;; previews.
-                      (add-to-list 'org-latex-packages-alist `(,latex-minted-cachedir "minted" nil))
-                    (add-to-list 'org-latex-packages-alist `(,latex-minted-cachedir "minted")))
+                  ;; If `org-latex-create-formula-image-program' is set to
+                  ;; `dvipng', minted package cannot be used to show latex
+                  ;; previews.
+                  (add-to-list 'org-latex-packages-alist
+                               `(,(concat "cachedir=" ; options
+                                          latex-minted-cachedir)
+                                 "minted" ; package
+                                 ,(not (eq org-latex-create-formula-image-program 'dvipng)))) ; snippet-flag
 
                   ;; minted package options (applied to embedded source codes)
                   (setq org-latex-minted-options
@@ -505,8 +512,7 @@ returned value `entity-name' will be nil."
             ;; automatically to resolve the cross-references.
             ;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
 
-            ;; `org-latex-compiler' variable was introduced in org 9.0
-            ;; (setq org-latex-compiler "xelatex")
+            ;; Below value of `org-latex-pdf-process' with %latex will work in org 9.0+
             ;; (setq org-latex-pdf-process
             ;;       ;; `-shell-escape' is required when using the `minted' package
             ;;       '("%latex -interaction nonstopmode -shell-escape -output-directory %o %f"
