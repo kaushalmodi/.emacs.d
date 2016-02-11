@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-06-19 12:25:03 kmodi>
+;; Time-stamp: <2016-02-11 16:32:39 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -66,14 +66,14 @@
 ;; http://emacs.stackexchange.com/a/9342/115
 (defvar package-menu-exclude-packages '()
   "List of packages for which the package manager should not look for updates.")
-(defun package-menu--remove-excluded-packages (orig)
+(defun package-menu--remove-excluded-packages (orig-fun &rest args)
   (let ((included (-filter
                    (lambda (entry)
                      (let ((name (symbol-name (package-desc-name (car entry)))))
                        (not (member name package-menu-exclude-packages))))
                    tabulated-list-entries)))
     (setq-local tabulated-list-entries included)
-    (funcall orig)))
+    (apply orig-fun args)))
 (advice-add 'package-menu--find-upgrades :around #'package-menu--remove-excluded-packages)
 
 ;; Inspired from paradox.el
