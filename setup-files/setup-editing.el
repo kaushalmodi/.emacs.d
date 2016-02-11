@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-08 12:28:52 kmodi>
+;; Time-stamp: <2016-02-11 16:53:50 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -686,49 +686,34 @@ abc |ghi        <-- point still after white space after calling this function."
 ;;; Operate on Region or Whole Buffer
 (defvar modi/region-or-whole-fns '(indent-region
                                    eval-region)
-  "List of functions that need to act on the whole buffer if a region is
-not selected.")
+  "List of functions to act on the whole buffer if no region is selected.")
 
-(defun modi/gen-region-or-whole-advice-fn (fn)
-  "Function to generate and apply an advice function that applies the FN
-function to the whole buffer if a region is not selected."
-  (let ((advice-fn (intern (format "modi/adv-%s-or-whole" fn))))
-    `(progn
-       (defun ,advice-fn (orig-fn &rest args)
-         (interactive) ; Required to override the "r" argument of `interactive'
-                                        ; in functions like `indent-region'
-                                        ; so that that function can be called
-                                        ; without an active region.
-         ;; (message "Args before: %S, length = %0d" args (length args))
-         (let (msg)
-           (save-excursion
-             ;; Execute the original SYMBOL function if it is called indirectly.
-             ;; Example: We do not want to modify the ARGS if `eval-region'
-             ;;          is called via `eval-defun', because in that case, the
-             ;;          ARGS are set by the wrapper function `eval-defun'.
-             (when (null args)
-               (if (use-region-p) ; when region is selected
-                   (setq args (list (region-beginning) (region-end)))
-                 (progn
-                   (setq args (list (point-min) (point-max)))
-                   (setq msg (format "Executed %s on the whole buffer."
-                                     (propertize (symbol-name ',fn)
-                                                 'face
-                                                 'font-lock-function-name-face))))))
-             ;; (message "Args after: %S, length = %0d" args (length args))
-             (apply orig-fn args)
-             (when msg
-               (message msg)))))
-       (advice-add ',fn :around #',advice-fn)
-       ;; (advice-remove ',fn #',advice-fn)
-       )))
+(defun modi/advice-region-or-whole (&rest _)
+  "Advice function that sets the region boundaries to that of the whole buffer
+if no region is selected.
+http://thread.gmane.org/gmane.emacs.help/109025/focus=109102 "
+  ;; Required to override the "r" argument of `interactive' in functions like
+  ;; `indent-region' so that they can be called without an active region.
+  (interactive (if (use-region-p)
+                   (list (region-beginning) (region-end))
+                 (list (point-min) (point-max))))
+  nil)
 
-(defmacro modi/define-region-or-whole-advice-fns ()
-  "Define an advice function for each fn in `modi/region-or-whole-fns'."
-  `(progn ,@(mapcar
-             (lambda (x) (modi/gen-region-or-whole-advice-fn x))
-             modi/region-or-whole-fns)))
-(modi/define-region-or-whole-advice-fns)
+(defun modi/advice-whole-buffer-message (&rest args)
+  "Advice function that prints a message if the original function was
+applied on the whole buffer."
+  (when (and (eq (first args) (point-min))
+             (eq (second args) (point-max)))
+    (message "Executed %s on the whole buffer."
+             (propertize (symbol-name this-command)
+                         'face 'font-lock-function-name-face))))
+
+(dolist (fn modi/region-or-whole-fns)
+  (advice-add fn :before #'modi/advice-region-or-whole)
+  (advice-add fn :after  #'modi/advice-whole-buffer-message))
+;; (dolist (fn modi/region-or-whole-fns)
+;;   (advice-remove fn #'modi/advice-region-or-whole)
+;;   (advice-remove fn #'modi/advice-whole-buffer-message))
 
 ;;; Mark Management
 
