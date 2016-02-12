@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-12 10:49:31 kmodi>
+;; Time-stamp: <2016-02-12 15:18:00 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -826,7 +826,7 @@ Else, execute ORIG function."
   ("f" forward-sexp                   "forward sexp")
   ("q" nil                            "cancel" :color blue))
 (key-chord-define-global "jj" #'hydra-comment/body)
-(bind-key "C-c ;" #'hydra-comment/body modi-mode-map)
+(bind-key "C-c C-;" #'hydra-comment/body modi-mode-map)
 
 
 (provide 'setup-editing)
