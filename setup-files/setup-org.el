@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-11 18:37:04 kmodi>
+;; Time-stamp: <2016-02-12 17:44:54 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -431,9 +431,21 @@ returned value `entity-name' will be nil."
             ;; (setq org-latex-create-formula-image-program 'dvipng) ; NOT Recommended
             (setq org-latex-create-formula-image-program 'imagemagick) ; Recommended
 
-            ;; Below will output tex files with
+            ;; Controlling the order of loading certain packages w.r.t. `hyperref'
+            ;; http://tex.stackexchange.com/a/1868/52678
+            ;; ftp://ftp.ctan.org/tex-archive/macros/latex/contrib/hyperref/README.pdf
+            ;; Remove the list element in `org-latex-default-packages-alist'.
+            ;; that has '("hyperref" nil) as its cdr.
+            ;; http://stackoverflow.com/a/9813211/1219634
+            (setq org-latex-default-packages-alist
+                  (delq (rassoc '("hyperref" nil) org-latex-default-packages-alist)
+                        org-latex-default-packages-alist))
+            ;; `hyperref' will be added again later in `org-latex-packages-alist'
+            ;; in the correct order.
+
+            ;; The `org-latex-packages-alist' will output tex files with
             ;;   \usepackage[FIRST STRING IF NON-EMPTY]{SECOND STRING}
-            ;; The org-latex-packages-alist is a list of cells of the format:
+            ;; It is a list of cells of the format:
             ;;   ("options" "package" SNIPPET-FLAG COMPILERS)
             ;; If SNIPPET-FLAG is non-nil, the package also needs to be included
             ;; when compiling LaTeX snippets into images for inclusion into
@@ -443,31 +455,54 @@ returned value `entity-name' will be nil."
             ;; see `org-latex-compiler'.  If the document compiler is not in the
             ;; list, and the list is non-nil, the package will not be inserted
             ;; in the final document.
-            (setq org-latex-packages-alist
-                  '(
-                    ;; % 0 paragraph indent, adds vertical space between paragraphs
-                    ;; http://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting
-                    ("" "parskip")
-                    ;; Graphics package for more complicated figures
-                    ("" "tikz")
-                    ("" "caption")
-                    ;;
-                    ;; Packages suggested to be added for previewing latex fragments
-                    ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
-                    ("mathscr" "eucal")
-                    ("" "latexsym")))
 
-            ;; Prevent tables/figures from one section to float into another section
-            ;; http://tex.stackexchange.com/a/282/52678
-            (add-to-list 'org-latex-packages-alist '("section" "placeins"))
+            (defconst modi/org-latex-packages-alist-pre-hyperref
+              '(("letterpaper,margin=1.0in" "geometry")
+                ;; Prevent an image from floating to a different location.
+                ;; http://tex.stackexchange.com/a/8633/52678
+                ("" "float")
+                ;; % 0 paragraph indent, adds vertical space between paragraphs
+                ;; http://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting
+                ("" "parskip"))
+              "Alist of packages that have to be loaded before `hyperref'
+package is loaded.
+ftp://ftp.ctan.org/tex-archive/macros/latex/contrib/hyperref/README.pdf ")
 
-            ;; Prevent an image from floating to a different location
-            ;; http://tex.stackexchange.com/a/8633/52678
-            (add-to-list 'org-latex-packages-alist '("" "float"))
-            ;; "H" option is from the `float' package.
-            ;; That prevents the images from floating around.
+            (defconst modi/org-latex-packages-alist-post-hyperref
+              '(;; Prevent tables/figures from one section to float into another section
+                ;; http://tex.stackexchange.com/a/282/52678
+                ("section" "placeins")
+                ;; Graphics package for more complicated figures
+                ("" "tikz")
+                ("" "caption")
+                ;;
+                ;; Packages suggested to be added for previewing latex fragments
+                ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+                ("mathscr" "eucal")
+                ("" "latexsym"))
+              "Alist of packages that have to (or can be) loaded after `hyperref'
+package is loaded.")
+
+            ;; The "H" option (`float' package) prevents images from floating around.
             (setq org-latex-default-figure-position "H") ; figures are NOT floating
             ;; (setq org-latex-default-figure-position "htb") ; default - figures are floating
+
+            ;; `hyperref' package setup
+            (setq org-latex-hyperref-template
+                  (concat "\\hypersetup{\n"
+                          "pdfauthor={%a},\n"
+                          "pdftitle={%t},\n"
+                          "pdfkeywords={%k},\n"
+                          "pdfsubject={%d},\n"
+                          "pdfcreator={%c},\n"
+                          "pdflang={%L},\n"
+                          ;; Get rid of the red boxes drawn around the links
+                          "colorlinks,\n"
+                          "citecolor=black,\n"
+                          "filecolor=black,\n"
+                          "linkcolor=blue,\n"
+                          "urlcolor=blue\n"
+                          "}"))
 
             (if modi/ox-latex-use-minted
                 ;; using minted
@@ -480,32 +515,39 @@ returned value `entity-name' will be nil."
                   (defvar latex-minted-cachedir (concat temporary-file-directory
                                                         (getenv "USER")
                                                         "/.minted/\\jobname"))
-                  ;; If `org-latex-create-formula-image-program' is set to
-                  ;; `dvipng', minted package cannot be used to show latex
-                  ;; previews.
-                  (add-to-list 'org-latex-packages-alist
+                  ;; `minted' package needed to be loaded AFTER `hyperref'.
+                  ;; http://tex.stackexchange.com/a/19586/52678
+                  (add-to-list 'modi/org-latex-packages-alist-post-hyperref
                                `(,(concat "cachedir=" ; options
                                           latex-minted-cachedir)
                                  "minted" ; package
+                                 ;; If `org-latex-create-formula-image-program'
+                                 ;; is set to `dvipng', minted package cannot be
+                                 ;; used to show latex previews.
                                  ,(not (eq org-latex-create-formula-image-program 'dvipng)))) ; snippet-flag
 
                   ;; minted package options (applied to embedded source codes)
                   (setq org-latex-minted-options
                         '(("linenos")
-                          ("numbersep"   "5pt")
-                          ("frame"       "none") ; box frame is created by the mdframed package
-                          ("framesep"    "2mm")
-                          ;; ("fontfamily"  "zi4") ; required only when using pdflatex
-                                        ; instead of xelatex
-                          ;; At least minted 2.0 required for `breaklines'
-                          ("breaklines") ; line wrapping within code blocks
-                          )))
+                          ("numbersep" "5pt")
+                          ("frame"     "none") ; box frame is created by `mdframed' package
+                          ("framesep"  "2mm")
+                          ;; minted 2.0+ required for `breaklines'
+                          ("breaklines"))) ; line wrapping within code blocks
+                  (when (equal org-latex-compiler "pdflatex")
+                    (add-to-list 'org-latex-minted-options '(("fontfamily"  "zi4")))))
               ;; not using minted
               (progn
-                (add-to-list 'org-latex-packages-alist '("" "listings"))
                 ;; Commented out below because it clashes with `placeins' package
-                ;; (add-to-list 'org-latex-packages-alist '("" "color"))
-                ))
+                ;; (add-to-list 'modi/org-latex-packages-alist-post-hyperref '("" "color"))
+                (add-to-list 'modi/org-latex-packages-alist-post-hyperref '("" "listings"))))
+
+            (setq org-latex-packages-alist
+                  (append modi/org-latex-packages-alist-pre-hyperref
+                          '(("" "hyperref" nil))
+                          modi/org-latex-packages-alist-post-hyperref))
+
+            ;; `-shell-escape' is required when using the `minted' package
 
             ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
             ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
@@ -514,7 +556,6 @@ returned value `entity-name' will be nil."
 
             ;; Below value of `org-latex-pdf-process' with %latex will work in org 9.0+
             ;; (setq org-latex-pdf-process
-            ;;       ;; `-shell-escape' is required when using the `minted' package
             ;;       '("%latex -interaction nonstopmode -shell-escape -output-directory %o %f"
             ;;         "%latex -interaction nonstopmode -shell-escape -output-directory %o %f"
             ;;         "%latex -interaction nonstopmode -shell-escape -output-directory %o %f"))
