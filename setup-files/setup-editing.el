@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-11 16:53:50 kmodi>
+;; Time-stamp: <2016-02-12 10:49:31 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -688,32 +688,29 @@ abc |ghi        <-- point still after white space after calling this function."
                                    eval-region)
   "List of functions to act on the whole buffer if no region is selected.")
 
-(defun modi/advice-region-or-whole (&rest _)
-  "Advice function that sets the region boundaries to that of the whole buffer
-if no region is selected.
+(defun modi/advice-region-or-whole (orig-fun &rest args)
+  "Advice function that applies ORIG-FUN to the whole buffer if no region is
+selected.
 http://thread.gmane.org/gmane.emacs.help/109025/focus=109102 "
   ;; Required to override the "r" argument of `interactive' in functions like
   ;; `indent-region' so that they can be called without an active region.
   (interactive (if (use-region-p)
                    (list (region-beginning) (region-end))
                  (list (point-min) (point-max))))
-  nil)
-
-(defun modi/advice-whole-buffer-message (&rest args)
-  "Advice function that prints a message if the original function was
-applied on the whole buffer."
-  (when (and (eq (first args) (point-min))
-             (eq (second args) (point-max)))
-    (message "Executed %s on the whole buffer."
-             (propertize (symbol-name this-command)
-                         'face 'font-lock-function-name-face))))
+  ;; (message "Args: %S R: %S I: %S"
+  ;;          args (use-region-p) (called-interactively-p 'interactive))
+  (prog1 ; Return value of the advising fn needs to be the same as ORIG-FUN
+      (apply orig-fun args)
+    (when (and (called-interactively-p 'interactive)
+               (not (use-region-p)))
+      (message "Executed %s on the whole buffer."
+               (propertize (symbol-name this-command)
+                           'face 'font-lock-function-name-face)))))
 
 (dolist (fn modi/region-or-whole-fns)
-  (advice-add fn :before #'modi/advice-region-or-whole)
-  (advice-add fn :after  #'modi/advice-whole-buffer-message))
-;; (dolist (fn modi/region-or-whole-fns)
-;;   (advice-remove fn #'modi/advice-region-or-whole)
-;;   (advice-remove fn #'modi/advice-whole-buffer-message))
+  (advice-add fn :around #'modi/advice-region-or-whole)
+  ;; (advice-remove fn #'modi/advice-region-or-whole)
+  )
 
 ;;; Mark Management
 
