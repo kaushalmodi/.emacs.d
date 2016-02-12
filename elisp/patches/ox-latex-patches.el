@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-13 17:10:58 kmodi>
+;; Time-stamp: <2016-02-12 18:40:31 kmodi>
 
 ;; `ox-latex' needs to be required before `load'ing this patch file
 
@@ -56,7 +56,8 @@ contextual information."
 			 `((?s . ,formatted-src)
 			   (?c . ,caption)
 			   (?f . ,float)
-			   (?l . ,(org-latex--label src-block info)))))))
+			   (?l . ,(org-latex--label src-block info))
+			   (?o . ,(or (plist-get attributes :options) "")))))))
        ;; Case 3.  Use minted package.
        ((eq listings 'minted)
         (let* ((caption-str (org-latex--caption/label-string src-block info))
@@ -150,7 +151,6 @@ contextual information."
                `(("captionpos" ,(if caption-above-p "t" "b")))
                (cond ((assoc "numbers" lst-opt) nil)
                      ((not num-start) '(("numbers" "none")))
-                     ((zerop num-start) '(("numbers" "left")))
                      (t `(("firstnumber" ,(number-to-string (1+ num-start)))
                           ("numbers" "left"))))))
              (let ((local-options (plist-get attributes :options)))
