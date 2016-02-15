@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-05 12:44:18 kmodi>
+;; Time-stamp: <2016-02-15 15:01:15 kmodi>
 
 ;; Elisp Slime Nav
 ;; gtags/ctags like navigation into elisp source codes (even the compressed ones)
@@ -28,7 +28,7 @@
     ;;             (find-face-definition sym))
     ;;            (:else
     ;;             (progn
-    ;;               (error "Don't know how to find '%s'" sym)))))))
+    ;;               (error "Don't know how to find `%s'" sym)))))))
 
     (defun modi/elisp-slime-nav-find-elisp-interactive (sym-name)
       "Find the elisp thing at point, be it a function, variable, library or face
@@ -89,7 +89,7 @@
             (find-face-definition sym))
            (:else
             (progn
-              (error "Don't know how to find '%s'" sym)))))))
+              (error "Don't know how to find `%s'" sym)))))))
     (bind-to-modi-map "?" #'modi/elisp-slime-nav-find-elisp-interactive)
 
     ;; Unbind the default `elisp-slime-nav-mode-map' bindings
