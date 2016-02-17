@@ -1,20 +1,16 @@
-;; Time-stamp: <2016-02-11 16:32:39 kmodi>
+;; Time-stamp: <2016-02-17 17:34:43 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
 
-;; Take care of free variables
-(defvar ido-cr+-enable-next-call   nil)
-(defvar ido-cr+-replace-completely nil)
-
 ;; Load newer version of .el and .elc if both are available
-(when (version<= "24.4" emacs-version)
-  (setq load-prefer-newer t))
+(>=e "24.4"
+    (setq load-prefer-newer t))
 
 (require 'package)
 
-(when (version<= "25.0" emacs-version)
-  (setq package-menu-async t)) ; If non-nil, do activities asynchronously, like refreshing menu
+(>=e "25.0"
+    (setq package-menu-async t)) ; If non-nil, do activities asynchronously, like refreshing menu
 
 (add-to-list 'load-path (concat user-emacs-directory "elisp/"))
 (add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
@@ -45,22 +41,22 @@
 ;; Auto install the required packages
 ;; https://github.com/bbatsov/prelude/blob/master/core/prelude-packages.el
 ;; http://toumorokoshi.github.io/emacs-from-scratch-part-2-package-management.html
-;; Method to check if all packages are installed
-(defun packages-installed-p ()
-  (loop for p in my-packages
-        when (not (package-installed-p p)) do (return nil)
-        finally (return t)))
+(defvar modi/missing-packages '()
+  "List populated at each startup that contains the list of packages that need
+to be installed.")
 
-;; if not all packages are installed, check one by one and install the missing ones.
-(unless (packages-installed-p)
-  ;; check for new packages (package versions)
-  (message "%s" "Emacs is now refreshing its package database...")
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (add-to-list 'modi/missing-packages p)))
+
+(when modi/missing-packages
+  (message "Emacs is now refreshing its package database...")
   (package-refresh-contents)
-  (message "%s" " done.")
-  ;; install the missing packages
-  (dolist (p my-packages)
-    (when (not (package-installed-p p))
-      (package-install p))))
+  ;; Install the missing packages
+  (dolist (p modi/missing-packages)
+    (message "Installing `%s' .." p)
+    (package-install p nil))
+  (setq modi/missing-packages '()))
 
 ;; Mark packages to not be updated
 ;; http://emacs.stackexchange.com/a/9342/115
