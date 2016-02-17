@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-12 15:18:00 kmodi>
+;; Time-stamp: <2016-02-17 13:46:52 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -25,7 +25,6 @@
 ;;  Cycle Letter Case
 ;;  Sort Words
 ;;  Unfill
-;;  Gplusify
 ;;  Replace identical strings with incremental number suffixes
 ;;  Delete Blank Lines
 ;;  Space Adjustment After Word Kills
@@ -573,13 +572,6 @@ Temporarily consider - and _ characters as part of the word when sorting."
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
   :load-path "elisp/unfill")
-
-;;; Gplusify
-;; Copy region with formatting for G+ comments
-;; https://github.com/jorgenschaefer/gplusify
-(use-package gplusify
-  :bind (:map region-bindings-mode-map
-         ("G" . gplusify-region-as-kill)))
 
 ;;; Replace identical strings with incremental number suffixes
 (defvar modi/rwins-max 100

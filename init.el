@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-04 11:09:21 kmodi>
+;; Time-stamp: <2016-02-17 13:46:36 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -67,7 +67,6 @@
         gist
         git-link ; get git links with line numbers and commit-hash/branch
         git-timemachine ; walk through git revisions
-        gplusify ; copy region with formatting for G+ posts
         ggtags etags-select etags-table ctags-update
         hardcore-mode
         header2
