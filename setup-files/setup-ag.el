@@ -1,16 +1,15 @@
-;; Time-stamp: <2016-01-15 14:21:29 kmodi>
+;; Time-stamp: <2016-02-17 13:54:13 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
 (use-package ag
+  :commands (ag-project-regexp modi/ag-regexp-cwd)
   :init
   (progn
-    (bind-to-modi-map "a" #'ag-project-regexp)
-    (bind-to-modi-map "g" #'ag-project-regexp))
+    (bind-to-modi-map "a" #'ag-project-regexp))
   :config
   (progn
-
     (defun ag/jump-to-result-if-only-one-match ()
       "Jump to the first ag result if that ag search came up with just one match."
       (let (only-one-match)
@@ -84,7 +83,7 @@ If called with a prefix, prompts for flags to pass to ag."
                          (read-directory-name "Directory: ")))
       (ag/search string directory :regexp t))
 
-    (defun ag-regexp-cwd (string)
+    (defun modi/ag-regexp-cwd (string)
       "Search using ag in the CURRENT DIRECTORY for a given search REGEXP,
 with REGEXP defaulting to the symbol under point.
 
