@@ -146,7 +146,7 @@ the smart-mode-line theme."
        (my/disable-enabled-themes)
        (when (not (equal ',theme-name 'default))
          (load-theme ',theme-name t))
-       (with-eval-after-load 'defuns
+       (with-eval-after-load 'general
          (modi/blend-fringe))
        (with-eval-after-load 'setup-linum
          (modi/blend-linum))

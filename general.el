@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-20 09:42:13 kmodi>
+;; Time-stamp: <2016-02-17 17:17:22 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -123,4 +123,4 @@ set the symbol's value to INIT-VALUE even if the symbol is defined."
 ;;
 
 
-(provide 'defuns)
+(provide 'general)
