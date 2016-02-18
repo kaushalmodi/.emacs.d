@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-17 17:45:44 kmodi>
+;; Time-stamp: <2016-02-18 00:37:23 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -223,7 +223,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-calc)
 (require 'setup-command-log-mode)
 (require 'setup-counsel)
-(require 'setup-de-ansi)
+(require 'setup-de-ansify)
 (require 'setup-deft)
 (require 'setup-dired)
 (require 'setup-discover-my-major)
