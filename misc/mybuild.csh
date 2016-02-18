@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2015-12-10 11:43:01 kmodi>
+# Time-stamp: <2016-02-17 20:36:41 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -166,7 +166,7 @@ if ( ! $debug ) then
     sleep 5
 
     if ( ! ${dirty_make} ) then
-        make maintainer-clean
+        ./autogen.sh all
     endif
 
     sed -i 's|/usr/local|${MY_EMACS_INSTALL_DIR}|g' src/epaths.in
