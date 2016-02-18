@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-01 09:49:31 kmodi>
+;; Time-stamp: <2016-02-17 20:49:21 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -144,12 +144,6 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 ;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
 (>=e "24.4"
     (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
-
-;; Avert the "auto-notify not working" bug in emacs 24.5+
-;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20441
-(>=e "24.4" ; The `auto-revert-use-notify' variable was introduced in emacs 24.4
-    (with-eval-after-load 'autorevert
-      (setq-default auto-revert-use-notify nil)))
 
 ;; Set firefox as the default web browser
 (setq browse-url-generic-program (executable-find "firefox"))
