@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-11 17:49:21 kmodi>
+;; Time-stamp: <2016-02-18 13:10:11 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -7,7 +7,7 @@
          ("M-s M-w" . eww-search-words)
          ("M-s M-l" . modi/eww-copy-link-first-search-result))
   :chords (("-=" . eww))
-  :commands (eww-open-file ; called by `modi/eww-open-file-with-auto-reload'
+  :commands (eww-open-file
              eww
              hydra-launch/eww-and-exit
              eww-list-bookmarks
@@ -16,6 +16,9 @@
              hydra-launch/modi/eww-im-feeling-lucky-and-exit
              modi/eww-browse-url-of-file
              hydra-launch/modi/eww-browse-url-of-file-and-exit)
+  :init
+  (progn
+    (bind-to-modi-map "e" #'eww-open-file))
   :config
   (progn
     ;; (setq eww-search-prefix                 "https://duckduckgo.com/html/?q=")
@@ -140,6 +143,49 @@ Else perform the default backspace action."
       :bind (:map eww-mode-map
              ("o" . org-eww-copy-for-org-mode)))
 
+    ;; Auto-refreshing eww buffer whenever the html file it's showing changes
+    ;; http://emacs.stackexchange.com/a/2566/115
+    (defvar modi/eww--file-notify-descriptors-list ()
+      "List to store file-notify descriptor for all files that have an
+associated auto-reloading eww buffer.")
+
+    (defun modi/advice-eww-open-file-to-auto-reload (orig-fun &rest args)
+      "When `eww-open-file' is called with \\[universal-argument], open
+the file in eww and also add `file-notify' watch for it so that the eww
+buffer auto-reloads when the HTML file changes."
+      (prog1
+          (apply orig-fun args)
+        (when current-prefix-arg ; C-u M-x eww-open-file
+          (require 'filenotify)
+          (let ((file-name (car args)))
+            (file-notify-add-watch file-name
+                                   '(change attribute-change)
+                                   #'modi/file-notify-callback-eww-reload)
+            ;; Show the HTML file and its rendered form in eww side-by-side
+            (find-file-other-window file-name))
+          ;; Redefine the `q' binding in `eww-mode-map'
+          (bind-key "q" #'modi/eww-quit-and-update-fn-descriptors eww-mode-map))))
+    (advice-add 'eww-open-file :around #'modi/advice-eww-open-file-to-auto-reload)
+
+    (defun modi/file-notify-callback-eww-reload (event)
+      "On getting triggered, switch to the eww buffer, reload and switch
+back to the working buffer. Also save the `file-notify-descriptor' of the
+triggering event."
+      (let* ((working-buffer (buffer-name)))
+        (switch-to-buffer-other-window "eww")
+        (eww-reload)
+        (switch-to-buffer-other-window working-buffer))
+      ;; `(car event)' will return the event descriptor
+      (add-to-list 'modi/eww--file-notify-descriptors-list (car event)))
+
+    (defun modi/eww-quit-and-update-fn-descriptors ()
+      "When quitting `eww', first remove any saved file-notify descriptors
+specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
+      (interactive)
+      (dotimes (index (safe-length modi/eww--file-notify-descriptors-list))
+        (file-notify-rm-watch (pop modi/eww--file-notify-descriptors-list)))
+      (quit-window :kill))
+
     (bind-keys
      :map eww-mode-map
       ("G"           . eww) ; Go to URL
@@ -179,49 +225,6 @@ Else perform the default backspace action."
     (bind-keys
      :map eww-link-keymap
       ("w" . modi/eww-copy-url-dwim))))
-
-;; Auto-refreshing *eww* buffer
-;; http://emacs.stackexchange.com/a/2566/115
-(use-package filenotify
-  :commands (modi/eww-open-file-with-auto-reload)
-  :config
-  (progn
-    (defvar modi/eww-file-notify-descriptors-list ()
-      "List to store file-notify descriptor for all files that have an
-associated auto-reloading eww buffer.")
-
-    (defun modi/eww-open-file-with-auto-reload (file)
-      "Open a file in eww and add `file-notify' watch for it."
-      (interactive "fFile: ")
-      (eww-open-file file)
-      (file-notify-add-watch file
-                             '(change attribute-change)
-                             #'modi/file-notify-callback-eww-reload))
-
-    (defun modi/file-notify-callback-eww-reload (event)
-      "On getting triggered, switch to the eww buffer, reload and switch
-back to the working buffer. Also save the `file-notify-descriptor' of the
-triggering event."
-      (let* ((working-buffer (buffer-name)))
-        (switch-to-buffer-other-window "eww")
-        (eww-reload)
-        (switch-to-buffer-other-window working-buffer))
-      ;; `(car event)' will return the event descriptor
-      (add-to-list 'modi/eww-file-notify-descriptors-list (car event)))
-
-    (defun modi/eww-quit-and-update-fn-descriptors ()
-      "When quitting `eww', also remove any saved file-notify descriptors
-specific to eww, while updating `modi/eww-file-notify-descriptors-list'."
-      (interactive)
-      (quit-window :kill)
-      (dotimes (index (safe-length modi/eww-file-notify-descriptors-list))
-        (file-notify-rm-watch (pop modi/eww-file-notify-descriptors-list))))
-
-    (with-eval-after-load 'eww
-      ;; Redefine the `q' binding in `eww-mode-map'
-      (bind-keys
-       :map eww-mode-map
-        ("q" . modi/eww-quit-and-update-fn-descriptors )))))
 
 
 (provide 'setup-eww)
