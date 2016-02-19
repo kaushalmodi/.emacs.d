@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-05 16:33:15 kmodi>
+;; Time-stamp: <2016-02-19 16:59:18 kmodi>
 
 ;;;; Fold setup
 
@@ -62,13 +62,6 @@
       "List of hooks of major modes in which hs-minor-mode should be enabled.")
 
     (setq hs-isearch-open 'code) ; default 'code, options: 'comment, t, nil
-
-    (setq hs-special-modes-alist
-          '((c-mode      "{" "}" "/[*/]" nil nil)
-            (c++-mode    "{" "}" "/[*/]" nil nil)
-            (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
-            (java-mode   "{" "}" "/[*/]" nil nil)
-            (js-mode     "{" "}" "/[*/]" nil)))
 
     ;; org-style folding/unfolding in hideshow
     (use-package hideshow-org
