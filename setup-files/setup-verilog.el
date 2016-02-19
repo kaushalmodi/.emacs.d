@@ -1,22 +1,25 @@
-;; Time-stamp: <2015-11-04 11:38:11 kmodi>
+;; Time-stamp: <2016-02-19 17:12:10 kmodi>
 
 ;; Verilog
 
 ;; Contents:
 ;;
 ;;  Variables
-;;  modi/verilog-find-module-instance
-;;  modi/verilog-get-header
-;;  modi/verilog-jump-to-header-dwim
-;;  modi/verilog-which-func
-;;  modi/verilog-update-which-func-format
-;;  modi/verilog-jump-to-module-at-point
-;;  modi/verilog-find-parent-module
-;;  my/verilog-selective-indent
+;;  Functions
+;;    modi/verilog-find-module-instance
+;;    modi/verilog-get-header
+;;    modi/verilog-jump-to-header-dwim (interactive)
+;;    which-func
+;;      modi/verilog-which-func
+;;      modi/verilog-update-which-func-format
+;;    modi/verilog-jump-to-module-at-point (interactive)
+;;    modi/verilog-find-parent-module (interactive)
+;;    my/verilog-selective-indent
 ;;  imenu support
 ;;  hideshow
 ;;  hydra-verilog-template
 ;;  my/verilog-mode-customizations
+;;  Key bindings
 
 (use-package verilog-mode
   :load-path "elisp/verilog-mode"
@@ -95,7 +98,8 @@
     (defvar modi/verilog-keywords-re nil
       "Regexp for reserved verilog keywords which should not be incorrectly
 parsed as a module or instance name.")
-
+    ;; Generate the regexp `modi/verilog-keywords-re' based on the list of
+    ;; keywords in `verilog-keywords'.
     (let ((cnt 1)
           ;; `verilog-keywords' list is defined in the `verilog-mode.el'
           (max-cnt (safe-length verilog-keywords)))
@@ -114,14 +118,29 @@ parsed as a module or instance name.")
                                         "\\b" keyword "\\b"))))
         (setq cnt (1+ cnt))))
 
-;;; modi/verilog-find-module-instance
+;;; Functions
+
+    (defvar-local modi/verilog-which-func-xtra nil
+      "Variable to hold extra information for `which-func' to show in the
+mode-line. For instance, if point is under \"module top\", `which-func' would
+show \"top\" but also show extra information that it's a \"module\".")
+
+;;;; modi/verilog-find-module-instance
     (defun modi/verilog-find-module-instance (&optional fwd)
-      "Function to return the module and instance name within which
-the point is currently.
+      "Return the module instance name within which the point is currently.
 
-Using the optional argument FWD does the search in forward direction.
+If FWD is non-nil, do the verilog module/instance search in forward direction;
+otherwise in backward direction.
 
-This function updates the local variable `modi/verilog-which-func-xtra'."
+This function updates the local variable `modi/verilog-which-func-xtra'.
+
+For example, if the point is as below (indicated by that rectangle), \"u_adder\"
+is returned and `modi/verilog-which-func-xtra' is updated to \"adder\".
+
+   adder u_adder
+   (
+    ▯
+    );"
       (let (instance-name return-val) ; return-val will be nil by default
         (setq-local modi/verilog-which-func-xtra nil) ; reset
         (save-excursion
@@ -154,17 +173,23 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
           (modi/verilog-update-which-func-format))
         return-val))
 
-;;; modi/verilog-get-header
+;;;; modi/verilog-get-header
     (defun modi/verilog-get-header (&optional fwd)
-      "Function to return the block name under which the point is currently
-present.
+      "Function to return the name of the block (module, class, package,
+function, task, `define) under which the point is currently present.
 
-Using the optional argument FWD does the search in forward direction.
+If FWD is non-nil, do the block header search in forward direction;
+otherwise in backward direction.
 
-Few examples of what is considered as a block: module, class, package, function,
-task, `define
+This function updates the local variable `modi/verilog-which-func-xtra'.
 
-This function updates the local variable `modi/verilog-which-func-xtra'."
+For example, if the point is as below (indicated by that rectangle), \"top\"
+is returned and `modi/verilog-which-func-xtra' is updated to \"mod\" (short
+for \"module\").
+
+   module top ();
+   ▯
+   endmodule "
       (let (block-type block-name return-val) ; return-val will be nil by default
         (setq-local modi/verilog-which-func-xtra nil) ; reset
         (save-excursion
@@ -200,12 +225,13 @@ This function updates the local variable `modi/verilog-which-func-xtra'."
           (modi/verilog-update-which-func-format))
         return-val))
 
-;;; modi/verilog-jump-to-header-dwim
-    (defun modi/verilog-jump-to-header-dwim (&optional fwd)
+;;;; modi/verilog-jump-to-header-dwim (interactive)
+    (defun modi/verilog-jump-to-header-dwim (fwd)
       "Jump to a module instantiation header above the current point. If
 a module instantiation is not found, jump to a block header if available.
 
-Using the optional argument FWD does the search in forward direction.
+If FWD is non-nil, do that module instrantiation/header search in forward
+direction; otherwise in backward direction.
 
 Few examples of what is considered as a block: module, class, package, function,
 task, `define."
@@ -219,23 +245,24 @@ task, `define."
           (re-search-backward modi/verilog-header-re nil :noerror))))
 
     (defun modi/verilog-jump-to-header-dwim-fwd ()
-      "Executes `modi/verilog-jump-to-header' with non-nil prefix argument so
+      "Executes `modi/verilog-jump-to-header' with non-nil argument so that
 the point jumps to a module instantiation/block header *below* the current
 point."
       (interactive)
       (modi/verilog-jump-to-header-dwim :fwd))
 
+;;;; which-func
     (with-eval-after-load 'which-func
       (add-to-list 'which-func-modes 'verilog-mode)
 
-;;; modi/verilog-which-func
+;;;;; modi/verilog-which-func
       (defun modi/verilog-which-func ()
         (setq-local which-func-functions '(modi/verilog-find-module-instance
                                            modi/verilog-get-header))
         (which-function-mode))
       (add-hook 'verilog-mode-hook #'modi/verilog-which-func)
 
-;;; modi/verilog-update-which-func-format
+;;;;; modi/verilog-update-which-func-format
       (defun modi/verilog-update-which-func-format ()
         (let ((modi/verilog-which-func-echo-help
                (concat "mouse-1/scroll up: jump to header UP" "\n"
@@ -243,10 +270,14 @@ point."
 
           (setq-local which-func-keymap
                       (let ((map (make-sparse-keymap)))
+                        ;; left click on mode line
                         (define-key map [mode-line mouse-1] #'modi/verilog-jump-to-header-dwim)
-                        (define-key map [mode-line mouse-4] #'modi/verilog-jump-to-header-dwim) ; scroll up
+                        ;; scroll up action while mouse on mode line
+                        (define-key map [mode-line mouse-4] #'modi/verilog-jump-to-header-dwim)
+                        ;; middle click on mode line
                         (define-key map [mode-line mouse-2] #'modi/verilog-jump-to-header-dwim-fwd)
-                        (define-key map [mode-line mouse-5] #'modi/verilog-jump-to-header-dwim-fwd) ; scroll down
+                        ;; scroll down action while mouse on mode line
+                        (define-key map [mode-line mouse-5] #'modi/verilog-jump-to-header-dwim-fwd)
                         map))
 
           (if modi/verilog-which-func-xtra
@@ -275,7 +306,7 @@ point."
 
     (with-eval-after-load 'projectile
 
-;;; modi/verilog-jump-to-module-at-point
+;;;; modi/verilog-jump-to-module-at-point (interactive)
       (defun modi/verilog-jump-to-module-at-point ()
         "If the point is somewhere in a module instance, jump to the definition
 of that module.
@@ -297,7 +328,7 @@ for this to work."
 
       (with-eval-after-load 'ag
 
-;;; modi/verilog-find-parent-module
+;;;; modi/verilog-find-parent-module (interactive)
         (defun modi/verilog-find-parent-module ()
           "Find the places where the current verilog module is instantiated in
 the project."
@@ -327,7 +358,7 @@ the project."
               (ag-regexp module-instance-re (projectile-project-root)))))
         (key-chord-define verilog-mode-map "^^" #'modi/verilog-find-parent-module)))
 
-;;; my/verilog-selective-indent
+;;;; my/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
     (defun my/verilog-selective-indent (&rest args)
       "Return t if either of the below is true:
@@ -370,7 +401,7 @@ The match with `//.' resolves this issue:
       "Generic regular expression to parse Verilog elements for `imenu'.")
 
 ;;; hideshow
-    (with-eval-after-load 'setup-fold
+    (with-eval-after-load 'hideshow
       (add-to-list 'hs-special-modes-alist
                    `(verilog-mode ,(concat "\\b\\(begin"
                                            "\\|task"
@@ -440,12 +471,9 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ("q"   nil nil :color blue)
       ("C-g" nil nil :color blue))
 
-    ;; Uncomment the lines for which the advice needs to be removed
-    ;; (advice-remove 'verilog-indent-line-relative #'my/verilog-selective-indent)
-    ;; (advice-remove 'verilog-indent-line          #'my/verilog-selective-indent)
-
     ;; Reset the verilog-mode abbrev table
-    (clear-abbrev-table verilog-mode-abbrev-table)
+    (with-eval-after-load 'abbrev
+      (clear-abbrev-table verilog-mode-abbrev-table))
 
     (defun modi/verilog-outshine-imenu ()
       "Update `imenu-generic-expression' when using outshine."
@@ -473,32 +501,41 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
       ;; (turn-on-orgstruct++)
 
-      (setq imenu-generic-expression
-            (append imenu-generic-expression
-                    modi/verilog-imenu-generic-expression))
+      (with-eval-after-load 'imenu
+        (setq imenu-generic-expression
+              (append imenu-generic-expression
+                      modi/verilog-imenu-generic-expression)))
+
       ;; Replace tabs with spaces when saving files in verilog-mode
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
 
-      ;; Force the `imenu-generic-expression' to be
-      ;; `modi/verilog-imenu-generic-expression' for `verilog-mode' after
-      ;; `outshine-hook-function' runs.
-      (when (member 'outshine-hook-function outline-minor-mode-hook)
-        (add-hook 'outline-minor-mode-hook
-                  #'modi/verilog-outshine-imenu :append :local)))
+      (with-eval-after-load 'outshine
+        ;; Force the `imenu-generic-expression' to contain
+        ;; `modi/verilog-imenu-generic-expression' for `verilog-mode' by making
+        ;; sure that `modi/verilog-outshine-imenu' is *appended* to
+        ;; `outline-minor-mode-hook' after `outshine-hook-function'.
+        (when (member 'outshine-hook-function outline-minor-mode-hook)
+          (add-hook 'outline-minor-mode-hook
+                    #'modi/verilog-outshine-imenu :append :local))))
+
+    ;; *Append* `my/verilog-mode-customizations' to `verilog-mode-hook' so that
+    ;; that function is run very last of all other functions added to that hook.
     (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations :append)
 
+;;; Key bindings
     (bind-keys
      :map verilog-mode-map
       ;; Unbind the backtick binding done to `electric-verilog-tick'
-      ;; With binding done to electric-verilog-tick, it's not possible to type
-      ;; backticks on multiple lines simultaneously in multiple-cursors mode
-      ("`" . nil)
+      ;; With binding done to `electric-verilog-tick', it's not possible to type
+      ;; backticks on multiple lines simultaneously in multiple-cursors mode.
+      ("`"         . nil)
       ;; Bind `verilog-header' to "C-c C-H" instead of to "C-c C-h"
-      ("C-c C-h" . nil)
-      ("C-c C-S-h" .  verilog-header)
-      ("C-c C-t" . hydra-verilog-template/body)
-      ("C-^" . modi/verilog-jump-to-header-dwim)
-      ("C-&" . modi/verilog-jump-to-header-dwim-fwd))))
+      ("C-c C-h"   . nil)
+      ("C-c C-S-h" . verilog-header)
+      ;;
+      ("C-c C-t"   . hydra-verilog-template/body)
+      ("C-^"       . modi/verilog-jump-to-header-dwim)
+      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd))))
 
 
 (provide 'setup-verilog)
