@@ -1,11 +1,10 @@
-;; Time-stamp: <2016-02-17 17:34:43 kmodi>
+;; Time-stamp: <2016-02-20 01:56:02 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
 
 ;; Load newer version of .el and .elc if both are available
-(>=e "24.4"
-    (setq load-prefer-newer t))
+(setq load-prefer-newer t)
 
 (require 'package)
 

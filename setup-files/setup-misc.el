@@ -142,8 +142,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 ;; on entering the minibuffer.
 ;; Below enables ElDoc inside the `eval-expression' minibuffer.
 ;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
-(>=e "24.4"
-    (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
+(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
 ;; Set firefox as the default web browser
 (setq browse-url-generic-program (executable-find "firefox"))
