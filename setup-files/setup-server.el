@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-09 09:58:01 kmodi>
+;; Time-stamp: <2016-02-20 02:07:51 kmodi>
 
 ;; server/daemon setup
 
@@ -54,19 +54,10 @@
 
           (edit-server-start))))
 
-    ;; Start a server only if one is not already running
-    ;; `server-running-p' returns "t" if a server is already running
-    (defvar modi/server-temp nil
-      "If t, start a “temp” server if a server is already running;
-otherwise do nothing.")
-
-    (if (not (server-running-p))
-        (progn
-          (server-start))
-      (progn
-        (when modi/server-temp
-          (setq server-name "temp")
-          (server-start))))))
+    ;; Start a server if (server-running-p) does not return t (e.g. if it
+    ;; returns nil or :other)
+    (or (eq (server-running-p) t)
+        (server-start))))
 
 
 (provide 'setup-server)
