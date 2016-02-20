@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-15 14:59:30 kmodi>
+;; Time-stamp: <2016-02-20 01:40:39 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -120,19 +120,16 @@
          ("C-c o"   . rotate-frame)
          ("C-c C-\\" . transpose-frame))) ; toggles between horz/vert splits
 
-;; http://www.whattheemacsd.com/
-(defun delete-current-buffer-file ()
+(defun modi/delete-current-buffer-file ()
   "Deletes file connected to current buffer and kills buffer."
   (interactive)
-  (let ((filename (buffer-file-name))
-        (buffer (current-buffer))
-        (name (buffer-name)))
-    (if (not (and filename (file-exists-p filename)))
-        (ido-kill-buffer)
-      (when (yes-or-no-p "Are you sure you want to delete this file? ")
-        (delete-file filename)
-        (kill-buffer buffer)
-        (message "File `%s' successfully deleted." filename)))))
+  (let ((filename (buffer-file-name)))
+    (when (and filename
+               (file-exists-p filename)
+               (yes-or-no-p "Are you sure you want to delete this file? "))
+      (delete-file filename)
+      (message "File `%s' successfully deleted." filename))
+    (kill-buffer (current-buffer))))
 
 ;; http://www.whattheemacsd.com/
 (defun rename-current-buffer-file ()
@@ -175,12 +172,6 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
           (kill-new file-name)
           (message file-name))
       (error "Buffer not visiting a file"))))
-
-;; http://www.emacswiki.org/emacs-en/download/misc-cmds.el
-(defun revert-buffer-no-confirm ()
-  "Revert buffer without confirmation."
-  (interactive)
-  (revert-buffer t t))
 
 ;; Revert All Buffers
 (defun revert-all-buffers ()
@@ -300,34 +291,21 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
   ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
   ("<M-mouse-5>" . scroll-other-window-up-dont-move-point)) ; M + wheel down
 
-;; Commented out this piece of code as it is giving the below error:
-;; byte-code: Wrong number of arguments: (lambda (arg)
-;; (mwheel-scroll-all-function-all (quote scroll-up) arg)), 0
-;; ;; Allow scrolling of all buffers using mouse-wheel in scroll-all-mode
-;; ;; (by default scroll-all-mode doesn't do that)
-;; ;; http://www.emacswiki.org/emacs/ScrollAllMode
-;; (defun mwheel-scroll-all-function-all (func arg)
-;;   (if scroll-all-mode
-;;       (save-selected-window
-;;         (walk-windows
-;;          (lambda (win)
-;;            (select-window win)
-;;            (condition-case nil
-;;                (funcall func arg)
-;;              (error nil)))))
-;;     (funcall func arg)))
-
-;; (defun mwheel-scroll-all-scroll-up-all (arg)
-;;   (mwheel-scroll-all-function-all 'scroll-up arg))
-
-;; (defun mwheel-scroll-all-scroll-down-all (arg)
-;;   (mwheel-scroll-all-function-all 'scroll-down arg))
-
-;; (setq mwheel-scroll-up-function   'mwheel-scroll-all-scroll-up-all)
-;; (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
-
-(setq mwheel-scroll-up-function   'scroll-up)
-(setq mwheel-scroll-down-function 'scroll-down)
+;; Allow scrolling of all buffers using mouse-wheel in `scroll-all-mode'.
+;; By default, `scroll-all-mode' works only with C-v/M-v.
+(defun modi/advice-mwhell-scroll-all (orig-fun &rest args)
+  "Execute ORIG-FUN in all the windows."
+  (let (ret)
+    (if scroll-all-mode
+        (save-selected-window (walk-windows (lambda (win)
+                                              (select-window win)
+                                              (condition-case nil
+                                                  (setq ret (apply orig-fun args))
+                                                (error nil)))))
+      (setq ret (apply orig-fun args)))
+    ret))
+(advice-add 'scroll-up   :around #'modi/advice-mwhell-scroll-all)
+(advice-add 'scroll-down :around #'modi/advice-mwhell-scroll-all)
 
 ;; Ediff
 (use-package ediff
@@ -405,11 +383,9 @@ function is called.")
 (defvar modi/toggle-one-window--window-configuration nil
   "Variable to store the window configuration before `modi/toggle-one-window'
 function was called.")
-(defun modi/toggle-one-window (&optional force-one-window)
+(defun modi/toggle-one-window (force-one-window)
   "Toggles the frame state between deleting all windows other than
-the current window and the windows state prior to that.
-
-`winner' is required for this function."
+the current window and the windows state prior to that."
   (interactive "P")
   (if (or (null (one-window-p))
           force-one-window)
@@ -451,6 +427,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
     (kill-buffer (current-buffer))))
 
 (defun modi/quit-and-kill-window ()
+  "Quit window and kill instead of burying the buffer in it."
   (interactive)
   (quit-window :kill))
 
@@ -472,8 +449,9 @@ buffers: *gtags-global*, *ag*, *Occur*."
   ;; overriding `C-x C-p' originally bound to `mark-page'
   ("C-x C-p"      . show-copy-buffer-file-name)
   ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence'
-  ("C-x <delete>" . delete-current-buffer-file)
+  ("C-x <delete>" . modi/delete-current-buffer-file)
   ("C-x C-r"      . rename-current-buffer-file)
+  ("C-x O"        . other-window)
   ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
   ("C-("          . toggle-between-buffers)
   ("C-)"          . modi/kill-buffer-dwim))
