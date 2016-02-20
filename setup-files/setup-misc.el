@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-17 20:49:21 kmodi>
+;; Time-stamp: <2016-02-20 01:56:27 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -214,12 +214,13 @@ If HERE is non-nil, also insert the string at point."
                         :hint  nil)
   "
     TOGGLE ...
-_ai_ aggressive indent      _d_/_D_ debug on error/entry      indent _g_uide                 _i_menu list        _p_resentation          _C-t_ theme
-_aw_ adaptive wrap          _e_debug^^                        _hl_ hl-line                   _k_ey chord         _r_ead only             _v_isible mode
-menu _b_ar                  _f_ill^^                          _hs_ hideshow                  _l_ine num          _S_tripe buffer         _<SPC>_ whitespace
-cycle _c_ase                _F_ollow^^                        _H_ardcore (allow arrows)      _m_odi mode         _t_ truncate lines
+_ai_ aggressive indent      cycle _c_ase^^                    _F_ollow            _H_ardcore (allow arrows)      _m_odi mode          _t_ truncate lines
+_ar_ auto revert            _d_/_D_ debug on error/entry      indent _g_uide      _i_menu list                   _p_resentation       _C-t_ theme
+_aw_ adaptive wrap          _e_debug^^                        _hl_ hl-line        _k_ey chord                    _r_ead only          _v_isible mode
+menu _b_ar                  _f_ill^^                          _hs_ hideshow       _l_ine num                     _S_tripe buffer      _<SPC>_ whitespace
 "
   ("ai"    aggressive-indent-mode)
+  ("ar"    auto-revert-mode)
   ("aw"    adaptive-wrap-prefix-mode)
   ("b"     modi/toggle-menu-bar)
   ("c"     xah-cycle-letter-case :color red)
