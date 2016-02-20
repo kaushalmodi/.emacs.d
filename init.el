@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-18 00:37:23 kmodi>
+;; Time-stamp: <2016-02-20 02:29:21 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -51,7 +51,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     deft ; quick note taking and management
     diff-hl
     dired-single dired+
-    discover-my-major ; Discover key bindings for the major mode
     drag-stuff
     easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
     elfeed
@@ -78,14 +77,12 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     indent-guide
     info+
     interleave ; takes notes associated to pdf files in org mode
-    iregister ; Interactive access to registers
     isend-mode ; used in setup-perl.el
     iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
     key-chord ; map pairs of simultaneously pressed keys to commands
     keyfreq ; find which commands you use the most
     kurecolor ; library to tweak colors
     linum-relative
-    list-environment
     magit ; for git management
     manage-minor-mode
     markdown-mode
@@ -203,9 +200,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 ;; Set up the looks of emacs
 (require 'setup-mode-line)
 (require 'setup-visual)
-(if (bound-and-true-p disable-pkg-shackle)
-    (require 'setup-popwin)
-  (require 'setup-shackle))
+(require 'setup-shackle)
 
 ;; Set up packages
 (require 'setup-abbrev)
@@ -217,7 +212,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-artist)
 (require 'setup-auto-complete)
 (require 'setup-beacon)
-(require 'setup-big-fringe)
 (require 'setup-bookmarks)
 (require 'setup-buffer-move)
 (require 'setup-calc)
@@ -226,7 +220,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-de-ansify)
 (require 'setup-deft)
 (require 'setup-dired)
-(require 'setup-discover-my-major)
 (require 'setup-drag-stuff)
 (require 'setup-elfeed)
 (require 'setup-eww)
@@ -251,11 +244,9 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
   (require 'setup-ido))
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
-(require 'setup-iregister)
 (require 'setup-ivy)
 (require 'setup-keyfreq)
 (require 'setup-kurecolor)
-(require 'setup-list-environment)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
