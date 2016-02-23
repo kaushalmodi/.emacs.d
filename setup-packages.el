@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-20 01:56:02 kmodi>
+;; Time-stamp: <2016-02-23 12:47:13 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -54,7 +54,7 @@ to be installed.")
   ;; Install the missing packages
   (dolist (p modi/missing-packages)
     (message "Installing `%s' .." p)
-    (package-install p nil))
+    (package-install p))
   (setq modi/missing-packages '()))
 
 ;; Mark packages to not be updated
