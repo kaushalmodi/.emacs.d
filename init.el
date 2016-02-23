@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-20 02:29:21 kmodi>
+;; Time-stamp: <2016-02-23 11:10:20 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -61,7 +61,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     fill-column-indicator
     fold-this
     gist
-    git-link ; get git links with line numbers and commit-hash/branch
     git-timemachine ; walk through git revisions
     ggtags etags-select etags-table ctags-update
     hardcore-mode
@@ -134,8 +133,8 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     zop-to-char
 
     ;; Themes
-    ;; zenburn-theme ; < forked version
-    ;; smyx-theme ; < forked version
+    ;; zenburn-theme ; < fork
+    ;; smyx-theme ; < fork
     ample-theme ; ample, ample-flat, ample-light
     darktooth-theme ; coffee
     leuven-theme ; awesome white background theme
@@ -144,6 +143,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     twilight-bright-theme
     twilight-anti-bright-theme
     ;; Crypt
+    ;; git-link ; get git links with line numbers and commit-hash/branch ; < fork
     ;; ido-vertical-mode flx-ido ido-ubiquitous ; < ivy, counsel
     ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
     ;; popwin ; < shackle

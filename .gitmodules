@@ -16,3 +16,6 @@
 [submodule "elisp/ox-reveal"]
 	path = elisp/ox-reveal
 	url = https://github.com/yjwen/org-reveal.git
+[submodule "elisp/git-link"]
+	path = elisp/git-link
+	url = http://kaushalmodi@github.com/kaushalmodi/git-link
