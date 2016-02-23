@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-04 00:09:38 kmodi>
+;; Time-stamp: <2016-02-23 18:05:47 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -24,7 +24,7 @@
     ;; (setq projectile-enable-caching nil)
     (setq projectile-enable-caching t) ; Enable caching, otherwise
                                         ; `projectile-find-file' is really slow
-                                        ; for large projects
+                                        ; for large projects.
     (dolist (item '(".SOS" "nobackup"))
       (add-to-list 'projectile-globally-ignored-directories item))
     (dolist (item '("GTAGS" "GRTAGS" "GPATH"))
@@ -50,68 +50,88 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
         project-name))
     (setq projectile-project-name-function #'modi/projectile-project-name)
 
+    ;; Use `ag' all the time if available
+    (defun modi/advice-projectile-use-ag ()
+      "Always use `ag' for getting a list of all files in the project."
+      (mapconcat 'identity
+                 (append '("\\ag") ; used unaliased version of `ag': \ag
+                         modi/ag-arguments
+                         '("-0" ; output null separated results
+                           "-g ''")) ; get file names matching the regex '' (all files)
+                 " "))
     (when (executable-find "ag")
-      (defconst modi/projectile-ag-command
-        (mapconcat 'identity
-                   (append '("\\ag") ; used unaliased version of `ag': \ag
-                           modi/ag-arguments
-                           '("-0" ; output null separated results
-                             "-g ''")) ; get file names matching the regex '' (all files)
-                   " ")
-        "Ag command to be used by projectile to generate file cache.")
+      (advice-add 'projectile-get-ext-command :override
+                  #'modi/advice-projectile-use-ag))
 
-      ;; Patch
-      (defun projectile-get-ext-command ()
-        "Override the projectile-defined function so that `ag' is always used
-for getting a list of all files in a project."
-        modi/projectile-ag-command))
-
-    ;; Patch
     ;; Make the file list creation faster by NOT calling `projectile-get-sub-projects-files'
-    (defun projectile-get-repo-files ()
+    (defun modi/advice-projectile-no-sub-project-files ()
+      "Directly call `projectile-get-ext-command'. No need to try to get a
+list of sub-project files if the vcs is git."
       (projectile-files-via-ext-command (projectile-get-ext-command)))
+    (advice-add 'projectile-get-repo-files :override
+                #'modi/advice-projectile-no-sub-project-files)
 
-    ;; Patch
-    ;; Use older version of `projectile-cache-current-file' that did not cache
-    ;; the true names.
-    ;; https://github.com/bbatsov/projectile/commit/924d73120bca6adc5b9bf3d79ad53075a63b5f1e
-    (defun projectile-cache-current-file ()
-      "Add the currently visited file to the cache."
-      (interactive)
-      (let* ((current-project (projectile-project-root))
-             (abs-current-file (buffer-file-name (current-buffer)))
-             (current-file (file-relative-name abs-current-file current-project)))
-        (when (gethash (projectile-project-root) projectile-projects-cache)
-          (unless (or (projectile-file-cached-p current-file current-project)
-                      (projectile-ignored-directory-p (file-name-directory abs-current-file))
-                      (projectile-ignored-file-p abs-current-file))
-            (puthash current-project
-                     (cons current-file (gethash current-project projectile-projects-cache))
-                     projectile-projects-cache)
-            (projectile-serialize-cache)
-            (message "File %s added to project %s cache."
-                     (propertize current-file 'face 'font-lock-keyword-face)
-                     (propertize current-project 'face 'font-lock-keyword-face))))))
+    (defun modi/advice-projectile-dont-cache-ignored-projects ()
+      "Do not cache files from ignored projects when doing `find-file'."
+      (let ((do-not-cache (member (projectile-project-p)
+                                  projectile-ignored-projects)))
+        do-not-cache))
+    (advice-add 'projectile-cache-files-find-file-hook :before-until
+                #'modi/advice-projectile-dont-cache-ignored-projects)
 
-    ;; Patch
-    ;; Do not cache files from ignored projects.
-    (defun projectile-cache-files-find-file-hook ()
-      "Function for caching files with `find-file-hook'."
-      (when (and projectile-enable-caching
-                 (projectile-project-p)
-                 (not (member (projectile-project-p) projectile-ignored-projects)))
-        (projectile-cache-current-file)))
-
+    ;; Do not visit the current project's tags table if `ggtags-mode' is loaded.
+    ;; Doing so prevents the unnecessary call to `visit-tags-table' function
+    ;; and the subsequent `find-file' call for the `TAGS' file."
+    (defun modi/advice-projectile-dont-visit-tags-table ()
+      "Don't visit the tags table as we are using gtags/global."
+      nil)
     (when (fboundp 'ggtags-mode)
-      ;; Patch
-      (defun projectile-visit-project-tags-table ()
-        "Visit the current project's tags table ONLY IF `ggtags-mode' is not loaded.
-If `ggtags-mode' function is defined, “empty” this definition so that it does
-nothing.
+      (advice-add 'projectile-visit-project-tags-table :override
+                  #'modi/advice-projectile-dont-visit-tags-table))
 
-Doing so prevents prevents the unnecessary call to `visit-tags-table' function
-and the subsequent `find-file' call for the `TAGS' file."
-        ))
+    (defun modi/advice-projectile-project-root-no-truename ()
+      "Retrieves the root directory of a project if available.
+The current directory is assumed to be the project's root otherwise.
+
+Do not try to get the truename in the case of symbolic links."
+      (let ((dir default-directory))
+        (or (--some (let* ((cache-key (format "%s-%s" it dir))
+                           (cache-value (gethash cache-key projectile-project-root-cache)))
+                      (if cache-value
+                          cache-value
+                        ;; (let ((value (funcall it (file-truename dir))))
+                        (let ((value (funcall it dir)))
+                          (puthash cache-key value projectile-project-root-cache)
+                          value)))
+                    projectile-project-root-files-functions)
+            (if projectile-require-project-root
+                (error "You're not in a project")
+              default-directory))))
+    (advice-add 'projectile-project-root :override
+                #'modi/advice-projectile-project-root-no-truename)
+
+    ;; https://github.com/bbatsov/projectile/commit/924d73120bca6adc5b9bf3d79ad53075a63b5f1e
+    (defun modi/advice-projectile-cache-current-file-no-truename ()
+      "Add the currently visited file to the cache, but do not try to find a
+file's true name (don't follow symlinks)."
+      (interactive)
+      (let ((current-project (projectile-project-root)))
+        (when (gethash (projectile-project-root) projectile-projects-cache)
+          ;; (let* ((abs-current-file (file-truename (buffer-file-name (current-buffer))))
+          (let* ((abs-current-file (buffer-file-name (current-buffer)))
+                 (current-file (file-relative-name abs-current-file current-project)))
+            (unless (or (projectile-file-cached-p current-file current-project)
+                        (projectile-ignored-directory-p (file-name-directory abs-current-file))
+                        (projectile-ignored-file-p abs-current-file))
+              (puthash current-project
+                       (cons current-file (gethash current-project projectile-projects-cache))
+                       projectile-projects-cache)
+              (projectile-serialize-cache)
+              (message "File %s added to project %s cache."
+                       (propertize current-file 'face 'font-lock-keyword-face)
+                       (propertize current-project 'face 'font-lock-keyword-face)))))))
+    (advice-add 'projectile-cache-current-file :override
+                #'modi/advice-projectile-cache-current-file-no-truename)
 
     ;; http://emacs.stackexchange.com/a/10187/115
     (defun modi/kill-non-project-buffers (&optional kill-special)
