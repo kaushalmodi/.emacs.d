@@ -1,6 +1,6 @@
 ;;; verilog-mode.el --- major mode for editing verilog source in Emacs
 
-;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2016 Free Software Foundation, Inc.
 
 ;; Author: Michael McNamara <mac@verilog.com>
 ;;    Wilson Snyder <wsnyder@wsnyder.org>
@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2015-12-01-a4a2f25-vpo"
+(defconst verilog-mode-version "2016-02-23-61c1bd2-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -757,7 +757,7 @@ Set this to \"logic\" for SystemVerilog code, or use `verilog-auto-logic'."
 (put 'verilog-auto-wire-type 'safe-local-variable `stringp)
 
 (defcustom verilog-auto-endcomments t
-  "Non-nil means insert a comment /* ... */ after 'end's.
+  "Non-nil means insert a comment /* ... */ after `end's.
 The name of the function or case will be set between the braces."
   :group 'verilog-mode-actions
   :type 'boolean)
@@ -797,7 +797,7 @@ needed on every save.  A value of `detect' will do \\[verilog-auto]
 automatically when it thinks necessary.  A value of `ask' will query the
 user when it thinks updating is needed.
 
-You should not rely on the 'ask or 'detect policies, they are safeguards
+You should not rely on the `ask' or `detect' policies, they are safeguards
 only.  They do not detect when AUTOINSTs need to be updated because a
 sub-module's port list has changed."
   :group 'verilog-mode-actions
@@ -1321,8 +1321,13 @@ See also `verilog-case-fold'."
   :type 'hook)
 
 (defvar verilog-imenu-generic-expression
-  '((nil "^\\s-*\\(\\(m\\(odule\\|acromodule\\)\\)\\|primitive\\)\\s-+\\([a-zA-Z0-9_.:]+\\)" 4)
-    ("*Vars*" "^\\s-*\\(reg\\|wire\\)\\s-+\\(\\|\\[[^]]+\\]\\s-+\\)\\([A-Za-z0-9_]+\\)" 3))
+  '((nil            "^\\s-*\\(?:m\\(?:odule\\|acromodule\\)\\|p\\(?:rimitive\\|rogram\\|ackage\\)\\)\\s-+\\([a-zA-Z0-9_.:]+\\)" 1)
+    ("*Classes*"    "^\\s-*\\(?:\\(?:static\\|local\\|virtual\\|protected\\)\\s-+\\)?class\\s-+\\([A-Za-z_][A-Za-z0-9_]+\\)" 1)
+    ("*Variables*"  "^\\s-*\\(reg\\|wire\\|logic\\)\\s-+\\(\\|\\[[^]]+\\]\\s-+\\)\\([A-Za-z0-9_]+\\)" 3)
+    ("*Tasks*"      "^\\s-*\\(?:\\(?:static\\|local\\|virtual\\|protected\\)\\s-+\\)?task\\s-+\\(?:\\(?:static\\|automatic\\)\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
+    ("*Functions*"  "^\\s-*\\(?:\\(?:static\\|local\\|virtual\\|protected\\)\\s-+\\)?function\\s-+\\(?:\\w+\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
+    ("*Interfaces*" "^\\s-*interface\\s-+\\([a-zA-Z_0-9]+\\)" 1)
+    ("*Types*"      "^\\s-*typedef\\s-+.*\\s-+\\([a-zA-Z_0-9]+\\)" 1))
   "Imenu expression for Verilog mode.  See `imenu-generic-expression'.")
 
 ;;
@@ -1374,7 +1379,7 @@ If set will become buffer local.")
     (define-key map "\C-c\C-i" 'verilog-pretty-declarations)
     (define-key map "\C-c="    'verilog-pretty-expr)
     (define-key map "\C-c\C-b" 'verilog-submit-bug-report)
-    (define-key map "\M-*"     'verilog-star-comment)
+    (define-key map "\C-c/"    'verilog-star-comment)
     (define-key map "\C-c\C-c" 'verilog-comment-region)
     (define-key map "\C-c\C-u" 'verilog-uncomment-region)
     (when (featurep 'xemacs)
@@ -3733,12 +3738,12 @@ Variables controlling indentation/edit style:
    will be inserted.  Setting this variable to zero results in every
    end acquiring a comment; the default avoids too many redundant
    comments in tight quarters.
- `verilog-auto-lineup'              (default 'declarations)
+ `verilog-auto-lineup'              (default `declarations')
    List of contexts where auto lineup of code should be done.
 
 Variables controlling other actions:
 
- `verilog-linter'                   (default surelint)
+ `verilog-linter'                   (default `surelint')
    Unix program to call to run the lint checker.  This is the default
    command for \\[compile-command] and \\[verilog-auto-save-compile].
 
@@ -4089,7 +4094,7 @@ The upper left corner is defined by point.  Indices begin with 0
 and extend to the MAX - 1.  If no prefix arg is given, the user
 is prompted for a value.  The indices are surrounded by square
 brackets [].  For example, the following code with the point
-located after the first 'a' gives:
+located after the first `a' gives:
 
     a = b                           a[  0] = b
     a = b                           a[  1] = b
@@ -9016,7 +9021,8 @@ IGNORE-NEXT is true to ignore next token, fake from inside case statement."
 	    ;;(if dbg (setq dbg (concat dbg (format "\tif-check-else-other %s\n" keywd))))
 	    (setq gotend t))
 	   ;; Final statement?
-	   ((and exit-keywd (equal keywd exit-keywd))
+	   ((and exit-keywd (and (equal keywd exit-keywd)
+                                 (not (looking-at "::"))))
 	    (setq gotend t)
 	    (forward-char (length keywd)))
 	   ;; Standard tokens...
@@ -9032,7 +9038,9 @@ IGNORE-NEXT is true to ignore next token, fake from inside case statement."
 		(goto-char (match-end 0))
 	      (forward-char 1)))
            ((equal keywd ":")  ; Case statement, begin/end label, x?y:z
-            (cond ((equal "endcase" exit-keywd)  ; case x: y=z; statement next
+            (cond ((looking-at "::")
+                   (forward-char 1))  ; Another forward-char below
+                  ((equal "endcase" exit-keywd)  ; case x: y=z; statement next
 		   (setq ignore-next nil rvalue nil))
                   ((equal "?" exit-keywd)  ; x?y:z rvalue
                    )  ; NOP
@@ -9127,7 +9135,7 @@ IGNORE-NEXT is true to ignore next token, fake from inside case statement."
       (verilog-read-always-signals-recurse nil nil nil)
       (setq sigs-out-i (append sigs-out-i sigs-out-unk)
 	    sigs-out-unk nil)
-      ;;(if dbg (with-current-buffer (get-buffer-create "*vl-dbg*")) (delete-region (point-min) (point-max)) (insert dbg) (setq dbg ""))
+      ;;(if dbg (with-current-buffer (get-buffer-create "*vl-dbg*") (delete-region (point-min) (point-max)) (insert dbg) (setq dbg "")))
       ;; Return what was found
       (verilog-alw-new sigs-out-d sigs-out-i sigs-temp sigs-in))))
 
@@ -12949,7 +12957,7 @@ used on the right hand side of assignments.
 By default, AUTORESET will include the width of the signal in the
 autos, SystemVerilog designs may want to change this.  To control
 this behavior, see `verilog-auto-reset-widths'.  In some cases
-AUTORESET must use a '0 assignment and it will print NOWIDTH; use
+AUTORESET must use a \\='0 assignment and it will print NOWIDTH; use
 `verilog-auto-reset-widths' unbased to prevent this.
 
 AUTORESET ties signals to deasserted, which is presumed to be zero.
