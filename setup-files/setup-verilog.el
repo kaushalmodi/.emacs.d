@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-24 11:32:21 kmodi>
+;; Time-stamp: <2016-02-24 14:19:09 kmodi>
 
 ;; Verilog
 
@@ -17,8 +17,8 @@
 ;;    my/verilog-selective-indent
 ;;  hideshow
 ;;  hydra-verilog-template
+;;  imenu + outshine
 ;;  my/verilog-mode-customizations
-;;    imenu + outshine
 ;;  Key bindings
 
 (use-package verilog-mode
@@ -458,6 +458,22 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ("q"   nil nil :color blue)
       ("C-g" nil nil :color blue))
 
+;;; imenu + outshine
+    (with-eval-after-load 'outshine
+      (defun modi/verilog-outshine-imenu-generic-expression (&rest _)
+        "Update `imenu-generic-expression' when using outshine."
+        (when (derived-mode-p 'verilog-mode)
+          (setq-local imenu-generic-expression
+                      (append '(("*Level 1*"
+                                 "^// \\* \\(?1:.*$\\)" 1)
+                                ("*Level 2*"
+                                 "^// \\*\\* \\(?1:.*$\\)" 1)
+                                ("*Level 3*"
+                                 "^// \\*\\* \\(?1:.*$\\)" 1))
+                              verilog-imenu-generic-expression))))
+      (advice-add 'outshine-hook-function :after
+                  #'modi/verilog-outshine-imenu-generic-expression))
+
 ;;; my/verilog-mode-customizations
     (defun my/verilog-mode-customizations ()
       ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
@@ -469,22 +485,7 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
 
       ;; Replace tabs with spaces when saving files in verilog-mode
-      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
-
-;;;; imenu + outshine
-      (with-eval-after-load 'outshine
-        (defun modi/verilog-outshine-imenu-generic-expression (&rest _)
-          "Update `imenu-generic-expression' when using outshine."
-          (setq-local imenu-generic-expression
-                      (append '(("*Level 1*"
-                                 "^// \\* \\(?1:.*$\\)" 1)
-                                ("*Level 2*"
-                                 "^// \\*\\* \\(?1:.*$\\)" 1)
-                                ("*Level 3*"
-                                 "^// \\*\\* \\(?1:.*$\\)" 1))
-                              verilog-imenu-generic-expression)))
-        (advice-add 'outshine-hook-function :after
-                    #'modi/verilog-outshine-imenu-generic-expression)))
+      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
 
     ;; *Append* `my/verilog-mode-customizations' to `verilog-mode-hook' so that
     ;; that function is run very last of all other functions added to that hook.
