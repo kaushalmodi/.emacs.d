@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-26 17:48:40 kmodi>
+;; Time-stamp: <2016-02-23 22:40:18 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -128,11 +128,10 @@ Don't add “Revision Control” heading to TOC."
       (dolist (hook modi/outline-minor-mode-hooks)
         (remove-hook hook #'outline-minor-mode)))
 
-    (defun modi/outshine-hook-function ()
-      "Stuff I'd like to add to the `outshine-hook-function'."
-      ;; Auto-generate/update TOC on file saves
+    (defun modi/outshine-update-toc ()
+      "Auto-generate/update TOC on file saves."
       (add-hook 'before-save-hook #'modi/outline-toc nil :local))
-    (advice-add 'outshine-hook-function :after #'modi/outshine-hook-function)
+    (advice-add 'outshine-hook-function :after #'modi/outshine-update-toc)
 
     ;; Always enable Outshine in `outline-minor-mode'
     (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
