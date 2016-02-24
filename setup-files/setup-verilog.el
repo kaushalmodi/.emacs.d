@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-23 22:46:33 kmodi>
+;; Time-stamp: <2016-02-24 11:32:21 kmodi>
 
 ;; Verilog
 
@@ -17,7 +17,6 @@
 ;;    my/verilog-selective-indent
 ;;  hideshow
 ;;  hydra-verilog-template
-;;  abbrev
 ;;  my/verilog-mode-customizations
 ;;    imenu + outshine
 ;;  Key bindings
@@ -458,11 +457,6 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ("D"   verilog-sk-define-signal)
       ("q"   nil nil :color blue)
       ("C-g" nil nil :color blue))
-
-;;; abbrev
-    ;; Reset the verilog-mode abbrev table
-    (with-eval-after-load 'abbrev
-      (clear-abbrev-table verilog-mode-abbrev-table))
 
 ;;; my/verilog-mode-customizations
     (defun my/verilog-mode-customizations ()

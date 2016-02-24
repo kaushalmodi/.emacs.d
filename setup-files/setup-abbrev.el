@@ -1,13 +1,13 @@
-;; Time-stamp: <2015-06-01 14:20:30 kmodi>
+;; Time-stamp: <2016-02-24 12:22:32 kmodi>
 
 ;; Abbrev
 (use-package abbrev
   :config
   (progn
-
     (setq abbrev-file-name (locate-user-emacs-file "abbrev_defs"))
     (unless (file-exists-p abbrev-file-name)
       (with-temp-buffer (write-file abbrev-file-name)))
+    (setq save-abbrevs 'silently) ; Silently save abbrevs on quitting emacs
 
     (defconst modi/abbrev-hooks '(verilog-mode-hook
                                   emacs-lisp-mode-hook
@@ -18,6 +18,10 @@
       "Turn on abbrev only for specific modes."
       (interactive)
       (dolist (hook modi/abbrev-hooks)
+        (when (eq hook 'verilog-mode-hook)
+          (with-eval-after-load 'verilog-mode
+            ;; Reset the verilog-mode abbrev table
+            (clear-abbrev-table verilog-mode-abbrev-table)))
         (add-hook hook #'abbrev-mode)))
 
     (defun modi/turn-off-abbrev-mode ()
@@ -26,10 +30,8 @@
       (dolist (hook modi/abbrev-hooks)
         (remove-hook hook #'abbrev-mode)))
 
-    (setq save-abbrevs 'silently) ; silently save abbrevs on quitting emacs
-
     (modi/turn-on-abbrev-mode)
-    (quietly-read-abbrev-file))) ; reads the abbreviations file on startup
+    (quietly-read-abbrev-file))) ; Reads the abbreviations file on startup
 
 ;; Hippie Expand
 (use-package hippie-exp
