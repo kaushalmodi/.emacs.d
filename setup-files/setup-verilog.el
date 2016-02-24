@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-19 17:12:10 kmodi>
+;; Time-stamp: <2016-02-23 22:46:33 kmodi>
 
 ;; Verilog
 
@@ -15,10 +15,11 @@
 ;;    modi/verilog-jump-to-module-at-point (interactive)
 ;;    modi/verilog-find-parent-module (interactive)
 ;;    my/verilog-selective-indent
-;;  imenu support
 ;;  hideshow
 ;;  hydra-verilog-template
+;;  abbrev
 ;;  my/verilog-mode-customizations
+;;    imenu + outshine
 ;;  Key bindings
 
 (use-package verilog-mode
@@ -387,19 +388,6 @@ The match with `//.' resolves this issue:
     ;; Advise the indentation done by hitting `TAB'
     (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
 
-;;; imenu support
-    ;; Imenu expression for Verilog mode.  See `imenu-generic-expression'
-    (defconst modi/verilog-imenu-generic-expression
-      '(("*Modules*"
-         "^\\s-*\\(\\(m\\(odule\\|acromodule\\)\\)\\|primitive\\)\\s-+\\(?1:[A-Za-z_][A-Za-z0-9_.:]+\\)" 1)
-        ("*Classes*"
-         "^\\s-*\\(\\(static\\|local\\|virtual\\|protected\\)\\b\\s-+\\)*class\\s-+\\(?1:[A-Za-z_][A-Za-z0-9_]+\\)" 1)
-        ("*Tasks*"
-         "^\\s-*\\(\\(static\\|local\\|virtual\\|protected\\)\\b\\s-+\\)*task\\s-+\\(\\(static\\|automatic\\)\\s-+\\)*\\(?1:[A-Za-z_][A-Za-z0-9_:]+\\)" 1)
-        ("*Functions*"
-         "^\\s-*\\(\\(static\\|local\\|virtual\\|protected\\)\\b\\s-+\\)*function\\s-+\\([a-z_]+\\s-+\\)*\\(?1:[A-Za-z_][A-Za-z0-9_:]+\\)" 1))
-      "Generic regular expression to parse Verilog elements for `imenu'.")
-
 ;;; hideshow
     (with-eval-after-load 'hideshow
       (add-to-list 'hs-special-modes-alist
@@ -471,21 +459,10 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ("q"   nil nil :color blue)
       ("C-g" nil nil :color blue))
 
+;;; abbrev
     ;; Reset the verilog-mode abbrev table
     (with-eval-after-load 'abbrev
       (clear-abbrev-table verilog-mode-abbrev-table))
-
-    (defun modi/verilog-outshine-imenu ()
-      "Update `imenu-generic-expression' when using outshine."
-      ;; `imenu-generic-expression' is a buffer-local variable
-      (setq imenu-generic-expression
-            (append '(("*Level 1*"
-                       "^// \\* \\(?1:.*$\\)" 1)
-                      ("*Level 2*"
-                       "^// \\*\\* \\(?1:.*$\\)" 1)
-                      ("*Level 3*"
-                       "^// \\*\\* \\(?1:.*$\\)" 1))
-                    modi/verilog-imenu-generic-expression)))
 
 ;;; my/verilog-mode-customizations
     (defun my/verilog-mode-customizations ()
@@ -497,26 +474,23 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; just in comments). To do the highlighting intelligently, install the
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
 
-      ;; ;; Enable orgstruct mode
-      ;; (setq-local orgstruct-heading-prefix-regexp "//; ")
-      ;; (turn-on-orgstruct++)
-
-      (with-eval-after-load 'imenu
-        (setq imenu-generic-expression
-              (append imenu-generic-expression
-                      modi/verilog-imenu-generic-expression)))
-
       ;; Replace tabs with spaces when saving files in verilog-mode
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
 
+;;;; imenu + outshine
       (with-eval-after-load 'outshine
-        ;; Force the `imenu-generic-expression' to contain
-        ;; `modi/verilog-imenu-generic-expression' for `verilog-mode' by making
-        ;; sure that `modi/verilog-outshine-imenu' is *appended* to
-        ;; `outline-minor-mode-hook' after `outshine-hook-function'.
-        (when (member 'outshine-hook-function outline-minor-mode-hook)
-          (add-hook 'outline-minor-mode-hook
-                    #'modi/verilog-outshine-imenu :append :local))))
+        (defun modi/verilog-outshine-imenu-generic-expression (&rest _)
+          "Update `imenu-generic-expression' when using outshine."
+          (setq-local imenu-generic-expression
+                      (append '(("*Level 1*"
+                                 "^// \\* \\(?1:.*$\\)" 1)
+                                ("*Level 2*"
+                                 "^// \\*\\* \\(?1:.*$\\)" 1)
+                                ("*Level 3*"
+                                 "^// \\*\\* \\(?1:.*$\\)" 1))
+                              verilog-imenu-generic-expression)))
+        (advice-add 'outshine-hook-function :after
+                    #'modi/verilog-outshine-imenu-generic-expression)))
 
     ;; *Append* `my/verilog-mode-customizations' to `verilog-mode-hook' so that
     ;; that function is run very last of all other functions added to that hook.
