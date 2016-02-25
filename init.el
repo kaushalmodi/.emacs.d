@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-25 11:07:13 kmodi>
+;; Time-stamp: <2016-02-25 18:39:46 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -95,6 +95,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     org-tree-slide
     outorg navi-mode ; supporting packages for outshine
     outshine ; org-mode navigation and organization outside org-mode
+    ox-reveal ; used to export to HTML slides; using latest from git
     ox-twbs ; export to twitter bootstrap html
     paradox ; package menu improvements
     page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
@@ -147,7 +148,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     ;; ido-vertical-mode flx-ido ido-ubiquitous ; < ivy, counsel
     ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
     ;; popwin ; < shackle
-    ;; ox-reveal ; used to export to HTML slides; using latest from git
     ;; helm helm-swoop ; < swiper
     ;; helm-gtags ; < ggtags
     )
