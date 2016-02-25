@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-23 11:10:20 kmodi>
+;; Time-stamp: <2016-02-25 11:07:13 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -302,6 +302,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-backup)
 (require 'setup-editing)
 (require 'setup-image)
+(require 'setup-launcher)
 (require 'setup-navigation)
 (require 'setup-pdf)
 (require 'setup-print)
@@ -310,6 +311,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (when (or (executable-find "aspell")
           (executable-find "hunspell"))
   (require 'setup-spell))
+(require 'setup-toggles)
 (require 'setup-unicode)
 (require 'setup-windows-buffers)
 
