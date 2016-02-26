@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-29 23:50:11 kmodi>
+;; Time-stamp: <2016-02-26 15:00:02 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
@@ -12,9 +12,6 @@
     ;; (setq-default fci-handle-truncate-lines nil) ; Do not truncate lines in fci mode
 
     (setq fci-rule-width 1)
-
-    (with-eval-after-load 'setup-visual
-      (setq fci-rule-column modi/fill-column)) ; default 70
 
     (defconst modi/fci-mode-hooks '(verilog-mode-hook
                                     emacs-lisp-mode-hook

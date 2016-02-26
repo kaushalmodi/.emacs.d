@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-26 23:05:15 kmodi>
+;; Time-stamp: <2016-02-26 15:04:26 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -37,8 +37,7 @@
 (setq tooltip-mode nil) ; disable tooltip appearance on mouse hover
 (setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
 
-(defvar modi/fill-column 80
-  "Fill column value used by `fci-rule-column', `whitespace-line-column'.")
+(setq-default fill-column 80) ; default 70
 
 (defvar default-font-size-pt 13
   "Default font size in points.")
@@ -495,7 +494,7 @@ Toggling off this mode reverts everything to their original states."
   :commands (whitespace-mode global-whitespace-mode)
   :config
   (progn
-    (setq whitespace-line-column modi/fill-column)
+    (setq whitespace-line-column nil) ; When nil, set the value to `fill-column'
     (setq whitespace-style '(face
                              ;; Visualize trailing white space
                              trailing

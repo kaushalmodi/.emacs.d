@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-29 16:47:08 kmodi>
+;; Time-stamp: <2016-02-26 15:01:28 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -66,11 +66,7 @@ a `lambda' return `t', so the version fields are always inserted.")
     (defsubst modi/header-sep-line ()
       "Insert separator line"
       (insert header-prefix-string)
-      (insert-char modi/header-sep-line-char
-                   (- (if (featurep 'fill-column-indicator)
-                          fci-rule-column
-                        fill-column)
-                      (current-column)))
+      (insert-char modi/header-sep-line-char (- fill-column (current-column)))
       (insert "\n"))
 
     (defsubst modi/header-timestamp ()
