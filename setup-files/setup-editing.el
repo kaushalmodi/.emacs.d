@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-17 13:46:52 kmodi>
+;; Time-stamp: <2016-02-27 01:22:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -416,12 +416,69 @@ instead of ASCII characters for adorning the copied snippet."
   ("C" . kill-with-linenum-unicode))
 
 ;;; Rectangle
+
 ;; How to position the cursor after the end of line; useful for copying/killing
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
-(use-package rectangle-utils
-  :bind (:map region-bindings-mode-map
-         ("|" . extend-rectangle-to-end)))
+
+;; Below function is inspired from the `rectangle-utils' package
+;; https://github.com/thierryvolpiatto/rectangle-utils
+(defun modi/extend-rectangle-to-end ()
+  "Create a rectangle based on the longest line of region."
+  (interactive)
+  (if (use-region-p)
+      (let* ((beg (region-beginning))
+             (end (region-end))
+             (num-lines (count-lines beg end))
+             (rect-left-col (save-excursion
+                              (goto-char beg)
+                              (current-column)))
+             (max-len 0)
+             (line-info '())
+             len)
+        ;; When the end point of the region is on the 0th column, `count-lines'
+        ;; returns a one less number, so increment that value by 1 to compensate.
+        (when (save-excursion
+                (goto-char end)
+                (bolp))
+          (setq num-lines (1+ num-lines)))
+        (if (>= num-lines 2)
+            (progn
+              ;; Calculate max-len
+              (goto-char beg)
+              (dotimes (i num-lines)
+                (let ((line-end-col (save-excursion
+                                      (goto-char (line-end-position))
+                                      (current-column))))
+                  (setq len (- line-end-col rect-left-col))
+                  (add-to-list 'line-info `(,i ,line-end-col)))
+                (when (> len max-len)
+                  (setq max-len len))
+                (forward-line 1))
+              ;; Pad the shorter lines with spaces
+              (goto-char beg)
+              (dotimes (i num-lines)
+                (let* ((line-end-col (car (cdr (assoc i line-info))))
+                       (len (- line-end-col rect-left-col))
+                       (diff (- max-len len))
+                       (inhibit-read-only t)) ; ignore read-only status of buffer
+                  (when (< len max-len)
+                    (goto-char (line-end-position))
+                    (insert (make-string diff ? ))
+                    (setq end (+ diff end))))
+                (forward-line 1))
+              ;; Go back to END and end-of-line to be sure END is there.
+              (goto-char end)
+              (end-of-line)
+              (setq end (point))
+              ;; Go back to BEG and push mark to new END.
+              (goto-char beg)
+              (push-mark end :nomsg :activate)
+              (setq deactivate-mark nil))
+          (deactivate-mark :force)
+          (error "Error: Not in a rectangular region.")))
+    (error "Error: No region selected.")))
+(bind-key "|" #'modi/extend-rectangle-to-end region-bindings-mode-map)
 
 (defun modi/kill-rectangle-replace-with-space (start end)
   "Kill the rectangle and replace it with spaces."
@@ -467,7 +524,7 @@ _b_   _f_      _k_   cut         _r_eset         _o_pen (create blank rectangle 
              (deactivate-mark)
            (rectangle-mark-mode 1)))
   ("x"   ora-ex-point-mark)
-  ("e"   extend-rectangle-to-end)
+  ("e"   modi/extend-rectangle-to-end)
   ("c"   clear-rectangle)
   ("C"   modi/kill-rectangle-replace-with-space)
   ("o"   open-rectangle)

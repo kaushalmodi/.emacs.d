@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-25 18:39:46 kmodi>
+;; Time-stamp: <2016-02-27 00:55:12 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -105,7 +105,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     rainbow-delimiters
     rainbow-mode
     region-bindings-mode ; complements really well with multiple-cursors
-    rectangle-utils
     rpn-calc
     shackle
     smart-compile
