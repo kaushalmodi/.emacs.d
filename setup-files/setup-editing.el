@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-27 01:22:45 kmodi>
+;; Time-stamp: <2016-02-28 00:37:48 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -421,64 +421,110 @@ instead of ASCII characters for adorning the copied snippet."
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 
-;; Below function is inspired from the `rectangle-utils' package
+;; Below is inspired from the `rectangle-utils' package.
 ;; https://github.com/thierryvolpiatto/rectangle-utils
-(defun modi/extend-rectangle-to-end ()
-  "Create a rectangle based on the longest line of region."
-  (interactive)
-  (if (use-region-p)
-      (let* ((beg (region-beginning))
-             (end (region-end))
-             (num-lines (count-lines beg end))
-             (rect-left-col (save-excursion
-                              (goto-char beg)
-                              (current-column)))
-             (max-len 0)
-             (line-info '())
-             len)
-        ;; When the end point of the region is on the 0th column, `count-lines'
-        ;; returns a one less number, so increment that value by 1 to compensate.
-        (when (save-excursion
-                (goto-char end)
-                (bolp))
-          (setq num-lines (1+ num-lines)))
-        (if (>= num-lines 2)
-            (progn
-              ;; Calculate max-len
-              (goto-char beg)
-              (dotimes (i num-lines)
-                (let ((line-end-col (save-excursion
-                                      (goto-char (line-end-position))
-                                      (current-column))))
-                  (setq len (- line-end-col rect-left-col))
-                  (add-to-list 'line-info `(,i ,line-end-col)))
-                (when (> len max-len)
-                  (setq max-len len))
-                (forward-line 1))
-              ;; Pad the shorter lines with spaces
-              (goto-char beg)
-              (dotimes (i num-lines)
-                (let* ((line-end-col (car (cdr (assoc i line-info))))
-                       (len (- line-end-col rect-left-col))
-                       (diff (- max-len len))
-                       (inhibit-read-only t)) ; ignore read-only status of buffer
-                  (when (< len max-len)
-                    (goto-char (line-end-position))
-                    (insert (make-string diff ? ))
-                    (setq end (+ diff end))))
-                (forward-line 1))
-              ;; Go back to END and end-of-line to be sure END is there.
-              (goto-char end)
-              (end-of-line)
-              (setq end (point))
-              ;; Go back to BEG and push mark to new END.
-              (goto-char beg)
-              (push-mark end :nomsg :activate)
-              (setq deactivate-mark nil))
-          (deactivate-mark :force)
-          (error "Error: Not in a rectangular region.")))
-    (error "Error: No region selected.")))
-(bind-key "|" #'modi/extend-rectangle-to-end region-bindings-mode-map)
+(defun modi/extend-rectangle--core (beg end)
+  "For a rectangle selected between BEG and END, return an updated value of END
+such that the longest line of region is completely included in the selection."
+  (let* ((num-lines (count-lines beg end))
+         (max-len 0)
+         (line-info '())
+         rect-left-col
+         len)
+    ;; (message "Before: beg=%0d end=%0d" beg end)
+    ;; When the end point of the region is on the 0th column, `count-lines'
+    ;; returns a one less number, so increment that value by 1 to compensate.
+    (when (save-excursion
+            (goto-char end)
+            (bolp))
+      (setq num-lines (1+ num-lines)))
+    (save-excursion
+      (goto-char beg)
+      (setq rect-left-col (current-column))
+      ;; Calculate max-len
+      (save-excursion
+        (dotimes (i num-lines)
+          (let ((line-end-col (save-excursion
+                                (goto-char (line-end-position))
+                                (current-column))))
+            (setq len (- line-end-col rect-left-col))
+            (add-to-list 'line-info `(,i ,line-end-col)))
+          (when (> len max-len)
+            (setq max-len len))
+          (forward-line 1)))
+      ;; Pad the shorter lines with spaces
+      (dotimes (i num-lines)
+        (let* ((line-end-col (nth 1 (assoc i line-info)))
+               (len (- line-end-col rect-left-col))
+               (diff (- max-len len))
+               (inhibit-read-only t)) ; ignore read-only status of buffer
+          (if (< len max-len)
+              (progn
+                (goto-char (line-end-position))
+                (insert (make-string diff ? ))
+                (setq end (line-end-position)))
+            (setq end (line-end-position))))
+        (forward-line 1))
+      ;; (message "After: end=%0d" end)
+      end)))
+
+(defvar modi/extend-rectangle-fns '(extract-rectangle ; copy-rectangle-as-kill
+                                    delete-extract-rectangle ; kill-rectangle
+                                    delete-rectangle
+                                    clear-rectangle
+                                    modi/kill-rectangle-replace-with-space)
+  "Functions where it would be useful to be able to extend the rectangle
+selections to include the longest lines.")
+
+(defun modi/advice-select-rectangle-to-end (orig-fun &rest args)
+  "Extract the rectangle so that the longest line of region is completely
+included when the prefix \\[universal-argument] is used.
+
+In the below example, ▯ is the mark and ▮ is the point.
+
+  a =▯12345;
+  b = 6;▮
+
+If that region is selected and if we do \\[copy-rectangle-as-kill], the following
+rectangle gets copied:
+
+  12
+  6;
+
+.. which was not the intention.
+
+But with this advice, \\[universal-argument] \\[copy-rectangle-as-kill] on that
+same region will copy the below rectangle:
+
+  12345;
+  6;
+
+.. which obviously was the actual intention.
+
+Similar rectangle extension behavior is applied when using the
+prefix \\[universal-argument] with similarly advised functions too."
+  (if (eq 4 (prefix-numeric-value current-prefix-arg)) ; when using C-u
+      (let* ((beg (nth 0 args))
+             (end (nth 1 args)))
+        ;; Override the original END argument
+        (setcar (cdr args) (modi/extend-rectangle--core beg end))
+        (apply orig-fun args))
+    (apply orig-fun args)))
+
+(dolist (fn modi/extend-rectangle-fns)
+  (advice-add fn :around #'modi/advice-select-rectangle-to-end)
+  ;; (advice-remove fn #'modi/advice-select-rectangle-to-end)
+  )
+
+(defun modi/extend-rectangle-to-end (beg end)
+  "Extend the rectangle based on the longest line of region."
+  (interactive "r")
+  (setq end (modi/extend-rectangle--core beg end))
+  ;; Go back to BEG and push mark to new END.
+  (goto-char beg)
+  (push-mark end :nomsg :activate)
+  (setq deactivate-mark nil))
+(bind-key ">" #'modi/extend-rectangle-to-end region-bindings-mode-map)
 
 (defun modi/kill-rectangle-replace-with-space (start end)
   "Kill the rectangle and replace it with spaces."
