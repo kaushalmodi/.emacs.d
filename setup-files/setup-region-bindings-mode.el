@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-05 16:35:25 kmodi>
+;; Time-stamp: <2016-02-28 00:21:34 kmodi>
 
 ;; Region Bindings Mode
 ;; https://github.com/fgallina/region-bindings-mode
@@ -19,8 +19,7 @@
 
     (bind-keys
      :map region-bindings-mode-map
-      ("<C-SPC>" . modi/disable-rbm-deactivate-mark)
-      ("<S-SPC>" . clear-rectangle)))) ; replace selection with spaces
+      ("<C-SPC>" . modi/disable-rbm-deactivate-mark))))
 
 
 (provide 'setup-region-bindings-mode)

@@ -532,6 +532,8 @@ _b_   _f_      _k_   cut         _r_eset         _o_pen (create blank rectangle 
   ("N"   rectangle-number-lines)
   ("q"   nil "cancel" :color blue))
 (bind-key "C-x SPC" #'hydra-rectangle/body modi-mode-map)
+;; Replace selection/rectangle with spaces
+(bind-key "<S-SPC>" #'clear-rectangle region-bindings-mode-map)
 
 ;;; Cycle Letter Case
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
