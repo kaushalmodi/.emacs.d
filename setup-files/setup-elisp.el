@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-04 00:01:34 kmodi>
+;; Time-stamp: <2016-02-29 03:42:38 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -244,3 +244,9 @@ Lisp function does not specify a special indentation."
 
 
 (provide 'setup-elisp)
+
+;; TIPS
+
+;; You cannot update `defvar' value by `eval-buffer' or `eval-last-sexp'. But
+;; you can place the point in each `defvar' form you want to re-evaluate and
+;; call `eval-defun' (C-M-x).
