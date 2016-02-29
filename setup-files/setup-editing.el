@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-28 00:37:48 kmodi>
+;; Time-stamp: <2016-02-29 04:56:13 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -421,6 +421,10 @@ instead of ASCII characters for adorning the copied snippet."
 ;; rectangles have lines of varying lengths.
 ;; http://emacs.stackexchange.com/a/3661/115
 
+(defvar modi/extend-rectangle--added-whitespace-boundaries '()
+  "Alist to hold the (start . end) positions of the white space added
+to the last line of the rectangle by `modi/extend-rectangle--core'.")
+
 ;; Below is inspired from the `rectangle-utils' package.
 ;; https://github.com/thierryvolpiatto/rectangle-utils
 (defun modi/extend-rectangle--core (beg end)
@@ -431,6 +435,7 @@ such that the longest line of region is completely included in the selection."
          (line-info '())
          rect-left-col
          len)
+    (setq modi/extend-rectangle--added-whitespace-boundaries (list end))
     ;; (message "Before: beg=%0d end=%0d" beg end)
     ;; When the end point of the region is on the 0th column, `count-lines'
     ;; returns a one less number, so increment that value by 1 to compensate.
@@ -452,19 +457,18 @@ such that the longest line of region is completely included in the selection."
           (when (> len max-len)
             (setq max-len len))
           (forward-line 1)))
-      ;; Pad the shorter lines with spaces
-      (dotimes (i num-lines)
-        (let* ((line-end-col (nth 1 (assoc i line-info)))
-               (len (- line-end-col rect-left-col))
-               (diff (- max-len len))
-               (inhibit-read-only t)) ; ignore read-only status of buffer
-          (if (< len max-len)
-              (progn
-                (goto-char (line-end-position))
-                (insert (make-string diff ? ))
-                (setq end (line-end-position)))
-            (setq end (line-end-position))))
-        (forward-line 1))
+      ;; Pad the last line with spaces if it's not the longest
+      (let* ((last-line-num (1- num-lines))
+             (line-end-col (nth 1 (assoc last-line-num line-info)))
+             (len (- line-end-col rect-left-col))
+             (diff (- max-len len)))
+        (when (< len max-len)
+          (forward-line last-line-num) ; go to the last line of the rectangle
+          (goto-char (line-end-position))
+          (let ((inhibit-read-only t)) ; ignore read-only status of buffer
+            (insert (make-string diff ? )))
+          (setq end (line-end-position))
+          (setcdr modi/extend-rectangle--added-whitespace-boundaries (list end))))
       ;; (message "After: end=%0d" end)
       end)))
 
@@ -503,13 +507,29 @@ same region will copy the below rectangle:
 
 Similar rectangle extension behavior is applied when using the
 prefix \\[universal-argument] with similarly advised functions too."
-  (if (eq 4 (prefix-numeric-value current-prefix-arg)) ; when using C-u
-      (let* ((beg (nth 0 args))
-             (end (nth 1 args)))
-        ;; Override the original END argument
-        (setcar (cdr args) (modi/extend-rectangle--core beg end))
-        (apply orig-fun args))
-    (apply orig-fun args)))
+  (let (ret)
+    (if (and (eq 4 (prefix-numeric-value current-prefix-arg)) ; C-u
+             ;; We cannot activate this advise for `copy-rectangle-to-register'
+             ;; because any prefix argument will enable its DELETE-FLAG arg. So
+             ;; one way to make this work for `copy-rectangle-to-register' would
+             ;; be to make the selection, call `modi/extend-rectangle-to-end'
+             ;; and then call `copy-rectangle-to-register'.
+             (not (eq this-command #'copy-rectangle-to-register)))
+        (let* ((beg (nth 0 args))
+               (end (nth 1 args)))
+          ;; Override the original END argument
+          (setcar (cdr args) (modi/extend-rectangle--core beg end))
+          (setq ret (apply orig-fun args)))
+      (setq ret (apply orig-fun args)))
+    ;; Remove the extra whitespace added by `modi/extend-rectangle--core'
+    (when (and (cdr modi/extend-rectangle--added-whitespace-boundaries)
+               (or (eq this-command #'copy-rectangle-as-kill)
+                   (eq this-command #'copy-rectangle-to-register)))
+      (let ((inhibit-read-only t))
+        (apply #'delete-trailing-whitespace
+               modi/extend-rectangle--added-whitespace-boundaries)
+        (setq modi/extend-rectangle--added-whitespace-boundaries nil)))
+    ret))
 
 (dolist (fn modi/extend-rectangle-fns)
   (advice-add fn :around #'modi/advice-select-rectangle-to-end)
