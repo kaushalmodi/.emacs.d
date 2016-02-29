@@ -583,6 +583,14 @@ _b_   _f_      _k_   cut         _r_eset         _o_pen (create blank rectangle 
 ;; Replace selection/rectangle with spaces
 (bind-key "<S-SPC>" #'clear-rectangle region-bindings-mode-map)
 
+(bind-keys
+ :map modi-mode-map
+  ;; Change the binding of `window-configuration-to-register' to C-x r W
+  ;; and bind C-x r w to `copy-rectangle-as-kill' instead (which is much more
+  ;; frequently used by me).
+  ("C-x r w" . copy-rectangle-as-kill)
+  ("C-x r W" . window-configuration-to-register))
+
 ;;; Cycle Letter Case
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
 (defun xah-cycle-letter-case (arg)
