@@ -65,11 +65,11 @@ instead of the one present in `package-user-dir'."
       ;; `pdf-info-epdfinfo-program' variable
       (pdf-tools-install))
 
-    (bind-keys
-     :map pdf-view-mode-map
-      ("M-w"  . pdf-view-kill-ring-save)
-      ("C-w"  . pdf-view-kill-ring-save)
-      ("<f1>" . pdf-view-goto-page))
+    (dolist (pair '((beginning-of-buffer . pdf-view-first-page)
+                    (end-of-buffer       . pdf-view-last-page)))
+      (let ((remap-from (car pair))
+            (remap-to (cdr pair)))
+        (define-key pdf-view-mode-map `[remap ,remap-from] remap-to)))
 
     (my/pdf-tools-install)))
 
