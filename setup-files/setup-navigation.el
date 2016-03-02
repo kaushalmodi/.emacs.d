@@ -1,7 +1,11 @@
-;; Time-stamp: <2015-11-03 00:49:36 kmodi>
+;; Time-stamp: <2016-03-02 01:37:28 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
+
+;; Bind the new bindings for `goto-line' in global map
+(bind-key "<f1>" #'goto-line)
+(bind-chord "1q" #'goto-line) ; alternative to F1
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -200,13 +204,15 @@ If ARG is omitted or nil, move point forward one word."
 ;; Avy Jump
 ;; https://github.com/abo-abo/avy
 (use-package avy
-  :bind (("<f1>" . modi/goto-line)) ; bind in global map
+  :commands (modi/goto-line)
+  :init
+  (progn
+    (global-set-key [remap goto-line] #'modi/goto-line))
   :bind (:map isearch-mode-map
          ("M-a" . isearch-avy)) ; isearch > avy
   :bind (:map modi-mode-map
          ("C-c C-SPC" . modi/avy))
-  :chords (("l;" . modi/avy)
-           ("1q" . modi/goto-line)) ; alternative to F1
+  :chords (("l;" . modi/avy))
   :config
   (progn
     (setq avy-style 'pre)
