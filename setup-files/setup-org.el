@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-25 18:38:47 kmodi>
+;; Time-stamp: <2016-03-02 02:15:23 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -118,6 +118,10 @@
     (when (executable-find "firefox")
       (add-to-list 'org-file-apps '("\\.x?html\\'" . "firefox %s")))
 
+    ;; Do not add the default indentation of 2 spaces when exiting the *Org Src*
+    ;; buffer (the buffer you get when you do «C-c '» while in a block like
+    ;; #+BEGIN_SRC
+    (setq org-edit-src-content-indentation 0)
 
 ;;; Agenda and Capture
     ;; http://orgmode.org/manual/Template-elements.html
