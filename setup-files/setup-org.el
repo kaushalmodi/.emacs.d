@@ -239,7 +239,7 @@ Execute this command while the point is on or after the hyper-linked org link."
                                 nil start end)))))))
 
     ;; http://emacs.stackexchange.com/a/17477/115
-    (defun ia/dwim-org-table-blank-field (&rest _args)
+    (defun ia/dwim-org-table-blank-field (&rest args)
       "Execute the “C-c SPC” binding from the global map if point is not in an
 org-table or if a prefix is used."
       (let ((skip-orig-fn (or current-prefix-arg

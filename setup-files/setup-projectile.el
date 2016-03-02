@@ -71,7 +71,7 @@ list of sub-project files if the vcs is git."
     (advice-add 'projectile-get-repo-files :override
                 #'modi/advice-projectile-no-sub-project-files)
 
-    (defun modi/advice-projectile-dont-cache-ignored-projects ()
+    (defun modi/advice-projectile-dont-cache-ignored-projects (&rest args)
       "Do not cache files from ignored projects when doing `find-file'."
       (let ((do-not-cache (member (projectile-project-p)
                                   projectile-ignored-projects)))

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-29 04:56:13 kmodi>
+;; Time-stamp: <2016-03-02 02:14:30 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -772,7 +772,7 @@ Note that the selected region cannot contain any spaces."
 ;; http://www.masteringemacs.org/article/removing-blank-lines-buffer
 ;; If a region is selected, delete all blank lines in that region.
 ;; Else, call `delete-blank-lines'.
-(defun modi/delete-blank-lines-in-region ()
+(defun modi/delete-blank-lines-in-region (&rest args)
   (let ((do-not-run-orig-fn (use-region-p)))
     (when do-not-run-orig-fn
       (flush-lines "^\\s-*$" (region-beginning) (region-end)))
