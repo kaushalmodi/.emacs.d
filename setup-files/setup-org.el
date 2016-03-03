@@ -1025,6 +1025,9 @@ region is selected. Else call `self-insert-command'."
 ;; - Display table of contents 4 deep (toc).
 ;; - Consider sections after 6 to be "low-level" (H).
 
+;; How to mark the whole src block that the point is in?
+;; C-c C-v C-M-h (`org-babel-mark-block')
+
 ;; Local Variables:
 ;; eval: (aggressive-indent-mode -1)
 ;; End:
