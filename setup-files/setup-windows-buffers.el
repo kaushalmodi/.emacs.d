@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-20 01:40:39 kmodi>
+;; Time-stamp: <2016-03-02 14:38:56 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -49,37 +49,37 @@
 
     ;; Move window splitters / Resize windows
     ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
-    (defun hydra-move-splitter-left ()
+    (defun hydra-move-splitter-left (delta)
       "Move window splitter left."
-      (interactive)
+      (interactive "p")
       (let ((windmove-wrap-around nil))
         (if (windmove-find-other-window 'right)
-            (shrink-window-horizontally 1)
-          (enlarge-window-horizontally 1))))
+            (shrink-window-horizontally delta)
+          (enlarge-window-horizontally delta))))
 
-    (defun hydra-move-splitter-right ()
+    (defun hydra-move-splitter-right (delta)
       "Move window splitter right."
-      (interactive)
+      (interactive "p")
       (let ((windmove-wrap-around nil))
         (if (windmove-find-other-window 'right)
-            (enlarge-window-horizontally 1)
-          (shrink-window-horizontally 1))))
+            (enlarge-window-horizontally delta)
+          (shrink-window-horizontally delta))))
 
-    (defun hydra-move-splitter-up ()
+    (defun hydra-move-splitter-up (delta)
       "Move window splitter up."
-      (interactive)
+      (interactive "p")
       (let ((windmove-wrap-around nil))
         (if (windmove-find-other-window 'up)
-            (enlarge-window 1)
-          (shrink-window 1))))
+            (enlarge-window delta)
+          (shrink-window delta))))
 
-    (defun hydra-move-splitter-down ()
+    (defun hydra-move-splitter-down (delta)
       "Move window splitter down."
-      (interactive)
+      (interactive "p")
       (let ((windmove-wrap-around nil))
         (if (windmove-find-other-window 'up)
-            (shrink-window 1)
-          (enlarge-window 1))))
+            (shrink-window delta)
+          (enlarge-window delta))))
 
     (defhydra hydra-win-resize (:color red)
       "win-resize"
