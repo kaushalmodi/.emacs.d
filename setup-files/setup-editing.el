@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-02 02:14:30 kmodi>
+;; Time-stamp: <2016-03-03 14:40:22 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -138,27 +138,31 @@ there's a region, all lines that region covers will be duplicated."
 (setq require-final-newline t)
 
 ;; Delete trailing white space in lines and empty new lines at the end of file
-;; when saving files.
-;; This is very useful for macro definitions in Verilog as for multi-line
-;; macros, NO space is allowed after line continuation character "\"
-(defvar do-not-delete-trailing-whitespace nil
-  "If nil, `delete-trailing-whitespace' function will be executed in the
-`write-file-functions' hook.
+;; when saving files. This is very useful for macro definitions in Verilog as for
+;; multi-line macros, NO space is allowed after line continuation character "\".
+(defvar-local do-not-delete-trailing-whitespace nil
+  "If non-nil, `modi/delete-trailing-whitespace-buffer' will do nothing.
 
 Usage: If you do not want to automatically delete the trailing whitespace in
 any of the files in a given sub-directory, create a `.dir-locals.el' file in
 that sub-directory will the below contents:
-  ((\"sub-dir-name\"
-    . ((nil . ((do-not-delete-trailing-whitespace . t))))))
+((\"sub-dir-name\"
+  . ((nil . ((do-not-delete-trailing-whitespace . t))))))
 ")
-(make-variable-buffer-local 'do-not-delete-trailing-whitespace)
-(defun modi/delete-trailing-whitespace-maybe (&rest args)
-  "Return nil if `do-not-delete-trailing-whitespace' is unbound or nil."
-  (bound-and-true-p do-not-delete-trailing-whitespace))
-;; Call the `delete-trailing-whitespace' function only if
-;; `modi/delete-trailing-whitespace-maybe' returns nil.
-(advice-add 'delete-trailing-whitespace :before-until #'modi/delete-trailing-whitespace-maybe)
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
+
+;; http://stackoverflow.com/a/35781486/1219634
+(defun modi/delete-trailing-whitespace-buffer ()
+  "Delete trailing whitespace in the whole buffer, except on the current line.
+The current line exception is because we do want to remove any whitespace
+on the current line on saving the file (`before-save-hook') while we are
+in-between typing something.
+
+Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
+  (interactive)
+  (when (not (bound-and-true-p do-not-delete-trailing-whitespace))
+    (delete-trailing-whitespace (point-min) (line-beginning-position))
+    (delete-trailing-whitespace (line-end-position) (point-max))))
+(add-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
 
 ;;; Untabify
 (setq-default indent-tabs-mode nil) ; Use spaces instead of tabs for indentation
