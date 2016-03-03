@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-18 13:10:11 kmodi>
+;; Time-stamp: <2016-03-02 12:04:39 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -115,14 +115,6 @@ Call `eww-reload' to undo the filtering."
           (goto-char (point-min))
           (keep-lines regexp))))
 
-    (defun modi/eww-back-dwim ()
-      "Call `eww-back-url' if the buffer is read only.
-Else perform the default backspace action."
-      (interactive)
-      (if buffer-read-only
-          (eww-back-url)
-        (delete-backward-char 1)))
-
     (defun modi/eww-browse-url-of-file ()
       "Browse the current file using `eww'."
       (interactive)
@@ -130,6 +122,7 @@ Else perform the default backspace action."
         (call-interactively #'browse-url-of-file)))
 
     ;; eww-lnum
+    ;; https://github.com/m00natic/eww-lnum
     (use-package eww-lnum
       :bind (:map eww-mode-map
              ("f" . eww-lnum-follow)
@@ -188,26 +181,13 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
 
     (bind-keys
      :map eww-mode-map
-      ("G"           . eww) ; Go to URL
-      ("g"           . eww-reload) ; Reload
-      ("h"           . eww-list-histories) ; View history
-      ("r"           . eww-reload) ; Reload
-      ("p"           . shr-previous-link)
-      ("<backtab>"   . shr-previous-link) ; S-TAB Jump to previous link on the page
-      ("n"           . shr-next-link)
-      ("<tab>"       . shr-next-link)
-      ("N"           . eww-next-url)
-      ("P"           . eww-previous-url)
-      ("<backspace>" . modi/eww-back-dwim)
-      ("w"           . modi/eww-copy-url-dwim)
-      ("\<"          . eww-back-url)
-      ("\>"          . eww-forward-url)
-      ("/"           . highlight-regexp)
-      ("k"           . modi/eww-keep-lines))
+      (":" . eww) ; Go to URL
+      ("h" . eww-list-histories) ; View history
+      ("w" . modi/eww-copy-url-dwim)
+      ("/" . highlight-regexp)
+      ("k" . modi/eww-keep-lines))
     ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
     (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
-    (>=e "25.0"
-        (bind-key "R" #'eww-readable eww-mode-map)) ; hit `g' to revert to default view
     (bind-keys
      :map eww-text-map ; For single line text fields
       ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
@@ -230,33 +210,42 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
 (provide 'setup-eww)
 
 ;; Default eww key bindings
-;; |--------+---------------------------------------------------------------------------------|
-;; | Key    | Function                                                                        |
-;; |--------+---------------------------------------------------------------------------------|
-;; | TAB    | Skip to the next link.                                                          |
-;; | SPC    | Scroll text of selected window upward ARG lines; or near full screen if no ARG. |
-;; | &      | Browse the current URL with an external browser.                                |
-;; | -      | Begin a negative numeric argument for the next command.                         |
-;; | 0 .. 9 | Part of the numeric argument for the next command.                              |
-;; | B      | Display the bookmarks.                                                          |
-;; | C      | Display a buffer listing the current URL cookies, if there are any.             |
-;; | H      | List the eww-histories.                                                         |
-;; | F      | Toggle font between variable-width and fixed-width.                             |
-;; | R      | Readable mode                                                                   |
-;; | S      | List eww buffers                                                                |
-;; | b      | Add the current page to the bookmarks.                                          |
-;; | d      | Download URL under point to `eww-download-directory'.                           |
-;; | g      | Reload the current page.                                                        |
-;; | l      | Go to the previously displayed page.                                            |
-;; | n      | Go to the page marked `next'.                                                   |
-;; | p      | Go to the page marked `previous'.                                               |
-;; | q      | Quit WINDOW and bury its buffer.                                                |
-;; | r      | Go to the next displayed page.                                                  |
-;; | t      | Go to the page marked `top'.                                                    |
-;; | u      | Go to the page marked `up'.                                                     |
-;; | v      | `eww-view-source' (not documented)                                              |
-;; | w      | `eww-copy-page-url' (not documented)                                            |
-;; | DEL    | Scroll text of selected window down ARG lines; or near full screen if no ARG.   |
-;; | S-SPC  | Scroll text of selected window down ARG lines; or near full screen if no ARG.   |
-;; | C-M-i  | Skip to the previous link.                                                      |
-;; |--------+---------------------------------------------------------------------------------|
+;; |-----------+---------------------------------------------------------------------|
+;; | Key       | Function                                                            |
+;; |-----------+---------------------------------------------------------------------|
+;; | &         | Browse the current URL with an external browser.                    |
+;; | -         | Begin a negative numeric argument for the next command.             |
+;; | 0 .. 9    | Part of the numeric argument for the next command.                  |
+;; | C         | Display a buffer listing the current URL cookies, if there are any. |
+;; | H         | List the eww-histories.                                             |
+;; | F         | Toggle font between variable-width and fixed-width.                 |
+;; | G         | Go to a URL                                                         |
+;; | R         | Readable mode                                                       |
+;; | S         | List eww buffers                                                    |
+;; | d         | Download URL under point to `eww-download-directory'.               |
+;; | g         | Reload the current page.                                            |
+;; | q         | Quit WINDOW and bury its buffer.                                    |
+;; | v         | `eww-view-source'                                                   |
+;; | w         | `eww-copy-page-url'                                                 |
+;; |-----------+---------------------------------------------------------------------|
+;; | b         | Add the current page to the bookmarks.                              |
+;; | B         | Display the bookmark list.                                          |
+;; | M-n       | Visit the next bookmark                                             |
+;; | M-p       | Visit the previous bookmark                                         |
+;; |-----------+---------------------------------------------------------------------|
+;; | t         | Go to the page marked `top'.                                        |
+;; | u         | Go to the page marked `up'.                                         |
+;; |-----------+---------------------------------------------------------------------|
+;; | n         | Go to the page marked `next'.                                       |
+;; | p         | Go to the page marked `previous'.                                   |
+;; |-----------+---------------------------------------------------------------------|
+;; | l         | Go to the previously displayed page.                                |
+;; | r         | Go to the next displayed page.                                      |
+;; |-----------+---------------------------------------------------------------------|
+;; | TAB       | Move point to next link on the page.                                |
+;; | S-TAB     | Move point to previous link on the page.                            |
+;; |-----------+---------------------------------------------------------------------|
+;; | SPC       | Scroll up                                                           |
+;; | DEL/Bkspc | Scroll down                                                         |
+;; | S-SPC     | Scroll down                                                         |
+;; |-----------+---------------------------------------------------------------------|
