@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-02 14:38:56 kmodi>
+;; Time-stamp: <2016-03-03 13:33:37 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -261,35 +261,43 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 (setq scroll-preserve-screen-position t)
 
 ;; Scroll without moving the point/cursor
-(defun scroll-up-dont-move-point ()
-  "Scroll up by 1 line without moving the point."
-  (interactive) (scroll-up 1))
+(defun modi/scroll-up (ln)
+  "Scroll up by LN lines without moving the point.
+If LN is nil, defaults to 1 line."
+  (interactive "p")
+  (scroll-up ln))
 
-(defun scroll-down-dont-move-point ()
-  "Scroll down by 1 line without moving the point."
-  (interactive) (scroll-down 1))
+(defun modi/scroll-down (ln)
+  "Scroll down by LN lines without moving the point.
+If LN is nil, defaults to 1 line."
+  (interactive "p")
+  (scroll-down ln))
 
-(defun scroll-other-window-up-dont-move-point ()
-  "Scroll other window up by 1 line without moving the point."
-  (interactive) (scroll-other-window 1))
+(defun modi/scroll-other-window-up (ln)
+  "Scroll other window up by LN lines without moving the point.
+If LN is nil, defaults to 1 line."
+  (interactive "p")
+  (scroll-other-window ln))
 
-(defun scroll-other-window-down-dont-move-point ()
-  "Scroll other window down by 1 line without moving the point."
-  (interactive) (scroll-other-window -1))
+(defun modi/scroll-other-window-down (ln)
+  "Scroll other window down by LN lines without moving the point.
+If LN is nil, defaults to 1 line."
+  (interactive "p")
+  (scroll-other-window (- ln)))
 
 ;; Below bindings are made in global map and not in my minor mode as I want
 ;; other modes to override those bindings.
 (bind-keys
- ("<C-M-up>"    . scroll-down-dont-move-point)
- ("<C-M-down>"  . scroll-up-dont-move-point)
- ("<C-M-left>"  . scroll-other-window-down-dont-move-point)
- ("<C-M-right>" . scroll-other-window-up-dont-move-point))
+ ("<C-M-up>"    . modi/scroll-down)
+ ("<C-M-down>"  . modi/scroll-up)
+ ("<C-M-left>"  . modi/scroll-other-window-down)
+ ("<C-M-right>" . modi/scroll-other-window-up))
 
 (bind-keys
  :map modi-mode-map
   ;; Make Alt+mousewheel scroll the other buffer
-  ("<M-mouse-4>" . scroll-other-window-down-dont-move-point) ; M + wheel up
-  ("<M-mouse-5>" . scroll-other-window-up-dont-move-point)) ; M + wheel down
+  ("<M-mouse-4>" . modi/scroll-other-window-down) ; M + wheel up
+  ("<M-mouse-5>" . modi/scroll-other-window-up)) ; M + wheel down
 
 ;; Allow scrolling of all buffers using mouse-wheel in `scroll-all-mode'.
 ;; By default, `scroll-all-mode' works only with C-v/M-v.
