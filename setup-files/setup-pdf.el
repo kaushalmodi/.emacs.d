@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-02 02:11:41 kmodi>
+;; Time-stamp: <2016-03-03 13:37:26 kmodi>
 
 ;; PDF
 
@@ -79,7 +79,9 @@ advised function in that major mode."
       (pdf-tools-install))
 
     (dolist (pair '((beginning-of-buffer . pdf-view-first-page)
-                    (end-of-buffer       . pdf-view-last-page)))
+                    (end-of-buffer . pdf-view-last-page)
+                    (modi/scroll-up . pdf-view-next-line-or-next-page)
+                    (modi/scroll-down . pdf-view-previous-line-or-previous-page)))
       (let ((remap-from (car pair))
             (remap-to (cdr pair)))
         (define-key pdf-view-mode-map `[remap ,remap-from] remap-to)))
