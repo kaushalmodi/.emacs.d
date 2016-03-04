@@ -1,9 +1,10 @@
-;; Time-stamp: <2016-01-26 17:50:33 kmodi>
+;; Time-stamp: <2016-03-04 13:14:25 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
 (use-package counsel
   :if (not (bound-and-true-p disable-pkg-ivy))
+  :commands (counsel-org-tag counsel-org-tag-agenda)
   :bind (:map modi-mode-map
          ("M-x"     . counsel-M-x)
          ("C-M-y"   . counsel-yank-pop)
@@ -14,6 +15,12 @@
          ("C-c u"   . counsel-unicode-char))
   :chords (("JJ" . counsel-imenu)
            (";'" . counsel-M-x))
+  :init
+  (progn
+    (with-eval-after-load 'org
+      (bind-key "C-c C-q" #'counsel-org-tag org-mode-map))
+    (with-eval-after-load 'org-agenda
+      (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map)))
   :config
   (progn
     (setq counsel-find-file-at-point t)
@@ -40,12 +47,7 @@
      'counsel-find-file
      `(("x"
         (lambda (x) (delete-file (expand-file-name x ivy--directory)))
-        ,(propertize "delete" 'face 'font-lock-warning-face))))
-
-    (with-eval-after-load 'org
-      (bind-key "C-c C-q" #'counsel-org-tag org-mode-map))
-    (with-eval-after-load 'org-agenda
-      (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))))
+        ,(propertize "delete" 'face 'font-lock-warning-face))))))
 
 
 (provide 'setup-counsel)
