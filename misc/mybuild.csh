@@ -1,16 +1,16 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-02-17 20:36:41 kmodi>
+# Time-stamp: <2016-03-09 01:02:28 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
 # Example usages:
 #   source mybuild.csh -- Install from latest origin/master.
-#   source mybuild.csh -dirty -- Do not do make maintainer-clean and make bootstrap
-#   source mybuild.csh -rev <COMMIT_HASH> -dirty -subdir test -- Dirty build for specified commit in test/
+#   source mybuild.csh -quick -- Do not do 'make bootstrap'
+#   source mybuild.csh -rev <COMMIT_HASH> -quick -subdir test -- Quick build for specified commit in test/
 #   source mybuild.csh -noupdate -debug -- Only show the git info of last build
 
-#   source mybuild.csh -rev emacs-24
-#   source mybuild.csh -rev master
+#   source mybuild.csh -rev origin/emacs-24
+#   source mybuild.csh -rev origin/master
 #   source mybuild.csh -debug -- Do not do the actual install, but update from git
 #                                print useful echo statements and retain the internal
 #                                variables.
@@ -41,7 +41,7 @@
 set emacs_rev       = "origin/emacs-25"
 set emacs_gdb_build = 0
 set no_git_update   = 0
-set dirty_make      = 0
+set quick_make      = 0
 set install_sub_dir = ""
 set no_install      = 0
 set debug           = 0
@@ -61,8 +61,8 @@ while ($#argv)
             set no_git_update = 1
             shift
             breaksw
-        case -dirty:
-            set dirty_make = 1
+        case -quick:
+            set quick_make = 1
             shift
             breaksw
         case -subdir:
@@ -165,21 +165,26 @@ if ( ! $debug ) then
     echo "Waiting for 5 seconds .. Press Ctrl+C to cancel this installation."
     sleep 5
 
-    if ( ! ${dirty_make} ) then
+    if ( ! ( -f "configure" ) ) then
         ./autogen.sh all
     endif
 
     sed -i 's|/usr/local|${MY_EMACS_INSTALL_DIR}|g' src/epaths.in
     sed -i 's|./configure|${MY_EMACS_CONFIGURE}|g'  GNUmakefile
 
-    if ( ${dirty_make} ) then
+    if ( ${quick_make} ) then
         make
     else
+        # The below step is needed as we would need to rebuild all the Makefiles
+        # when switching branches (e.g. from emacs-25 to master, or vice-versa)
+        eval ${MY_EMACS_CONFIGURE}
+
         # Do NOT call autoreconf. "make bootstrap" below will call autoreconf
         # with proper arguments.
         # The `make bootstrap' step is required for a clean fresh install
         make bootstrap
     endif
+
     if ( ! ${no_install} ) then
         make install
     endif
@@ -231,7 +236,7 @@ if ( ! $debug ) then
     unset {emacs_rev}
     unset {emacs_gdb_build}
     unset {no_git_update}
-    unset {dirty_make}
+    unset {quick_make}
     unset {install_sub_dir}
     unset {no_install}
     unset {debug}
