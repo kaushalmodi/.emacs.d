@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-03-09 12:09:03 kmodi>
+# Time-stamp: <2016-03-09 15:58:00 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -216,20 +216,18 @@ git log -n 1 --pretty=full ${current_commit_hash} >> ${build_info_file}
 
 if ( $debug ) then
     cat ${build_info_file}
-endif
-
-if ( ! $debug ) then
+else
     # I use the Exuberant ctags (now Universal ctags build from its github
     # repo). So rename the binary and man of "ctags" that ship with emacs so
     # that I do not end up using the incorrect ctags.
     if ( -e ${MY_EMACS_INSTALL_DIR}/bin/ctags ) then
-        \mv ${MY_EMACS_INSTALL_DIR}/bin/ctags ${MY_EMACS_INSTALL_DIR}/bin/ctags_emacs
+        \mv ${MY_EMACS_INSTALL_DIR}/bin/ctags{,_emacs}
     endif
     if ( -e ${MY_EMACS_INSTALL_DIR}/share/man/man1/ctags.1.gz ) then
-        \mv ${MY_EMACS_INSTALL_DIR}/share/man/man1/ctags.1.gz ${MY_EMACS_INSTALL_DIR}/share/man/man1/ctags_emacs.1.gz
+        \mv ${MY_EMACS_INSTALL_DIR}/share/man/man1/ctags{,_emacs}.1.gz
     endif
 
-    # unset all internal variables
+    # Unset all internal variables
     unset {emacs_configure_CFLAGS}
     unset {emacs_configure_CPPFLAGS}
     unset {emacs_configure_CXXFLAGS}
