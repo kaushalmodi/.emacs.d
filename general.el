@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-17 17:17:22 kmodi>
+;; Time-stamp: <2016-03-09 18:10:43 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -82,6 +82,47 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
     "--follow") ; follow symlinks
   "Default ag arguments used in the functions in `ag', `counsel' and `projectile'
 packages.")
+
+(defvar emacs-build-hash emacs-repository-version
+  "Git hash of the commit at which this version of emacs was built.")
+
+(defvar emacs-git-branch
+  (when (and emacs-repository-version
+             (file-exists-p source-directory))
+    (let ((shell-return
+           (replace-regexp-in-string
+            "[\n)]" " " ; Replace newline and ) chars with spaces
+            (shell-command-to-string
+             (concat "cd " source-directory " && "
+                     "git branch --contains "
+                     emacs-repository-version)))))
+      ;; Below regexp is tested for following "git branch --contains" values
+      ;; Output for a commit in master branch too
+      ;;   "* (HEAD detached at origin/emacs-25)
+      ;;     master
+      ;;   "
+      ;; Output for a commit only in emacs-25 branch
+      ;;   "* (HEAD detached at origin/emacs-25)
+      ;;   "
+      ;; (message "%S" shell-return)
+      (string-match ".*[/ ]\\([^ ]+?\\)\\s-*$" shell-return)
+      (match-string-no-properties 1 shell-return)))
+  "Name of git branch from which the current emacs is built.")
+
+(defun emacs-version-dev (here)
+  "Display emacs build info and also save it to the kill-ring.
+If HERE is non-nil, also insert the string at point."
+  (interactive "P")
+  (let ((emacs-build-info
+         (concat "Emacs version: " (emacs-version) ","
+                 " built using commit " emacs-repository-version ".\n\n"
+                 "./configure options:\n  " system-configuration-options "\n\n"
+                 "Features:\n  " system-configuration-features "\n")))
+    (kill-new emacs-build-info)
+    (message emacs-build-info)
+    (when here
+      (insert emacs-build-info))
+    emacs-build-info))
 
 ;; Re-evaluatable `defvar's
 ;; Usage: When debugging/developing something in elisp, it is useful to have

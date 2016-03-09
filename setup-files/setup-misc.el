@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-25 10:38:39 kmodi>
+;; Time-stamp: <2016-03-09 18:10:37 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -147,60 +147,6 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 ;; Set firefox as the default web browser
 (setq browse-url-generic-program (executable-find "firefox"))
 (setq browse-url-browser-function 'browse-url-generic)
-
-(defvar emacs-build-hash emacs-repository-version
-  "Git hash of the commit at which this version of emacs was built.")
-
-(defvar emacs-git-branch
-  (when (and emacs-repository-version
-             (file-exists-p source-directory))
-    (let ((shell-return
-           (replace-regexp-in-string
-            "[\n)]" " " ; Replace newline and ) chars with spaces
-            (shell-command-to-string
-             (concat "cd " source-directory " && "
-                     "git branch --contains "
-                     emacs-repository-version)))))
-      ;; Below regexp is tested for following "git branch --contains" values
-      ;; Output for a commit in master branch too
-      ;;   "* (HEAD detached at origin/emacs-25)
-      ;;     master
-      ;;   "
-      ;; Output for a commit only in emacs-25 branch
-      ;;   "* (HEAD detached at origin/emacs-25)
-      ;;   "
-      ;; (message "%S" shell-return)
-      (string-match ".*[/ ]\\([^ ]+?\\)\\s-*$" shell-return)
-      (match-string-no-properties 1 shell-return)))
-  "Name of git branch from which the current emacs is built.")
-
-(defun modi/browse-current-build-emacs-git (log)
-  "Browse to the emacs git page for the current build commit details.
-Also save the url to the kill-ring.
-
-If LOG is non-nil, browse to the log page having the current build commit."
-  (interactive "P")
-  (let* ((commit-or-log (if log "log" "commit"))
-         (url (concat "http://git.savannah.gnu.org/cgit/emacs.git/"
-                      commit-or-log
-                      "/?id=" emacs-repository-version)))
-    (kill-new url)
-    (browse-url url)))
-
-(defun emacs-version-dev (here)
-  "Display emacs build info and also save it to the kill-ring.
-If HERE is non-nil, also insert the string at point."
-  (interactive "P")
-  (let ((emacs-build-info
-         (concat "Emacs version: " (emacs-version) ","
-                 " built using commit " emacs-repository-version ".\n\n"
-                 "./configure options:\n  " system-configuration-options "\n\n"
-                 "Features:\n  " system-configuration-features "\n")))
-    (kill-new emacs-build-info)
-    (message emacs-build-info)
-    (when here
-      (insert emacs-build-info))
-    emacs-build-info))
 
 ;; https://github.com/kaushalmodi/.emacs.d/issues/7
 (defun modi/startup-time()
