@@ -1,16 +1,17 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-03-09 01:02:28 kmodi>
+# Time-stamp: <2016-03-09 12:09:03 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
 # Example usages:
-#   source mybuild.csh -- Install from latest origin/master.
-#   source mybuild.csh -quick -- Do not do 'make bootstrap'
-#   source mybuild.csh -rev <COMMIT_HASH> -quick -subdir test -- Quick build for specified commit in test/
-#   source mybuild.csh -noupdate -debug -- Only show the git info of last build
+#   source mybuild.csh -- Install from ${emacs_rev}
+#   source mybuild.csh -quick -- Do not do 'make bootstrap' from ${emacs_rev}
+#   source mybuild.csh -noopt -- Build without optimization (to allow gdb debug) from ${emacs_rev}
+#   source mybuild.csh -noopt -rev origin/master -- Build without optimization (to allow gdb debug) using the master branch
 
+#   source mybuild.csh -rev <COMMIT_HASH> -quick -subdir test -- Quick build for specified commit to "test/"
+#   source mybuild.csh -noupdate -debug -- Only show the git info of last build
 #   source mybuild.csh -rev origin/emacs-24
-#   source mybuild.csh -rev origin/master
 #   source mybuild.csh -debug -- Do not do the actual install, but update from git
 #                                print useful echo statements and retain the internal
 #                                variables.
@@ -37,14 +38,15 @@
 # and related files. This is necessary for XFT and related X11
 # features.. otherwise the fonts will look horrible.
 
-# set emacs_rev       = "origin/master"
-set emacs_rev       = "origin/emacs-25"
-set emacs_gdb_build = 0
-set no_git_update   = 0
-set quick_make      = 0
-set install_sub_dir = ""
-set no_install      = 0
-set debug           = 0
+# set emacs_rev         = "origin/master"
+set emacs_rev         = "origin/emacs-25"
+set emacs_debug_build = 0
+set no_git_update     = 0
+set quick_make        = 0
+set install_sub_dir   = ""
+set no_install        = 0
+set dquote            = '"'
+set debug             = 0
 
 while ($#argv)
     switch ($argv[1])
@@ -53,8 +55,8 @@ while ($#argv)
             set emacs_rev = $argv[1]
             shift
             breaksw
-        case -noopt: # no optimization for gdb debug
-            set emacs_gdb_build = 1
+        case -noopt: # no optimization for gdb debug build
+            set emacs_debug_build = 1
             shift
             breaksw
         case -noupdate:
@@ -122,35 +124,37 @@ setenv MY_EMACS_CONFIGURE "./configure --prefix=${MY_EMACS_INSTALL_DIR}"
 # configure option.
 
 # Initialize the configure flag variables
-set emacs_configure_CFLAGS   = ''
-set emacs_configure_CXXFLAGS = ''
-set emacs_configure_CPPFLAGS = ''
-set emacs_configure_LDFLAGS  = ''
+set emacs_configure_CFLAGS   = ""
+set emacs_configure_CXXFLAGS = ""
+set emacs_configure_CPPFLAGS = ""
+set emacs_configure_LDFLAGS  = ""
 
-set emacs_configure_CPPFLAGS = 'CPPFLAGS="'"-fgnu89-inline -I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
+set emacs_configure_CPPFLAGS = "CPPFLAGS=${dquote}-fgnu89-inline -I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
 # -L${HOME}/usr_local/${MY_OSREV}/lib required for libgpm (GPM feature)
 # -L${HOME}/usr_local/${MY_OSREV}/lib64 required for libgif (GIF feature)
-set emacs_configure_LDFLAGS  = 'LDFLAGS="'"-L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
+set emacs_configure_LDFLAGS  = "LDFLAGS=${dquote}-L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
 
-# For Debug
-if ( ${emacs_gdb_build} ) then
-    set emacs_configure_CFLAGS   = 'CFLAGS="'"-ggdb3 -O0"
-    set emacs_configure_CXXFLAGS = 'CXXFLAGS="'"-ggdb3 -O0"
+if ( ${emacs_debug_build} ) then # For Debug
+    set emacs_configure_CFLAGS   = "CFLAGS=${dquote}-ggdb3 -O0"
+    set emacs_configure_CXXFLAGS = "CXXFLAGS=${dquote}-ggdb3 -O0"
     set emacs_configure_LDFLAGS  = "${emacs_configure_LDFLAGS} -ggdb3"
+else
+    # http://emacs.stackexchange.com/questions/14043/build-a-minimal-emacs-25-for-unit-testing#comment27111_17436
+    set emacs_configure_CFLAGS   = "CFLAGS=${dquote}-O2 -march=native"
 endif
 
 # Close the double quotes
 if ( ! ( "${emacs_configure_CFLAGS}" == "" ) ) then
-    set emacs_configure_CFLAGS = "${emacs_configure_CFLAGS}"'"'
+    set emacs_configure_CFLAGS = "${emacs_configure_CFLAGS}${dquote}"
 endif
 if ( ! ( "${emacs_configure_CXXFLAGS}" == "" ) ) then
-    set emacs_configure_CXXFLAGS = "${emacs_configure_CXXFLAGS}"'"'
+    set emacs_configure_CXXFLAGS = "${emacs_configure_CXXFLAGS}${dquote}"
 endif
 if ( ! ( "${emacs_configure_CPPFLAGS}" == "" ) ) then
-    set emacs_configure_CPPFLAGS = "${emacs_configure_CPPFLAGS}"'"'
+    set emacs_configure_CPPFLAGS = "${emacs_configure_CPPFLAGS}${dquote}"
 endif
 if ( ! ( "${emacs_configure_LDFLAGS}" == "" ) ) then
-    set emacs_configure_LDFLAGS = "${emacs_configure_LDFLAGS}"'"'
+    set emacs_configure_LDFLAGS = "${emacs_configure_LDFLAGS}${dquote}"
 endif
 
 setenv MY_EMACS_CONFIGURE "${MY_EMACS_CONFIGURE} ${emacs_configure_CPPFLAGS} ${emacs_configure_CFLAGS} ${emacs_configure_CXXFLAGS} ${emacs_configure_LDFLAGS}"
@@ -234,11 +238,12 @@ if ( ! $debug ) then
     unset {build_info_file}
     unset {current_commit_hash}
     unset {emacs_rev}
-    unset {emacs_gdb_build}
+    unset {emacs_debug_build}
     unset {no_git_update}
     unset {quick_make}
     unset {install_sub_dir}
     unset {no_install}
+    unset {dquote}
     unset {debug}
 endif
 
