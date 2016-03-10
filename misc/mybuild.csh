@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-03-09 15:58:00 kmodi>
+# Time-stamp: <2016-03-10 14:32:29 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -173,8 +173,20 @@ if ( ! $debug ) then
         ./autogen.sh all
     endif
 
-    sed -i 's|/usr/local|${MY_EMACS_INSTALL_DIR}|g' src/epaths.in
-    sed -i 's|./configure|${MY_EMACS_CONFIGURE}|g'  GNUmakefile
+    # Call ./configure with the required CPPFLAGS, CFLAGS, etc so that
+    # Makefile is generated successfully. Without the below sed command,
+    # build fails with the below error:
+    #   checking for GifMakeMapObject in -lgif... no
+    #   checking for EGifPutExtensionLast in -lgif... no
+    #   checking for EGifPutExtensionLast in -lungif... no
+    #   configure: error: The following required libraries were not found:
+    #        libgif/libungif
+    #   Maybe some development libraries/packages are missing?
+    #   If you don't want to link with them give
+    #        --with-gif=no
+    #   as options to configure
+    #   make: *** [Makefile] Error 1
+    sed -i 's|./configure|${MY_EMACS_CONFIGURE}|g' GNUmakefile
 
     if ( ${quick_make} ) then
         make
