@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-04 13:14:25 kmodi>
+;; Time-stamp: <2016-03-10 18:18:28 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -23,6 +23,9 @@
       (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map)))
   :config
   (progn
+    (setq counsel-prompt-function #'counsel-prompt-function-dir)
+
+    ;; counsel-find-file
     (setq counsel-find-file-at-point t)
     (setq counsel-find-file-ignore-regexp
           (concat
@@ -30,7 +33,13 @@
            "\\(?:\\`[#.]\\)"
            ;; file names ending with # or ~
            "\\|\\(?:\\`.+?[#~]\\'\\)"))
+    (ivy-set-actions
+     'counsel-find-file
+     `(("x"
+        (lambda (x) (delete-file (expand-file-name x ivy--directory)))
+        ,(propertize "delete" 'face 'font-lock-warning-face))))
 
+    ;; counsel-ag
     ;; Redefine `counsel-ag-base-command' with my required options, especially
     ;; the `--follow' option to allow search through symbolic links.
     (setq counsel-ag-base-command
@@ -41,13 +50,7 @@
                              '("--noheading" ; no file names above matching content
                                "--nocolor"
                                "%S"))
-                     " "))
-
-    (ivy-set-actions
-     'counsel-find-file
-     `(("x"
-        (lambda (x) (delete-file (expand-file-name x ivy--directory)))
-        ,(propertize "delete" 'face 'font-lock-warning-face))))))
+                     " "))))
 
 
 (provide 'setup-counsel)
