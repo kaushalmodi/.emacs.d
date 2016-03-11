@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-10 18:18:28 kmodi>
+;; Time-stamp: <2016-03-10 19:40:00 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -42,6 +42,7 @@
     ;; counsel-ag
     ;; Redefine `counsel-ag-base-command' with my required options, especially
     ;; the `--follow' option to allow search through symbolic links.
+    ;; (setq counsel-ag-base-command "\\ag --vimgrep %s") ; default
     (setq counsel-ag-base-command
           ;; http://stackoverflow.com/a/12999828/1219634
           (mapconcat 'identity
@@ -49,7 +50,8 @@
                              modi/ag-arguments
                              '("--noheading" ; no file names above matching content
                                "--nocolor"
-                               "%S"))
+                               "%s")) ; This MUST be %s, not %S
+                                        ; https://github.com/abo-abo/swiper/issues/427
                      " "))))
 
 
