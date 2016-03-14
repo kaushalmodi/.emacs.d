@@ -105,8 +105,9 @@ packages.")
       ;;   "* (HEAD detached at origin/emacs-25)
       ;;   "
       ;; (message "%S" shell-return)
-      (string-match ".*[/ ]\\([^ ]+?\\)\\s-*$" shell-return)
-      (match-string-no-properties 1 shell-return)))
+      (when (not (string= "" shell-return))
+	(string-match ".*[/ ]\\([^ ]+?\\)\\s-*$" shell-return)
+	(match-string-no-properties 1 shell-return))))
   "Name of git branch from which the current emacs is built.")
 
 (defun emacs-version-dev (here)
