@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-10 19:40:00 kmodi>
+;; Time-stamp: <2016-03-15 08:16:25 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -50,8 +50,9 @@
                              modi/ag-arguments
                              '("--noheading" ; no file names above matching content
                                "--nocolor"
-                               "%s")) ; This MUST be %s, not %S
+                               "%s" ; This MUST be %s, not %S
                                         ; https://github.com/abo-abo/swiper/issues/427
+                               "--"))
                      " "))))
 
 
