@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-09 18:10:37 kmodi>
+;; Time-stamp: <2016-03-15 10:22:04 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -9,9 +9,6 @@
 
 ;; Do not make mouse wheel accelerate its action (example: scrolling)
 (setq mouse-wheel-progressive-speed nil)
-
-;; Quitting emacs via `C-x C-c` or the GUI 'X' button
-(setq confirm-kill-emacs 'y-or-n-p)
 
 ;; Clipboard
 ;; after copy Ctrl+c in X11 apps, you can paste by 'yank' in emacs"

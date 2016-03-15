@@ -1,7 +1,18 @@
-;; Time-stamp: <2016-03-09 18:10:43 kmodi>
+;; Time-stamp: <2016-03-15 10:25:42 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
+;; Contents:
+;;
+;;  Emacs version check
+;;  Aliases
+;;  Get symbol at point
+;;  Quitting emacs
+;;  Fringe face setting
+;;  Default ag arguments
+;;  Emacs version and git branch
+
+;;; Emacs version check
 (defmacro >=e (V &rest body)
   "The BODY can contain both
 'if'   (emacs version at least version V) and
@@ -14,6 +25,7 @@ Usage: (>=e \"25.0\"
   `(if (version<= ,V emacs-version)
        ,@body))
 
+;;; Aliases
 ;; Alias ^ as a function to calculate exponents
 ;; (^ 2 15) `C-x C-e' -> 32768
 (defalias '^ 'expt)
@@ -26,7 +38,8 @@ Usage: (>=e \"25.0\"
 ;; Cyclically replace "A" with "X", "Y", "Z", "X", "Y", ..
 (defalias 'query-replace-regexp-cyclic 'map-query-replace-regexp)
 
-;; Source https://github.com/Wilfred/ag.el
+;;; Get symbol at point
+;; https://github.com/Wilfred/ag.el
 (defun modi/get-symbol-at-point ()
   "If there's an active selection, return that.
 Otherwise, get the symbol at point, as a string."
@@ -36,6 +49,7 @@ Otherwise, get the symbol at point, as a string."
          (substring-no-properties
           (symbol-name (symbol-at-point))))))
 
+;;; Quitting emacs
 ;; Based on `tv-stop-emacs' function from
 ;; http://lists.gnu.org/archive/html/emacs-devel/2011-11/msg00348.html
 (defun modi/quit-emacs (skip-desktop-save)
@@ -56,14 +70,10 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
   (interactive)
   (modi/quit-emacs :skip-desktop-save))
 
-;; `with-eval-after-load' macro was introduced in emacs 24.4
-;; Below code makes this macro compatible with older versions of emacsen
-;; http://www.lunaryorn.com/2013/06/25/introducing-with-eval-after-load.html
-(unless (fboundp 'with-eval-after-load)
-  (defmacro with-eval-after-load (file &rest body)
-    `(eval-after-load ,file
-       `(funcall (function ,(lambda () ,@body))))))
+;; Quitting emacs via `C-x C-c` or the GUI 'X' button
+(setq confirm-kill-emacs #'y-or-n-p)
 
+;;; Fringe face setting
 ;; http://emacs.stackexchange.com/a/5343/115
 (defun modi/blend-fringe ()
   (interactive)
@@ -74,6 +84,7 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
                       :background (if (string= (face-background 'default) "unspecified-bg")
                                       "#282828" (face-background 'default))))
 
+;;; Default ag arguments
 (defconst modi/ag-arguments
   '("--nogroup" ; mandatory argument for ag.el as per https://github.com/Wilfred/ag.el/issues/41
     "--skip-vcs-ignores" ; Ignore files/dirs ONLY from `.agignore'
@@ -83,6 +94,7 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
   "Default ag arguments used in the functions in `ag', `counsel' and `projectile'
 packages.")
 
+;;; Emacs version and git branch
 (defvar emacs-build-hash emacs-repository-version
   "Git hash of the commit at which this version of emacs was built.")
 
@@ -124,45 +136,6 @@ If HERE is non-nil, also insert the string at point."
     (when here
       (insert emacs-build-info))
     emacs-build-info))
-
-;; Re-evaluatable `defvar's
-;; Usage: When debugging/developing something in elisp, it is useful to have
-;; the `defvar's re-evaluatable. To do so, temporarily set the
-;; `defvar-always-reeval-values' to `t' and use `defvar-re's instead of
-;; `defvar's.
-;; It is recommended to keep the default value of the above var as nil.
-;; http://emacs.stackexchange.com/a/2301/115
-
-;; When non-nil, defvar will reevaluate the init-val arg even if the symbol
-;; is defined.
-(setq-default defvar-always-reeval-values nil)
-
-(defmacro defvar-re (name &optional init-value docstring)
-  "Like defvar, but when `defvar-always-reeval-values' is non-nil, it will
-set the symbol's value to INIT-VALUE even if the symbol is defined."
-  `(progn
-     (when defvar-always-reeval-values
-       (makunbound ',name))
-     (defvar ,name ,init-value ,docstring)))
-
-;; Fontify `defvar-re' as emacs-lisp keyword
-(font-lock-add-keywords
- 'emacs-lisp-mode
- '(("(\\(defvar\\-re\\)\\_> +\\(.*?\\)\\_>"
-    (1 font-lock-keyword-face)
-    (2 font-lock-type-face))))
-
-(defun modi/toggle-defvar-re-eval ()
-  "Toggle the “re-evaluatable” state of `defvar's."
-  (interactive)
-  (if defvar-always-reeval-values
-      (progn
-        (setq-default defvar-always-reeval-values nil)
-        (message "'defvar-re' will now work as 'defvar'."))
-    (progn
-      (setq-default defvar-always-reeval-values t)
-      (message "'defvar-re' will now force re-evaluate."))))
-;;
 
 
 (provide 'general)
