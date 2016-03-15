@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-09 18:38:31 kmodi>
+;; Time-stamp: <2016-03-15 08:03:57 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -7,10 +7,6 @@
 (setq load-prefer-newer t)
 
 (require 'package)
-
-(setq package-check-signature nil) ; Don't check for signature validity
-;; Above is required because installation of queue.el failed due to bad
-;; signature failure: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=22971
 
 (>=e "25.0"
     (setq package-menu-async t)) ; If non-nil, do activities asynchronously, like refreshing menu
