@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-15 10:22:04 kmodi>
+;; Time-stamp: <2016-03-15 11:18:32 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -30,6 +30,12 @@
 ;; On saving, automatically make a file an executable if it begins with "#!"
 ;; Example: #!/bin/csh
 (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
+
+;; Uncompress->edit->save->compress .gz, .bz2, .Z files on the fly
+(auto-compression-mode 1)
+
+;; Send mail using `Sendmail' package
+(setq send-mail-function #'sendmail-send-it)
 
 ;; url
 ;; First delete the old `url/' directory if present

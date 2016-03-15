@@ -1,10 +1,13 @@
-;; Time-stamp: <2016-03-03 14:40:22 kmodi>
+;; Time-stamp: <2016-03-15 11:17:23 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
 ;;
+;;  Coding System
 ;;  Time stamps
 ;;    Insert time-stamp + user name
+;;  Delete Selection
+;;  Show Paren
 ;;  Duplicate current line or region
 ;;  Managing white spaces and empty newlines
 ;;  Untabify
@@ -36,6 +39,9 @@
 ;;  Mouse Copy
 ;;  Bindings
 ;;  Comment Commander
+
+;;; Coding System
+(setq keyboard-coding-system 'utf-8-unix)
 
 ;;; Time stamps
 ;; Write time stamps when saving files
@@ -110,6 +116,16 @@ C-u C-u C-u -> All of the above."
     (when (not (looking-at " *$"))
       (insert " "))))
 (bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
+
+;;; Delete Selection
+;; Typing anything after highlighting text overwrites that text
+;; http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert
+(delete-selection-mode 1)
+
+;;; Show Paren
+;; Allow one to see matching pairs of parentheses
+;; When point is on one of the paired characters, highlight the other 
+(show-paren-mode 1)
 
 ;;; Duplicate current line or region
 ;; http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html

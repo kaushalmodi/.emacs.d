@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-26 15:04:26 kmodi>
+;; Time-stamp: <2016-03-15 11:14:48 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -33,10 +33,10 @@
 
 ;;; Variables
 (setq inhibit-startup-message t) ; No splash screen at startup
-(setq scroll-step 1) ; scroll 1 line at a time
-(setq tooltip-mode nil) ; disable tooltip appearance on mouse hover
-(setq frame-resize-pixelwise t) ; allow frame size to inc/dec by a pixel
-
+(setq scroll-step 1) ; Scroll 1 line at a time
+(setq tooltip-mode nil) ; Disable tooltip appearance on mouse hover
+(setq frame-resize-pixelwise t) ; Allow frame size to inc/dec by a pixel
+(setq visible-bell t) ; Enable visible bell or screen blink to happen on error
 (setq-default fill-column 80) ; default 70
 
 (defvar default-font-size-pt 13
@@ -474,13 +474,19 @@ Toggling off this mode reverts everything to their original states."
   (force-mode-line-update))
 
 ;;; Fringes
-(defun enable-fringe ()
+(defun modi/enable-fringe ()
+  "Display the left/right fringes with default widths of 8 pixels."
   (interactive)
-  (fringe-mode '(nil . nil) ))
+  (fringe-mode '(nil . nil)))
 
-(defun disable-fringe ()
+(defun modi/disable-fringe ()
+  "Do not show the fringes."
   (interactive)
-  (fringe-mode '(0 . 0) ))
+  (fringe-mode '(0 . 0)))
+
+;; Show the top/bottom buffer boundaries only in the right fringe
+(setq-default indicate-buffer-boundaries '((top    . right)
+                                           (bottom . right)))
 
 ;;; Coloring regions with ANSI color codes
 ;; http://unix.stackexchange.com/a/19505/57923

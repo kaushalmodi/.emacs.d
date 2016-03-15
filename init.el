@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-27 00:55:12 kmodi>
+;; Time-stamp: <2016-03-15 11:31:28 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -24,8 +24,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
                                        "org/"))) ; must end with /
                       (make-directory dir :parents)
                       dir))
-(setq custom-file (locate-user-emacs-file
-                   (concat "custom_" emacs-version-short ".el")))
+(setq custom-file (expand-file-name "custom.el" user-personal-directory))
 
 (defconst my-packages
   '(ace-window
@@ -158,7 +157,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (add-to-list 'load-path user-personal-directory)
 (require 'setup-var-overrides nil :noerror)
 
-(load custom-file :noerror :nomessage) ; Load the emacs `M-x customize` generated file
+(load custom-file :noerror :nomessage) ; Load the `M-x customize` generated file
 (load (locate-user-emacs-file "general.el") nil :nomessage)
 (load (locate-user-emacs-file "setup-packages.el") nil :nomessage)
 ;; (package-initialize) ; Do NOT delete this comment
