@@ -1,5 +1,7 @@
 #+TITLE: modi .emacs.d
 
+*NOTE*: My emacs setup is tested to work only with emacs 24.5 and newer versions. If you are on older versions, I would recommend that you upgrade to the latest available stable version.
+
 * Using my emacs setup
 You can start using my emacs setup by following these steps:
 

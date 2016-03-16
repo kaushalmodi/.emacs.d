@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-15 11:31:28 kmodi>
+;; Time-stamp: <2016-03-15 22:19:56 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -169,11 +169,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 
 ;; Start `benchmark-init' as soon as possible
 (require 'benchmark-init)
-
-(>=e "25.0"
-    nil
-  (require 'cl)
-  (require 'cl-lib))
 
 (eval-when-compile
   (require 'use-package)
