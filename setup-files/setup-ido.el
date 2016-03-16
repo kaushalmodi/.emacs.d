@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-16 10:11:02 kmodi>
+;; Time-stamp: <2016-03-16 10:15:07 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -41,18 +41,20 @@
 
     ;; Use flx-ido for better flex matching between words
     (use-package flx-ido
+      :ensure t
       :config
       (progn
         (setq ido-use-faces nil) ; disable ido faces to see flx highlights
         (flx-ido-mode 1)))
 
     (use-package ido-vertical-mode
+      :ensure t
       :config
       (progn
         (ido-vertical-mode 1))) ; flx-ido looks better with ido-vertical-mode
 
     (use-package ido-ubiquitous
-      :disabled
+      :ensure t
       :preface
       (progn
         (defvar ido-ubiquitous-debug-mode nil))
