@@ -1,9 +1,8 @@
-;; Time-stamp: <2016-03-15 08:16:25 kmodi>
+;; Time-stamp: <2016-03-16 10:11:20 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
 (use-package counsel
-  :if (not (bound-and-true-p disable-pkg-ivy))
   :commands (counsel-org-tag counsel-org-tag-agenda)
   :bind (:map modi-mode-map
          ("M-x"     . counsel-M-x)

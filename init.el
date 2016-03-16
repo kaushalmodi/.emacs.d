@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-15 22:19:56 kmodi>
+;; Time-stamp: <2016-03-16 10:11:49 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -209,7 +209,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-buffer-move)
 (require 'setup-calc)
 (require 'setup-command-log-mode)
-(require 'setup-counsel)
 (require 'setup-de-ansify)
 (require 'setup-deft)
 (require 'setup-dired)
@@ -233,11 +232,14 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-htmlize)
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
-(when (bound-and-true-p disable-pkg-ivy)
-  (require 'setup-ido))
+(if (bound-and-true-p disable-pkg-ivy)
+    (progn
+      (require 'setup-ido))
+  (progn
+    (require 'setup-ivy)
+    (require 'setup-counsel)))
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
-(require 'setup-ivy)
 (require 'setup-keyfreq)
 (require 'setup-kurecolor)
 (require 'setup-manage-minor-mode)

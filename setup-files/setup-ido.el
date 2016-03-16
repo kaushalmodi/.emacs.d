@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 19:29:49 kmodi>
+;; Time-stamp: <2016-03-16 10:11:02 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -32,11 +32,10 @@
     (setq ido-auto-merge-work-directories-length 0))
   :config
   (progn
-    ;; Don't enable `ido-mode' when `ivy-mode' is intended to be used instead
-    (when (bound-and-true-p disable-pkg-ivy)
-      ;; Disable ivy
-      (with-eval-after-load 'ivy
-        (ivy-mode -1))
+    (ido-mode 1)
+    ;; Re-enable `ido-mode' again after ensuring that `ivy-mode' is off
+    (with-eval-after-load 'ivy
+      (ivy-mode -1)
       ;; Enable ido
       (ido-mode 1))
 
@@ -106,8 +105,7 @@
          (ido-completing-read "Recentf open: "
                               (mapcar 'abbreviate-file-name recentf-list)
                               nil t)))
-      (when (bound-and-true-p disable-pkg-ivy)
-        (bind-key "M-o" #'ido-find-recentf)))
+      (bind-key "M-o" #'ido-find-recentf))
 
     (defun endless/ido-bury-buffer-at-head ()
       "Bury the buffer at the head of `ido-matches'.
