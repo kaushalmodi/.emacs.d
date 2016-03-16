@@ -1,25 +1,29 @@
-;; Time-stamp: <2016-03-16 10:11:20 kmodi>
+;; Time-stamp: <2016-03-16 10:34:35 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
 (use-package counsel
-  :commands (counsel-org-tag counsel-org-tag-agenda)
-  :bind (:map modi-mode-map
-         ("M-x"     . counsel-M-x)
-         ("C-M-y"   . counsel-yank-pop)
-         ("C-x C-f" . counsel-find-file)
-         ("C-h v"   . counsel-describe-variable)
-         ("C-h f"   . counsel-describe-function)
-         ("C-h S"   . counsel-info-lookup-symbol)
-         ("C-c u"   . counsel-unicode-char))
-  :chords (("JJ" . counsel-imenu)
-           (";'" . counsel-M-x))
+  :defer t
   :init
   (progn
-    (with-eval-after-load 'org
-      (bind-key "C-c C-q" #'counsel-org-tag org-mode-map))
-    (with-eval-after-load 'org-agenda
-      (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map)))
+    ;; Do not bind the below keys to counsel commands if the user has decided
+    ;; to use ido instead of ivy.
+    (when (not (bound-and-true-p disable-pkg-ivy))
+      (bind-keys :map modi-mode-map
+        ("M-x"     . counsel-M-x)
+        ("C-M-y"   . counsel-yank-pop)
+        ("C-x C-f" . counsel-find-file)
+        ("C-h v"   . counsel-describe-variable)
+        ("C-h f"   . counsel-describe-function)
+        ("C-h S"   . counsel-info-lookup-symbol)
+        ("C-c u"   . counsel-unicode-char))
+      (bind-chords
+       ("JJ" . counsel-imenu)
+       (";'" . counsel-M-x))
+      (with-eval-after-load 'org
+        (bind-key "C-c C-q" #'counsel-org-tag org-mode-map))
+      (with-eval-after-load 'org-agenda
+        (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))))
   :config
   (progn
     (setq counsel-prompt-function #'counsel-prompt-function-dir)
