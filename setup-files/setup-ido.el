@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-16 10:15:07 kmodi>
+;; Time-stamp: <2016-03-16 10:18:55 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -76,16 +76,16 @@
       ;; otherwise the sort function errors out.
       ;; (message "Current dir: %s File GID: %s File Attributes: %s"
       ;;          ido-current-directory
-      ;;          (fourth (file-attributes ido-current-directory))
+      ;;          (cl-fourth (file-attributes ido-current-directory))
       ;;          (file-attributes ido-current-directory))
       (when (file-exists-p ido-current-directory) ; only if the current directory exists
-        (when (not (= (fourth (file-attributes ido-current-directory)) 0))
+        (when (not (= (cl-fourth (file-attributes ido-current-directory)) 0))
           (setq ido-temp-list
                 (sort ido-temp-list
                       (lambda (a b)
                         (time-less-p
-                         (sixth (file-attributes (concat ido-current-directory b)))
-                         (sixth (file-attributes (concat ido-current-directory a))))))))
+                         (cl-sixth (file-attributes (concat ido-current-directory b)))
+                         (cl-sixth (file-attributes (concat ido-current-directory a))))))))
         (ido-to-end  ; move . files to end (again)
          (delq nil (mapcar
                     (lambda (x) (and (char-equal (string-to-char x) ?.) x))
