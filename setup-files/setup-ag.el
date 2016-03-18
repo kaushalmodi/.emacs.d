@@ -1,10 +1,12 @@
-;; Time-stamp: <2016-03-15 08:15:37 kmodi>
+;; Time-stamp: <2016-03-18 16:51:44 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
 (use-package ag
-  :commands (ag-project-regexp modi/ag-regexp-cwd)
+  :commands (ag-project-regexp
+             modi/ag-regexp-cwd
+             modi/verilog-find-parent-module)
   :init
   (progn
     (bind-to-modi-map "a" #'ag-project-regexp))

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-24 14:19:09 kmodi>
+;; Time-stamp: <2016-03-18 18:20:30 kmodi>
 
 ;; Verilog
 
@@ -324,7 +324,6 @@ for this to work."
                 (modi/update-etags-table)
                 (find-tag modi/verilog-which-func-xtra))
             (pop-tag-mark))))
-      (key-chord-define verilog-mode-map "\\\\" #'modi/verilog-jump-to-module-at-point) ; "\\"
 
       (with-eval-after-load 'ag
 
@@ -355,8 +354,7 @@ the project."
                             "(?=[^a-zA-Z0-9_]*\\()")) ; optional space/newline after instance name
                                         ; and before opening parenthesis `('
                                         ; don't highlight anything in (?=..)
-              (ag-regexp module-instance-re (projectile-project-root)))))
-        (key-chord-define verilog-mode-map "^^" #'modi/verilog-find-parent-module)))
+              (ag-regexp module-instance-re (projectile-project-root)))))))
 
 ;;;; my/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
@@ -504,7 +502,10 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;;
       ("C-c C-t"   . hydra-verilog-template/body)
       ("C-^"       . modi/verilog-jump-to-header-dwim)
-      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd))))
+      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd))
+    (bind-chord "\\\\" #'modi/verilog-jump-to-module-at-point verilog-mode-map) ; "\\"
+    (when (executable-find "ag")
+      (bind-chord "^^" #'modi/verilog-find-parent-module verilog-mode-map))))
 
 
 (provide 'setup-verilog)
