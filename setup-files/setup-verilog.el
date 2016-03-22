@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-18 18:20:30 kmodi>
+;; Time-stamp: <2016-03-22 18:49:02 kmodi>
 
 ;; Verilog
 
@@ -463,11 +463,11 @@ _a_lways         _f_or              _g_enerate         _O_utput
         (when (derived-mode-p 'verilog-mode)
           (setq-local imenu-generic-expression
                       (append '(("*Level 1*"
-                                 "^// \\* \\(?1:.*$\\)" 1)
+                                 "^// \\*\\{1\\} \\(?1:.*$\\)" 1)
                                 ("*Level 2*"
-                                 "^// \\*\\* \\(?1:.*$\\)" 1)
+                                 "^// \\*\\{2\\} \\(?1:.*$\\)" 1)
                                 ("*Level 3*"
-                                 "^// \\*\\* \\(?1:.*$\\)" 1))
+                                 "^// \\*\\{3\\} \\(?1:.*$\\)" 1))
                               verilog-imenu-generic-expression))))
       (advice-add 'outshine-hook-function :after
                   #'modi/verilog-outshine-imenu-generic-expression))
