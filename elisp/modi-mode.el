@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-17 11:50:47 kmodi>
+;; Time-stamp: <2016-03-23 17:44:40 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -27,26 +27,18 @@ Overrides the default binding for `compose-mail'.")
   :lighter    " μ"
   :keymap     modi-mode-map)
 
+;;;###autoload
+(define-globalized-minor-mode global-modi-mode modi-mode modi-mode)
+
 ;; https://github.com/jwiegley/use-package/blob/master/bind-key.el
 ;; The keymaps in `emulation-mode-map-alists' take precedence over
 ;; `minor-mode-map-alist'
 (add-to-list 'emulation-mode-map-alists `((modi-mode . ,modi-mode-map)))
 
-;;;###autoload
-(defun turn-on-modi-mode ()
-  "Turn on modi-mode."
-  (interactive)
-  (modi-mode 1))
-
+;; Turn off the minor mode in the minibuffer
 (defun turn-off-modi-mode ()
   "Turn off modi-mode."
-  (interactive)
   (modi-mode -1))
-
-;;;###autoload
-(define-globalized-minor-mode global-modi-mode modi-mode turn-on-modi-mode)
-
-;; Turn off the minor mode in the minibuffer
 (add-hook 'minibuffer-setup-hook #'turn-off-modi-mode)
 
 (defmacro bind-to-modi-map (key fn)

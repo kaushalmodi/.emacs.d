@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-15 11:14:48 kmodi>
+;; Time-stamp: <2016-03-23 17:42:54 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -425,13 +425,7 @@ Toggling off this mode reverts everything to their original states."
       (switch-to-buffer prez-mode--buffer-name)
       (modi/global-font-size-reset)
       (toggle-theme))))
-
-(defun turn-on-prez-mode ()
-  "Turns on prez-mode."
-  (interactive)
-  (prez-mode 1))
-
-(define-globalized-minor-mode global-prez-mode prez-mode turn-on-prez-mode)
+(define-globalized-minor-mode global-prez-mode prez-mode prez-mode)
 
 ;; F8 key can't be used as it launches the VNC menu
 ;; It can though be used with shift/ctrl/alt keys
