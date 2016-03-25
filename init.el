@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-16 10:26:36 kmodi>
+;; Time-stamp: <2016-03-25 11:31:27 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -110,7 +110,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     smart-mark
     smart-mode-line popup rich-minority
     smex ; smart M-x
-    stripe-buffer
     sunshine forecast ; weather
     swiper counsel
     sx
@@ -256,7 +255,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-server)
 (require 'setup-smart-compile)
 (require 'setup-smex)
-(require 'setup-stripe-buffer)
 (require 'setup-sx)
 (require 'setup-term)
 (require 'setup-tiny)
