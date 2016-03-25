@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-10 16:14:16 kmodi>
+;; Time-stamp: <2016-03-23 18:00:55 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -241,6 +241,16 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook #'stop-using-minibuffer)
+
+;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21874
+;; Do not allow the cursor to go over or select the minibuffer prompt.
+;; A good example is that we wouldn't want to ever edit/select the "Find file:"
+;; prompt we see in the minibuffer when we do `find-file'.
+(>=e "25.0"
+    (let ((default '(read-only t face minibuffer-prompt))
+          (dont-touch-prompt-prop '(cursor-intangible t)))
+      (setq minibuffer-prompt-properties (append default dont-touch-prompt-prop))
+      (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)))
 
 ;; http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
