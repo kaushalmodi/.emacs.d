@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-06 09:53:24 kmodi>
+;; Time-stamp: <2016-03-22 11:25:30 kmodi>
 
 ;; Shell Script Mode
 
@@ -38,10 +38,13 @@ argument) controls whether to insert a #!-line and think about making
 the visited file executable, and NO-QUERY-FLAG (the second argument)
 controls whether to query about making the visited file executable.
 
-Calls the value of `sh-set-shell-hook' if set."
+Calls the value of `sh-set-shell-hook' if set.
+
+Shell script files can cause this function be called automatically
+when the file is visited by having a `sh-shell' file-local variable
+whose value is the shell name (don't quote it)."
       (interactive (list (completing-read
-                          (format "Shell \(default %s\): "
-                                  sh-shell-file)
+                          (format "Shell (default %s): " sh-shell-file)
                           ;; This used to use interpreter-mode-alist, but that is
                           ;; no longer appropriate now that uses regexps.
                           ;; Maybe there could be a separate variable that lists
@@ -69,8 +72,7 @@ Calls the value of `sh-set-shell-hook' if set."
                   (sh-feature sh-imenu-generic-expression))
       (let ((tem (sh-feature sh-mode-syntax-table-input)))
         (when tem
-          (setq-local sh-mode-syntax-table
-                      (apply 'sh-mode-syntax-table tem))
+          (setq-local sh-mode-syntax-table (apply 'sh-mode-syntax-table tem))
           (set-syntax-table sh-mode-syntax-table)))
       (dolist (var (sh-feature sh-variables))
         (sh-remember-variable var))
@@ -88,6 +90,7 @@ Calls the value of `sh-set-shell-hook' if set."
               (if (looking-at "[ \t]*\\\\\n")
                   (goto-char (match-end 0))
                 (funcall orig))))
+          (add-hook 'smie-indent-functions #'sh-smie--indent-continuation nil t)
           (smie-setup (symbol-value (funcall mksym "grammar"))
                       (funcall mksym "rules")
                       :forward-token  (funcall mksym "forward-token")
@@ -103,13 +106,13 @@ Calls the value of `sh-set-shell-hook' if set."
           ;; sh-mode has already made indent-line-function local
           ;; but do it in case this is called before that.
           (setq-local indent-line-function #'sh-indent-line))
-        (if sh-make-vars-local
-            (sh-make-vars-local))
+        (when sh-make-vars-local
+          (sh-make-vars-local))
         ;; (message "Indentation setup for shell type %s" sh-shell)
         )
        ((or (eq sh-shell 'tcsh)
             (eq sh-shell 'csh))
-        (setq-local indent-line-function   #'csh-indent-line)
+        (setq-local indent-line-function #'csh-indent-line)
         (setq-local indent-region-function #'csh-indent-region))
        ((null sh-indent-supported-here)
         (message "No indentation for this shell type.")
