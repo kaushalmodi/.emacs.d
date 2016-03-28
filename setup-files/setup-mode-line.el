@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-27 23:41:07 kmodi>
+;; Time-stamp: <2016-03-25 21:44:45 kmodi>
 
 ;; Customize the mode-line
 
@@ -186,6 +186,7 @@ TIME is \"nil\" or \"\"."
             ("\\(:.*\\)DIG:tb/"                    "\\1TB:"  )
             ("\\(:.*\\)TB:agents/"                 "\\1AGT:" )
             ("\\(:.*\\)TB:patterns/"               "\\1PAT:" )
+            ("\\(:.*\\)TB:tests/"                  "\\1TST:" )
             ("\\(:.*\\)TB:uvm.*src/"               "\\1UVM:" )
             ("\\(:.*\\)DIG:design_code/"           "\\1DSGN:")
             ("\\(:.*\\)DSGN:rtl/"                  "\\1RTL:" )
