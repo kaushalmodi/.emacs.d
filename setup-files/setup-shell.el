@@ -17,12 +17,14 @@
     (use-package csh-mode
       :load-path "elisp/csh-mode")
 
-    ;; Change default shell file to tcsh
-    (setq-default sh-shell-file "/bin/tcsh")
+    ;; Change default shell file to tcsh if available
+    (let ((tcsh-bin (executable-find "tcsh")))
+      (when tcsh-bin
+        (setq-default sh-shell-file tcsh-bin)))
 
-    (setq sh-indent-supported '((sh   . sh)
-                                (rc   . rc)
-                                (csh  . csh)
+    (setq sh-indent-supported '((sh . sh)
+                                (rc . rc)
+                                (csh . csh)
                                 (tcsh . csh)))
 
     (defun sh-set-shell (shell &optional no-query-flag insert-flag)
