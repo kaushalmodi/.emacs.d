@@ -20,7 +20,7 @@ MATLAB and Emacs integration
 
    The most recent version of matlab.el is always in CVS.
 
-   The last stabilized version of matlab.el can be found on MATLAB Central:
+   You can get an old downloader for matlab-emacs from MATLAB File Exchange.
 
    Category:
    http://www.mathworks.com/matlabcentral/fileexchange/loadCategory.do?objectId=19&objectType=Category
@@ -51,19 +51,26 @@ MATLAB and Emacs integration
    http://sourceforge.net/projects/matlab-emacs
 
    CVS Repository:
-   http://sourceforge.net/cvs/?group_id=154105
+   http://matlab-emacs.cvs.sourceforge.net/matlab-emacs
 
    If you do not have a CVS client on your machine, you can use the
    MATLAB script dl_emacs_support.m to download a fresh copy of the
    matlab.el sources.
 
+   http://matlab-emacs.cvs.sourceforge.net/viewvc/matlab-emacs/matlab-emacs/dl_emacs_support.m
+
 ** Dependancies
 
-   MATLAB-Emacs can now use the CEDET suite for the following items:
+   MATLAB-Emacs can use the CEDET suite for the following items:
 	- Modifying the build system (Makefiles, etc)
 	- mlint (uses EIEIO object system)
 	- parsing/completion (uses semantic parsing system)
         - some template insertion features
+
+   As of Emacs 23.2, CEDET is included in Emacs, and nothing extra
+   is needed to satisfy that dependency.
+
+   For older versions of Emacs:
 
    See http://cedet.sf.net for downloading CEDET.
 

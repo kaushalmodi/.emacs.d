@@ -1,0 +1,11 @@
+;; Object toolbox
+;; EDE Project Files are auto generated: Do Not Edit
+(ede-proj-project "toolbox"
+  :file "Project.ede"
+  :name "toolbox"
+  :targets
+  (list
+    (ede-proj-target-makefile-miscelaneous "matlab"
+      :name "matlab"
+      :path ""
+      :source '("emacsinit.m" "opentoline.m" "emacsdocomplete.m"))))

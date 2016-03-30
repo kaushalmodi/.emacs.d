@@ -1,0 +1,6 @@
+*-compile-script
+bugs
+*.patch
+*.diff
+semantic.cache
+MISC

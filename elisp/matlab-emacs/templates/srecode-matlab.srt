@@ -1,9 +1,9 @@
 ;; srecode-matlab.srt --- SREcode Templates for MATLAB.
 
-;; Copyright (C) 2008 Eric Ludlam
+;; Copyright (C) 2008, 2014 Eric Ludlam
 
 ;; Author: Eric Ludlam <eludlam@mathworks.com>
-;; X-RCS: $Id: srecode-matlab.srt,v 1.1 2009/07/06 19:51:41 zappo Exp $
+;; X-RCS: $Id: srecode-matlab.srt,v 1.2 2014/12/27 12:36:13 zappo Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -33,16 +33,37 @@ set comment_end    ""
 
 ;; @todo - add argument support.
 ;;         choose template based on script/function or class in current dir.
-template empty :file :user :time
+template empty :matlab :file :user :time
 "Fill out an empty file."
 ----
-function {{FILE}}
-% {{FILE:upcase}} - 
+{{#FILE_FUNCTION}}function {{FILE_SYMBOL}}
+{{comment_prefix}} {{FILE_DOC_SYMBOL}} - 
+{{comment_prefix}}
 
 {{comment_prefix}} Copyright (C) {{YEAR}} {{?AUTHOR}}
 
-{{^}}
+  {{^}}
 
+end
+{{/FILE_FUNCTION}}{{#FILE_CLASS}}classdef {{FILE_SYMBOL}}
+{{comment_prefix}} Class {{FILE_DOC_SYMBOL}}
+{{comment_prefix}}
+
+{{comment_prefix}} Copyright (C) {{YEAR}} {{?AUTHOR}}
+
+    properties
+
+    end
+
+    methods
+	function h = {{FILE_SYMBOL}}({{^}})
+	% Constructor
+	   
+        end
+    end
+end
+
+{{/FILE_CLASS}}
 end
 ----
 bind "e"
@@ -53,11 +74,11 @@ context declaration
 
 prompt NAME "Name for declaration: "
 
-template classdef :time
+template classdef :time :user :time
 "Template to declare a class"
 ----
 classdef {{?NAME}} 
-% Class {{NAME}}
+% Class {{NAME:upcase}}
 %
 % Copyright (C) {{YEAR}} {{?AUTHOR}}
 

@@ -8,7 +8,7 @@
 (defvar mlint-version "1.3.1"
   "The current version of mlint minor mode.")
 
-;; Copyright (C) 2002-2005 The MathWorks Inc.
+;; Copyright (C) 2002-2005, 2013, 2014 The MathWorks Inc.
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -797,7 +797,6 @@ With prefix ARG, turn mlint minor mode on iff ARG is positive.
 	(if (y-or-n-p "No MLINT program available.  Configure it?")
 	    (customize-variable 'mlint-programs))
 
-      (make-local-hook 'after-save-hook)
       (add-hook 'after-save-hook 'mlint-buffer nil t)
       (easy-menu-add mlint-minor-menu mlint-minor-mode-map)
       (mlint-buffer))

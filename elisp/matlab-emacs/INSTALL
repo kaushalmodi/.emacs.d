@@ -3,28 +3,25 @@ Installation:
 ** DEPENDANCIES
 
 This matlab-emacs build system now requires the CEDET suite.
+If you are using Emacs version 23.2 or later, you should have
+everything you need.
+
+For older versions of Emacs, visit:
 
    http://cedet.sf.net
 
 The build system uses EDE for project management, Makefile creation,
 and autoload generation.
 
-To build if CEDET is installed in ../cedet:
+** BUILD
+
+To build:
 
   make
 
-To build if CEDET is installed in some other location:
+To build using an alternate version of CEDET:
 
-   make "LOADPATH=../cedet-VER/common ../cedet-VER/eieio ../cedet-VER/semantic/bovine/ ../cedet-VER/semantic/"
-
-where ../cedet-VER is a full or relative path to the CEDET suite.  If
-you get CEDET from CVS, then it is likey just "../cedet", if you use
-CEDET from a release, then it may be "../cedet-1.0pre6", or similar.
-
-This tool requires CEDET 1.0pre3 or later.
-
-If you have CEDET installed in "../cedet" then you do not need to
-specify a LOADPATH on the make command line.
+   make CEDET_PATH=~/my/cedet/lisp/
 
 It is possible to use matlab.el, and associated programs without this
 extra package.  To do so, install and compile only those lisp files
@@ -50,6 +47,8 @@ add this to your .emacs or site-init.el file:
   (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
   (setq auto-mode-alist (cons '("\\.m\\'" . matlab-mode) auto-mode-alist))
   (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
+
+** CUSTOMIZATION:
 
 User Level customizations (You need not use them all):
   (setq matlab-indent-function-body t)  ; if you want function bodies indented
@@ -79,7 +78,7 @@ This package supports language specific extensions in imenu, func-menu,
 
 ** tlc.el
 
-To use this mode without using the full instatll, put the this file
+To use this mode without using the full install, put the this file
 into your load path, and add the following to your .emacs file:
 
   (require 'tlc)
@@ -88,8 +87,3 @@ or
   (add-to-list 'auto-mode-alist '("\\.tlc$" . tlc-mode))
   (setq tlc-indent-function t)
 
-
-** semantic-matlab.el, semanticdb-matlab.el
-
-
-Note that this feature requires CEDET 1.0pre4 or newer.

@@ -1,6 +1,6 @@
 ;;; semanticdb-matlab.el --- Semantic database extensions for MATLAB
 
-;;; Copyright (C) 2008 David Engster
+;;; Copyright (C) 2008, 2012, 2013 David Engster
 
 ;; Author: David Engster <dengste@eml.cc>
 ;; based heavily on semanticdb-skel.el (C) Eric Ludlam
@@ -22,14 +22,17 @@
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
+;; For generic function searching.
+(require 'eieio)
+(require 'eieio-opt)
 
-(require 'semanticdb-search)
-(require 'working)
-(eval-when-compile
-  ;; For generic function searching.
-  (require 'eieio)
-  (require 'eieio-opt)
-  )
+;; eval-and-compile needed because of the condition-case.
+;; Normally a require is eval'd during compile, so this is the same.
+(eval-and-compile
+  (condition-case nil
+      (require 'semanticdb)
+    (error (require 'semantic/db))))
+
 ;;; Code:
 
 ;; Put all directories which should be recursively scanned for your
@@ -211,12 +214,8 @@ will be included in the search.  If EXCLUDE-CLASSES, class
 directories (beginning with '@') will be skipped.  If
 EXCLUDE-PRIVATE, 'private' directories will be skipped."
   (if dirs
-      (let ((working-status-dynamic-type 'working-spinner-display)
-	    files)
+      (let (files)
 	(dolist (dir dirs)
-	  (when (and (boundp 'working-message)
-		     working-message)
-	    (working-dynamic-status))
 	  (let (subdirs)
 	    (dolist (cur (directory-files dir t "[^.]" t))
 	      (if (file-directory-p cur)
@@ -240,19 +239,15 @@ EXCLUDE-PRIVATE, 'private' directories will be skipped."
   "Cache user and system MATLAB files if necessary."
   ;; car of *-file-cache variables is used as flag
   (unless (car semanticdb-matlab-system-files-cache)
-    (working-status-forms
-     "Searching system MATLAB files" "done"
-     (setq semanticdb-matlab-system-files-cache
-	   (cons t
-		 (semanticdb-matlab-scan-directories
-		  semantic-matlab-dependency-system-include-path t t t)))))
+    (setq semanticdb-matlab-system-files-cache
+	  (cons t
+		(semanticdb-matlab-scan-directories
+		 semantic-matlab-dependency-system-include-path t t t))))
   (unless (car semanticdb-matlab-user-files-cache)
-    (working-status-forms
-     "Searching user MATLAB files" "done"
-     (setq semanticdb-matlab-user-files-cache
-	   (cons t
-		 (semanticdb-matlab-scan-directories
-		  semanticdb-matlab-include-paths t nil nil))))
+    (setq semanticdb-matlab-user-files-cache
+	  (cons t
+		(semanticdb-matlab-scan-directories
+		 semanticdb-matlab-include-paths t nil nil)))
     ;; cache user defined old-style classes
     (setq semanticdb-matlab-user-class-cache
 	  (semantic-matlab-find-oldstyle-classes

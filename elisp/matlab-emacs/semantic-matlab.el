@@ -1,9 +1,9 @@
 ;;; semantic-matlab.el --- Semantic details for MATLAB files
 
-;;; Copyright (C) 2004, 2005, 2008 Eric M. Ludlam: The Mathworks, Inc
+;;; Copyright (C) 2004, 2005, 2008, 2012, 2013 Eric M. Ludlam: The Mathworks, Inc
 
 ;; Author: Eric M. Ludlam <eludlam@mathworks.com>
-;; X-RCS: $Id: semantic-matlab.el,v 1.14 2009/07/06 19:49:09 zappo Exp $
+;; X-RCS: $Id: semantic-matlab.el,v 1.16 2013/08/29 01:42:12 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -35,7 +35,14 @@
 
 (require 'mode-local)
 (require 'semantic)
-(require 'semantic-format)
+(eval-and-compile
+  (condition-case nil
+      (require 'semantic-format)
+    (error (require 'semantic/format)))
+  (condition-case nil
+      (require 'semantic-dep)
+    (error (require 'semantic/dep)))
+  )
 (require 'matlab)
 (require 'semanticdb-matlab)
 
@@ -162,7 +169,7 @@ the whole directory for methods.  The function returns a single tag
 describing the class.  This means that in semantic-matlab, the
 old-style MATLAB classes are linked to the constructor file."
   (let* ((name (buffer-file-name buffer))
-	 class methods retval attributes)
+	 class method methods retval attributes)
     (when (string-match ".*/@\\(.*?\\)/\\(.*?\\)\\.m" name)
       ;; this buffer is part of a class - check
       (setq class (match-string 1 name))
