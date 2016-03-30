@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-29 03:42:38 kmodi>
+;; Time-stamp: <2016-03-30 11:24:05 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -241,6 +241,19 @@ Lisp function does not specify a special indentation."
     (setq easy-escape-character ?\\) ; default
     ;; (setq easy-escape-character ?⑊)
     (add-hook 'emacs-lisp-mode-hook #'easy-escape-minor-mode)))
+
+;; Overlay eval results
+;; http://endlessparentheses.com/eval-result-overlays-in-emacs-lisp.html
+(defun endless/eval-overlay (orig-ret-val)
+  "Overlay the eval results"
+  (require 'cider-overlays nil :noerror)
+  ;; Skip this feature if `cider' is not installed
+  (when (fboundp #'cider--make-result-overlay)
+    (cider--make-result-overlay (format "%S" orig-ret-val)
+      :where (point)
+      :duration 'command))
+  orig-ret-val)
+(advice-add 'eval-last-sexp :filter-return #'endless/eval-overlay)
 
 
 (provide 'setup-elisp)
