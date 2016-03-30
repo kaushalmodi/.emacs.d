@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-30 12:37:03 kmodi>
+;; Time-stamp: <2016-03-30 17:20:02 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -251,12 +251,13 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
           ;; (car (cdr (car (get ..)))) -> (read-only t face minibuffer-prompt)
           (default (car (cdr (car (get 'minibuffer-prompt-properties 'standard-value)))))
           (dont-touch-prompt-prop '(cursor-intangible t)))
-      ;; When `cursor-intangible' property is detected in `minibuffer-prompt-properties',
-      ;; `cursor-intangible-mode' is automatically added to `minibuffer-setup-hook'
+      (setq minibuffer-prompt-properties (append default dont-touch-prompt-prop))
+      ;; Note: If the above `minibuffer-prompt-properties' is set using the
+      ;; Customize interface, `cursor-intangible-mode' would be automatically
+      ;; added to `minibuffer-setup-hook' because of the presence of
+      ;; `cursor-intangible' property in `minibuffer-prompt-properties'.
       ;; (see cus-start.el).
-      (custom-set-variables '(minibuffer-prompt-properties
-                              (append default dont-touch-prompt-prop)
-                              nil nil "Make the minibuffer prompt intangible."))))
+      (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)))
 
 ;; http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
