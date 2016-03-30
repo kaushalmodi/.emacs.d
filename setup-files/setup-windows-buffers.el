@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-28 12:47:25 kmodi>
+;; Time-stamp: <2016-03-30 12:37:03 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -245,10 +245,18 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 ;; A good example is that we wouldn't want to ever edit/select the "Find file:"
 ;; prompt we see in the minibuffer when we do `find-file'.
 (>=e "25.0"
-    (let ((default '(read-only t face minibuffer-prompt))
+    (let (;; (get ..)                   -> ((quote (read-only t face minibuffer-prompt)))
+          ;; (car (get ..))             -> (quote (read-only t face minibuffer-prompt))
+          ;; (cdr (car (get ..)))       -> ((read-only t face minibuffer-prompt))
+          ;; (car (cdr (car (get ..)))) -> (read-only t face minibuffer-prompt)
+          (default (car (cdr (car (get 'minibuffer-prompt-properties 'standard-value)))))
           (dont-touch-prompt-prop '(cursor-intangible t)))
-      (setq minibuffer-prompt-properties (append default dont-touch-prompt-prop))
-      (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)))
+      ;; When `cursor-intangible' property is detected in `minibuffer-prompt-properties',
+      ;; `cursor-intangible-mode' is automatically added to `minibuffer-setup-hook'
+      ;; (see cus-start.el).
+      (custom-set-variables '(minibuffer-prompt-properties
+                              (append default dont-touch-prompt-prop)
+                              nil nil "Make the minibuffer prompt intangible."))))
 
 ;; http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
