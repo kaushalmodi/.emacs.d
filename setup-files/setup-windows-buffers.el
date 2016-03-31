@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-30 17:20:02 kmodi>
+;; Time-stamp: <2016-03-31 10:12:25 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -247,9 +247,9 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
 (>=e "25.0"
     (let (;; (get ..)                   -> ((quote (read-only t face minibuffer-prompt)))
           ;; (car (get ..))             -> (quote (read-only t face minibuffer-prompt))
-          ;; (cdr (car (get ..)))       -> ((read-only t face minibuffer-prompt))
-          ;; (car (cdr (car (get ..)))) -> (read-only t face minibuffer-prompt)
-          (default (car (cdr (car (get 'minibuffer-prompt-properties 'standard-value)))))
+          ;; (eval (car (get ..)))      -> (read-only t face minibuffer-prompt)
+          ;; http://thread.gmane.org/gmane.emacs.devel/202463/focus=202496
+          (default (eval (car (get 'minibuffer-prompt-properties 'standard-value))))
           (dont-touch-prompt-prop '(cursor-intangible t)))
       (setq minibuffer-prompt-properties (append default dont-touch-prompt-prop))
       ;; Note: If the above `minibuffer-prompt-properties' is set using the
