@@ -3739,8 +3739,8 @@ If ARG is nil, then highlighting is toggled."
 			  post-command-hook)
 		  -1 1)))
     (if (> arg 0)
-	(add-hook 'post-command-hook 'matlab-start-block-highlight-timer)
-      (remove-hook 'post-command-hook 'matlab-start-block-highlight-timer))))
+	(add-hook 'post-command-hook 'matlab-start-block-highlight-timer nil :local)
+      (remove-hook 'post-command-hook 'matlab-start-block-highlight-timer :local))))
 
 (defvar matlab-block-highlight-overlay nil
   "The last highlighted overlay.")

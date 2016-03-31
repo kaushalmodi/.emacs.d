@@ -41,7 +41,7 @@ Bind the viss bookmark functions to F2 related keys.
 
 ;;;***
 
-;;;### (autoloads nil "matlab" "matlab.el" (22269 28281 720820 0))
+;;;### (autoloads nil "matlab" "matlab.el" (22269 28745 518314 0))
 ;;; Generated autoloads from matlab.el
 
 (add-to-list 'auto-mode-alist '("\\.m$" . matlab-mode))
