@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2016-02-24-3bb6198-vpo"
+(defconst verilog-mode-version "2016-03-24-b8be43d-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -349,6 +349,11 @@ wherever possible, since it is slow."
   (condition-case nil
       (unless (fboundp 'prog-mode)
 	(define-derived-mode prog-mode fundamental-mode "Prog"))
+    (error nil))
+  ;; Added in Emacs 25.1
+  (condition-case nil
+      (unless (fboundp 'forward-word-strictly)
+        (defalias 'forward-word-strictly 'forward-word))
     (error nil)))
 
 (eval-when-compile
@@ -1323,9 +1328,9 @@ See also `verilog-case-fold'."
 (defvar verilog-imenu-generic-expression
   '((nil            "^\\s-*\\(?:m\\(?:odule\\|acromodule\\)\\|p\\(?:rimitive\\|rogram\\|ackage\\)\\)\\s-+\\([a-zA-Z0-9_.:]+\\)" 1)
     ("*Variables*"  "^\\s-*\\(reg\\|wire\\|logic\\)\\s-+\\(\\|\\[[^]]+\\]\\s-+\\)\\([A-Za-z0-9_]+\\)" 3)
-    ("*Classes*"    "^\\s-*\\(?:\\(?:static\\|local\\|virtual\\|protected\\)\\s-+\\)?class\\s-+\\([A-Za-z_][A-Za-z0-9_]+\\)" 1)
-    ("*Tasks*"      "^\\s-*\\(?:\\(?:static\\|local\\|virtual\\|protected\\)\\s-+\\)?task\\s-+\\(?:\\(?:static\\|automatic\\)\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
-    ("*Functions*"  "^\\s-*\\(?:\\(?:static\\|local\\|virtual\\|protected\\)\\s-+\\)?function\\s-+\\(?:\\w+\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
+    ("*Classes*"    "^\\s-*\\(?:\\(?:virtual\\|interface\\)\\s-+\\)?class\\s-+\\([A-Za-z_][A-Za-z0-9_]+\\)" 1)
+    ("*Tasks*"      "^\\s-*\\(?:\\(?:static\\|pure\\|virtual\\|local\\|protected\\)\\s-+\\)*task\\s-+\\(?:\\(?:static\\|automatic\\)\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
+    ("*Functions*"  "^\\s-*\\(?:\\(?:static\\|pure\\|virtual\\|local\\|protected\\)\\s-+\\)*function\\s-+\\(?:\\(?:static\\|automatic\\)\\s-+\\)?\\(?:\\w+\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
     ("*Interfaces*" "^\\s-*interface\\s-+\\([a-zA-Z_0-9]+\\)" 1)
     ("*Types*"      "^\\s-*typedef\\s-+.*\\s-+\\([a-zA-Z_0-9]+\\)\\s-*;" 1))
   "Imenu expression for Verilog mode.  See `imenu-generic-expression'.")
@@ -3475,7 +3480,7 @@ Use filename, if current buffer being edited shorten to just buffer name."
 	(found nil)
 	(st (point)))
     (if (not (looking-at "\\<"))
-	(forward-word -1))
+	(forward-word-strictly -1))
     (cond
      ((verilog-skip-backward-comment-or-string))
      ((looking-at "\\<else\\>")
@@ -3527,7 +3532,7 @@ Use filename, if current buffer being edited shorten to just buffer name."
 	(st (point))
 	(nest 'yes))
     (if (not (looking-at "\\<"))
-	(forward-word -1))
+	(forward-word-strictly -1))
     (cond
      ((verilog-skip-forward-comment-or-string)
       (verilog-forward-syntactic-ws))
@@ -3550,11 +3555,11 @@ Use filename, if current buffer being edited shorten to just buffer name."
 	       (and (looking-at "fork")
 		    (progn
                       (setq here (point))  ; sometimes a fork is just a fork
-		      (forward-word -1)
+		      (forward-word-strictly -1)
 		      (looking-at verilog-disable-fork-re))))
               (progn  ; it is a disable fork; ignore it
 		(goto-char (match-end 0))
-		(forward-word 1)
+		(forward-word-strictly 1)
 		(setq reg nil))
             (progn  ; it is a nice simple fork
               (goto-char here)   ; return from looking for "disable fork"
@@ -3604,7 +3609,7 @@ Use filename, if current buffer being edited shorten to just buffer name."
         ;; Search forward for matching endclocking
         (setq reg "\\(\\<clocking\\>\\)\\|\\(\\<endclocking\\>\\)" )))
       (if (and reg
-	       (forward-word 1))
+	       (forward-word-strictly 1))
 	  (catch 'skip
 	    (if (eq nest 'yes)
 		(let ((depth 1)
@@ -3623,7 +3628,7 @@ Use filename, if current buffer being edited shorten to just buffer name."
 			     (looking-at verilog-disable-fork-re)
 			     (and (looking-at "fork")
 				  (progn
-				    (forward-word -1)
+				    (forward-word-strictly -1)
 				    (looking-at verilog-disable-fork-re))))
                             (progn  ; it is a disable fork; another false alarm
 			      (goto-char (match-end 0)))
@@ -3875,6 +3880,27 @@ Key bindings specific to `verilog-mode-map' are:
   (add-hook 'write-contents-hooks 'verilog-auto-save-check nil 'local)
   ;; verilog-mode-hook call added by define-derived-mode
   )
+
+;;; Integration with the speedbar
+;;
+
+;; This causes problems with XEmacs byte-compiles.
+;; For GNU Emacs, the eval-after-load will handle if it isn't loaded yet.
+;;(declare-function speedbar-add-supported-extension "speedbar" (extension))
+
+(defun verilog-speedbar-initialize ()
+  "Initialize speedbar to understand `verilog-mode'."
+  ;; Set Verilog file extensions (extracted from `auto-mode-alist')
+  (let ((mode-alist auto-mode-alist))
+    (while mode-alist
+      (when (eq (cdar mode-alist) 'verilog-mode)
+        (speedbar-add-supported-extension (caar mode-alist)))
+      (setq mode-alist (cdr mode-alist)))))
+
+;; If the speedbar is loaded, execute initialization instructions right away,
+;; otherwise add the initialization instructions to the speedbar loader.
+(eval-after-load "speedbar" '(verilog-speedbar-initialize))
+
 
 ;;; Electric functions:
 ;;
@@ -4297,7 +4323,7 @@ Uses `verilog-scan' cache."
 	      ;; stop if we see a named coverpoint
 	      (looking-at "\\w+\\W*:\\W*\\(coverpoint\\|cross\\|constraint\\)")
 	      ;; keep going if we are in the middle of a word
-	      (not (or (looking-at "\\<") (forward-word -1)))
+	      (not (or (looking-at "\\<") (forward-word-strictly -1)))
 	      ;; stop if we see an assertion (perhaps labeled)
 	      (and
 	       (looking-at "\\(\\w+\\W*:\\W*\\)?\\(\\<\\(assert\\|assume\\|cover\\)\\>\\s-+\\<property\\>\\)\\|\\(\\<assert\\>\\)")
@@ -4846,7 +4872,7 @@ primitive or interface named NAME."
 
                              ((looking-at "\\<end\\>")
                               ;; HERE
-                              (forward-word 1)
+                              (forward-word-strictly 1)
                               (verilog-forward-syntactic-ws)
                               (setq err nil)
                               (setq str (verilog-get-expr))
@@ -5961,7 +5987,7 @@ Set point to where line starts."
       (verilog-backward-up-list 1)
       (verilog-backward-syntactic-ws)
       (let ((back (point)))
-	(forward-word -1)
+	(forward-word-strictly -1)
 	(cond
 	 ;;XX
 	 ((looking-at "\\<\\(always\\(_latch\\|_ff\\|_comb\\)?\\|case\\(\\|[xz]\\)\\|for\\(\\|each\\|ever\\)\\|i\\(f\\|nitial\\)\\|repeat\\|while\\)\\>")
@@ -6002,11 +6028,11 @@ Set point to where line starts."
 
    (;-- any of begin|initial|while are complete statements; 'begin : foo' is also complete
     t
-    (forward-word -1)
+    (forward-word-strictly -1)
     (while (or (= (preceding-char) ?\_)
                (= (preceding-char) ?\@)
                (= (preceding-char) ?\.))
-      (forward-word -1))
+      (forward-word-strictly -1))
     (cond
      ((looking-at "\\<else\\>")
       t)
@@ -6520,7 +6546,7 @@ Only look at a few lines to determine indent level."
 				  (= (following-char) ?\`))
 			     (progn
 			       (forward-char 1)
-			       (forward-word 1)
+			       (forward-word-strictly 1)
 			       (skip-chars-forward " \t")))
 			    ((= (following-char) ?\[)
 			     (progn
@@ -9824,9 +9850,12 @@ Uses the CURRENT filename, `verilog-library-extensions',
 `verilog-library-directories' and `verilog-library-files'
 variables to build the path."
   ;; Return search locations for it
-  (append (list current)		; first, current buffer
-	  (verilog-library-filenames module current t)
-	  verilog-library-files))	; finally, any libraries
+  (append (list current)                ; first, current buffer
+          (verilog-library-filenames module current t)
+                                        ; finally, any libraries
+                                        ; possibly remote
+          (mapcar (lambda (fname) (concat (file-remote-p current) fname))
+                  verilog-library-files)))
 
 ;;
 ;; Module Information
