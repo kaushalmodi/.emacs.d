@@ -24,18 +24,204 @@
 ;; the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
 ;; 02139, USA.
 
-;; LCD Archive Entry:
-;; my-pub|Uwe Brauer|oub@mat.ucm.es
-;; |
-;; |$Date: 2009/07/06 19:59:10 $|$Revision: 1.1 $|~/packages/my-pub.el
 
 ;;; Commentary:
 
+
+;;; Code:
+
+
+
+(require 'matlab)
+
+;; Variables
+(defvar matlab-temp-region-file "region.m"
+  "*Variable for the file which saves the region for publishing.")
+
+(defvar matlab-show-matlab-shell t
+"* t means the matlab buffer shell is shown when running matlab.")
+
+;; Functions
+(defun matlab-select-publish-form (ch)
+"This function allows to publish the m file, either as in LaTeX or in
+HTML format."
+  (interactive "c1: LaTeX, 2: HTML ")
+  (setq ch (downcase ch))
+  (call-interactively (cond ((eql ch ?1) #'matlab-publish-file-latex)
+                            ((eql ch ?2) #'matlab-publish-file-html)
+                            (t (error 'args-out-of-range '(1 2 ch))))))
+
+(defun matlab-publish-file-latex ()
+  "Publish a matlab file in the LaTeX format."
+  (interactive)
+  (let ((pub (file-name-nondirectory (buffer-file-name)))) 
+	(matlab-shell-run-command (format "publish('%s','latex')" pub)))
+  (if matlab-show-matlab-shell
+	  (matlab-show-matlab-shell-buffer)))
+
+
+
+(defun matlab-publish-file-html ()
+  (interactive)
+"Publish a matlab file in the html format."
+  (let ((pub (file-name-nondirectory (buffer-file-name))))
+ 	(matlab-shell-run-command (format "publish('%s','html')" pub)))
+  (if matlab-show-matlab-shell
+	  (matlab-show-matlab-shell-buffer)))
+
+
+
+(defun matlab-select-environment (ch)
+  "This functions inserts structured text, which results for example 
+in LaTeX mode in title, sections, description, boldified text,  unnumbered equations and bullet list."
+  (interactive "c1: title, 2: section, 3:descrip, 4:boldify, 5:equation, 6:list ")
+  (setq ch (downcase ch))
+  (call-interactively (cond ((eql ch ?1) #'matlab-insert-title)
+                            ((eql ch ?2) #'matlab-insert-section)
+                            ((eql ch ?3) #'matlab-insert-description-text)
+                            ((eql ch ?4) #'matlab-boldify)
+                            ((eql ch ?5) #'matlab-insert-equation)
+                            ((eql ch ?6) #'matlab-insert-bullet-list)
+                            (t (error 'args-out-of-range '(1 2 3 5 6 ch))))))
+
+
+(defun matlab-insert-title ()
+  (interactive)
+  (beginning-of-buffer nil)
+  (insert "%% TITLE\n")
+  (previous-line 1)
+  (forward-char 3))
+
+(defun matlab-insert-section ()
+  (interactive)
+  (insert "%% Section\n")
+  (previous-line 1)
+  (forward-char 3))
+
+
+(defun matlab-insert-description-text ()
+  (interactive)
+  (insert "%%\n")
+  (insert "% DESCRIPTIVE TEXT\n")
+  (previous-line 1)
+  (forward-char 2))
+
+
+
+(defun matlab-boldify ()
+  "Insert either \%\%\\n \% \*BOLD TEXT\*\\n or, when mark is active,
+surrounds region by * *."
+  (interactive)
+  (if (or (and (boundp 'zmacs-region-active-p) zmacs-region-active-p)
+		  (and (boundp 'transient-mark-mode) transient-mark-mode mark-active))
+	  (save-excursion
+		(goto-char (point))
+		(insert "*")
+		(goto-char (mark))
+		(insert "*"))
+  (insert "\n%%\n")
+  (insert "% *BOLD TEXT*\n")
+	(backward-char 2)))
+
+
+(defun matlab-insert-bold-text ()
+  (interactive)
+  (insert "%%\n")
+  (insert "% *BOLD TEXT*\n")
+  (previous-line 1)
+  (forward-char 2))
+
+(defun matlab-insert-monospaces-text ()
+  (interactive)
+  (insert "%%\n")
+  (insert "% |MONOSPACED TEXT|\n")
+  (previous-line 1)
+  (forward-char 2))
+
+
+(defun matlab-insert-preformated-text ()
+  (interactive)
+  (insert "%%\n")
+  (insert "%\n") 
+  (insert "%  PREFORMATTED\n")
+  (insert "%  TEXT\n")
+  (insert "% \n")
+  (previous-line 3)
+  (forward-char 3))
+
+(defun matlab-insert-equation ()
+  (interactive)
+  (insert "%%\n")
+  (insert "% \n")
+  (insert "% $$e^{\pi i} + 1 = 0$$\n")
+  (insert "% \n")
+  (previous-line 2)
+  (forward-char 4))
+
+
+(defun matlab-insert-bullet-list ()
+  (interactive)
+  (insert "%%\n")
+  (insert "% \n")
+  (insert "% * ITEM1\n")
+  (insert "% * ITEM2\n")
+  (insert "% \n")
+  (previous-line 3)
+  (forward-char 4))
+
+
+
+
+(defun matlab-write-region (start end)
+  (interactive "r")
+  (write-region start end (expand-file-name matlab-temp-region-file) nil nil nil nil)
+  (find-file matlab-temp-region-file))
+
+
+(defun matlab-write-region-novisit (start end)
+  (interactive "r")
+  (write-region start end (expand-file-name matlab-temp-region-file) nil nil nil nil))
+
+
+
+
+
+
+
+(defun matlab-publish-region (start end ch)
+  (interactive "r\nc1: LaTeX, 2: HTML ")
+  (setq ch (downcase ch))
+  (write-region start end (expand-file-name matlab-temp-region-file) nil nil nil nil)
+  (call-interactively (cond ((eql ch ?1) #'matlab-publish-region-latex)
+                            ((eql ch ?2) #'matlab-publish-region-html)
+                            (t (error 'args-out-of-range '(1 2 ch))))))
+
+
+
+(defun matlab-publish-region-latex ()
+  (interactive)
+	(matlab-shell-run-command (format "publish('%s','latex')" matlab-temp-region-file))
+  (if matlab-show-matlab-shell
+	  (matlab-show-matlab-shell-buffer)))
+
+
+
+(defun matlab-publish-region-html ()
+  (interactive)
+	(matlab-shell-run-command (format "publish('%s','html')" matlab-temp-region-file))
+  (if matlab-show-matlab-shell
+	  (matlab-show-matlab-shell-buffer)))
+
+
+
+
+(provide 'matlab-publish)
+
 ;;{{{Change log:
 
-;; $Id: matlab-publish.el,v 1.1 2009/07/06 19:59:10 zappo Exp $
-;; $Log: matlab-publish.el,v $
-;; Revision 1.1  2009/07/06 19:59:10  zappo
+;; $Id$
+;; $Log$
+;; Revision 1.1  2009-07-06 19:59:10  zappo
 ;; Utilities for editing MATLAB files for publishing
 ;;
 ;; Revision 1.9  2009/03/08 09:38:31  oub
@@ -107,211 +293,3 @@
 ;;
 
 ;;}}}
-
-;;; Code:
-
-
-;; (defun my-publish-matlab ()
-;;   (interactive)
-;;   (let ((pub (file-name-nondirectory (buffer-file-name))))
-;; 	(let ((arg (concat "publish('" pub "','latex')")))
-;; 	  (matlab-shell-run-command arg))))
-
-(require 'matlab)
-
-;; Variables
-(defvar matlab-temp-region-file "region.m"  ;Version-1.5
-  "*Variable for the file which saves the region for publishing.")
-
-(defvar matlab-show-matlab-shell t
-"* t means the matlab buffer shell is shown when running matlab.")
-
-;; Functions
-(defun matlab-select-publish-form (ch)
-"This function allows to publish the m file, either as in LaTeX or in
-HTML format."
-  (interactive "c1: LaTeX, 2: HTML ")
-  (setq ch (downcase ch))
-  (call-interactively (cond ((eql ch ?1) #'matlab-publish-file-latex)
-                            ((eql ch ?2) #'matlab-publish-file-html)
-                            (t (error 'args-out-of-range '(1 2 ch))))))
-
-(defun matlab-publish-file-latex ()		;Version-1.7
-"Publish a matlab file in the LaTeX format."
-  (interactive)
-  (let ((pub (file-name-nondirectory (buffer-file-name)))) 
-	(matlab-shell-run-command (format "publish('%s','latex')" pub)))
-  (if matlab-show-matlab-shell
-	  (matlab-show-matlab-shell-buffer)))
-
-
-
-(defun matlab-publish-file-html ()		;Version-1.7
-  (interactive)
-"Publish a matlab file in the html format."
-  (let ((pub (file-name-nondirectory (buffer-file-name))))
- 	(matlab-shell-run-command (format "publish('%s','html')" pub)))
-  (if matlab-show-matlab-shell
-	  (matlab-show-matlab-shell-buffer)))
-
-
-
-(defun matlab-select-environment (ch) 	;Version-1.9
-"This functions inserts structured text, which results for example 
-in LaTeX mode in title, sections, description, boldified text,  unnumbered equations and bullet list."
-  (interactive "c1: title, 2: section, 3:descrip, 4:boldify, 5:equation, 6:list ")
-  (setq ch (downcase ch))
-  (call-interactively (cond ((eql ch ?1) #'matlab-insert-title)
-                            ((eql ch ?2) #'matlab-insert-section)
-                            ((eql ch ?3) #'matlab-insert-description-text)
-                            ((eql ch ?4) #'matlab-boldify)
-                            ((eql ch ?5) #'matlab-insert-equation)
-                            ((eql ch ?6) #'matlab-insert-bullet-list)
-                            (t (error 'args-out-of-range '(1 2 3 5 6 ch))))))
-
-
-(defun matlab-insert-title ()
-  (interactive)
-  (beginning-of-buffer nil)
-  (insert "%% TITLE\n")
-  (previous-line 1)
-  (forward-char 3))
-
-(defun matlab-insert-section ()		;Version-1.9
-  (interactive)
-  (insert "%% Section\n")
-  (previous-line 1)
-  (forward-char 3))
-
-
-(defun matlab-insert-description-text ()
-  (interactive)
-  (insert "%%\n")
-  (insert "% DESCRIPTIVE TEXT\n")
-  (previous-line 1)
-  (forward-char 2))
-
-
-
-(defun matlab-boldify ()				;Version-1.6
-"Insert either \%\%\\n \% \*BOLD TEXT\*\\n or, when mark is active,
-surrounds region by * *."
-  (interactive)
-  (if (or (and (boundp 'zmacs-region-active-p) zmacs-region-active-p)
-		  (and (boundp 'transient-mark-mode) transient-mark-mode mark-active))
-	  (save-excursion
-		(goto-char (point))
-		(insert "*")
-		(goto-char (mark))
-		(insert "*"))
-  (insert "\n%%\n")
-  (insert "% *BOLD TEXT*\n")
-	(backward-char 2)))
-
-
-(defun matlab-insert-bold-text ()
-  (interactive)
-  (insert "%%\n")
-  (insert "% *BOLD TEXT*\n")
-  (previous-line 1)
-  (forward-char 2))
-
-(defun matlab-insert-monospaces-text ()
-  (interactive)
-  (insert "%%\n")
-  (insert "% |MONOSPACED TEXT|\n")
-  (previous-line 1)
-  (forward-char 2))
-
-
-(defun matlab-insert-preformated-text ()
-  (interactive)
-  (insert "%%\n")
-  (insert "%\n") 
-  (insert "%  PREFORMATTED\n")
-  (insert "%  TEXT\n")
-  (insert "% \n")
-  (previous-line 3)
-  (forward-char 3))
-
-(defun matlab-insert-equation ()
-  (interactive)
-  (insert "%%\n")
-  (insert "% \n")
-  (insert "% $$e^{\pi i} + 1 = 0$$\n")
-  (insert "% \n")
-  (previous-line 2)
-  (forward-char 4))
-
-
-(defun matlab-insert-bullet-list ()
-  (interactive)
-  (insert "%%\n")
-  (insert "% \n")
-  (insert "% * ITEM1\n")
-  (insert "% * ITEM2\n")
-  (insert "% \n")
-  (previous-line 3)
-  (forward-char 4))
-
-
-
-
-(defun matlab-write-region (start end)	;Version-1.5
-  (interactive "r")
-  (write-region start end (expand-file-name matlab-temp-region-file) nil nil nil nil)
-  (find-file matlab-temp-region-file))
-
-
-(defun matlab-write-region-novisit (start end)
-  (interactive "r")
-  (write-region start end (expand-file-name matlab-temp-region-file) nil nil nil nil))
-
-
-
-
-(defun matlab-publish-region-old (ch)	;Version-1.8
-  (interactive "c1: LaTeX, 2: HTML ")
-  (setq ch (downcase ch))
-  (matlab-write-region-novisit (region-beginning) (region-end))
-  (call-interactively (cond ((eql ch ?1) #'matlab-publish-region-latex)
-                            ((eql ch ?2) #'matlab-publish-region-html)
-                            (t (error 'args-out-of-range '(1 2 ch))))))
-
-
-(defun matlab-publish-region (start end ch)	 ;Version-1.8
-  (interactive "r\nc1: LaTeX, 2: HTML ")
-  (setq ch (downcase ch))
-  (write-region start end (expand-file-name matlab-temp-region-file) nil nil nil nil)
-  (call-interactively (cond ((eql ch ?1) #'matlab-publish-region-latex)
-                            ((eql ch ?2) #'matlab-publish-region-html)
-                            (t (error 'args-out-of-range '(1 2 ch))))))
-
-
-
-(defun matlab-publish-region-latex ()	;Version-1.8
-  (interactive)
-	(matlab-shell-run-command (format "publish('%s','latex')" matlab-temp-region-file))
-  (if matlab-show-matlab-shell
-	  (matlab-show-matlab-shell-buffer)))
-
-
-
-(defun matlab-publish-region-html ()	;Version-1.8
-  (interactive)
-	(matlab-shell-run-command (format "publish('%s','html')" matlab-temp-region-file))
-  (if matlab-show-matlab-shell
-	  (matlab-show-matlab-shell-buffer)))
-
-
-
-
-(provide 'matlab-publish)
-
-;;; MY-PUB.EL ends here
-
-;; (defvar isp "hallo"
-;; "*check")
-;;
-;; (when (string-match isp "hallo"))
-;; (message "it works"))

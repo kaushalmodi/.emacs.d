@@ -7,7 +7,7 @@
 ;; Keywords: MATLAB(R)
 ;; Version:
 
-(defconst matlab-mode-version "3.3.2"
+(defconst matlab-mode-version "3.3.4"
   "Current version of MATLAB(R) mode.")
 
 ;;
@@ -434,6 +434,14 @@ Valid values are:
   :type 'boolean)
 
 (make-variable-buffer-local 'matlab-return-add-semicolon)
+
+(defcustom matlab-change-current-directory nil
+  "*If non nil, make file's directory the current directory when
+evaluating it."
+  :group 'matlab
+  :type 'boolean)
+
+(make-variable-buffer-local 'matlab-change-current-directory)
 
 ;; Load in the region we use for highlighting stuff.
 (if (and (featurep 'custom) (fboundp 'custom-declare-variable))
@@ -3731,8 +3739,8 @@ If ARG is nil, then highlighting is toggled."
 			  post-command-hook)
 		  -1 1)))
     (if (> arg 0)
-	(add-hook 'post-command-hook 'matlab-start-block-highlight-timer nil :local)
-      (remove-hook 'post-command-hook 'matlab-start-block-highlight-timer :local))))
+	(add-hook 'post-command-hook 'matlab-start-block-highlight-timer)
+      (remove-hook 'post-command-hook 'matlab-start-block-highlight-timer))))
 
 (defvar matlab-block-highlight-overlay nil
   "The last highlighted overlay.")
@@ -4339,7 +4347,7 @@ Try C-h f matlab-shell RET"))
 	      (define-key km [(control h) (control m)]
 		matlab-help-map)
               (define-key km "\C-c." 'matlab-find-file-on-path)
-	      (define-key km [(tab)] 'matlab-shell-tab)
+	      (define-key km (kbd "TAB") 'matlab-shell-tab)
 	      (define-key km "\C-i" 'matlab-shell-tab)
 	      (define-key km [(control up)]
 		'comint-previous-matching-input-from-input)
@@ -4487,9 +4495,9 @@ in a popup buffer.
   ;; Add a version scraping logo identification filter.
   (add-hook 'comint-output-filter-functions 'matlab-shell-version-scrape)
   ;; Add pseudo html-renderer
-  ;;(add-hook 'comint-output-filter-functions 'matlab-shell-render-html-anchor nil t)
-  ;;(add-hook 'comint-output-filter-functions 'matlab-shell-render-html-txt-format nil t)
-  ;;(add-hook 'comint-output-filter-functions 'matlab-shell-render-errors-as-anchor nil t)
+  (add-hook 'comint-output-filter-functions 'matlab-shell-render-html-anchor nil t)
+  ;(add-hook 'comint-output-filter-functions 'matlab-shell-render-html-txt-format nil t)
+  ;(add-hook 'comint-output-filter-functions 'matlab-shell-render-errors-as-anchor nil t)
   ;; Scroll to bottom after running cell/region
   (add-hook 'comint-output-filter-functions 'comint-postoutput-scroll-to-bottom)
 
@@ -4539,12 +4547,14 @@ in a popup buffer.
       (progn
 	(gud-def gud-break  "dbstop at %l in %f"  "\C-b" "Set breakpoint at current line.")
 	(gud-def gud-remove "dbclear at %l in %f" "\C-d" "Remove breakpoint at current line")
-	(gud-def gud-step   "dbstep in"           "\C-s" "Step one source line, possibly into a function.")
-	(gud-def gud-next   "dbstep %p"           "\C-n" "Step over one source line.")
-	(gud-def gud-cont   "dbcont"              "\C-r" "Continue with display.")
+	(gud-def gud-step   "dbstep in;\ndbhotlink(1)"           "\C-s" "Step one source line, possibly into a function.")
+	(gud-def gud-next   "dbstep %p;\ndbhotlink(1)"           "\C-n" "Step over one source line.")
+	(gud-def gud-cont   "dbcont;\ndbhotlink(1)"              "\C-r" "Continue with display.")
 	(gud-def gud-finish "dbquit"              "\C-f" "Finish executing current function.")
-	(gud-def gud-up     "dbup %p"             "<"    "Up N stack frames (numeric arg).")
-	(gud-def gud-down   "dbdown %p"           ">"    "Down N stack frames (numeric arg).")
+	;; (gud-def gud-up     "dbup %p;\ndbhotlink()"             "<"    "Up N stack frames (numeric arg).")
+	;; (gud-def gud-down   "dbdown %p;\ndbhotlink()"           ">"    "Down N stack frames (numeric arg).")
+	(gud-def gud-up     "dbup;\n[~,a___]=dbstack;\ndbhotlink(a___)"             "<"    "Up N stack frames (numeric arg).")
+	(gud-def gud-down   "dbdown;\n[~,a___]=dbstack;\ndbhotlink(a___)"           ">"    "Down N stack frames (numeric arg).")
 	(gud-def gud-print  "%e"                  "\C-p" "Evaluate M expression at point.")
 	(if (fboundp 'gud-make-debug-menu)
 	    (gud-make-debug-menu))
@@ -5096,6 +5106,8 @@ Similar to  `comint-send-input'."
   (let ((fn-name (file-name-sans-extension
 		  (file-name-nondirectory (buffer-file-name))))
 	(msbn (concat "*" matlab-shell-buffer-name "*"))
+        (dir (file-name-directory buffer-file-name))
+        (change-cd matlab-change-current-directory)
 	(param ""))
     (save-buffer)
     ;; Do we need parameters?
@@ -5117,6 +5129,21 @@ Similar to  `comint-send-input'."
       (if (get-buffer-window msbn t)
 	  (select-window (get-buffer-window msbn t))
 	(switch-to-buffer (concat "*" matlab-shell-buffer-name "*")))
+
+      ;; change current directory?
+      (if change-cd
+          (let ((cmd (progn
+                       (mapc
+                        (lambda (e)
+                          (while (string-match (car e) dir)
+                            (setq dir (replace-match
+                                       (format "', char(%s), '" (cdr e)) t t dir))))
+                        '(("ô" . "244")
+                          ("é" . "233")
+                          ("è" . "232")
+                          ("à" . "224")))
+                       dir)))
+            (matlab-shell-send-string (concat "cd(['" cmd "'])\n"))))
 
       (let ((cmd (concat fn-name " " param)))
 	(matlab-shell-add-to-input-history cmd)

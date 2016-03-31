@@ -3,7 +3,7 @@
 ;; Copyright (C) 2008, 2014 Eric Ludlam
 
 ;; Author: Eric Ludlam <eludlam@mathworks.com>
-;; X-RCS: $Id: srecode-matlab.srt,v 1.2 2014/12/27 12:36:13 zappo Exp $
+;; X-RCS: $Id$
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as

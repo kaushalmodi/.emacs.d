@@ -3,7 +3,7 @@
 ;;; Copyright (C) 2004, 2005, 2008, 2012, 2013 Eric M. Ludlam: The Mathworks, Inc
 
 ;; Author: Eric M. Ludlam <eludlam@mathworks.com>
-;; X-RCS: $Id: semantic-matlab.el,v 1.16 2013/08/29 01:42:12 zappo Exp $
+;; X-RCS: $Id$
 
 ;; This file is not part of GNU Emacs.
 

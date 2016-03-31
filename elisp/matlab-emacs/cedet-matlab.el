@@ -3,7 +3,7 @@
 ;; Copyright (C) 2009, 2012 Eric Ludlam
 ;;
 ;; Author: Eric Ludlam <eludlam@mathworks.com>
-;; X-RCS: $Id: cedet-matlab.el,v 1.2 2013/04/02 00:47:42 zappo Exp $
+;; X-RCS: $Id$
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
