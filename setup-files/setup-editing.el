@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-15 11:17:23 kmodi>
+;; Time-stamp: <2016-04-01 11:15:54 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -124,7 +124,7 @@ C-u C-u C-u -> All of the above."
 
 ;;; Show Paren
 ;; Allow one to see matching pairs of parentheses
-;; When point is on one of the paired characters, highlight the other 
+;; When point is on one of the paired characters, highlight the other
 (show-paren-mode 1)
 
 ;;; Duplicate current line or region
@@ -936,7 +936,6 @@ Else, execute ORIG function."
   ("C-o"        . modi/smart-open-line)
   ("C-j"        . modi/pull-up-line)
   ("M-="        . count-words) ; count words in buffer if no region selected
-  ("<f9>"       . eval-region)
   ;; override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
   ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
   ("<M-delete>" . backward-kill-word))
