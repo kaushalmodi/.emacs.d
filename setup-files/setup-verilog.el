@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-22 18:49:02 kmodi>
+;; Time-stamp: <2016-04-01 12:30:03 kmodi>
 
 ;; Verilog
 
@@ -15,6 +15,7 @@
 ;;    modi/verilog-jump-to-module-at-point (interactive)
 ;;    modi/verilog-find-parent-module (interactive)
 ;;    my/verilog-selective-indent
+;;    modi/verilog-compile
 ;;  hideshow
 ;;  hydra-verilog-template
 ;;  imenu + outshine
@@ -385,6 +386,24 @@ The match with `//.' resolves this issue:
     ;; Advise the indentation done by hitting `TAB'
     (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
 
+;;;; modi/verilog-compile
+    (defun modi/verilog-compile (option)
+      "Compile verilog/SystemVerilog.
+If OPTION is \\='(4) (using `\\[universal-argument]' prefix), run simulation.
+If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' prefix), run linter."
+      (interactive "P")
+      (cl-case (car option)
+        (4  (setq verilog-tool 'verilog-simulator))
+        (16 (setq verilog-tool 'verilog-linter))
+        (t  (setq verilog-tool 'verilog-compiler)))
+      (verilog-set-compile-command)
+      (call-interactively #'compile))
+
+    (defun modi/verilog-simulate ()
+      "Run verilog/SystemVerilog simulation."
+      (interactive)
+      (modi/verilog-compile '(4)))
+
 ;;; hideshow
     (with-eval-after-load 'hideshow
       (add-to-list 'hs-special-modes-alist
@@ -502,7 +521,9 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;;
       ("C-c C-t"   . hydra-verilog-template/body)
       ("C-^"       . modi/verilog-jump-to-header-dwim)
-      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd))
+      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd)
+      ("<f9>"      . modi/verilog-compile)
+      ("<S-f9>"    . modi/verilog-simulate))
     (bind-chord "\\\\" #'modi/verilog-jump-to-module-at-point verilog-mode-map) ; "\\"
     (when (executable-find "ag")
       (bind-chord "^^" #'modi/verilog-find-parent-module verilog-mode-map))))
