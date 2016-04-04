@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-05 11:17:49 kmodi>
+;; Time-stamp: <2016-04-04 17:29:12 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -6,12 +6,7 @@
 (use-package multiple-cursors
   :init
   (progn
-    (setq mc/list-file (locate-user-emacs-file "mc-lists"))
-
-    (bind-to-modi-map "m" #'mc/mark-all-like-this-dwim)
-    (bind-to-modi-map "r" #'set-rectangular-region-anchor))
-  :commands (mc/mark-all-like-this-dwim
-             set-rectangular-region-anchor)
+    (setq mc/list-file (locate-user-emacs-file "mc-lists")))
   :bind (:map modi-mode-map
          ("C-S-c C-S-c"   . mc/edit-lines)
          ("C->"           . mc/mark-next-like-this)
