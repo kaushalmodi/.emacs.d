@@ -1,13 +1,11 @@
-;; Time-stamp: <2015-10-12 15:22:41 kmodi>
+;; Time-stamp: <2016-04-04 18:22:57 kmodi>
 
 ;; Printing
 
 (use-package ps-print
   :init
   (progn
-    (bind-to-modi-map "p" #'modi/pdf-print-buffer-with-faces)
-    ;; Print to printer defined by env var `PRINTER'
-    (bind-to-modi-map "P" #'ps-print-buffer-with-faces))
+    (bind-to-modi-map "P" #'modi/pdf-print-buffer-with-faces))
   :commands (modi/pdf-print-buffer-with-faces ps-print-buffer-with-faces)
   :config
   (progn
@@ -68,8 +66,11 @@ which is then converted to PDF at the same location."
 
 (provide 'setup-print)
 
-;; To export the file as a syntax hightlighted .ps from emacs
-;;   `C-u M-x ps-print-buffer-with-faces` and save that file with any name when
-;; prompted for the output file name
-;; !! If you don't use <C-u> in the above command, emacs will print
-;;    it directly to the default printer !!
+;;     M-x ps-print-buffer-with-faces -> Print to the printer defined by
+;;                                       env var `PRINTER'.
+;; C-u M-x ps-print-buffer-with-faces -> Export the file as a syntax
+;;                                       hightlighted .ps from emacs and
+;;                                       save that file with any name when
+;;                                       prompted for the output file name
+;;         !! If you don't use <C-u> in the above command, emacs will print
+;;            it directly to the default printer !!
