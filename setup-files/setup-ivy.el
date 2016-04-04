@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-16 10:07:15 kmodi>
+;; Time-stamp: <2016-04-04 15:56:32 kmodi>
 
 ;; Ivy (comes packaged with the `swiper' package)
 
@@ -18,6 +18,9 @@
     (setq ivy-count-format "%d/%d ")
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
     ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+
+    ;; Do not show "./" and "../" in the `counsel-find-file' completion list
+    (setq ivy-extra-directories nil) ; default value: ("../" "./")
 
     (use-package ivy-hydra
       :config

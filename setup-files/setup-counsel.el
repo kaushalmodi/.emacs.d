@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-16 10:34:35 kmodi>
+;; Time-stamp: <2016-04-04 15:55:58 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -35,7 +35,10 @@
            ;; file names beginning with # or .
            "\\(?:\\`[#.]\\)"
            ;; file names ending with # or ~
-           "\\|\\(?:\\`.+?[#~]\\'\\)"))
+           "\\|\\(?:[#~]\\'\\)"))
+    ;; Note that `ivy-extra-directories' should also not contain the "../" and
+    ;; "./" elements if you don't want to see those in the `counsel-find-file'
+    ;; completion list.
     (ivy-set-actions
      'counsel-find-file
      `(("x"
