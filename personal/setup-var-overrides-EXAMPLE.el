@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-11 09:46:47 kmodi>
+;; Time-stamp: <2016-04-04 11:23:59 kmodi>
 
 ;; Variable overrides
 
@@ -7,6 +7,7 @@
 ;;   Format to be used: (setq disable-pkg-PKGNAME t)
 ;; *Note that all packages CANNOT be disabled in this manner.
 
+(setq disable-recursive-edit-in-minibuffer t)
 (setq disable-pkg-hardcore-mode t)
 (setq disable-pkg-pdf-tools t)
 (setq disable-pkg-ispell t)

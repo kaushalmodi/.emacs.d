@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-31 10:12:25 kmodi>
+;; Time-stamp: <2016-04-04 11:33:50 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -230,15 +230,22 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
                          (concat "*scratch-" mode-str "*")))
       (funcall (intern mode-str))))) ; http://stackoverflow.com/a/7539787/1219634
 
-;; Perform the "C-g" action automatically when focus moves away from the minibuffer
-;; This is to avoid the irritating occassions where repeated `C-g` pressing doesn't
-;; edit the mini-buffer as cursor focus has moved out of it.
+;; Quit the minibuffer automatically when focus moves away from it (which could
+;; have happened by actions like clicking some other buffer using the mouse or
+;; by hitting `C-x o'). This is to avoid the irritating occasions where repeated
+;; `C-g' pressing doesn't kill the minibuffer prompt as emacs has entered a
+;; recursive edit session.
 ;; http://stackoverflow.com/a/3024055/1219634
-(defun stop-using-minibuffer ()
-  "kill the minibuffer"
-  (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
+;; The right way to exit a recursive edit session is by hitting `C-]', which is
+;; bound to `abort-recursive-edit' by default.
+(defun abort-recursive-edit-in-minibuffer ()
+  "Disable recursive edit in minibuffer if `disable-recursive-edit-in-minibuffer'
+is set to a non-nil value."
+  (when (and (bound-and-true-p disable-recursive-edit-in-minibuffer)
+             (active-minibuffer-window)
+             (>= (recursion-depth) 1))
     (abort-recursive-edit)))
-(add-hook 'mouse-leave-buffer-hook #'stop-using-minibuffer)
+(add-hook 'mouse-leave-buffer-hook #'abort-recursive-edit-in-minibuffer)
 
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21874
 ;; Do not allow the cursor to go over or select the minibuffer prompt.
