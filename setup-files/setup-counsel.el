@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-04 15:55:58 kmodi>
+;; Time-stamp: <2016-04-04 17:17:30 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -58,7 +58,7 @@
                                "--nocolor"
                                "%s" ; This MUST be %s, not %S
                                         ; https://github.com/abo-abo/swiper/issues/427
-                               "--"))
+                               ))
                      " "))))
 
 
