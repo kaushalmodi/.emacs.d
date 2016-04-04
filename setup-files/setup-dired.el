@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-25 11:32:34 kmodi>
+;; Time-stamp: <2016-04-04 10:35:32 kmodi>
 
 ;; Dired
 
@@ -22,11 +22,12 @@
       (interactive)
       (dired-single-buffer ".."))
 
-    (bind-keys
-     :map dired-mode-map
-      ("<return>"         . dired-single-buffer)
-      ("<double-mouse-1>" . dired-single-buffer-mouse)
-      ("^"                . dired-single-up-directory))))
+    (with-eval-after-load 'dired
+      (bind-keys
+       :map dired-mode-map
+        ("<return>"         . dired-single-buffer)
+        ("<double-mouse-1>" . dired-single-buffer-mouse)
+        ("^"                . dired-single-up-directory)))))
 
 (use-package dired
   :commands (dired dired-toggle-read-only
