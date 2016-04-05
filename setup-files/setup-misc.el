@@ -1,28 +1,19 @@
-;; Time-stamp: <2016-03-15 11:18:32 kmodi>
+;; Time-stamp: <2016-04-05 09:30:32 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
 (fset 'yes-or-no-p 'y-or-n-p) ; Use y or n instead of yes or no
 
+;; Delete stuff to a trash directory
 (setq delete-by-moving-to-trash t)
-(setq trash-directory (concat "/tmp/trash/" (getenv "USER") "/emacs/"))
+(setq trash-directory
+      (let ((dir (concat temporary-file-directory
+                         (getenv "USER") "/.trash_emacs/"))) ; must end with /
+        (make-directory dir :parents)
+        dir))
 
 ;; Do not make mouse wheel accelerate its action (example: scrolling)
 (setq mouse-wheel-progressive-speed nil)
-
-;; Clipboard
-;; after copy Ctrl+c in X11 apps, you can paste by 'yank' in emacs"
-(>=e "25.0"
-    (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
-  (setq x-select-enable-clipboard t)) ; if older
-;; after mouse selection in X11, you can paste by 'yank' in emacs"
-(>=e "25.0"
-    (setq select-enable-primary t)  ; if emacs 25.0 or newer
-  (setq x-select-enable-primary t)) ; if older
-
-;; Save stuff copied from an external program to the kill ring before killing
-;; new stuff from within emacs
-(setq save-interprogram-paste-before-kill t)
 
 ;; Make apropos commands search more extensively
 (setq apropos-do-all t)

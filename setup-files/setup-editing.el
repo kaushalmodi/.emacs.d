@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-01 11:15:54 kmodi>
+;; Time-stamp: <2016-04-05 09:32:50 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -6,6 +6,7 @@
 ;;  Coding System
 ;;  Time stamps
 ;;    Insert time-stamp + user name
+;;  Clipboard
 ;;  Delete Selection
 ;;  Show Paren
 ;;  Duplicate current line or region
@@ -116,6 +117,20 @@ C-u C-u C-u -> All of the above."
     (when (not (looking-at " *$"))
       (insert " "))))
 (bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
+
+;;; Clipboard
+;; After copy (Ctrl+c) in X11 apps, you can paste by `yank' in emacs.
+(>=e "25.0"
+    (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
+  (setq x-select-enable-clipboard t)) ; if older
+;; After mouse selection in X11, you can paste by `yank' in emacs.
+(>=e "25.0"
+    (setq select-enable-primary t)  ; if emacs 25.0 or newer
+  (setq x-select-enable-primary t)) ; if older
+
+;; Save text copied from an external program to the kill ring before killing
+;; new text from within emacs.
+(setq save-interprogram-paste-before-kill t)
 
 ;;; Delete Selection
 ;; Typing anything after highlighting text overwrites that text
