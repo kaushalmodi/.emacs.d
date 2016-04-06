@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-02 02:15:23 kmodi>
+;; Time-stamp: <2016-04-06 12:20:06 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -647,30 +647,43 @@ INFO is the property list of export options."
             (setq org-html-htmlize-font-prefix "org-") ; default: "org-"
 
             ;; http://emacs.stackexchange.com/a/14560/115
-            (defvar modi/htmlize-html-file (concat user-home-directory
-                                                   "temp/htmlize_temp.html")
-              "Name of the html file exported by `modi/htmlize-region-as-html-file'.")
+            (defvar modi/htmlize-output-directory
+              (let ((dir (concat temporary-file-directory
+                                 (getenv "USER") "/.htmlize/"))) ; must end with /
+                (make-directory dir :parents)
+                dir)
+              "Output directory for files exported by `modi/htmlize-region-to-file'.")
             (defvar modi/htmlize-css-file (concat user-emacs-directory
                                                   "misc/css/leuven_theme.css")
               "CSS file to be embedded in the html file created using the
-             `modi/htmlize-region-as-html-file' function.")
-            (defun modi/htmlize-region-as-html-file (open-in-browser)
+             `modi/htmlize-region-to-file' function.")
+            (defun modi/htmlize-region-to-file (option)
               "Export the selected region to an html file. If a region is not
 selected, export the whole buffer.
 
-If OPEN-IN-BROWSER is non-nil, also open the exported html file in
-the default browser."
+The output file is saved to `modi/htmlize-output-directory' and its fontification
+is done using `modi/htmlize-css-file'.
+
+If OPTION is non-nil (for example, using `\\[universal-argument]' prefix), copy
+the output file name to kill ring.
+If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' prefix),
+do the above and also open the html file in the default browser."
               (interactive "P")
               (let ((org-html-htmlize-output-type 'css)
                     (org-html-htmlize-font-prefix "org-")
+                    (fname (concat modi/htmlize-output-directory
+                                   (if (buffer-file-name)
+                                       (file-name-nondirectory (buffer-file-name))
+                                     "temp")
+                                   ".html"))
                     start end html-string)
                 (if (use-region-p)
                     (progn
                       (setq start (region-beginning))
-                      (setq end   (region-end)))
+                      (setq end (region-end)))
                   (progn
                     (setq start (point-min))
-                    (setq end   (point-max))))
+                    (setq end (point-max))))
                 (setq html-string (org-html-htmlize-region-for-paste start end))
                 (with-temp-buffer
                   ;; Insert the `modi/htmlize-css-file' contents in the temp buffer
@@ -680,7 +693,7 @@ the default browser."
                   ;; inserted *above* the earlier inserted css code.
                   (goto-char (point-min))
                   (insert (concat "<!-- This file is generated using the "
-                                  "modi/htmlize-region-as-html-file function\n"
+                                  "`modi/htmlize-region-to-file' function\n"
                                   "from https://github.com/kaushalmodi/.emacs.d/"
                                   "blob/master/setup-files/setup-org.el -->\n"))
                   (insert "<html>\n<head>\n<style media=\"screen\" type=\"text/css\">\n")
@@ -693,10 +706,13 @@ the default browser."
                   (insert html-string)
                   ;; Close the `body' and `html' tags.
                   (insert "</body>\n</html>\n")
-                  (write-file modi/htmlize-html-file)
-                  (when open-in-browser
-                    (browse-url-of-file modi/htmlize-html-file)))))
-            (bind-key "H" #'modi/htmlize-region-as-html-file region-bindings-mode-map)))
+                  (write-file fname)
+                  (when option
+                    (kill-new fname)
+                    (when (= 16 (car option))
+                      (browse-url-of-file fname))))))
+            (bind-key "H"     #'modi/htmlize-region-to-file region-bindings-mode-map)
+            (bind-key "C-c H" #'modi/htmlize-region-to-file modi-mode-map)))
 
 ;;;; ox-beamer - Beamer export
         (use-package ox-beamer
