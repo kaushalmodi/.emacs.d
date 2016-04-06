@@ -2,6 +2,7 @@
 pre                                      {background-color:#FFFFFF;}
 pre span.org-builtin                     {color:#006FE0;font-weight:bold;}
 pre span.org-string                      {color:#008000;}
+pre span.org-doc                         {color:#008000;}
 pre span.org-keyword                     {color:#0000FF;}
 pre span.org-variable-name               {color:#BA36A5;}
 pre span.org-function-name               {color:#006699;}
