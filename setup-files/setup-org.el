@@ -320,13 +320,15 @@ returned value `entity-name' will be nil."
                                  (dot      . t))) ; activate graphviz
 
 ;;; Confirm evaluate
-    (defun my-org-confirm-babel-evaluate (lang body)
-      (and (not (string= lang "ditaa"))    ; don't ask for ditaa
-           (not (string= lang "plantuml")) ; don't ask for plantuml
-           (not (string= lang "latex"))    ; don't ask for latex
-           (not (string= lang "dot"))      ; don't ask for graphviz
-           ))
-    (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+    (defun modi/org-confirm-babel-evaluate-fn (lang body)
+      "Returns a non-nil value if the user should be prompted for execution,
+or nil if no prompt is required."
+      ;; (message "%S" body)
+      (and (not (string= lang "ditaa"))    ; Do not ask for ditaa
+           (not (string= lang "plantuml")) ; Do not ask for plantuml
+           (not (string= lang "dot"))      ; Do not ask for graphviz
+           (not (string= lang "latex"))))  ; Do not ask for latex
+    (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn)
     (setq org-confirm-elisp-link-function 'yes-or-no-p)
 
 ;;; epresent
