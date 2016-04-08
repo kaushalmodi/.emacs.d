@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2016-03-24-b8be43d-vpo"
+(defconst verilog-mode-version "2016-04-08-8f706fb-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -2815,7 +2815,7 @@ find the errors."
 (defconst verilog-disable-fork-re "\\(disable\\|wait\\)\\s-+fork\\>")
 (defconst verilog-extended-case-re "\\(\\(unique0?\\s-+\\|priority\\s-+\\)?case[xz]?\\)")
 (defconst verilog-extended-complete-re
-  (concat "\\(\\(\\<extern\\s-+\\|\\<\\(\\<\\(pure\\|context\\)\\>\\s-+\\)?virtual\\s-+\\|\\<protected\\s-+\\)*\\(\\<function\\>\\|\\<task\\>\\)\\)"
+  (concat "\\(\\(\\<extern\\s-+\\|\\<\\(\\<\\(pure\\|context\\)\\>\\s-+\\)?virtual\\s-+\\|\\<protected\\s-+\\|\\<static\\s-+\\)*\\(\\<function\\>\\|\\<task\\>\\)\\)"
 	  "\\|\\(\\(\\<typedef\\>\\s-+\\)*\\(\\<struct\\>\\|\\<union\\>\\|\\<class\\>\\)\\)"
 	  "\\|\\(\\(\\<\\(import\\|export\\)\\>\\s-+\\)?\\(\"DPI\\(-C\\)?\"\\s-+\\)?\\(\\<\\(pure\\|context\\)\\>\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_]*\\s-*=\\s-*\\)?\\(function\\>\\|task\\>\\)\\)"
 	  "\\|" verilog-extended-case-re ))
@@ -6302,7 +6302,7 @@ Return >0 for nested struct."
 	(let ((p (point)))
           (and
            (equal (char-after) ?\{)
-           (forward-list)
+           (ignore-errors (forward-list))
            (progn (backward-char 1)
                   (verilog-backward-ws&directives)
                   (and
@@ -9852,9 +9852,11 @@ variables to build the path."
   ;; Return search locations for it
   (append (list current)                ; first, current buffer
           (verilog-library-filenames module current t)
-                                        ; finally, any libraries
-                                        ; possibly remote
-          (mapcar (lambda (fname) (concat (file-remote-p current) fname))
+          ;; Finally any libraries; fixed up if using e.g. tramp
+          (mapcar (lambda (fname)
+                    (if (file-name-absolute-p fname)
+                        (concat (file-remote-p current) fname)
+                      fname))
                   verilog-library-files)))
 
 ;;
