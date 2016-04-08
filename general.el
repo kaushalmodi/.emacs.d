@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-08 01:00:10 kmodi>
+;; Time-stamp: <2016-04-08 13:06:17 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -133,7 +133,7 @@ If HERE is non-nil, also insert the string at point."
                  "./configure options:\n  " system-configuration-options "\n\n"
                  "Features:\n  " system-configuration-features "\n")))
     (kill-new emacs-build-info)
-    (message emacs-build-info)
+    (message "%s" emacs-build-info)
     (when here
       (insert emacs-build-info))
     emacs-build-info))
