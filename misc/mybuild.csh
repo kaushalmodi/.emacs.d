@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-03-10 14:32:29 kmodi>
+# Time-stamp: <2016-04-08 11:23:59 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -110,7 +110,7 @@ if ( ! $debug ) then
 endif
 
 # Basic configure command
-setenv MY_EMACS_CONFIGURE "./configure --prefix=${MY_EMACS_INSTALL_DIR}"
+setenv MY_EMACS_CONFIGURE "./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR}"
 
 # # Fri Oct 23 15:17:10 EDT 2015 - kmodi
 # # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21738
