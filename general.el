@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-15 10:25:42 kmodi>
+;; Time-stamp: <2016-04-08 01:00:10 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -58,8 +58,9 @@ If `desktop-save-mode' is non-nil, save the desktop before killing emacs.
 
 If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
   (interactive "P")
-  (when (and (not skip-desktop-save)
-             (bound-and-true-p desktop-save-mode))
+  (when skip-desktop-save
+    (desktop-save-mode -1))
+  (when desktop-save-mode
     (desktop-save-in-desktop-dir))
   (if (daemonp)
       (save-buffers-kill-emacs)
