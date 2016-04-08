@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-05 09:32:50 kmodi>
+;; Time-stamp: <2016-04-08 14:09:05 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -192,7 +192,9 @@ Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
   (interactive)
   (when (not (bound-and-true-p do-not-delete-trailing-whitespace))
     (delete-trailing-whitespace (point-min) (line-beginning-position))
-    (delete-trailing-whitespace (line-end-position) (point-max))))
+    ;; Below, the END argument is left nil so that trailing empty lines are
+    ;; also deleted if `delete-trailing-lines' is non-nil.
+    (delete-trailing-whitespace (line-end-position))))
 (add-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
 
 ;;; Untabify
