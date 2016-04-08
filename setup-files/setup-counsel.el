@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-04 17:17:30 kmodi>
+;; Time-stamp: <2016-04-08 13:02:51 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -17,6 +17,8 @@
         ("C-h f"   . counsel-describe-function)
         ("C-h S"   . counsel-info-lookup-symbol)
         ("C-c u"   . counsel-unicode-char))
+      (bind-keys :map read-expression-map
+        ("C-r" . counsel-expression-history)) ; useful in `eval-expression' (`M-:')
       (bind-chords
        ("JJ" . counsel-imenu)
        (";'" . counsel-M-x))
