@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-08 13:06:17 kmodi>
+;; Time-stamp: <2016-04-08 13:48:35 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -137,6 +137,13 @@ If HERE is non-nil, also insert the string at point."
     (when here
       (insert emacs-build-info))
     emacs-build-info))
+
+;; http://stackoverflow.com/a/20747279/1219634
+(defun modi/read-file (f)
+  "Return the contents of file F as a string."
+  (with-temp-buffer
+    (insert-file-contents f)
+    (buffer-substring-no-properties (point-min) (point-max))))
 
 
 (provide 'general)
