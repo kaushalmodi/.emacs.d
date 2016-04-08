@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-04 10:35:32 kmodi>
+;; Time-stamp: <2016-04-08 00:29:23 kmodi>
 
 ;; Dired
 
@@ -104,19 +104,22 @@ It added extra strings at the front and back of the default dired buffer name."
 ;; TIPS
 
 ;; (1) Jump to the dired of the current file
-;; `C-x C-j` - Calls `dired-jump' function.
-;; Jump to dired buffer corresponding to current buffer.
-;; If in a file, dired the current directory and move to file's line.
-;; If in Dired already, pop up a level and goto old directory's line.
-;; In case the proper dired file line cannot be found, refresh the dired
-;; buffer and try again.
+;;     C-x C-j - Calls `dired-jump' function.
+;;     Jump to dired buffer corresponding to current buffer.
+;;     If in a file, dired the current directory and move to file's line.
+;;     If in Dired already, pop up a level and goto old directory's line.
+;;     In case the proper dired file line cannot be found, refresh the dired
+;;     buffer and try again.
 
 ;; https://peterreavy.wordpress.com/2011/05/04/emacs-dired-tips/
 ;; (2) To copy the name of the file at point, in order to make use of
-;; it elsewhere, use `dired-copy-filename-as-kill', which is bound to
-;; `w'.
-;;    To make it copy the absolute path: `0 w'
+;;     it elsewhere, use `dired-copy-filename-as-kill', which is bound to
+;;     `w'. To make it copy the absolute path: `0 w'
 
 ;; (3) To copy the path to the folder you’re looking at in dired: `M-< w'
+
+;; (4) Enable wdired mode in dired to edit the file names by hitting C-x C-q
+;;     which is bound to `dired-toggle-read-only' by default. That's a wrapper
+;;     function which calls `wdired-change-to-wdired-mode' in `dired-mode'.
 
 ;; http://truongtx.me/2013/04/24/dired-as-default-file-manager-1-introduction
