@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-06 12:20:06 kmodi>
+;; Time-stamp: <2016-04-12 10:13:11 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -44,6 +44,11 @@
         )))
 
 (use-package org
+  :preface
+  (progn
+    ;; Set my default org-export backends. This variable needs to be set before
+    ;; org.el is loaded.
+    (setq org-export-backends '(ascii html latex)))
   :mode ("\\.org\\'" . org-mode)
   :config
   (progn
