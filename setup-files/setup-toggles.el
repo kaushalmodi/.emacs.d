@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-25 11:05:38 kmodi>
+;; Time-stamp: <2016-04-20 14:40:22 kmodi>
 
 ;; Toggles
 
@@ -9,7 +9,7 @@
 _ai_ aggressive indent      cycle _c_ase^^                    _F_ollow            _H_ardcore (allow arrows)      _m_odi mode          _t_ truncate lines
 _ar_ auto revert            _d_/_D_ debug on error/entry      indent _g_uide      _i_menu list                   _p_resentation       _C-t_ theme
 _aw_ adaptive wrap          _e_debug^^                        _hl_ hl-line        _k_ey chord                    _r_ead only          _v_isible mode
-menu _b_ar                  _f_ill^^                          _hs_ hideshow       _l_ine num                     _S_tripe buffer      _<SPC>_ whitespace
+menu _b_ar                  _f_ill^^                          _hs_ hideshow       _l_ine num                     _sa_ scroll all      _<SPC>_ whitespace
 "
   ("ai"    aggressive-indent-mode)
   ("ar"    auto-revert-mode)
@@ -34,7 +34,7 @@ menu _b_ar                  _f_ill^^                          _hs_ hideshow     
   ("o"     modi/toggle-one-window :color red)
   ("p"     prez-mode)
   ("r"     dired-toggle-read-only) ; generalized `read-only-mode'
-  ("S"     stripe-buffer-mode)
+  ("sa"    scroll-all-mode)
   ("t"     toggle-truncate-lines :color red)
   ("C-t"   toggle-theme)
   ("v"     visible-mode)
