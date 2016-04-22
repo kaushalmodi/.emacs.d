@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-12 10:13:11 kmodi>
+;; Time-stamp: <2016-04-22 18:13:53 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -48,7 +48,12 @@
   (progn
     ;; Set my default org-export backends. This variable needs to be set before
     ;; org.el is loaded.
-    (setq org-export-backends '(ascii html latex)))
+    (setq org-export-backends '(ascii html latex))
+    ;; Do not open links of mouse left clicks.
+    ;; Default behavior caused inline images in org buffers to pop up in their
+    ;; own buffers when left clicked on by mistake. I can still intentionally
+    ;; open links and such images in new buffers by doing C-c C-o.
+    (setq org-mouse-1-follows-link nil))
   :mode ("\\.org\\'" . org-mode)
   :config
   (progn
@@ -1050,6 +1055,9 @@ region is selected. Else call `self-insert-command'."
 
 ;; How to mark the whole src block that the point is in?
 ;; C-c C-v C-M-h (`org-babel-mark-block')
+
+;; How to toggle display of inline images?
+;; C-c C-x C-v (`org-toggle-inline-images')
 
 ;; Local Variables:
 ;; eval: (aggressive-indent-mode -1)
