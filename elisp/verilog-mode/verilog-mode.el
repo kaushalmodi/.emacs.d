@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2016-04-11-17913bd-vpo"
+(defconst verilog-mode-version "2016-04-23-5f6855e-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -752,6 +752,13 @@ mode is experimental."
   :group 'verilog-mode-actions
   :type 'boolean)
 (put 'verilog-auto-declare-nettype 'safe-local-variable `stringp)
+
+(defcustom verilog-auto-wire-comment t
+  "Non-nil indicates to insert to/from comments with `verilog-auto-wire' etc."
+  :version "25.1"
+  :group 'verilog-mode-actions
+  :type 'boolean)
+(put 'verilog-auto-wire-comment 'safe-local-variable `verilog-booleanp)
 
 (defcustom verilog-auto-wire-type nil
   "Non-nil specifies the data type to use with `verilog-auto-wire' etc.
@@ -7834,7 +7841,7 @@ See also `verilog-sk-header' for an alternative format."
   (if (verilog-sig-multidim sig)
       (let ((str "") (args (verilog-sig-multidim sig)))
 	(while args
-	  (setq str (concat str (car args)))
+	  (setq str (concat (car args) str))
 	  (setq args (cdr args)))
 	str)))
 (defsubst verilog-sig-modport (sig)
@@ -8754,7 +8761,7 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 	(setq vec (match-string 1 expr)
 	      expr (substring expr (match-end 0))))
       ;; Find .[unpacked_memory] or .[unpacked][unpacked]...
-      (while (string-match "^\\s-*\\.\\(\\[[^]]+\\]\\)" expr)
+      (while (string-match "^\\s-*\\.\\(\\(\\[[^]]+\\]\\)+\\)" expr)
 	;;(message "vrsde-m: `%s'" (match-string 1 expr))
 	(setq mem (match-string 1 expr)
 	      expr (substring expr (match-end 0))))
@@ -8822,6 +8829,7 @@ Inserts the list of signals found, using submodi to look up each port."
 				      (point)))))))) ; expr
 	;;
 	(forward-line 1)))))
+;;(verilog-read-sub-decls-line (verilog-subdecls-new nil nil nil nil nil) "Cmt")
 
 (defun verilog-read-sub-decls-gate (submoddecls comment submod end-inst-point)
   "For `verilog-read-sub-decls', read lines of UDP gate decl until none match.
@@ -9340,22 +9348,29 @@ Optionally associate it with the specified enumeration ENUMNAME."
 If the filename is provided, `verilog-library-flags' will be used to
 resolve it.  If optional RECURSE is non-nil, recurse through \\=`includes.
 
-Parameters must be simple assignments to constants, or have their own
-\"parameter\" label rather than a list of parameters.  Thus:
+Localparams must be simple assignments to constants, or have their own
+\"localparam\" label rather than a list of localparams.  Thus:
 
-    parameter X = 5, Y = 10;	// Ok
-    parameter X = {1\\='b1, 2\\='h2};	// Ok
-    parameter X = {1\\='b1, 2\\='h2}, Y = 10;	// Bad, make into 2 parameter lines
+    localparam X = 5, Y = 10;	// Ok
+    localparam X = {1\\='b1, 2\\='h2};	// Ok
+    localparam X = {1\\='b1, 2\\='h2}, Y = 10;	// Bad, make into 2 localparam lines
 
 Defines must be simple text substitutions, one on a line, starting
 at the beginning of the line.  Any ifdefs or multiline comments around the
 define are ignored.
 
-Defines are stored inside Emacs variables using the name vh-{definename}.
+Defines are stored inside Emacs variables using the name
+vh-{definename}.
 
-This function is useful for setting vh-* variables.  The file variables
-feature can be used to set defines that `verilog-mode' can see; put at the
-*END* of your file something like:
+Localparams define what symbols are constants so that AUTOSENSE
+will not include them in sensitivity lists.  However any
+parameters in the include file are not considered ports in the
+including file, thus will not appear in AUTOINSTPARAM lists for a
+parent module..
+
+The file variables feature can be used to set defines that
+`verilog-mode' can see; put at the *END* of your file something
+like:
 
     // Local Variables:
     // vh-macro:\"macro_definition\"
@@ -10278,8 +10293,9 @@ When MODI is non-null, also add to modi-cache, for tracking."
 	      direction))
        indent-pt)
       (insert (if v2k "," ";"))
-      (if (or (not (verilog-sig-comment sig))
-	      (equal "" (verilog-sig-comment sig)))
+      (if (or (not verilog-auto-wire-comment)
+              (not (verilog-sig-comment sig))
+              (equal "" (verilog-sig-comment sig)))
 	  (insert "\n")
 	(indent-to (max 48 (+ indent-pt 40)))
 	(verilog-insert "// " (verilog-sig-comment sig) "\n"))
