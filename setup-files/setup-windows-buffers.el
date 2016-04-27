@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-04 11:33:50 kmodi>
+;; Time-stamp: <2016-04-27 18:48:57 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -317,6 +317,11 @@ If LN is nil, defaults to 1 line."
  ("<C-M-left>"  . modi/scroll-other-window-down)
  ("<C-M-right>" . modi/scroll-other-window-up))
 
+(when (not (display-graphic-p)) ; terminal
+  (bind-keys
+   ("<mouse-4>" . modi/scroll-down)
+   ("<mouse-5>" . modi/scroll-up)))
+
 (bind-keys
  :map modi-mode-map
   ;; Make Alt+mousewheel scroll the other buffer
@@ -428,8 +433,12 @@ buffers: *gtags-global*, *ag*, *Occur*."
   ("C-x C-r"      . rename-current-buffer-file)
   ("C-x O"        . other-window)
   ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
+  ("C-c 6"        . reopen-killed-file) ; alternative to C-S-t for terminal mode
   ("C-("          . toggle-between-buffers)
-  ("C-)"          . modi/kill-buffer-dwim))
+  ("C-c ("        . toggle-between-buffers) ; alternative to C-( for terminal mode
+  ("C-)"          . modi/kill-buffer-dwim)
+  ("C-c )"        . modi/kill-buffer-dwim) ; alternative to C-) for terminal mode
+  ("C-c 0"        . modi/kill-buffer-dwim)) ; alternative to C-) for terminal mode
 
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; http://stackoverflow.com/a/26629984/1219634
@@ -444,6 +453,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
 ;; minor mode is disabled
 (bind-keys
  ("<f5>"   . revert-buffer)
+ ("C-c 5"  . revert-buffer) ; alternative to f5
  ("<S-f5>" . revert-all-buffers)
  ("<S-f9>" . eshell))
 
@@ -453,7 +463,6 @@ buffers: *gtags-global*, *ag*, *Occur*."
 
 (key-chord-define-global "XX" #'modi/kill-buffer-dwim)
 (key-chord-define-global "ZZ" #'toggle-between-buffers)
-(key-chord-define-global "5t" #'revert-buffer) ; alternative to F5
 
 
 (provide 'setup-windows-buffers)

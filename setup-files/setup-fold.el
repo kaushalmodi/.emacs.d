@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-19 16:59:18 kmodi>
+;; Time-stamp: <2016-04-27 18:49:52 kmodi>
 
 ;;;; Fold setup
 
@@ -76,6 +76,7 @@
 
     ;; Show hideshow foldable sections in the buffer
     (use-package hideshowvis
+      :if (display-graphic-p) ; no fringe in terminal mode
       :config
       (progn
         ;; + bitmap

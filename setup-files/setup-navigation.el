@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-02 01:37:28 kmodi>
+;; Time-stamp: <2016-04-27 18:48:32 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -262,35 +262,41 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
                 (fci-mode 'toggle))))))))
 
 (bind-keys
- :map modi-mode-map
-  ;; Move faster
-  ("C-S-n"  . next-line-fast)
-  ("C-S-p"  . previous-line-fast)
-  ("C-S-f"  . forward-char-fast)
-  ("C-S-b"  . backward-char-fast)
-  ("M-f"    . forward-word)
-  ("M-F"    . forward-word-fast)
-  ("M-b"    . backward-word)
-  ("M-B"    . backward-word-fast)
-  ;; Scroll down; does the same as `M-v'. It makes scrolling up and down quick
-  ;; as the `scroll-up' is bound to `C-v'.
-  ("C-S-v"  . scroll-down)
-  ;; !WARN! `C-[` key combination is the same as pressing the meta key Esc|Alt
-  ;; Do NOT reconfigure that key combination.
-  ("C-}"    . forward-paragraph)
-  ("M-]"    . forward-paragraph)
-  ("C-{"    . backward-paragraph)
-  ("M-["    . backward-paragraph))
-
-(bind-keys
  ;; Bind in `global-map' to allow the `term-mode-map' to override the `C-a' binding
  ("C-a"   . modi/beginning-of-line-or-indentation) ; default binding for `move-beginning-of-line'
- ("C-S-a" . move-beginning-of-line)
  ;; The `M-}' and `M-{' bindings are useful in Ibuffer and dired to move to
  ;; next and previous marked items respectively. Bind them in global map so
  ;; that those major mode bindings can override the global bindings.
  ("M-}" . forward-paragraph) ; default binding for `forward-paragraph'
  ("M-{" . backward-paragraph)) ; default binding for `backward-paragraph'
+
+(bind-keys
+ :map modi-mode-map
+  ("M-f"    . forward-word)
+  ("M-F"    . forward-word-fast)
+  ("M-b"    . backward-word)
+  ("M-B"    . backward-word-fast)
+  ;; !WARN! `C-[` key combination is the same as pressing the meta key Esc|Alt
+  ;; Do NOT reconfigure that key combination.
+  ("C-}"    . forward-paragraph)
+  ("C-{"    . backward-paragraph))
+
+(when (display-graphic-p) ; when not in terminal mode
+  (bind-keys
+   ("C-S-a" . move-beginning-of-line))
+
+  (bind-keys
+   :map modi-mode-map
+    ;; Move faster
+    ("C-S-n"  . next-line-fast)
+    ("C-S-p"  . previous-line-fast)
+    ("C-S-f"  . forward-char-fast)
+    ("C-S-b"  . backward-char-fast)
+    ;; Scroll down; does the same as `M-v'. It makes scrolling up and down quick
+    ;; as the `scroll-up' is bound to `C-v'.
+    ("C-S-v"  . scroll-down)
+    ("M-]"    . forward-paragraph)
+    ("M-["    . backward-paragraph)))
 
 (when (not (featurep 'avy))
   (bind-key "<f1>" #'goto-line)

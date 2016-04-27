@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-08 14:09:05 kmodi>
+;; Time-stamp: <2016-04-27 18:48:04 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -957,6 +957,12 @@ Else, execute ORIG function."
   ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
   ("<M-delete>" . backward-kill-word))
 (bind-to-modi-map "=" #'modi/align-to-equals)
+
+(when (not (display-graphic-p)) ; terminal mode
+  (bind-keys
+   :map modi-mode-map
+    ;; Override the default binding for `down-list'
+    ("C-M-d" . duplicate-current-line-or-region))) ; alternative to C-S-d in terminal mode
 
 ;;; Comment Commander
 ;; Usage: Quickly pressing `j' twice will toggle comment on the current line or

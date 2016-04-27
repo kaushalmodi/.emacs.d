@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-22 16:34:31 kmodi>
+;; Time-stamp: <2016-04-27 19:01:06 kmodi>
 
 ;; Bookmarks
 
@@ -58,14 +58,15 @@
       ;; Make sure bookmarks is saved before check-in (and revert-buffer)
       (add-hook 'vc-before-checkin-hook #'bm-buffer-save))
 
-    (define-fringe-bitmap 'bm-marker-left [#xF8   ; ▮ ▮ ▮ ▮ ▮ 0 0 0
-                                           #xFC   ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
-                                           #xFE   ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                           #x0F   ; 0 0 0 0 ▮ ▮ ▮ ▮
-                                           #x0F   ; 0 0 0 0 ▮ ▮ ▮ ▮
-                                           #xFE   ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                           #xFC   ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
-                                           #xF8]) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+    (when (display-graphic-p) ; no fringe in terminal mode
+      (define-fringe-bitmap 'bm-marker-left [#xF8    ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+                                             #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                             #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                             #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                             #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                             #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                             #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                             #xF8])) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
 
     (setq bm-highlight-style 'bm-highlight-only-fringe)
     (setq bm-cycle-all-buffers t) ; search all open buffers for bookmarks
@@ -103,6 +104,12 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
 ;;; bookmark+ (bmkp)
 ;; http://www.emacswiki.org/BookmarkPlus
 (use-package bookmark+
+  :preface
+  (progn
+    ;; Prevent "`fringe-bitmaps' variable not found" errors in emacs built
+    ;; without fringe support.
+    (when (not (display-graphic-p))
+      (setq fringe-bitmaps nil)))
   :commands (bookmark-set bookmark-jump bookmark-bmenu-list))
 
 ;;; Quickly save and restore point using registers
