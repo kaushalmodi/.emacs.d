@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-01 11:17:09 kmodi>
+;; Time-stamp: <2016-04-27 14:57:22 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -255,7 +255,8 @@ Lisp function does not specify a special indentation."
   orig-ret-val)
 (advice-add 'eval-last-sexp :filter-return #'endless/eval-overlay)
 
-(bind-key "<f9>" #'eval-region emacs-lisp-mode-map)
+(bind-key "<f9>"  #'eval-region emacs-lisp-mode-map)
+(bind-key "C-c 9" #'eval-region emacs-lisp-mode-map) ; alternative to f9
 
 
 (provide 'setup-elisp)
