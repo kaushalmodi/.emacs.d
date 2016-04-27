@@ -1,6 +1,6 @@
-;; Time-stamp: <2016-04-04 15:56:32 kmodi>
+;; Time-stamp: <2016-04-26 09:54:26 kmodi>
 
-;; Ivy (comes packaged with the `swiper' package)
+;; Ivy (better than ido in my opinion)
 
 (use-package ivy
   :config

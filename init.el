@@ -76,6 +76,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     info+
     interleave ; takes notes associated to pdf files in org mode
     isend-mode ; used in setup-perl.el
+    ivy swiper counsel
     iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
     key-chord ; map pairs of simultaneously pressed keys to commands
     keyfreq ; find which commands you use the most
@@ -111,7 +112,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     smart-mode-line popup rich-minority
     smex ; smart M-x
     sunshine forecast ; weather
-    swiper counsel
     sx
     tiny
     transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
