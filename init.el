@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-25 11:31:27 kmodi>
+;; Time-stamp: <2016-04-27 14:54:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -80,7 +80,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
     key-chord ; map pairs of simultaneously pressed keys to commands
     keyfreq ; find which commands you use the most
-    kurecolor ; library to tweak colors
     linum-relative
     magit ; for git management
     manage-minor-mode
@@ -238,7 +237,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
 (require 'setup-keyfreq)
-(require 'setup-kurecolor)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
