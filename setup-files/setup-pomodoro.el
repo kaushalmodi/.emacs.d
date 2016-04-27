@@ -1,21 +1,11 @@
-;; Time-stamp: <2015-09-13 19:37:11 kmodi>
+;; Time-stamp: <2016-04-27 15:47:04 kmodi>
 
 ;; Pomodoro
 ;; https://github.com/baudtack/pomodoro.el
 
 (use-package pomodoro
-  :commands (hydra-pomodoro/body pomodoro-start)
-  :init
-  (progn
-    (defhydra hydra-pomodoro (:color blue)
-      "pomodoro"
-      ("0" pomodoro-start  "start")
-      ("s" pomodoro-start  "start")
-      ("x" pomodoro-stop   "stop")
-      ("p" pomodoro-pause  "pause")
-      ("r" pomodoro-resume "resume")
-      ("q" nil "cancel"))
-    (bind-key "C-c 0" #'hydra-pomodoro/body modi-mode-map))
+  :bind (:map modi-mode-map
+         ("C-c `" . hydra-pomodoro/body))
   :config
   (progn
     (setq pomodoro-play-sounds              nil)
@@ -35,7 +25,16 @@
     (setq pomodoro-extra-time               2)
 
     (add-to-list 'mode-line-format
-                 '(pomodoro-mode-line-string pomodoro-mode-line-string))))
+                 '(pomodoro-mode-line-string pomodoro-mode-line-string))
+
+    (defhydra hydra-pomodoro (:color blue)
+      "pomodoro"
+      ("0" pomodoro-start  "start")
+      ("s" pomodoro-start  "start")
+      ("x" pomodoro-stop   "stop")
+      ("p" pomodoro-pause  "pause")
+      ("r" pomodoro-resume "resume")
+      ("q" nil "cancel"))))
 
 
 (provide 'setup-pomodoro)
