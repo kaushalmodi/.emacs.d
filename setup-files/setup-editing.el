@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-27 18:48:04 kmodi>
+;; Time-stamp: <2016-04-29 11:31:44 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -690,7 +690,12 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
       (?l (downcase-region p1 p2)
           ;; lower -> Capitalize
           (put this-command 'next-state "Capitalize"))
-      (t (upcase-initials-region p1 p2)
+      ;; Capitalization is a better option here than upcasing the initials
+      ;; because (upcase-initials "abc") -> "Abc" (good)
+      ;;         (upcase-initials "ABC") -> "ABC" (not what I expect most of the times)
+      ;;         (capitalize "abc")      -> "Abc" (good)
+      ;;         (capitalize "ABC")      -> "Abc" (good)
+      (t (capitalize-region p1 p2)
          ;; Capitalize -> UPPER
          (put this-command 'next-state "UPPER")))))
 (defun modi/upcase ()     (interactive) (xah-cycle-letter-case 4))
