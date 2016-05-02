@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-05 09:30:32 kmodi>
+;; Time-stamp: <2016-05-02 17:51:26 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -97,11 +97,13 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 
 ;; Set the major mode for plain text/log files
 (use-package text-mode
-  :mode (("\\.log\\'" . text-mode))
+  :mode (("\\.log\\'" . text-mode)
+         ("\\.f\\'" . text-mode)) ; I never need to code in Fortran
   :config
   (progn
     ;; http://emacs.stackexchange.com/a/16854/115
     (defun modi/text-mode-comments ()
+      "Make text beginning with # look like comments."
       (font-lock-add-keywords nil '(("#.+" . font-lock-comment-face))))
     (add-hook 'text-mode-hook #'modi/text-mode-comments)))
 
@@ -124,30 +126,34 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
       :config
       (save-place-mode 1)))
 
+(use-package browse-url
+  :defer t
+  :config
+  (progn
+    ;; Set firefox as the default web browser if available
+    (when (executable-find "firefox")
+      (setq browse-url-browser-function 'browse-url-firefox))))
+
 ;; Unset keys
-(global-unset-key (kbd "C-z")) ;; it is bound to `suspend-frame' by default
-;; suspend-frame can be called using `C-x C-z` too. And `C-z` is used as prefix
-;; key in tmux. So removing the `C-z` binding from emacs makes it possible to
-;; use emacs in -nw (no-window) mode in tmux if needed without any key binding
-;; contention.
+(global-unset-key (kbd "C-z")) ; It is bound to `suspend-frame' by default.
+;; `suspend-frame' can be called using C-x C-z too.
+;; C-z is used as prefix key by me in tmux. So removing the C-z binding from
+;; emacs makes it possible to use emacs in -nw (no-window) mode in tmux without
+;; any key binding contention.
 
 ;; http://endlessparentheses.com/sweet-new-features-in-24-4.html
-;; Hook `eval-expression-minibuffer-setup-hook' is run by ;; `eval-expression'
+;; Hook `eval-expression-minibuffer-setup-hook' is run by `eval-expression'
 ;; on entering the minibuffer.
 ;; Below enables ElDoc inside the `eval-expression' minibuffer.
 ;; Call `M-:' and type something like `(message.' to see what ElDoc does :)
 (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-
-;; Set firefox as the default web browser
-(setq browse-url-generic-program (executable-find "firefox"))
-(setq browse-url-browser-function 'browse-url-generic)
 
 ;; https://github.com/kaushalmodi/.emacs.d/issues/7
 (defun modi/startup-time()
   (message (format "init.el loaded in %s." (emacs-init-time))))
 (add-hook 'emacs-startup-hook #'modi/startup-time)
 
-;; Organize The Order Of Minor Mode Lighters
+;; Organize the order of minor mode lighters
 (defvar mode-line-space-mode-lighter " "
   "Lighter for `mode-line-space-mode'." )
 (define-minor-mode mode-line-space-mode
