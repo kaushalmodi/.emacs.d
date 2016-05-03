@@ -1,12 +1,40 @@
-;; Time-stamp: <2016-05-03 18:22:49 kmodi>
+;; Time-stamp: <2016-05-03 18:40:28 kmodi>
 
-;; Functions to manipulate windows and buffers
+;; Windows and buffers manipulation
 
+;; Contents:
+;;
+;;  Variables
+;;  Winner Mode
+;;  Uniquify
+;;  Recentf
+;;  Windmove
+;;  Reopen Killed File
+;;  Transpose Frame
+;;  Current File Buffer Actions
+;;  Revert buffer
+;;  Full Screen
+;;  Minibuffer and Recursive Edit
+;;  Untouchable Minibuffer Prompt
+;;  Toggle between buffers
+;;  Scrolling
+;;    Mouse Scrolling
+;;  File Permissions
+;;  One Window Toggle
+;;  Swap Buffers using Mouse
+;;  Kill/Bury Buffer
+;;  Bindings
+;;    Read-only Buffer Bindings
+;;    Mode-line Mouse Bindings
+;;    Other Bindings
+
+;;; Variables
 ;; When multiple buffers are visible (like in a frame with 2 or more windows),
 ;; do not display an already visible buffer when switching to next/previous
 ;; buffers or after killing buffers.
 (setq switch-to-visible-buffer nil)
 
+;;; Winner Mode
 ;; http://www.emacswiki.org/emacs/WinnerMode
 ;; Winner Mode is a global minor mode. When activated, it allows to “undo”
 ;; (and “redo”) changes in the window configuration with the key commands
@@ -16,7 +44,7 @@
   (progn
     (winner-mode 1)))
 
-;; Uniquify
+;;; Uniquify
 ;; The library uniquify overrides Emacs’ default mechanism for making buffer
 ;; names unique (using suffixes like <2>, <3> etc.) with a more sensible
 ;; behaviour which use parts of the file names to make the buffer names
@@ -26,6 +54,7 @@
   (progn
     (setq uniquify-buffer-name-style 'post-forward)))
 
+;;; Recentf
 ;; http://www.emacswiki.org/emacs/RecentFiles
 (use-package recentf
   :config
@@ -33,6 +62,7 @@
     (recentf-mode 1)
     (setq recentf-max-menu-items 2000)))
 
+;;; Windmove
 (use-package windmove
   :bind (:map modi-mode-map
          ("s-<left>"  . windmove-left)
@@ -91,7 +121,7 @@
       ("q"        nil "cancel" :color blue)
       ("<return>" nil "cancel" :color blue))))
 
-;; Reopen Killed File
+;;; Reopen Killed File
 ;; http://emacs.stackexchange.com/a/3334/115
 (defvar killed-file-list nil
   "List of recently killed files.")
@@ -111,13 +141,15 @@
       (find-file (pop killed-file-list))
     (message "No recently killed file found to reopen.")))
 
-;; Transpose Frame
+;;; Transpose Frame
 ;; http://www.emacswiki.org/emacs/transpose-frame.el
 (use-package transpose-frame
   :bind (:map modi-mode-map
          ("C-c o"   . rotate-frame)
          ("C-c C-\\" . transpose-frame))) ; toggles between horz/vert splits
 
+;;; Current File Buffer Actions
+;; Delete current buffer file
 (defun modi/delete-current-buffer-file ()
   "Deletes file connected to current buffer and kills buffer."
   (interactive)
@@ -129,6 +161,7 @@
       (message "File `%s' successfully deleted." filename))
     (kill-buffer (current-buffer))))
 
+;; Rename current buffer file
 ;; http://www.whattheemacsd.com/
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
@@ -171,6 +204,7 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
           (message file-name))
       (error "Buffer not visiting a file"))))
 
+;;; Revert buffer
 (defun modi/revert-all-file-buffers ()
   "Refresh all open buffers from their respective files."
   (interactive)
@@ -197,6 +231,7 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
       (setq buffer (pop list)))
     (message "Finished reverting buffers containing unmodified files.")))
 
+;;; Full Screen
 ;; Set the frame fill the center screen
 (defun full-screen-center ()
   (interactive)
@@ -204,6 +239,7 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
     (set-frame-position nil 1910 0) ; pixels x y from upper left
     (set-frame-size     nil 1894 1096 :pixelwise))) ; width, height
 
+;; Scratch-and-Back
 ;; http://emacs.stackexchange.com/a/81/115
 (defun modi/switch-to-scratch-and-back (arg)
   "Toggle between *scratch-MODE* buffer and the current buffer.
@@ -227,6 +263,7 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
                          (concat "*scratch-" mode-str "*")))
       (funcall (intern mode-str))))) ; http://stackoverflow.com/a/7539787/1219634
 
+;;; Minibuffer and Recursive Edit
 ;; Quit the minibuffer automatically when focus moves away from it (which could
 ;; have happened by actions like clicking some other buffer using the mouse or
 ;; by hitting `C-x o'). This is to avoid the irritating occasions where repeated
@@ -244,6 +281,7 @@ is set to a non-nil value."
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook #'abort-recursive-edit-in-minibuffer)
 
+;;; Untouchable Minibuffer Prompt
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21874
 ;; Do not allow the cursor to go over or select the minibuffer prompt.
 ;; A good example is that we wouldn't want to ever edit/select the "Find file:"
@@ -263,6 +301,7 @@ is set to a non-nil value."
       ;; (see cus-start.el).
       (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)))
 
+;;; Toggle between buffers
 ;; http://www.emacswiki.org/emacs/SwitchingBuffers
 (defun toggle-between-buffers ()
   "Toggle between 2 buffers"
@@ -277,6 +316,7 @@ is set to a non-nil value."
 ;; - If the optional third argument FRAME is non-nil, use that frame's buffer
 ;;   list instead of the selected frame's buffer list.
 
+;;; Scrolling
 ;; Keep point at its screen position if the scroll command moved it vertically
 ;; out of the window, e.g. when scrolling by full screens using C-v.
 (setq scroll-preserve-screen-position t)
@@ -314,6 +354,7 @@ If LN is nil, defaults to 1 line."
  ("<C-M-left>"  . modi/scroll-other-window-down)
  ("<C-M-right>" . modi/scroll-other-window-up))
 
+;;;; Mouse Scrolling
 (when (not (display-graphic-p)) ; terminal
   (bind-keys
    ("<mouse-4>" . modi/scroll-down)
@@ -341,6 +382,7 @@ If LN is nil, defaults to 1 line."
 (advice-add 'scroll-up   :around #'modi/advice-mwhell-scroll-all)
 (advice-add 'scroll-down :around #'modi/advice-mwhell-scroll-all)
 
+;;; File Permissions
 (defun modi/set-file-permissions (perm)
   "Change permissions of the file in current buffer.
 Example: M-644 M-x modi/set-file-permissions."
@@ -354,6 +396,7 @@ Example: M-644 M-x modi/set-file-permissions."
     (shell-command cmd "*Shell Temp*")
     (kill-buffer "*Shell Temp*")))
 
+;;; One Window Toggle
 (defvar modi/toggle-one-window--buffer-name nil
   "Variable to store the name of the buffer for which the `modi/toggle-one-window'
 function is called.")
@@ -375,6 +418,7 @@ the current window and the windows state prior to that."
         (set-window-configuration modi/toggle-one-window--window-configuration)
         (switch-to-buffer modi/toggle-one-window--buffer-name)))))
 
+;;; Swap Buffers using Mouse
 ;; https://tsdh.wordpress.com/2015/03/03/swapping-emacs-windows-using-dragndrop/
 (defun th/swap-window-buffers-by-dnd (drag-event)
   "Swaps the buffers displayed in the DRAG-EVENT's start and end window."
@@ -393,6 +437,7 @@ the current window and the windows state prior to that."
           (set-window-buffer end-win bs))))))
 (bind-key "<C-S-drag-mouse-1>" #'th/swap-window-buffers-by-dnd modi-mode-map)
 
+;;; Kill/Bury Buffer
 (defun modi/kill-buffer-dwim (kill-next-error-buffer)
   "Kill the current buffer.
 
@@ -408,6 +453,8 @@ buffers: *gtags-global*, *ag*, *Occur*."
   (interactive)
   (quit-window :kill))
 
+;;; Bindings
+;;;; Read-only Buffer Bindings
 ;; Update bindings in few read-only modes
 ;; http://stackoverflow.com/a/27091776/1219634
 ;; Cannot set below to `'(map1 map2)'; it has to be `(list map1 map2)'.
@@ -420,6 +467,17 @@ buffers: *gtags-global*, *ag*, *Occur*."
   (define-key map (kbd "z") #'quit-window) ; quit + bury
   (define-key map (kbd "q") #'modi/quit-and-kill-window)) ; quit + kill
 
+;;;; Mode-line Mouse Bindings
+;; Bind a function to execute when middle clicking a buffer name in mode line
+;; http://stackoverflow.com/a/26629984/1219634
+(bind-key "<mode-line> <mouse-2>" #'show-copy-buffer-file-name
+          mode-line-buffer-identification-keymap)
+(bind-key "<mode-line> <S-mouse-2>" (lambda ()
+                                      (interactive)
+                                      (show-copy-buffer-file-name 4))
+          mode-line-buffer-identification-keymap)
+
+;;;; Other Bindings
 (bind-keys
  :map modi-mode-map
   ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
@@ -436,15 +494,6 @@ buffers: *gtags-global*, *ag*, *Occur*."
   ("C-)"          . modi/kill-buffer-dwim)
   ("C-c )"        . modi/kill-buffer-dwim) ; alternative to C-) for terminal mode
   ("C-c 0"        . modi/kill-buffer-dwim)) ; alternative to C-) for terminal mode
-
-;; Bind a function to execute when middle clicking a buffer name in mode line
-;; http://stackoverflow.com/a/26629984/1219634
-(bind-key "<mode-line> <mouse-2>" #'show-copy-buffer-file-name
-          mode-line-buffer-identification-keymap)
-(bind-key "<mode-line> <S-mouse-2>" (lambda ()
-                                      (interactive)
-                                      (show-copy-buffer-file-name 4))
-          mode-line-buffer-identification-keymap)
 
 ;; Below bindings are made in global map as I want them to work even when my
 ;; minor mode is disabled
