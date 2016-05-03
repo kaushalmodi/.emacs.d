@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 12:12:38 kmodi>
+;; Time-stamp: <2016-05-03 12:58:31 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -25,7 +25,7 @@
 ;;    ox-reveal - Presentations using reveal.js
 ;;    ox-twbs - Twitter Bootstrap
 ;;    ox-odt - ODT, doc export
-;;    Custom Org Export related “packages”
+;;    Org Export Customization
 ;;  Easy Templates
 ;;  Bindings
 ;;  Notes
@@ -828,7 +828,21 @@ footer > div {
           (org-ascii-export-to-ascii)
           (org-latex-export-to-pdf))
 
-;;;; Custom Org Export related “packages”
+;;;; Org Export Customization
+        ;; Delete selected columns from org tables before exporting
+        ;; http://thread.gmane.org/gmane.emacs.orgmode/106497/focus=106683
+        (defun mbrand/org-export-delete-commented-cols (back-end)
+          "Delete columns $2 to $> marked as `<#>' on a row with `/' in $1.
+If you want a non-empty column $1 to be deleted make it $2 by
+inserting an empty column before and adding `/' in $1."
+          (while (re-search-forward
+                  "^[ \t]*| +/ +|\\(.*|\\)? +\\(<#>\\) *|" nil :noerror)
+            (goto-char (match-beginning 2))
+            (org-table-delete-column)
+            (beginning-of-line)))
+        (add-hook 'org-export-before-processing-hook
+                  #'mbrand/org-export-delete-commented-cols)
+
         ;; Auto update line numbers for source code includes when exporting
         (use-package org-include-src-lines
           :load-path "elisp/org-include-src-lines")
