@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 14:52:50 kmodi>
+;; Time-stamp: <2016-05-03 17:08:40 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -132,6 +132,13 @@
     ;; buffer (the buffer you get when you do «C-c '» while in a block like
     ;; #+BEGIN_SRC
     (setq org-edit-src-content-indentation 0)
+
+    ;; Do NOT try to auto-evaluate entered text as formula when I begin a field's
+    ;; content with "=" e.g. |=123=|. More often than not, I use the "=" to
+    ;; simply format that field text as verbatim. As now the below variable is
+    ;; set to nil, formula will not be automatically evaluated when hitting TAB.
+    ;; But you can still using ‘C-c =’ to evaluate it manually when needed.
+    (setq org-table-formula-evaluate-inline nil) ; default = t
 
 ;;; Agenda and Capture
     ;; http://orgmode.org/manual/Template-elements.html
