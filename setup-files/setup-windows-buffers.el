@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-27 18:48:57 kmodi>
+;; Time-stamp: <2016-05-03 18:22:49 kmodi>
 
 ;; Functions to manipulate windows and buffers
 
@@ -171,34 +171,31 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
           (message file-name))
       (error "Buffer not visiting a file"))))
 
-;; Revert All Buffers
-(defun revert-all-buffers ()
-  "Refreshes all open buffers from their respective files"
+(defun modi/revert-all-file-buffers ()
+  "Refresh all open buffers from their respective files."
   (interactive)
   (let* ((list (buffer-list))
          (buffer (car list)))
     (while buffer
-      ;; (message "test: %s %s %s %s"
-      ;;          buffer
-      ;;          (buffer-file-name buffer)
-      ;;          (buffer-modified-p buffer)
-      ;;          (file-exists-p (format "%s" (buffer-file-name buffer))))
+      (let ((filename (buffer-file-name buffer)))
+        ;; (message "buffer:%s  filename:%s  modified:%s  fileexists:%s"
+        ;;          buffer filename (buffer-modified-p buffer)
+        ;;          (file-exists-p (format "%s" filename)))
 
-      ;; Revert only buffers containing files which are not modified
-      ;; Don't try to revert buffers like *Messages*
-      (when (and (buffer-file-name buffer) (not (buffer-modified-p buffer)))
-        (if (file-exists-p (format "%s" (buffer-file-name  buffer)))
-            ;; if the file exists, revert the buffer
-            (progn
-              (set-buffer buffer)
-              (revert-buffer t t t))
-          ;; if the file doesn't exist, kill the buffer
-          (let (kill-buffer-query-functions) ; no query done when killing buffer
-            (kill-buffer buffer)
-            (message "Killed buffer of non-existing file: %s" (buffer-file-name buffer)))))
-      (setq list (cdr list))
-      (setq buffer (car list)))
-    (message "Refreshing open files")))
+        ;; Revert only buffers containing files, which are not modified;
+        ;; do not try to revert non-file buffers like *Messages*.
+        (when (and filename
+                   (not (buffer-modified-p buffer)))
+          (if (file-exists-p filename)
+              ;; If the file exists, revert the buffer.
+              (with-current-buffer buffer
+                (revert-buffer :ignore-auto :noconfirm :preserve-modes))
+            ;; If the file doesn't exist, kill the buffer.
+            (let (kill-buffer-query-functions) ; No query done when killing buffer
+              (kill-buffer buffer)
+              (message "Killed non-existing file buffer: %s" filename)))))
+      (setq buffer (pop list)))
+    (message "Finished reverting buffers containing unmodified files.")))
 
 ;; Set the frame fill the center screen
 (defun full-screen-center ()
@@ -454,7 +451,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
 (bind-keys
  ("<f5>"   . revert-buffer)
  ("C-c 5"  . revert-buffer) ; alternative to f5
- ("<S-f5>" . revert-all-buffers)
+ ("<S-f5>" . modi/revert-all-file-buffers)
  ("<S-f9>" . eshell))
 
 (bind-to-modi-map "b" #'modi/switch-to-scratch-and-back)
