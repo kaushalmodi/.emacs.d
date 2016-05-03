@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 12:20:34 kmodi>
+;; Time-stamp: <2016-05-03 17:13:16 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -538,10 +538,7 @@ narrowed."
          (narrow-to-region (region-beginning) (region-end)))
         ((derived-mode-p 'org-mode)
          (cond
-          ;; `org-edit-src-code' is not a real narrowing command.
-          ;; Remove this first conditional if you don't want it.
-          ((ignore-errors (org-edit-src-code))
-           (delete-other-windows))
+          ((ignore-errors (org-edit-src-code) t))
           ((ignore-errors (org-narrow-to-block) t))
           (t
            (org-narrow-to-subtree))))
