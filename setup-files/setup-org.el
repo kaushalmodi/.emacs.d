@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 17:08:40 kmodi>
+;; Time-stamp: <2016-05-03 17:46:57 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -117,8 +117,10 @@
     ;; empty lines is equal or larger to the number given in this variable.
     (setq org-cycle-separator-lines 2) ; default = 2
 
-    ;; Footnote auto adjustment after insertion/deletion
-    (setq org-footnote-auto-adjust t) ; `'sort' - only sort
+    ;; Prevent renumbering/sorting footnotes when a footnote is added/removed.
+    ;; Doing so would create a big diff in an org file containing lot of
+    ;; footnotes even if only one footnote was added/removed.
+    (setq org-footnote-auto-adjust nil) ; `'sort' - only sort
                                         ; `'renumber' - only renumber
                                         ; `t' - sort and renumber
                                         ; `nil' - do nothing (default)
