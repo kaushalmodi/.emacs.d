@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 12:58:31 kmodi>
+;; Time-stamp: <2016-05-03 14:52:50 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -988,7 +988,8 @@ region is selected. Else call `self-insert-command'."
     (bind-keys
      :map modi-mode-map
       ("C-c a" . org-agenda)
-      ("C-c c" . org-capture))))
+      ("C-c c" . org-capture)
+      ("C-c i" . org-store-link))))
 
 
 (provide 'setup-org)
