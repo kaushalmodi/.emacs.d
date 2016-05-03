@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-23 17:42:54 kmodi>
+;; Time-stamp: <2016-05-03 12:20:34 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -523,29 +523,35 @@ Toggling off this mode reverts everything to their original states."
 ;;; Narrow/Widen
 ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun endless/narrow-or-widen-dwim (p)
-  "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
-Intelligently means: region, org-src-block, org-subtree, or defun,
-whichever applies first.
-Narrowing to org-src-block actually calls `org-edit-src-code'.
+  "Widen if buffer is narrowed, narrow-dwim otherwise.
+Dwim means: region, org-src-block, org-subtree, or defun,
+whichever applies first. Narrowing to org-src-block actually
+calls `org-edit-src-code'.
 
 With prefix P, don't widen, just narrow even if buffer is already
 narrowed."
   (interactive "P")
   (declare (interactive-only))
-  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+  (cond ((and (buffer-narrowed-p) (not p))
+         (widen))
         ((region-active-p)
          (narrow-to-region (region-beginning) (region-end)))
         ((derived-mode-p 'org-mode)
-         ;; `org-edit-src-code' is not a real narrowing command.
-         ;; Remove this first conditional if you don't want it.
-         (cond ((ignore-errors (org-edit-src-code))
-                (delete-other-windows))
-               ((org-at-block-p)
-                (org-narrow-to-block))
-               (t (org-narrow-to-subtree))))
-        (t (narrow-to-defun))))
-
+         (cond
+          ;; `org-edit-src-code' is not a real narrowing command.
+          ;; Remove this first conditional if you don't want it.
+          ((ignore-errors (org-edit-src-code))
+           (delete-other-windows))
+          ((ignore-errors (org-narrow-to-block) t))
+          (t
+           (org-narrow-to-subtree))))
+        ((derived-mode-p 'latex-mode)
+         (LaTeX-narrow-to-environment))
+        (t
+         (narrow-to-defun))))
 ;; This line actually replaces Emacs' entire narrowing keymap.
+;; This will also override the default "C-x n" binding in LaTeX-mode-map as
+;; the below binding is done in `modi-mode-map'.
 (bind-key "C-x n" #'endless/narrow-or-widen-dwim modi-mode-map)
 
 ;;; Prettify symbols
