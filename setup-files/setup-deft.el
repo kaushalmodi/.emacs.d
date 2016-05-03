@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-12-21 16:02:25 kmodi>
+;; Time-stamp: <2016-05-03 17:33:43 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -74,18 +74,20 @@ and restore the window config to the way it was before deft was invoked."
           ;; editing a deft-opened file
           (setq modi/pre-deft-window-configuration nil))))
 
-    (defun modi/deft-dwim (open-deft-buffer)
+    (defun modi/deft-dwim (option)
       "Launch deft or quit a deft opened file based on context.
 
-If OPEN-DEFT-BUFFER is non-nil, open `deft'.
-
+If OPTION is '(4), call `deft-find-file'.
+Else if OPTION is '(16), call `deft'.
 Else if major-mode is `deft-mode', bury the buffer.
 Else if in a deft-opened file buffer, call `modi/deft-quit'.
 Else call `deft'."
       (interactive "P")
       (cond
-       (open-deft-buffer ; when using `C-u'
-        (deft))
+       ((equal '(4) option) ; when using C-u
+        (call-interactively #'deft-find-file))
+       ((equal '(16) option) ; when using C-u C-u
+        (call-interactively #'deft))
        ((derived-mode-p 'deft-mode)
         (bury-buffer))
        ;; If the user is in a file buffer opened by deft,
@@ -97,7 +99,7 @@ Else call `deft'."
              (member (get-buffer (buffer-name)) deft-auto-save-buffers))
         (modi/deft-quit))
        (t
-        (deft))))
+        (call-interactively #'deft))))
 
     (defun modi/deft-complete (new-file)
       "Call the `deft-complete' command by default.
