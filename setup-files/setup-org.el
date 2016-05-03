@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-22 18:13:53 kmodi>
+;; Time-stamp: <2016-05-03 12:12:38 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -956,11 +956,8 @@ region is selected. Else call `self-insert-command'."
           (self-insert-command 1))))
 
 ;;; Bindings
-    ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
-    ;; Pressing `C-x C-s' while editing org source code blocks saves and exits
-    ;; the edit.
     (with-eval-after-load 'org-src
-      (bind-key "C-x C-s" #'org-edit-src-exit org-src-mode-map))
+      (bind-key "C-c C-c" #'org-edit-src-exit org-src-mode-map))
 
     (defun modi/reset-local-set-keys ()
       (local-unset-key (kbd "<f10>"))
