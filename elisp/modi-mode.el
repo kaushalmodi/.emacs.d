@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-23 17:44:40 kmodi>
+;; Time-stamp: <2016-05-03 12:04:18 kmodi>
 
 ;; My minor mode
 ;; Main use is to have my key bindings have the highest priority
@@ -53,13 +53,11 @@ USAGE: (unbind-from-modi-map \"C-x m f\")
 "
   (interactive "kUnset key from modi-mode-map: ")
   (define-key modi-mode-map (kbd (key-description key)) nil)
-  (message (concat "Unbound "
-                   (propertize (key-description key)
-                               'face 'font-lock-function-name-face)
-                   " key from the "
-                   (propertize "modi-mode-map"
-                               'face 'font-lock-function-name-face)
-                   ".")))
+  (message "%s" (format "Unbound %s key from the %s."
+                        (propertize (key-description key)
+                                    'face 'font-lock-function-name-face)
+                        (propertize "modi-mode-map"
+                                    'face 'font-lock-function-name-face))))
 
 
 (provide 'modi-mode)
