@@ -1,11 +1,11 @@
-;; Time-stamp: <2016-04-27 15:47:04 kmodi>
+;; Time-stamp: <2016-05-03 11:57:11 kmodi>
 
 ;; Pomodoro
 ;; https://github.com/baudtack/pomodoro.el
 
 (use-package pomodoro
   :bind (:map modi-mode-map
-         ("C-c `" . hydra-pomodoro/body))
+         ("C-c C-`" . hydra-pomodoro/body))
   :config
   (progn
     (setq pomodoro-play-sounds              nil)
