@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 17:46:57 kmodi>
+;; Time-stamp: <2016-05-04 00:43:46 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -14,7 +14,7 @@
 ;;  Org Entities
 ;;  org-linkid - Support markdown-style link ids
 ;;  Diagrams
-;;  Confirm evaluate
+;;  Org Babel
 ;;  epresent
 ;;  org-tree-slide
 ;;  Org Cliplink
@@ -329,26 +329,42 @@ returned value `entity-name' will be nil."
                                  "plantuml.jar"
                                  (concat user-emacs-directory "software/")))
 
-    ;; (setq org-startup-with-inline-images t)
-    ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+;;; Org Babel
+    (defvar modi/ob-enabled-languages '("emacs-lisp"
+                                        "org"
+                                        "latex"
+                                        "dot" ; graphviz
+                                        "ditaa"
+                                        "plantuml")
+      "List of languages for which the ob-* packages need to be loaded.")
 
-    (org-babel-do-load-languages
-     'org-babel-load-languages '((ditaa    . t)   ; activate ditaa
-                                 (plantuml . t)   ; activate plantuml
-                                 (latex    . t)   ; activate latex
-                                 (dot      . t))) ; activate graphviz
+    (defvar modi/ob-eval-unsafe-languages '("emacs-lisp")
+      "List of languages which are unsafe for babel evaluation without
+confirmation. Languages present in `modi/ob-enabled-languages' will be marked
+as safe for babel evaluation except for the languages in this variable.")
 
-;;; Confirm evaluate
-    (defun modi/org-confirm-babel-evaluate-fn (lang body)
-      "Returns a non-nil value if the user should be prompted for execution,
-or nil if no prompt is required."
-      ;; (message "%S" body)
-      (and (not (string= lang "ditaa"))    ; Do not ask for ditaa
-           (not (string= lang "plantuml")) ; Do not ask for plantuml
-           (not (string= lang "dot"))      ; Do not ask for graphviz
-           (not (string= lang "latex"))))  ; Do not ask for latex
-    (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn)
-    (setq org-confirm-elisp-link-function 'yes-or-no-p)
+    (let (ob-lang-alist)
+      (dolist (lang modi/ob-enabled-languages)
+        (add-to-list 'ob-lang-alist `(,(intern lang) . t)))
+      (org-babel-do-load-languages 'org-babel-load-languages ob-lang-alist))
+
+    (with-eval-after-load 'ob-core
+      (defun modi/org-confirm-babel-evaluate-fn (lang body)
+        "Returns a non-nil value if the user should be prompted for execution,
+or nil if no prompt is required.
+
+Babel evaluation will happen without confirmation for the org src blocks for
+the languages in `modi/ob-enabled-languages'."
+        (let ((re-all-lang (regexp-opt modi/ob-enabled-languages 'words))
+              (re-unsafe-lang (regexp-opt modi/ob-eval-unsafe-languages 'words))
+              (unsafe t)) ; Set the return value `unsafe' to t by default
+          (when (and (not (string-match-p re-unsafe-lang lang))
+                     (string-match-p re-all-lang lang))
+            (setq unsafe nil))
+          ;; (message "re-all:%s\nre-unsafe:%s\nlang:%s\nbody:%S\nret-val:%S"
+          ;;          re-all-lang re-unsafe-lang lang body unsafe)
+          unsafe))
+      (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn))
 
 ;;; epresent
     (use-package epresent
