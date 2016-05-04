@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 18:50:11 kmodi>
+;; Time-stamp: <2016-05-04 16:41:26 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -231,10 +231,10 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
       (setq buffer (pop list)))
     (message "Finished reverting buffers containing unmodified files.")))
 
-(defun modi/revert-noconfirm-help-buffers (orig-fun &rest args)
+(defun modi/revert-noconfirm-help-buffers (&rest args)
   "Don't confirm when reverting *Help* buffers."
-  (apply orig-fun '(nil :noconfirm)))
-(advice-add 'help-mode-revert-buffer :around #'modi/revert-noconfirm-help-buffers)
+  (list (car args) :noconfirm))
+(advice-add 'help-mode-revert-buffer :filter-args #'modi/revert-noconfirm-help-buffers)
 
 ;;; Full Screen
 ;; Set the frame fill the center screen
