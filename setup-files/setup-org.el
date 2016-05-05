@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-04 00:43:46 kmodi>
+;; Time-stamp: <2016-05-05 15:34:18 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -767,6 +767,11 @@ do the above and also open the html file in the default browser."
 
 ;;;; ox-reveal - Presentations using reveal.js
         (use-package ox-reveal
+          ;; Use the local version instead of the one from Melpa, because the
+          ;; Melpa version ox-reveal.el has “;; Package-Requires: ((org "20150330"))”
+          ;; which installs the org package from Melpa even though I have a newer
+          ;; org version in `load-path' installed from its git master branch.
+          :load-path "elisp/ox-reveal"
           :config
           (progn
             ;; Download reveal.js from https://github.com/hakimel/reveal.js/

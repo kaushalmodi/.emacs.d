@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-27 14:54:01 kmodi>
+;; Time-stamp: <2016-05-05 15:35:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -94,7 +94,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     org-tree-slide
     outorg navi-mode ; supporting packages for outshine
     outshine ; org-mode navigation and organization outside org-mode
-    ox-reveal ; used to export to HTML slides; using latest from git
     ox-twbs ; export to twitter bootstrap html
     paradox ; package menu improvements
     page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
@@ -140,6 +139,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     twilight-bright-theme
     twilight-anti-bright-theme
     ;; Crypt
+    ;; ox-reveal ; used to export to HTML slides; < git clone
     ;; git-link ; get git links with line numbers and commit-hash/branch ; < fork
     ;; ido-vertical-mode flx-ido ido-ubiquitous ; < ivy, counsel
     ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
