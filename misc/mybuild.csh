@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-04-08 11:23:59 kmodi>
+# Time-stamp: <2016-05-05 15:40:40 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -135,6 +135,11 @@ set emacs_configure_CPPFLAGS = "CPPFLAGS=${dquote}-fgnu89-inline -I${HOME}/usr_l
 set emacs_configure_LDFLAGS  = "LDFLAGS=${dquote}-L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
 
 if ( ${emacs_debug_build} ) then # For Debug
+    # http://git.savannah.gnu.org/cgit/emacs.git/plain/etc/DEBUG
+    # Preventing to use the --enable-check-lisp-object-type for now as that
+    # changes the representation of error_symbol in gdb from a scalar to a vector.
+    # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23424#54
+    # setenv MY_EMACS_CONFIGURE "${MY_EMACS_CONFIGURE} --enable-checking='yes,glyphs' --enable-check-lisp-object-type"
     set emacs_configure_CFLAGS   = "CFLAGS=${dquote}-ggdb3 -O0"
     set emacs_configure_CXXFLAGS = "CXXFLAGS=${dquote}-ggdb3 -O0"
     set emacs_configure_LDFLAGS  = "${emacs_configure_LDFLAGS} -ggdb3"
