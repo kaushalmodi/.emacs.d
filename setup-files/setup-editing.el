@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-29 11:31:44 kmodi>
+;; Time-stamp: <2016-05-06 18:56:13 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -28,7 +28,7 @@
 ;;  Rectangle
 ;;  Cycle Letter Case
 ;;  Sort Words
-;;  Unfill
+;;  Fill/unfill
 ;;  Replace identical strings with incremental number suffixes
 ;;  Delete Blank Lines
 ;;  Space Adjustment After Word Kills
@@ -745,7 +745,9 @@ Temporarily consider - and _ characters as part of the word when sorting."
       (modify-syntax-entry ?_ "w" temp-table)
       (sort-regexp-fields reverse "\\w+" "\\&" beg end))))
 
-;;; Unfill
+;;; Fill/unfill
+(bind-key "f" #'fill-region region-bindings-mode-map)
+
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
   :load-path "elisp/unfill")
