@@ -168,6 +168,33 @@ there's a region, all lines that region covers will be duplicated."
 ;;; Managing white spaces and empty newlines
 (setq require-final-newline t)
 
+;; Fri May 06 17:55:12 EDT 2016 - kmodi
+;; Below workaround is needed to make `modi/delete-trailing-whitespace-buffer'
+;; to work correctly in org capture buffers, which are Indirect Buffers.
+;;   When saving the org capture (indirect) buffers in-between edits, the
+;; `modi/delete-trailing-whitespace-buffer' function that runs in the
+;; `before-save-hook' would apply around the point in the BASE buffer, NOT
+;; around where the point currently is in the indirect org capture buffer.
+;; This happens where the current buffer is set to the (buffer-base-buffer) in
+;; `basic-save-buffer' (which is called in `save-buffer'):
+;;     (if (buffer-base-buffer)
+;;         (set-buffer (buffer-base-buffer))) ; <-- The point moves around here!
+;; The workaround is to save the mark as soon as `basic-save-buffer' is called
+;; (only when the current buffer is an org capture buffer), and then pop to that
+;; saved mark at the very beginning of `modi/delete-trailing-whitespace-buffer'.
+(defvar modi/org-capture-buffer-file-name nil
+  "Variable to save the org capture buffer file name.")
+(defun modi/advice-basic-save-buffer-save-mark (orig-fun &rest args)
+  "Save the mark just before calling ORIG-FUN if the current buffer is an
+org capture buffer."
+  (let ((buf (buffer-name)))
+    ;; Push mark to the mark ring ONLY in org capture buffers
+    (when (string-match "\\`CAPTURE-\\(.*\\.org\\)\\'" buf)
+      (setq modi/org-capture-buffer-file-name (match-string-no-properties 1 buf))
+      (push-mark (point))))
+  (apply orig-fun args))
+(advice-add 'basic-save-buffer :around #'modi/advice-basic-save-buffer-save-mark)
+
 ;; Delete trailing white space in lines and empty new lines at the end of file
 ;; when saving files. This is very useful for macro definitions in Verilog as for
 ;; multi-line macros, NO space is allowed after line continuation character "\".
@@ -191,6 +218,16 @@ in-between typing something.
 Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
   (interactive)
   (when (not (bound-and-true-p do-not-delete-trailing-whitespace))
+    (let ((pre-marker-restore-point (point)))
+      ;; Only in org capture buffers, first restore the point to the marker
+      ;; saved by the `modi/advice-basic-save-buffer-save-mark' function.
+      (when (string= modi/org-capture-buffer-file-name (buffer-name))
+        (pop-to-mark-command)
+        (message "delete-trailing-whitespace: Restored point to %S from %S."
+                 pre-marker-restore-point (point))
+        ;; Also set the value of modi/org-capture-buffer-file-name back to nil
+        ;; to prevent false executions of this `when' form.
+        (setq modi/org-capture-buffer-file-name nil)))
     (delete-trailing-whitespace (point-min) (line-beginning-position))
     ;; Below, the END argument is left nil so that trailing empty lines are
     ;; also deleted if `delete-trailing-lines' is non-nil.
