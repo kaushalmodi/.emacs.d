@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-27 18:49:52 kmodi>
+;; Time-stamp: <2016-05-06 18:50:03 kmodi>
 
 ;;;; Fold setup
 
@@ -41,7 +41,7 @@
 
     (bind-keys
      :map region-bindings-mode-map
-      ("f" . fold-this))))
+      ("&" . fold-this))))
 
 ;;; Yet Another Folding - Folding code blocks based on indentation
 ;; https://github.com/zenozeng/yafolding.el
