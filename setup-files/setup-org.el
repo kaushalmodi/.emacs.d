@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-07 01:34:22 kmodi>
+;; Time-stamp: <2016-05-07 01:38:37 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -813,6 +813,9 @@ do the above and also open the html file in the default browser."
 ;;;; ox-twbs - Twitter Bootstrap
         ;; https://github.com/marsmining/ox-twbs
         (use-package ox-twbs
+          ;; My fork of ox-twbs has the ":export-block .." line commented out,
+          ;; which is now not supported in org 9.0+
+          :load-path "elisp/ox-twbs"
           :config
           (progn
             (setq org-twbs-link-org-files-as-html nil)
