@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-07 01:39:10 kmodi>
+;; Time-stamp: <2016-05-07 01:53:37 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -184,8 +184,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-region-bindings-mode)
 (require 'setup-key-chord)
 (require 'setup-hydra)
-(require 'setup-tags) ; It's important that this is required at least
-                                        ; before requiring `setup-projectile'
+(require 'setup-tags)
 ;; End of basic requires
 
 ;; Set up the looks of emacs
@@ -249,7 +248,8 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-pcache)
 (require 'setup-pomodoro)
 (require 'setup-poporg)
-(require 'setup-projectile)
+(with-eval-after-load 'setup-tags
+  (require 'setup-projectile))
 (require 'setup-rainbow-delimiters)
 (require 'setup-rainbow-mode)
 (require 'setup-server)
