@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-05 15:35:45 kmodi>
+;; Time-stamp: <2016-05-07 00:54:32 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -236,7 +236,9 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
   (require 'setup-ivy))
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
+(require 'setup-info)
 (require 'setup-keyfreq)
+(require 'setup-linum)
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
@@ -254,6 +256,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-sx)
+(require 'setup-symbola)
 (require 'setup-term)
 (require 'setup-tiny)
 (require 'setup-undo-tree)
@@ -310,22 +313,15 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 ;; Place `setup-personal.el' with `(provide 'setup-personal)' in `user-personal-directory'
 (require 'setup-personal nil :noerror)
 
-;; Load certain setup files after a 1 second idle time after emacs has loaded.
-;; This files need the emacs frame to be set up properly. For example, linum,
-;; font detection does not work when emacs is launched in daemon mode while
-;; the emacs frame has yet to load. So do those things after a safe estimate
-;; delay of 1 second by which the frame should have loaded.
-(use-package setup-info    :defer 1)
-(use-package setup-linum   :defer 1)
-(use-package setup-symbola :defer 1)
+;; The `setup-misc' must be the last package to be required except for
+;; `setup-desktop'.
+(require 'setup-misc)
 
-;; Do desktop setup after linum setup so that the desktop loaded files will show
-;; linum if enabled for that major mode or if enabled globally
-(with-eval-after-load 'setup-linum
-  (require 'setup-desktop))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'setup-misc) ; This MUST be the last required package
+;; Delay desktop setup by a second.
+;; - This speeds up emacs init, and
+;; - Also linum and other packages would already be loaded which the files
+;;   being loaded in the saved desktop might need.
+(use-package setup-desktop :defer 1)
 
 (when (and (bound-and-true-p emacs-initialized)
            (featurep 'setup-visual))

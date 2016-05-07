@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-29 21:21:02 kmodi>
+;; Time-stamp: <2016-05-07 00:49:46 kmodi>
 
 ;; Line number package manager
 
@@ -111,8 +111,10 @@ background color to that of the theme."
         (remove-hook hook #'nlinum-mode)))))
 
 (defun modi/set-linum (linum-pkg)
-  "Set linum to either 'nlinum, 'linum-relative or 'linum.
-Set to nil to disable linum altogether."
+  "Enable or disable linum.
+With LINUM-PKG set to either 'nlinum, 'linum-relative or 'linum, the
+respective linum mode will be enabled. When LINUM-PKG is nil, linum will be
+disabled altogether."
   (interactive
    (list (intern (completing-read
                   "linum pkg (default nlinum): "
@@ -141,16 +143,20 @@ Set to nil to disable linum altogether."
       (message "Deactivated %s" modi/linum-fn-internal)))
   (setq modi/linum-fn-internal linum-pkg))
 
-(defun modi/toggle-linum ()
+(defun modi/toggle-linum (&optional frame)
   "Toggle linum between the disabled state and enabled using the default
-package set by the user using variable `modi/linum-fn-default'."
+package set by the user using variable `modi/linum-fn-default'.
+The optional FRAME argument is added as it is needed when this frame is
+added to the `after-make-frame-functions' hook."
   (interactive)
+  (when frame
+    (select-frame frame))
   (if modi/linum-fn-internal
       (modi/set-linum nil)
     (modi/set-linum modi/linum-fn-default)))
 
 ;; Set/unset linum
-(modi/set-linum modi/linum-fn-default)
+(add-hook 'after-make-frame-functions #'modi/toggle-linum)
 
 
 (provide 'setup-linum)
