@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-06 23:41:41 kmodi>
+;; Time-stamp: <2016-05-07 01:34:22 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -15,7 +15,6 @@
 ;;  org-linkid - Support markdown-style link ids
 ;;  Diagrams
 ;;  Org Babel
-;;  epresent
 ;;  org-tree-slide
 ;;  Org Cliplink
 ;;  Org Export
@@ -30,30 +29,31 @@
 ;;  Bindings
 ;;  Notes
 
-;; If `org-load-version-dev' is non-nil, remove the stable version of org
-;; from the `load-path'.
-(when (bound-and-true-p org-load-version-dev)
-  (>=e "25.0" ; `directory-files-recursively' is not available in older emacsen
-      (let ((org-stable-install-path (car (directory-files-recursively
-                                           package-user-dir
-                                           "org-plus-contrib-[0-9]+"
-                                           :include-directories))))
-        (setq load-path (delete org-stable-install-path load-path))
-        ;; Also ensure that the associated path is removed from Info search list
-        (setq Info-directory-list (delete org-stable-install-path Info-directory-list))
-
-        ;; Also delete the path to the org directory that ships with emacs
-        (dolist (path load-path)
-          (when (string-match-p (concat "emacs/"
-                                        (replace-regexp-in-string
-                                         "\\.[0-9]+\\'" "" emacs-version)
-                                        "/lisp/org\\'")
-                                path)
-            (setq load-path (delete path load-path)))))))
-
 (use-package org
   :preface
   (progn
+    ;; If `org-load-version-dev' is non-nil, remove the older versions of org
+    ;; from the `load-path'.
+    (when (bound-and-true-p org-load-version-dev)
+      (>=e "25.0" ; `directory-files-recursively' is not available in older emacsen
+          (let ((org-stable-install-path (car (directory-files-recursively
+                                               package-user-dir
+                                               "org-plus-contrib-[0-9]+"
+                                               :include-directories))))
+            (setq load-path (delete org-stable-install-path load-path))
+            ;; Also ensure that the associated path is removed from Info search list
+            (setq Info-directory-list (delete org-stable-install-path
+                                              Info-directory-list))
+
+            ;; Also delete the path to the org directory that ships with emacs
+            (dolist (path load-path)
+              (when (string-match-p (concat "emacs/"
+                                            (replace-regexp-in-string
+                                             "\\.[0-9]+\\'" "" emacs-version)
+                                            "/lisp/org\\'")
+                                    path)
+                (setq load-path (delete path load-path)))))))
+
     ;; Set my default org-export backends. This variable needs to be set before
     ;; org.el is loaded.
     (setq org-export-backends '(ascii html latex))
@@ -373,10 +373,6 @@ the languages in `modi/ob-enabled-languages'."
           ;;          re-all-lang re-unsafe-lang lang body unsafe)
           unsafe))
       (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn))
-
-;;; epresent
-    (use-package epresent
-      :commands (epresent-run))
 
 ;;; org-tree-slide
     ;; https://github.com/takaxp/org-tree-slide
