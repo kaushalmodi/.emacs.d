@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-05 15:34:18 kmodi>
+;; Time-stamp: <2016-05-06 23:41:41 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -41,7 +41,15 @@
         (setq load-path (delete org-stable-install-path load-path))
         ;; Also ensure that the associated path is removed from Info search list
         (setq Info-directory-list (delete org-stable-install-path Info-directory-list))
-        )))
+
+        ;; Also delete the path to the org directory that ships with emacs
+        (dolist (path load-path)
+          (when (string-match-p (concat "emacs/"
+                                        (replace-regexp-in-string
+                                         "\\.[0-9]+\\'" "" emacs-version)
+                                        "/lisp/org\\'")
+                                path)
+            (setq load-path (delete path load-path)))))))
 
 (use-package org
   :preface
@@ -70,7 +78,7 @@
 
     ;; Allow _ and ^ characters to sub/super-script strings but only when
     ;; string is wrapped in braces
-    (setq org-use-sub-superscripts         '{}) ; in-buffer rendering
+    (setq org-use-sub-superscripts '{}) ; in-buffer rendering
 
     ;; Single key command execution when at beginning of a headline
     (setq org-use-speed-commands t) ; ? speed-key opens Speed Keys help
@@ -442,6 +450,7 @@ the languages in `modi/ob-enabled-languages'."
 
 ;;; Org Export
     (use-package ox
+      :commands (org-export-dispatch)
       :config
       (progn
         ;; Require wrapping braces to interpret _ and ^ as sub/super-script
