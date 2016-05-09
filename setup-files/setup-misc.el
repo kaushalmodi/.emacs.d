@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-02 17:51:26 kmodi>
+;; Time-stamp: <2016-05-09 10:40:13 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -152,6 +152,13 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 (defun modi/startup-time()
   (message (format "init.el loaded in %s." (emacs-init-time))))
 (add-hook 'emacs-startup-hook #'modi/startup-time)
+
+;; Don't put the build system info "built on <IP>" in emacs bug reports
+(defun modi/advice-report-emacs-bug-without-build-system (orig-fun &rest args)
+  "Do not insert the user system IP when creating emacs bug report."
+  (let (emacs-build-system) ; Temporarily set `emacs-build-system' to nil.
+    (apply orig-fun args)))
+(advice-add 'report-emacs-bug :around #'modi/advice-report-emacs-bug-without-build-system)
 
 ;; Organize the order of minor mode lighters
 (defvar mode-line-space-mode-lighter " "
