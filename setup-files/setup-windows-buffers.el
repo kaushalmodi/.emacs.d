@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-04 16:41:26 kmodi>
+;; Time-stamp: <2016-05-09 14:08:02 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -60,7 +60,7 @@
   :config
   (progn
     (recentf-mode 1)
-    (setq recentf-max-menu-items 2000)))
+    (setq recentf-max-saved-items 200)))
 
 ;;; Windmove
 (use-package windmove
