@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-05-05 15:40:40 kmodi>
+# Time-stamp: <2016-05-07 17:13:53 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -89,9 +89,13 @@ if ( $debug ) then
     echo '======================================================================'
 endif
 
+# If ${emacs_rev} is master, ${emacs_rev_basename} = master
+# If ${emacs_rev} is origin/emacs-24.5, ${emacs_rev_basename} = emacs-24.5
+set emacs_rev_basename = "`basename ${emacs_rev}`"
+
 if ( ! ${no_git_update} ) then
     git fetch --all # fetch new branch names if any
-    git checkout ${emacs_rev}
+    git checkout ${emacs_rev_basename}
     git fetch --all
     git reset --hard ${emacs_rev}
     echo "Waiting for 5 seconds .. "
@@ -99,9 +103,7 @@ if ( ! ${no_git_update} ) then
 endif
 
 if ( "${install_sub_dir}" == "" ) then
-    # If ${emacs_rev} is master, basename ${emacs_rev} -> master
-    # If ${emacs_rev} is origin/emacs-24.5, basename ${emacs_rev} -> emacs-24.5
-    set install_sub_dir = "`basename ${emacs_rev}`"
+    set install_sub_dir = ${emacs_rev_basename}
 endif
 setenv MY_EMACS_INSTALL_DIR "${HOME}/usr_local/apps/${MY_OSREV}/emacs/${install_sub_dir}"
 if ( ! $debug ) then
@@ -252,6 +254,7 @@ else
     unset {prev_build_time_stamp}
     unset {build_info_file}
     unset {current_commit_hash}
+    unset {emacs_rev_basename}
     unset {emacs_rev}
     unset {emacs_debug_build}
     unset {no_git_update}
