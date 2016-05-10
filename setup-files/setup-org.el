@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-10 12:11:07 kmodi>
+;; Time-stamp: <2016-05-10 19:23:35 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -306,7 +306,15 @@ insert the character's `org-entity' name if available.
 
 If C-u prefix is not used and if `org-entity' name is not available, the
 returned value `entity-name' will be nil."
-      (let ((pressed-key (this-command-keys))
+      ;; It would be fine to use just (this-command-keys) instead of
+      ;; (substring (this-command-keys) -1) below in emacs 25+.
+      ;; But if the user pressed "C-u *", then
+      ;;  - in emacs 24.5, (this-command-keys) would return "^U*", and
+      ;;  - in emacs 25.x, (this-command-keys) would return "*".
+      ;; But in both versions, (substring (this-command-keys) -1) will return
+      ;; "*", which is what we want.
+      ;; http://thread.gmane.org/gmane.emacs.orgmode/106974/focus=106996
+      (let ((pressed-key (substring (this-command-keys) -1))
             entity-name)
         (when (and (listp args) (eq 4 (car args)))
           (setq entity-name (modi/org-entity-get-name pressed-key))
