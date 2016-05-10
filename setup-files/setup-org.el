@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-07 01:38:37 kmodi>
+;; Time-stamp: <2016-05-10 12:11:07 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -89,13 +89,15 @@
     (setq org-blank-before-new-entry '((heading)
                                        (plain-list-item)))
 
-    (setq org-startup-folded 'showall)
     ;; fold / overview  - collapse everything, show only level 1 headlines
     ;; content          - show only headlines
     ;; nofold / showall - expand all headlines except the ones with :archive:
     ;;                    tag and property drawers
     ;; showeverything   - same as above but without exceptions
-    (setq org-startup-indented t) ; http://orgmode.org/manual/Clean-view.html
+    (setq org-startup-folded 'showall)
+    ;; http://orgmode.org/manual/Clean-view.html
+    ;; Enable `org-indent-mode' on org startup
+    (setq org-startup-indented t)
 
     (setq org-log-done 'timestamp) ; Insert only timestamp when closing an org TODO item
     ;; (setq org-log-done 'note) ; Insert timestamp and note when closing an org TODO item
