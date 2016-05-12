@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-05-15 11:03:51 kmodi>
+;; Time-stamp: <2016-05-12 11:02:23 kmodi>
 
 ;; http://stackoverflow.com/q/28697108/1219634
 
@@ -21,14 +21,17 @@
 ;; as you can't have a file and a folder with the exact same name in the same
 ;; folder.
 
-;; Execute the `modi/org-include-img-from-archive' function just before saving the file
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook #'modi/org-include-img-from-archive nil :local)))
-;; Execute the `modi/org-include-img-from-archive' function before processing the
-;; file for export
-(add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive)
+;;; * How to enable this package
+;; Add below to your config
+;;   ;; Execute `modi/org-include-img-from-archive' before saving the
+;;   ;; file or before processing the file for export.
+;;   (defun modi/org-include-img-from-archive-before-save ()
+;;     "Execute `modi/org-include-img-from-archive' just before saving the file."
+;;     (add-hook 'before-save-hook #'modi/org-include-img-from-archive nil :local))
+;;   (add-hook 'org-mode-hook #'modi/org-include-img-from-archive-before-save)
+;;   (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive)
 
+;;;###autoload
 (defun modi/org-include-img-from-archive (&rest ignore)
   "Extract image files from the archive files.
 ** Only .zip files are supported as of now.

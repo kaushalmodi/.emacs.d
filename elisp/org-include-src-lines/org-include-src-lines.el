@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-05-19 11:59:59 kmodi>
+;; Time-stamp: <2016-05-12 10:58:31 kmodi>
 
 ;; Updating the #+INCLUDE source code line numbers automatically
 ;; http://emacs.stackexchange.com/q/64/115
 
-;; * To Use *
+;; * To Use
 ;; Do something like the following in your org-file. (The :lines keyword
 ;; is optional)
 
@@ -18,18 +18,22 @@
 ;; If :range-end is missing, the range will be "14-".
 ;; If both of the above are missing, the `:lines' won't be auto updated
 
-;; Execute the `endless/update-includes' function just before saving the file
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook #'endless/update-includes nil :local)))
+;;; * How to enable this package
+;; Add below to your config
+;;   ;; Execute `endless/org-include-update' before saving the file.
+;;   (defun modi/org-include-update-before-save ()
+;;     "Execute `endless/org-include-update' just before saving the file."
+;;     (add-hook 'before-save-hook #'endless/org-include-update nil :local))
+;;   (add-hook 'org-mode-hook #'modi/org-include-update-before-save)
 
-;; * The Updater *
+;; * The Updater
 ;; This is the function that goes through the buffer. You can bind it
 ;; to a key, or add it to a hook. The following code updates the lines
 ;; whenever you save the file, but if your use case is different, just
 ;; find out which hook you need! (org-mode is full of hooks)
 
-(defun endless/update-includes (&rest ignore)
+;;;###autoload
+(defun endless/org-include-update (&rest ignore)
   "Update the line numbers of #+INCLUDE:s in current buffer.
 Only looks at INCLUDEs that have either :range-begin or :range-end.
 This function does nothing if not in org-mode, so you can safely
@@ -54,17 +58,17 @@ add it to `before-save-hook'."
             (setq adj-begin (string-to-number (match-string-no-properties 1))))
           (when (looking-at "^.*:adj-end *\\([-+0-9]+\\)")
             (setq adj-end (string-to-number (match-string-no-properties 1))))
-          (setq lines (endless/decide-line-range file begin end adj-begin adj-end))
+          (setq lines (endless/org-include-decide-line-range file begin end adj-begin adj-end))
           (when lines
             (if (looking-at ".*:lines *\"\\([-0-9]+\\)\"")
                 (replace-match lines :fixedcase :literal nil 1)
               (goto-char (line-end-position))
               (insert " :lines \"" lines "\""))))))))
 
-;; * The background worker *
+;; * The background worker
 ;; This is the guy that does most of the work.
 
-(defun endless/decide-line-range (file begin end adj-begin adj-end)
+(defun endless/org-include-decide-line-range (file begin end adj-begin adj-end)
   "Visit FILE and decide which lines to include.
 BEGIN and END are regexps which define the line range to use.
 ADJ-BEGIN is a positive/negative integer to add to the beginning line number.

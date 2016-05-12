@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-10 19:23:35 kmodi>
+;; Time-stamp: <2016-05-12 10:56:26 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -893,16 +893,40 @@ inserting an empty column before and adding `/' in $1."
 
         ;; Auto update line numbers for source code includes when exporting
         (use-package org-include-src-lines
-          :load-path "elisp/org-include-src-lines")
+          :load-path "elisp/org-include-src-lines"
+          :config
+          (progn
+            ;; Execute `endless/org-include-update' before saving the file.
+            (defun modi/org-include-update-before-save ()
+              "Execute `endless/org-include-update' just before saving the file."
+              (add-hook 'before-save-hook #'endless/org-include-update nil :local))
+            (add-hook 'org-mode-hook #'modi/org-include-update-before-save)))
 
         ;; Replace include pdf files with images when exporting
         (use-package org-include-img-from-pdf
-          :load-path "elisp/org-include-img-from-pdf")
+          :load-path "elisp/org-include-img-from-pdf"
+          :config
+          (progn
+            ;; Execute `modi/org-include-img-from-pdf' before saving the file or
+            ;; before processing the file for export.
+            (defun modi/org-include-img-from-pdf-before-save ()
+              "Execute `modi/org-include-img-from-pdf' just before saving the file."
+              (add-hook 'before-save-hook #'modi/org-include-img-from-pdf nil :local))
+            (add-hook 'org-mode-hook #'modi/org-include-img-from-pdf-before-save)
+            (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf)))
 
         ;; Auto extract images from zip files
         (use-package org-include-img-from-archive
-          :load-path "elisp/org-include-img-from-archive")
-        ))
+          :load-path "elisp/org-include-img-from-archive"
+          :config
+          (progn
+            ;; Execute `modi/org-include-img-from-archive' before saving the
+            ;; file or before processing the file for export.
+            (defun modi/org-include-img-from-archive-before-save ()
+              "Execute `modi/org-include-img-from-archive' just before saving the file."
+              (add-hook 'before-save-hook #'modi/org-include-img-from-archive nil :local))
+            (add-hook 'org-mode-hook #'modi/org-include-img-from-archive-before-save)
+            (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive)))))
 
 ;;; Easy Templates
     ;; http://orgmode.org/manual/Easy-Templates.html
