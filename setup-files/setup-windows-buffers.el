@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-09 14:08:02 kmodi>
+;; Time-stamp: <2016-05-12 17:15:12 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -23,6 +23,7 @@
 ;;  One Window Toggle
 ;;  Swap Buffers using Mouse
 ;;  Kill/Bury Buffer
+;;  Other Window/Buffer
 ;;  Bindings
 ;;    Read-only Buffer Bindings
 ;;    Mode-line Mouse Bindings
@@ -458,6 +459,17 @@ buffers: *gtags-global*, *ag*, *Occur*."
   (interactive)
   (quit-window :kill))
 
+;;; Other Window/Buffer
+;; http://emacs.stackexchange.com/q/22226/115
+(defhydra hydra-other-window-buffer
+  (global-map "C-x"
+              :color red)
+  "other window/buffer"
+  ("<right>" other-window "→win")
+  ("<left>" (lambda () (interactive) (other-window -1)) "win←")
+  ("<C-right>" next-buffer "→buf")
+  ("<C-left>" previous-buffer "buf←"))
+
 ;;; Bindings
 ;;;; Read-only Buffer Bindings
 ;; Update bindings in few read-only modes
@@ -491,7 +503,6 @@ buffers: *gtags-global*, *ag*, *Occur*."
   ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence'
   ("C-x <delete>" . modi/delete-current-buffer-file)
   ("C-x C-r"      . rename-current-buffer-file)
-  ("C-x O"        . other-window)
   ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
   ("C-c 6"        . reopen-killed-file) ; alternative to C-S-t for terminal mode
   ("C-("          . toggle-between-buffers)
