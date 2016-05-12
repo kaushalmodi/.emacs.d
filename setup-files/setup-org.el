@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-12 11:58:14 kmodi>
+;; Time-stamp: <2016-05-12 13:41:45 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -293,8 +293,7 @@ This variable is buffer local.")
     ;; Mark `modi/org-table-enable-buffer-wide-recalculation' as a safe local
     ;; variable as long as its value is t or nil. That way you are not prompted
     ;; to add that to `safe-local-variable-values' in custom.el.
-    (put 'modi/org-table-enable-buffer-wide-recalculation
-         'safe-local-variable (lambda (val) (or (equal val nil) (equal val t))))
+    (put 'modi/org-table-enable-buffer-wide-recalculation 'safe-local-variable #'booleanp)
 
     (defun modi/org-table-recalculate-buffer-tables (&rest args)
       "Wrapper function for `org-table-recalculate-buffer-tables' that runs
