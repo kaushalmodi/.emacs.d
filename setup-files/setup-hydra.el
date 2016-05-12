@@ -1,10 +1,9 @@
-;; Time-stamp: <2015-02-24 19:38:12 kmodi>
+;; Time-stamp: <2016-05-12 17:04:01 kmodi>
 
 ;; Hydra
 ;; https://github.com/abo-abo/hydra
 
 (use-package hydra
-  ;; :load-path "elisp/hydra"
   :config
   (progn
     ;; (setq hydra-lv nil)
@@ -18,14 +17,25 @@
 
 (provide 'setup-hydra)
 
-;; |----------+-----------+------------------+----------------+-------------|
-;; | Body     | Head      | Allows execution | Quits hydra    | Quits hydra |
-;; | Color    | Inherited | of NON-HEADs     | after NON-HEAD | after HEAD  |
-;; |          | Color     |                  | execution      | execution   |
-;; |----------+-----------+------------------+----------------+-------------|
-;; | amaranth | red       | No               | No             | No          |
-;; | pink     | red       | Yes              | No             | No          |
-;; | red      | red       | Yes              | Yes            | No          |
-;; | teal     | blue      | No               | No             | Yes         |
-;; | blue     | blue      | Yes              | Yes            | Yes         |
-;; |----------+-----------+------------------+----------------+-------------|
+;; https://github.com/abo-abo/hydra/wiki/Hydra-Colors#colorful-hydras
+;; https://github.com/abo-abo/hydra/wiki/internals#exit
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | Body     | Non-color                   | Head      | Executing             | After     |
+;; | Color    | Alternative                 | Inherited | NON-HEADS             | executing |
+;; |          |                             | Color     |                       | HEADS     |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | red      | :foreign-keys nil (default) | red       | Allow and Quit        |           |
+;; |          | :exit nil (default)         |           |                       | Continue  |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | blue     | :foreign-keys nil (default) | blue      | Allow and Quit        |           |
+;; |          | :exit t                     |           |                       | Quit      |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | amaranth | :foreign-keys warn          | red       | Disallow and Continue |           |
+;; |          | :exit nil (default)         |           |                       | Continue  |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | teal     | :foreign-keys warn          | blue      | Disallow and Continue |           |
+;; |          | :exit t                     |           |                       | Quit      |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | pink     | :foreign-keys run           | red       | Allow and Continue    |           |
+;; |          | :exit nil (default)         |           |                       | Continue  |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
