@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-12 10:56:26 kmodi>
+;; Time-stamp: <2016-05-12 11:58:14 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -282,6 +282,41 @@ org-table or if a prefix is used."
           (call-interactively (global-key-binding (kbd "C-c SPC"))))
         skip-orig-fn))
     (advice-add 'org-table-blank-field :before-until #'ia/dwim-org-table-blank-field)
+
+    ;; Recalculate all org tables in the buffer when saving.
+    ;; http://emacs.stackexchange.com/a/22221/115
+    (defvar-local modi/org-table-enable-buffer-wide-recalculation t
+      "When non-nil, all the org tables in the buffer will be recalculated when
+saving the file or when exporting.
+
+This variable is buffer local.")
+    ;; Mark `modi/org-table-enable-buffer-wide-recalculation' as a safe local
+    ;; variable as long as its value is t or nil. That way you are not prompted
+    ;; to add that to `safe-local-variable-values' in custom.el.
+    (put 'modi/org-table-enable-buffer-wide-recalculation
+         'safe-local-variable (lambda (val) (or (equal val nil) (equal val t))))
+
+    (defun modi/org-table-recalculate-buffer-tables (&rest args)
+      "Wrapper function for `org-table-recalculate-buffer-tables' that runs
+that function only if `modi/org-table-enable-buffer-wide-recalculation' is
+non-nil.
+
+Also, this function has ARGS as optional arguments that are needed for any
+function that is added to the `org-export-before-processing-hook'."
+      (when modi/org-table-enable-buffer-wide-recalculation
+        (org-table-recalculate-buffer-tables)))
+
+    (defun modi/org-table-recalculate-before-save ()
+      "Recalculate all org tables in the buffer before saving."
+      (add-hook 'before-save-hook #'modi/org-table-recalculate-buffer-tables nil :local))
+    (add-hook 'org-mode-hook #'modi/org-table-recalculate-before-save)
+    ;; FIXME: The buffer local value of `modi/org-table-enable-buffer-wide-recalculation'
+    ;; does not seem to be respected at the moment at the time of running
+    ;; `org-export-before-processing-hook'. Investigating this ..
+    ;; For now, as the default value of that variable is t, all org tables
+    ;; in the buffer will always be recalculated at the time of export even
+    ;; if the buffer local value of that var is nil.
+    (add-hook 'org-export-before-processing-hook #'modi/org-table-recalculate-buffer-tables)
 
 ;;; Org Entities
     ;; http://www.mail-archive.com/emacs-orgmode@gnu.org/msg100527.html
