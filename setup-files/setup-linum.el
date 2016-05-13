@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-13 13:55:02 kmodi>
+;; Time-stamp: <2016-05-13 14:21:06 kmodi>
 
 ;; Line number package manager
 
@@ -138,13 +138,15 @@ disabled altogether."
     (t
      (modi/turn-off-linum)
      (modi/turn-off-nlinum)))
-  (let (state-str)
-    (if linum-pkg
-        (setq state-str "Activated")
-      (when modi/linum--state
-        (setq state-str "Deactivated")))
-    (message (format "%s `%s'. Revert buffer to see the change."
-                     state-str linum-pkg)))
+  (let (state-str filler-str)
+    (when linum-pkg
+      (setq state-str (format "Activated `%s'." linum-pkg)))
+    (when modi/linum--state
+      (when state-str
+        (setq filler-str " "))
+      (setq state-str (concat (format "Deactivated `%s'." modi/linum--state)
+                              filler-str state-str)))
+    (message (format "%s Revert buffer to see the change." state-str)))
   (setq modi/linum--state linum-pkg))
 
 (defun modi/toggle-linum (&optional frame)
