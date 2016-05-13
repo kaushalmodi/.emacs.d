@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-07 01:53:37 kmodi>
+;; Time-stamp: <2016-05-13 13:08:11 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -80,7 +80,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     iy-go-to-char ; Go to next char which is similar to "f" and "t" in vim
     key-chord ; map pairs of simultaneously pressed keys to commands
     keyfreq ; find which commands you use the most
-    linum-relative
     magit ; for git management
     manage-minor-mode
     markdown-mode
@@ -88,7 +87,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     multi-term
     multiple-cursors
     neotree
-    nlinum ; reviews say it's better than linum
+    nlinum nlinum-relative ; better performance than linum
     org-cliplink ; paste copied links as well-formatted org-mode links with desc
     org-plus-contrib ; latest stable version of org-mode, includes org-eww
     org-tree-slide
@@ -319,7 +318,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 
 ;; Delay desktop setup by a second.
 ;; - This speeds up emacs init, and
-;; - Also linum and other packages would already be loaded which the files
+;; - Also (n)linum and other packages would already be loaded which the files
 ;;   being loaded in the saved desktop might need.
 (use-package setup-desktop :defer 1)
 
