@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-12 13:41:45 kmodi>
+;; Time-stamp: <2016-05-13 12:40:46 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1176,6 +1176,17 @@ region is selected. Else call `self-insert-command'."
 
 ;; How to toggle display of inline images?
 ;; C-c C-x C-v (`org-toggle-inline-images')
+
+;; Setting buffer local variables to be effective during org exports
+;; http://thread.gmane.org/gmane.emacs.orgmode/107058
+;; If you want to set a buffer local variable foo to nil during org exports,
+;; add the below to the end of the org file
+;;
+;;   #+BIND: foo nil
+;;   # Local Variables:
+;;   # org-export-allow-bind-keywords: t
+;;   # End:
+
 
 ;; Local Variables:
 ;; eval: (aggressive-indent-mode -1)
