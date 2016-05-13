@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-13 12:40:46 kmodi>
+;; Time-stamp: <2016-05-13 12:58:46 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -287,7 +287,7 @@ org-table or if a prefix is used."
     ;; http://emacs.stackexchange.com/a/22221/115
     (defvar-local modi/org-table-enable-buffer-wide-recalculation t
       "When non-nil, all the org tables in the buffer will be recalculated when
-saving the file or when exporting.
+saving the file.
 
 This variable is buffer local.")
     ;; Mark `modi/org-table-enable-buffer-wide-recalculation' as a safe local
@@ -300,8 +300,9 @@ This variable is buffer local.")
 that function only if `modi/org-table-enable-buffer-wide-recalculation' is
 non-nil.
 
-Also, this function has ARGS as optional arguments that are needed for any
-function that is added to the `org-export-before-processing-hook'."
+Also, this function has optional ARGS that is needed for any function that is
+added to `org-export-before-processing-hook'. This would be useful if this
+function is ever added to that hook."
       (when modi/org-table-enable-buffer-wide-recalculation
         (org-table-recalculate-buffer-tables)))
 
@@ -309,13 +310,6 @@ function that is added to the `org-export-before-processing-hook'."
       "Recalculate all org tables in the buffer before saving."
       (add-hook 'before-save-hook #'modi/org-table-recalculate-buffer-tables nil :local))
     (add-hook 'org-mode-hook #'modi/org-table-recalculate-before-save)
-    ;; FIXME: The buffer local value of `modi/org-table-enable-buffer-wide-recalculation'
-    ;; does not seem to be respected at the moment at the time of running
-    ;; `org-export-before-processing-hook'. Investigating this ..
-    ;; For now, as the default value of that variable is t, all org tables
-    ;; in the buffer will always be recalculated at the time of export even
-    ;; if the buffer local value of that var is nil.
-    (add-hook 'org-export-before-processing-hook #'modi/org-table-recalculate-buffer-tables)
 
 ;;; Org Entities
     ;; http://www.mail-archive.com/emacs-orgmode@gnu.org/msg100527.html
