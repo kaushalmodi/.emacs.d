@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-13 19:21:37 kmodi>
+;; Time-stamp: <2016-05-13 19:36:32 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -326,11 +326,14 @@ If N is 0 or 1 (default), only the current field is selected."
             (bof-arg 1)
             (eof-arg 1)
             (p (point))
-            bof-p)
+            bof-p eof-p)
 
         ;; Check if the point is already at the beginning of the current field.
-        (when (looking-back "|\\s-*" bol-point)
+        (when (looking-back "|\\s-?" bol-point)
           (setq bof-p t))
+        ;; Check if the point is already at the end of the current field.
+        (when (looking-at "\\s-?|")
+          (setq eof-p t))
 
         ;; When selecting current field plus fields to the right
         (when (>= n 2)
@@ -344,6 +347,8 @@ If N is 0 or 1 (default), only the current field is selected."
           (org-table-next-field))
         (set-mark-command nil)
         (goto-char p)
+        (when eof-p
+          (org-table-beginning-of-field 1))
         (org-table-end-of-field eof-arg)
         (exchange-point-and-mark)))
 
