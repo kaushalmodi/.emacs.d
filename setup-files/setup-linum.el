@@ -1,16 +1,16 @@
-;; Time-stamp: <2016-05-13 14:21:06 kmodi>
+;; Time-stamp: <2016-05-13 16:41:49 kmodi>
 
 ;; Line number package manager
 
 (defvar modi/linum-fn-default 'nlinum
   "Default “linum” mode. This is used when toggling linum on and off.
-Set this value to either `nlinum', `nlinum-relative' or `linum'.")
+Set this value to either `nlinum', `nlinum-plus' or `linum'.")
 
 (defvar modi/linum--state nil
   "State variable that tells if line numbers are being displayed or not.
 
 If nil, the line numbers are not displayed. Otherwise this value is either
-`nlinum', `nlinum-relative' or `linum'.
+`nlinum', `nlinum-plus' or `linum'.
 
 This variable is meant to show only the current “linum” state; it must not
 be set by the user.")
@@ -81,14 +81,17 @@ background color to that of the theme."
   (progn
     (setq nlinum-format " %d ") ; 1 space padding on each side of line number
 
-    ;; nlinum-relative
-    ;; https://github.com/CodeFalling/nlinum-relative
-    (use-package nlinum-relative
-      :config
-      (progn
-        ;; If `nlinum-relative-current-symbol' is an empty string, the real line
-        ;; number will be shown at the current line.
-        (setq nlinum-relative-current-symbol "")))
+    ;; ;; nlinum-relative
+    ;; ;; https://github.com/CodeFalling/nlinum-relative
+    ;; (use-package nlinum-relative
+    ;;   :config
+    ;;   (progn
+    ;;     ;; If `nlinum-relative-current-symbol' is an empty string, the real line
+    ;;     ;; number will be shown at the current line.
+    ;;     (setq nlinum-relative-current-symbol "")))
+
+    (use-package nlinum-plus
+      :load-path "elisp/nlinum-plus")
 
     (defun modi/turn-on-nlinum ()
       "Turn on nlinum mode in specific modes."
@@ -113,25 +116,25 @@ background color to that of the theme."
 
 (defun modi/set-linum (linum-pkg)
   "Enable or disable linum.
-With LINUM-PKG set to either 'nlinum, 'nlinum-relative or 'linum, the
+With LINUM-PKG set to either 'nlinum, 'nlinum-plus or 'linum, the
 respective linum mode will be enabled. When LINUM-PKG is nil, linum will be
 disabled altogether."
   (interactive
    (list (intern (completing-read
                   "linum pkg (default nlinum): "
-                  '("nlinum" "nlinum-relative" "linum" "nil")
+                  '("nlinum" "nlinum-plus" "linum" "nil")
                   nil t nil nil "nlinum"))))
   (when (stringp linum-pkg)
     (setq linum-pkg (intern linum-pkg)))
   (cl-case linum-pkg
     (nlinum
      (modi/turn-off-linum)
-     (nlinum-relative-off)
+     (nlinum-plus-mode -1)
      (modi/turn-on-nlinum))
-    (nlinum-relative
+    (nlinum-plus
      (modi/turn-off-linum)
      (modi/turn-on-nlinum)
-     (nlinum-relative-on))
+     (nlinum-plus-mode 1))
     (linum
      (modi/turn-off-nlinum)
      (modi/turn-on-linum))

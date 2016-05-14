@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-13 13:08:11 kmodi>
+;; Time-stamp: <2016-05-14 03:13:26 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -87,7 +87,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     multi-term
     multiple-cursors
     neotree
-    nlinum nlinum-relative ; better performance than linum
+    nlinum ; better performance than linum
     org-cliplink ; paste copied links as well-formatted org-mode links with desc
     org-plus-contrib ; latest stable version of org-mode, includes org-eww
     org-tree-slide
