@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-13 19:36:32 kmodi>
+;; Time-stamp: <2016-05-14 03:25:37 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -311,51 +311,45 @@ function is ever added to that hook."
       (add-hook 'before-save-hook #'modi/org-table-recalculate-buffer-tables nil :local))
     (add-hook 'org-mode-hook #'modi/org-table-recalculate-before-save)
 
-    (defun org-table-mark-field (n)
-      "Mark the current table field.
+    (defun org-table-mark-field ()
+      "Mark the current table field."
+      (interactive)
+      ;; Do not try to jump to the beginning of field if the point is already there
+      (when (not (looking-back "|\\s-?"))
+        (org-table-beginning-of-field 1))
+      (set-mark-command nil)
+      (org-table-end-of-field 1))
 
-If N is negative, select (- N) fields to the left of the current field,
-including the current field.
-If N >= 2, select (1- N) fields to the right of the current field,
-including the current field.
-If N is 0 or 1 (default), only the current field is selected."
-      (interactive "p")
-      (let ((bol-point (save-excursion
-                         (beginning-of-line)
-                         (point)))
-            (bof-arg 1)
-            (eof-arg 1)
-            (p (point))
-            bof-p eof-p)
-
-        ;; Check if the point is already at the beginning of the current field.
-        (when (looking-back "|\\s-?" bol-point)
-          (setq bof-p t))
-        ;; Check if the point is already at the end of the current field.
-        (when (looking-at "\\s-?|")
-          (setq eof-p t))
-
-        ;; When selecting current field plus fields to the right
-        (when (>= n 2)
-          (setq eof-arg n))
-        ;; When selecting current field plus fields to the left
-        (when (<= n -1)
-          (setq bof-arg (- n)))
-
-        (org-table-beginning-of-field bof-arg)
-        (when bof-p
-          (org-table-next-field))
-        (set-mark-command nil)
-        (goto-char p)
-        (when eof-p
-          (org-table-beginning-of-field 1))
-        (org-table-end-of-field eof-arg)
-        (exchange-point-and-mark)))
+    (defhydra hydra-org-table-mark-field
+      (:body-pre (org-table-mark-field)
+       :color red
+       :hint nil)
+      "
+   ^^      ^🠙^     ^^
+   ^^      _p_     ^^
+🠘 _b_  selection  _f_ 🠚          | org table mark ▯field▮ |
+   ^^      _n_     ^^
+   ^^      ^🠛^     ^^
+"
+      ("x" exchange-point-and-mark "exchange point/mark")
+      ("f" (lambda (arg)
+             (interactive "p")
+             (when (eq 1 arg)
+               (setq arg 2))
+             (org-table-end-of-field arg)))
+      ("b" (lambda (arg)
+             (interactive "p")
+             (when (eq 1 arg)
+               (setq arg 2))
+             (org-table-beginning-of-field arg)))
+      ("n" next-line)
+      ("p" previous-line)
+      ("q" nil "cancel" :color blue))
 
     (bind-keys
      :map org-mode-map
      :filter (org-at-table-p)
-      ("S-SPC" . org-table-mark-field))
+      ("S-SPC" . hydra-org-table-mark-field/body))
 
 ;;; Org Entities
     ;; http://www.mail-archive.com/emacs-orgmode@gnu.org/msg100527.html
