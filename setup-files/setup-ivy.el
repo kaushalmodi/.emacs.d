@@ -1,8 +1,11 @@
-;; Time-stamp: <2016-04-26 09:54:26 kmodi>
+;; Time-stamp: <2016-05-16 11:06:53 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
 (use-package ivy
+  :bind (:map modi-mode-map
+         ("M-u" . ivy-resume)) ; Override the default binding for `upcase-word'
+  :bind (("M-o" . ivy-recentf))
   :config
   (progn
     ;; Disable ido
@@ -22,56 +25,61 @@
     ;; Do not show "./" and "../" in the `counsel-find-file' completion list
     (setq ivy-extra-directories nil) ; default value: ("../" "./")
 
-    (use-package ivy-hydra
-      :config
-      (progn
-        (defhydra hydra-ivy (:hint nil
-                             :color pink)
-          "
+    ;; https://github.com/abo-abo/swiper/blob/master/ivy-hydra.el
+    (defun ivy--matcher-desc () ; used in `hydra-ivy'
+      (if (eq ivy--regex-function
+              'ivy--regex-fuzzy)
+          "fuzzy"
+        "ivy"))
+    (defhydra hydra-ivy (:hint nil
+                         :color pink)
+      "
 ^^_,_        _f_ollow      occ_u_r      _g_o          ^^_c_alling %-7s(if ivy-calling \"on\" \"off\")      _w_/_s_/_a_: %-14s(ivy-action-name)
 _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matcher-desc)^^^^^^^^^^^^      _C_ase-fold: %-10`ivy-case-fold-search
 ^^_._        _D_o it!      ^^           _q_uit        _<_/_>_ shrink/grow^^^^^^^^^^^^^^^^^^^^^^^^^^^^      _t_runcate: %-11`truncate-lines
 "
-          ;; arrows
-          (","   ivy-beginning-of-buffer) ; default h
-          ("p"   ivy-previous-line) ; default j
-          ("n"   ivy-next-line) ; default k
-          ("."   ivy-end-of-buffer) ; default l
-          ;; actions
-          ("f"   ivy-alt-done         :exit nil)
-          ("C-m" ivy-alt-done         :exit nil) ; RET, default C-j
-          ("C-j" ivy-done             :exit t) ; default C-m
-          ("d"   ivy-done             :exit t)
-          ("g"   ivy-call)
-          ("D"   ivy-immediate-done   :exit t)
-          ("c"   ivy-toggle-calling)
-          ("m"   ivy-toggle-fuzzy)
-          (">"   ivy-minibuffer-grow)
-          ("<"   ivy-minibuffer-shrink)
-          ("w"   ivy-prev-action)
-          ("s"   ivy-next-action)
-          ("a"   ivy-read-action)
-          ("t"   (setq truncate-lines (not truncate-lines)))
-          ("C"   ivy-toggle-case-fold)
-          ("u"   ivy-occur :exit t)
-          ;; quit hydra
-          ("i"   nil)
-          ("C-o" nil)
-          ;; quit ivy
-          ("q"   keyboard-escape-quit :exit t); default o
-          ("C-g" keyboard-escape-quit :exit t))))
+      ;; arrows
+      ("," ivy-beginning-of-buffer) ; default h
+      ("p" ivy-previous-line) ; default j
+      ("n" ivy-next-line) ; default k
+      ("." ivy-end-of-buffer) ; default l
+      ;; quit ivy
+      ("q" keyboard-escape-quit :exit t) ; default o
+      ("C-g" keyboard-escape-quit :exit t)
+      ;; quit hydra
+      ("i" nil)
+      ("C-o" nil)
+      ;; actions
+      ("f" ivy-alt-done :exit nil)
+      ;; Exchange the default bindings for C-j and C-m
+      ("C-m" ivy-alt-done :exit nil) ; RET, default C-j
+      ("C-j" ivy-done :exit t) ; default C-m
+      ("d" ivy-done :exit t)
+      ("g" ivy-call)
+      ("D" ivy-immediate-done :exit t)
+      ("c" ivy-toggle-calling)
+      ("m" ivy-toggle-fuzzy)
+      (">" ivy-minibuffer-grow)
+      ("<" ivy-minibuffer-shrink)
+      ("w" ivy-prev-action)
+      ("s" ivy-next-action)
+      ("a" ivy-read-action)
+      ("t" (setq truncate-lines (not truncate-lines)))
+      ("C" ivy-toggle-case-fold)
+      ("u" ivy-occur :exit t))
 
-    ;; Exchange the default bindings for C-j and C-m
     (bind-keys
      :map ivy-minibuffer-map
-      ("C-m"   . ivy-alt-done) ; RET
-      ("C-j"   . ivy-done)
+      ;; Exchange the default bindings for C-j and C-m
+      ("C-m" . ivy-alt-done) ; RET, default C-j
+      ("C-j" . ivy-done) ; default C-m
       ("C-S-m" . ivy-immediate-done)
-      ("C-t"   . ivy-toggle-fuzzy)
-      ("C-o"   . hydra-ivy/body))
+      ("C-t" . ivy-toggle-fuzzy)
+      ("C-o" . hydra-ivy/body))
     (key-chord-define ivy-minibuffer-map "m," #'ivy-beginning-of-buffer)
     (key-chord-define ivy-minibuffer-map ",." #'ivy-end-of-buffer)
 
+    ;; Bind C-k to kill a buffer directly from the list shown on doing M-x ivy-switch-buffer.
     ;; https://github.com/abo-abo/swiper/issues/164
     (defun modi/ivy-kill-buffer ()
       (interactive)
@@ -79,11 +87,7 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
       (ivy-done))
     (bind-keys
      :map ivy-switch-buffer-map
-      ("C-k" . modi/ivy-kill-buffer))
-
-    ;; Override the default binding for `upcase-word'
-    (bind-key "M-u" #'ivy-resume modi-mode-map)
-    (bind-key "M-o" #'ivy-recentf)))
+      ("C-k" . modi/ivy-kill-buffer))))
 
 
 (provide 'setup-ivy)
@@ -96,23 +100,36 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
 ;; This is useful especially when renaming files (and the name you want to
 ;; rename to partially matches one of the existing files).
 ;;
-;; |----------------------------+-----------------------------------------------------|
-;; | Command                    | Function                                            |
-;; |----------------------------+-----------------------------------------------------|
-;; | ivy-done                   | Exit the minibuffer with the selected candidate.    |
-;; |                            | Try to leave `ivy' as soon as possible.             |
-;; | ivy-alt-done               | Exit the minibuffer with the selected candidate.    |
-;; |                            | When ARG is t, acts like `ivy-immediate-done'.      |
-;; |                            | Try NOT to leave `ivy' at the soonest. For          |
-;; |                            | instance, if a directory name completion is         |
-;; |                            | possible, do that and list that directory's         |
-;; |                            | content in `ivy' instead of opening that dir        |
-;; |                            | in `dired'.                                         |
-;; | ivy-immediate-done         | Exit the minibuffer with the current text,          |
-;; |                            | ignoring the candidates.                            |
-;; | ivy-call                   | Call the current action without exiting completion. |
-;; | ivy-next-line-and-call     | Move cursor vertically down ARG candidates.         |
-;; |                            | Call the permanent action if possible.              |
-;; | ivy-previous-line-and-call | Move cursor vertically up ARG candidates.           |
-;; |                            | Call the permanent action if possible.              |
-;; |----------------------------+-----------------------------------------------------|
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | Command                    | ivy map        | Function                                             |
+;; |                            | Bindings       |                                                      |
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | ivy-done                   | C-j            | Exit the minibuffer with the selected candidate.     |
+;; |                            | (default: C-m) | Try to leave `ivy' as soon as possible.              |
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | ivy-alt-done               | C-m or RET     | Exit the minibuffer with the selected candidate.     |
+;; |                            | (default: C-j) | When ARG is t, acts like `ivy-immediate-done'.       |
+;; |                            |                | Try NOT to leave `ivy' at the soonest. For           |
+;; |                            |                | instance, if a directory name completion is          |
+;; |                            |                | possible, do that and list that directory's          |
+;; |                            |                | content in `ivy' instead of opening that dir         |
+;; |                            |                | in `dired'.                                          |
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | ivy-immediate-done         | C-S-m          | Exit the minibuffer with the current text,           |
+;; |                            |                | ignoring the candidates.                             |
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | ivy-partial-or-done        | TAB            | Attempts partial completion, extending current line  |
+;; |                            |                | input as much as possible. "TAB TAB" is the same as  |
+;; |                            |                | `ivy-alt-done'.                                      |
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | ivy-call                   | C-M-m          | Call the current action without exiting completion.  |
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | ivy-next-line-and-call     | C-M-n          | Move cursor vertically down ARG candidates.          |
+;; |                            |                | Call the permanent action if possible.               |
+;; | ivy-previous-line-and-call | C-M-p          | Move cursor vertically up ARG candidates.            |
+;; |                            |                | Call the permanent action if possible.               |
+;; |----------------------------+----------------+------------------------------------------------------|
+;; | ivy-dispatching-done       | M-o            | Presents valid actions from which to choose. When    |
+;; |                            |                | only one action is available, there is no difference |
+;; |                            |                | between this and `ivy-done'.                         |
+;; |----------------------------+----------------+------------------------------------------------------|
