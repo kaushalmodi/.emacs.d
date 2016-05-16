@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-13 16:41:49 kmodi>
+;; Time-stamp: <2016-05-16 16:44:48 kmodi>
 
 ;; Line number package manager
 
@@ -166,7 +166,9 @@ added to the `after-make-frame-functions' hook."
     (modi/set-linum modi/linum-fn-default)))
 
 ;; Set/unset linum
-(add-hook 'after-make-frame-functions #'modi/toggle-linum)
+(if (daemonp) ; only for emacsclient launches
+    (add-hook 'after-make-frame-functions #'modi/toggle-linum)
+  (add-hook 'window-setup-hook #'modi/toggle-linum))
 
 
 (provide 'setup-linum)

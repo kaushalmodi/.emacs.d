@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-14 03:13:26 kmodi>
+;; Time-stamp: <2016-05-16 16:57:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -255,7 +255,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-sx)
-(require 'setup-symbola)
 (require 'setup-term)
 (require 'setup-tiny)
 (require 'setup-undo-tree)
@@ -321,6 +320,16 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 ;; - Also (n)linum and other packages would already be loaded which the files
 ;;   being loaded in the saved desktop might need.
 (use-package setup-desktop :defer 1)
+
+(defun modi/symbola-font-check (&optional frame)
+  ;; The below `select-frame' form is required for the `find-font'
+  ;; to work correctly when using emacs daemon (emacsclient).
+  (when frame
+    (select-frame frame))
+  (require 'setup-symbola))
+(if (daemonp) ; only for emacsclient launches
+    (add-hook 'after-make-frame-functions #'modi/symbola-font-check)
+  (add-hook 'window-setup-hook #'modi/symbola-font-check))
 
 (when (and (bound-and-true-p emacs-initialized)
            (featurep 'setup-visual))
