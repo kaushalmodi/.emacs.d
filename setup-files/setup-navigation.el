@@ -1,10 +1,14 @@
-;; Time-stamp: <2016-04-27 18:48:32 kmodi>
+;; Time-stamp: <2016-05-17 11:35:46 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
 
 ;; Bind the new bindings for `goto-line' in global map
-(bind-key "<f1>" #'goto-line)
+(when (display-graphic-p)
+  ;; Bind `goto-line' to <f1> only when running GUI, because `C-h' help binding
+  ;; in not available for emacs in no-window mode. And so will need to use <f1>
+  ;; for help functions.
+  (bind-key "<f1>" #'goto-line))
 (bind-chord "1q" #'goto-line) ; alternative to F1
 
 ;; iy-go-to-char
@@ -297,10 +301,6 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
     ("C-S-v"  . scroll-down)
     ("M-]"    . forward-paragraph)
     ("M-["    . backward-paragraph)))
-
-(when (not (featurep 'avy))
-  (bind-key "<f1>" #'goto-line)
-  (key-chord-define-global "1q" #'goto-line)) ; alternative to F1
 
 (key-chord-define-global "m," #'beginning-of-buffer)
 (key-chord-define-global ",." #'end-of-buffer)
