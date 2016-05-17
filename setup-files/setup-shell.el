@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-22 11:25:30 kmodi>
+;; Time-stamp: <2016-05-17 18:11:29 kmodi>
 
 ;; Shell Script Mode
 
@@ -123,6 +123,28 @@ whose value is the shell name (don't quote it)."
         (font-lock-flush))
       (setq sh-shell-process nil)
       (run-hooks 'sh-set-shell-hook))))
+
+(defun modi/shell-region (start end)
+  "Execute region in a shell corresponding to the local value of `sh-shell-file'.
+
+After the execution, the output buffer is displayed, the point is moved to it,
+and the output buffer mode is set to the read-only `special-mode'."
+  (interactive "r")
+  (let ((shell-file-name sh-shell-file)
+        (output-buf "*Shell Region Output*"))
+    (message "Executing the region in `%s' shell .."
+             (file-name-nondirectory shell-file-name))
+    (shell-command (buffer-substring-no-properties start end) output-buf)
+    (pop-to-buffer output-buf)
+    ;; Set the major mode to `special-mode' so that you can quit window with q.
+    (special-mode)))
+;; Bind C-x C-e to `modi/shell-region' ONLY if the current major mode is
+;; `sh-mode' and if a region is selected.
+(bind-keys
+ :map modi-mode-map
+ :filter (and (derived-mode-p 'sh-mode)
+              (use-region-p))
+  ("C-x C-e" . modi/shell-region))
 
 
 (provide 'setup-shell)
