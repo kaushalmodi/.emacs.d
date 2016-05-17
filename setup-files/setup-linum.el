@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-16 16:44:48 kmodi>
+;; Time-stamp: <2016-05-17 11:44:37 kmodi>
 
 ;; Line number package manager
 
@@ -159,16 +159,23 @@ package set by the user in `modi/linum-fn-default'.
 The optional FRAME argument is added as it is needed when this function is
 added to the `after-make-frame-functions' hook."
   (interactive)
-  (when frame
-    (select-frame frame))
   (if modi/linum--state
       (modi/set-linum nil)
     (modi/set-linum modi/linum-fn-default)))
 
 ;; Set/unset linum
-(if (daemonp) ; only for emacsclient launches
+(if (daemonp)
+    ;; Need to delay linum activation till the frame and fonts are loaded, only
+    ;; for emacsclient launches. For non-daemon, regular emacs launches, the
+    ;; frame is loaded *before* the emacs config is read. Not doing so results
+    ;; in the below error in emacs 24.5:
+    ;;   *ERROR*: Invalid face: linum
     (add-hook 'after-make-frame-functions #'modi/toggle-linum)
-  (add-hook 'window-setup-hook #'modi/toggle-linum))
+  ;; Even when running in non-daemon mode, run `modi/toggle-linum' only after the
+  ;; init has loaded, so that the last modified value of `modi/linum-fn-default'
+  ;; if any in setup-personal.el is the one effective, not its standard value
+  ;; in its defvar form above.
+  (add-hook 'after-init-hook #'modi/toggle-linum))
 
 
 (provide 'setup-linum)

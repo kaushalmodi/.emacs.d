@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-16 16:41:56 kmodi>
+;; Time-stamp: <2016-05-17 13:23:45 kmodi>
 
 ;; Info
 
@@ -6,19 +6,10 @@
   :defer t
   :config
   (progn
-    (>=e "25.0"
-        (progn
-          (defun modi/find-font-Info-quoted (&optional frame)
-            "Set font to DejaVu Sans Mono for Info-quoted face, if available."
-            ;; The below `select-frame' form is required for the `find-font'
-            ;; to work correctly when using emacs daemon (emacsclient).
-            (when frame
-              (select-frame frame))
-            (when (find-font (font-spec :name "DejaVu Sans Mono"))
-              (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono")))
-          (if (daemonp) ; only for emacsclient launches
-              (add-hook 'after-make-frame-functions #'modi/find-font-Info-quoted)
-            (add-hook 'window-setup-hook #'modi/find-font-Info-quoted))))
+    (>=e "25.0" ; `Info-quoted' was a new face introduced then
+        (with-eval-after-load 'setup-font-check
+          (when font-dejavu-sans-mono-p
+            (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))))
 
     (use-package info+
       :config

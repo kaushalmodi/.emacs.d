@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-03 15:26:17 kmodi>
+;; Time-stamp: <2016-05-17 13:20:58 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -38,7 +38,7 @@
             ("\\`hydra-" . "+h/")
             ("\\`org-babel-" . "ob/")))
     ;; Use cool unicode characters if available
-    (with-eval-after-load 'setup-symbola
+    (with-eval-after-load 'setup-font-check
       (when font-symbola-p
         (add-to-list 'which-key-description-replacement-alist '("\\`calc-" . "🖩"))))
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-25 21:44:45 kmodi>
+;; Time-stamp: <2016-05-17 13:21:05 kmodi>
 
 ;; Customize the mode-line
 
@@ -229,7 +229,7 @@ TIME is \"nil\" or \"\"."
         (add-to-list 'rm-text-properties '("\\` Wg\\'"     'display "​w")) ; writegood
         (add-to-list 'rm-text-properties '("\\` =>\\'"     'display "​a")) ; aggressive indent
         (add-to-list 'rm-text-properties '("\\` Vis\\'"    'display "​V")) ; visible-mode
-        (with-eval-after-load 'setup-symbola
+        (with-eval-after-load 'setup-font-check
           (if font-symbola-p
               (progn
                 (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​🢛")) ; auto revert tail

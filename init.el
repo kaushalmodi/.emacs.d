@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-16 16:57:01 kmodi>
+;; Time-stamp: <2016-05-17 13:33:22 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -318,18 +318,23 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 ;; Delay desktop setup by a second.
 ;; - This speeds up emacs init, and
 ;; - Also (n)linum and other packages would already be loaded which the files
-;;   being loaded in the saved desktop might need.
+;;   being loaded from the saved desktop might need.
 (use-package setup-desktop :defer 1)
 
-(defun modi/symbola-font-check (&optional frame)
-  ;; The below `select-frame' form is required for the `find-font'
-  ;; to work correctly when using emacs daemon (emacsclient).
-  (when frame
-    (select-frame frame))
-  (require 'setup-symbola))
-(if (daemonp) ; only for emacsclient launches
-    (add-hook 'after-make-frame-functions #'modi/symbola-font-check)
-  (add-hook 'window-setup-hook #'modi/symbola-font-check))
+(defun modi/font-check (&optional frame)
+  "Do font-check; require `setup-font-check' just once."
+  (unless (featurep 'setup-font-check)
+    (require 'setup-font-check)))
+;; For non-daemon, regular emacs launches, the frame/fonts are loaded *before*
+;; the emacs config is read. But when emacs is launched as a daemon (using
+;; emacsclient, the fonts are not actually loaded until the point when the
+;; `after-make-frame-functions' hook is run. But even at that point, the frame
+;; is not yet selected (for the daemon case). Without a selected frame, the
+;; `find-font' will not work correctly. So we do the font check in
+;; `focus-in-hook' instead by which all the below are true:
+;;  - Fonts are loaded (in both daemon and non-daemon cases).
+;;  - The frame is selected and so `find-font' calls work correctly.
+(add-hook 'focus-in-hook #'modi/font-check)
 
 (when (and (bound-and-true-p emacs-initialized)
            (featurep 'setup-visual))
