@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-04 17:29:12 kmodi>
+;; Time-stamp: <2016-05-18 11:26:42 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -8,10 +8,10 @@
   (progn
     (setq mc/list-file (locate-user-emacs-file "mc-lists")))
   :bind (:map modi-mode-map
-         ("C-S-c C-S-c"   . mc/edit-lines)
-         ("C->"           . mc/mark-next-like-this)
-         ("C-<"           . mc/mark-previous-like-this)
-         ("C-c C-<"       . mc/mark-all-like-this)
+         ("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click))
   :bind (:map region-bindings-mode-map
          ("a" . mc/mark-all-like-this)
@@ -26,7 +26,23 @@
          ("\\" . mc/vertical-align-with-space)
          ("#" . mc/insert-numbers) ; use num prefix to set the starting number
          ("^" . mc/edit-beginnings-of-lines)
-         ("$" . mc/edit-ends-of-lines)))
+         ("$" . mc/edit-ends-of-lines))
+  :config
+  (progn
+    (defvar modi/mc-blink-matching-paren--store nil
+      "Internal variable used to restore the value of `blink-matching-paren'
+after `multiple-cursors-mode' is quit.")
+    (defun modi/mc-when-enabled ()
+      "Function to be added to `multiple-cursors-mode-enabled-hook'."
+      ;; Disable the annoying sluggish matching paren blinks for all cursors
+      ;; when you happen to type a ")" at all cursor locations.
+      (setq modi/mc-blink-matching-paren--store blink-matching-paren)
+      (setq blink-matching-paren nil))
+    (defun modi/mc-when-disabled ()
+      "Function to be added to `multiple-cursors-mode-disabled-hook'."
+      (setq blink-matching-paren modi/mc-blink-matching-paren--store))
+    (add-hook 'multiple-cursors-mode-enabled-hook #'modi/mc-when-enabled)
+    (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
 
 
 (provide 'setup-multiple-cursors)
