@@ -1,14 +1,14 @@
-;; Time-stamp: <2016-05-17 11:35:46 kmodi>
+;; Time-stamp: <2016-05-18 19:22:07 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
 
 ;; Bind the new bindings for `goto-line' in global map
-(when (display-graphic-p)
-  ;; Bind `goto-line' to <f1> only when running GUI, because `C-h' help binding
-  ;; in not available for emacs in no-window mode. And so will need to use <f1>
-  ;; for help functions.
-  (bind-key "<f1>" #'goto-line))
+(if-display-graphic-p modi/goto-line-f1
+    ;; Bind `goto-line' to <f1> only when running GUI, because `C-h' help binding
+    ;; in not available for emacs in no-window mode. And so will need to use <f1>
+    ;; for help functions.
+    (bind-key "<f1>" #'goto-line))
 (bind-chord "1q" #'goto-line) ; alternative to F1
 
 ;; iy-go-to-char
@@ -285,22 +285,23 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
   ("C-}"    . forward-paragraph)
   ("C-{"    . backward-paragraph))
 
-(when (display-graphic-p) ; when not in terminal mode
-  (bind-keys
-   ("C-S-a" . move-beginning-of-line))
+(if-display-graphic-p modi/nav-bindings-display-graphic
+    (progn
+      (bind-keys
+       ("C-S-a" . move-beginning-of-line))
 
-  (bind-keys
-   :map modi-mode-map
-    ;; Move faster
-    ("C-S-n"  . next-line-fast)
-    ("C-S-p"  . previous-line-fast)
-    ("C-S-f"  . forward-char-fast)
-    ("C-S-b"  . backward-char-fast)
-    ;; Scroll down; does the same as `M-v'. It makes scrolling up and down quick
-    ;; as the `scroll-up' is bound to `C-v'.
-    ("C-S-v"  . scroll-down)
-    ("M-]"    . forward-paragraph)
-    ("M-["    . backward-paragraph)))
+      (bind-keys
+       :map modi-mode-map
+        ;; Move faster
+        ("C-S-n" . next-line-fast)
+        ("C-S-p" . previous-line-fast)
+        ("C-S-f" . forward-char-fast)
+        ("C-S-b" . backward-char-fast)
+        ;; Scroll down; does the same as `M-v'. It makes scrolling up and down quick
+        ;; as the `scroll-up' is bound to `C-v'.
+        ("C-S-v" . scroll-down)
+        ("M-]" . forward-paragraph)
+        ("M-[" . backward-paragraph))))
 
 (key-chord-define-global "m," #'beginning-of-buffer)
 (key-chord-define-global ",." #'end-of-buffer)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-06 18:56:13 kmodi>
+;; Time-stamp: <2016-05-18 19:19:14 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -985,28 +985,24 @@ Else, execute ORIG function."
 (bind-keys
  :map modi-mode-map
   ;; override the binding of `M-;' for `comment-dwim'
-  ("M-;"        . endless/comment-line-or-region)
-  ("C-x d"      . delete-region)
-  ("C-S-d"      . duplicate-current-line-or-region)
-  ("C-x \\"      . align-regexp)  ; align selected region to the entered regexp
-  ;; align multiple columns in the selected region. Of course all the selected
+  ("M-;" . endless/comment-line-or-region)
+  ("C-x d" . delete-region)
+  ("C-S-d" . duplicate-current-line-or-region)
+  ;; Override the default binding for `down-list'
+  ("C-M-d" . duplicate-current-line-or-region) ; alternative to C-S-d in terminal mode
+  ("C-x \\" . align-regexp) ; align selected region to the entered regexp
+  ;; Align multiple columns in the selected region. Of course all the selected
   ;; lines must have the same number of columns of groups of non-space characters
-  ("C-x |"      . modi/align-columns)
-  ("C-k"        . modi/kill-line)
+  ("C-x |" . modi/align-columns)
+  ("C-k" . modi/kill-line)
   ;; override the binding of `C-o' for `open-line'
-  ("C-o"        . modi/smart-open-line)
-  ("C-j"        . modi/pull-up-line)
-  ("M-="        . count-words) ; count words in buffer if no region selected
+  ("C-o" . modi/smart-open-line)
+  ("C-j" . modi/pull-up-line)
+  ("M-=" . count-words) ; count words in buffer if no region selected
   ;; override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
   ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
   ("<M-delete>" . backward-kill-word))
 (bind-to-modi-map "=" #'modi/align-to-equals)
-
-(when (not (display-graphic-p)) ; terminal mode
-  (bind-keys
-   :map modi-mode-map
-    ;; Override the default binding for `down-list'
-    ("C-M-d" . duplicate-current-line-or-region))) ; alternative to C-S-d in terminal mode
 
 ;;; Comment Commander
 ;; Usage: Quickly pressing `j' twice will toggle comment on the current line or

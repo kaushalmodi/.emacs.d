@@ -1,10 +1,11 @@
-;; Time-stamp: <2016-04-08 13:48:35 kmodi>
+;; Time-stamp: <2016-05-18 19:14:14 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
 ;; Contents:
 ;;
 ;;  Emacs version check
+;;  GUI/Terminal mode
 ;;  Aliases
 ;;  Get symbol at point
 ;;  Quitting emacs
@@ -24,6 +25,35 @@ Usage: (>=e \"25.0\"
   (declare (indent 2)) ; `if'-style indentation where this macro is used
   `(if (version<= ,V emacs-version)
        ,@body))
+
+;;; GUI/Terminal mode
+(defmacro if-display-graphic-p (fn &rest body)
+  "Define a function FN that executes code based on the return value of
+`display-graphic-p'.
+
+Case of emacs with frame (emacs, emacsclient -c):
+  If NOT is nil,     FN is executed when `display-graphic-p' is non-nil.
+Case of emacs without frame (emacs -nw, emacsclient -nw):
+  If NOT is non-nil, FN is executed when `display-graphic-p' is nil.
+
+The true value of `display-graphic-p' can be known only in
+`after-make-frame-functions' hook for the case where emacsclient is used to
+create a new frame. So this macro also adds FN to the required hooks.
+
+Usage example:
+
+  (if-display-graphic-p my-msg
+      (message \"Emacs has a GUI frame.\")
+    (message \"Emacs is running in terminal mode.\")) "
+  (declare (indent 2))
+  `(progn
+     (defun ,fn (&optional frame)
+       (when frame
+         (select-frame frame))
+       (if (display-graphic-p)
+           ,@body))
+     (add-hook 'after-init-hook #',fn) ; for non-"emacsclient -c" cases
+     (add-hook 'after-make-frame-functions #',fn))) ; for "emacsclient -c" cases
 
 ;;; Aliases
 ;; Alias ^ as a function to calculate exponents

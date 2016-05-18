@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-27 19:01:06 kmodi>
+;; Time-stamp: <2016-05-18 19:17:19 kmodi>
 
 ;; Bookmarks
 
@@ -58,15 +58,15 @@
       ;; Make sure bookmarks is saved before check-in (and revert-buffer)
       (add-hook 'vc-before-checkin-hook #'bm-buffer-save))
 
-    (when (display-graphic-p) ; no fringe in terminal mode
-      (define-fringe-bitmap 'bm-marker-left [#xF8    ; ▮ ▮ ▮ ▮ ▮ 0 0 0
-                                             #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
-                                             #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                             #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
-                                             #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
-                                             #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                             #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
-                                             #xF8])) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+    (if-display-graphic-p modi/bm-define-fringe ; Add fringe only if display is graphic (GUI)
+        (define-fringe-bitmap 'bm-marker-left [#xF8    ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+                                               #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                               #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                               #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                               #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                               #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                               #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                               #xF8])) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
 
     (setq bm-highlight-style 'bm-highlight-only-fringe)
     (setq bm-cycle-all-buffers t) ; search all open buffers for bookmarks
@@ -108,7 +108,8 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
   (progn
     ;; Prevent "`fringe-bitmaps' variable not found" errors in emacs built
     ;; without fringe support.
-    (when (not (display-graphic-p))
+    (if-display-graphic-p modi/bmp-no-fringe-bitmaps
+        nil
       (setq fringe-bitmaps nil)))
   :commands (bookmark-set bookmark-jump bookmark-bmenu-list))
 

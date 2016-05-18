@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-12 17:15:12 kmodi>
+;; Time-stamp: <2016-05-18 19:20:03 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -361,10 +361,9 @@ If LN is nil, defaults to 1 line."
  ("<C-M-right>" . modi/scroll-other-window-up))
 
 ;;;; Mouse Scrolling
-(when (not (display-graphic-p)) ; terminal
-  (bind-keys
-   ("<mouse-4>" . modi/scroll-down)
-   ("<mouse-5>" . modi/scroll-up)))
+(bind-keys
+ ("<mouse-4>" . modi/scroll-down)
+ ("<mouse-5>" . modi/scroll-up))
 
 (bind-keys
  :map modi-mode-map
