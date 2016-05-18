@@ -1,11 +1,11 @@
-;; Time-stamp: <2016-03-02 12:04:39 kmodi>
+;; Time-stamp: <2016-05-18 17:06:31 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
 (use-package eww
   :bind (:map modi-mode-map
          ("M-s M-w" . eww-search-words)
-         ("M-s M-l" . modi/eww-copy-link-first-search-result))
+         ("M-s M-l" . modi/eww-get-link))
   :chords (("-=" . eww))
   :commands (eww-open-file
              eww
@@ -48,39 +48,50 @@ See the `eww-search-prefix' variable for the search engine used."
           (eww (buffer-substring beg end))
         (eww (modi/get-symbol-at-point))))
 
-    (defun modi/eww-go-to-first-search-result (search-term)
-      "Navigate to the first search result in the *eww* buffer.
-
-This function is not for interactive use."
-      (while (string-match "eww" (buffer-name))
+    (defun modi/eww--go-to-first-search-result (search-term)
+      "Navigate to the first search result in the *eww* buffer."
+      ;; Keep on burying the current buffer if it turns out to be an eww buffer.
+      (while (string-match "^\\*?eww" (buffer-name))
         (bury-buffer))
+      ;; Start a new eww search
       (eww search-term)
-      ;; The while loop will keep on repeating every 0.1 seconds till the
-      ;; result of `(re-search-forward " +1 +" nil :noerror)' is non-nil
-      (catch 'break
-        (while t
-          (goto-char (point-min)) ; go to the top of the buffer
-          (re-search-forward "[0-9]+\\s-+results" nil :noerror) ; go to the start of results
-          (when (re-search-forward "\\s-+1\\s-+" nil :noerror) ; go to the first result
-            (throw 'break nil))
-          (sleep-for 0.1))) ; 0.1 second wait
-      (forward-char 5)) ; locate the point safely on the first result link
+      (let* ((max-wait 5) ; seconds
+             (search-repeat-interval 0.1) ; seconds
+             (max-trials (floor max-wait search-repeat-interval))
+             (start-time (current-time))
+             (n 1))
+        ;; The while loop will keep on repeating every `search-repeat-interval'
+        ;; seconds till the return value of `eww-links-at-point' is non-nil.
+        (catch 'break
+          (while (<= n max-trials)
+            (goto-char (point-min)) ; go to the top of the buffer
+            (re-search-forward "[0-9]+\\s-+results\\s-*$" nil :noerror) ; go to the start of results
+            (shr-next-link) ; go to the first search result
+            (when (eww-links-at-point)
+              (throw 'break nil))
+            ;; Wait for a while before trying link check again
+            (sleep-for search-repeat-interval)
+            ;; (message "eww search result trial # %d" n)
+            (setq n (1+ n))))
+        (message "Search for `%s' finished in %0.2f seconds."
+                 search-term (float-time (time-since start-time)))))
 
-    (defun modi/eww-copy-link-first-search-result (search-term)
+    (defun modi/eww-get-link (search-term)
       "Copy the link to the first search result."
       (interactive "sSearch term: ")
       (let ((eww-buffer-name))
-        (modi/eww-go-to-first-search-result search-term)
+        (modi/eww--go-to-first-search-result search-term)
         (setq eww-buffer-name (rename-buffer "*eww-temp*" t))
-        ;; Copy the actual link instead of redirection link by calling
+        ;; Copy the actual link instead of the redirection link by calling
         ;; `shr-copy-url' twice
-        (dotimes (i 2) (shr-copy-url))
-        (kill-buffer eww-buffer-name))) ; kill the eww buffer
+        (dotimes (i 2)
+          (shr-copy-url))
+        (kill-buffer eww-buffer-name)))
 
     (defun modi/eww-im-feeling-lucky (search-term)
       "Navigate to the first search result directly."
       (interactive "sSearch term (I'm Feeling Lucky!): ")
-      (modi/eww-go-to-first-search-result search-term)
+      (modi/eww--go-to-first-search-result search-term)
       (eww-follow-link))
 
     (defun modi/eww-copy-url-dwim(&optional option)
