@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-17 13:33:22 kmodi>
+;; Time-stamp: <2016-05-18 09:53:05 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -321,10 +321,10 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 ;;   being loaded from the saved desktop might need.
 (use-package setup-desktop :defer 1)
 
-(defun modi/font-check (&optional frame)
-  "Do font-check; require `setup-font-check' just once."
-  (unless (featurep 'setup-font-check)
-    (require 'setup-font-check)))
+(defun modi/font-check ()
+  "Do font check, then remove self from `focus-in-hook'; need to run this just once."
+  (require 'setup-font-check)
+  (remove-hook 'focus-in-hook #'modi/font-check))
 ;; For non-daemon, regular emacs launches, the frame/fonts are loaded *before*
 ;; the emacs config is read. But when emacs is launched as a daemon (using
 ;; emacsclient, the fonts are not actually loaded until the point when the
