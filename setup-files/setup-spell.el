@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-11-11 09:46:29 kmodi>
+;; Time-stamp: <2016-05-18 17:17:08 kmodi>
 ;;
 ;; Spell check
 ;; ispell, flyspell
@@ -51,9 +51,10 @@
     (use-package flyspell
       :init
       (progn
+        ;; Below variables need to be set before `flyspell' is loaded.
         (setq flyspell-use-meta-tab nil)
-        ;; Binding for `flyspell-auto-correct-previous-word'
-        (setq flyspell-auto-correct-binding (kbd "<f12>")))
+        ;; Binding for `flyspell-auto-correct-previous-word'.
+        (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
       :config
       (progn
         (add-hook 'prog-mode-hook #'flyspell-prog-mode)
@@ -71,6 +72,15 @@
           (not (executable-find ispell-program-name)))
         (advice-add 'turn-on-flyspell   :before-until #'modi/ispell-not-avail-p)
         (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)
+
+        ;; https://github.com/d12frosted/flyspell-correct
+        (use-package flyspell-correct
+          :bind (:map modi-mode-map
+                 ("<f12>" . flyspell-correct-word-generic))
+          :config
+          (progn
+            (with-eval-after-load 'ivy
+              (setq flyspell-correct-interface 'flyspell-correct-ivy))))
 
         (bind-keys
          :map flyspell-mode-map

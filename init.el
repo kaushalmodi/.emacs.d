@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 09:53:05 kmodi>
+;; Time-stamp: <2016-05-18 17:16:38 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -58,6 +58,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     expand-region
     eww-lnum ; jump to links in eww buffer ace-jump style
     fill-column-indicator
+    flyspell-correct ; ivy interface for correct spelling suggestions
     fold-this
     gist
     git-timemachine ; walk through git revisions
