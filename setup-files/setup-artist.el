@@ -1,13 +1,19 @@
-;; Time-stamp: <2015-07-08 13:52:16 kmodi>
+;; Time-stamp: <2016-05-19 18:26:10 kmodi>
 
 ;; Artist Mode
 (use-package artist
-  :commands (artist-mode)
+  :defer t
   :config
   (progn
+    (defun modi/artist-mode-hook-fn ()
+      (if artist-mode
+          (message "Artist mode is now enabled. Hit `C-c C-a' prefix to start drawing!")
+        (message "Artist mode is disabled.")))
+    (add-hook 'artist-mode-hook #'modi/artist-mode-hook-fn)
+
+    ;; http://www.gnuvola.org/software/aa2u/
     (use-package ascii-art-to-unicode
-      :commands (aa2u aa2u-rectangle
-                      aa2u-mark-as-text aa2u-mark-rectangle-as-text)
+      :defer t
       :config
       (progn
         (setq aa2u-uniform-weight 'LIGHT))))) ; values: 'LIGHT, 'HEAVY
