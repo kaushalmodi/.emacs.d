@@ -13,12 +13,13 @@
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
 (use-package iy-go-to-char
+  :defer t
   ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
   ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-  :chords (("]'"  . iy-go-to-char)
+  :chords (("]'" . iy-go-to-char)
+           ("[;" . iy-go-to-char-backward)
            ("}\"" . iy-go-to-or-up-to-continue)
-           ("[;"  . iy-go-to-char-backward)
-           ("{:"  . iy-go-to-or-up-to-continue-backward))
+           ("{:" . iy-go-to-or-up-to-continue-backward))
   :config
   (progn
     (setq iy-go-to-char-continue-when-repeating t)

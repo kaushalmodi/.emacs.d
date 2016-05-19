@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-06 18:50:03 kmodi>
+;; Time-stamp: <2016-05-19 10:36:39 kmodi>
 
 ;;;; Fold setup
 
@@ -53,6 +53,9 @@
 
 ;;; Hide-show
 (use-package hideshow
+  :commands (modi/hideshow-mode
+             hydra-toggle/modi/hideshow-mode-and-exit
+             hs-minor-mode)             
   :config
   (progn
 
