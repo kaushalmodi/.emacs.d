@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-17 13:20:58 kmodi>
+;; Time-stamp: <2016-05-19 18:19:48 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -33,6 +33,9 @@
             ("which-key-show-next-page" . "wk next pg")
             ("\\`calc-" . "") ; Hide "calc-" prefixes when listing M-x calc keys
             ("/body\\'" . "") ; Remove display the "/body" portion of hydra fn names
+            ("\\`artist-select-op-" . "") ; Make artist-mode function names less verbose
+            ("\\`artist-select-" . "sel-")
+            ("\\`artist-toggle-" . "toggle-")
             ("modi/" . "m/") ; The car is intentionally not "\\`modi/" to cover
                                         ; cases like `hydra-toggle/modi/..'.
             ("\\`hydra-" . "+h/")
