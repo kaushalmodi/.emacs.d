@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 19:22:07 kmodi>
+;; Time-stamp: <2016-05-19 11:28:05 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -127,40 +127,53 @@ If point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (ignore-errors (backward-word 5)))
 
-;; Patched version to fix this issue:
+;; I like to use the `find-file-at-point' feature if my cursor is on the
+;; file name in a line like below,
+;;
+;;   `include "some_file.v".
+;;
 ;; In Verilog/C/C++, comments can begin with //.
-;; Here's an example comment,
-;; //This is a comment
-;; I like to use the find-file-at-point feature. If my cursor is on the
-;; file name in `include "some_file.v".  But if my cursor is on the above
-;; example comment and if I hit C-x C-f, emacs tries to open a tentative
-;; path //This!
-;; How do I selectively prevent find-file-at-point from activating? In
-;; this case, when the major mode is verilog-mode, how do I NOT do
-;; find-file-at-point when my cursor is on a line where the first 2
-;; non-space characters are //?
-;; http://emacs.stackexchange.com/q/107/115
+;;
+;;   //This is an example comment
+;;
+;; Pre-requisites for this bug to show up in emacs -Q:
+;;
+;;  (ido-mode 1)
+;;  (setq ido-use-filename-at-point 'guess)
+;;
+;; Now if my cursor is on the above example comment and if I hit C-x C-f, emacs
+;; tries to open a tentative path "//This"!
+;; Below patch from http://emacs.stackexchange.com/q/107/115 fixes that.
 (use-package ffap
-  :commands (find-file-at-point ffap-guess-file-name-at-point)
+  :defer t
   :config
   (progn
     (defun ffap-string-at-point (&optional mode)
+      "Return a string of characters from around point.
+
+MODE (defaults to value of `major-mode') is a symbol used to look up string
+syntax parameters in `ffap-string-at-point-mode-alist'.
+
+If MODE is not found, we use `file' instead of MODE.  If the region is active,
+return a string from the region.  Sets the variable `ffap-string-at-point' and
+the variable `ffap-string-at-point-region'."
       (let* ((args
               (cdr
                (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
                    (assq 'file ffap-string-at-point-mode-alist))))
-             next-comment ; patch
+             next-comment ; patch part 1/3
              (pt (point))
              (beg (if (use-region-p)
                       (region-beginning)
                     (save-excursion
                       (skip-chars-backward (car args))
                       (skip-chars-forward (nth 1 args) pt)
-                      (save-excursion ; patch
-                        (setq next-comment ; patch
-                              (progn (comment-search-forward (line-end-position) :noerror) ; patch
-                                     (point)))) ; patch
-                      ;; (message "next-comment = %d" next-comment) ; patch
+                      ;; patch part 2/3
+                      (setq next-comment (save-excursion
+                                           (comment-search-forward
+                                            (line-end-position) :noerror)
+                                           (point)))
+                      ;;
                       (point))))
              (end (if (use-region-p)
                       (region-end)
@@ -168,16 +181,18 @@ If point reaches the beginning or end of the buffer, stop there."
                       (skip-chars-forward (car args))
                       (skip-chars-backward (nth 2 args) pt)
                       (point)))))
-        ;; (message "end = %d beg = %d" end beg) ; patch
-        (when (> end next-comment) ; patch
-          (setq beg next-comment)) ; patch
+        ;; patch part 3/3
+        ;; (message "next-comment = %d end = %d beg = %d" next-comment end beg)
+        (when (> end next-comment)
+          (setq beg next-comment))
+        ;;
         (setq ffap-string-at-point
               (buffer-substring-no-properties
                (setcar ffap-string-at-point-region beg)
                (setcar (cdr ffap-string-at-point-region) end)))))))
 
 ;; Inspired from this emacs.SE question: http://emacs.stackexchange.com/q/4271/115
-(defun modi/forward-word-begin(arg)
+(defun modi/forward-word-begin (arg)
   "Move forward a word and end up with the point being at the beginning of the
 next word.  Move point forward ARG words (backward if ARG is negative).
 If ARG is omitted or nil, move point forward one word."
@@ -208,7 +223,7 @@ If ARG is omitted or nil, move point forward one word."
 ;; Avy Jump
 ;; https://github.com/abo-abo/avy
 (use-package avy
-  :commands (modi/goto-line)
+  :commands (modi/avy modi/goto-line)
   :init
   (progn
     (global-set-key [remap goto-line] #'modi/goto-line))
@@ -267,7 +282,7 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
 
 (bind-keys
  ;; Bind in `global-map' to allow the `term-mode-map' to override the `C-a' binding
- ("C-a"   . modi/beginning-of-line-or-indentation) ; default binding for `move-beginning-of-line'
+ ("C-a" . modi/beginning-of-line-or-indentation) ; default binding for `move-beginning-of-line'
  ;; The `M-}' and `M-{' bindings are useful in Ibuffer and dired to move to
  ;; next and previous marked items respectively. Bind them in global map so
  ;; that those major mode bindings can override the global bindings.
@@ -280,7 +295,7 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
   ("M-F"    . forward-word-fast)
   ("M-b"    . backward-word)
   ("M-B"    . backward-word-fast)
-  ;; !WARN! `C-[` key combination is the same as pressing the meta key Esc|Alt
+  ;; WARNING: `C-[` key combination is the same as pressing the meta key Esc|Alt
   ;; Do NOT reconfigure that key combination.
   ("C-}"    . forward-paragraph)
   ("C-{"    . backward-paragraph))
