@@ -43,7 +43,6 @@ menu _b_ar                  _f_ill^^                          _hs_ hideshow     
 
 (bind-key "s-t" #'hydra-toggle/body)
 (bind-key "C-c t" #'hydra-toggle/body)
-(key-chord-define-global "hj" #'hydra-toggle/body)
 
 
 (provide 'setup-toggles)

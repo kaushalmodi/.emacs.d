@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-25 11:06:39 kmodi>
+;; Time-stamp: <2016-05-19 18:03:04 kmodi>
 
 ;; Launcher
 
@@ -51,7 +51,6 @@
 ;; Bind C-c SPC in global-map so that the org-mode-map binding is not overridden.
 (bind-key "C-c SPC" #'hydra-launch/body)
 (bind-key "C-c l" #'hydra-launch/body modi-mode-map)
-(key-chord-define-global "jk" #'hydra-launch/body)
 
 
 (provide 'setup-launcher)
