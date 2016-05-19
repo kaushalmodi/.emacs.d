@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 19:17:19 kmodi>
+;; Time-stamp: <2016-05-19 10:42:47 kmodi>
 
 ;; Bookmarks
 
@@ -58,15 +58,15 @@
       ;; Make sure bookmarks is saved before check-in (and revert-buffer)
       (add-hook 'vc-before-checkin-hook #'bm-buffer-save))
 
-    (if-display-graphic-p modi/bm-define-fringe ; Add fringe only if display is graphic (GUI)
-        (define-fringe-bitmap 'bm-marker-left [#xF8    ; ▮ ▮ ▮ ▮ ▮ 0 0 0
-                                               #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
-                                               #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                               #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
-                                               #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
-                                               #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                               #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
-                                               #xF8])) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+    (when (display-graphic-p) ; Add fringe only if display is graphic (GUI)
+      (define-fringe-bitmap 'bm-marker-left [#xF8    ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+                                             #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                             #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                             #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                             #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                             #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                             #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                             #xF8])) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
 
     (setq bm-highlight-style 'bm-highlight-only-fringe)
     (setq bm-cycle-all-buffers t) ; search all open buffers for bookmarks
@@ -105,12 +105,11 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
 ;; http://www.emacswiki.org/BookmarkPlus
 (use-package bookmark+
   :preface
-  (progn
-    ;; Prevent "`fringe-bitmaps' variable not found" errors in emacs built
-    ;; without fringe support.
-    (if-display-graphic-p modi/bmp-no-fringe-bitmaps
-        nil
-      (setq fringe-bitmaps nil)))
+  ;; Prevent "`fringe-bitmaps' variable not found" errors in emacs built
+  ;; without fringe support; for example in emacs built without GUI support
+  ;; for Termux app on Android
+  (when (not (boundp 'fringe-bitmaps))
+    (defvar fringe-bitmaps nil)) ; used in bookmark+-lit.el
   :commands (bookmark-set bookmark-jump bookmark-bmenu-list))
 
 ;;; Quickly save and restore point using registers
