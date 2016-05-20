@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-09 10:40:13 kmodi>
+;; Time-stamp: <2016-05-20 17:34:53 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -160,6 +160,14 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
     (apply orig-fun args)))
 (advice-add 'report-emacs-bug :around #'modi/advice-report-emacs-bug-without-build-system)
 
+(use-package calendar
+  :defer t
+  :config
+  (progn
+    ;; Highlight today's date in the calendar
+    (add-hook 'calendar-today-visible-hook 'calendar-mark-today)))
+
+;;;;;;;;;;
 ;; Organize the order of minor mode lighters
 (defvar mode-line-space-mode-lighter " "
   "Lighter for `mode-line-space-mode'." )

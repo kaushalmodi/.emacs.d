@@ -1,15 +1,16 @@
-;; Time-stamp: <2016-05-19 18:03:04 kmodi>
+;; Time-stamp: <2016-05-20 17:29:48 kmodi>
 
 ;; Launcher
 
 (defhydra hydra-launch (:color teal
                         :columns 7)
   "Launcher"
-  ("c"       calc "calc")
+  ("cc"      calc "calc")
   ("qc"      quick-calc "quick calc")
   ("rc"      rpn-calc "RPN calc")
   ("a"       counsel-ag "ag cwd")
   ("b"       bookmark-jump "bookmark jump")
+  ("cl"      calendar "calendar")
   ("d"       dired-single-magic-buffer-current-dir "dired cwd")
   ("ed"      modi/ediff-dwim "ediff dwim")
   ("ee"      eww "eww")

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-12-21 09:00:23 kmodi>
+;; Time-stamp: <2016-05-20 15:27:59 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -14,17 +14,18 @@
 
     (setq shackle-rules
           ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
-          '((compilation-mode              :select nil                                                )
+          '((compilation-mode              :select nil                                               )
             ("*undo-tree*"                                                    :size 0.25 :align right)
-            ("*Shell Command Output*"      :select nil                                                )
-            ("\\*Async Shell.*\\*" :regexp t :ignore t                                                  )
-            (occur-mode                    :select nil                                    :align t    )
-            ("*Help*"                      :select t   :inhibit-window-quit t :other t                )
+            ("*Shell Command Output*"      :select nil                                               )
+            ("\\*Async Shell.*\\*" :regexp t :ignore t                                                 )
+            (occur-mode                    :select nil                                   :align t    )
+            ("*Help*"                      :select t   :inhibit-window-quit t :other t               )
             ("*Completions*"                                                  :size 0.3  :align t    )
-            ("*Messages*"                  :select t   :inhibit-window-quit t :other t                )
-            ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t                )
-            ("\\*poporg.*\\*"      :regexp t :select t                          :other t                )
+            ("*Messages*"                  :select t   :inhibit-window-quit t :other t               )
+            ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t               )
+            ("\\*poporg.*\\*"      :regexp t :select t                          :other t               )
             ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :size 0.3  :align t    )
+            ("*Calendar*"                  :select t                          :size 0.3  :align below)
             ))
 
     (shackle-mode 1)))
