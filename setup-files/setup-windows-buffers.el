@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 19:20:03 kmodi>
+;; Time-stamp: <2016-05-20 18:15:50 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -24,6 +24,7 @@
 ;;  Swap Buffers using Mouse
 ;;  Kill/Bury Buffer
 ;;  Other Window/Buffer
+;;  *Messages* Auto-tail
 ;;  Bindings
 ;;    Read-only Buffer Bindings
 ;;    Mode-line Mouse Bindings
@@ -468,6 +469,27 @@ buffers: *gtags-global*, *ag*, *Occur*."
   ("<left>" (lambda () (interactive) (other-window -1)) "win←")
   ("<C-right>" next-buffer "→buf")
   ("<C-left>" previous-buffer "buf←"))
+
+;;; *Messages* Auto-tail
+;; Improved upon http://stackoverflow.com/a/4685005/1219634
+(defun modi/messages-auto-tail (&rest _)
+  "Make *Messages* buffer auto-scroll to the end after each message."
+  (let ((msg-buf-name "*Messages*"))
+    ;; Activate this advice only if the point is _not_ in the *Messages* buffer
+    ;; to begin with. This condition is required; otherwise you will not be
+    ;; able to use `isearch' and other stuff within the *Messages* buffer as
+    ;; the point will keep moving to the end of buffer :P
+    (when (not (string= msg-buf-name (buffer-name)))
+      ;; Go to the end of the *Messages* buffer even if it is not in one of the
+      ;; live windows.
+      (with-current-buffer msg-buf-name
+        (goto-char (point-max)))
+      ;; In the event the *Messages* buffer is shown in multiple windows and
+      ;; frames, ensure that the point in each of those windows goes to the end.
+      ;; Note that `set-window-point' works only on live windows.
+      (dolist (win (get-buffer-window-list msg-buf-name nil :all-frames))
+        (set-window-point win (point-max))))))
+(advice-add 'message :after #'modi/messages-auto-tail)
 
 ;;; Bindings
 ;;;; Read-only Buffer Bindings
