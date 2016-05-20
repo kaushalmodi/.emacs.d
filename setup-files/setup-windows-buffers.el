@@ -194,13 +194,13 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
          file-name)
     (if file-name-full
         (progn
-          (cl-case arg
-            (4 (setq file-name (concat (file-name-base file-name-full) ; C-u
-                                       (file-name-extension file-name-full :period))))
-            (16 (setq file-name file-name-full)) ; C-u C-u
-            (t (setq file-name (replace-regexp-in-string ; no prefix
-                                (concat "_" (getenv "USER")) "_${USER}"
-                                file-name-full))))
+          (setq file-name (cl-case arg
+                            (4 (concat (file-name-base file-name-full) ; C-u
+                                       (file-name-extension file-name-full :period)))
+                            (16 file-name-full) ; C-u C-u
+                            (t (replace-regexp-in-string ; no prefix
+                                (concat "_" (getenv "USER"))
+                                "_${USER}" file-name-full))))
           (kill-new file-name)
           (message file-name))
       (error "Buffer not visiting a file"))))
