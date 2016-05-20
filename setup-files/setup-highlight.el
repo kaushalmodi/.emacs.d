@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 21:54:30 kmodi>
+;; Time-stamp: <2016-05-20 13:58:49 kmodi>
 
 ;; Highlight stuff
 
@@ -10,25 +10,31 @@
   :config
   (progn
     ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
-    ;; highlight color automatically.
-    (defun hi-lock-face-buffer (regexp)
-      "Interactively, prompt for REGEXP using `read-regexp'. Uses the
-next face from `hi-lock-face-defaults' without prompting.
+    ;; selected region to derive a regexp if a region is active.
+    (defun hi-lock-face-buffer (regexp &optional face)
+      "Set face of each match of REGEXP to FACE.
+Interactively, prompt for REGEXP using `read-regexp', then FACE.
+Use the global history list for FACE.
 
-Use Font lock mode, if enabled, to highlight REGEXP.  Otherwise, use
-overlays for highlighting.  If overlays are used, the highlighting
-will not update as you type."
+Use Font lock mode, if enabled, to highlight REGEXP.  Otherwise,
+use overlays for highlighting.  If overlays are used, the
+highlighting will not update as you type."
       (interactive
        (list
         (hi-lock-regexp-okay
-         ;; (read-regexp "Regexp to highlight" 'regexp-history-last))))
-         (read-from-minibuffer "Regexp to highlight: "
-                               (modi/get-symbol-at-point)))))
-      (let* ((hi-lock-auto-select-face t)
-             (face (hi-lock-read-face-name)))
-        (or (facep face) (setq face 'hi-yellow))
-        (unless hi-lock-mode (hi-lock-mode 1))
-        (hi-lock-set-pattern regexp face)))
+         (read-regexp "Regexp to highlight"
+                      (if (use-region-p)
+                          ;; Use `rx' to generate regexp for selected text.
+                          ;; Example: regexp to find "a.b" text would be
+                          ;; "a\.b"
+                          (let ((str (buffer-substring-no-properties
+                                      (region-beginning) (region-end))))
+                            (eval `(rx ,str)))
+                        'regexp-history-last)))
+        (hi-lock-read-face-name)))
+      (or (facep face) (setq face 'hi-yellow))
+      (unless hi-lock-mode (hi-lock-mode 1))
+      (hi-lock-set-pattern regexp face))
 
     ;; Don't scan the file beyond 1000 characters to look for the Hi-Lock patterns.
     (setq hi-lock-file-patterns-range 1000)
