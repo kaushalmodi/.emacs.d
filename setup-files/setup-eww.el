@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 17:06:31 kmodi>
+;; Time-stamp: <2016-05-19 22:26:02 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -7,15 +7,8 @@
          ("M-s M-w" . eww-search-words)
          ("M-s M-l" . modi/eww-get-link))
   :chords (("-=" . eww))
-  :commands (eww-open-file
-             eww
-             hydra-launch/eww-and-exit
-             eww-list-bookmarks
-             hydra-launch/eww-list-bookmarks-and-exit
-             modi/eww-im-feeling-lucky
-             hydra-launch/modi/eww-im-feeling-lucky-and-exit
-             modi/eww-browse-url-of-file
-             hydra-launch/modi/eww-browse-url-of-file-and-exit)
+  :commands (modi/eww-im-feeling-lucky
+             modi/eww-browse-url-of-file)
   :init
   (progn
     (bind-to-modi-map "e" #'eww-open-file))

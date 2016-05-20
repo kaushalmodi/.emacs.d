@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-24 12:22:32 kmodi>
+;; Time-stamp: <2016-05-19 23:20:21 kmodi>
 
 ;; Abbrev
 (use-package abbrev
@@ -35,9 +35,8 @@
 
 ;; Hippie Expand
 (use-package hippie-exp
-  :config
-  (progn
-    (bind-key "M-/" #'hippie-expand modi-mode-map)))
+  :bind (:map modi-mode-map
+         ("M-/" . hippie-expand)))
 
 
 (provide 'setup-abbrev)

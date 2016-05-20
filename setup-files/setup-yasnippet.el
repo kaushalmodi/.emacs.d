@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-08-06 09:46:37 kmodi>
+;; Time-stamp: <2016-05-19 23:17:03 kmodi>
 
 ;; yasnippet
 ;; https://github.com/capitaomorte/yasnippet
@@ -6,6 +6,9 @@
 (use-package yasnippet
   :if (not (bound-and-true-p disable-pkg-yasnippet))
   :defer 20
+  :bind (:map modi-mode-map
+         ("s-y" . hydra-yas/body)
+         ("C-c y" . hydra-yas/body))
   :config
   (progn
     (setq yas-prompt-functions '(yas-ido-prompt
@@ -65,9 +68,7 @@ $0")
       ("r" yas-reload-all)
       ("x" yas-expand)
       ("?" yas-describe-tables)
-      ("q" nil "cancel" :color blue))
-    (bind-key "s-y" #'hydra-yas/body modi-mode-map)
-    (bind-key "C-c y" #'hydra-yas/body modi-mode-map)))
+      ("q" nil "cancel" :color blue))))
 
 
 (provide 'setup-yasnippet)

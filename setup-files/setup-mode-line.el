@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-17 13:21:05 kmodi>
+;; Time-stamp: <2016-05-19 22:35:02 kmodi>
 
 ;; Customize the mode-line
 
@@ -27,7 +27,7 @@ If nil, show the same in the minibuffer.")
                                         ; when launching emacsclient
   :init
   (progn
-    (defconst modi/minibuffer-line-right-aligned nil
+    (defvar modi/minibuffer-line-right-aligned nil
       "If non-nil, right-align the minibuffer-line display.")
 
     (setq minibuffer-line-format
@@ -41,19 +41,19 @@ If nil, show the same in the minibuffer.")
                     time-string)
                  time-string)))))
 
-    (defconst modi/today--day-sym (intern (format-time-string "%a"))
+    (defvar modi/today--day-sym (intern (format-time-string "%a"))
       "Symbol containing 3-letter abbreviation of today's day.")
 
-    (defconst modi/time-go-home-reset "12:01am"
+    (defvar modi/time-go-home-reset "12:01am"
       "Time when to modify the time face to remove the alert face.")
 
-    (defconst modi/time-go-home-alert '((Mon . "05:15pm")
-                                        (Tue . "05:15pm")
-                                        (Wed . "05:15pm")
-                                        (Thu . "04:20pm")
-                                        (Fri . "04:20pm")
-                                        (Sat . "")
-                                        (Sun . ""))
+    (defvar modi/time-go-home-alert '((Mon . "05:15pm")
+                                      (Tue . "05:15pm")
+                                      (Wed . "05:15pm")
+                                      (Thu . "04:20pm")
+                                      (Fri . "04:20pm")
+                                      (Sat . "")
+                                      (Sun . ""))
       "Time when to modify the time face to alert it's time to go home."))
   :config
   (progn

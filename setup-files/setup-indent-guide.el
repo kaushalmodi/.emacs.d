@@ -1,12 +1,10 @@
-;; Time-stamp: <2015-09-13 23:58:25 kmodi>
+;; Time-stamp: <2016-05-19 22:32:31 kmodi>
 
 ;; Indent Guide
 ;; https://github.com/zk-phi/indent-guide
 
 (use-package indent-guide
-  :commands (indent-guide-mode
-             indent-guide-global-mode
-             modi/turn-on-indent-guide)
+  :commands (modi/turn-on-indent-guide)
   :config
   (progn
     (setq indent-guide-recursive t)

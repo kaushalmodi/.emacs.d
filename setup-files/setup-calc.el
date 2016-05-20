@@ -1,10 +1,9 @@
-;; Time-stamp: <2015-10-12 09:18:42 kmodi>
+;; Time-stamp: <2016-05-19 21:40:57 kmodi>
 
 ;; Calculator
 
 (use-package calc
-  :commands (calc quick-calc
-                  hydra-launch/calc-and-exit hydra-launch/quick-calc-and-exit)
+  :defer t
   :bind (:map modi-mode-map
          ("C-`" . modi/calc))
   :init
@@ -61,7 +60,6 @@ because 2^3 = 8 comes next after 7 |  ceil(log(x)/log(2))"
       (calcFunc-ceil (math-div (calcFunc-log10 x) (calcFunc-log10 2))))))
 
 (use-package rpn-calc
-  :commands (hydra-launch/rpn-calc-and-exit)
   :bind (:map modi-mode-map
          ("C-~" . rpn-calc)))
 

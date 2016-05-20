@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-04 18:22:57 kmodi>
+;; Time-stamp: <2016-05-19 22:17:34 kmodi>
 
 ;; Printing
 
@@ -6,7 +6,7 @@
   :init
   (progn
     (bind-to-modi-map "P" #'modi/pdf-print-buffer-with-faces))
-  :commands (modi/pdf-print-buffer-with-faces ps-print-buffer-with-faces)
+  :commands (modi/pdf-print-buffer-with-faces)
   :config
   (progn
     ;; Print configuration

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 10:42:47 kmodi>
+;; Time-stamp: <2016-05-19 22:12:02 kmodi>
 
 ;; Bookmarks
 
@@ -104,13 +104,13 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
 ;;; bookmark+ (bmkp)
 ;; http://www.emacswiki.org/BookmarkPlus
 (use-package bookmark+
+  :defer t
   :preface
   ;; Prevent "`fringe-bitmaps' variable not found" errors in emacs built
   ;; without fringe support; for example in emacs built without GUI support
   ;; for Termux app on Android
   (when (not (boundp 'fringe-bitmaps))
-    (defvar fringe-bitmaps nil)) ; used in bookmark+-lit.el
-  :commands (bookmark-set bookmark-jump bookmark-bmenu-list))
+    (defvar fringe-bitmaps nil))) ; used in bookmark+-lit.el
 
 ;;; Quickly save and restore point using registers
 (defun modi/save-point (restore)

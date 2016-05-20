@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-10 16:30:48 kmodi>
+;; Time-stamp: <2016-05-19 23:12:02 kmodi>
 
 (use-package vc
   :bind (:map modi-mode-map
@@ -27,9 +27,11 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
 ;; Diff-hl
 ;; https://github.com/dgutov/diff-hl
 (use-package diff-hl
+  :bind (:map modi-mode-map
+	      ("s-v" . hydra-diff-hl/body)
+	      ("C-c v" . hydra-diff-hl/body))
   :config
   (progn
-
     (defvar modi/diff-hl-mode-hooks '(emacs-lisp-mode-hook
                                       sh-mode-hook)
       "List of hooks of major modes in which diff-hl-mode should be enabled.")
@@ -47,17 +49,12 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
       ("]"     diff-hl-next-hunk      "next hunk")
       ("n"     diff-hl-next-hunk      "next hunk")
       ("q" nil "cancel"))
-    (bind-key "s-v" #'hydra-diff-hl/body modi-mode-map)
-    (bind-key "C-c v" #'hydra-diff-hl/body modi-mode-map)
 
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)))
 
 ;; Ediff
 (use-package ediff
-  :commands (ediff-files
-             ediff-buffers
-             modi/ediff-dwim
-             hydra-launch/modi/ediff-dwim-and-exit)
+  :commands (modi/ediff-dwim)
   :config
   (progn
     ;; No separate frame for ediff control buffer

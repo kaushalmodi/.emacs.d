@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-10-29 11:44:12 kmodi>
+;; Time-stamp: <2016-05-19 22:14:20 kmodi>
 
 ;; Clojure
 
 (use-package cider
   :ensure t
-  :commands (cider-jack-in))
+  :defer t)
 
 
 (provide 'setup-clojure)

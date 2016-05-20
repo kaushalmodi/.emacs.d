@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-07-01 20:49:28 kmodi>
+;; Time-stamp: <2016-05-19 22:18:00 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
 
 (use-package magit
-  :commands (magit-status))
+  :defer t)
 
 
 (provide 'setup-magit)

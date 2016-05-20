@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-16 10:18:55 kmodi>
+;; Time-stamp: <2016-05-19 22:02:53 kmodi>
 
 ;; Interactively Do Things
 ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
@@ -14,7 +14,7 @@
     (defvar inherit-input-method       nil)
     (defvar ido-cur-list               nil)
     (defvar ido-context-switch-command nil))
-  :commands (ido-mode)
+  :defer t
   :init
   (progn
     (setq ido-enable-flex-matching  t) ; enable fuzzy search

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-02 00:53:02 kmodi>
+;; Time-stamp: <2016-05-19 22:31:38 kmodi>
 
 ;; PDF
 
@@ -89,14 +89,13 @@ advised function in that major mode."
 
 ;; https://github.com/rudolfochrist/interleave
 (use-package interleave
-  ;; :load-path "elisp/interleave"
   :init
   (progn
     (with-eval-after-load 'doc-view
       (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
     (with-eval-after-load 'pdf-view
       (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map)))
-  :commands (interleave interleave--open-notes-file-for-pdf))
+  :defer t)
 
 (with-eval-after-load 'doc-view
   ;; In continuous mode, reaching the page edge advances to the next/prev page

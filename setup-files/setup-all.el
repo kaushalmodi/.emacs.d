@@ -1,9 +1,9 @@
-;; Time-stamp: <2015-09-13 23:54:48 kmodi>
+;; Time-stamp: <2016-05-19 22:29:29 kmodi>
 
 ;; All
 ;; http://elpa.gnu.org/packages/all.html
 (use-package all
-  :commands (all)
+  :defer t
   :init
   (progn
     (bind-to-modi-map ":" #'all))

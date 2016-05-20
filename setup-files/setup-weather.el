@@ -1,11 +1,11 @@
-;; Time-stamp: <2016-01-20 18:25:46 kmodi>
+;; Time-stamp: <2016-05-19 22:15:43 kmodi>
 
 ;; Weather Forecast
 
 ;; Sunshine
 ;; https://github.com/aaronbieber/sunshine.el
 (use-package sunshine
-  :commands (sunshine-quick-forecast sunshine-forecast)
+  :defer t
   :config
   (progn
     ;; The "openweathermap-api" file is supposed to contain this line:
@@ -22,7 +22,7 @@
   ;; deferring not needed as the package is set to autoload on M-x forecast
   ;; :defer 1 ; Wait for at least a second after emacs has loaded.
   ;;          ; The emacs frame needs to be set up properly before `find-font' call.
-  :commands (forecast)
+  :defer t
   :config
   (progn
     ;; Use Quivira font for moon phases

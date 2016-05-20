@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-08 13:02:51 kmodi>
+;; Time-stamp: <2016-05-19 23:20:49 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -9,7 +9,8 @@
     ;; Do not bind the below keys to counsel commands if the user has decided
     ;; to use ido instead of ivy.
     (when (not (bound-and-true-p disable-pkg-ivy))
-      (bind-keys :map modi-mode-map
+      (bind-keys
+       :map modi-mode-map
         ("M-x"     . counsel-M-x)
         ("C-M-y"   . counsel-yank-pop)
         ("C-x C-f" . counsel-find-file)

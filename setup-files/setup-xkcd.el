@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-10-18 11:38:33 kmodi>
+;; Time-stamp: <2016-05-19 22:07:17 kmodi>
 
 ;; xkcd
 ;; https://github.com/vibhavp/emacs-xkcd
 
 (use-package xkcd
-  :commands (xkcd)
+  :defer t
   :config
   (progn
     (bind-keys

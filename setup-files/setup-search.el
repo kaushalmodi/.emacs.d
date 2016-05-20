@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-27 00:15:13 kmodi>
+;; Time-stamp: <2016-05-19 22:02:09 kmodi>
 
 ;; Search / Replace
 
@@ -48,31 +48,21 @@ See the command `isearch-forward-symbol' for more information."
 ;;; anzu
 ;; https://github.com/syohex/emacs-anzu
 (use-package anzu
-  :init
-  (progn
-    (bind-keys
-     :map modi-mode-map
-      ("C-c r" . anzu-query-replace)))
+  :bind (:map modi-mode-map
+         ("C-c r" . anzu-query-replace))
   :config
   (progn
-    (setq anzu-mode-lighter                "")
-    (setq anzu-search-threshold            1000)
+    (setq anzu-mode-lighter "")
+    (setq anzu-search-threshold 1000)
     (setq anzu-replace-to-string-separator " => ")
 
     (global-anzu-mode 1)))
 
 ;;; Visual Regular Expression search/replace
 (use-package visual-regexp
-  :commands (vr/query-replace vr/mc-mark vr/replace)
-  :init
-  (progn
-    (bind-keys
-     :map modi-mode-map
-      ("C-c q" . vr/query-replace))
-    (with-eval-after-load 'multiple-cursors
-      (bind-keys
-       :map modi-mode-map
-        ("C-c M" . vr/mc-mark))))
+  :bind (:map modi-mode-map
+         ("C-c q" . vr/query-replace)
+         ("C-c M" . vr/mc-mark))
   :config
   (progn
     (setq vr/default-feedback-limit 300)))

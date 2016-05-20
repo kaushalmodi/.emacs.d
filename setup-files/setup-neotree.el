@@ -1,17 +1,19 @@
-;; Time-stamp: <2015-10-05 09:19:08 kmodi>
+;; Time-stamp: <2016-05-19 22:40:44 kmodi>
 
 ;; Neotree
 ;; https://github.com/jaypei/emacs-neotree
 
 (use-package neotree
+  :bind (:map modi-mode-map
+         ("C-c >" . modi/find-file-next-in-dir)
+         ("C-c <" . modi/find-file-prev-in-dir))
   :init
   (progn
-    (setq-default neo-smart-open t) ;  every time when the neotree window is
-                                        ;  opened, it will try to find current
-                                        ;  file and jump to node.
-    (setq-default neo-dont-be-alone t) ; Don't allow neotree to be the only open
-                                        ; window
-    )
+    ;; Every time when the neotree window is opened, it will try to find current
+    ;; file and jump to node.
+    (setq-default neo-smart-open t)
+    ;; Do not allow neotree to be the only open window
+    (setq-default neo-dont-be-alone t))
   :config
   (progn
     (setq neo-theme 'nerd) ; 'classic, 'nerd, 'ascii, 'arrow
@@ -78,19 +80,14 @@ When PREV is non-nil, open the previous file in the directory."
       (modi/find-file-next-in-dir :prev))
 
     (bind-keys
-     :map modi-mode-map
-      ("C-c >" . modi/find-file-next-in-dir)
-      ("C-c <" . modi/find-file-prev-in-dir))
-
-    (bind-keys
      :map neotree-mode-map
-      ("^"          . modi/neotree-go-up-dir)
+      ("^" . modi/neotree-go-up-dir)
       ("<C-return>" . neotree-change-root)
-      ("C"          . neotree-change-root)
-      ("c"          . neotree-create-node)
-      ("+"          . neotree-create-node)
-      ("d"          . neotree-delete-node)
-      ("r"          . neotree-rename-node))))
+      ("C" . neotree-change-root)
+      ("c" . neotree-create-node)
+      ("+" . neotree-create-node)
+      ("d" . neotree-delete-node)
+      ("r" . neotree-rename-node))))
 
 
 (provide 'setup-neotree)

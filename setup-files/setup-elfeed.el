@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-06-15 17:08:48 kmodi>
+;; Time-stamp: <2016-05-19 22:28:30 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
 
 (use-package elfeed
-  :commands (elfeed)
+  :defer t
   :config
   (progn
     (setq elfeed-feeds
@@ -31,7 +31,7 @@
 
     (bind-keys
      :map elfeed-search-mode-map
-     ("R" . elfeed-mark-all-as-read))
+      ("R" . elfeed-mark-all-as-read))
 
     (bind-to-modi-map ";" #'elfeed)))
 

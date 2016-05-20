@@ -1,10 +1,10 @@
-;; Time-stamp: <2015-09-13 19:19:43 kmodi>
+;; Time-stamp: <2016-05-19 22:26:35 kmodi>
 
 ;; Git Time Machine
 ;; https://github.com/pidu/git-timemachine
 
 (use-package git-timemachine
-  :commands (git-timemachine))
+  :defer t)
 
 
 (provide 'setup-git-timemachine)

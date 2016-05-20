@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-03 17:13:16 kmodi>
+;; Time-stamp: <2016-05-19 23:18:06 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -54,7 +54,10 @@ This variable is to be updated when changing themes.")
 ;;; Bars
 
 ;;;; Menu bar
-(if (fboundp 'menu-bar-mode)   (menu-bar-mode -1)) ; do not show the menu bar with File|Edit|Options|...
+;; Do not show the menu bar with File|Edit|Options|...
+(if (fboundp 'menu-bar-mode)
+    (menu-bar-mode -1))
+
 ;; Toggle menu bar
 (>=e "25.0"
     (progn
@@ -357,7 +360,7 @@ font size."
 ;; the level of the actual line plus `adaptive-wrap-extra-indent'. Thus line
 ;; truncation has to be off for adaptive wrap to be in effect.
 (use-package adaptive-wrap
-  :commands (visual-line-mode)
+  :defer t
   :config
   (progn
     ;; Need to set the below variable globally as it is a buffer-local variable.
@@ -491,7 +494,7 @@ Toggling off this mode reverts everything to their original states."
 
 ;;; Whitespace Mode/Show Long Lines
 (use-package whitespace
-  :commands (whitespace-mode global-whitespace-mode)
+  :defer t
   :config
   (progn
     (setq whitespace-line-column nil) ; When nil, set the value to `fill-column'

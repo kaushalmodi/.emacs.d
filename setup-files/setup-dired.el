@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-08 00:29:23 kmodi>
+;; Time-stamp: <2016-05-19 22:34:21 kmodi>
 
 ;; Dired
 
@@ -30,8 +30,8 @@
         ("^"                . dired-single-up-directory)))))
 
 (use-package dired
-  :commands (dired dired-toggle-read-only
-                   dired-get-filename) ; called by `dired-single'
+  :commands (dired-toggle-read-only ; to toggle read-only state of any buffer
+             dired-get-filename) ; called by `dired-single'
   :config
   (progn
     (setq dired-recursive-deletes 'always)
@@ -68,7 +68,7 @@ It added extra strings at the front and back of the default dired buffer name."
     (use-package dired+
       :init
       (progn
-        ;; detail toggling is bound to "(" in `dired-mode' by default
+        ;; Details toggling is bound to "(" in `dired-mode' by default
         (setq diredp-hide-details-initially-flag nil))
       :config
       (progn

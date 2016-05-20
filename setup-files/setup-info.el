@@ -1,8 +1,10 @@
-;; Time-stamp: <2016-05-17 13:23:45 kmodi>
+;; Time-stamp: <2016-05-19 23:14:11 kmodi>
 
 ;; Info
 
 (use-package info
+  :bind (:map modi-mode-map
+         ("C-h i" . hydra-info-to/body))
   :defer t
   :config
   (progn
@@ -96,6 +98,7 @@ Info-mode:
             (unless (string-match topic Info-current-file)
               (Info-goto-node (format "(%s)" topic))))
         (info topic bufname)))
+    
     (defhydra hydra-info-to (:hint nil
                              :color teal)
       "
@@ -105,8 +108,7 @@ _i_nfo      _o_rg      e_l_isp      e_L_isp intro      _e_macs      _c_alc"
       ("l" (ora-open-info "elisp" "*elisp info*"))
       ("L" (ora-open-info "eintr" "*elisp intro info*"))
       ("e" (ora-open-info "emacs" "*emacs info*"))
-      ("c" (ora-open-info "calc" "*calc info*")))
-    (bind-key "C-h i" #'hydra-info-to/body modi-mode-map)))
+      ("c" (ora-open-info "calc" "*calc info*")))))
 
 
 (provide 'setup-info)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-19 19:41:53 kmodi>
+;; Time-stamp: <2016-05-19 22:27:42 kmodi>
 
 ;; poporg
 ;; https://github.com/QBobWatson/poporg
@@ -9,7 +9,7 @@
 ;; Python docstrings, in an org-mode buffer instead of in a comment or a string.
 
 (use-package poporg
-  :commands (poporg-dwim)
+  :defer t
   :init
   (progn
     (bind-to-modi-map "o" #'poporg-dwim)))

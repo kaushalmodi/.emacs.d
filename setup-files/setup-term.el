@@ -1,12 +1,11 @@
-;; Time-stamp: <2016-03-29 17:59:22 kmodi>
+;; Time-stamp: <2016-05-19 21:41:18 kmodi>
 
 ;; multi-term
 ;; http://www.emacswiki.org/emacs/multi-term.el
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 
 (use-package multi-term
-  :commands (multi-term
-             hydra-launch/multi-term-and-exit)
+  :defer t
   :config
   (progn
     ;; term

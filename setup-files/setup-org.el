@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-14 03:25:37 kmodi>
+;; Time-stamp: <2016-05-19 22:23:36 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -455,10 +455,8 @@ the languages in `modi/ob-enabled-languages'."
 ;;; org-tree-slide
     ;; https://github.com/takaxp/org-tree-slide
     (use-package org-tree-slide
-      :commands (org-tree-slide-mode)
-      :init
-      (progn
-        (bind-key "<C-S-f8>" #'org-tree-slide-mode modi-mode-map))
+      :bind (:map modi-mode-map
+             ("<C-S-f8>" . org-tree-slide-mode))
       :config
       (progn
         (setq org-tree-slide--lighter " Slide")
@@ -524,7 +522,7 @@ the languages in `modi/ob-enabled-languages'."
 
 ;;; Org Export
     (use-package ox
-      :commands (org-export-dispatch)
+      :defer t
       :config
       (progn
         ;; Require wrapping braces to interpret _ and ^ as sub/super-script
@@ -834,9 +832,7 @@ do the above and also open the html file in the default browser."
 
 ;;;; ox-beamer - Beamer export
         (use-package ox-beamer
-          :commands (org-beamer-export-as-latex
-                     org-beamer-export-to-latex
-                     org-beamer-export-to-pdf)
+          :defer t
           :config
           (progn
             ;; allow for export=>beamer by placing

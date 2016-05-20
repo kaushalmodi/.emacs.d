@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-20 02:07:51 kmodi>
+;; Time-stamp: <2016-05-19 22:06:42 kmodi>
 
 ;; server/daemon setup
 
@@ -45,8 +45,7 @@
           ;; Integration with Gmail
           (use-package edit-server-htmlize
             :ensure t
-            :commands (edit-server-maybe-dehtmlize-buffer
-                       edit-server-maybe-htmlize-buffer)
+            :defer t
             :config
             (progn
               (add-hook 'edit-server-start-hook #'edit-server-maybe-dehtmlize-buffer)

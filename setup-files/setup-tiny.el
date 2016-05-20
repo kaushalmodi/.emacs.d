@@ -1,9 +1,8 @@
-;; Time-stamp: <2015-10-07 13:52:18 kmodi>
+;; Time-stamp: <2016-05-19 22:28:44 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
 (use-package tiny
-  :commands (tiny-expand)
   :bind (:map modi-mode-map
          ("C-c \\" . modi/tiny-helper))
   :chords (("]\\" . modi/tiny-helper))

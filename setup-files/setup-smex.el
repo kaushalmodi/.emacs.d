@@ -1,14 +1,15 @@
-;; Time-stamp: <2016-04-27 14:57:35 kmodi>
+;; Time-stamp: <2016-05-19 22:45:12 kmodi>
 
 ;; Smart M-x (smex)
 ;; https://github.com/nonsequitur/smex/
 
 (use-package smex
+  :bind (("C-c M-x" . execute-extended-command)) ; old M-x
+  :bind (:map modi-mode-map
+         ("M-X" . smex-major-mode-commands))
   :init
   (progn
     (smex-initialize)
-    (bind-key "M-X" #'smex-major-mode-commands modi-mode-map)
-    (bind-key "C-c M-x" #'execute-extended-command) ; old M-x
     (when (bound-and-true-p disable-pkg-ivy)
       (bind-key "M-x" #'smex modi-mode-map)
       (key-chord-define-global ";'" #'smex)))) ; alternative to `M-x'

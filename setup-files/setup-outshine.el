@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-23 22:40:18 kmodi>
+;; Time-stamp: <2016-05-19 22:30:24 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -9,7 +9,7 @@
   ;; changing this prefix key requires manipulating keymaps.
   :preface
   (setq outline-minor-mode-prefix "\M-#")
-  :commands (outline-mode outline-minor-mode))
+  :defer t)
 
 (use-package outshine
   :config

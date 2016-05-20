@@ -1,20 +1,18 @@
-;; Time-stamp: <2015-11-06 12:26:37 kmodi>
+;; Time-stamp: <2016-05-19 22:42:28 kmodi>
 
 ;; Command Log Mode
 ;; https://github.com/lewang/command-log-mode
 ;; Maintained fork of http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el
 
 (use-package command-log-mode
-  :commands (command-log-mode
-             global-command-log-mode
-             hydra-command-log/body)
+  :commands (hydra-command-log/body)
   :init
   (progn
     (setq clm/logging-dir (let ((dir (concat user-emacs-directory
                                              "command-log")))
                             (make-directory dir :parents)
                             dir))
-    ;; Don't bind `clm/open-command-log-buffer' by default to "C-c o"
+    ;; Do not bind `clm/open-command-log-buffer' by default to "C-c o"
     (setq command-log-mode-key-binding-open-log nil)
     (bind-to-modi-map "c" #'hydra-command-log/body))
   :config

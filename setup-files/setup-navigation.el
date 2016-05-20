@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 11:28:05 kmodi>
+;; Time-stamp: <2016-05-19 23:23:18 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -214,11 +214,11 @@ If ARG is omitted or nil, move point forward one word."
        :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
        :color pink)
   "nav-error"
-  ("g"        first-error    "first")
-  ("n"        next-error     "next")
-  ("p"        previous-error "prev")
-  ("q"        nil            "cancel")
-  ("<return>" nil            "cancel"))
+  ("g" first-error "first")
+  ("n" next-error "next")
+  ("p" previous-error "prev")
+  ("q" nil "cancel")
+  ("<return>" nil "cancel"))
 
 ;; Avy Jump
 ;; https://github.com/abo-abo/avy

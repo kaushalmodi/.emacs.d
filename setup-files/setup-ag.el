@@ -1,11 +1,10 @@
-;; Time-stamp: <2016-03-18 16:51:44 kmodi>
+;; Time-stamp: <2016-05-19 22:16:31 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
 
 (use-package ag
-  :commands (ag-project-regexp
-             modi/ag-regexp-cwd
+  :commands (modi/ag-regexp-cwd
              modi/verilog-find-parent-module)
   :init
   (progn
@@ -30,7 +29,7 @@
     ;; Allow editing in *ag* buffers
     ;; https://github.com/mhayashi1120/Emacs-wgrep
     (use-package wgrep-ag
-      :commands (wgrep-ag-setup)
+      :defer t
       :config
       (progn
         (add-hook 'ag-mode-hook #'wgrep-ag-setup)
