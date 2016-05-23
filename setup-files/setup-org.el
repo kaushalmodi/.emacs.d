@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:23:36 kmodi>
+;; Time-stamp: <2016-05-23 12:40:04 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -271,17 +271,19 @@ Execute this command while the point is on or after the hyper-linked org link."
                 (replace-regexp "\\[\\[.*?\\(\\]\\[\\(.*?\\)\\)*\\]\\]" "\\2"
                                 nil start end)))))))
 
-    ;; http://emacs.stackexchange.com/a/17477/115
-    (defun ia/dwim-org-table-blank-field (&rest args)
-      "Execute the “C-c SPC” binding from the global map if point is not in an
-org-table or if a prefix is used."
-      (let ((skip-orig-fn (or current-prefix-arg
-                              (not (org-at-table-p)))))
-        (when skip-orig-fn
-          ;; because `org-table-blank-field' is bound to "C-c SPC" in `org-mode-map'
-          (call-interactively (global-key-binding (kbd "C-c SPC"))))
-        skip-orig-fn))
-    (advice-add 'org-table-blank-field :before-until #'ia/dwim-org-table-blank-field)
+    ;; Bind the "org-table-*" command ONLY when the point is in an org table.
+    ;; http://emacs.stackexchange.com/a/22457/115
+    (bind-keys
+     :map org-mode-map
+     :filter (org-at-table-p)
+      ("C-c ?" . org-table-field-info)
+      ("C-c SPC" . org-table-blank-field)
+      ("C-c +" . org-table-sum)
+      ("C-c =" . org-table-eval-formula)
+      ("C-c `" . org-table-edit-field)
+      ("C-#" . org-table-rotate-recalc-marks)
+      ("C-c }" . org-table-toggle-coordinate-overlays)
+      ("C-c {" . org-table-toggle-formula-debugger))
 
     ;; Recalculate all org tables in the buffer when saving.
     ;; http://emacs.stackexchange.com/a/22221/115
