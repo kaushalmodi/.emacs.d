@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 11:26:42 kmodi>
+;; Time-stamp: <2016-05-24 11:05:42 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -29,18 +29,30 @@
          ("$" . mc/edit-ends-of-lines))
   :config
   (progn
+    ;; Disable the annoying sluggish matching paren blinks for all cursors
+    ;; when you happen to type a ")" or "}" at all cursor locations.
     (defvar modi/mc-blink-matching-paren--store nil
       "Internal variable used to restore the value of `blink-matching-paren'
 after `multiple-cursors-mode' is quit.")
+
+    ;; The `multiple-cursors-mode-enabled-hook' and
+    ;; `multiple-cursors-mode-disabled-hook' are run in the
+    ;; `multiple-cursors-mode' minor mode definition, but they are not declared
+    ;; (not `defvar'd). So do that first before using `add-hook'.
+    (defvar multiple-cursors-mode-enabled-hook nil
+      "Hook that is run after `multiple-cursors-mode' is enabled.")
+    (defvar multiple-cursors-mode-disabled-hook nil
+      "Hook that is run after `multiple-cursors-mode' is disabled.")
+
     (defun modi/mc-when-enabled ()
       "Function to be added to `multiple-cursors-mode-enabled-hook'."
-      ;; Disable the annoying sluggish matching paren blinks for all cursors
-      ;; when you happen to type a ")" at all cursor locations.
       (setq modi/mc-blink-matching-paren--store blink-matching-paren)
       (setq blink-matching-paren nil))
+
     (defun modi/mc-when-disabled ()
       "Function to be added to `multiple-cursors-mode-disabled-hook'."
       (setq blink-matching-paren modi/mc-blink-matching-paren--store))
+
     (add-hook 'multiple-cursors-mode-enabled-hook #'modi/mc-when-enabled)
     (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
 
