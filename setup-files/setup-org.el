@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-23 12:40:04 kmodi>
+;; Time-stamp: <2016-05-25 11:33:47 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -223,11 +223,10 @@ this with to-do items than with projects or headings."
 ;;; Source block languages
     ;; Change the default app for opening pdf files from org
     ;; http://stackoverflow.com/a/9116029/1219634
+    (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")
+
     (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
     (add-to-list 'org-src-lang-modes '("dot"           . graphviz-dot))
-
-    ;; Change .pdf association directly within the alist
-    (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")
 
 ;;; Defuns
     ;; http://emacs.stackexchange.com/a/13854/115
