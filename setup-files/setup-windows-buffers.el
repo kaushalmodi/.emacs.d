@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-20 18:15:50 kmodi>
+;; Time-stamp: <2016-05-27 16:14:07 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -480,15 +480,15 @@ buffers: *gtags-global*, *ag*, *Occur*."
     ;; able to use `isearch' and other stuff within the *Messages* buffer as
     ;; the point will keep moving to the end of buffer :P
     (when (not (string= msg-buf-name (buffer-name)))
+      ;; Go to the end of buffer in all *Messages* buffer windows that are
+      ;; *live* (`get-buffer-window-list' returns a list of only live windows).
+      (dolist (win (get-buffer-window-list msg-buf-name nil :all-frames))
+        (with-selected-window win
+          (goto-char (point-max))))
       ;; Go to the end of the *Messages* buffer even if it is not in one of the
       ;; live windows.
       (with-current-buffer msg-buf-name
-        (goto-char (point-max)))
-      ;; In the event the *Messages* buffer is shown in multiple windows and
-      ;; frames, ensure that the point in each of those windows goes to the end.
-      ;; Note that `set-window-point' works only on live windows.
-      (dolist (win (get-buffer-window-list msg-buf-name nil :all-frames))
-        (set-window-point win (point-max))))))
+        (goto-char (point-max))))))
 (advice-add 'message :after #'modi/messages-auto-tail)
 
 ;;; Bindings
