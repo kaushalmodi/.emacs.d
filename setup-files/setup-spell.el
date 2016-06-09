@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 17:17:08 kmodi>
+;; Time-stamp: <2016-06-08 23:33:58 kmodi>
 ;;
 ;; Spell check
 ;; ispell, flyspell
@@ -74,7 +74,7 @@
         (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)
 
         ;; https://github.com/d12frosted/flyspell-correct
-        (use-package flyspell-correct
+        (use-package flyspell-correct-ivy
           :bind (:map modi-mode-map
                  ("<f12>" . flyspell-correct-word-generic))
           :config
