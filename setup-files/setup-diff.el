@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 23:12:02 kmodi>
+;; Time-stamp: <2016-06-09 13:18:27 kmodi>
 
 (use-package vc
   :bind (:map modi-mode-map
@@ -28,9 +28,9 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
 ;; https://github.com/dgutov/diff-hl
 (use-package diff-hl
   :bind (:map modi-mode-map
-	      ("s-v" . hydra-diff-hl/body)
-	      ("C-c v" . hydra-diff-hl/body))
-  :config
+         ("s-v" . hydra-diff-hl/body)
+         ("C-c v" . hydra-diff-hl/body))
+  :init
   (progn
     (defvar modi/diff-hl-mode-hooks '(emacs-lisp-mode-hook
                                       sh-mode-hook)
