@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-27 16:14:07 kmodi>
+;; Time-stamp: <2016-06-09 12:05:37 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -287,6 +287,13 @@ is set to a non-nil value."
              (>= (recursion-depth) 1))
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook #'abort-recursive-edit-in-minibuffer)
+
+;; http://oremacs.com/2016/06/06/counsel-set-variable/
+(when (not (bound-and-true-p disable-recursive-edit-in-minibuffer))
+  ;; Allow to read from minibuffer while in minibuffer.
+  (setq enable-recursive-minibuffers t)
+  ;; Show the minibuffer depth (when larger than 1)
+  (minibuffer-depth-indicate-mode 1))
 
 ;;; Untouchable Minibuffer Prompt
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21874
