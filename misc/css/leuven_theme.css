@@ -30,3 +30,9 @@ pre span.org-rainbow-delimiters-depth-7  {color:#858580;}
 pre span.org-rainbow-delimiters-depth-8  {color:#80a880;}
 pre span.org-rainbow-delimiters-depth-9  {color:#887070;}
 pre span.org-sh-quoted-exec              {color:#FF1493;}
+pre span.org-diff-added                  {color:#008000;}
+pre span.org-diff-changed                {color:#0000FF;}
+pre span.org-diff-header                 {color:#800000;}
+pre span.org-diff-hunk-header            {color:#990099;}
+pre span.org-diff-none                   {color:#545454;}
+pre span.org-diff-removed                {color:#A60000;}
