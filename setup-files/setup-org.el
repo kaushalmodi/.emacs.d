@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-25 11:33:47 kmodi>
+;; Time-stamp: <2016-06-12 02:50:13 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -422,7 +422,8 @@ returned value `entity-name' will be nil."
                                         "latex"
                                         "dot" ; graphviz
                                         "ditaa"
-                                        "plantuml")
+                                        "plantuml"
+                                        "awk")
       "List of languages for which the ob-* packages need to be loaded.")
 
     (defvar modi/ob-eval-unsafe-languages '("emacs-lisp")
@@ -435,23 +436,22 @@ as safe for babel evaluation except for the languages in this variable.")
         (add-to-list 'ob-lang-alist `(,(intern lang) . t)))
       (org-babel-do-load-languages 'org-babel-load-languages ob-lang-alist))
 
-    (with-eval-after-load 'ob-core
-      (defun modi/org-confirm-babel-evaluate-fn (lang body)
-        "Returns a non-nil value if the user should be prompted for execution,
+    (defun modi/org-confirm-babel-evaluate-fn (lang body)
+      "Returns a non-nil value if the user should be prompted for execution,
 or nil if no prompt is required.
 
 Babel evaluation will happen without confirmation for the org src blocks for
 the languages in `modi/ob-enabled-languages'."
-        (let ((re-all-lang (regexp-opt modi/ob-enabled-languages 'words))
-              (re-unsafe-lang (regexp-opt modi/ob-eval-unsafe-languages 'words))
-              (unsafe t)) ; Set the return value `unsafe' to t by default
-          (when (and (not (string-match-p re-unsafe-lang lang))
-                     (string-match-p re-all-lang lang))
-            (setq unsafe nil))
-          ;; (message "re-all:%s\nre-unsafe:%s\nlang:%s\nbody:%S\nret-val:%S"
-          ;;          re-all-lang re-unsafe-lang lang body unsafe)
-          unsafe))
-      (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn))
+      (let ((re-all-lang (regexp-opt modi/ob-enabled-languages 'words))
+            (re-unsafe-lang (regexp-opt modi/ob-eval-unsafe-languages 'words))
+            (unsafe t)) ; Set the return value `unsafe' to t by default
+        (when (and (not (string-match-p re-unsafe-lang lang))
+                   (string-match-p re-all-lang lang))
+          (setq unsafe nil))
+        ;; (message "re-all:%s\nre-unsafe:%s\nlang:%s\nbody:%S\nret-val:%S"
+        ;; re-all-lang re-unsafe-lang lang body unsafe)
+        unsafe))
+    (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn)
 
 ;;; org-tree-slide
     ;; https://github.com/takaxp/org-tree-slide
