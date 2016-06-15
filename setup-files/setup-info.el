@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 23:14:11 kmodi>
+;; Time-stamp: <2016-06-13 10:02:12 kmodi>
 
 ;; Info
 
@@ -16,6 +16,19 @@
     (use-package info+
       :config
       (progn
+        ;; The faces implementation to highlight strings in "..." is incomplete;
+        ;; it does not work well in text having a mix of regular and escaped
+        ;; double quotes (" and \"). So the workaround is to disable highlighting
+        ;; the double quotes.
+        (setq info-quoted+<>-regexp
+              (concat
+               ;; "\"\\(?:[^\"]\\|\\\\\\(?:.\\|[\n]\\)\\)*\"\\|"           ; "..."
+               "`\\(?:[^']\\|\\\\\\(.\\|[\n]\\)\\)*'\\|"                ; `...'
+               "‘\\(?:[^’]\\|\\\\\\(.\\|[\n]\\)\\)*’\\|"                ; ‘...’
+               "\“\\(?:[^”]\\|\\\\\\(.\\|[\n]\\)\\)*”\\|"               ; “...”
+               "<\\(?:[[:alpha:]][^>]*\\|\\(\\\\\\(.\\|[\n]\\)\\)*\\)>" ; <...>
+               ))
+
         (bind-keys
          :map Info-mode-map
           ;; Allow mouse scrolling to do its normal thing
@@ -98,7 +111,7 @@ Info-mode:
             (unless (string-match topic Info-current-file)
               (Info-goto-node (format "(%s)" topic))))
         (info topic bufname)))
-    
+
     (defhydra hydra-info-to (:hint nil
                              :color teal)
       "
