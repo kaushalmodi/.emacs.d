@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-17 18:11:29 kmodi>
+;; Time-stamp: <2016-06-15 10:52:00 kmodi>
 
 ;; Shell Script Mode
 
@@ -125,12 +125,12 @@ whose value is the shell name (don't quote it)."
       (run-hooks 'sh-set-shell-hook))))
 
 (defun modi/shell-region (start end)
-  "Execute region in a shell corresponding to the local value of `sh-shell-file'.
+  "Execute region in a shell corresponding to the local value of `sh-shell'.
 
 After the execution, the output buffer is displayed, the point is moved to it,
 and the output buffer mode is set to the read-only `special-mode'."
   (interactive "r")
-  (let ((shell-file-name sh-shell-file)
+  (let ((shell-file-name (executable-find (symbol-name sh-shell)))
         (output-buf "*Shell Region Output*"))
     (message "Executing the region in `%s' shell .."
              (file-name-nondirectory shell-file-name))
