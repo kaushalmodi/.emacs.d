@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-09 11:48:32 kmodi>
+;; Time-stamp: <2016-06-20 12:08:42 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -30,8 +30,6 @@
         (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))))
   :config
   (progn
-    (setq counsel-prompt-function #'counsel-prompt-function-dir)
-
     ;; counsel-find-file
     (setq counsel-find-file-at-point t)
     (setq counsel-find-file-ignore-regexp
@@ -63,7 +61,9 @@
                                "%s" ; This MUST be %s, not %S
                                         ; https://github.com/abo-abo/swiper/issues/427
                                ))
-                     " "))))
+                     " "))
+    ;; Show parent directory in the prompt
+    (ivy-set-prompt 'counsel-ag #'counsel-prompt-function-dir)))
 
 
 (provide 'setup-counsel)
