@@ -22,10 +22,18 @@ nlinum-plus will show the real line number at current line."
 (defun nlinum-plus-reflush ()
   "Reflush display on current window"
   (when nlinum-mode
+    (nlinum--after-change)
     (setq nlinum-plus--current-line (string-to-number (format-mode-line "%l")))
-    (remove-overlays (point-min) (point-max) 'nlinum t)
-    (with-silent-modifications
-      (remove-text-properties (point-min) (point-max) '(fontified)))))
+    ;; Do reflush only in the visible portion in the window, not the whole
+    ;; buffer, when possible.
+    (let* ((start (window-start))
+           (end (window-end))
+           (out-of-range-p (< (point-max) end)))
+      (when out-of-range-p
+        (setq start (point-min))
+        (setq end (point-max)))
+      (with-silent-modifications
+        (remove-text-properties start end '(fontified))))))
 
 (defun nlinum-plus-format-function (line width)
   "Function to replace `nlinum-format-function'."
