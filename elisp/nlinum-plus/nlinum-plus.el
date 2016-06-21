@@ -12,7 +12,7 @@ nlinum-plus will show the real line number at current line."
   "When non-nil, show relative line numbers.")
 
 (defface nlinum-plus-current-face
-  '((t :inherit linum :foreground "#CAE682" :background "#444444" :weight bold))
+  '((t :inherit linum :foreground "#CAE682" :weight bold))
   "Face for displaying current line."
   :group 'nlinum-plus)
 
