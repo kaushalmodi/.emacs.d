@@ -1,12 +1,9 @@
-;; Time-stamp: <2016-05-24 11:05:42 kmodi>
+;; Time-stamp: <2016-06-21 11:35:08 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
 
 (use-package multiple-cursors
-  :init
-  (progn
-    (setq mc/list-file (locate-user-emacs-file "mc-lists")))
   :bind (:map modi-mode-map
          ("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
@@ -27,8 +24,10 @@
          ("#" . mc/insert-numbers) ; use num prefix to set the starting number
          ("^" . mc/edit-beginnings-of-lines)
          ("$" . mc/edit-ends-of-lines))
-  :config
+  :init
   (progn
+    (setq mc/list-file (locate-user-emacs-file "mc-lists"))
+
     ;; Disable the annoying sluggish matching paren blinks for all cursors
     ;; when you happen to type a ")" or "}" at all cursor locations.
     (defvar modi/mc-blink-matching-paren--store nil
