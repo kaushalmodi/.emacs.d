@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:16:31 kmodi>
+;; Time-stamp: <2016-06-24 17:13:04 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -58,14 +58,8 @@
                     "--")))
 
     (setq ag-highlight-search t)
-    ;; By default, ag.el will open results in a different window in the frame, so
-    ;; the results buffer is still visible. You can override this so the results
-    ;; buffer is hidden and the selected result is shown in its place:
-    (setq ag-reuse-window nil)
-    ;; reuse the same *ag* buffer for all your searches
-    (setq ag-reuse-buffers t)
-    ;; ;; To save buffer automatically when `wgrep-finish-edit'
-    ;; (setq wgrep-auto-save-buffer t)
+
+    (setq ag-reuse-buffers nil) ; Open new buffers for new searches
 
     (with-eval-after-load 'projectile
       ;; Override the default function to use the projectile function instead
@@ -111,7 +105,7 @@ If called with a prefix, prompts for flags to pass to ag."
       ("/" . isearch-forward)
       ("n" . next-error-no-select)
       ("p" . previous-error-no-select)
-      ("q" . ag-kill-buffers))))
+      ("Q" . ag-kill-buffers))))
 
 
 (provide 'setup-ag)
