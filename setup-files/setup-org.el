@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-12 02:50:13 kmodi>
+;; Time-stamp: <2016-06-27 12:19:10 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -157,13 +157,10 @@
     ;; http://orgmode.org/manual/Template-expansion.html
     (setq org-capture-templates
           '(("j" "Journal" entry ; `org-capture' binding + j
-             (file+datetree (expand-file-name "journal.org" org-directory))
+             (file+datetree "journal.org")
              "\n* %?\n  Entered on %U")
             ("n" "Note" entry ; `org-capture' binding + n
-             (file (expand-file-name "notes.org" org-directory))
-             "\n* %?\n  Context:\n    %i\n  Entered on %U")
-            ("u" "UVM/System Verilog Notes" ; `org-capture' binding + u
-             entry (file (expand-file-name "uvm.org" org-directory))
+             (file "notes.org")
              "\n* %?\n  Context:\n    %i\n  Entered on %U")))
 
     (defvar modi/one-org-agenda-file (expand-file-name "agenda.files"
