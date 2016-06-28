@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-20 18:13:00 kmodi>
+;; Time-stamp: <2016-06-28 10:28:00 kmodi>
 
 ;; Verilog
 
@@ -16,6 +16,7 @@
 ;;    modi/verilog-find-parent-module (interactive)
 ;;    my/verilog-selective-indent
 ;;    modi/verilog-compile
+;;    convert end-block comments to block names
 ;;  hideshow
 ;;  hydra-verilog-template
 ;;  imenu + outshine
@@ -405,6 +406,47 @@ If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' pre
       (interactive)
       (modi/verilog-compile '(4)))
 
+;;;; convert end-block comments to block names
+    (defun modi/verilog-end-block-comments-to-block-names ()
+      "Convert valid end-block comments to ': BLOCK_NAME'.
+Reference: IEEE 1800-2012 SystemVerilog Section 9.3.4 Block Names.
+
+Examples: endmodule // module_name             → endmodule : module_name
+          endfunction // some comment          → endfunction // some comment
+          endfunction // class_name::func_name → endfunction : func_name "
+      (interactive)
+      (save-excursion
+        (goto-char (point-min))
+        (let* ((end-block-keywords '("end"
+                                     "join"
+                                     "join_any"
+                                     "join_none"
+                                     "endchecker"
+                                     "endclass"
+                                     "endclocking"
+                                     "endconfig"
+                                     "endfunction"
+                                     "endgroup"
+                                     "endinterface"
+                                     "endmodule"
+                                     "endpackage"
+                                     "endprimitive"
+                                     "endprogram"
+                                     "endproperty"
+                                     "endsequence"
+                                     "endtask"))
+               (end-block-keywords-regexp (regexp-opt end-block-keywords 'words))
+               ;; Section 5.6 Identifiers, keywords, and system names
+               (verilog-identifier-regexp "[a-zA-Z_][a-zA-Z0-9_$]*"))
+          (while (re-search-forward (concat "^"
+                                            "\\(?1:\\s-*" end-block-keywords-regexp "\\)"
+                                            "\\s-*//\\s-*"
+                                            "\\(" verilog-identifier-regexp "\\s-*::\\s-*\\)*"
+                                            "\\(?2:" verilog-identifier-regexp "\\)"
+                                            "\\s-*$")
+                                    nil :noerror)
+            (replace-match "\\1 : \\2")))))
+
 ;;; hideshow
     (with-eval-after-load 'hideshow
       (add-to-list 'hs-special-modes-alist
@@ -502,7 +544,10 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; just in comments). To do the highlighting intelligently, install the
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
 
-      ;; Replace tabs with spaces when saving files in verilog-mode
+      ;; Convert end-block comments to ': BLOCK_NAME' in verilog-mode.
+      (add-hook 'before-save-hook #'modi/verilog-end-block-comments-to-block-names nil :local)
+
+      ;; Replace tabs with spaces when saving files in verilog-mode.
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
 
     ;; *Append* `my/verilog-mode-customizations' to `verilog-mode-hook' so that
@@ -535,3 +580,7 @@ _a_lways         _f_or              _g_enerate         _O_utput
 ;; Convert $display statements to `uvm_info statements
 ;; Regex Search Expression - \$display(\(.*?\));\(.*\)
 ;; Replace Expression - `uvm_info("REPLACE_THIS_GENERIC_ID", $sformatf(\1), UVM_MEDIUM) \2
+
+;; Local Variables:
+;; aggressive-indent-mode: nil
+;; End:
