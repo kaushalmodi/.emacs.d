@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-28 10:28:00 kmodi>
+;; Time-stamp: <2016-06-28 14:31:27 kmodi>
 
 ;; Verilog
 
@@ -50,22 +50,21 @@
     (setq verilog-tab-to-comment           nil) ; nil
     (setq verilog-date-scientific-format   t)   ; t
 
-    (defconst modi/verilog-identifier-re "\\b[a-zA-Z][a-zA-Z0-9:_]*"
-      ;; The : is to allow parsing extern methods like class::task
-      "Regexp for a valid verilog identifier.")
+    (defconst modi/verilog-identifier-re "\\b[a-zA-Z][a-zA-Z0-9$_]*"
+      "Regexp for a valid verilog identifier.
+Reference: IEEE 1800-2012 SystemVerilog Section 5.6 Identifiers, keywords,
+and system names. ")
 
     (defconst modi/verilog-module-instance-re
       (concat "^\\s-*"
-              "\\(?1:" ; force group number to 1
-              modi/verilog-identifier-re ; module name
-              "\\)"
+              ;; force group number to 1; module name
+              "\\(?1:" modi/verilog-identifier-re "\\)"
               "\\(?:\n\\|\\s-\\)+" ; newline/space
               ;; optional hardware parameters followed by optional comments
               ;; followed by optional space/newline before instance name
               "\\(#([^;]+?)\\(\\s-*//.*?\\)*[^;\\./]+?\\)*"
-              "\\(?2:" ; force group number to 2
-              modi/verilog-identifier-re
-              "\\)" ; instance name
+              ;; force group number to 2; instance name
+              "\\(?2:" modi/verilog-identifier-re "\\)"
               "\\(?:\n\\|\\s-\\)*" ; optional newline/space
               "(" ; opening parenthesis `(' before port list
               )
@@ -92,8 +91,10 @@
               "\\|" "task" "\\)"
               "\\s-+"
               "\\([a-z]+\\s-+\\)*" ; void, static, automatic, ..
-              "\\(?2:" modi/verilog-identifier-re "\\)" ; block name
-                                        ; force group number to 2
+              "\\(?2:"
+              "\\(?:" modi/verilog-identifier-re "::\\)*" ; allow parsing extern methods like class::task
+              modi/verilog-identifier-re ; block name, force group number to 2
+              "\\)"
               "\\b"
               )
       "Regexp for a valid verilog block header statement.")
@@ -345,19 +346,21 @@ the project."
             (save-excursion
               (re-search-backward verilog-module-re)
               (setq module-name (match-string 1))
-              (setq module-instance-re
-                    (concat "^\\s*" ; pcre regex
+              (setq module-instance-pcre ; pcre regex
+                    (concat "^\\s*"
                             module-name
                             "\\s+"
                             "(#\\s*\\((\\n|.)*?\\))*" ; optional hardware parameters
                                         ; '(\n|.)*?' does non-greedy multi-line grep
                             "(\\n|.)*?" ; optional newline/space before instance name
+                            "[^.]" ; do not match ".PARAM (PARAM_VAL),"
                             "\\K" ; don't highlight anything till this point
                             modi/verilog-identifier-re ; instance name
                             "(?=[^a-zA-Z0-9_]*\\()")) ; optional space/newline after instance name
                                         ; and before opening parenthesis `('
                                         ; don't highlight anything in (?=..)
-              (ag-regexp module-instance-re (projectile-project-root)))))))
+              ;; (message module-instance-pcre)
+              (ag-regexp module-instance-pcre (projectile-project-root)))))))
 
 ;;;; my/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
@@ -435,14 +438,12 @@ Examples: endmodule // module_name             → endmodule : module_name
                                      "endproperty"
                                      "endsequence"
                                      "endtask"))
-               (end-block-keywords-regexp (regexp-opt end-block-keywords 'words))
-               ;; Section 5.6 Identifiers, keywords, and system names
-               (verilog-identifier-regexp "[a-zA-Z_][a-zA-Z0-9_$]*"))
+               (end-block-keywords-re (regexp-opt end-block-keywords 'words)))
           (while (re-search-forward (concat "^"
-                                            "\\(?1:\\s-*" end-block-keywords-regexp "\\)"
+                                            "\\(?1:\\s-*" end-block-keywords-re "\\)"
                                             "\\s-*//\\s-*"
-                                            "\\(" verilog-identifier-regexp "\\s-*::\\s-*\\)*"
-                                            "\\(?2:" verilog-identifier-regexp "\\)"
+                                            "\\(" modi/verilog-identifier-re "\\s-*::\\s-*\\)*"
+                                            "\\(?2:" modi/verilog-identifier-re "\\)"
                                             "\\s-*$")
                                     nil :noerror)
             (replace-match "\\1 : \\2")))))
