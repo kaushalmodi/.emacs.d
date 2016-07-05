@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-24 17:13:04 kmodi>
+;; Time-stamp: <2016-07-05 10:54:15 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -42,20 +42,7 @@
     ;; So the ignores from ~/.agignore don't have to be set here again.
     (setq ag-arguments
           (append modi/ag-arguments
-                  '("--column" ; print column numbers in results
-                                        ; mandatory argument for ag.el as per
-                                        ; https://github.com/Wilfred/ag.el/issues/41
-                    "--stats"
-                    ;; https://github.com/Wilfred/ag.el/commit/7015493e711a73e5d0d0e1015bc065efe3bddff9#commitcomment-11281719
-                    ;; -- marks the end of all options. All arguments after --
-                    ;; are interpreted as normal arguments, even if the begin
-                    ;; with - or --.  For instance, "ag --nogroup" calls ag with
-                    ;; the "--nogroup" option, whereas "ag -- --nogroup" searches
-                    ;; for the pattern "--nogroup" in the current directory.
-                    ;; -- was historically introduced by GNU programs, and has now
-                    ;; become the standard notation for this purpose, and is
-                    ;; supported by almost all command line programs.
-                    "--")))
+                  '("--stats")))
 
     (setq ag-highlight-search t)
 
