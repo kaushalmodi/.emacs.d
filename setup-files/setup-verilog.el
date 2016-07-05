@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-28 14:31:27 kmodi>
+;; Time-stamp: <2016-07-05 16:21:56 kmodi>
 
 ;; Verilog
 
@@ -312,22 +312,36 @@ point."
 
 ;;;; modi/verilog-jump-to-module-at-point (interactive)
       (defun modi/verilog-jump-to-module-at-point ()
-        "If the point is somewhere in a module instance, jump to the definition
-of that module.
+        "When in a module instance, jump to that module's definition.
 
-It is required to have `ctags' executable and `projectile' package installed
-for this to work."
+Calling this function again after that *without moving the point* will
+call `pop-tag-mark' and jump will be made back to the original position.
+
+Usage: While the point is inside a verilog instance, say, \"core u_core\",
+calling this command, will make a jump to \"module core\". When you call this
+command again *without moving the point*, the jump will be made back to the
+earlier position where the point was inside the \"core u_core\" instance.
+
+It is required to have `ctags' executable and `projectile' package installed,
+and to have a `ctags' TAGS file pre-generated for this command to work."
         (interactive)
-        (when (and (executable-find "ctags")
-                   (locate-file "TAGS" (list `,(projectile-project-root))))
-          ;; `modi/verilog-which-func-xtra' contains the module name in
-          ;; whose instance declaration the point is currently.
-          (if (and (modi/verilog-find-module-instance)
-                   modi/verilog-which-func-xtra)
-              (progn
-                (modi/update-etags-table)
-                (find-tag modi/verilog-which-func-xtra))
-            (pop-tag-mark))))
+        ;; You need to have ctags installed.
+        (if (executable-find "ctags")
+            (let ((tags-file (expand-file-name "TAGS" (projectile-project-root))))
+              ;; You need to have the ctags TAGS file pre-generated.
+              (if (file-exists-p tags-file)
+                  ;; `modi/verilog-which-func-xtra' contains the module name in
+                  ;; whose instance declaration the point is currently.
+                  (if (and (modi/verilog-find-module-instance)
+                           modi/verilog-which-func-xtra)
+                      (progn
+                        (modi/update-etags-table)
+                        (find-tag modi/verilog-which-func-xtra))
+                    ;; Do `pop-tag-mark' if this command is called when the
+                    ;; point in *not* inside a verilog instance.
+                    (pop-tag-mark))
+                (user-error "Ctags TAGS file `%s' was not found" tags-file)))
+          (user-error "Executable `ctags' is required for this command to work")))
 
       (with-eval-after-load 'ag
 
