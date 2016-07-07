@@ -1,5 +1,5 @@
 #!/bin/tcsh -f
-# Time-stamp: <2016-05-07 17:13:53 kmodi>
+# Time-stamp: <2016-07-07 15:24:22 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -19,6 +19,7 @@
 #   source mybuild.csh -noupdate -- Install without updating from the git
 #   source mybuild.csh -noinstall -- Build but do not install in ${MY_EMACS_INSTALL_DIR}
 #   source mybuild.csh -noopt -subdir noimagemagick -- Build without optimization to a subdir "noimagemagick/"
+#   source mybuild.csh -noupdate -quick -noinfo -noelc -noinstall -- Quick builds without git clone, no info or elc building and no install; useful during git bisects
 
 # Update the following environment variables post-installation:
 #   prepend PATH     with "${HOME}/usr_local/apps/${OSREV}/emacs/`basename ${MY_EMACS_INSTALL_DIR}`/bin"
@@ -47,6 +48,8 @@ set install_sub_dir   = ""
 set no_install        = 0
 set dquote            = '"'
 set debug             = 0
+set no_info           = 0
+set no_elc            = 0
 
 while ($#argv)
     switch ($argv[1])
@@ -74,6 +77,14 @@ while ($#argv)
             breaksw
         case -noinstall:
             set no_install = 1
+            shift
+            breaksw
+        case -noinfo:
+            set no_info = 1
+            shift
+            breaksw
+        case -noelc
+            set no_elc = 1
             shift
             breaksw
         case -debug:
@@ -146,7 +157,7 @@ if ( ${emacs_debug_build} ) then # For Debug
     set emacs_configure_CXXFLAGS = "CXXFLAGS=${dquote}-ggdb3 -O0"
     set emacs_configure_LDFLAGS  = "${emacs_configure_LDFLAGS} -ggdb3"
 else
-    # http://emacs.stackexchange.com/questions/14043/build-a-minimal-emacs-25-for-unit-testing#comment27111_17436
+    # http://emacs.stackexchange.com/a/19839/115
     set emacs_configure_CFLAGS   = "CFLAGS=${dquote}-O2 -march=native"
 endif
 
@@ -195,16 +206,38 @@ if ( ! $debug ) then
     #   make: *** [Makefile] Error 1
     sed -i 's|./configure|${MY_EMACS_CONFIGURE}|g' GNUmakefile
 
+    # Do not build info files
+    if ( ${no_info} ) then
+        \sed -E -i 's/^(\s*all:.*)info/\1/' Makefile.in
+    endif
+
+    # Do not build .elc files
+    if ( ${no_elc} ) then
+        # In order to skip .elc file generation,
+        # replace below:
+        #   @echo Directories for loaddefs: ${SUBDIRS_ALMOST}
+        #   $(AM_V_GEN)$(emacs) -l autoload \
+        #       --eval '(setq autoload-ensure-writable t)' \
+        #       --eval '(setq autoload-builtin-package-versions t)' \
+        #       --eval '(setq generated-autoload-file (expand-file-name (unmsys--file-name "$@")))' \
+        #       -f batch-update-autoloads ${SUBDIRS_ALMOST}
+        # with:
+        #   true
+        \sed -E -i 's/^(\s*)@echo/\1true\n\0/'lisp/Makefile.in
+        \sed -E -i '/^\s*@echo/,/-f batch/d' lisp/Makefile.in
+    endif
+
+    # The below step is needed as we would need to rebuild all the Makefiles
+    # when switching branches (e.g. from emacs-25 to master, or vice-versa),
+    # or when git bisecting.
+    eval ${MY_EMACS_CONFIGURE}
+
     if ( ${quick_make} ) then
         make
     else
-        # The below step is needed as we would need to rebuild all the Makefiles
-        # when switching branches (e.g. from emacs-25 to master, or vice-versa)
-        eval ${MY_EMACS_CONFIGURE}
-
         # Do NOT call autoreconf. "make bootstrap" below will call autoreconf
         # with proper arguments.
-        # The `make bootstrap' step is required for a clean fresh install
+        # The `make bootstrap' step is required for a clean fresh install.
         make bootstrap
     endif
 
