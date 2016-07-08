@@ -1,8 +1,9 @@
-;; Time-stamp: <2016-06-09 13:18:27 kmodi>
+;; Time-stamp: <2016-07-08 16:28:16 kmodi>
 
 (use-package vc
   :bind (:map modi-mode-map
-         ("C-x v =" . modi/vc-diff))
+         ("C-x v =" . modi/vc-diff)
+         ("C-x v H" . vc-region-history)) ; New command in emacs 25.x
   :config
   (progn
     (defun modi/vc-diff (no-whitespace)
