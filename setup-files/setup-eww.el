@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:26:02 kmodi>
+;; Time-stamp: <2016-07-08 18:22:46 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -31,6 +31,21 @@
       "Rename eww browser's buffer so sites open in new page."
       (rename-buffer "eww" t))
     (add-hook 'eww-mode-hook #'xah-rename-eww-hook)
+
+    ;; If the current buffer is an eww buffer, "M-x eww" will always reuse the
+    ;; current buffer to load the new page. Below advice will make "C-u M-x eww"
+    ;; force a new eww buffer even when the current buffer is an eww buffer.
+    ;; The above `xah-rename-eww-hook' fix is still needed in order to create
+    ;; uniquely named eww buffers.
+    ;; http://emacs.stackexchange.com/a/24477/115
+    (defun modi/force-new-eww-buffer (orig-fun &rest args)
+      "When prefix argument is used, a new eww buffer will be created.
+This is regardless of whether the current buffer is an eww buffer. "
+      (if current-prefix-arg
+          (with-temp-buffer
+            (apply orig-fun args))
+        (apply orig-fun args)))
+    (advice-add 'eww :around #'modi/force-new-eww-buffer)
 
     ;; Override the default definition of `eww-search-words'
     (defun eww-search-words (&optional beg end)
