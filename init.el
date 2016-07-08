@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-08 23:34:17 kmodi>
+;; Time-stamp: <2016-07-08 12:00:09 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -241,6 +241,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-manage-minor-mode)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
+(require 'setup-news)
 (require 'setup-org)
 (require 'setup-orgstruct)
 (require 'setup-outshine)
