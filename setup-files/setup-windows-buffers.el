@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-09 12:05:37 kmodi>
+;; Time-stamp: <2016-07-08 14:52:57 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -208,30 +208,31 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
 
 ;;; Revert buffer
 (defun modi/revert-all-file-buffers ()
-  "Refresh all open buffers from their respective files."
+  "Refresh all open file buffers without confirmation.
+Buffers in modified (not yet saved) state in emacs will not be reverted. They
+will be reverted though if they were modified outside emacs.
+Buffers visiting files which do not exist any more or are no longer readable
+will be killed."
   (interactive)
-  (let* ((list (buffer-list))
-         (buffer (car list)))
-    (while buffer
-      (let ((filename (buffer-file-name buffer)))
-        ;; (message "buffer:%s  filename:%s  modified:%s  fileexists:%s"
-        ;;          buffer filename (buffer-modified-p buffer)
-        ;;          (file-exists-p (format "%s" filename)))
+  (dolist (buf (buffer-list))
+    (let ((filename (buffer-file-name buf)))
+      ;; (message "buf:%s  filename:%s  modified:%s  filereadable:%s"
+      ;;          buf filename
+      ;;          (buffer-modified-p buf) (file-readable-p (format "%s" filename)))
 
-        ;; Revert only buffers containing files, which are not modified;
-        ;; do not try to revert non-file buffers like *Messages*.
-        (when (and filename
-                   (not (buffer-modified-p buffer)))
-          (if (file-exists-p filename)
-              ;; If the file exists, revert the buffer.
-              (with-current-buffer buffer
-                (revert-buffer :ignore-auto :noconfirm :preserve-modes))
-            ;; If the file doesn't exist, kill the buffer.
-            (let (kill-buffer-query-functions) ; No query done when killing buffer
-              (kill-buffer buffer)
-              (message "Killed non-existing file buffer: %s" filename)))))
-      (setq buffer (pop list)))
-    (message "Finished reverting buffers containing unmodified files.")))
+      ;; Revert only buffers containing files, which are not modified;
+      ;; do not try to revert non-file buffers like *Messages*.
+      (when (and filename
+                 (not (buffer-modified-p buf)))
+        (if (file-readable-p filename)
+            ;; If the file exists and is readable, revert the buffer.
+            (with-current-buffer buf
+              (revert-buffer :ignore-auto :noconfirm :preserve-modes))
+          ;; Otherwise, kill the buffer.
+          (let (kill-buffer-query-functions) ; No query done when killing buffer
+            (kill-buffer buf)
+            (message "Killed non-existing/unreadable file buffer: %s" filename))))))
+  (message "Finished reverting buffers containing unmodified files."))
 
 (defun modi/revert-noconfirm-help-buffers (&rest args)
   "Don't confirm when reverting *Help* buffers."
