@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-08 12:48:22 kmodi>
+;; Time-stamp: <2016-07-08 13:46:47 kmodi>
 
 ;; Handles the NEWS better
 
@@ -22,7 +22,7 @@
     "Search in all NEWS files for REGEXP."
     (if (< (length regexp) 3)
         (counsel-more-chars 3)
-      (let ((default-directory data-directory)
+      (let ((default-directory counsel--git-grep-dir)
             (regex (counsel-unquote-regex-parens
                     (setq ivy--old-re (ivy--regex regexp)))))
         (counsel--async-command
@@ -33,7 +33,7 @@
         nil)))
 
   (defun counsel-news (&optional initial-input)
-    "Grep for a pattern in regr*list files using ag.
+    "Search for a pattern in NEWS files using ag.
 INITIAL-INPUT can be given as the initial minibuffer input."
     (interactive)
     (require 'counsel)
