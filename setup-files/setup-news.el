@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-08 13:46:47 kmodi>
+;; Time-stamp: <2016-07-09 14:16:07 kmodi>
 
 ;; Handles the NEWS better
 
@@ -18,39 +18,15 @@
 
 ;; NEWS search
 (when (executable-find "ag")
-  (defun counsel-news-function (regexp)
-    "Search in all NEWS files for REGEXP."
-    (if (< (length regexp) 3)
-        (counsel-more-chars 3)
-      (let ((default-directory counsel--git-grep-dir)
-            (regex (counsel-unquote-regex-parens
-                    (setq ivy--old-re (ivy--regex regexp)))))
-        (counsel--async-command
-         (format (concat counsel-ag-base-command
-                         ;; search only in files whose names contain '/NEWS'
-                         " -G '/NEWS'")
-                 (shell-quote-argument regex)))
-        nil)))
-
-  (defun counsel-news (&optional initial-input)
+  (defun counsel-ag-news (&optional initial-input)
     "Search for a pattern in NEWS files using ag.
 INITIAL-INPUT can be given as the initial minibuffer input."
     (interactive)
-    (require 'counsel)
-    (setq counsel--git-grep-dir data-directory)
-    (ivy-read "Search NEWS: " 'counsel-news-function
-              :initial-input initial-input
-              :dynamic-collection t
-              :history 'counsel-git-grep-history
-              :action #'counsel-git-grep-action
-              :unwind (lambda ()
-                        (counsel-delete-process)
-                        (swiper--cleanup))
-              :caller 'counsel-news))
+    (counsel-ag initial-input data-directory " -G '/NEWS'" "Search NEWS"))
 
   ;; Override the default binding to `view-emacs-news', which is also bound to
   ;; "C-h C-n" by default.
-  (bind-key "C-h n" #'counsel-news modi-mode-map))
+  (bind-key "C-h n" #'counsel-ag-news modi-mode-map))
 
 
 (provide 'setup-news)
