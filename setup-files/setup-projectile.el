@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-10 00:35:26 kmodi>
+;; Time-stamp: <2016-07-10 22:26:30 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -73,8 +73,8 @@ list of sub-project files if the vcs is git."
 
     (defun modi/advice-projectile-dont-cache-ignored-projects (&rest args)
       "Do not cache files from ignored projects when doing `find-file'."
-      (let ((do-not-cache (member (projectile-project-p)
-                                  projectile-ignored-projects)))
+      (let* ((project-root (projectile-project-p))
+             (do-not-cache (projectile-ignored-project-p project-root)))
         do-not-cache))
     (advice-add 'projectile-cache-files-find-file-hook :before-until
                 #'modi/advice-projectile-dont-cache-ignored-projects)
@@ -120,11 +120,11 @@ With prefix argument (`C-u'), also kill the special buffers."
       "
      PROJECTILE: %(if (fboundp 'projectile-project-root) (projectile-project-root) \"TBD\")
 
-^^^^       Find               ^^   Search/Tags       ^^^^       Buffers               ^^   Cache
-^^^^--------------------------^^---------------------^^^^-----------------------------^^-----------------------
-_f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear
-^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project
-^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: Kill all buffers      _X_: cleanup non-existing
+^^^^       Find               ^^   Search/Tags       ^^^^       Buffers               ^^   Cache                     ^^^^       Other
+^^^^--------------------------^^---------------------^^^^-----------------------------^^------------------------------------------------------------------
+_f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear               ^^    _E_: edit project's .dir-locals.el
+^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project      _s-p_/_p_: switch to an open project
+^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: kill all buffers      _X_: cleanup non-existing      ^^    _P_: switch to any other project
 ^^    _r_: recent file        ^^                     ^^^^                             _z_: cache current
 ^^    _D_: dir
 
@@ -137,14 +137,16 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
       ("s-f" projectile-find-file)
       ("F"   projectile-find-file-dwim)
       ("D"   projectile-find-dir)
+      ("E"   projectile-edit-dir-locals)
       ("g"   ggtags-update-tags)
       ("i"   projectile-ibuffer)
       ("K"   projectile-kill-buffers)
       ("s-k" projectile-kill-buffers)
       ("m"   projectile-multi-occur)
       ("o"   projectile-multi-occur)
-      ("p"   projectile-switch-project "switch project")
-      ("s-p" projectile-switch-project "switch project")
+      ("p"   projectile-switch-open-project)
+      ("s-p" projectile-switch-open-project)
+      ("P"   projectile-switch-project)
       ("s"   projectile-switch-project)
       ("r"   projectile-recentf)
       ("x"   projectile-remove-known-project)
