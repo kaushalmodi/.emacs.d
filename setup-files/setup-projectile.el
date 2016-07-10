@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 23:29:49 kmodi>
+;; Time-stamp: <2016-07-10 00:35:26 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -88,50 +88,6 @@ list of sub-project files if the vcs is git."
     (when (fboundp 'ggtags-mode)
       (advice-add 'projectile-visit-project-tags-table :override
                   #'modi/advice-projectile-dont-visit-tags-table))
-
-    (defun modi/advice-projectile-project-root-no-truename ()
-      "Retrieves the root directory of a project if available.
-The current directory is assumed to be the project's root otherwise.
-
-Do not try to get the truename in the case of symbolic links."
-      (let ((dir default-directory))
-        (or (--some (let* ((cache-key (format "%s-%s" it dir))
-                           (cache-value (gethash cache-key projectile-project-root-cache)))
-                      (if cache-value
-                          cache-value
-                        ;; (let ((value (funcall it (file-truename dir))))
-                        (let ((value (funcall it dir)))
-                          (puthash cache-key value projectile-project-root-cache)
-                          value)))
-                    projectile-project-root-files-functions)
-            (if projectile-require-project-root
-                (error "You're not in a project")
-              default-directory))))
-    (advice-add 'projectile-project-root :override
-                #'modi/advice-projectile-project-root-no-truename)
-
-    ;; https://github.com/bbatsov/projectile/commit/924d73120bca6adc5b9bf3d79ad53075a63b5f1e
-    (defun modi/advice-projectile-cache-current-file-no-truename ()
-      "Add the currently visited file to the cache, but do not try to find a
-file's true name (don't follow symlinks)."
-      (interactive)
-      (let ((current-project (projectile-project-root)))
-        (when (gethash (projectile-project-root) projectile-projects-cache)
-          ;; (let* ((abs-current-file (file-truename (buffer-file-name (current-buffer))))
-          (let* ((abs-current-file (buffer-file-name (current-buffer)))
-                 (current-file (file-relative-name abs-current-file current-project)))
-            (unless (or (projectile-file-cached-p current-file current-project)
-                        (projectile-ignored-directory-p (file-name-directory abs-current-file))
-                        (projectile-ignored-file-p abs-current-file))
-              (puthash current-project
-                       (cons current-file (gethash current-project projectile-projects-cache))
-                       projectile-projects-cache)
-              (projectile-serialize-cache)
-              (message "File %s added to project %s cache."
-                       (propertize current-file 'face 'font-lock-keyword-face)
-                       (propertize current-project 'face 'font-lock-keyword-face)))))))
-    (advice-add 'projectile-cache-current-file :override
-                #'modi/advice-projectile-cache-current-file-no-truename)
 
     ;; http://emacs.stackexchange.com/a/10187/115
     (defun modi/kill-non-project-buffers (&optional kill-special)
