@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-05 16:21:56 kmodi>
+;; Time-stamp: <2016-07-11 13:34:17 kmodi>
 
 ;; Verilog
 
@@ -326,7 +326,8 @@ It is required to have `ctags' executable and `projectile' package installed,
 and to have a `ctags' TAGS file pre-generated for this command to work."
         (interactive)
         ;; You need to have ctags installed.
-        (if (executable-find "ctags")
+        (if (and (executable-find "ctags")
+                 (projectile-project-root))
             (let ((tags-file (expand-file-name "TAGS" (projectile-project-root))))
               ;; You need to have the ctags TAGS file pre-generated.
               (if (file-exists-p tags-file)

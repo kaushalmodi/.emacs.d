@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-01-29 14:27:02 kmodi>
+;; Time-stamp: <2016-07-11 13:34:58 kmodi>
 
 ;; Setup for different tags
 
@@ -121,7 +121,8 @@
       (defun modi/update-etags-table ()
         "Update `etags-table-alist' based on the current project directory."
         (interactive)
-        (when (featurep 'projectile)
+        (when (and (featurep 'projectile)
+                   (projectile-project-root))
           (add-to-list 'etags-table-alist
                        `(,(concat (projectile-project-root) ".*")
                          ,(concat (projectile-project-root) "TAGS"))

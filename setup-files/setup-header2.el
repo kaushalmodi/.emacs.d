@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-26 15:01:28 kmodi>
+;; Time-stamp: <2016-07-11 13:33:10 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -78,7 +78,8 @@ a `lambda' return `t', so the version fields are always inserted.")
     (defsubst modi/header-projectname ()
       "Insert \"Project\" line."
       (insert header-prefix-string "Project            : "
-              (when (featurep 'projectile)
+              (when (and (featurep 'projectile)
+                         (projectile-project-root))
                 (replace-regexp-in-string "/proj/\\(.*?\\)/.*"
                                           "\\1"
                                           (projectile-project-root)))
