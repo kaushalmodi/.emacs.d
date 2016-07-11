@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-10 22:26:30 kmodi>
+;; Time-stamp: <2016-07-11 01:18:53 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -74,7 +74,8 @@ list of sub-project files if the vcs is git."
     (defun modi/advice-projectile-dont-cache-ignored-projects (&rest args)
       "Do not cache files from ignored projects when doing `find-file'."
       (let* ((project-root (projectile-project-p))
-             (do-not-cache (projectile-ignored-project-p project-root)))
+             (do-not-cache (or (null project-root)
+                               (projectile-ignored-project-p project-root))))
         do-not-cache))
     (advice-add 'projectile-cache-files-find-file-hook :before-until
                 #'modi/advice-projectile-dont-cache-ignored-projects)
