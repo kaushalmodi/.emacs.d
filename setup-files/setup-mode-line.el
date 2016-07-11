@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:35:02 kmodi>
+;; Time-stamp: <2016-07-10 22:58:00 kmodi>
 
 ;; Customize the mode-line
 
@@ -227,7 +227,6 @@ TIME is \"nil\" or \"\"."
         (add-to-list 'rm-text-properties '("\\` Server\\'" 'display "​Σ")) ; Server
         (add-to-list 'rm-text-properties '("\\` μ\\'"      'display "​μ")) ; modi-mode
         (add-to-list 'rm-text-properties '("\\` Wg\\'"     'display "​w")) ; writegood
-        (add-to-list 'rm-text-properties '("\\` =>\\'"     'display "​a")) ; aggressive indent
         (add-to-list 'rm-text-properties '("\\` Vis\\'"    'display "​V")) ; visible-mode
         (with-eval-after-load 'setup-font-check
           (if font-symbola-p
@@ -236,13 +235,17 @@ TIME is \"nil\" or \"\"."
                 (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​𝘵")) ; temp
                 (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​▯")) ; region bindings
                 (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​💡")) ; beacon
-                (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​🞵"))) ; Hi-Lock
+                (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​🞵")) ; Hi-Lock
+                (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​⇥")) ; aggressive indent
+                (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​⭮"))) ; auto revert
             (progn
               (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​Tail|"))
               (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​t"))
               (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​r"))
               (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​*"))
-              (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​H")))))))
+              (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​H"))
+              (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​a"))
+              (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​AR|")))))))
 
     (sml/setup)))
 
