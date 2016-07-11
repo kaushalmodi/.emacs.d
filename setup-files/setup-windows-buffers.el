@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-08 14:52:57 kmodi>
+;; Time-stamp: <2016-07-11 18:13:11 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -482,22 +482,25 @@ buffers: *gtags-global*, *ag*, *Occur*."
 ;; Improved upon http://stackoverflow.com/a/4685005/1219634
 (defun modi/messages-auto-tail (&rest _)
   "Make *Messages* buffer auto-scroll to the end after each message."
-  (let ((msg-buf-name "*Messages*"))
+  (let* ((buf-name "*Messages*")
+         ;; Create *Messages* buffer if it does not exist
+         (buf (get-buffer-create buf-name)))
     ;; Activate this advice only if the point is _not_ in the *Messages* buffer
     ;; to begin with. This condition is required; otherwise you will not be
     ;; able to use `isearch' and other stuff within the *Messages* buffer as
     ;; the point will keep moving to the end of buffer :P
-    (when (not (string= msg-buf-name (buffer-name)))
+    (when (not (string= buf-name (buffer-name)))
       ;; Go to the end of buffer in all *Messages* buffer windows that are
       ;; *live* (`get-buffer-window-list' returns a list of only live windows).
-      (dolist (win (get-buffer-window-list msg-buf-name nil :all-frames))
+      (dolist (win (get-buffer-window-list buf-name nil :all-frames))
         (with-selected-window win
           (goto-char (point-max))))
-      ;; Go to the end of the *Messages* buffer even if it is not in one of the
-      ;; live windows.
-      (with-current-buffer msg-buf-name
+      ;; Go to the end of the *Messages* buffer even if it is not in one of
+      ;; the live windows.
+      (with-current-buffer buf
         (goto-char (point-max))))))
 (advice-add 'message :after #'modi/messages-auto-tail)
+;; (advice-remove 'message #'modi/messages-auto-tail)
 
 ;;; Bindings
 ;;;; Read-only Buffer Bindings
