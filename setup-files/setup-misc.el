@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-20 17:34:53 kmodi>
+;; Time-stamp: <2016-07-11 17:48:00 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -214,6 +214,23 @@ in the mode line."
  ;; kill the emacs server.
  ("C-x C-c" . modi/quit-emacs)
  ("C-x M-c" . modi/quit-emacs-no-desktop-save))
+
+;; Basic `global-map' bindings saved to `modi-mode-map' also in the event the
+;; former gets wiped off due to a bug or by mistake.
+;; https://lists.gnu.org/archive/html/emacs-devel/2016-07/msg00519.html
+(bind-keys
+ :map modi-mode-map
+  ("M-w" . kill-ring-save)
+  ("C-y" . yank)
+  ("C-p" . previous-line)
+  ("C-n" . next-line)
+  ("C-b" . backward-char)
+  ("C-f" . forward-char)
+  ("C-x C-e" . eval-last-sexp)
+  ("C-c t" . hydra-toggle/body)
+  ("C-h l" . view-lossage)
+  ("C-x C-c" . modi/quit-emacs)
+  ("C-x M-c" . modi/quit-emacs-no-desktop-save))
 
 
 (provide 'setup-misc)
