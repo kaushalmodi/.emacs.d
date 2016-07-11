@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-07-02 14:07:19 kmodi>
+;; Time-stamp: <2016-07-11 14:54:38 kmodi>
 
 ;; Engine mode
 ;; https://github.com/hrs/engine-mode
@@ -14,15 +14,15 @@
       "https://duckduckgo.com/html/?q=%s"
       :keybinding "d")
 
+    (defengine google
+      "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+      :keybinding "g")
+
     (defengine github-el
       "https://github.com/search?type=Code&q=extension:el+%s"
       :keybinding "e"
       :browser 'browse-url-firefox
       :docstring "Search .el files on github.com.")
-
-    (defengine google
-      "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
-      :keybinding "g")
 
     (defengine github-el-km
       "https://github.com/search?type=Code&q=extension:el+user:kaushalmodi+%s"
@@ -39,7 +39,13 @@
       "https://en.wikipedia.org/wiki/%s"
       :keybinding "W")
 
-    (engine-mode t)))
+    (defengine emacs-devel
+      "https://lists.gnu.org/archive/cgi-bin/namazu.cgi?query=%s&submit=Search&idxname=emacs-devel"
+      :keybinding "d"
+      :browser 'browse-url-firefox
+      :docstring "Search posts on emacs-devel archive.")
+
+    (engine-mode 1)))
 
 
 (provide 'setup-engine-mode)
