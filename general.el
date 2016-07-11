@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 10:43:09 kmodi>
+;; Time-stamp: <2016-07-12 08:22:53 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -137,6 +137,30 @@ If HERE is non-nil, also insert the string at point."
     (when here
       (insert emacs-build-info))
     emacs-build-info))
+
+(defmacro emacs-q-template (pkgs &rest body)
+  "Install packages in PKGS list and evaluate BODY.
+
+Example usage:
+
+1. Launch 'emacs -Q'.
+2. Copy this macro definition to its scratch buffer and evaluate it.
+3. Evaluate a minimum working example using this macro as below:
+     (emacs-q-template '(projectile)
+       (projectile-global-mode)) "
+  (declare (indent 1) (debug t))
+  `(progn
+     (require 'package)
+     (setq package-user-dir (concat (getenv "HOME") "/.emacs.d/elpa_test/"))
+     (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+     (package-initialize)
+     (package-refresh-contents)
+
+     (dolist (pkg ,pkgs)
+       (package-install pkg)
+       (require pkg))
+
+     ,@body))
 
 ;; http://stackoverflow.com/a/20747279/1219634
 (defun modi/read-file (f)
