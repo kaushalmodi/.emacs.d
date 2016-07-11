@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 01:18:53 kmodi>
+;; Time-stamp: <2016-07-11 10:01:59 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -70,15 +70,6 @@ list of sub-project files if the vcs is git."
       (projectile-files-via-ext-command (projectile-get-ext-command)))
     (advice-add 'projectile-get-repo-files :override
                 #'modi/advice-projectile-no-sub-project-files)
-
-    (defun modi/advice-projectile-dont-cache-ignored-projects (&rest args)
-      "Do not cache files from ignored projects when doing `find-file'."
-      (let* ((project-root (projectile-project-p))
-             (do-not-cache (or (null project-root)
-                               (projectile-ignored-project-p project-root))))
-        do-not-cache))
-    (advice-add 'projectile-cache-files-find-file-hook :before-until
-                #'modi/advice-projectile-dont-cache-ignored-projects)
 
     ;; Do not visit the current project's tags table if `ggtags-mode' is loaded.
     ;; Doing so prevents the unnecessary call to `visit-tags-table' function
