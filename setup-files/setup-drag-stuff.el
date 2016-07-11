@@ -1,9 +1,14 @@
-;; Time-stamp: <2016-05-25 09:00:41 kmodi>
+;; Time-stamp: <2016-07-11 18:19:31 kmodi>
 
 ;; Drag Stuff
 ;; https://github.com/rejeep/drag-stuff
 
 (use-package drag-stuff
+  :bind (:map modi-mode-map
+         ("C-M-p" . drag-stuff-up)
+         ("C-M-n" . drag-stuff-down)
+         ("C-M-;" . drag-stuff-left)
+         ("C-M-'" . drag-stuff-right))
   :config
   (progn
     ;; http://emacs.stackexchange.com/a/13942/115
@@ -40,18 +45,10 @@ the vertical drag is done."
         (setq modi/drag-stuff--point-mark-exchanged nil)))
 
     (add-hook 'drag-stuff-before-drag-hook #'modi/drag-stuff--adj-pt-pre-drag)
-    (add-hook 'drag-stuff-after-drag-hook  #'modi/drag-stuff--rst-pt-post-drag)
+    (add-hook 'drag-stuff-after-drag-hook  #'modi/drag-stuff--rst-pt-post-drag)))
 
-    (defun drag-stuff-define-keys ()
-      "Override the default key binding function."
-      (bind-keys
-       :map drag-stuff-mode-map
-        ("C-M-p" . drag-stuff-up)
-        ("C-M-n" . drag-stuff-down)
-        ("C-M-;" . drag-stuff-left)
-        ("C-M-'" . drag-stuff-right)))
-
-    (drag-stuff-global-mode 1)))
+;; PS: There is *no* need to enable the `drag-stuff-mode'. All that does is
+;; define the `drag-stuff-mode-map' bindings.
 
 
 (provide 'setup-drag-stuff)
