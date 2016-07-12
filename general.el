@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-12 08:22:53 kmodi>
+;; Time-stamp: <2016-07-12 17:12:07 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -138,29 +138,47 @@ If HERE is non-nil, also insert the string at point."
       (insert emacs-build-info))
     emacs-build-info))
 
-(defmacro emacs-q-template (pkgs &rest body)
-  "Install packages in PKGS list and evaluate BODY.
+(defmacro emacs-pkg-debug-setup (pkg-alist &rest body)
+  "Install packages in PKG-ALIST and evaluate BODY.
+Each element of PKG-ALIST has the form (((ID . LOCATION) . (PKG1 PKG2 ..)) ..).
+The ID and LOCATION are the same as the ones in `package-archives'.
+PKG1, PKG2, .. are package names from the ID archive.
 
 Example usage:
 
 1. Launch 'emacs -Q'.
 2. Copy this macro definition to its scratch buffer and evaluate it.
 3. Evaluate a minimum working example using this macro as below:
-     (emacs-q-template '(projectile)
-       (projectile-global-mode)) "
+     (emacs-pkg-debug-setup '(;; Install hydra from GNU Elpa
+                              (nil . (hydra))
+                              ;; Install org from Org Elpa
+                              ((\"org\" . \"http://orgmode.org/elpa/\") . (org)))
+       ;; Then evaluate the below forms
+       (org-mode)) "
   (declare (indent 1) (debug t))
   `(progn
      (require 'package)
-     (setq package-user-dir (concat (getenv "HOME") "/.emacs.d/elpa_test/"))
-     (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-     (package-initialize)
-     (package-refresh-contents)
+     (setq user-emacs-directory (concat temporary-file-directory
+                                        (getenv "USER") "/" ".emacs.d-debug/"))
+     (setq package-user-dir (concat user-emacs-directory "elpa/"))
+     (let (archive pkgs)
+       (dolist (archive-alist ,pkg-alist)
+	 (setq archive (car archive-alist))
+	 (when archive
+           (add-to-list 'package-archives archive :append))
+         (setq pkgs (append pkgs (cdr archive-alist))))
+       (package-initialize)
+       (package-refresh-contents)
 
-     (dolist (pkg ,pkgs)
-       (package-install pkg)
-       (require pkg))
+       (dolist (pkg pkgs)
+         (when (and pkg (not (package-installed-p pkg)))
+           (package-install pkg))
+         (require pkg))
 
-     ,@body))
+       ,@body)))
+;; (emacs-pkg-debug-setup '((nil . (hydra))
+;;                          (("melpa" . "http://melpa.org/packages/") . (use-package)))
+;;   (message "Done!"))
 
 ;; http://stackoverflow.com/a/20747279/1219634
 (defun modi/read-file (f)
