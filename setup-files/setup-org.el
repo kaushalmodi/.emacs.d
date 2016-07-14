@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-27 12:19:10 kmodi>
+;; Time-stamp: <2016-07-14 17:08:30 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -283,7 +283,12 @@ Execute this command while the point is on or after the hyper-linked org link."
 
     ;; Recalculate all org tables in the buffer when saving.
     ;; http://emacs.stackexchange.com/a/22221/115
-    (defvar-local modi/org-table-enable-buffer-wide-recalculation t
+    ;; Thu Jul 14 17:06:28 EDT 2016 - kmodi
+    ;; Do not enable the buffer-wide recalculation by default because if an org
+    ;; buffer has an org-table formula (like "#+TBLFM: $1=@#-1"), a *Calc*
+    ;; buffer is created when `org-table-recalculate-buffer-tables' is run each
+    ;; time.
+    (defvar-local modi/org-table-enable-buffer-wide-recalculation nil
       "When non-nil, all the org tables in the buffer will be recalculated when
 saving the file.
 
