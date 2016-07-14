@@ -566,7 +566,8 @@ narrowed."
 (bind-key "C-x n" #'endless/narrow-or-widen-dwim modi-mode-map)
 
 ;;; Prettify symbols
-(defvar modi/prettify-symbols-mode-hooks '(emacs-lisp-mode-hook)
+(defvar modi/prettify-symbols-mode-hooks '(prog-mode-hook
+                                           text-mode-hook)
   "List of hooks of major modes in which prettify-symbols-mode should be enabled.")
 
 (>=e "25.0"
