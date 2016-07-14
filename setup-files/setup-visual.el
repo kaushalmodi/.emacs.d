@@ -39,8 +39,18 @@
 (setq visible-bell t) ; Enable visible bell or screen blink to happen on error
 (setq-default fill-column 80) ; default 70
 
-(defvar default-font-size-pt 13
-  "Default font size in points.")
+(defun modi/is-font (fontname)
+  "Return non-nil if the default font matches FONTNAME."
+  ;; http://superuser.com/a/1100378/209371
+  (string-match-p fontname (format "%s" (face-attribute 'default :font))))
+
+(with-eval-after-load 'setup-font-check
+  (defvar default-font-size-pt
+    (cond
+     ((modi/is-font "Monoid") 11)
+     ((modi/is-font "Pragmata") 13)
+     (t 12))
+    "Default font size in points."))
 
 (defvar dark-theme t
   "Variable to store the nature of theme whether it is light or dark.
@@ -283,7 +293,8 @@ font size."
 (defun modi/global-font-size-reset () (interactive) (modi/global-font-size-adj 0))
 
 ;; Initialize font-size-pt var to the default value
-(modi/global-font-size-reset)
+(with-eval-after-load 'setup-font-check
+  (modi/global-font-size-reset))
 
 ;; Usage: C-c - = - 0 = = = = - - 0
 ;; Usage: C-c = = 0 - = - = = = = - - 0
