@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 10:01:59 kmodi>
+;; Time-stamp: <2016-07-14 16:45:11 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -98,6 +98,19 @@ With prefix argument (`C-u'), also kill the special buffers."
                 (unless (string-match "^\\*\\(\\scratch\\|Messages\\)" buf-name)
                   (message "Killing buffer %s" buf-name)
                   (kill-buffer buf))))))))
+
+    (defun modi/package-make-projectile-cache-stale (install-list delete-list)
+      "Mark the .emacs.d projectile project to be updated by updating
+the .projectile file for that project, when any package is installed or deleted.
+The return value of this function is unused as it is added as an :after advice."
+      ;; Update the .projectile file if any package needs to be installed or deleted.
+      (when (or install-list delete-list)
+        (write-region "" :ignore (concat user-emacs-directory ".projectile"))))
+    (advice-add 'package-menu--perform-transaction
+                :after #'modi/package-make-projectile-cache-stale)
+    (with-eval-after-load 'paradox
+      (advice-add 'paradox--perform-package-transaction
+                  :after #'modi/package-make-projectile-cache-stale))
 
     (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
