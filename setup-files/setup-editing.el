@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-18 19:19:14 kmodi>
+;; Time-stamp: <2016-07-14 16:24:15 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -71,51 +71,59 @@ or if the buffer's major-mode has `comment-start' set to nil,
 
 If the point is in a comment or string, but *not* immediately after
 `comment-start' chars,
-  time-stamp + user name is inserted with `--' prefix.
+  time-stamp + user name is inserted with ‘--’ prefix.
 
 Additional control:
 
-        C-u -> Prefix (`comment-start' or `--') is not auto-inserted.
+        C-u -> Prefix (`comment-start' or ‘--’) is not auto-inserted.
     C-u C-u -> User name is not inserted.
-C-u C-u C-u -> All of the above."
+          0 -> Neither prefix nor user name is inserted."
   (interactive "p")
-  (let ((current-date-time-format "%a %b %d %H:%M:%S %Z %Y")
-        (no-prefix (or (= option 4) ; C-u or C-u C-u C-u
-                       (= option 64)))
-        (no-user-name (or (= option 16) ; C-u C-u or C-u C-u C-u
-                          (= option 64))))
-    ;; Insert a space if there is no space to the left of the current point
-    ;; and it's not at the beginning of a line
-    (when (and (not (looking-back "^ *"))
-               (not (looking-back " ")))
-      (insert " "))
-    ;; Insert prefix only if `comment-start' is defined for the major mode
-    (when (stringp comment-start)
-      (if (or (nth 3 (syntax-ppss)) ; string
-              (nth 4 (syntax-ppss))) ; comment
-          ;; If the point is in a comment or string
-          (progn
-            ;; If the point is not immediately after `comment-start' chars
-            ;; (followed by optional space)
-            (when (and (not no-prefix)
-                       (not (looking-back (concat comment-start " *")))
-                       (not (looking-back "^ *")))
-              (insert "--")))
-        ;; If the point is NOT in a comment or string
-        (progn
-          (when (not no-prefix)
-            (insert comment-start)))))
-    ;; Insert a space if there is no space to the left of the current point
-    ;; and it's not at the beginning of a line
-    (when (and (not (looking-back "^ *"))
-               (not (looking-back " ")))
-      (insert " "))
-    (insert (format-time-string current-date-time-format (current-time)))
-    (when (not no-user-name)
-      (insert (concat " - " (getenv "USER"))))
-    ;; Insert a space after the time stamp if not at the end of the line
-    (when (not (looking-at " *$"))
-      (insert " "))))
+  (cl-flet ((in-string-or-comment-p () (or (nth 3 (syntax-ppss))
+                                           (nth 4 (syntax-ppss)))) ; (elisp) Parser State
+            (bol-after-space-maybe () (looking-back "^ *"))
+            (eol-before-space-maybe () (looking-at " *$"))
+            (after-space-p () (looking-back " ")))
+    (let ((current-date-time-format "%a %b %d %H:%M:%S %Z %Y")
+          (no-prefix (or (= option 4) ; C-u or C-u C-u C-u
+                         (= option 0)))
+          (no-user-name (or (= option 16) ; C-u C-u or C-u C-u C-u
+                            (= option 0))))
+      ;; Do not insert a space if point is at beginning of line (followed by
+      ;; optional space) or if there is already space before the current point.
+      (unless (or (bol-after-space-maybe)
+                  (after-space-p))
+        (insert " "))
+      ;; Do not insert prefix if `comment-start' is undefined for the major mode
+      ;; or if `no-prefix' is non-nil.
+      (unless (or no-prefix
+                  (not (stringp comment-start)))
+        (if (in-string-or-comment-p)
+            ;; Do not insert "--" if the point is immediately after
+            ;; `comment-start' chars (followed by optional space) or at
+            ;; beginning of line (followed by optional space).
+            (unless (or (looking-back (concat comment-start " *"))
+                        (bol-after-space-maybe))
+              (insert "--"))
+          ;; If the point is NOT in a comment or string, insert `comment-start'.
+          ;; Only for `emacs-lisp-mode', insert 2 semi-colons when point is at
+          ;; the beginning of the line.
+          (when (and (derived-mode-p 'emacs-lisp-mode)
+                     (bol-after-space-maybe))
+            (insert comment-start)) ; insert first of the 2 semi-colons
+          (insert comment-start)))
+      ;; Do not insert a space if the point is at the beginning of line
+      ;; (followed by optional space) or if the point is after a space.
+      (unless (or (bol-after-space-maybe)
+                  (after-space-p))
+        (insert " "))
+      (insert (format-time-string current-date-time-format (current-time)))
+      (unless no-user-name
+        (insert " - " (getenv "USER")))
+      ;; Do not insert a space after the time stamp if at the end of the line
+      ;; (preceding optional space).
+      (unless (eol-before-space-maybe)
+        (insert " ")))))
 (bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
 
 ;;; Clipboard
