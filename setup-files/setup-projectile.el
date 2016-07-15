@@ -128,8 +128,8 @@ The return value of this function is unused as it is added as an :after advice."
 ^^^^       Find               ^^   Search/Tags       ^^^^       Buffers               ^^   Cache                     ^^^^       Other
 ^^^^--------------------------^^---------------------^^^^-----------------------------^^------------------------------------------------------------------
 _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear               ^^    _E_: edit project's .dir-locals.el
-^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project      _s-p_/_p_: switch to an open project
-^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: kill all buffers      _X_: cleanup non-existing      ^^    _P_: switch to any other project
+^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project      _s-p_/_p_: switch to any other project
+^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: kill all buffers      _X_: cleanup non-existing      ^^    _P_: switch to an open project
 ^^    _r_: recent file        ^^                     ^^^^                             _z_: cache current
 ^^    _D_: dir
 
@@ -149,9 +149,9 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
       ("s-k" projectile-kill-buffers)
       ("m"   projectile-multi-occur)
       ("o"   projectile-multi-occur)
-      ("p"   projectile-switch-open-project)
-      ("s-p" projectile-switch-open-project)
-      ("P"   projectile-switch-project)
+      ("p"   projectile-switch-project)
+      ("s-p" projectile-switch-project)
+      ("P"   projectile-switch-open-project)
       ("s"   projectile-switch-project)
       ("r"   projectile-recentf)
       ("x"   projectile-remove-known-project)
