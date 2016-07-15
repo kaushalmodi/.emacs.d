@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-14 17:08:30 kmodi>
+;; Time-stamp: <2016-07-15 16:33:12 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -12,7 +12,7 @@
 ;;  Source block languages
 ;;  Defuns
 ;;  Org Entities
-;;  org-linkid - Support markdown-style link ids
+;;  org-link-ref - Support markdown-style link id references
 ;;  Diagrams
 ;;  Org Babel
 ;;  org-tree-slide
@@ -405,9 +405,9 @@ returned value `entity-name' will be nil."
     ;; returns nil.
     (advice-add 'org-self-insert-command :before-until #'modi/org-insert-org-entity-maybe)
 
-;;; org-linkid - Support markdown-style link ids
-    (use-package org-linkid
-      :load-path "elisp/org-linkid")
+;;; org-link-ref - Support markdown-style link id references
+    (use-package org-link-ref
+      :load-path "elisp/org-link-ref")
 
 ;;; Diagrams
     ;; http://pages.sachachua.com/.emacs.d/Sacha.html
