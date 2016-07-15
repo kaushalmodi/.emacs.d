@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-15 11:21:45 kmodi>
+;; Time-stamp: <2016-07-15 14:18:10 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -103,9 +103,10 @@ With prefix argument (`C-u'), also kill the special buffers."
       "Mark the .emacs.d projectile project to be updated by updating
 the .projectile file for that project, when any package is installed or deleted.
 The return value of this function is unused as it is added as an :after advice."
-      ;; Update the .projectile file if any package needs to be installed or deleted.
+      ;; Update the .projectile file if any package is installed or deleted.
       (when (or install-list delete-list)
-        (write-region "" :ignore (concat user-emacs-directory ".projectile"))))
+        (write-region "" :ignore (concat user-emacs-directory ".projectile")
+                      nil :no-message-echo)))
     (advice-add 'package-menu--perform-transaction
                 :after #'modi/package-make-projectile-cache-stale)
     (with-eval-after-load 'paradox
