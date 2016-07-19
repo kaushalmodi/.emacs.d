@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-14 16:24:15 kmodi>
+;; Time-stamp: <2016-07-19 16:11:29 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -14,7 +14,6 @@
 ;;  Untabify
 ;;  Align
 ;;  Eval and replace last sexp
-;;  Toggle comment on current line or selected region
 ;;  My modified basic functions
 ;;    Kill Line
 ;;    Open Line
@@ -39,7 +38,6 @@
 ;;  Tweaking `region-extract-function'
 ;;  Mouse Copy
 ;;  Bindings
-;;  Comment Commander
 
 ;;; Coding System
 (setq keyboard-coding-system 'utf-8-unix)
@@ -312,27 +310,6 @@ this command."
     (kill-sexp -1)
     (insert (format "%s" value))))
 (bind-to-modi-map "x" #'eval-and-replace-last-sexp)
-
-;;; Toggle comment on current line or selected region
-;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
-;; http://endlessparentheses.com/implementing-comment-line.html
-(defun endless/comment-line-or-region (n)
-  "Comment or uncomment current line and proceed to the next line.
-With positive prefix, apply to N lines including current one.
-With negative prefix, apply to -N lines above.
-If region is active, apply to active region instead."
-  (interactive "p")
-  (if (use-region-p)
-      (comment-or-uncomment-region
-       (region-beginning) (region-end))
-    (let ((range
-           (list (line-beginning-position)
-                 (goto-char (line-end-position n)))))
-      (comment-or-uncomment-region
-       (apply #'min range)
-       (apply #'max range)))
-    (forward-line 1)
-    (back-to-indentation)))
 
 ;;; My modified basic functions
 
@@ -992,8 +969,6 @@ Else, execute ORIG function."
 ;;; Bindings
 (bind-keys
  :map modi-mode-map
-  ;; override the binding of `M-;' for `comment-dwim'
-  ("M-;" . endless/comment-line-or-region)
   ("C-x d" . delete-region)
   ("C-S-d" . duplicate-current-line-or-region)
   ;; Override the default binding for `down-list'
@@ -1003,62 +978,44 @@ Else, execute ORIG function."
   ;; lines must have the same number of columns of groups of non-space characters
   ("C-x |" . modi/align-columns)
   ("C-k" . modi/kill-line)
-  ;; override the binding of `C-o' for `open-line'
+  ;; Override the binding of `C-o' for `open-line'.
   ("C-o" . modi/smart-open-line)
   ("C-j" . modi/pull-up-line)
   ("M-=" . count-words) ; count words in buffer if no region selected
-  ;; override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
+  ;; Override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
   ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
   ("<M-delete>" . backward-kill-word))
 (bind-to-modi-map "=" #'modi/align-to-equals)
 
-;;; Comment Commander
-;; Usage: Quickly pressing `j' twice will toggle comment on the current line or
-;;        region and proceed the cursor to the next line.
-;;        Now each consecutive pressing of `j', will toggle the comment on that
-;;        line and proceed to the next line. Pressing `p' or `n' will simply
-;;        navigate the cursor to the next or previous line without commenting
-;;        or uncommenting anything.
-;;
-;;        jj j j j j j n n n j j p j n
-;;
-;;        Numeric prefixes are supported too:
-;;
-;;        jj 5j 7j 2j j 7n n n j j p j n
-(defhydra hydra-comment (:color red
-                         :columns 4)
-  "comment"
-  ("j" endless/comment-line-or-region "toggle comment")
-  (";" endless/comment-line-or-region "toggle comment")
-  ("p" previous-line                  "prev line")
-  ("n" next-line                      "next line")
-  ("{" backward-paragraph             "backward para")
-  ("P" backward-paragraph             "backward para")
-  ("}" forward-paragraph              "forward para")
-  ("N" forward-paragraph              "forward para")
-  ("m" set-mark-command               "set mark")
-  ("d" mark-defun                     "mark defun")
-  ("k" kill-whole-line                "kill whole line")
-  ("b" backward-sexp                  "backward sexp")
-  ("f" forward-sexp                   "forward sexp")
-  ("q" nil                            "cancel" :color blue))
-(key-chord-define-global "jj" #'hydra-comment/body)
-(bind-key "C-c C-;" #'hydra-comment/body modi-mode-map)
+(>=e "25.0" ; `comment-line' was added new in emacs 25.1
+    (bind-keys
+     :map modi-mode-map
+      ;; Swap the M-; and C-x C-; bindings
+      ("M-;" . comment-line) ; was `comment-dwim' by default
+      ("C-x C-;" . comment-dwim))) ; was `comment-line' by default
 
 
 (provide 'setup-editing)
 
-;; (1) Commented new line
-;; `M-j'/`C-M-j' - `indent-new-comment-line' (aliased to `comment-indent-new-line')
-;; This creates a commented new line; useful when writing multiline comments
-;; like this one without having to manually type in the comment characters.
-
+;; (1) Commenting
+;; |-------------+-----------------------------------------------------------|
+;; | Binding     | Description                                               |
+;; |-------------+-----------------------------------------------------------|
+;; | M-j / C-M-j | `indent-new-comment-line' (default)                       |
+;; |             | This creates a commented new line; useful when writing    |
+;; |             | multiline comments like this one without having to        |
+;; |             | manually type in the comment characters.                  |
+;; | C-x C-;     | `comment-line' (default) [new in emacs 25.1]              |
+;; |             | Comments line or region and moves point to the next line. |
+;; | M-;         | `comment-dwim' (default)                                  |
+;; |-------------+-----------------------------------------------------------|
+;;
 ;; (2) Undo
 ;; `C-_' or `C-/'
-
+;;
 ;; (3) Toggle read-only-mode; toggles buffers between editable and read-only states.
 ;; `C-x C-q' or `M-x read-only-mode'
-
+;;
 ;; (4) Backups using prefix args to `save-buffer' (C-x C-s)
 ;;                 C-x C-s -> Makes the prev version into a backup file if
 ;;                            previously requested or if this is the first save.
