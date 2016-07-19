@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 18:13:11 kmodi>
+;; Time-stamp: <2016-07-19 16:31:26 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -59,6 +59,7 @@
 ;;; Recentf
 ;; http://www.emacswiki.org/emacs/RecentFiles
 (use-package recentf
+  :defer 1
   :config
   (progn
     (recentf-mode 1)

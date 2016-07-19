@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-15 16:33:12 kmodi>
+;; Time-stamp: <2016-07-19 16:22:50 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -53,6 +53,11 @@
                                             "/lisp/org\\'")
                                     path)
                 (setq load-path (delete path load-path)))))))
+
+    ;; Modules that should always be loaded together with org.el.
+    ;; `org-modules' default: '(org-w3m org-bbdb org-bibtex org-docview org-gnus
+    ;;                          org-info org-irc org-mhe org-rmail)
+    (setq org-modules '(org-info))
 
     ;; Set my default org-export backends. This variable needs to be set before
     ;; org.el is loaded.
