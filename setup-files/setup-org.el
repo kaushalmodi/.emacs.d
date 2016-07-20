@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-19 16:22:50 kmodi>
+;; Time-stamp: <2016-07-20 15:03:35 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -17,6 +17,7 @@
 ;;  Org Babel
 ;;  org-tree-slide
 ;;  Org Cliplink
+;;  Htmlize Region→File
 ;;  Org Export
 ;;    ox-latex - LaTeX export
 ;;    ox-html - HTML export
@@ -528,6 +529,14 @@ the languages in `modi/ob-enabled-languages'."
              ;; "C-c C-L" is bound to `org-cliplink'
              ("C-c C-S-l" . org-cliplink)))
 
+;;; Htmlize Region→File
+    (use-package htmlize-r2f
+      :load-path "elisp/htmlize-r2f"
+      :bind (:map region-bindings-mode-map
+             ("H" . htmlize-r2f))
+      :bind (:map modi-mode-map
+             ("C-c H" . htmlize-r2f)))
+
 ;;; Org Export
     (use-package ox
       :defer t
@@ -768,75 +777,7 @@ INFO is the property list of export options."
             (setq org-html-postamble #'modi/org-html-postamble-fn) ; default: 'auto
 
             (setq org-html-htmlize-output-type 'css) ; default: 'inline-css
-            (setq org-html-htmlize-font-prefix "org-") ; default: "org-"
-
-            ;; http://emacs.stackexchange.com/a/14560/115
-            (defvar modi/htmlize-output-directory
-              (let ((dir (concat temporary-file-directory
-                                 (getenv "USER") "/.htmlize/"))) ; must end with /
-                (make-directory dir :parents)
-                dir)
-              "Output directory for files exported by `modi/htmlize-region-to-file'.")
-            (defvar modi/htmlize-css-file (concat user-emacs-directory
-                                                  "misc/css/leuven_theme.css")
-              "CSS file to be embedded in the html file created using the
-             `modi/htmlize-region-to-file' function.")
-            (defun modi/htmlize-region-to-file (option)
-              "Export the selected region to an html file. If a region is not
-selected, export the whole buffer.
-
-The output file is saved to `modi/htmlize-output-directory' and its fontification
-is done using `modi/htmlize-css-file'.
-
-If OPTION is non-nil (for example, using `\\[universal-argument]' prefix), copy
-the output file name to kill ring.
-If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' prefix),
-do the above and also open the html file in the default browser."
-              (interactive "P")
-              (let ((org-html-htmlize-output-type 'css)
-                    (org-html-htmlize-font-prefix "org-")
-                    (fname (concat modi/htmlize-output-directory
-                                   (if (buffer-file-name)
-                                       (file-name-nondirectory (buffer-file-name))
-                                     "temp")
-                                   ".html"))
-                    start end html-string)
-                (if (use-region-p)
-                    (progn
-                      (setq start (region-beginning))
-                      (setq end (region-end)))
-                  (progn
-                    (setq start (point-min))
-                    (setq end (point-max))))
-                (setq html-string (org-html-htmlize-region-for-paste start end))
-                (with-temp-buffer
-                  ;; Insert the `modi/htmlize-css-file' contents in the temp buffer
-                  (insert-file-contents modi/htmlize-css-file nil nil nil :replace)
-                  ;; Go to the beginning of the buffer and insert comments and
-                  ;; opening tags for `html', `head' and `style'. These are
-                  ;; inserted *above* the earlier inserted css code.
-                  (goto-char (point-min))
-                  (insert (concat "<!-- This file is generated using the "
-                                  "`modi/htmlize-region-to-file' function\n"
-                                  "from https://github.com/kaushalmodi/.emacs.d/"
-                                  "blob/master/setup-files/setup-org.el -->\n"))
-                  (insert "<html>\n<head>\n<style media=\"screen\" type=\"text/css\">\n")
-                  ;; Go to the end of the buffer (end of the css code) and
-                  ;; insert the closing tags for `style' and `head' and opening
-                  ;; tag for `body'.
-                  (goto-char (point-max))
-                  (insert "</style>\n</head>\n<body>\n")
-                  ;; Insert the HTML for fontified text in `html-string'.
-                  (insert html-string)
-                  ;; Close the `body' and `html' tags.
-                  (insert "</body>\n</html>\n")
-                  (write-file fname)
-                  (when option
-                    (kill-new fname)
-                    (when (= 16 (car option))
-                      (browse-url-of-file fname))))))
-            (bind-key "H"     #'modi/htmlize-region-to-file region-bindings-mode-map)
-            (bind-key "C-c H" #'modi/htmlize-region-to-file modi-mode-map)))
+            (setq org-html-htmlize-font-prefix "org-"))) ; default: "org-"
 
 ;;;; ox-beamer - Beamer export
         (use-package ox-beamer
