@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-14 10:17:25 kmodi>
+;; Time-stamp: <2016-07-20 09:49:48 kmodi>
 
 ;; Desktop save and restore
 
@@ -20,8 +20,12 @@ saved desktop at startup:
     (setq desktop-base-lock-name (concat "emacs_" emacs-version-short
                                          ".desktop.lock"))
 
-    ;; Fix the frameset warning at startup
-    (setq desktop-restore-frames nil)
+    ;; Wed Jul 20 09:36:15 EDT 2016 - kmodi
+    ;; Below problem seems to be fixed in emacs 25.x
+    (>=e "25.0"
+        nil
+      ;; Fix the frameset error at startup
+      (setq desktop-restore-frames nil))
 
     ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-sessions.el
     ;; Save a bunch of variables to the desktop file.
