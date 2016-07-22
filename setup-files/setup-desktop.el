@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-20 09:49:48 kmodi>
+;; Time-stamp: <2016-07-22 16:09:59 kmodi>
 
 ;; Desktop save and restore
 
@@ -73,38 +73,11 @@ saved desktop at startup:
                   "\\|\\(\\TAGS$\\)"))
 
     ;; Don't save the eww buffers
-    (setq desktop-buffers-not-to-save (concat desktop-buffers-not-to-save
-                                              "\\|\\(^eww\\(<[0-9]+>\\)*$\\)"))
-
-    ;; Patch `desktop-restore-file-buffer'.
-    ;; DON'T throw any warnings; especially "Note: file is write protected" when
-    ;; restoring files from a saved desktop.
-    (defun desktop-restore-file-buffer (buffer-filename
-                                        _buffer-name
-                                        _buffer-misc)
-      "Restore a file buffer."
-      (when buffer-filename
-        (if (or (file-exists-p buffer-filename)
-                (let ((msg (format "Desktop: File \"%s\" no longer exists."
-                                   buffer-filename)))
-                  (if desktop-missing-file-warning
-                      (y-or-n-p (concat msg " Re-create buffer? "))
-                    (message "%s" msg)
-                    nil)))
-            (let* ((auto-insert nil) ; Disable auto insertion
-                   (coding-system-for-read
-                    (or coding-system-for-read
-                        (cdr (assq 'buffer-file-coding-system
-                                   desktop-buffer-locals))))
-                   (buf (find-file-noselect buffer-filename :nowarn))) ; <-- modified line
-              (condition-case nil
-                  (switch-to-buffer buf)
-                (error (pop-to-buffer buf)))
-              (and (not (eq major-mode desktop-buffer-major-mode))
-                   (functionp desktop-buffer-major-mode)
-                   (funcall desktop-buffer-major-mode))
-              buf)
-          nil)))
+    (let (;; http://thread.gmane.org/gmane.emacs.devel/202463/focus=202496
+          (default (eval (car (get 'desktop-buffers-not-to-save 'standard-value))))
+          (eww-buf-regexp "\\(^eww\\(<[0-9]+>\\)*$\\)"))
+      (setq desktop-buffers-not-to-save (concat default
+                                                "\\|" eww-buf-regexp)))
 
     (defun modi/restore-last-saved-desktop ()
       "Enable `desktop-save-mode' and restore the last saved desktop."
