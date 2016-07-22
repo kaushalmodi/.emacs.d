@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 23:23:18 kmodi>
+;; Time-stamp: <2016-07-22 18:33:33 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -127,69 +127,81 @@ If point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (ignore-errors (backward-word 5)))
 
-;; I like to use the `find-file-at-point' feature if my cursor is on the
-;; file name in a line like below,
-;;
-;;   `include "some_file.v".
-;;
-;; In Verilog/C/C++, comments can begin with //.
-;;
-;;   //This is an example comment
-;;
-;; Pre-requisites for this bug to show up in emacs -Q:
-;;
-;;  (ido-mode 1)
-;;  (setq ido-use-filename-at-point 'guess)
-;;
-;; Now if my cursor is on the above example comment and if I hit C-x C-f, emacs
-;; tries to open a tentative path "//This"!
-;; Below patch from http://emacs.stackexchange.com/q/107/115 fixes that.
 (use-package ffap
   :defer t
   :config
   (progn
-    (defun ffap-string-at-point (&optional mode)
+    ;; I like to use the `find-file-at-point' feature if my cursor is on the
+    ;; file name in a line like below,
+    ;;
+    ;;   `include "some_file.v".
+    ;;
+    ;; In Verilog/C/C++, comments can begin with //.
+    ;;
+    ;;   //This is an example comment
+    ;;
+    ;; Pre-requisites for this bug to show up in emacs -Q:
+    ;;
+    ;;  (ido-mode 1)
+    ;;  (setq ido-use-filename-at-point 'guess)
+    ;;
+    ;; Now if my cursor is on the above example comment and if I hit C-x C-f,
+    ;; emacs tries to open a tentative path "//This"!
+    ;;
+    ;; Below `modi/ffap-string-at-point' function is used to advice the
+    ;; `ffap-string-at-point' using ":override" to fix this. This function is
+    ;; based on the solution from http://emacs.stackexchange.com/q/107/115.
+    (defun modi/ffap-string-at-point (&optional mode)
       "Return a string of characters from around point.
 
-MODE (defaults to value of `major-mode') is a symbol used to look up string
-syntax parameters in `ffap-string-at-point-mode-alist'.
+MODE (defaults to value of `major-mode') is a symbol used to look up
+string syntax parameters in `ffap-string-at-point-mode-alist'.
 
-If MODE is not found, we use `file' instead of MODE.  If the region is active,
-return a string from the region.  Sets the variable `ffap-string-at-point' and
-the variable `ffap-string-at-point-region'."
+If MODE is not found, we use `file' instead of MODE.
+
+If the region is active,return a string from the region.
+
+If the point is in a comment, ensure that the returned string does not contain
+the comment start characters (especially for major modes that have '//' as
+comment start characters).
+
+Sets variables `ffap-string-at-point' and `ffap-string-at-point-region'. "
       (let* ((args
               (cdr
                (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
                    (assq 'file ffap-string-at-point-mode-alist))))
-             next-comment ; patch part 1/3
+             (region-selected (use-region-p))
              (pt (point))
-             (beg (if (use-region-p)
+             (beg (if region-selected
                       (region-beginning)
                     (save-excursion
                       (skip-chars-backward (car args))
                       (skip-chars-forward (nth 1 args) pt)
-                      ;; patch part 2/3
-                      (setq next-comment (save-excursion
-                                           (comment-search-forward
-                                            (line-end-position) :noerror)
-                                           (point)))
-                      ;;
                       (point))))
-             (end (if (use-region-p)
+             ;; If point is in a comment like "//abc" (in `c-mode'), and a
+             ;; region is not selected, return the position of 'a'.
+             (comment-start-pos (unless region-selected
+                                  (save-excursion
+                                    (goto-char beg)
+                                    (comment-search-forward
+                                     (line-end-position) :noerror)
+                                    (point))))
+             (end (if region-selected
                       (region-end)
                     (save-excursion
                       (skip-chars-forward (car args))
                       (skip-chars-backward (nth 2 args) pt)
                       (point)))))
-        ;; patch part 3/3
-        ;; (message "next-comment = %d end = %d beg = %d" next-comment end beg)
-        (when (> end next-comment)
-          (setq beg next-comment))
-        ;;
+        (when (and comment-start-pos
+                   (> end comment-start-pos))
+          (setq beg comment-start-pos))
+        ;; (message "comment-start-pos = %d end = %d beg = %d"
+        ;;          comment-start-pos end beg)
         (setq ffap-string-at-point
               (buffer-substring-no-properties
                (setcar ffap-string-at-point-region beg)
-               (setcar (cdr ffap-string-at-point-region) end)))))))
+               (setcar (cdr ffap-string-at-point-region) end)))))
+    (advice-add 'ffap-string-at-point :override #'modi/ffap-string-at-point)))
 
 ;; Inspired from this emacs.SE question: http://emacs.stackexchange.com/q/4271/115
 (defun modi/forward-word-begin (arg)
