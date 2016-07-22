@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 17:48:00 kmodi>
+;; Time-stamp: <2016-07-22 14:06:32 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -226,7 +226,6 @@ in the mode line."
   ("C-n" . next-line)
   ("C-b" . backward-char)
   ("C-f" . forward-char)
-  ("C-x C-e" . eval-last-sexp)
   ("C-c t" . hydra-toggle/body)
   ("C-h l" . view-lossage)
   ("C-x C-c" . modi/quit-emacs)
