@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:12:02 kmodi>
+;; Time-stamp: <2016-07-22 11:18:30 kmodi>
 
 ;; Bookmarks
 
@@ -68,7 +68,7 @@
                                              #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
                                              #xF8])) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
 
-    (setq bm-highlight-style 'bm-highlight-only-fringe)
+    (setq bm-highlight-style 'bm-highlight-line-and-fringe)
     (setq bm-cycle-all-buffers t) ; search all open buffers for bookmarks
 
     (defun modi/bm-bookmark-regexp ()
