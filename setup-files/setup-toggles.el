@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 18:13:32 kmodi>
+;; Time-stamp: <2016-07-22 18:22:19 kmodi>
 
 ;; Toggles
 
@@ -7,6 +7,7 @@
   "Toggle"
   ("aa"    artist-mode "artist mode")
   ("ai"    aggressive-indent-mode "aggressive indent")
+  ("af"    auto-fill-mode "auto fill")
   ("ar"    auto-revert-mode "auto revert")
   ("aw"    adaptive-wrap-prefix-mode "adaptive wrap")
   ("b"     modi/toggle-menu-bar "menu bar")
