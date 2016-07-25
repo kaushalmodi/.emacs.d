@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-08 12:00:09 kmodi>
+;; Time-stamp: <2016-07-25 18:05:42 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -216,7 +216,9 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-elisp-slime-nav)
 (require 'setup-engine-mode)
 (require 'setup-expand-region)
-(require 'setup-fci)
+;; Uncommenting below will cause emacs to freeze on evaluating "(string-match-p "." nil)"
+;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23949
+;; (require 'setup-fci)
 (require 'setup-fold)
 (require 'setup-gist)
 (when (executable-find "git")
@@ -250,6 +252,8 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-pomodoro)
 (require 'setup-poporg)
 (with-eval-after-load 'setup-tags
+  ;; Below causes `help-function-arglist' error on evaluating "(string-match-p "." nil)"
+  ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23949
   (require 'setup-projectile))
 (require 'setup-rainbow-delimiters)
 (require 'setup-rainbow-mode)
@@ -272,7 +276,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 
 ;; Languages
 (when (executable-find "lein")
-  (require 'setup-clojure))
+  (require 'setup-clojure)) ; cider
 (require 'setup-conf)
 (when (executable-find "dmd")
   (require 'setup-d))
