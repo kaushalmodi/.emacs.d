@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 13:34:58 kmodi>
+;; Time-stamp: <2016-07-25 17:23:23 kmodi>
 
 ;; Setup for different tags
 
@@ -21,37 +21,8 @@
     :config
     (progn
       (setq ggtags-sort-by-nearness nil) ; Enabling nearness requires global 6.5+
-
-      (defun my/ggtags-project-name ()
-        "Return gtags project name."
-        (if (stringp ggtags-project-root)
-            (let ((project-root ggtags-project-root)
-                  project-name)
-              (setq project-name (file-name-nondirectory
-                                  (directory-file-name project-root)))
-              (while (string-match "\\(sos_\\|\\bsrc\\b\\)" project-name)
-                (setq project-root (replace-regexp-in-string
-                                    "\\(.*\\)/.+/*$" "\\1" project-root))
-                (setq project-name (file-name-nondirectory
-                                    (directory-file-name project-root))))
-              project-name)
-          nil))
-
       (setq ggtags-navigation-mode-lighter nil)
-      (setq ggtags-mode-line-project-name
-            '("[" (:eval (let ((name (if (stringp (my/ggtags-project-name))
-                                         (my/ggtags-project-name)
-                                       "?")))
-                           (propertize name
-                                       'face font-lock-type-face
-                                       'help-echo (if (stringp ggtags-project-root)
-                                                      (concat "mouse-1 to visit "
-                                                              ggtags-project-root)
-                                                    "mouse-1 to set project")
-                                       'mouse-face 'mode-line-highlight
-                                       'keymap ggtags-mode-line-project-keymap)))
-              "]"))
-
+      (setq ggtags-mode-line-project-name nil)
       (setq ggtags-oversize-limit (* 30 1024 1024)) ; 30 MB
 
       (dolist (hook '(verilog-mode-hook
