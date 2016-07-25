@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 11:38:10 kmodi>
+;; Time-stamp: <2016-07-14 17:43:34 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -581,6 +581,10 @@ narrowed."
 ;; Show "(lambda ..)" as "(λ ..)" in lisp modes when `prettify-symbols-mode'
 ;; is enabled.
 (setq lisp-prettify-symbols-alist '(("lambda" . ?λ)))
+
+(with-eval-after-load 'setup-font-check
+  (when (modi/is-font "Pragmata")
+    (require 'setup-pragmata-ligatures)))
 
 
 (provide 'setup-visual)
