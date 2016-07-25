@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-22 18:33:33 kmodi>
+;; Time-stamp: <2016-07-25 17:19:07 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -165,7 +165,21 @@ If the point is in a comment, ensure that the returned string does not contain
 the comment start characters (especially for major modes that have '//' as
 comment start characters).
 
-Sets variables `ffap-string-at-point' and `ffap-string-at-point-region'. "
+Sets variables `ffap-string-at-point' and `ffap-string-at-point-region'.
+
+|-----------------------------------+---------------------------------|
+| Example string in `c-mode' buffer | Returned `ffap-string-at-point' |
+|-----------------------------------+---------------------------------|
+| ▮//tmp                            | tmp                             |
+| //▮tmp                            | tmp                             |
+| ▮///tmp                           | /tmp                            |
+| //▮/tmp                           | /tmp                            |
+| ▮////tmp                          | //tmp                           |
+| ////▮tmp                          | //tmp                           |
+| ▮// //tmp                         | (empty string) \"\"             |
+| // ▮/tmp                          | /tmp                            |
+| // ▮//tmp                         | //tmp                           |
+|-----------------------------------+---------------------------------| "
       (let* ((args
               (cdr
                (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
@@ -178,29 +192,48 @@ Sets variables `ffap-string-at-point' and `ffap-string-at-point-region'. "
                       (skip-chars-backward (car args))
                       (skip-chars-forward (nth 1 args) pt)
                       (point))))
-             ;; If point is in a comment like "//abc" (in `c-mode'), and a
-             ;; region is not selected, return the position of 'a'.
-             (comment-start-pos (unless region-selected
-                                  (save-excursion
-                                    (goto-char beg)
-                                    (comment-search-forward
-                                     (line-end-position) :noerror)
-                                    (point))))
              (end (if region-selected
                       (region-end)
                     (save-excursion
                       (skip-chars-forward (car args))
                       (skip-chars-backward (nth 2 args) pt)
-                      (point)))))
-        (when (and comment-start-pos
-                   (> end comment-start-pos))
-          (setq beg comment-start-pos))
-        ;; (message "comment-start-pos = %d end = %d beg = %d"
-        ;;          comment-start-pos end beg)
+                      (point))))
+             (beg-new beg))
+        ;; (message "ffap-string-at-point dbg: beg = %d end = %d" beg end)
+        ;; If the initial characters of the to-be-returned string are the
+        ;; current major mode's comment starter characters, *and* are not part
+        ;; of a comment, remove those from the returned string (Bug#24057).
+        ;; Example comments in `c-mode' (which considers lines beginning with
+        ;; "//" as comments):
+        ;;  //tmp - This is a comment. It does not contain any path reference.
+        ;;  ///tmp - This is a comment. The "/tmp" portion in that is a path.
+        ;;  ////tmp - This is a comment. The "//tmp" portion in that is a path.
+        (when (and
+               ;; Proceed if no region is selected by the user.
+               (null region-selected)
+               ;; Check if END character is part of a comment.
+               (save-excursion
+                 (goto-char end)
+                 (nth 4 (syntax-ppss))))
+          (save-excursion
+            ;; Increment BEG till point at BEG is in a comment too.
+            ;; (nth 4 (syntax-ppss)) will be nil for comment start characters
+            ;; (for example, for the "//" characters in `c-mode' line comments).
+            (setq beg (catch 'break
+                        (while (< beg-new end)
+                          (goto-char beg-new)
+                          (if (nth 4 (syntax-ppss)) ; in a comment
+                              (throw 'break beg-new)
+                            (setq beg-new (1+ beg-new))))
+                        end)))) ; Set BEG to END if no throw happens
+        ;; (message "ffap-string-at-point dbg: beg = %d beg-new = %d" beg beg-new)
         (setq ffap-string-at-point
               (buffer-substring-no-properties
                (setcar ffap-string-at-point-region beg)
-               (setcar (cdr ffap-string-at-point-region) end)))))
+               (setcar (cdr ffap-string-at-point-region) end)))
+        ;; (message "ffap-string-at-point dbg: ffap-string-at-point = %S"
+        ;;          ffap-string-at-point)
+        ffap-string-at-point))
     (advice-add 'ffap-string-at-point :override #'modi/ffap-string-at-point)))
 
 ;; Inspired from this emacs.SE question: http://emacs.stackexchange.com/q/4271/115
