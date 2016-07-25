@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-20 15:27:59 kmodi>
+;; Time-stamp: <2016-07-23 07:42:46 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -21,7 +21,7 @@
             (occur-mode                    :select nil                                   :align t    )
             ("*Help*"                      :select t   :inhibit-window-quit t :other t               )
             ("*Completions*"                                                  :size 0.3  :align t    )
-            ("*Messages*"                  :select t   :inhibit-window-quit t :other t               )
+            ("*Messages*"                  :select nil :inhibit-window-quit t :other t               )
             ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t               )
             ("\\*poporg.*\\*"      :regexp t :select t                          :other t               )
             ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :size 0.3  :align t    )
