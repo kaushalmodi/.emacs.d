@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-25 18:05:42 kmodi>
+;; Time-stamp: <2016-07-27 23:24:20 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -289,6 +289,8 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-python)
 (require 'setup-shell)
 (require 'setup-spice)
+(when (executable-find "sml")
+  (require 'setup-sml))
 (require 'setup-tcl)
 (require 'setup-verilog)
 (require 'setup-web-mode)
