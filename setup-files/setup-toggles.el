@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-22 18:22:19 kmodi>
+;; Time-stamp: <2016-07-28 15:52:43 kmodi>
 
 ;; Toggles
 
@@ -33,7 +33,7 @@
   ("t"     toggle-truncate-lines "truncate lines" :color red)
   ("C-t"   toggle-theme "dark/light theme")
   ("v"     visible-mode "visible mode")
-  ("<SPC>" whitespace-mode "whitespace mode" :color red)
+  ("<SPC>" whitespace-mode "whitespace mode")
   ("q"     nil "cancel" :color blue))
 
 (bind-key "s-t" #'hydra-toggle/body)

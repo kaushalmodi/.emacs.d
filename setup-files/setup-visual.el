@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-14 17:43:34 kmodi>
+;; Time-stamp: <2016-07-28 16:25:54 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -509,13 +509,17 @@ Toggling off this mode reverts everything to their original states."
   :config
   (progn
     (setq whitespace-line-column nil) ; When nil, set the value to `fill-column'
-    (setq whitespace-style '(face
-                             ;; Visualize trailing white space
-                             trailing
-                             ;; Highlight only the portion of the lines
-                             ;; exceeding `whitespace-line-column'
-                             lines-tail
-                             tabs))
+    (setq whitespace-style
+          '(face
+            trailing ; white space at end of lines
+            tabs ; tab-mark ; `tab-mark' shows tabs as '»'
+            spaces space-mark ; `space-mark' shows spaces as '.'
+            space-before-tab space-after-tab ; mix of tabs and spaces
+            ;; lines ; highlight lines that extend beyond `whitespace-line-column'
+            lines-tail ; highlight only characters beyond `whitespace-line-column'
+            ;; newline newline-mark
+            ;; empty ; blank lines at BOB or EOB
+            indentation)) ; highlight spaces/tabs at BOL depending on `indent-tabs-mode'
 
     ;; Do word wrapping only at word boundaries
     (defconst modi/whitespace-mode-hooks '(verilog-mode-hook
