@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:34:21 kmodi>
+;; Time-stamp: <2016-07-29 17:18:07 kmodi>
 
 ;; Dired
 
@@ -42,6 +42,16 @@
     ;; of the current subdir of this dired buffer. The target is used
     ;; in the prompt for file copy, rename etc.
     (setq dired-dwim-target t)
+
+    ;; Dired listing switches
+    ;;  -a : Do not ignore entries starting with .
+    ;;  -l : Use long listing format.
+    ;;  -G : Do not print group names like 'users'
+    ;;  -h : Human-readable sizes like 1K, 234M, ..
+    ;;  -v : Do natural sort .. so the file names starting with . will show up first.
+    ;;  -F : Classify filenames by appending '*' to executables,
+    ;;       '/' to directories, etc.
+    (setq dired-listing-switches "-alGhvF --group-directories-first") ; default: "-al"
 
     (defun modi/dired-rename-buffer-name ()
       "Rename the dired buffer name to distinguish it from file buffers.
