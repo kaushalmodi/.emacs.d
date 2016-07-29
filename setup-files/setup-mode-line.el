@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-29 11:58:22 kmodi>
+;; Time-stamp: <2016-07-29 14:25:19 kmodi>
 
 ;; Customize the mode-line
 
@@ -59,27 +59,45 @@ If nil, show the same in the minibuffer.")
     (setq sml/theme (if (boundp 'dark-theme)
                         (if (not dark-theme) 'light 'dark)
                       'dark))
+
+    ;; Try doing projectile based replacements *after* going through regular
+    ;; replacements.
+    (with-eval-after-load 'projectile
+      (setq sml/use-projectile-p 'after-prefixes)
+      (defun modi/sml-projectile-replacement-maybe (orig-ret)
+        "Process the ORIG-RET return value of the original function."
+        (let (new-ret)
+          (setq new-ret (if (and (eq sml/use-projectile-p 'after-prefixes)
+                                 ;; If ORIG-RET still begins with a file path
+                                 (string-match-p "\\`/" orig-ret))
+                            (setq new-ret (sml/perform-projectile-replacement orig-ret))
+                          orig-ret))
+          ;; (message "dbg-adv: %s" new-ret)
+          new-ret))
+      (advice-add 'sml/replacer-raw :filter-return #'modi/sml-projectile-replacement-maybe))
+
     (setq sml/replacer-regexp-list
           `(
             ("^~/org/"                          ":Org:")
-            ("^~/\\.emacs\\.d/"                   ":ED:")
+            ;; Allow projectile to set the prefix for the below
+            ;; ("^~/\\.emacs\\.d/"                   ":ED:")
             ("^~/.*box/uvm/uvm_examples/"       ":UVM_EX:")
             ("^~/.*box/uvm/adsim_uvm_examples/" ":AD_UVM_EX:")
             (":\\(.*_EX\\):\\([a-z0-9_]\\{3\\}\\).*?/"
-             (lambda (string) (concat ":\\1:"
-                                      (match-string 2 string)
-                                      ":")))
+             (lambda (string)
+               (concat ":\\1:"
+                       (match-string 2 string)
+                       ":")))
             ;; Prefix with first 2 letters and last letter of project name
             ;; To distinguish between projects that could have same first 3 letters
             ;; Using "\,(upcase ...)" only works when calling `replace-regexp` interactively.
             ;; In lisp code you have to give it a function. So we need to change the
             ;; replacement string to,
             ;; `(lambda (string) (concat ":" (upcase (match-string 1 string)) ":")))`.
-
-            (,(concat "/proj.*?" ; project base
-                      "/\\([a-z0-9_]\\{2\\}\\).*?\\([a-z0-9_]\\)" ; project name
-                      "/[so]+_\\([a-z0-9]+\\)" ; user project root
-                      "/\\([a-z0-9_]\\{0,3\\}\\).*?/") ; dir in user project root
+            (,(concat "\\(?1:/proj.*?/" ; project base
+                      "\\(?2:[a-z0-9_]\\{3\\}\\).*?\\(?3:[a-z0-9_]\\)/" ; project name
+                      "[so]+_\\(?4:[a-z0-9]+\\)\\)/" ; user project root
+                      "\\(?5:[a-z0-9_]\\{0,3\\}\\).*?/") ; dir in user project root
              (lambda (string)
                ;; (concat ":"
                ;;         (capitalize (match-string 1 string))
@@ -88,20 +106,28 @@ If nil, show the same in the minibuffer.")
                ;;           (concat "[" (match-string 3 string) "]"))
                ;;         ":" (upcase (match-string 4 string)) ":"
                ;;         )
-               (let ((user       (match-string-no-properties 3 string))
-                     (abbrev-dir (match-string-no-properties 4 string)))
-                 (concat ":" ; The first char HAS to be `:'
-                         (when (not (string= user (getenv "USER")))
-                           (concat "~" user "/"))
-                         (upcase abbrev-dir) ":"))))
-            ("\\(:.*\\)DIG:tb/"                    "\\1TB:"  )
-            ("\\(:.*\\)TB:agents/"                 "\\1AGT:" )
-            ("\\(:.*\\)TB:patterns/"               "\\1PAT:" )
-            ("\\(:.*\\)TB:tests/"                  "\\1TST:" )
-            ("\\(:.*\\)TB:uvm.*src/"               "\\1UVM:" )
-            ("\\(:.*\\)DIG:design_code/"           "\\1DSGN:")
-            ("\\(:.*\\)DSGN:rtl/"                  "\\1RTL:" )
-            ("\\(:.*\\)DSGN:analog_partition_rtl/" "\\1ANA:" ))))
+               (let* ((prj-root (match-string-no-properties 1 string))
+                      (prj-abbrev (concat (capitalize (match-string-no-properties 2 string))
+                                          "." (upcase (match-string-no-properties 3 string))))
+                      (user (match-string-no-properties 4 string))
+                      (dir-abbrev (upcase (match-string-no-properties 5 string)))
+                      (is-me (string= user (getenv "USER"))))
+                 (concat (if is-me
+                             (concat prj-root "/")
+                           (concat ":" ; has to begin with ':' to be identified in a different face
+                                   prj-abbrev
+                                   "/" user))
+                         ":" dir-abbrev ":"))))
+            ("\\(.*:\\)DIG:tb/"                    "\\1TB:"  )
+            ("\\(.*:\\)DIG:syslvl_tb/"             "\\1TB:"  )
+            ("\\(.*:\\)TB:agents/"                 "\\1AGT:" )
+            ("\\(.*:\\)TB:patterns/"               "\\1PAT:" )
+            ("\\(.*:\\)TB:tests/"                  "\\1TST:" )
+            ("\\(.*:\\)TB:tests_sv/"               "\\1TST:" )
+            ("\\(.*:\\)TB:uvm.*src/"               "\\1UVM:" )
+            ("\\(.*:\\)DIG:design_code/"           "\\1DSGN:")
+            ("\\(.*:\\)DSGN:rtl/"                  "\\1RTL:" )
+            ("\\(.*:\\)DSGN:analog_partition_rtl/" "\\1ANA:" ))))
   :config
   (progn
     (use-package rich-minority
