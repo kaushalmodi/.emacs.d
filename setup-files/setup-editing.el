@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-19 16:11:29 kmodi>
+;; Time-stamp: <2016-07-29 10:47:46 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -37,6 +37,7 @@
 ;;    Smart Mark
 ;;  Tweaking `region-extract-function'
 ;;  Mouse Copy
+;;  Commenting
 ;;  Bindings
 
 ;;; Coding System
@@ -966,6 +967,27 @@ Else, execute ORIG function."
          ;; and the selected region will be MOVED to the point location.
          ("<S-s-down-mouse-1>" . mouse-drag-secondary-moving)))
 
+;;; Commenting
+;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
+;; http://endlessparentheses.com/implementing-comment-line.html
+(defun endless/comment-line-or-region (n)
+  "Comment or uncomment current line and proceed to the next line.
+ With positive prefix, apply to N lines including current one.
+ With negative prefix, apply to -N lines above.
+ If region is active, apply to active region instead."
+  (interactive "p")
+  (if (use-region-p)
+      (comment-or-uncomment-region
+       (region-beginning) (region-end))
+    (let ((range
+           (list (line-beginning-position)
+                 (goto-char (line-end-position n)))))
+      (comment-or-uncomment-region
+       (apply #'min range)
+       (apply #'max range)))
+    (forward-line 1)
+    (back-to-indentation)))
+
 ;;; Bindings
 (bind-keys
  :map modi-mode-map
@@ -984,15 +1006,12 @@ Else, execute ORIG function."
   ("M-=" . count-words) ; count words in buffer if no region selected
   ;; Override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
   ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
+  ;; Override the default binding for `comment-dwim'
+  ("M-;" . endless/comment-line-or-region)
+  ;; Override the default binding for `comment-set-column'
+  ("C-x ;" . comment-dwim)
   ("<M-delete>" . backward-kill-word))
 (bind-to-modi-map "=" #'modi/align-to-equals)
-
-(>=e "25.0" ; `comment-line' was added new in emacs 25.1
-    (bind-keys
-     :map modi-mode-map
-      ;; Swap the M-; and C-x C-; bindings
-      ("M-;" . comment-line) ; was `comment-dwim' by default
-      ("C-x C-;" . comment-dwim))) ; was `comment-line' by default
 
 
 (provide 'setup-editing)
@@ -1024,3 +1043,35 @@ Else, execute ORIG function."
 ;;         C-u C-u C-x C-s -> Unconditionally makes the previous version into
 ;;                            a backup file.
 ;;     C-u C-u C-u C-x C-s -> Does both of what C-u prefix and C-u C-u prefix do.
+;;
+;; (5) The new `comment-line' function in emacs 25.1 is based off the above
+;;     `endless/comment-line-or-region' function. But I do not like `comment-line'
+;;     as it always comments/uncomments *whole* lines only, even when a region is
+;;     selected.
+;;
+;;     Annoyances of `comment-line':
+;;
+;;     - Case where the `mark' is at the BOL. I do not intend to comment the 3rd
+;;       line in the below example.
+;;
+;;       ▮(let ((foo "bar"))                        ;; (let ((foo "bar"))
+;;         (message foo))      -- comment-line -->  ;;   (message foo))
+;;       ▯(let ((baz "cat"))                        ;; (let ((baz "cat"))
+;;         (message baz))                                (message baz))
+;;
+;;     - Case where I intend to comment out *only* the selected sexp, not the whole
+;;       line.
+;;
+;;       (let (▮(foo "bar")▯)  -- comment-line -->  ;; (let ((foo "bar"))
+;;         (message foo))                             (message foo))
+;;
+;;     Above gets fixed by `endless/comment-line-or-region':
+;;
+;;       ▮(let ((foo "bar"))                                          ;; (let ((foo "bar"))
+;;         (message foo))      -- endless/comment-line-or-region -->  ;;   (message foo))
+;;       ▯(let ((baz "cat"))                                          (let ((baz "cat"))
+;;         (message baz))                                                  (message baz))
+;;
+;;       (let (▮(foo "bar")▯)  -- endless/comment-line-or-region -->  (let (;; (foo "bar")
+;;         (message foo))                                                   )
+;;                                                                      (message foo))
