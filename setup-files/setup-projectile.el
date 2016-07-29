@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-25 17:59:35 kmodi>
+;; Time-stamp: <2016-07-28 17:11:30 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -17,6 +17,10 @@
     (when (not (bound-and-true-p disable-pkg-ivy))
       (with-eval-after-load 'ivy
         (setq projectile-completion-system 'ivy)))
+
+    ;; Do not barf when I try to do `projectile-switch-project' while in a
+    ;; buffer containing a non-projectile file.
+    (setq projectile-require-project-root nil)
 
     ;; Don't consider my home dir as a project
     (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/"))
