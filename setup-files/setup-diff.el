@@ -1,5 +1,14 @@
-;; Time-stamp: <2016-07-08 16:28:16 kmodi>
+;; Time-stamp: <2016-07-29 17:46:59 kmodi>
 
+;; All things diff
+
+;; Contents:
+;;
+;;  vc
+;;  Diff-hl
+;;  Ediff
+
+;;; vc
 (use-package vc
   :bind (:map modi-mode-map
          ("C-x v =" . modi/vc-diff)
@@ -25,7 +34,7 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
              current-prefix-arg)
         (call-interactively #'vc-diff)))))
 
-;; Diff-hl
+;;; Diff-hl
 ;; https://github.com/dgutov/diff-hl
 (use-package diff-hl
   :bind (:map modi-mode-map
@@ -53,7 +62,7 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
 
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)))
 
-;; Ediff
+;;; Ediff
 (use-package ediff
   :commands (modi/ediff-dwim)
   :config
