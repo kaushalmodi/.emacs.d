@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-10 22:58:00 kmodi>
+;; Time-stamp: <2016-07-29 11:58:22 kmodi>
 
 ;; Customize the mode-line
 
@@ -39,99 +39,10 @@ If nil, show the same in the minibuffer.")
                     (make-string (- (frame-text-cols) (string-width time-string))
                                  ? )
                     time-string)
-                 time-string)))))
-
-    (defvar modi/today--day-sym (intern (format-time-string "%a"))
-      "Symbol containing 3-letter abbreviation of today's day.")
-
-    (defvar modi/time-go-home-reset "12:01am"
-      "Time when to modify the time face to remove the alert face.")
-
-    (defvar modi/time-go-home-alert '((Mon . "05:15pm")
-                                      (Tue . "05:15pm")
-                                      (Wed . "05:15pm")
-                                      (Thu . "04:20pm")
-                                      (Fri . "04:20pm")
-                                      (Sat . "")
-                                      (Sun . ""))
-      "Time when to modify the time face to alert it's time to go home."))
+                 time-string))))))
   :config
   (progn
-    (defun modi/minibuffer-line-set-default-face ()
-      (set-face-attribute 'minibuffer-line nil :inherit font-lock-type-face))
-    (defun modi/minibuffer-line-set-alert-face ()
-      (set-face-attribute 'minibuffer-line nil :inherit font-lock-warning-face))
-
-    (defun modi/update-go-home-alert ()
-      "Reset the `minibuffer-line' face to default and update the `Go Home'
-alert time."
-      (modi/minibuffer-line-set-default-face)
-      (setq modi/today--day-sym (intern (format-time-string "%a")))
-      (modi/set-go-home-alert (cdr (assq modi/today--day-sym
-                                         modi/time-go-home-alert))))
-
-    (defun modi/reset-go-home-alert (time)
-      "Set the `go home' alert reset time interactively.
-The `modi/timer--go-home-reset' timer is canceled and not restarted if
-TIME is \"nil\" or \"\"."
-      (interactive "sReset alert time (e.g. 7:00am): ")
-      (setq modi/time-go-home-reset time)
-      (when (and (boundp 'modi/timer--go-home-reset) ; cancel the timer if
-                 (timerp  modi/timer--go-home-reset)) ; already running
-        (cancel-timer modi/timer--go-home-reset))
-      (when (not (or (string= time "")
-                     (string= time "nil")))
-        (let ((daily (* 60 60 24)))
-          (setq modi/timer--go-home-reset (run-at-time
-                                           time daily
-                                           #'modi/update-go-home-alert)))))
-
-    (defun modi/set-go-home-alert (time)
-      "Set the `go home' alert time interactively.
-The `modi/timer--go-home-alert' timer is canceled and not restarted if
-TIME is \"nil\" or \"\"."
-      (interactive "s'Go Home' alert time (e.g. 5:00pm): ")
-      ;; http://emacs.stackexchange.com/a/3415/115
-      (setcdr (assq modi/today--day-sym modi/time-go-home-alert) time)
-      (let (old-go-home-time old-go-home-time-str)
-        (when (and (boundp 'modi/timer--go-home-alert) ; cancel the timer if
-                   (timerp  modi/timer--go-home-alert)) ; already running
-          (setq old-go-home-time (list (elt modi/timer--go-home-alert 1)
-                                       (elt modi/timer--go-home-alert 2)))
-          (setq old-go-home-time-str (downcase (format-time-string
-                                                "%I:%M%p" old-go-home-time)))
-          (cancel-timer modi/timer--go-home-alert))
-        (if (or (string= time "")
-                (string= time "nil"))
-            (progn
-              (modi/minibuffer-line-set-default-face)
-              (setq modi/timer--go-home-alert nil)
-              (message "%s: `Go Home' alert removed." modi/today--day-sym))
-          (let ((daily (* 60 60 24))
-                new-go-home-time new-go-home-time-str)
-            (setq modi/timer--go-home-alert (run-at-time
-                                             time daily
-                                             #'modi/minibuffer-line-set-alert-face))
-            (setq new-go-home-time (list (elt modi/timer--go-home-alert 1)
-                                         (elt modi/timer--go-home-alert 2)))
-            (setq new-go-home-time-str (downcase (format-time-string
-                                                  "%I:%M%p" new-go-home-time)))
-            (if old-go-home-time
-                (if (string= new-go-home-time-str old-go-home-time-str)
-                    (message "`Go Home' time unchanged: %s"
-                             new-go-home-time-str)
-                  (message "%s: Changed `Go Home' time from %s to %s."
-                           modi/today--day-sym
-                           old-go-home-time-str new-go-home-time-str))
-              (message "%s: `Go Home' alert time set to %s."
-                       modi/today--day-sym new-go-home-time-str))))))
-
-    ;; To set the `Go Home' alert, put the below in `setup-personal.el'
-    ;; (with-eval-after-load 'setup-mode-line
-    ;;   (with-eval-after-load 'minibuffer-line
-    ;;     (modi/reset-go-home-alert modi/time-go-home-reset)))
-
-    (modi/minibuffer-line-set-default-face)
+    (set-face-attribute 'minibuffer-line nil :inherit font-lock-type-face)
 
     (minibuffer-line-mode)))
 
