@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-19 16:31:26 kmodi>
+;; Time-stamp: <2016-07-30 00:26:59 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -13,7 +13,8 @@
 ;;  Transpose Frame
 ;;  Current File Buffer Actions
 ;;  Revert buffer
-;;  Full Screen
+;;  Frame setup
+;;  Scratch-and-Back
 ;;  Minibuffer and Recursive Edit
 ;;  Untouchable Minibuffer Prompt
 ;;  Toggle between buffers
@@ -240,15 +241,22 @@ will be killed."
   (list (car args) :noconfirm))
 (advice-add 'help-mode-revert-buffer :filter-args #'modi/revert-noconfirm-help-buffers)
 
-;;; Full Screen
-;; Set the frame fill the center screen
-(defun full-screen-center ()
+;;; Frame setup
+(defun modi/frame-setup-1 ()
+  "Set the frame to fill the center screen."
   (interactive)
-  (let ((frame-resize-pixelwise t))
+  (let ((frame-resize-pixelwise t)) ; do not round frame sizes to character h/w
     (set-frame-position nil 1910 0) ; pixels x y from upper left
-    (set-frame-size     nil 1894 1096 :pixelwise))) ; width, height
+    (set-frame-size nil 1894 1096 :pixelwise))) ; width, height
 
-;; Scratch-and-Back
+(defun modi/frame-setup-2 ()
+  "Set the frame to fill half the laptop screen."
+  (interactive)
+  (let ((frame-resize-pixelwise t)) ; do not round frame sizes to character h/w
+    (set-frame-position nil 0 0) ; pixels x y from upper left
+    (set-frame-size nil 900 1096 :pixelwise)))
+
+;;; Scratch-and-Back
 ;; http://emacs.stackexchange.com/a/81/115
 (defun modi/switch-to-scratch-and-back (arg)
   "Toggle between *scratch-MODE* buffer and the current buffer.
@@ -553,7 +561,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
  ("<S-f9>" . eshell))
 
 (bind-to-modi-map "b" #'modi/switch-to-scratch-and-back)
-(bind-to-modi-map "f" #'full-screen-center)
+(bind-to-modi-map "f" #'modi/frame-setup-1)
 (bind-to-modi-map "y" #'bury-buffer)
 
 (key-chord-define-global "XX" #'modi/kill-buffer-dwim)
