@@ -1,10 +1,8 @@
-;; Time-stamp: <2016-06-13 10:02:12 kmodi>
+;; Time-stamp: <2016-08-04 11:08:10 kmodi>
 
 ;; Info
 
 (use-package info
-  :bind (:map modi-mode-map
-         ("C-h i" . hydra-info-to/body))
   :defer t
   :config
   (progn
@@ -100,28 +98,39 @@ Info-mode:
       ("h"   Info-help "Info help")
       ("q"   Info-exit "Info exit")
       ("C-g" nil "cancel" :color blue))
-    (bind-key "?" #'hydra-info/body Info-mode-map)
+    (bind-key "?" #'hydra-info/body Info-mode-map)))
 
-    ;; http://oremacs.com/2015/03/17/more-info/
-    (defun ora-open-info (topic bufname)
-      "Open info on TOPIC in BUFNAME."
-      (if (get-buffer bufname)
-          (progn
-            (switch-to-buffer bufname)
-            (unless (string-match topic Info-current-file)
-              (Info-goto-node (format "(%s)" topic))))
-        (info topic bufname)))
+(defun counsel-ag-emacs-info (&optional initial-input)
+  "Search in all Info manuals in the emacs 'info/' directory using ag.
+This directory contains the emacs, elisp, eintr, org, calc Info manuals and other
+manuals too for the packages that ship with emacs.
+INITIAL-INPUT can be given as the initial minibuffer input."
+  (interactive)
+  (counsel-ag initial-input (car Info-default-directory-list)
+              " -z" "Search emacs/elisp info"))
 
-    (defhydra hydra-info-to (:hint nil
-                             :color teal)
-      "
-_i_nfo      _o_rg      e_l_isp      e_L_isp intro      _e_macs      _c_alc"
-      ("i" info)
-      ("o" (ora-open-info "org" "*org info*"))
-      ("l" (ora-open-info "elisp" "*elisp info*"))
-      ("L" (ora-open-info "eintr" "*elisp intro info*"))
-      ("e" (ora-open-info "emacs" "*emacs info*"))
-      ("c" (ora-open-info "calc" "*calc info*")))))
+;; http://oremacs.com/2015/03/17/more-info/
+(defun ora-open-info (topic bufname)
+  "Open info on TOPIC in BUFNAME."
+  (if (get-buffer bufname)
+      (progn
+        (switch-to-buffer bufname)
+        (unless (string-match topic Info-current-file)
+          (Info-goto-node (format "(%s)" topic))))
+    (info topic bufname)))
+
+(defhydra hydra-info-to (:hint nil
+                         :color teal)
+  "
+_i_nfo      _o_rg      e_l_isp      e_L_isp intro      _e_macs      _c_alc      _g_rep emacs info"
+  ("i" info)
+  ("o" (ora-open-info "org" "*org info*"))
+  ("l" (ora-open-info "elisp" "*elisp info*"))
+  ("L" (ora-open-info "eintr" "*elisp intro info*"))
+  ("e" (ora-open-info "emacs" "*emacs info*"))
+  ("c" (ora-open-info "calc" "*calc info*"))
+  ("g" counsel-ag-emacs-info))
+(bind-key "C-h i" #'hydra-info-to/body modi-mode-map)
 
 
 (provide 'setup-info)
