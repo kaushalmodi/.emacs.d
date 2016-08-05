@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-28 23:19:02 kmodi>
+;; Time-stamp: <2016-08-04 23:30:42 kmodi>
 
 ;; Standard ML
 
@@ -7,16 +7,36 @@
   :mode (("\\.sml\\'" . sml-mode))
   :config
   (progn
+    ;; Undefine all the default abbrevs defined in `sml-mode.el'.
+    ;; I cannot use `clear-abbrev-table' because that will clear out my
+    ;; personally defined abbrevs too!
+    (dolist (abbrev '("let"
+                      "if"
+                      "local"
+                      "case"
+                      "signature"
+                      "structure"
+                      "functor"
+                      "datatype"
+                      "abstype"
+                      "struct"
+                      "sig"
+                      "val"
+                      "fn"
+                      "fun"))
+      (define-abbrev sml-mode-abbrev-table abbrev nil))
+
     (defun modi/sml-mode-hook-fn ()
-      "Disable `electric-indent-mode' only locally."
-      ;; In SML, it is perfectly fine to have the statements not ending in
-      ;; semicolons as below (in files, *not* in REPL!):
-      ;;   val x = 34
-      ;; But when doing so, newline with auto-indentation does not work
-      ;; correctly. Newline + auto-indentation works fine only if the statements
-      ;; are ended in semi-colons. So `electric-indent-mode will have to be
-      ;; disabled for this major mode.
-      (electric-indent-local-mode -1))
+      "My customizations for `sml-mode'."
+      ;; ;; In SML, it is perfectly fine to have the statements not ending in
+      ;; ;; semicolons as below (in files, *not* in REPL!):
+      ;; ;;   val x = 34
+      ;; ;; But when doing so, newline with auto-indentation does not work
+      ;; ;; correctly. Newline + auto-indentation works fine only if the statements
+      ;; ;; are ended in semi-colons. So `electric-indent-mode will have to be
+      ;; ;; disabled for this major mode.
+      ;; (electric-indent-local-mode -1)
+      (auto-fill-mode))
     (add-hook 'sml-mode-hook #'modi/sml-mode-hook-fn)))
 
 
