@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-04 11:48:38 kmodi>
+;; Time-stamp: <2016-08-04 23:10:24 kmodi>
 
 ;; Abbrev
 
@@ -81,3 +81,6 @@
 ;; Usage example: Now you can type the abbreviation you want, followed by
 ;; `C-x a -' and you will be prompted for the expanded text.
 ;;   e.g. fn C-x a - function
+;;
+;; To remove an abbrev definition, give a negative argument to the abbrev
+;; definition command: C-u - C-x a g or C-u - C-x a l.
