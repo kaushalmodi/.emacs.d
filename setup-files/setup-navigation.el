@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-25 17:19:07 kmodi>
+;; Time-stamp: <2016-08-05 11:00:55 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -117,16 +117,6 @@ If point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (ignore-errors (backward-char 5)))
 
-(defun forward-word-fast ()
-  "Faster `M-f'"
-  (interactive)
-  (ignore-errors (forward-word 5)))
-
-(defun backward-word-fast ()
-  "Faster `M-b'"
-  (interactive)
-  (ignore-errors (backward-word 5)))
-
 (use-package ffap
   :defer t
   :config
@@ -236,16 +226,6 @@ Sets variables `ffap-string-at-point' and `ffap-string-at-point-region'.
         ffap-string-at-point))
     (advice-add 'ffap-string-at-point :override #'modi/ffap-string-at-point)))
 
-;; Inspired from this emacs.SE question: http://emacs.stackexchange.com/q/4271/115
-(defun modi/forward-word-begin (arg)
-  "Move forward a word and end up with the point being at the beginning of the
-next word.  Move point forward ARG words (backward if ARG is negative).
-If ARG is omitted or nil, move point forward one word."
-  (interactive "p")
-  (forward-word arg)
-  (forward-word 1)
-  (backward-word 1))
-
 ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
 ;; A three-headed hydra for jumping between "errors", useful for
 ;; e.g. `occur', `rgrep' and the like.
@@ -325,6 +305,21 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
             (if fci-state-orig
                 (fci-mode 'toggle))))))))
 
+;; http://emacs.stackexchange.com/a/4272/115
+(defun modi/forward-word-begin (arg)
+  "Move forward ARG (defaults to 1) number of words.
+Here 'words' are defined as characters separated by whitespace."
+  (interactive "p")
+  (dotimes (_ arg)
+    (forward-whitespace 1)))
+
+(defun modi/backward-word-end (arg)
+  "Move back ARG (defaults to 1) number of words.
+Here 'words' are defined as characters separated by whitespace."
+  (interactive "p")
+  (dotimes (_ arg)
+    (forward-whitespace -1)))
+
 (bind-keys
  ;; Bind in `global-map' to allow the `term-mode-map' to override the `C-a' binding
  ("C-a" . modi/beginning-of-line-or-indentation) ; default binding for `move-beginning-of-line'
@@ -336,14 +331,14 @@ Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
 
 (bind-keys
  :map modi-mode-map
-  ("M-f"    . forward-word)
-  ("M-F"    . forward-word-fast)
-  ("M-b"    . backward-word)
-  ("M-B"    . backward-word-fast)
+  ("M-f" . forward-word)
+  ("M-F" . modi/forward-word-begin)
+  ("M-b" . backward-word)
+  ("M-B" . modi/backward-word-end)
   ;; WARNING: `C-[` key combination is the same as pressing the meta key Esc|Alt
   ;; Do NOT reconfigure that key combination.
-  ("C-}"    . forward-paragraph)
-  ("C-{"    . backward-paragraph))
+  ("C-}" . forward-paragraph)
+  ("C-{" . backward-paragraph))
 
 (bind-keys
  :filter (display-graphic-p)
