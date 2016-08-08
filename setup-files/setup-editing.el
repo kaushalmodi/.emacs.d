@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-29 10:47:46 kmodi>
+;; Time-stamp: <2016-08-08 16:30:44 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -989,6 +989,11 @@ Else, execute ORIG function."
     (back-to-indentation)))
 
 ;;; Bindings
+
+;; After indenting rigidly interactively, hitting Enter should copy the indented
+;; selection (and quit the interactive rigid indentation mode).
+(bind-key "RET" #'kill-ring-save indent-rigidly-map)
+
 (bind-keys
  :map modi-mode-map
   ("C-x d" . delete-region)
@@ -1075,3 +1080,6 @@ Else, execute ORIG function."
 ;;       (let (▮(foo "bar")▯)  -- endless/comment-line-or-region -->  (let (;; (foo "bar")
 ;;         (message foo))                                                   )
 ;;                                                                      (message foo))
+;;
+;; (6) Selecting a region and hitting C-u C-x TAB will indent that selection to
+;;     the right by 4 spaces. See `indent-rigidly'.
