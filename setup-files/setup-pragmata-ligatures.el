@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-25 16:20:36 kmodi>
+;; Time-stamp: <2016-08-08 16:33:27 kmodi>
 
 ;; Enable PragmataPro ligatures
 ;; Tested to work with version 0.822
@@ -177,7 +177,11 @@
                 (delq (assoc "#>" prettify-symbols-alist) prettify-symbols-alist))
     ;; "***" → "" breaks the 'hidestars' feature in org-mode
     (setq-local prettify-symbols-alist
-                (delq (assoc "***" prettify-symbols-alist) prettify-symbols-alist))))
+                (delq (assoc "***" prettify-symbols-alist) prettify-symbols-alist)))
+
+  (when (derived-mode-p 'sml-mode)
+    (setcdr (assoc "andalso" sml-font-lock-symbols-alist) "")
+    (setcdr (assoc "orelse" sml-font-lock-symbols-alist) "")))
 
 (dolist (hook modi/prettify-symbols-mode-hooks)
   (add-hook hook #'modi/setup-pragmata-ligatures))

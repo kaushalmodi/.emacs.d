@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-04 23:30:42 kmodi>
+;; Time-stamp: <2016-08-06 01:43:27 kmodi>
 
 ;; Standard ML
 
@@ -25,6 +25,9 @@
                       "fn"
                       "fun"))
       (define-abbrev sml-mode-abbrev-table abbrev nil))
+
+    (setcdr (assoc "andalso" sml-font-lock-symbols-alist) "&")
+    (setcdr (assoc "orelse" sml-font-lock-symbols-alist) "|")
 
     (defun modi/sml-mode-hook-fn ()
       "My customizations for `sml-mode'."
