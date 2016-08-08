@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-29 14:25:19 kmodi>
+;; Time-stamp: <2016-08-08 18:28:26 kmodi>
 
 ;; Customize the mode-line
 
@@ -173,8 +173,9 @@ If nil, show the same in the minibuffer.")
                 (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​▯")) ; region bindings
                 (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​💡")) ; beacon
                 (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​🞵")) ; Hi-Lock
-                (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​⇥")) ; aggressive indent
-                (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​⭮"))) ; auto revert
+                (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​➠")) ; aggressive indent
+                (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​⭮")) ; auto revert
+                (add-to-list 'rm-text-properties '("\\` Fill\\'" 'display "​⮒"))) ; auto fill
             (progn
               (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​Tail|"))
               (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​t"))
@@ -182,7 +183,8 @@ If nil, show the same in the minibuffer.")
               (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​*"))
               (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​H"))
               (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​a"))
-              (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​AR|")))))))
+              (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​aR|"))
+              (add-to-list 'rm-text-properties '("\\` Fill\\'" 'display "​aF|")))))))
 
     (sml/setup)))
 
