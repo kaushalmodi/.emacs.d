@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-22 14:06:32 kmodi>
+;; Time-stamp: <2016-08-09 11:25:15 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -123,7 +123,8 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 
 (>=e "25.0"
     (use-package saveplace
-      :config
+      :defer t
+      :init
       (save-place-mode 1)))
 
 (use-package browse-url
