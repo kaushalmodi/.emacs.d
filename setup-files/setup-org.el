@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-09 13:55:11 kmodi>
+;; Time-stamp: <2016-08-09 15:52:26 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -470,58 +470,77 @@ the languages in `modi/ob-enabled-languages'."
       (progn
         (setq org-tree-slide--lighter " Slide")
 
-        (defvar org-tree-slide-text-scale 3
+        (defvar modi/org-tree-slide-text-scale 3
           "Text scale ratio to default when `org-tree-slide-mode' is enabled.")
 
-        (defun org-tree-slide-my-profile ()
-          "Customize org-tree-slide variables.
-  `org-tree-slide-header'            => nil
-  `org-tree-slide-slide-in-effect'   => nil
-  `org-tree-slide-heading-emphasis'  => nil
-  `org-tree-slide-cursor-init'       => t
-  `org-tree-slide-modeline-display'  => 'lighter
-  `org-tree-slide-skip-done'         => nil
-  `org-tree-slide-skip-comments'     => t
-"
+        (defun modi/org-tree-slide-set-profile ()
+          "Customize org-tree-slide variables."
           (interactive)
-          (setq org-tree-slide-text-scale         2)
-          (setq org-tree-slide-header             nil)
-          (setq org-tree-slide-slide-in-effect    nil)
-          (setq org-tree-slide-heading-emphasis   nil)
-          (setq org-tree-slide-cursor-init        t)
-          (setq org-tree-slide-modeline-display   'lighter)
-          (setq org-tree-slide-skip-done          nil)
-          (setq org-tree-slide-skip-comments      t)
-          (setq org-tree-slide-activate-message   "Starting org presentation.")
-          (setq org-tree-slide-deactivate-message "Ended presentation."))
+          (setq modi/org-tree-slide-text-scale 2)
+          (setq org-tree-slide-header nil)
+          (setq org-tree-slide-slide-in-effect t)
+          (setq org-tree-slide-heading-emphasis nil)
+          (setq org-tree-slide-cursor-init t) ; Move cursor to the head of buffer
+          (setq org-tree-slide-modeline-display 'lighter)
+          (setq org-tree-slide-skip-done nil)
+          (setq org-tree-slide-skip-comments t)
+          (setq org-tree-slide-activate-message
+                (concat "Starting org presentation. "
+                        "Use arrow keys to navigate the slides."))
+          (setq org-tree-slide-deactivate-message "Ended presentation.")
+          (message "my custom `org-tree-slide' profile: ON"))
 
-        (defun my/org-tree-slide-start ()
+        (defvar modi/writegood-mode-state nil
+          "Variable to store the state of `writegood-mode'.")
+
+        (defun modi/org-tree-slide-start ()
           "Set up the frame for the slideshow."
           (interactive)
+          (when (fboundp 'writegood-mode)
+            (setq modi/writegood-mode-state writegood-mode)
+            (writegood-mode -1))
           (modi/toggle-one-window :force-one-window) ; force 1 window
-          (text-scale-set org-tree-slide-text-scale)
-          (org-tree-slide-my-profile))
+          (modi/org-tree-slide-set-profile)
+          (text-scale-set modi/org-tree-slide-text-scale))
+        (add-hook 'org-tree-slide-play-hook #'modi/org-tree-slide-start)
 
-        (defun my/org-tree-slide-stop()
+        (defun modi/org-tree-slide-stop()
           "Undo the frame setup for the slideshow."
           (interactive)
           (modi/toggle-one-window) ; toggle 1 window
+          (when (and (fboundp 'writegood-mode)
+                     modi/writegood-mode-state)
+            (writegood-mode 1)
+            (setq modi/writegood-mode-state nil))
           (text-scale-set 0))
+        (add-hook 'org-tree-slide-stop-hook #'modi/org-tree-slide-stop)
 
-        (add-hook 'org-tree-slide-play-hook #'my/org-tree-slide-start)
-        ;; (remove-hook 'org-tree-slide-play-hook #'my/org-tree-slide-start)
-        (add-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
-        ;; (remove-hook 'org-tree-slide-stop-hook #'my/org-tree-slide-stop)
+        (defun modi/org-tree-slide-text-scale-reset ()
+          "Reset time scale to `modi/org-tree-slide-text-scale'."
+          (interactive)
+          (text-scale-set modi/org-tree-slide-text-scale))
 
-        (bind-key "<left>"   #'org-tree-slide-move-previous-tree                             org-tree-slide-mode-map)
-        (bind-key "<right>"  #'org-tree-slide-move-next-tree                                 org-tree-slide-mode-map)
-        (bind-key "C-0"      (lambda () (interactive) (text-scale-set org-tree-slide-text-scale)) org-tree-slide-mode-map)
-        (bind-key "C-="      (lambda () (interactive) (text-scale-increase 1))                    org-tree-slide-mode-map)
-        (bind-key "C--"      (lambda () (interactive) (text-scale-decrease 1))                    org-tree-slide-mode-map)
-        (bind-key "C-1"      #'org-tree-slide-content                                        org-tree-slide-mode-map)
-        (bind-key "C-2"      #'org-tree-slide-my-profile                                     org-tree-slide-mode-map)
-        (bind-key "C-3"      #'org-tree-slide-simple-profile                                 org-tree-slide-mode-map)
-        (bind-key "C-4"      #'org-tree-slide-presentation-profile                           org-tree-slide-mode-map)))
+        (defun modi/org-tree-slide-text-scale-inc1 ()
+          "Increase text scale by 1."
+          (interactive)
+          (text-scale-increase 1))
+
+        (defun modi/org-tree-slide-text-scale-dec1 ()
+          "Decrease text scale by 1."
+          (interactive)
+          (text-scale-decrease 1))
+
+        (bind-keys
+         :map org-tree-slide-mode-map
+          ("<left>" . org-tree-slide-move-previous-tree)
+          ("<right>" . org-tree-slide-move-next-tree)
+          ("C-0" . modi/org-tree-slide-text-scale-reset)
+          ("C-=" . modi/org-tree-slide-text-scale-inc1)
+          ("C--" . modi/org-tree-slide-text-scale-dec1)
+          ("C-1" . org-tree-slide-content)
+          ("C-2" . modi/org-tree-slide-set-profile)
+          ("C-3" . org-tree-slide-simple-profile)
+          ("C-4" . org-tree-slide-presentation-profile))))
 
 ;;; Org Cliplink
     ;; https://github.com/rexim/org-cliplink
