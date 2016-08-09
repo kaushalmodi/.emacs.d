@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-09 15:52:26 kmodi>
+;; Time-stamp: <2016-08-09 19:01:59 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -24,6 +24,7 @@
 ;;    ox-beamer - Beamer export
 ;;    ox-reveal - Presentations using reveal.js
 ;;    ox-twbs - Twitter Bootstrap
+;;    ox-ascii - ASCII export
 ;;    ox-odt - ODT, doc export
 ;;    Org Export Customization
 ;;  Easy Templates
@@ -892,6 +893,61 @@ footer > div {
     padding: 0px;
 }
 </style>"))))
+
+;;;; ox-ascii - ASCII export
+        (use-package ox-ascii
+          :config
+          (progn
+            (defun modi/ox-ascii-remove-blank-lines (contents backend info)
+              "Filter to remove extra blank lines only from ASCII exports.
+
+For below filter to be effective, put the below in the org file:
+
+  #+OPTIONS: H:0 num:0
+
+The TOC is always removed from the export because it is anyways
+empty with the \"num:0\" portion of the above needed options.
+"
+              ;; (message "dbg: info: %S" info)
+              (when (eq backend 'ascii)
+                (let* ((headline-levels (plist-get info :headline-levels))
+                       (section-numbers (plist-get info :section-numbers))
+                       (with-toc (plist-get info :with-toc))
+                       ;; newline-regexp below is a literal newline character
+                       (newline-regexp "
+")
+                       start-point)
+                  ;; (message "dbg: section-numbers: %S" section-numbers)
+                  (when (and (= headline-levels 0)
+                             (and (numberp section-numbers) ; section-numbers can be `t' too
+                                  (= section-numbers 0)))
+                    (with-temp-buffer
+                      (insert contents)
+
+                      ;; Force remove TOC if `with-toc' is non-nil because with headline-levels
+                      ;; at 0, the TOC will anyways be empty.
+                      ;; (message "dbg: with-toc: %S" with-toc)
+                      (when with-toc
+                        (goto-char (point-min))
+                        (re-search-forward "^Table of Contents")
+                        (kill-whole-line 2)) ; Delete the "Table of Contents" underline too.
+
+                      (goto-char (point-min))
+                      (while (re-search-forward (concat
+                                                 ;; 0 or more newlines
+                                                 newline-regexp "*"
+                                                 ;; followed by the newline before the
+                                                 ;; line containing list items
+                                                 "\\(" newline-regexp "\\s-*[*+-]\\)")
+                                                nil :noerror)
+                        ;; Make sure that only one new line exists only before the topmost
+                        ;; level list items.
+                        (if (string-match-p "^\\*" (match-string-no-properties 1))
+                            (replace-match "\n\\1")
+                          ;; Remove all blank lines before all other list items
+                          (replace-match "\\1")))
+                      (buffer-substring-no-properties (point-min) (point-max)))))))
+            (add-hook 'org-export-filter-final-output-functions #'modi/ox-ascii-remove-blank-lines)))
 
 ;;;; ox-odt - ODT, doc export
         ;; http://stackoverflow.com/a/22990257/1219634
