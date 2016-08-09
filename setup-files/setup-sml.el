@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-06 01:43:27 kmodi>
+;; Time-stamp: <2016-08-09 08:16:06 kmodi>
 
 ;; Standard ML
 
@@ -40,7 +40,11 @@
       ;; ;; disabled for this major mode.
       ;; (electric-indent-local-mode -1)
       (auto-fill-mode))
-    (add-hook 'sml-mode-hook #'modi/sml-mode-hook-fn)))
+    (add-hook 'sml-mode-hook #'modi/sml-mode-hook-fn)
+
+    ;; Do not bind M-SPC to `sml-electric-space' in `sml-mode-map'.
+    ;; I prefer the default binding to `just-one-space'.
+    (bind-key "M-SPC" nil sml-mode-map)))
 
 
 (provide 'setup-sml)
