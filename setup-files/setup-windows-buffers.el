@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-30 00:26:59 kmodi>
+;; Time-stamp: <2016-08-09 13:56:03 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -426,7 +426,7 @@ function is called.")
 (defvar modi/toggle-one-window--window-configuration nil
   "Variable to store the window configuration before `modi/toggle-one-window'
 function was called.")
-(defun modi/toggle-one-window (force-one-window)
+(defun modi/toggle-one-window (&optional force-one-window)
   "Toggles the frame state between deleting all windows other than
 the current window and the windows state prior to that."
   (interactive "P")

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-20 15:03:35 kmodi>
+;; Time-stamp: <2016-08-09 13:55:11 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -496,12 +496,14 @@ the languages in `modi/ob-enabled-languages'."
           (setq org-tree-slide-deactivate-message "Ended presentation."))
 
         (defun my/org-tree-slide-start ()
+          "Set up the frame for the slideshow."
           (interactive)
-          (modi/toggle-one-window 4) ; force 1 window
+          (modi/toggle-one-window :force-one-window) ; force 1 window
           (text-scale-set org-tree-slide-text-scale)
           (org-tree-slide-my-profile))
 
         (defun my/org-tree-slide-stop()
+          "Undo the frame setup for the slideshow."
           (interactive)
           (modi/toggle-one-window) ; toggle 1 window
           (text-scale-set 0))
