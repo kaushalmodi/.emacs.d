@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-22 16:09:59 kmodi>
+;; Time-stamp: <2016-08-09 11:45:44 kmodi>
 
 ;; Desktop save and restore
 
@@ -78,6 +78,15 @@ saved desktop at startup:
           (eww-buf-regexp "\\(^eww\\(<[0-9]+>\\)*$\\)"))
       (setq desktop-buffers-not-to-save (concat default
                                                 "\\|" eww-buf-regexp)))
+
+    ;; http://emacs.stackexchange.com/a/20036/115
+    (defun modi/bury-star-buffers ()
+      "Bury all star buffers."
+      (mapc (lambda (buf)
+              (when (string-match-p "\\`\\*.*\\*\\'" (buffer-name buf))
+                (bury-buffer buf)))
+            (buffer-list)))
+    (add-hook 'desktop-after-read-hook #'modi/bury-star-buffers)
 
     (defun modi/restore-last-saved-desktop ()
       "Enable `desktop-save-mode' and restore the last saved desktop."
