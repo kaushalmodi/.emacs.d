@@ -25,3 +25,6 @@
 [submodule "elisp/ox-minutes"]
 	path = elisp/ox-minutes
 	url = https://kaushalmodi@github.com/kaushalmodi/ox-minutes.git
+[submodule "elisp/el2markdown"]
+	path = elisp/el2markdown
+	url = https://kaushalmodi@github.com/kaushalmodi/el2markdown
