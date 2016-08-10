@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 23:17:03 kmodi>
+;; Time-stamp: <2016-08-09 23:13:23 kmodi>
 
 ;; yasnippet
 ;; https://github.com/capitaomorte/yasnippet
@@ -57,6 +57,23 @@ $0")
         (remove-hook hook #'yas-minor-mode)))
 
     (modi/turn-on-yas-minor-mode)
+
+    (defun modi/yas-org-path-to-caption (text)
+      "Converts a file path in TEXT to caption.
+Used in org-mode/figure-caption snippet.
+
+Example: ./img/my-figure.png → My Figure"
+      (capitalize
+       (replace-regexp-in-string
+        "[-_]" " " (replace-regexp-in-string
+                    "\\(.*/\\)*\\(.*?\\)\\(\\..*\\)*" "\\2" text))))
+
+    (defun modi/yas-org-caption-to-name (text)
+      "Converts an org CAPTION in TEXT to NAME.
+Used in org-mode/figure-caption and org-mode/table-caption snippets.
+
+Example: My Figure → my_figure"
+      (replace-regexp-in-string " " "_" (downcase text)))
 
     (defhydra hydra-yas (:color blue
                          :hint nil)
