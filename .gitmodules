@@ -22,3 +22,6 @@
 [submodule "elisp/ox-twbs"]
 	path = elisp/ox-twbs
 	url = https://kaushalmodi@www.github.com/kaushalmodi/ox-twbs
+[submodule "elisp/ox-minutes"]
+	path = elisp/ox-minutes
+	url = https://kaushalmodi@github.com/kaushalmodi/ox-minutes.git
