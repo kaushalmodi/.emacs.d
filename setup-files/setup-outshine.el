@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:30:24 kmodi>
+;; Time-stamp: <2016-08-10 11:52:37 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -119,6 +119,22 @@ Don't add “Revision Control” heading to TOC."
     (defun modi/turn-on-outline-minor-mode ()
       "Turn on `outline-minor-mode' only for specific modes."
       (interactive)
+      ;; When outshine is enabled, it remaps `self-insert-command' to
+      ;; `outshine-self-insert-command.' That works fine, except that in
+      ;; `emacs-lisp-mode' when `outline-minor-mode' is enabled (and thus outshine
+      ;; is enabled), the eldoc-mode gets messed up.
+      ;; Example: After typing "(define-key", the eldoc-mode should show the
+      ;; hint for `define-key' in the echo area. But that does not happen while
+      ;; outshine is enabled. It starts working fine if I disable
+      ;; `outline-minor-mode' (and thus outshine too).
+      ;; The workaround is to do "C-b" after hitting SPACE after typing
+      ;; "(define-key" to get the eldoc hint to show up.
+      ;; Wed Aug 10 11:45:39 EDT 2016 - kmodi
+      ;; Thanks to _compunaut_'s comment https://www.reddit.com/r/emacs/comments/4v4bof/sharing_my_first_package_modeonregion/d6bwxhc,
+      ;; below now fixes that.
+      (with-eval-after-load 'eldoc
+        (eldoc-add-command 'outshine-self-insert-command))
+
       (dolist (hook modi/outline-minor-mode-hooks)
         (add-hook hook #'outline-minor-mode)))
 
@@ -160,13 +176,3 @@ Don't add “Revision Control” heading to TOC."
 
 
 (provide 'setup-outshine)
-
-;; To Debug:
-;; When outshine is enabled, it remaps self-insert-command to
-;; outshine-self-insert-command. That works fine except that in
-;; `emacs-lisp-mode' when `outline-minor-mode' is enabled (and thus outshine is
-;; enabled), the eldoc-mode is messed up.
-;; Example: after typing `(define-key' followed by SPACE, the eldoc-mode
-;; should show the hint for `define-key' in the echo area. But that
-;; does not happen while outshine is enabled. It starts working fine
-;; if I disable `outline-minor-mode' (and thus outshine too).
