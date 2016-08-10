@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-09 11:54:34 kmodi>
+;; Time-stamp: <2016-08-10 01:27:39 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -52,6 +52,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     dired-single dired+
     drag-stuff
     easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
+    el2markdown ; Generate README.md files from Commentary section in .el files
     elfeed
     elisp-slime-nav ; tag based code navigation for elisp; works even for compressed code
     engine-mode ; search engines
@@ -213,6 +214,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-drag-stuff)
 (require 'setup-elfeed)
 (require 'setup-eww)
+(require 'setup-el2markdown)
 (require 'setup-elisp-slime-nav)
 (require 'setup-engine-mode)
 (require 'setup-expand-region)
