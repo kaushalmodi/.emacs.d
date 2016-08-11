@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 13:34:17 kmodi>
+;; Time-stamp: <2016-08-11 16:58:25 kmodi>
 
 ;; Verilog
 
@@ -14,7 +14,7 @@
 ;;      modi/verilog-update-which-func-format
 ;;    modi/verilog-jump-to-module-at-point (interactive)
 ;;    modi/verilog-find-parent-module (interactive)
-;;    my/verilog-selective-indent
+;;    modi/verilog-selective-indent
 ;;    modi/verilog-compile
 ;;    convert end-block comments to block names
 ;;  hideshow
@@ -377,34 +377,39 @@ the project."
               ;; (message module-instance-pcre)
               (ag-regexp module-instance-pcre (projectile-project-root)))))))
 
-;;;; my/verilog-selective-indent
+;;;; modi/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
-    (defun my/verilog-selective-indent (&rest args)
-      "Return t if either of the below is true:
-- The current line starts with optional whitespace and then `// *'
-- The current line contains `//.'
+    (defun modi/verilog-selective-indent (&rest args)
+      "Return non-nil if point is on certain types of comment lines.
 
-If the first match above is true, also delete any preceding white space too.
+If either of the below is true:
+- The current line starts with optional whitespace and then \"// *(space)\".
+  Here that * represents one or more consecutive '*' chars.
+- The current line contains \"//.\".
+  Here that . represents a literal '.' char.
 
-Tweak the verilog-mode indentation to skip the lines that begin with
-“<optional-white-space>// *” in order to not break any `outline-mode'
-or `outshine' functionality.
+If the comment is of \"// *(space)\" style, delete any preceding white space, do
+not indent that comment line at all.
 
-The match with `//.' resolves this issue:
-  http://www.veripool.org/issues/922-Verilog-mode-Consistent-comment-column
-"
+This function is used to tweak the `verilog-mode' indentation to skip the lines
+containing \"// *(space)\" style of comments in order to not break any
+`outline-mode'or `outshine' functionality.
+
+The match with \"//.\" resolves this issue:
+  http://www.veripool.org/issues/922-Verilog-mode-Consistent-comment-column "
       (save-excursion
         (beginning-of-line)
-        (let* ((match1 (looking-at "^[[:blank:]]*// \\*")) ; // *
-               (match2 (looking-at "^.*//\\.")) ; //.
-               (match (or match1 match2)))
-          (when match1
+        (let* ((outline-comment (looking-at "^[[:blank:]]*// \\*+\\s-")) ; // *(space)
+               (fixed-indent-comment (looking-at "^.*//\\.")) ; //.
+               (do-not-run-orig-fn (or outline-comment fixed-indent-comment)))
+          ;; Force remove any indentation for outline comments
+          (when outline-comment
             (delete-horizontal-space))
-          match)))
+          do-not-run-orig-fn)))
     ;; Advise the indentation behavior of `indent-region' done using `C-M-\'
-    (advice-add 'verilog-indent-line-relative :before-until #'my/verilog-selective-indent)
+    (advice-add 'verilog-indent-line-relative :before-until #'modi/verilog-selective-indent)
     ;; Advise the indentation done by hitting `TAB'
-    (advice-add 'verilog-indent-line          :before-until #'my/verilog-selective-indent)
+    (advice-add 'verilog-indent-line :before-until #'modi/verilog-selective-indent)
 
 ;;;; modi/verilog-compile
     (defun modi/verilog-compile (option)
