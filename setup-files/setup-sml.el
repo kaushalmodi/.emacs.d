@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-11 01:44:20 kmodi>
+;; Time-stamp: <2016-08-15 14:11:16 kmodi>
 
 ;; Standard ML
 
@@ -7,6 +7,9 @@
   :mode (("\\.sml\\'" . sml-mode))
   :config
   (progn
+    ;; Make typing '|' insert a literal '|' only.
+    (setq sml-electric-pipe-mode nil)
+
     ;; Undefine all the default abbrevs defined in `sml-mode.el'.
     ;; I cannot use `clear-abbrev-table' because that will clear out my
     ;; personally defined abbrevs too!
