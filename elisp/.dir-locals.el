@@ -1,9 +1,8 @@
 (("verilog-mode/src"
-  . ((emacs-lisp-mode . ((lisp-indent-function . lisp-indent-function)))))
- ("verilog-mode/tests"
-  . ((nil . ((do-not-delete-trailing-whitespace . t)))))
- ("verilog-mode/tests_ok"
-  . ((nil . ((do-not-delete-trailing-whitespace . t)))))
+  . ((nil . ((do-not-delete-trailing-whitespace . t)
+             (eval . (whitespace-mode 1))))
+     (emacs-lisp-mode . ((lisp-indent-function . lisp-indent-function)
+                         (aggressive-indent-mode . nil))))) 
  ("matlab-emacs/src"
   . ((emacs-lisp-mode . ((lisp-indent-function . lisp-indent-function)
                          (aggressive-indent-mode . nil))))))
