@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-17 16:14:02 kmodi>
+;; Time-stamp: <2016-08-17 17:19:13 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -41,7 +41,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     beacon ; visual flash to show the cursor position
     benchmark-init
     bm ; visual bookmarks
-    bookmark+ ; able to bookmark desktop sessions
     buffer-move
     command-log-mode ; for logging commands; useful when demoing emacs
     cperl-mode
@@ -138,6 +137,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     twilight-bright-theme
     twilight-anti-bright-theme
     ;; Crypt
+    ;; bookmark+ ; able to bookmark desktop sessions
     ;; ox-twbs ; export to twitter bootstrap html < fork (supports org 9.0+)
     ;; ox-reveal ; used to export to HTML slides; < git clone
     ;; git-link ; get git links with line numbers and commit-hash/branch ; < fork

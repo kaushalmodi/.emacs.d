@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-22 11:18:30 kmodi>
+;; Time-stamp: <2016-08-15 17:50:36 kmodi>
 
 ;; Bookmarks
 
@@ -104,6 +104,9 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
 ;;; bookmark+ (bmkp)
 ;; http://www.emacswiki.org/BookmarkPlus
 (use-package bookmark+
+  ;; Mon Aug 15 17:50:25 EDT 2016 - kmodi
+  ;; Checking if I do actually need this package
+  :disabled
   :defer t
   :preface
   ;; Prevent "`fringe-bitmaps' variable not found" errors in emacs built
