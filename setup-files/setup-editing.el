@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-08 16:30:44 kmodi>
+;; Time-stamp: <2016-08-17 16:11:03 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -191,16 +191,17 @@ there's a region, all lines that region covers will be duplicated."
 ;; saved mark at the very beginning of `modi/delete-trailing-whitespace-buffer'.
 (defvar modi/org-capture-buffer-file-name nil
   "Variable to save the org capture buffer file name.")
-(defun modi/advice-basic-save-buffer-save-mark (orig-fun &rest args)
-  "Save the mark just before calling ORIG-FUN if the current buffer is an
-org capture buffer."
+(defun modi/advice-basic-save-buffer-save-mark (&rest args)
+  "Save the mark just before calling ORIG-FUN.
+
+Do this only if the current buffer is an org capture buffer."
   (let ((buf (buffer-name)))
     ;; Push mark to the mark ring ONLY in org capture buffers
     (when (string-match "\\`CAPTURE-\\(.*\\.org\\)\\'" buf)
       (setq modi/org-capture-buffer-file-name (match-string-no-properties 1 buf))
-      (push-mark (point))))
-  (apply orig-fun args))
-(advice-add 'basic-save-buffer :around #'modi/advice-basic-save-buffer-save-mark)
+      (push-mark (point)))))
+(advice-add 'basic-save-buffer :before #'modi/advice-basic-save-buffer-save-mark)
+;; (advice-remove 'basic-save-buffer #'modi/advice-basic-save-buffer-save-mark)
 
 ;; Delete trailing white space in lines and empty new lines at the end of file
 ;; when saving files. This is very useful for macro definitions in Verilog as for
