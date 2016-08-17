@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-08 18:28:26 kmodi>
+;; Time-stamp: <2016-08-17 16:16:02 kmodi>
 
 ;; Customize the mode-line
 
@@ -182,7 +182,7 @@ If nil, show the same in the minibuffer.")
               (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​r"))
               (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​*"))
               (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​H"))
-              (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​a"))
+              (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​aI|"))
               (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​aR|"))
               (add-to-list 'rm-text-properties '("\\` Fill\\'" 'display "​aF|")))))))
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-10 01:27:39 kmodi>
+;; Time-stamp: <2016-08-17 16:14:02 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -32,7 +32,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     ag wgrep wgrep-ag s ; ag > ack > grep
                                         ; wgrep+wgrep-ag allow editing files
                                         ; directly in ag buffer
-    aggressive-indent
     all all-ext ; edit ALL lines matching regex
     anzu   ; shows total search hits in mode line, > query-replace
     ascii-art-to-unicode
@@ -198,7 +197,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-ace-window)
 (when (executable-find "ag")
   (require 'setup-ag))
-(require 'setup-aggressive-indent)
 (require 'setup-all)
 (require 'setup-artist)
 (require 'setup-auto-complete)

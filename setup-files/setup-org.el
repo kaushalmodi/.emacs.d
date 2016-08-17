@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-10 00:41:50 kmodi>
+;; Time-stamp: <2016-08-17 16:16:30 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1196,5 +1196,5 @@ region is selected. Else call `self-insert-command'."
 ;; recognized as the local variables setup for THIS file.
 
 ;; Local Variables:
-;; eval: (aggressive-indent-mode -1)
+;; aggressive-indent-mode: nil
 ;; End:

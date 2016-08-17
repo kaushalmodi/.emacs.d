@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-28 15:52:43 kmodi>
+;; Time-stamp: <2016-08-17 16:15:20 kmodi>
 
 ;; Toggles
 
@@ -6,7 +6,6 @@
                         :columns 7)
   "Toggle"
   ("aa"    artist-mode "artist mode")
-  ("ai"    aggressive-indent-mode "aggressive indent")
   ("af"    auto-fill-mode "auto fill")
   ("ar"    auto-revert-mode "auto revert")
   ("aw"    adaptive-wrap-prefix-mode "adaptive wrap")
