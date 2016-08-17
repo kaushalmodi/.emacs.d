@@ -28,7 +28,9 @@ If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]'
 prefix), do the above and also open the html file in the default browser."
   (interactive "P")
   (require 'ox-html)
-  (let ((org-html-htmlize-output-type 'css)
+  (let ((src-link (concat "https://github.com/kaushalmodi/.emacs.d/blob/master/"
+                          "elisp/htmlize-r2f/htmlize-r2f.el"))
+        (org-html-htmlize-output-type 'css)
         (org-html-htmlize-font-prefix "org-")
         (fname (concat htmlize-r2f-output-directory
                        (if (buffer-file-name)
@@ -53,8 +55,7 @@ prefix), do the above and also open the html file in the default browser."
       (goto-char (point-min))
       (insert (concat "<!-- This file is generated using the "
                       "`htmlize-r2f' function\n"
-                      "from https://github.com/kaushalmodi/.emacs.d/"
-                      "blob/master/setup-files/setup-org.el -->\n"))
+                      "from " src-link " -->\n"))
       (insert "<html>\n<head>\n<style media=\"screen\" type=\"text/css\">\n")
       ;; Go to the end of the buffer (end of the css code) and
       ;; insert the closing tags for `style' and `head' and opening
@@ -69,7 +70,8 @@ prefix), do the above and also open the html file in the default browser."
       (when option
         (kill-new fname)
         (when (= 16 (car option))
-          (browse-url-of-file fname))))))
+          (browse-url-of-file fname))))
+    fname))
 
 
 (provide 'htmlize-r2f)
