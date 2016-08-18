@@ -1,11 +1,10 @@
-;; Time-stamp: <2016-06-10 09:16:00 kmodi>
+;; Time-stamp: <2016-08-18 09:40:58 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
 (use-package ivy
   :bind (:map modi-mode-map
          ("M-u" . ivy-resume)) ; Override the default binding for `upcase-word'
-  :bind (("M-o" . ivy-recentf))
   :config
   (progn
     ;; Disable ido
