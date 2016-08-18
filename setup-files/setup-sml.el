@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-15 14:11:16 kmodi>
+;; Time-stamp: <2016-08-18 01:28:15 kmodi>
 
 ;; Standard ML
 
@@ -44,6 +44,64 @@
       ;; (electric-indent-local-mode -1)
       (auto-fill-mode))
     (add-hook 'sml-mode-hook #'modi/sml-mode-hook-fn)
+
+    (defun modi/sml-indent-new-comment-line ()
+      "Pretty block comments.
+
+With point | in comment
+
+  (* test| *)
+
+calling this command will result in:
+
+  (* test
+   * |
+   *)
+
+Calling this command again will result in:
+
+  (* test
+   *
+   * |
+   *) "
+      (interactive)
+      (call-interactively #'indent-new-comment-line)
+      (let (nested-empty-comment)
+        ;; If the previous command results in inserting "(* *)" within the
+        ;; comment block, delete that, and replace with just "*".
+        ;;   (* |*)  --indent-new-comment-line-->  (*        (*
+        ;;                                         (* *)  ->  * |
+        ;;                                         |*)        *)
+        ;;           --modi/sml-indent-new-comment-line------>
+        (save-excursion
+          (forward-line -1)
+          (when (re-search-forward "(\\*\\s-+\\*)\\s-*" (line-end-position) :noerror)
+            (setq nested-empty-comment t)
+            (replace-match "*")
+            (indent-according-to-mode)
+            (delete-blank-lines)))
+        (if nested-empty-comment
+            (progn
+              (indent-according-to-mode)
+              (previous-line 1)
+              (move-end-of-line 1))
+          ;; By default "*)" is inserted at the end of the current line and the
+          ;; point is moved to the next line. So now we need to remove that "*)"
+          ;; on the previous line.
+          ;;   (* abc| *)  --indent-new-comment-line-->  (* abc *)    (* abc
+          ;;                                             (* |*)    ->  * |
+          ;;                                                           *)
+          ;;           --modi/sml-indent-new-comment-line----------->
+          (forward-line -1)
+          (re-search-forward "\\*)\\s-*\n\\s-*(\\*")
+          (replace-match "\n*")
+          (indent-according-to-mode)
+          ;; Move the ending "*)" to its own line
+          (when (looking-at-p " \\*)")
+            (save-excursion
+              (newline-and-indent))))
+        (insert " ")))
+    (bind-key "M-j" #'modi/sml-indent-new-comment-line sml-mode-map)
 
     (defun modi/restart-sml-and-run ()
       "Restarts the SML REPL and tries to load the correct .sml file.
