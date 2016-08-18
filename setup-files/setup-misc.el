@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-09 11:25:15 kmodi>
+;; Time-stamp: <2016-08-18 12:38:42 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -110,6 +110,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 ;; Help Functions +
 ;; http://www.emacswiki.org/emacs/HelpPlus
 (use-package help-fns+
+  :defer 20
   :config
   (progn
     (bind-keys
