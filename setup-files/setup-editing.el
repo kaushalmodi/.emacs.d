@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-17 16:11:03 kmodi>
+;; Time-stamp: <2016-08-19 23:16:50 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -770,7 +770,72 @@ Temporarily consider - and _ characters as part of the word when sorting."
       (sort-regexp-fields reverse "\\w+" "\\&" beg end))))
 
 ;;; Fill/unfill
+
 (bind-key "f" #'fill-region region-bindings-mode-map)
+
+;; par - http://www.nicemice.net/par/
+;; http://emacs.stackexchange.com/a/26387/115
+(when (executable-find "par")
+  (defun modi/par-fill-region (begin end par-option)
+    "Use `par' executable to fill region between BEGIN and END.
+
+If PAR-OPTION is \\='(4) `\\[universal-argument]', also justify the text.
+If PAR-OPTION is \\='(16) `\\[universal-argument] \\[universal-argument]', try to
+make all lines of almost equal lengths instead of justifying.
+
+See `man par' for more information."
+    (interactive "r\nP")
+    (let* ((width-str (number-to-string fill-column))
+           (err-buf "*par Error*")
+           (par-cmd
+            (concat "par "
+                    "w" width-str " " ; set fill width
+                    ;; Body characters: . , ? upper-case lower-case
+                    (shell-quote-argument "B=.,?_A_a") " "
+                    ;; Quote characters: space > | <comment-start char>
+                    (shell-quote-argument
+                     (concat "Q=_s>|" (when comment-start comment-start))) " "
+                     ;; Allow bodiless characters like *, space, .. to inc/dec by
+                     ;; up to 10 characters to adjust line width.
+                     "r10"
+                     "T4" ; Expand tab chars to 4 spaces
+                     ;; Prefixes may not contain any trailing body characters, and
+                     ;; suffixes may not contain any leading body characters
+                     "b"
+                     "e" ; Expel/remove superfluous lines
+                     (when (equal '(16) par-option)
+                       "f") ; Try to make all lines of nearly the same length
+                     "g" ; Make a better guess at inserting line breaks
+                     (when (equal '(4) par-option)
+                       "j") ; Justify the lines by inserting spaces between words
+                     "q" ; Insert blank lines before/after quoted text
+                     "R" ; Throw an error if a word length exceeds the fill width
+                     "E" )) ; Send error to stderr instead of stdout
+           (before-text (buffer-substring-no-properties begin end))
+           par-ret
+           ;; Do the formatting in a temp buffer so that the text in the original
+           ;; buffer doesn't get corrupted in case `par' fails due to some error.
+           (after-text (with-temp-buffer
+                         (insert before-text)
+                         (setq par-ret (shell-command-on-region
+                                        (point-min) (point-max)
+                                        par-cmd nil :replace
+                                        err-buf :display-error-buffer))
+                         (buffer-substring-no-properties (point-min) (point-max)))))
+      ;; If 1 is returned, error occurred in the cmd execution; 0 - no error
+      (if (= 1 par-ret)
+          (progn
+            ;; Switch to the error buffer
+            (switch-to-buffer-other-window err-buf)
+            (special-mode)) ; Set this mode so that you can quit it quickly using C-u q
+        ;; If no error occurred, do below in the original buffer
+        (delete-region begin end)
+        (insert after-text))
+      (message "Executed `%s' on the region" par-cmd)))
+  (bind-key "F" #'modi/par-fill-region region-bindings-mode-map)
+  ;; Rationale for the below binding is that it flows very well when selecting a
+  ;; paragraph and then filling that region: "M-h M-H"
+  (bind-key "M-H" #'modi/par-fill-region modi-mode-map))
 
 ;; Forked version of https://github.com/purcell/unfill
 (use-package unfill
