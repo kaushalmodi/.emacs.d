@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-26 15:00:02 kmodi>
+;; Time-stamp: <2016-08-19 02:08:48 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
@@ -41,22 +41,41 @@
     ;; Turn off fci-mode when popups are activated
     ;; https://github.com/alpaker/Fill-Column-Indicator/issues/21#issuecomment-6959718
     (with-eval-after-load 'popup
-      (defvar sanityinc/fci-mode-suppressed nil)
+      (defvar modi/fci-mode-original-state nil
+        "Variable to store the initial state of `fci-mode'.")
 
-      (defun sanityinc/suppress-fci-mode (&rest args)
-        "Suspend fci-mode while popups are visible"
-        (setq-local sanityinc/fci-mode-suppressed fci-mode)
+      (defun modi/popup--fci-disable-temporarily (&rest args)
+        "Suspend `fci-mode' for time being."
+        (setq-local modi/fci-mode-original-state fci-mode)
         (when fci-mode
-          (turn-off-fci-mode)))
-      (advice-add 'popup-create :before #'sanityinc/suppress-fci-mode)
+          (fci-mode -1)))
+      (advice-add 'popup-create :before #'modi/popup--fci-disable-temporarily)
 
-      (defun sanityinc/restore-fci-mode (&rest args)
-        "Restore fci-mode when all popups have closed"
-        (when (and sanityinc/fci-mode-suppressed
+      (defun modi/popup--fci-restore (&rest args)
+        "Restore `fci-mode' when all popups have closed"
+        (when (and modi/fci-mode-original-state
                    (null popup-instances))
-          (setq-local sanityinc/fci-mode-suppressed nil)
-          (turn-on-fci-mode)))
-      (advice-add 'popup-delete :after #'sanityinc/restore-fci-mode))
+          (setq-local modi/fci-mode-original-state nil)
+          (fci-mode 1)))
+      (advice-add 'popup-delete :after #'modi/popup--fci-restore))
+
+    ;; `fci-mode' needs to be disabled/enabled around the
+    ;; `shell-command-on-region' command too. Because if that is not done and if
+    ;; `C-u M-x shell-command-on-region' is called, the inserted text is pasted
+    ;; to the right of the fci. It's just a visual glitch due to the fci
+    ;; overlays. But to fix it, you would need to refresh the display otherwise,
+    ;; each time that happened.
+    (defun modi/shell--fci-disable-temporarily (orig-fun &rest args)
+      "Disable `fci-mode' before calling ORIG-FUN; re-enable afterwards."
+      (let ((fci-was-initially-on (when fci-mode
+                                    (prog1
+                                        fci-mode
+                                      (fci-mode -1)))))
+        (prog1
+            (apply orig-fun args)
+          (when fci-was-initially-on
+            (fci-mode 1)))))
+    (advice-add 'shell-command-on-region :around #'modi/shell--fci-disable-temporarily)
 
     (defun modi/fci-redraw-frame-all-buffers ()
       "Redraw the fill-column rule in all buffers on the selected frame.
