@@ -13,7 +13,7 @@
 ;; Description: spice file editing
 ;; URL: http://spice-mode.4t.com/
 ;; old-URL: http://www.esat.kuleuven.ac.be/~vdplas/emacs/
-;; Compatibility: Emacs2[01], (partly tested)XEmacs21
+;; Compatibility: Emacs2[01]
 
 ;; Please send suggestions and bug reports to
 ;; mailto:Geert_VanderPlas@email.com
@@ -97,7 +97,6 @@
 ;; 	      (list
 ;; 	       (list "My Header"    "MY HEADER"    nil)
 ;; 	       )))
-;;  '(spice-use-func-menu t)                          ;; use func-menu (XEmacs)
 ;;  '(spice-show-describe-mode nil)         ;; don't describe mode at startup
 ;;  )
 
@@ -153,9 +152,6 @@
   "Geert Van der Plas & Emmanuel Rouat (<geert_vanderplas@email.com>, <emmanuel.rouat@wanadoo.fr>)"
   "Current developers/maintainers of spice-mode.")
 
-(defvar spice-running-xemacs (string-match "XEmacs" emacs-version)
-  "A variable that tells us whether we're in Xemacs or not")
-
 (defvar spice-tempo-tags nil
   "List of templates used in spice mode.")
 
@@ -204,17 +200,17 @@ Additional standards:
   Spectre (TM): Spice compatibility of Spectre language (simulator language=spice decks)
 "
   :type '(list (choice :tag "Basic standard"
-		       (const :tag "Spice2g6" spice2g6))
+                 (const :tag "Spice2g6" spice2g6))
 	       (set :tag "Additional standards" :indent 2
-		    (const :tag "Hspice" hspice)
-		    (const :tag "Eldo"   eldo)
-		    (const :tag "Eldo RF" eldorf)
-		    (const :tag "Eldo Verilog-A" eldovloga)
-		    (const :tag "FastHenry" fasthenry)
-		    (const :tag "Layla"  layla)
-		    (const :tag "Mondriaan"  mondriaan)
-		    (const :tag "DracCDL"  draccdl)
-		    (const :tag "Spectre Spice Compatibility"  spectre)))
+                 (const :tag "Hspice" hspice)
+                 (const :tag "Eldo"   eldo)
+                 (const :tag "Eldo RF" eldorf)
+                 (const :tag "Eldo Verilog-A" eldovloga)
+                 (const :tag "FastHenry" fasthenry)
+                 (const :tag "Layla"  layla)
+                 (const :tag "Mondriaan"  mondriaan)
+                 (const :tag "DracCDL"  draccdl)
+                 (const :tag "Spectre Spice Compatibility"  spectre)))
   :set (lambda (variable value)
          (spice-custom-set variable value
 			   'spice-check-spice-standard
@@ -351,17 +347,17 @@ out a file name message in advance.  In this case, set \"File Subexp Index\"
 to 0 and fill out the \"File Message\" entries.
 "
   :type '(repeat (list :tag "Simulator" :indent 2
-		       (string :tag "Simulator Name    ")
-		       (string :tag "Simulate Command  ")
-		       ;(string :tag "From Directory    " "./")
-		       (string :tag "Extra Switches    ")
-		       (list :tag "Error Message" :indent 4
-			     (regexp  :tag "Regexp           ")
-			     (integer :tag "File Subexp Index")
-			     (integer :tag "Line Subexp Index"))
-		       (list :tag "File Message" :indent 4
-			     (regexp  :tag "Regexp           ")
-			     (integer :tag "File Subexp Index"))))
+                   (string :tag "Simulator Name    ")
+                   (string :tag "Simulate Command  ")
+                                        ;(string :tag "From Directory    " "./")
+                   (string :tag "Extra Switches    ")
+                   (list :tag "Error Message" :indent 4
+                     (regexp  :tag "Regexp           ")
+                     (integer :tag "File Subexp Index")
+                     (integer :tag "Line Subexp Index"))
+                   (list :tag "File Message" :indent 4
+                     (regexp  :tag "Regexp           ")
+                     (integer :tag "File Subexp Index"))))
   :set (lambda (variable value)
          (spice-custom-set variable value
 			   'spice-menu-init
@@ -396,7 +392,7 @@ see also `spice-simulator'."
     ("Xelga"   "xelga"  "" spice-run-silent ".cou") ; xelga eldo viewer
     ("Awaves"  "awaves_emacs" "" spice-run-silent (".ac0" ".tr0")) ; awaves hspice viewer, this doesn't work yet and will it ever ? Explanation: awaves is a script that starts an executable/binary in the background. This means the shell starting awaves ends immediately after the forking of the executable; after which all backgrounded programs get killed by emacs since their parent's parent shell (/bin/sh) ends. awaves shouldn't return immediately and then this will work; that's why I called the program awaves_emacs...
 
-;;     ("Awaves2" "echo_awaves"  "" spice-run-silent nil) ; awaves hspice viewer
+    ;;     ("Awaves2" "echo_awaves"  "" spice-run-silent nil) ; awaves hspice viewer
     ;;; Add your local waveform viewers here:
     ;;
     )
@@ -412,17 +408,17 @@ See also variable `spice-waveform-viewer-switches' to add options to the
 waveform viewer command.
 "
   :type '(repeat (list :tag "Waveform Viewer" :indent 2
-		       (string :tag "Waveform Viewer Name     ")
-		       (string :tag "Waveform Viewing Command ")
-		       (string :tag "Extra Switches           ")
-		       (choice :tag "How"
-			       :value spice-run-silent
-			       (function-item spice-run-silent)
-			       (function-item spice-run-interactive)
-			       (function :tag "Other"))
-		       (choice (string :tag "Filename Suffix          ")
-			       (function :tag "Function Deriving Filename")
-			       (repeat (list :tag "List of Filename Suffixes")))))
+                   (string :tag "Waveform Viewer Name     ")
+                   (string :tag "Waveform Viewing Command ")
+                   (string :tag "Extra Switches           ")
+                   (choice :tag "How"
+                           :value spice-run-silent
+                     (function-item spice-run-silent)
+                     (function-item spice-run-interactive)
+                     (function :tag "Other"))
+                   (choice (string :tag "Filename Suffix          ")
+                           (function :tag "Function Deriving Filename")
+                           (repeat (list :tag "List of Filename Suffixes")))))
   :set (lambda (variable value)
          (spice-custom-set variable value
 			   'spice-menu-init
@@ -489,16 +485,16 @@ see also `spice-waveform-viewer'."
 					    (make-string comment-padding ? )
 					  comment-padding)
 				      " ")))
-				   "[a-z\\*!$0-9+\\.]")
-  "*Regexp string describing lines that are commented out and will be
+                           "[a-z\\*!$0-9+\\.]")
+                         "*Regexp string describing lines that are commented out and will be
 hidden. The regexp is matched to the beginning of a line, the ^ is
 added automatically. The initialization of this variable is handled
 in `spice-hide-init', which is after the setting of `comment-start'
 and `comment-padding' variables."
-  :initialize (lambda (variable value)
-		(message "Deferring initialization of %s with %s to spice-hide-init" variable value)) ; avoid init now, comment-start and padding aren't set yet.
-  :group 'spice-hide
-  :type 'string)
+                         :initialize (lambda (variable value)
+                                       (message "Deferring initialization of %s with %s to spice-hide-init" variable value)) ; avoid init now, comment-start and padding aren't set yet.
+                         :group 'spice-hide
+                         :type 'string)
 
 ;;;###autoload
 (defcustom spice-auto-hide-comments nil
@@ -546,9 +542,9 @@ Section:
                      uppercase variant of name).
   Extra switches   : extra switches for a section, unspecified for now."
   :type '(repeat (list :tag "Section" :indent 2
-		       (string :tag "Section Name        ")
-		       (string :tag "Section String      ")
-		       (sexp   :tag "Extra Switches (nil)")))
+                   (string :tag "Section Name        ")
+                   (string :tag "Section String      ")
+                   (sexp   :tag "Extra Switches (nil)")))
   :set (lambda (variable value)
          (spice-custom-set variable value
 			   'spice-keywords-init
@@ -583,7 +579,7 @@ The following faces are used:
   `font-lock-constant-face'	: simulator's options
   `font-lock-variable-name-face': names of .param's & variables
 NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
-      entry \"Fontify Buffer\").  XEmacs: turn off and on font locking."
+      entry \"Fontify Buffer\")."
   :type 'boolean
   :group 'spice-faces)
 
@@ -623,8 +619,8 @@ NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
   Expression       : expression calculating the output filename
 "
   :type '(repeat (list :tag "Output Filenames" :indent 2
-		       (symbol :tag "Spice Standard      ")
-		       (sexp   :tag "Expression          ")))
+                   (symbol :tag "Spice Standard      ")
+                   (sexp   :tag "Expression          ")))
   :group 'spice-output)
 
 
@@ -1268,63 +1264,37 @@ NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
   "Spice mode face used to highlight analysis commands."
   :group 'spice-faces)
 
-(defvar spice-doc-face	(if spice-running-xemacs
-			    'font-lock-doc-string-face
-			  'font-lock-string-face)
+(defvar spice-doc-face 'font-lock-string-face
   "Face name to use for doc strings.")
 
 (custom-add-to-group
- 'spice-faces (if spice-running-xemacs
-		  'font-lock-doc-string-face
-		'font-lock-string-face)
+ 'spice-faces 'font-lock-string-face
  'custom-face)
 
 
-(defvar spice-constant-face	(if spice-running-xemacs
-				    'font-lock-reference-face
-				  (if (facep 'font-lock-constant-face)
-				      'font-lock-constant-face
-				    'font-lock-reference-face)) ; old emacs20.1
+(defvar spice-constant-face (if (facep 'font-lock-constant-face)
+                                'font-lock-constant-face
+                              'font-lock-reference-face) ; old emacs20.1
   "Face name to use for constants.")
 
 (custom-add-to-group
- 'spice-faces (if spice-running-xemacs
-		  'font-lock-reference-face
-		(if (facep 'font-lock-constant-face)
-		    'font-lock-constant-face
-		  'font-lock-reference-face))
+ 'spice-faces (if (facep 'font-lock-constant-face)
+                  'font-lock-constant-face
+                'font-lock-reference-face)
  'custom-face)
 
-(defvar spice-include-file-face	(if spice-running-xemacs
-				    'font-lock-preprocessor-face
-				  'font-lock-string-face)
+(defvar spice-include-file-face	'font-lock-string-face
   "Face name to use for include files and libraries.")
 
 (custom-add-to-group
- 'spice-faces (if spice-running-xemacs
-		  'font-lock-preprocessor-face
-		'font-lock-string-face)
+ 'spice-faces 'font-lock-string-face
  'custom-face)
 
-(if (not spice-running-xemacs)
-    (custom-add-to-group
-     'spice-faces 'font-lock-builtin-face 'custom-face)
+(custom-add-to-group
+ 'spice-faces 'font-lock-builtin-face 'custom-face)
 
-  (defface spice-builtin-face
-    '((((class grayscale) (background light)) (:foreground "LightGray"))
-      (((class grayscale) (background dark)) (:foreground "DimGray"))
-      (((class color) (background light)) (:foreground "Orchid" :bold t))
-      (((class color) (background dark)) (:foreground "LightBlue" :bold t))
-      (t (:bold t)))
-    "Spice mode face used for builtin types."
-    :group 'spice-faces))
-
-(defvar spice-builtin-face	 (if spice-running-xemacs
-				     'spice-builtin-face
-				   'font-lock-builtin-face)
+(defvar spice-builtin-face 'font-lock-builtin-face
   "Face name for builtin types.")
-
-
 
 (defun spice-keywords-init ()
   "Initialize reserved words."
@@ -1417,11 +1387,11 @@ NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
   (setq spice-functions spice-layla-functions)
   (setq spice-section-headings (list "Changelog")) ; Changelog is special case
   (let ((section-alist spice-section-alist) heading)
-	(while section-alist
-	  (setq heading (downcase (car (cdr (car section-alist)))))
-	  (setq spice-section-headings (append spice-section-headings
-					       (list heading)))
-	  (setq section-alist (cdr section-alist))))
+    (while section-alist
+      (setq heading (downcase (car (cdr (car section-alist)))))
+      (setq spice-section-headings (append spice-section-headings
+                                           (list heading)))
+      (setq section-alist (cdr section-alist))))
   (setq spice-entity-start-keywords
 	(append spice-spice2g6-entity-start-keywords
 		(when (spice-standard-p 'hspice)
@@ -1437,7 +1407,7 @@ NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
   (setq spice-section-headings-regexp
 	(concat spice-section-regexp-start "\\("
 		(regexp-opt spice-section-headings) "\\)\\(.*\\)$"
-		; "\\s-*$" ; ??
+                                        ; "\\s-*$" ; ??
 		))
   (setq spice-keywords-regexp
 	(concat "^\\.\\("
@@ -1477,34 +1447,34 @@ NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
 	(concat "^\\s-*\\(\\*?\\.\\("
 		(regexp-opt spice-functions)
 		"\\)\\)\\>(\\([^,]+\\),\\([^,]+\\),[^,]+)"))
-  ; old xinstance regexp
-;		  "\\([ \t]+[^ $!(=\t\n][^ (=\t\n]*\\|\n[+]\\)*" ; $! are hspice & eldo's doc string starters
+                                        ; old xinstance regexp
+                                        ;		  "\\([ \t]+[^ $!(=\t\n][^ (=\t\n]*\\|\n[+]\\)*" ; $! are hspice & eldo's doc string starters
   (setq spice-xinstance-regexp
-	  (concat "^\\(x\\S-*\\)"
-		  "\\(\\([ \t]+[^ *"
-		  ;; "\\(\\([ \t]*[^ *" ;; should solve problem when no space between + and name, but fails horribly due to CPU hungry recursion in matcher....
-		  (when (spice-standard-p 'hspice) "$")
-		  (when (spice-standard-p 'eldo) "!")
-		  ":(=\t\n][^ :(=\t\n]*\\|[ \t]*\\(\n?[*"
-		  (when (spice-standard-p 'hspice) "$")
-		  (when (spice-standard-p 'eldo) "!")
-		  "].*\\)?\n[+]\\)*\\s-*\\)" ;; \\([a-z]\\w*\\)
-		  "\\<" spice-model-name "\\>"
-		  "\\(\\s-*\n\\|\\s-+[^=\n]\\)"
-		  ))
+        (concat "^\\(x\\S-*\\)"
+                "\\(\\([ \t]+[^ *"
+                ;; "\\(\\([ \t]*[^ *" ;; should solve problem when no space between + and name, but fails horribly due to CPU hungry recursion in matcher....
+                (when (spice-standard-p 'hspice) "$")
+                (when (spice-standard-p 'eldo) "!")
+                ":(=\t\n][^ :(=\t\n]*\\|[ \t]*\\(\n?[*"
+                (when (spice-standard-p 'hspice) "$")
+                (when (spice-standard-p 'eldo) "!")
+                "].*\\)?\n[+]\\)*\\s-*\\)" ;; \\([a-z]\\w*\\)
+                "\\<" spice-model-name "\\>"
+                "\\(\\s-*\n\\|\\s-+[^=\n]\\)"
+                ))
 
   (setq spice-model-name-regexp
-	  (concat "^\\([qmd]\\S-*\\)" ;; only bips, mos and diodes
-		  "\\([ \t]+[^ *" ;; first '*' was '+' ! but fails see spice-xinstance-regexp...
-		  (when (spice-standard-p 'hspice) "$")
-		  (when (spice-standard-p 'eldo) "!")
-		  "(=\t\n][^ (=\t\n]*\\|[ \t]*\\([*"
-		  (when (spice-standard-p 'hspice) "$")
-		  (when (spice-standard-p 'eldo) "!")
-		  "].*\\)?\n[+]\\)*\\s-*" ;; \\([a-z]\\w*\\)
-		  "\\<" spice-model-name "\\>"
-		  "\\(\\s-*\n\\|\\s-+[^=]\\)"
-		  ))
+        (concat "^\\([qmd]\\S-*\\)" ;; only bips, mos and diodes
+                "\\([ \t]+[^ *" ;; first '*' was '+' ! but fails see spice-xinstance-regexp...
+                (when (spice-standard-p 'hspice) "$")
+                (when (spice-standard-p 'eldo) "!")
+                "(=\t\n][^ (=\t\n]*\\|[ \t]*\\([*"
+                (when (spice-standard-p 'hspice) "$")
+                (when (spice-standard-p 'eldo) "!")
+                "].*\\)?\n[+]\\)*\\s-*" ;; \\([a-z]\\w*\\)
+                "\\<" spice-model-name "\\>"
+                "\\(\\s-*\n\\|\\s-+[^=]\\)"
+                ))
   (setq spice-entity-start-regexp
 	(concat "^\\*?\\.\\("
 		(regexp-opt spice-entity-start-keywords)
@@ -1675,9 +1645,9 @@ This does highlighting of keywords and standard identifiers.")
 		    (run-with-idle-timer 1 nil 'spice-idle-font-lock
 					 (match-beginning 1) (match-end 5))
 		    ))
-;;	      (if (> (match-end 5) limit)
-;;		  (run-with-idle-timer 1 nil 'spice-idle-font-lock
-;;				       (match-beginning 1) (match-end 5)))
+              ;;	      (if (> (match-end 5) limit)
+              ;;		  (run-with-idle-timer 1 nil 'spice-idle-font-lock
+              ;;				       (match-beginning 1) (match-end 5)))
 	      t)
 	  (goto-char pt)
 	  nil)
@@ -1765,14 +1735,14 @@ when modifying an xinstance line though, hard to tell."
 			 2 spice-title-face)))))
   ;; highlight layla functions: .xx_yy_param(name,prop,val);
   (setq spice-font-lock-keywords-1
-	 (list
-	  (list spice-functions-regexp
-		'(1  spice-layla-function-name-face)
-		(list (- (regexp-opt-depth spice-functions-regexp) 1)
-		      font-lock-function-name-face)
-		(list (regexp-opt-depth spice-functions-regexp)
-		      font-lock-variable-name-face)
-		)))
+        (list
+         (list spice-functions-regexp
+               '(1  spice-layla-function-name-face)
+               (list (- (regexp-opt-depth spice-functions-regexp) 1)
+                     font-lock-function-name-face)
+               (list (regexp-opt-depth spice-functions-regexp)
+                     font-lock-variable-name-face)
+               )))
   ;; highlight spice keywords (mainly .<keyword> & .<analysis>)
   (setq spice-font-lock-keywords-2
 	(list ;; .opt, .nodeset, ...
@@ -1793,8 +1763,8 @@ when modifying an xinstance line though, hard to tell."
 	(list
 	 ;; add $ docs when they are followed by a space...
 	 (list (concat "\\<\\([$]\\)\\s-+\\(.*\\)$")
-		 (list 1 font-lock-comment-face)
-		 (list 2 spice-doc-face 'keep))
+               (list 1 font-lock-comment-face)
+               (list 2 spice-doc-face 'keep))
 	 ;; special models on element line
 	 (list (concat "\\([$]\\(?:ldd\\)?\\[\\)" spice-model-name "\\(\\]\\)")
 	       '(1 font-lock-keyword-face)
@@ -1820,9 +1790,9 @@ when modifying an xinstance line though, hard to tell."
 	(append (list
 		 (list spice-layla-keywords-regexp    0 font-lock-keyword-face)
 		 (list "^\\(\\*\\)\\+"    1 font-lock-keyword-face))
-	(when (spice-standard-p 'mondriaan)
-	  (list
-	   (list spice-mondriaan-keywords-regexp    0 font-lock-keyword-face)))))
+                (when (spice-standard-p 'mondriaan)
+                  (list
+                   (list spice-mondriaan-keywords-regexp    0 font-lock-keyword-face)))))
 
   (setq spice-font-lock-keywords-13
 	;; do spectre stuff
@@ -1841,9 +1811,9 @@ when modifying an xinstance line though, hard to tell."
 	 ;; elements
 	 ;;'("^[a-z]\\S-*"            .     spice-instance-name-face)
 	 '("^[a-z][^ \t\n]+"            .     spice-instance-name-face)
-	;(list (concat "^\\*\\([^"
-	;		(when (spice-standard-p 'layla) "+")
-	;		"\n].*\\|\n\\)") 0 font-lock-comment-face)
+                                        ;(list (concat "^\\*\\([^"
+                                        ;		(when (spice-standard-p 'layla) "+")
+                                        ;		"\n].*\\|\n\\)") 0 font-lock-comment-face)
 	 (list (concat "^\\*[^\n"
 		       (when (or (spice-standard-p 'hspice)
 				 (spice-standard-p 'draccdl)
@@ -1931,7 +1901,7 @@ when modifying an xinstance line though, hard to tell."
 		'(1 font-lock-function-name-face)
 		'(3 font-lock-type-face))
 	  ))
-  )
+        )
   ;; highlight additional eldo reserved words
   (setq spice-font-lock-keywords-10
 	(list
@@ -1977,17 +1947,11 @@ when modifying an xinstance line though, hard to tell."
 	 ;; param=value
 	 ;; '("\\<\\([a-z]\\w*\\)\\s-*=" 1 font-lock-variable-name-face)
 	 ;; this function matcher is much faster, it searches for '=' and then
-	 ;; returns the word in front of the '=', doesn't work in xemacs though
-	 ;;(if (string-match "XEmacs" emacs-version)
-	 ;;    (list "\\<\\([a-z]\\w*\\)\\s-*=" 1 font-lock-variable-name-face)
+	 ;; returns the word in front of the '='
 	 (list 'spice-match-variable-name
 	       (list 1 font-lock-variable-name-face 'append)
 	       ;;(list 1 font-lock-variable-name-face)
 	       '(2 'default 'append)) ;; default is required for XEmacs
-	 ;; 'append is required for Xemacs 21.4.11 on Windows. Otherwise
-	 ;; the matcher overrules the previous highlighting (for instance when
-	 ;; this 'var=value' is after a doc starter...
-	 ;;  )
 
 	 ;; changelog entries
 	 (list
@@ -2112,10 +2076,6 @@ Doc comments (starting with '!') are unaffected."
     ;; changelog addition
     (define-key map "\C-c\C-ac"   'spice-add-changelog-entry)
 
-    ;; fontification
-    (when spice-running-xemacs
-      (define-key map "\C-c\C-f" 'font-lock-fontify-buffer))
-
     (setq spice-mode-map map)))
 
 
@@ -2134,10 +2094,6 @@ Doc comments (starting with '!') are unaffected."
 ;;; libraries & include files (taken & adapted from eldo-mode.el, E. Rouat)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (if spice-running-xemacs
-    ;; (require 'overlay)
-  ;; (require 'lucid)) ;; what else can we do ??
-
 ;;------------------------------------------------------------
 ;; Mouse bindings (only used by 'spice-load-file-at-mouse')
 ;; I separate this from spice-mode-map so that this particular
@@ -2153,12 +2109,8 @@ Doc comments (starting with '!') are unaffected."
     ;; mouse button bindings
     ;;(define-key map "\r" 'ffap)
     (define-key map "\r" 'spice-load-file-at-point)
-    (if spice-running-xemacs
-	(define-key map 'button2 'spice-load-file-at-mouse) ;; ffap-at-mouse ?
-      (define-key map [mouse-2] 'spice-load-file-at-mouse))
-    (if spice-running-xemacs
-	(define-key map 'Sh-button2 'mouse-yank)
-      (define-key map [S-mouse-2] 'mouse-yank-at-click))
+    (define-key map [mouse-2] 'spice-load-file-at-mouse)
+    (define-key map [S-mouse-2] 'mouse-yank-at-click)
     (setq spice-mode-mouse-map map)))
 
 
@@ -2299,7 +2251,7 @@ or if not found at end of buffer."
       (spice-add-section "Changelog" (spice-find-changelog-point)))
 
   (spice-goto-section "Changelog")
-  ; (forward-line 2)
+                                        ; (forward-line 2)
   (let ((string (concat (spice-doc-char)
 			(if (equal (spice-doc-char) "*") "* " " ")
 			(substring (current-time-string) 0 11)
@@ -2347,13 +2299,13 @@ argument is provided, bar will be added from current column."
   (insert
    (concat (spice-doc-char) "\t" section " \n"))
   (spice-comment-bar)
-;;  (unless (assoc section spice-section-alist)
-;;    ;; new entry
-;;    (custom-set-variables
-;;     (quote (spice-section-alist
-;;	     (append spice-section-alist
-;;		     (list (list section (upcase section) nil))))))
-;;    )
+  ;;  (unless (assoc section spice-section-alist)
+  ;;    ;; new entry
+  ;;    (custom-set-variables
+  ;;     (quote (spice-section-alist
+  ;;	     (append spice-section-alist
+  ;;		     (list (list section (upcase section) nil))))))
+  ;;    )
   )
 
 
@@ -2362,13 +2314,13 @@ argument is provided, bar will be added from current column."
 (defun spice-cache-section-p (section)
   "checks for all sections in file and remembers if they were present or not"
   (save-excursion
-      (setq spice-cache-section-alist nil)
-      (goto-char (point-min))
-      (while (re-search-forward spice-section-headings-regexp nil t)
-	(setq spice-cache-section-alist
-	      (cons (cons (downcase (spice-match-string-no-properties 2)) t)
-		    spice-cache-section-alist)))
-      (spice-section-p section)))
+    (setq spice-cache-section-alist nil)
+    (goto-char (point-min))
+    (while (re-search-forward spice-section-headings-regexp nil t)
+      (setq spice-cache-section-alist
+            (cons (cons (downcase (spice-match-string-no-properties 2)) t)
+                  spice-cache-section-alist)))
+    (spice-section-p section)))
 
 
 (defun spice-section-p (section)
@@ -2393,7 +2345,7 @@ uses cache generated with the `spice-cache-section-p' function."
    (p "[pos node]: ") '(just-one-space)
    (p "[neg node]: ") '(just-one-space)
    (p "[val]: "))
-;; "spice2g6 resistor"
+ ;; "spice2g6 resistor"
  "R"
  "tempo template for spice2g6 resistor"
  'spice-tempo-tags)
@@ -2420,7 +2372,7 @@ uses cache generated with the `spice-cache-section-p' function."
        () (list 'l "TEMP=" '(s temp)))
    '(just-one-space)
    )
-;; "spice3 semiconductor resistor"
+ ;; "spice3 semiconductor resistor"
  "RSS"
  "tempo template for spice3 semiconductor resistor"
  'spice-tempo-tags)
@@ -2436,40 +2388,40 @@ uses cache generated with the `spice-cache-section-p' function."
    (if (string-equal (tempo-lookup-named 'mname) "")
        (list 'l "r=" '(p "[val]: "))
      (list 'l '(p "[val]: "))) '(just-one-space)
-   (p "<temp coef 1>: " tc1 'noinsert)
-   (if (string-equal (tempo-lookup-named 'tc1) "") ()
-     (list 'l "TC1=" '(s tc1) '(p "<temp coef 2>: " tc2 'noinsert)))
-   '(just-one-space)
-   (if (and (tempo-lookup-named 'tc2)
-	    (not (string-equal (tempo-lookup-named 'tc2) "")))
-       (list 'l "TC2=" '(s tc2)))
-   '(just-one-space)
-   (p "<ac resistance>: " ac 'noinsert)
-   (if (string-equal (tempo-lookup-named 'ac) "")
-       () (list 'l "AC=" '(s ac)))
-   '(just-one-space)
-   (p "<temp>: " temp 'noinsert)
-   (if (string-equal (tempo-lookup-named 'temp) "")
-       () (list 'l "T=" '(s temp)))
-   '(just-one-space)
-   (p "<m>: " m 'noinsert)
-   (if (string-equal (tempo-lookup-named 'm) "")
-       () (list 'l "M=" '(s m)))
-   '(just-one-space)
-   (p "<nonoise in transient [y/n]?>: " nonoise 'noinsert)
-   (if (string-equal (tempo-lookup-named 'nonoise) "y")
-       (list 'l "NONOISE"))
-   '(just-one-space)
-   (p "<kf>: " kf 'noinsert)
-   (if (string-equal (tempo-lookup-named 'kf) "")
-       () (list 'l '(s kf) '(p "<af>: " af 'noinsert)))
-   '(just-one-space)
-   (if (and (tempo-lookup-named 'af)
-	    (not (string-equal (tempo-lookup-named 'af) "")))
-       (list 'l '(s af)))
-   '(just-one-space)
-   )
-;; "eldo resistor"
+     (p "<temp coef 1>: " tc1 'noinsert)
+     (if (string-equal (tempo-lookup-named 'tc1) "") ()
+       (list 'l "TC1=" '(s tc1) '(p "<temp coef 2>: " tc2 'noinsert)))
+     '(just-one-space)
+     (if (and (tempo-lookup-named 'tc2)
+              (not (string-equal (tempo-lookup-named 'tc2) "")))
+         (list 'l "TC2=" '(s tc2)))
+     '(just-one-space)
+     (p "<ac resistance>: " ac 'noinsert)
+     (if (string-equal (tempo-lookup-named 'ac) "")
+         () (list 'l "AC=" '(s ac)))
+     '(just-one-space)
+     (p "<temp>: " temp 'noinsert)
+     (if (string-equal (tempo-lookup-named 'temp) "")
+         () (list 'l "T=" '(s temp)))
+     '(just-one-space)
+     (p "<m>: " m 'noinsert)
+     (if (string-equal (tempo-lookup-named 'm) "")
+         () (list 'l "M=" '(s m)))
+     '(just-one-space)
+     (p "<nonoise in transient [y/n]?>: " nonoise 'noinsert)
+     (if (string-equal (tempo-lookup-named 'nonoise) "y")
+         (list 'l "NONOISE"))
+     '(just-one-space)
+     (p "<kf>: " kf 'noinsert)
+     (if (string-equal (tempo-lookup-named 'kf) "")
+         () (list 'l '(s kf) '(p "<af>: " af 'noinsert)))
+     '(just-one-space)
+     (if (and (tempo-lookup-named 'af)
+              (not (string-equal (tempo-lookup-named 'af) "")))
+         (list 'l '(s af)))
+     '(just-one-space)
+     )
+ ;; "eldo resistor"
  "RE"
  "tempo template for eldo resistor"
  'spice-tempo-tags)
@@ -2500,7 +2452,7 @@ uses cache generated with the `spice-cache-section-p' function."
 	    (not (string-equal (tempo-lookup-named 'af) "")))
        (list 'l '(s af)))
    )
-;; "eldo expression resistor"
+ ;; "eldo expression resistor"
  "REE"
  "tempo template for eldo expression resistor"
  'spice-tempo-tags)
@@ -2542,7 +2494,7 @@ uses cache generated with the `spice-cache-section-p' function."
        () (list 'l "IC=" '(s ic)))
    '(just-one-space)
    )
-;; "eldo semiconductor resistor"
+ ;; "eldo semiconductor resistor"
  "RES"
  "tempo template for eldo semiconductor resistor"
  'spice-tempo-tags)
@@ -2560,43 +2512,43 @@ uses cache generated with the `spice-cache-section-p' function."
      (list 'l '(p "<val>: " val 'noinsert)
 	   '(if (not (string-equal (tempo-lookup-named 'val) ""))
 		(list 'l "R=" '(s val))))) '(just-one-space)
-   (p "<temp coef 1>: " tc1 'noinsert)
-   (if (string-equal (tempo-lookup-named 'tc1) "") ()
-     (list 'l "TC1=" '(s tc1) '(p "<temp coef 2>: " tc2 'noinsert)))
-   '(just-one-space)
-   (if (and (tempo-lookup-named 'tc2)
-	    (not (string-equal (tempo-lookup-named 'tc2) "")))
-       (list 'l "TC2=" '(s tc2)))
-   '(just-one-space)
-   (p "<scale>: " scale 'noinsert)
-   (if (string-equal (tempo-lookup-named 'scale) "")
-       () (list 'l "SCALE=" '(s scale)))
-   '(just-one-space)
-   (p "<m>: " m 'noinsert)
-   (if (string-equal (tempo-lookup-named 'm) "")
-       () (list 'l "M=" '(s m)))
-   '(just-one-space)
-   (p "<ac resistance>: " ac 'noinsert)
-   (if (string-equal (tempo-lookup-named 'ac) "")
-       () (list 'l "AC=" '(s ac)))
-   '(just-one-space)
-   (p "<diff temp>: " dtemp 'noinsert)
-   (if (string-equal (tempo-lookup-named 'dtemp) "")
-       () (list 'l "DTEMP=" '(s dtemp)))
-   '(just-one-space)
-   (p "<length>: " l 'noinsert)
-   (if (string-equal (tempo-lookup-named 'l) "")
-       () (list 'l "L=" '(s l)))
-   '(just-one-space)
-   (p "<width>: " w 'noinsert)
-   (if (string-equal (tempo-lookup-named 'w) "")
-       () (list 'l "W=" '(s w)))
-   '(just-one-space)
-   (p "<cap>: " c 'noinsert)
-   (if (string-equal (tempo-lookup-named 'c) "")
-       () (list 'l "C=" '(s c)))
-   '(just-one-space)
-   )
+                (p "<temp coef 1>: " tc1 'noinsert)
+                (if (string-equal (tempo-lookup-named 'tc1) "") ()
+                  (list 'l "TC1=" '(s tc1) '(p "<temp coef 2>: " tc2 'noinsert)))
+                '(just-one-space)
+                (if (and (tempo-lookup-named 'tc2)
+                         (not (string-equal (tempo-lookup-named 'tc2) "")))
+                    (list 'l "TC2=" '(s tc2)))
+                '(just-one-space)
+                (p "<scale>: " scale 'noinsert)
+                (if (string-equal (tempo-lookup-named 'scale) "")
+                    () (list 'l "SCALE=" '(s scale)))
+                '(just-one-space)
+                (p "<m>: " m 'noinsert)
+                (if (string-equal (tempo-lookup-named 'm) "")
+                    () (list 'l "M=" '(s m)))
+                '(just-one-space)
+                (p "<ac resistance>: " ac 'noinsert)
+                (if (string-equal (tempo-lookup-named 'ac) "")
+                    () (list 'l "AC=" '(s ac)))
+                '(just-one-space)
+                (p "<diff temp>: " dtemp 'noinsert)
+                (if (string-equal (tempo-lookup-named 'dtemp) "")
+                    () (list 'l "DTEMP=" '(s dtemp)))
+                '(just-one-space)
+                (p "<length>: " l 'noinsert)
+                (if (string-equal (tempo-lookup-named 'l) "")
+                    () (list 'l "L=" '(s l)))
+                '(just-one-space)
+                (p "<width>: " w 'noinsert)
+                (if (string-equal (tempo-lookup-named 'w) "")
+                    () (list 'l "W=" '(s w)))
+                '(just-one-space)
+                (p "<cap>: " c 'noinsert)
+                (if (string-equal (tempo-lookup-named 'c) "")
+                    () (list 'l "C=" '(s c)))
+                '(just-one-space)
+                )
  ;; "hspice resistor"
  "RH"
  "template for hspice resistor tempo templates"
@@ -2609,7 +2561,7 @@ uses cache generated with the `spice-cache-section-p' function."
    (p "[name]: ") '(just-one-space)
    (p "[pos node]: ") '(just-one-space)
    (p "[neg node]: ") '(just-one-space)
-;   (p "<mname>: ") '(just-one-space)
+                                        ;   (p "<mname>: ") '(just-one-space)
    (p "[value]: ") '(just-one-space)
    (p "<width>: " w 'noinsert)
    (if (string-equal (tempo-lookup-named 'w) "")
@@ -2663,7 +2615,7 @@ uses cache generated with the `spice-cache-section-p' function."
        () (list 'l "routing_space=" '(s routing_space)))
    '(just-one-space)
    )
-;; "layla resistor"
+ ;; "layla resistor"
  "RL"
  "tempo template for layla resistor"
  'spice-tempo-tags)
@@ -2681,7 +2633,7 @@ uses cache generated with the `spice-cache-section-p' function."
    (if (string-equal (tempo-lookup-named 'ic) "")
        () (list 'l "ic=" '(s ic)))
    )
-;; "spice2g6 capacitor"
+ ;; "spice2g6 capacitor"
  "C"
  "tempo template for spice2g6 capacitor"
  'spice-tempo-tags)
@@ -2708,7 +2660,7 @@ uses cache generated with the `spice-cache-section-p' function."
        () (list 'l "IC=" '(s ic)))
    '(just-one-space)
    )
-;; "spice3 semiconductor capacitor"
+ ;; "spice3 semiconductor capacitor"
  "CSS"
  "tempo template for spice3 semiconductor capacitor"
  'spice-tempo-tags)
@@ -2753,7 +2705,7 @@ uses cache generated with the `spice-cache-section-p' function."
    (if (string-equal (tempo-lookup-named 'ic) "")
        () (list 'l "IC=" '(s ic)))
    )
-;; "eldo capacitor"
+ ;; "eldo capacitor"
  "CE"
  "tempo template for eldo capacitor"
  'spice-tempo-tags)
@@ -2781,7 +2733,7 @@ uses cache generated with the `spice-cache-section-p' function."
    (p "[val enter expression without {}]: ")
    "}"
    )
-;; "eldo expression capacitor"
+ ;; "eldo expression capacitor"
  "CEE"
  "tempo template for eldo expression capacitor"
  'spice-tempo-tags)
@@ -2841,7 +2793,7 @@ uses cache generated with the `spice-cache-section-p' function."
        () (list 'l "DTEMP=" '(s dtemp)))
    '(just-one-space)
    )
-;; "hspice capacitor"
+ ;; "hspice capacitor"
  "CH"
  "tempo template for hspice capacitor"
  'spice-tempo-tags)
@@ -3405,7 +3357,7 @@ uses cache generated with the `spice-cache-section-p' function."
    (p "[name]: ") '(just-one-space)
    (p "[positive node]: ") '(just-one-space)
    (p "[negative node]: ") '(just-one-space)
-;   (p "<mname>: ") '(just-one-space)
+                                        ;   (p "<mname>: ") '(just-one-space)
    (p "[area]: ") '(just-one-space)
    (p "<units_ver>: " units_ver 'noinsert)
    (if (string-equal (tempo-lookup-named 'units_ver) "")
@@ -4045,13 +3997,13 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-spice2g6-vcvs"
  '("E"
-     (p "[name]: ") '(just-one-space)
-     (p "[positive node]: ") '(just-one-space)
-     (p "[negative node]: ") '(just-one-space)
-     (p "[positive controling node]: ") '(just-one-space)
-     (p "[negative controling node]: ") '(just-one-space)
-     (p "[gain]: ") '(just-one-space)
-     )
+   (p "[name]: ") '(just-one-space)
+   (p "[positive node]: ") '(just-one-space)
+   (p "[negative node]: ") '(just-one-space)
+   (p "[positive controling node]: ") '(just-one-space)
+   (p "[negative controling node]: ") '(just-one-space)
+   (p "[gain]: ") '(just-one-space)
+   )
  "VCVS"
  "template for inserting a voltage controled voltage source"
  'spice-tempo-tags)
@@ -4059,12 +4011,12 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-spice2g6-ccvs"
  '("H"
-     (p "[name]: ") '(just-one-space)
-     (p "[positive node]: ") '(just-one-space)
-     (p "[negative node]: ") '(just-one-space)
-     (p "[voltage source]: ") '(just-one-space)
-     (p "[gain]: ") '(just-one-space)
-     )
+   (p "[name]: ") '(just-one-space)
+   (p "[positive node]: ") '(just-one-space)
+   (p "[negative node]: ") '(just-one-space)
+   (p "[voltage source]: ") '(just-one-space)
+   (p "[gain]: ") '(just-one-space)
+   )
  "CCVS"
  "template for inserting a current controled voltage source"
  'spice-tempo-tags)
@@ -4075,13 +4027,13 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-spice2g6-vccs"
  '("G"
-     (p "[name]: ") '(just-one-space)
-     (p "[positive node]: ") '(just-one-space)
-     (p "[negative node]: ") '(just-one-space)
-     (p "[positive controling node]: ") '(just-one-space)
-     (p "[negative controling node]: ") '(just-one-space)
-     (p "[transadmitance]: ") '(just-one-space)
-     )
+   (p "[name]: ") '(just-one-space)
+   (p "[positive node]: ") '(just-one-space)
+   (p "[negative node]: ") '(just-one-space)
+   (p "[positive controling node]: ") '(just-one-space)
+   (p "[negative controling node]: ") '(just-one-space)
+   (p "[transadmitance]: ") '(just-one-space)
+   )
  "VCCS"
  "template for inserting a voltage controled current source"
  'spice-tempo-tags)
@@ -4089,12 +4041,12 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-spice2g6-cccs"
  '("F"
-     (p "[name]: ") '(just-one-space)
-     (p "[positive node]: ") '(just-one-space)
-     (p "[negative node]: ") '(just-one-space)
-     (p "[voltage source]: ") '(just-one-space)
-     (p "[gain]: ") '(just-one-space)
-     )
+   (p "[name]: ") '(just-one-space)
+   (p "[positive node]: ") '(just-one-space)
+   (p "[negative node]: ") '(just-one-space)
+   (p "[voltage source]: ") '(just-one-space)
+   (p "[gain]: ") '(just-one-space)
+   )
  "CCCS"
  "template for inserting a current controled current source"
  'spice-tempo-tags)
@@ -4169,12 +4121,12 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "hspice-sffm"
  '("sffm("
-     (p "[offset value]: ") " "
-     (p "[amplitude value]: ") " "
-     (p "[carrier frequency]: ") " "
-     (p "[modulation index]: ") " "
-     (p "[signal frequency]: ")
-     ")"'n)
+   (p "[offset value]: ") " "
+   (p "[amplitude value]: ") " "
+   (p "[carrier frequency]: ") " "
+   (p "[modulation index]: ") " "
+   (p "[signal frequency]: ")
+   ")"'n)
  "sffm"
  "template for inserting an HSPICE SFFM waveform"
  'spice-tempo-tags)
@@ -4182,12 +4134,12 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "hspice-am"
  '("am("
-     (p "[signal amplitude]: ") " "
-     (p "[offset constant]: ") " "
-     (p "[modulation frequency]: ") " "
-     (p "[carrier frequency]: ") " "
-     (p "[delay time]: ")
-     ")"'n)
+   (p "[signal amplitude]: ") " "
+   (p "[offset constant]: ") " "
+   (p "[modulation frequency]: ") " "
+   (p "[carrier frequency]: ") " "
+   (p "[delay time]: ")
+   ")"'n)
  "am"
  "template for inserting an HSPICE AM waveform"
  'spice-tempo-tags)
@@ -4195,9 +4147,9 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-ac"
  '("ac("
-     (p "[magnitude]: ") " "
-     (p "[phase]: ")
-     ")"'n)
+   (p "[magnitude]: ") " "
+   (p "[phase]: ")
+   ")"'n)
  "ac"
  "template for inserting an AC waveform"
  'spice-tempo-tags)
@@ -4205,14 +4157,14 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-eldo-pattern"
  '("pattern "
-     (p "[Vhi]: ") " "
-     (p "[Vlo]: ") " "
-     (p "[delay]: ") " "
-     (p "[rise time]: ") " "
-     (p "[fall time]: ") " "
-     (p "[Bit duration]: ") " "
-     (p "[Bits]: ")
-     'n)
+   (p "[Vhi]: ") " "
+   (p "[Vlo]: ") " "
+   (p "[delay]: ") " "
+   (p "[rise time]: ") " "
+   (p "[fall time]: ") " "
+   (p "[Bit duration]: ") " "
+   (p "[Bits]: ")
+   'n)
  "eldo-pattern"
  "template for inserting an ELDO Pattern function"
  'spice-tempo-tags)
@@ -4220,12 +4172,12 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-eldo-noise"
  '("noise("
-     (p "[White noise level]: ") " "
-     (p "[Flicker noise level]: ") " "
-     (p "[Alpha]: ") " "
-     (p "[Cut-off freq]: ") " "
-     (p "[Filter order]: ")
-     ")"'n)
+   (p "[White noise level]: ") " "
+   (p "[Flicker noise level]: ") " "
+   (p "[Alpha]: ") " "
+   (p "[Cut-off freq]: ") " "
+   (p "[Filter order]: ")
+   ")"'n)
  "noise"
  "template for inserting an ELDO NOISE waveform"
  'spice-tempo-tags)
@@ -4233,14 +4185,14 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-eldorf-fpulse"
  '("fpulse("
-     (p "[initial value]: ") " "
-     (p "[pulse value]: ") " "
-     (p "[delay time]: ") " "
-     (p "[rise time]: ") " "
-     (p "[fall time]: ") " "
-     (p "[pulse duration]: ") " "
-     (p "[FUND1|FUND2|FUND3 (of .sst)]: ")
-     ")"'n)
+   (p "[initial value]: ") " "
+   (p "[pulse value]: ") " "
+   (p "[delay time]: ") " "
+   (p "[rise time]: ") " "
+   (p "[fall time]: ") " "
+   (p "[pulse duration]: ") " "
+   (p "[FUND1|FUND2|FUND3 (of .sst)]: ")
+   ")"'n)
  "eldorf-fpulse"
  "template for inserting an Eldo-RF fpulse waveform"
  'spice-tempo-tags)
@@ -4655,11 +4607,11 @@ uses cache generated with the `spice-cache-section-p' function."
 (tempo-define-template
  "spice-eldo-delay"
  '("DEL"
-     (p "[Instance name]: ") " "
-     (p "[Input]: ") " "
-     (p "[Output]: ") " "
-     (p "[Delay value]: ") " "
-     'n)
+   (p "[Instance name]: ") " "
+   (p "[Input]: ") " "
+   (p "[Output]: ") " "
+   (p "[Delay value]: ") " "
+   'n)
  "del"
  "template for inserting an ELDO delay"
  'spice-tempo-tags)
@@ -6176,7 +6128,7 @@ uses cache generated with the `spice-cache-section-p' function."
  "opa"
  "template for inserting an ELDO differential single or double stage opamp"
  'spice-tempo-tags
-)
+ )
 
 (tempo-define-template
  "spice-eldo-switch"
@@ -6199,7 +6151,7 @@ uses cache generated with the `spice-cache-section-p' function."
  "switch"
  "template for inserting an ELDO switch macromodel"
  'spice-tempo-tags
-)
+ )
 
 
 ;; Layla constructs
@@ -6220,7 +6172,7 @@ uses cache generated with the `spice-cache-section-p' function."
    (p "[Name of performance]: ") " "
    (p "[Nominal value]: ") " \n+"
    (p "[Weight (alfa)]: ") " "
-;   (p "[Weight (alfa)]: ") " "
+                                        ;   (p "[Weight (alfa)]: ") " "
    'n)
  "layla-performance"
  "template for inserting a Layla performance"
@@ -6251,10 +6203,10 @@ uses cache generated with the `spice-cache-section-p' function."
        (tempo-define-template
 	(concat "layla-" (, name) "-" (, type))
 	(list (concat "." (, name) "_" (, type) "_param(")
-	   (list 'p p_prompt) ", "
-	   '(p "[Name of parameter]: ") ", "
-	   '(p "[Value of parameter]: ") ")"
-	   'n)
+              (list 'p p_prompt) ", "
+              '(p "[Name of parameter]: ") ", "
+              '(p "[Value of parameter]: ") ")"
+              'n)
 	(concat "layla-" (, name) "-" (, type))
 	(concat "template for inserting a " (, type) " parameter for a Layla "
 		(, name))
@@ -6327,12 +6279,12 @@ uses cache generated with the `spice-cache-section-p' function."
 
     ;;  lossy transmission lines
     (define-abbrev spice-mode-abbrev-table "o"     "" 'tempo-template-spice-spice2g6-lossy-transmission)
-    ; spice3 rcline
+                                        ; spice3 rcline
     (define-abbrev spice-mode-abbrev-table "rcls"  "" 'tempo-template-spice-spice3-rcline)
-    ; eldo rc-line
+                                        ; eldo rc-line
     (define-abbrev spice-mode-abbrev-table "rcle"  "" 'tempo-template-spice-eldo-rcline)
-    ; eldo lossy transmission line
-    ; not implemented
+                                        ; eldo lossy transmission line
+                                        ; not implemented
 
     ;; active elements:
 
@@ -6380,10 +6332,10 @@ uses cache generated with the `spice-cache-section-p' function."
     ;; transient signals
     (define-abbrev spice-mode-abbrev-table "pwl"   "" '(spice-pwl))
     (define-abbrev spice-mode-abbrev-table "pu"    "" 'tempo-template-spice-pulse)
-    ;(define-abbrev spice-mode-abbrev-table "'su"    "" 'tempo-template-spice-subckt)
-    ;(define-abbrev spice-mode-abbrev-table "'ac"    "" 'tempo-template-spice-ac)
+                                        ;(define-abbrev spice-mode-abbrev-table "'su"    "" 'tempo-template-spice-subckt)
+                                        ;(define-abbrev spice-mode-abbrev-table "'ac"    "" 'tempo-template-spice-ac)
     (define-abbrev spice-mode-abbrev-table "sin"   "" 'tempo-template-spice-sine)
-    ;(define-abbrev spice-mode-abbrev-table "'sffm"  "" 'tempo-template-spice-hspice-sffm)
+                                        ;(define-abbrev spice-mode-abbrev-table "'sffm"  "" 'tempo-template-spice-hspice-sffm)
     (define-abbrev spice-mode-abbrev-table "exp"   "" 'tempo-template-spice-exp)
     (define-abbrev spice-mode-abbrev-table "noi"   "" 'tempo-template-spice-eldo-noise)
     (define-abbrev spice-mode-abbrev-table "pat"   "" 'tempo-template-spice-eldo-pattern)
@@ -6470,8 +6422,8 @@ uses cache generated with the `spice-cache-section-p' function."
 					 (list 'spice-set-simulator name)
 					 :style 'radio :selected
 					;					(list 'equal 'spice-simulator name)
-					 (list 'equal '(spice-get-simulator) name)
-					 )
+                                   (list 'equal '(spice-get-simulator) name)
+                                   )
 				 menu-alist))
 	  (setq simu-alist (cdr simu-alist)))
 	(setq menu-alist
@@ -6501,9 +6453,9 @@ uses cache generated with the `spice-cache-section-p' function."
 					 (list 'spice-set-waveform-viewer name)
 					 :style 'radio :selected
 					;(list 'equal 'spice-simulator name)
-					 (list 'equal
-					       '(spice-get-waveform-viewer)
-					       name))
+                                   (list 'equal
+                                         '(spice-get-waveform-viewer)
+                                         name))
 				 menu-alist))
 	  (setq wave-alist (cdr wave-alist)))
 	(setq menu-alist
@@ -6754,7 +6706,7 @@ uses cache generated with the `spice-cache-section-p' function."
       ["Create <name>_nodeset.cir file" (spice-create-guess-nodeset-file "nodeset") (spice-output-p)]
       )
     )
-    (spice-common-menu-tail-entries))
+   (spice-common-menu-tail-entries))
   )
 
 
@@ -6807,18 +6759,12 @@ uses cache generated with the `spice-cache-section-p' function."
 
 (defun spice-update-mode-menu ()
   "Updates Spice mode menu for current buffer." ; assumes globals have
-						; been updated
+                                        ; been updated
   (interactive)
   (if (spice-output-p)
       (progn
-	(easy-menu-remove spice-output-menu-list)     ; for XEmacs
-	;; (setq spice-output-menu-list (spice-create-output-mode-menu))
-	(easy-menu-add spice-output-menu-list)	 ; for XEmacs
 	(easy-menu-define spice-output-menu spice-output-mode-map
 	  "Menu keymap for Spice-output Mode." spice-output-menu-list))
-    (easy-menu-remove spice-menu-list)     ; for XEmacs
-    ;; (setq spice-menu-list (spice-create-mode-menu))
-    (easy-menu-add spice-menu-list)	 ; for XEmacs
     (easy-menu-define spice-menu spice-mode-map
       "Menu keymap for Spice Mode." spice-menu-list)))
 
@@ -6893,7 +6839,7 @@ uses cache generated with the `spice-cache-section-p' function."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Imenu: S-mouse3 in emacs to find spice objects quickly (xemacs ?)
+;;; Imenu: S-mouse3 in emacs to find spice objects quickly
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'imenu)
@@ -7040,8 +6986,7 @@ uses cache generated with the `spice-cache-section-p' function."
   "spice wrapper function for compile."
   (interactive)
   (spice-set-simulator-command)
-  (call-interactively 'compile nil)
-)
+  (call-interactively 'compile nil))
 
 (defun spice-compile-variables-init ()
   "build variable lists."
@@ -7055,12 +7000,11 @@ uses cache generated with the `spice-cache-section-p' function."
 		    (cons (append
 			   (list (nth 0 sublist)
 				 (if (= 0 (nth 1 sublist))
-				     (if spice-running-xemacs 9 nil)
+				     nil
 				   (nth 1 sublist))
 				 (if (numberp (nth 2 sublist))
 				     (nth 2 sublist)
-				   (if spice-running-xemacs 0
-				     (nth 2 sublist))))
+				   (nth 2 sublist)))
 			   (list (nth 3 sublist))
 			   (if (nth 4 sublist)
 			       (if (stringp (nth 4 sublist))
@@ -7069,7 +7013,7 @@ uses cache generated with the `spice-cache-section-p' function."
 			  regexp-alist)))
 	    (setq commands-alist (cdr commands-alist)))
 	  regexp-alist))
-  ; (message "setting compilation file regexps command")
+                                        ; (message "setting compilation file regexps command")
   (setq spice-compilation-file-regexp-alist
 	(let ((commands-alist spice-simulator-alist)
 	      regexp-alist)
@@ -7098,7 +7042,7 @@ uses cache generated with the `spice-cache-section-p' function."
   (setq compilation-buffer-name-function
 	'spice-simulation-buffer-name-function)
 
-  ; (message "setting compilation error regexps command")
+                                        ; (message "setting compilation error regexps command")
   (setq compilation-error-regexp-alist spice-compilation-error-regexp-alist
 	compilation-file-regexp-alist spice-compilation-file-regexp-alist)
   )
@@ -7119,10 +7063,10 @@ the errors in the simulation buffer with compile.el")
 
 
 (defun spice-linenum (f c)
-  ;(message (format "calling linenum fun '%s'" f))
+                                        ;(message (format "calling linenum fun '%s'" f))
   (save-excursion
     (set-buffer compilation-last-buffer)
-    ;(message (format "buffer '%s'" (buffer-name)))
+                                        ;(message (format "buffer '%s'" (buffer-name)))
     )
   (list (point-marker) f 1 (if (= spice-column 1)
 			       (setq spice-column 2)
@@ -7195,7 +7139,7 @@ is t, the filename itself is returned unmodified."
 	((listp arg)
 	 (let ((alist arg)
 	       filename)
-	   ;(message alist)
+                                        ;(message alist)
 	   (while alist
 	     (message (concat (file-name-sans-extension buffer-file-name) (car alist)))
 	     (setq
@@ -7288,7 +7232,7 @@ is t, the filename itself is returned unmodified."
     (set-buffer (get-buffer-create "*spice silent*"))
     (erase-buffer)
     (if dir (cd dir))
-;    (message "cd to %s" dir)
+                                        ;    (message "cd to %s" dir)
     (let ((process (start-process (concat name " silent")
 				  (current-buffer)  ; can be nil
 				  spice-shell
@@ -7309,7 +7253,7 @@ interaction."
 	(process nil)
 	(dir (spice-master-directory)))
     (spice-process-check file)		; Check that no process is running
-    ; (setq spice-command-buffer (current-buffer))
+                                        ; (setq spice-command-buffer (current-buffer))
     (with-output-to-temp-buffer buffer)
     (set-buffer buffer)
     (setq buffer-read-only nil)
@@ -7319,24 +7263,24 @@ interaction."
 		 (list spice-shell-command-option command))
     (comint-mode)
     (setq mode-name name)
-    ; (setq spice-command-default default)
+                                        ; (setq spice-command-default default)
     (setq process (get-buffer-process buffer))
     (if spice-after-start-process-function
         (funcall spice-after-start-process-function process))
-    ; (spice-command-mode-line process) ; mode line setting
-    ; (set-process-sentinel process 'spice-command-sentinel)
+                                        ; (spice-command-mode-line process) ; mode line setting
+                                        ; (set-process-sentinel process 'spice-command-sentinel)
     (set-marker (process-mark process) (point-max))
     ;;; (setq compilation-in-progress (cons process compilation-in-progress))
-    ; (spice-parse-reset)
-    ; (setq spice-parse-function 'spice-parse-spice)
-    ; (setq spice-sentinel-function 'spice-LaTeX-sentinel)
+                                        ; (spice-parse-reset)
+                                        ; (setq spice-parse-function 'spice-parse-spice)
+                                        ; (setq spice-sentinel-function 'spice-LaTeX-sentinel)
     ))
 
 (defun spice-command-mode-line (process)
   "Format the mode line for a buffer containing output from PROCESS."
-    (setq mode-line-process (concat ": "
-				    (symbol-name (process-status process))))
-    (set-buffer-modified-p (buffer-modified-p)))
+  (setq mode-line-process (concat ": "
+                                  (symbol-name (process-status process))))
+  (set-buffer-modified-p (buffer-modified-p)))
 
 (defun spice-process-check (name)
   "Check if a process for the spice deck NAME already exist.
@@ -7344,7 +7288,7 @@ If so, give the user the choice of aborting the process or the current
 command."
   (let ((process (get-buffer-process
 		  (spice-waveform-buffer-name-function name))))
-;    (message "checking %s for running process" (spice-waveform-buffer-name-function name))
+                                        ;    (message "checking %s for running process" (spice-waveform-buffer-name-function name))
     (cond ((null process))
 	  ((not (eq (process-status process) 'run)))
 	  ((yes-or-no-p (concat "Process `"
@@ -7364,7 +7308,7 @@ command."
   (interactive)
   (spice-set-simulator-command)
   (spice-set-waveform-viewer-command)
-)
+  )
 
 
 ;;------------------------------------------------------------
@@ -7517,9 +7461,6 @@ that has been selected."
 	fume-buffer-name "*Subcircuits List*"
 	fume-index-method 2)
 
-  (when (and (featurep 'xemacs) (not (emacs-version>= 21 5)))
-    (make-local-hook 'find-file-hooks))
-
   (add-hook 'find-file-hooks 'fume-add-menubar-entry)
   (define-key global-map '(shift button2) 'fume-mouse-function-goto)
   (fume-add-menubar-entry))
@@ -7604,9 +7545,7 @@ subcircuit searches.")
   "Helper function visiting buffer and mark specified."
   (if (eq (marker-buffer (cdr mrk))
 	  (current-buffer))
-      (if (or
-	   spice-running-xemacs ; then push mark always
-	   (not (and transient-mark-mode mark-active))) ; emacs, check if active region
+      (if (not (and transient-mark-mode mark-active)) ; emacs, check if active region
 	  (push-mark)))
   (pop-to-buffer (marker-buffer (cdr mrk)) t)
   (widen)
@@ -7635,10 +7574,10 @@ return to the search start position by using C-u C-<SPC> or C-u C-@."
 		   (error "No subckt args given")
 		 default-subckt)
 	     input))))
-  ;(message (format "name of subckt is %s" subckt-args))
+                                        ;(message (format "name of subckt is %s" subckt-args))
   (let (mrk)
     (setq mrk (spice-search-file-for-subckt buffer-file-name subckt-args))
-    ; (message (format "mark is %s" (cdr mrk)))
+                                        ; (message (format "mark is %s" (cdr mrk)))
     (if (and (cdr mrk) (markerp (cdr mrk)))
 	(spice-visit-subckt-def mrk)
       (progn
@@ -7691,7 +7630,7 @@ only guaranteed to work when all included files are not already loaded."
 		;; (spice-mode) ? ref. discussion Manu
 		(unless (or non-recursive
 			    (not (eq major-mode 'spice-mode)))
-		    (spice-load-include-files))))
+                  (spice-load-include-files))))
 	  (setq l (cdr l))))))
 
 
@@ -7740,12 +7679,12 @@ effective"
   ;; make sure we have invisibility property working, local for a buffer
   (if (fboundp 'add-to-invisibility-spec)
       (add-to-invisibility-spec 'spice-mode))
-;;  (remove-from-invisibility-spec '(spice-mode . t))
+  ;;  (remove-from-invisibility-spec '(spice-mode . t))
   ;; local for buffers:
   (set (make-local-variable 'line-move-ignore-invisible) t)
   (if spice-auto-hide-comments
       (spice-hide-all-comments))
-)
+  )
 
 (defun spice-hide (from to)
   "Not supported, don't use this."
@@ -7762,9 +7701,9 @@ effective"
 the user edited the file, new comments might have been created and
 thus hide all comments must be activated. This is not the best
 criterion, but it is safe."
-;;  (interactive)
-;;  (message "buffer tick is %s, last hide comment is %s"
-;;    (buffer-modified-tick) spice-last-hide-comment-regions-tick)
+  ;;  (interactive)
+  ;;  (message "buffer tick is %s, last hide comment is %s"
+  ;;    (buffer-modified-tick) spice-last-hide-comment-regions-tick)
   (if (and
        spice-last-hide-comment-regions-tick ; can be nil
        (= spice-last-hide-comment-regions-tick (buffer-modified-tick)))
@@ -7788,16 +7727,16 @@ only one *. If you want to unhide all the hidden comment lines, use
   (setq spice-last-hide-comment-regions-tick (buffer-modified-tick))
   (save-excursion
     (goto-char (point-min))
-;;    (message "beginning of buffer reached %s" (point))
+    ;;    (message "beginning of buffer reached %s" (point))
     (forward-line)
     (while (search-forward-regexp (concat "^" spice-hide-line-prefix)
 				  (point-max) t)
       (beginning-of-line)
-;;      (message "reached %s" (point))
+      ;;      (message "reached %s" (point))
       (let ((beg (point))
 	    end
 	    lines)
-;;	(message "found start of regexp %s" (point))
+        ;;	(message "found start of regexp %s" (point))
 	(setq lines (forward-line))
 	;; (message "%s left" lines)
 	;; the empty lines following commented lines are also hidden
@@ -7808,7 +7747,7 @@ only one *. If you want to unhide all the hidden comment lines, use
 	(setq end (point))
 	(spice-hide-region beg end t))))
   (set-spice-name)
-)
+  )
 
 (defun spice-unhide-all-comments ()
   "Unhides all hidden comment regions."
@@ -7824,7 +7763,7 @@ is nil then the text is shown, while if FLAG is t the text is hidden."
   (let ((inhibit-read-only t))
     (save-excursion
       (goto-char from)
-;      (foldingo-discard-overlays (point) to 'invisible 'spice-comment)
+                                        ;      (foldingo-discard-overlays (point) to 'invisible 'spice-comment)
       (spice-discard-overlays from to 'spice-comment)
       (if flag
 	  (let ((overlay (make-overlay (point) to)))
@@ -7832,12 +7771,12 @@ is nil then the text is shown, while if FLAG is t the text is hidden."
 
 (defun spice-make-overlay-hidden (overlay)
   ;; Make overlay hidden and intangible.
-;;  (overlay-put overlay 'intangible t)
+  ;;  (overlay-put overlay 'intangible t)
   (overlay-put overlay 'invisible 'spice-mode)
   (overlay-put overlay 'spice-comment t)
   (setq spice-some-comment-regions-are-hidden t)
-;;  (overlay-put overlay 'intangible t)
-)
+  ;;  (overlay-put overlay 'intangible t)
+  )
 
 (defun spice-discard-overlays (from to prop)
   "discards overlays in region FROM to TO that have property PROP set."
@@ -7861,12 +7800,12 @@ is nil then the text is shown, while if FLAG is t the text is hidden."
   "Check if current buffer is output file and return symbol or NIL."
   (save-excursion
     (goto-char (point-min))
-     (if (looking-at "1\\*\\*\\*\\*\\*\\*\\*") ; eldo
-	 'eldo
-       (if (or (looking-at "Using: ")
-	       (looking-at " \\*\\*\\*\\*\\*\\*  Star-HSPICE")) ; hspice
-	   'hspice
-	 nil))))
+    (if (looking-at "1\\*\\*\\*\\*\\*\\*\\*") ; eldo
+        'eldo
+      (if (or (looking-at "Using: ")
+              (looking-at " \\*\\*\\*\\*\\*\\*  Star-HSPICE")) ; hspice
+          'hspice
+        nil))))
 
 (defun spice-output-p ()
   "Check if current buffer is output file."
@@ -7894,19 +7833,18 @@ is nil then the text is shown, while if FLAG is t the text is hidden."
    (list "^\\s-*\\(..?error..?[: ]\\).+$" 0 'font-lock-warning-face) ; hspice errors
    )
   "List of regexps for font-lock in output mode."
-)
+  )
 
 (defun spice-mode-output ()
   "Spice major mode start up function for spice output files. Experimental ;)"
 
   (setq buffer-read-only t) ; don't want to edit output files, do we
-			    ; common mistake in hspice output files!
+                                        ; common mistake in hspice output files!
 
   ;; use local keymap (for keys and menu)
   (use-local-map spice-output-mode-map)
 
   ;; set menu for local buffer
-  (easy-menu-add spice-menu-list)	; for XEmacs
   (easy-menu-define spice-output-menu spice-output-mode-map
     "Menu keymap for Spice Output Mode." spice-output-menu-list)
 
@@ -7914,7 +7852,7 @@ is nil then the text is shown, while if FLAG is t the text is hidden."
   (set (make-local-variable 'font-lock-defaults)
        (list 'spice-output-font-lock-keywords
 	     nil t (list (cons ?\" "w")))) ; nil, t (do multiline
-					   ; comments)
+                                        ; comments)
 
   ;; imenu buffer local init
   (set (make-local-variable 'imenu-case-fold-search) t)
@@ -8000,7 +7938,7 @@ eldo..."
 				      ") = "
 				      (spice-match-string-no-properties 2)))
 
-		      ))
+                        ))
 	  )))))
 
 (defun spice-create-guess-nodeset-file (str)
@@ -8112,7 +8050,7 @@ in eldo mode, otherwise uses \"+ \" prefix."
 	    (re-search-forward "\\s-\\([!]\\)" end t))))
 	(setq fill-prefix (concat (spice-match-string-no-properties 1) " "))
       (setq fill-prefix (concat spice-continuation-prefix " ")))
-    ;(comment-indent-new-line) ;;call standard comment-indent-new-line function
+                                        ;(comment-indent-new-line) ;;call standard comment-indent-new-line function
     (when spice-save-comment-line-break-function
       (funcall spice-save-comment-line-break-function))
     (setq fill-prefix fpx)))
@@ -8121,16 +8059,16 @@ in eldo mode, otherwise uses \"+ \" prefix."
 (defun spice-fill-context-prefix () ; ???
   "Calculates prefix from current position (move-to-left-margin), and
 returns it. Non-comment paragraphs can also be filled correctly."
-;;  (message "deriving fill prefix")
+  ;;  (message "deriving fill prefix")
   (let ((result
 	 (if (or (looking-at (concat "\\([" comment-start
-				 (when (spice-standard-p 'layla)
-				   spice-continuation-prefix)
-				 "]+\\)"))
+                                     (when (spice-standard-p 'layla)
+                                       spice-continuation-prefix)
+                                     "]+\\)"))
 		 (looking-at "\\([$!]+\\)"))
 	     (concat (spice-match-string-no-properties 1) " ")
 	   (concat spice-continuation-prefix " "))))
-;;    (message (format "result is '%s'" result))
+    ;;    (message (format "result is '%s'" result))
     result))
 
 (defun spice-delete-indentation (&optional arg)
@@ -8241,9 +8179,7 @@ returns it. Non-comment paragraphs can also be filled correctly."
 ;; xemacs - emacs compatibility wrapper
 (defun spice-match-string-no-properties (num)
   "wrapper for no properties string matcher"
-  (if spice-running-xemacs
-      (match-string num)
-    (match-string-no-properties num)))
+  (match-string-no-properties num))
 
 
 (defun spice-update-existing-buffers ()
@@ -8285,12 +8221,7 @@ returns it. Non-comment paragraphs can also be filled correctly."
   (if (fboundp 'font-lock-unset-defaults)
       (font-lock-unset-defaults))
   (font-lock-set-defaults)
-  (if (not (and spice-running-xemacs font-lock-mode))
-      (font-lock-fontify-buffer)
-    (font-lock-mode)
-    (font-lock-mode))
-  )
-
+  (font-lock-fontify-buffer))
 
 (defun spice-activate-customizations-obsolete ()
   "Activate all customizations on local variables. Run this if you set
@@ -8323,8 +8254,8 @@ variables of the customization buffer."
   (spice-waveform-viewer-init)
   (if (fboundp 'font-lock-unset-defaults)
       (font-lock-unset-defaults))
-;;  (setq font-lock-defaults
-;;	(list 'spice-font-lock-keywords nil t (list (cons ?\" "w"))))
+  ;;  (setq font-lock-defaults
+  ;;	(list 'spice-font-lock-keywords nil t (list (cons ?\" "w"))))
   (font-lock-set-defaults)
   (font-lock-fontify-buffer))
 
@@ -8495,9 +8426,7 @@ Usage & Features:
    - Paragraph support: [a-z] starts dev lines, '+' continues dev lines,
      [*!$] start paragraphs.
 
-   - Works under GNU Emacs20.6/21.[123], also tested under XEmacs21.1/21.4.5,
-     requires fsf-compat package for XEmacs 21.4.5.
-
+   - Works under GNU Emacs20.6/21.[123]
 
 Do not use a -*- Mode -*- line in a spice deck as the first card in
 the deck is defined to be the title card. Rather, autoload spice-mode
@@ -8523,11 +8452,11 @@ Key bindings for other parts in the file:
 
 \\{spice-mode-map}
 "
-;;Key bindings for output files:
-;;------------------------------
-;;
-;;\\{spice-output-mode-map}
-;;"
+  ;;Key bindings for output files:
+  ;;------------------------------
+  ;;
+  ;;\\{spice-output-mode-map}
+  ;;"
 
   (interactive)
   (kill-all-local-variables) ; important !
@@ -8588,7 +8517,6 @@ Key bindings for other parts in the file:
     (use-local-map spice-mode-map)
 
     ;; set menu for local buffer
-    (easy-menu-add spice-menu-list)	; for XEmacs
     (easy-menu-define spice-menu spice-mode-map
       "Menu keymap for Spice Mode." spice-menu-list)
 
@@ -8647,13 +8575,9 @@ Key bindings for other parts in the file:
     ;; now hook in 'spice-colorize-libraries (eldo-mode.el)
     ;; all buffer local:
     ;;(make-local-hook 'font-lock-mode-hook)
-    (when (and (featurep 'xemacs) (not (emacs-version>= 21 5)))
-      (make-local-hook 'font-lock-after-fontify-buffer-hook)); doesn't exist in emacs 20
     ;;(add-hook 'font-lock-mode-hook 'spice-colorize-libraries-buffer t t)
     (add-hook 'font-lock-after-fontify-buffer-hook 'spice-colorize-libraries-buffer t t) ; not in emacs 20
 
-    (when (and (featurep 'xemacs) (not (emacs-version>= 21 5)))
-      (make-local-hook 'after-change-functions))
     (add-hook 'after-change-functions 'spice-colorize-libraries t t)
     (spice-colorize-libraries-buffer)
 
@@ -8695,12 +8619,12 @@ Key bindings for other parts in the file:
 	(setq spice-show-describe-mode nil)) ;; but only once in a session !!
     )
   (if spice-echo-intro
-	  (message "Spice mode %s.  Type C-h m for documentation." ;; always
-			 spice-version))
+      (message "Spice mode %s.  Type C-h m for documentation." ;; always
+               spice-version))
 
   ;; run spice-mode hooks
   (run-hooks 'spice-mode-hook)
-)
+  )
 
 
 ;; this is sometimes useful
