@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:12:19 kmodi>
+;; Time-stamp: <2016-08-19 01:11:56 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -76,8 +76,8 @@ and restore the window config to the way it was before deft was invoked."
     (defun modi/deft-dwim (option)
       "Launch deft or quit a deft opened file based on context.
 
-If OPTION is '(4), call `deft-find-file'.
-Else if OPTION is '(16), call `deft'.
+If OPTION is \\='(4), call `deft-find-file'.
+Else if OPTION is \\='(16), call `deft'.
 Else if major-mode is `deft-mode', bury the buffer.
 Else if in a deft-opened file buffer, call `modi/deft-quit'.
 Else call `deft'."

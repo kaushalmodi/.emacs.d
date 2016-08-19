@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:17:34 kmodi>
+;; Time-stamp: <2016-08-19 01:12:21 kmodi>
 
 ;; Printing
 
@@ -42,9 +42,9 @@
 underline information.  This command works only if you are using a window
 system, so it has a way to determine color values.
 
-If OPTION is '(4), open the PDF file after generating it.
+If OPTION is \\='(4), open the PDF file after generating it.
 
-If OPTION is '(16), prompt the user for the Postscript file save location,
+If OPTION is \\='(16), prompt the user for the Postscript file save location,
 which is then converted to PDF at the same location."
         (interactive "P")
         (let* ((open-pdf (eq 4 (car option)))
