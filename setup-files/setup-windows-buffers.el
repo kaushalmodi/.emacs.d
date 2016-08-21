@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-09 13:56:03 kmodi>
+;; Time-stamp: <2016-08-21 17:27:23 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -275,7 +275,11 @@ C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
                       (0  "fundamental-mode") ; C-0
                       (4  "org-mode") ; C-u
                       (16 "emacs-lisp-mode") ; C-u C-u
-                      (t  (format "%s" major-mode))))) ; no prefix
+                      ;; If the major mode turns out to be a read-only mode like
+                      ;; `help-mode', open an `org-mode' scratch buffer instead.
+                      (t (if buffer-read-only
+                             "org-mode"
+                           (format "%s" major-mode)))))) ; no prefix
       (switch-to-buffer (get-buffer-create
                          (concat "*scratch-" mode-str "*")))
       (funcall (intern mode-str))))) ; http://stackoverflow.com/a/7539787/1219634
