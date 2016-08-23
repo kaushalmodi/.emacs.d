@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-17 16:16:30 kmodi>
+;; Time-stamp: <2016-08-23 01:35:58 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1194,6 +1194,9 @@ region is selected. Else call `self-insert-command'."
 ;;
 ;; Above ** are added in the local variables footer so that that is not
 ;; recognized as the local variables setup for THIS file.
+
+;; C-u M-RET - Force create a heading (see `org-insert-heading') whether point
+;; is in a list or a normal line.
 
 ;; Local Variables:
 ;; aggressive-indent-mode: nil
