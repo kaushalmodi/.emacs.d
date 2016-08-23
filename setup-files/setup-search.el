@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:02:09 kmodi>
+;; Time-stamp: <2016-08-23 18:18:07 kmodi>
 
 ;; Search / Replace
 
@@ -107,21 +107,22 @@ happens within a region if one is selected."
   :chords (("'/" . modi/swiper))
   :config
   (progn
-    (defun modi/swiper (arg)
-      "Start swiper with input as the selected region.
+    (defun modi/swiper (all)
+      "Run `swiper' or `swiper-all'.
 
-If a region is not selected and,
-  - If ARG is nil, start swiper with the symbol at point as input.
-  - Elseswiper without any arguments (stock behavior)."
+If a region is selected, the selected text is provided as initial input to
+`swiper'. Otherwise, `swiper' is started without any initial input.
+
+If ALL is non-nil, `swiper-all' is run."
       (interactive "P")
-      (if (use-region-p)
-          (let ((b (region-beginning))
-                (e (region-end)))
-            (deactivate-mark)
-            (swiper (buffer-substring-no-properties b e)))
-        (if arg
-            (swiper) ; C-u
-          (swiper (modi/get-symbol-at-point)))))
+      (if all ; C-u
+          (swiper-all)
+        (if (use-region-p)
+            (progn
+              (deactivate-mark)
+              (swiper (buffer-substring-no-properties
+                       (region-beginning) (region-end))))
+          (swiper))))
 
     (bind-key "M-a" #'swiper-avy swiper-map))) ; swiper > avy
 
