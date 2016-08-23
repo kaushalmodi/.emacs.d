@@ -41,8 +41,7 @@ instead of the one present in `package-user-dir'."
             ;; http://ergoemacs.org/emacs/elisp_break_loop.html
             (catch 'break
               (dotimes (index (safe-length my/package-dirs))
-                (let ((dir-name (pop my/package-dirs))
-                      )
+                (let ((dir-name (pop my/package-dirs)))
                   ;; (message "%s" dir-name) ; debug
                   ;; Find a directory name that matches "pdf-tools-*"
                   (when (string-match "pdf\\-tools\\-.*" dir-name)
@@ -53,19 +52,6 @@ instead of the one present in `package-user-dir'."
                       ;; break the `dotimes' loop on finding this directory
                       ;; and return its full path
                       (throw 'break pdf-tools-epdfinfo-dir))))))))))
-
-    (defun modi/advice-scroll-other-window-pdf-view (&rest args)
-      "Call the correct pdf-view scroll functions instead of calling the
-advised function in that major mode."
-      (let (do-not-call-orig-fn)
-        (with-selected-window (other-window-for-scrolling)
-          (when (setq do-not-call-orig-fn (derived-mode-p 'pdf-view-mode))
-            (if (or (null args)
-                    (> (car args) 0))
-                (apply #'pdf-view-next-line-or-next-page args)
-              (apply #'pdf-view-previous-line-or-previous-page args))))
-        do-not-call-orig-fn))
-    (advice-add 'scroll-other-window :before-until #'modi/advice-scroll-other-window-pdf-view)
 
     (defun my/pdf-tools-install ()
       (interactive)

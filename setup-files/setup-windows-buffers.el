@@ -362,20 +362,33 @@ If LN is nil, defaults to 1 line."
   (interactive "p")
   (scroll-down ln))
 
-(defun modi/scroll-other-window-up (ln)
-  "Scroll other window up by LN lines without moving the point.
-If LN is nil, defaults to 1 line."
+(defun modi/scroll-other-window (ln)
+  "Scroll the buffer in other window.
+
+This command supports pdf file buffers too (`pdf-view-mode').
+
+If LN is positive, scroll the buffer up.
+If LN is negative, scroll the buffer down."
   (interactive "p")
-  (scroll-other-window ln))
+  (let (is-other-window-showing-pdf)
+    (with-selected-window (other-window-for-scrolling)
+      (when (setq is-other-window-showing-pdf (derived-mode-p 'pdf-view-mode))
+        (if (>= ln 1)
+            (pdf-view-next-line-or-next-page ln)
+          (pdf-view-previous-line-or-previous-page (- ln)))))
+    (when (not is-other-window-showing-pdf)
+      (scroll-other-window ln))))
+
+(defalias 'modi/scroll-other-window-up 'modi/scroll-other-window)
 
 (defun modi/scroll-other-window-down (ln)
   "Scroll other window down by LN lines without moving the point.
 If LN is nil, defaults to 1 line."
   (interactive "p")
-  (scroll-other-window (- ln)))
+  (modi/scroll-other-window (- ln)))
 
 ;; Below bindings are made in global map and not in my minor mode as I want
-;; other modes to override those bindings.
+;; to allow other modes to override these.
 (bind-keys
  ("<C-M-up>"    . modi/scroll-down)
  ("<C-M-down>"  . modi/scroll-up)
