@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-23 15:54:14 kmodi>
+;; Time-stamp: <2016-08-24 13:30:33 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -363,6 +363,7 @@ If LN is nil, defaults to 1 line."
   (interactive "p")
   (scroll-down ln))
 
+;; https://github.com/politza/pdf-tools/issues/227#issuecomment-242100968
 (defun modi/scroll-other-window (ln)
   "Scroll the buffer in other window.
 
@@ -371,13 +372,14 @@ This command supports pdf file buffers too (`pdf-view-mode').
 If LN is positive, scroll the buffer up.
 If LN is negative, scroll the buffer down."
   (interactive "p")
-  (let (is-other-window-showing-pdf)
-    (with-selected-window (other-window-for-scrolling)
-      (when (setq is-other-window-showing-pdf (derived-mode-p 'pdf-view-mode))
-        (if (>= ln 1)
-            (pdf-view-next-line-or-next-page ln)
-          (pdf-view-previous-line-or-previous-page (- ln)))))
-    (when (not is-other-window-showing-pdf)
+  (let ((other-win (other-window-for-scrolling)))
+    (if (pdf-util-pdf-window-p other-win)
+        (with-current-buffer (window-buffer other-win)
+          (with-selected-window other-win
+            (if (>= ln 1)
+                (pdf-view-next-line-or-next-page ln)
+              (pdf-view-previous-line-or-previous-page (- ln))))
+          (set-window-point other-win (point)))
       (scroll-other-window ln))))
 
 (defalias 'modi/scroll-other-window-up 'modi/scroll-other-window)
