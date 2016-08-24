@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-19 23:16:50 kmodi>
+;; Time-stamp: <2016-08-24 13:24:05 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -666,11 +666,9 @@ _b_   _f_      _k_   cut         _r_eset         _o_pen (create blank rectangle 
 
 (bind-keys
  :map modi-mode-map
-  ;; Change the binding of `window-configuration-to-register' to C-x r W
-  ;; and bind C-x r w to `copy-rectangle-as-kill' instead (which is much more
-  ;; frequently used by me).
-  ("C-x r w" . copy-rectangle-as-kill)
-  ("C-x r W" . window-configuration-to-register))
+  ;; Add an extra binding for `copy-rectangle-as-kill' as the default is a bit
+  ;; inconvenient "C-x r M-w"
+  ("C-x r e" . copy-rectangle-as-kill))
 
 ;;; Cycle Letter Case
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
