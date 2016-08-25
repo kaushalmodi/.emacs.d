@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-19 01:12:21 kmodi>
+;; Time-stamp: <2016-08-25 11:44:44 kmodi>
 
 ;; Printing
 
@@ -10,16 +10,33 @@
   :config
   (progn
     ;; Print configuration
-    (setq ps-paper-type        'letter) ; default = 'letter
-    (setq ps-print-color-p     'black-white)
+    (setq ps-paper-type        'letter)      ; default = 'letter
     (setq ps-font-family       'Courier)
-    (setq ps-font-size         8.5) ; default = 8.5
-    (setq ps-landscape-mode    nil) ; default = nil (portrait)
+    (setq ps-font-size         8.5)     ; default = 8.5
+    (setq ps-landscape-mode    nil)     ; default = nil (portrait)
     (setq ps-number-of-columns 1)
+
+    ;; Color or black & white
+    (defvar modi/ps-print-color-with-black-bg nil
+      "When non-nil, colored postscript output will have black bg and white fg.")
+
+    (setq ps-print-color-p 'black-white) ; default = t
+    (if (and modi/ps-print-color-with-black-bg
+             (eq ps-print-color-p t))
+        (progn
+          (setq ps-default-fg 1.0)            ; white
+          (setq ps-default-bg 0.0))           ; black
+      ;; The default fg and bg settings should effective only when
+      ;; `ps-print-color-p' is `t'. But it is effective when that var is set to
+      ;; `black-white' too.
+      ;;   http://debbugs.gnu.org/cgi/bugreport.cgi?bug=24308
+      ;; Below workaround fixes that.
+      (setq ps-default-fg nil)
+      (setq ps-default-bg nil))
 
     ;; Header configuration
     (setq ps-print-header t)
-    (setq ps-header-lines 2) ; 1 = Show buffer name, page number
+    (setq ps-header-lines 2)            ; 1 = Show buffer name, page number
                                         ; 2 = ^above + path to file, date
                                         ; 3 = ^above + time
     (setq ps-print-header-frame     nil)
