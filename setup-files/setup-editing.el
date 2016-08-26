@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-24 13:24:05 kmodi>
+;; Time-stamp: <2016-08-26 13:13:37 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -126,11 +126,11 @@ Additional control:
 (bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
 
 ;;; Clipboard
-;; After copy (Ctrl+c) in X11 apps, you can paste by `yank' in emacs.
+;; Use clipboard for cutting/pasting
 (>=e "25.0"
     (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
   (setq x-select-enable-clipboard t)) ; if older
-;; After mouse selection in X11, you can paste by `yank' in emacs.
+;; Use primary selection too, for cutting/pasting
 (>=e "25.0"
     (setq select-enable-primary t)  ; if emacs 25.0 or newer
   (setq x-select-enable-primary t)) ; if older
