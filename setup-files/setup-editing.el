@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-26 13:13:37 kmodi>
+;; Time-stamp: <2016-08-26 18:51:22 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -126,14 +126,18 @@ Additional control:
 (bind-key "C-c D" #'modi/insert-time-stamp modi-mode-map)
 
 ;;; Clipboard
-;; Use clipboard for cutting/pasting
+;; Non-nil means cutting and pasting uses the clipboard.  This can be in
+;; addition to, but in preference to, the primary selection, if applicable (i.e.
+;; under X11).
 (>=e "25.0"
-    (setq select-enable-clipboard t)  ; if emacs 25.0 or newer
-  (setq x-select-enable-clipboard t)) ; if older
-;; Use primary selection too, for cutting/pasting
+    (setq select-enable-clipboard t)    ; default = t
+  (setq x-select-enable-clipboard t))
+;; Non-nil means cutting and pasting uses the primary selection
+;; The existence of a primary selection depends on the underlying GUI you use.
+;; E.g. it doesn't exist under MS-Windows.
 (>=e "25.0"
-    (setq select-enable-primary t)  ; if emacs 25.0 or newer
-  (setq x-select-enable-primary t)) ; if older
+    (setq select-enable-primary nil)    ; default = nil
+  (setq x-select-enable-primary nil))
 
 ;; Save text copied from an external program to the kill ring before killing
 ;; new text from within emacs.
