@@ -77,6 +77,7 @@ instead of the one present in `package-user-dir'."
 (use-package interleave
   :init
   (progn
+    (bind-to-modi-map "i" #'interleave)
     (with-eval-after-load 'doc-view
       (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
     (with-eval-after-load 'pdf-view
