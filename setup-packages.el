@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-03-15 08:03:57 kmodi>
+;; Time-stamp: <2016-08-24 09:59:31 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -87,6 +87,31 @@ not prevent downloading the actual packages (obviously)."
       (package-list-packages no-fetch)
       (package-menu-mark-upgrades)
       (package-menu-execute 'noquery))))
+
+;; http://emacs.stackexchange.com/a/26513/115
+(defun modi/package-dependency-check-ignore (orig-ret)
+  "Remove the `black listed packages' from ORIG-RET.
+
+Packages listed in the let-bound `pkg-black-list' will not be auto-installed
+even if they are found as dependencies.
+
+It is known that this advice is not effective when installed packages
+asynchronously using `paradox'. Below is effective on synchronous
+package installations."
+  (let ((pkg-black-list '(org))
+        new-ret
+        pkg-name)
+    (dolist (pkg-struct orig-ret)
+      (setq pkg-name (package-desc-name pkg-struct))
+      (if (member pkg-name pkg-black-list)
+          (message (concat "Package `%s' will not be installed. "
+                           "See `modi/package-dependency-check-ignore'.")
+                   pkg-name)
+        ;; (message "Package to be installed: %s" pkg-name)
+        (push pkg-struct new-ret)))
+    new-ret))
+(advice-add 'package-compute-transaction :filter-return #'modi/package-dependency-check-ignore)
+;; (advice-remove 'package-compute-transaction #'modi/package-dependency-check-ignore)
 
 
 (provide 'setup-packages)
