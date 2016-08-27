@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-24 13:30:33 kmodi>
+;; Time-stamp: <2016-08-27 00:27:47 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -249,12 +249,15 @@ will be killed."
     (set-frame-position nil 1910 0) ; pixels x y from upper left
     (set-frame-size nil 1894 1096 :pixelwise))) ; width, height
 
-(defun modi/frame-setup-2 ()
-  "Set the frame to fill half the laptop screen."
-  (interactive)
-  (let ((frame-resize-pixelwise t)) ; do not round frame sizes to character h/w
-    (set-frame-position nil 0 0) ; pixels x y from upper left
-    (set-frame-size nil 900 1096 :pixelwise)))
+(defun modi/frame-width-2x (double)
+  "Set the frame text width to half the current width.
+If DOUBLE is non-nil, the frame text width is doubled. "
+  (interactive "P")
+  (let ((frame-resize-pixelwise t) ; do not round frame sizes to character h/w
+        (factor (if double 2 0.5)))
+    (set-frame-size nil
+                    (round (* factor (frame-text-width))) (frame-text-height)
+                    :pixelwise)))
 
 ;;; Scratch-and-Back
 ;; http://emacs.stackexchange.com/a/81/115
@@ -582,6 +585,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
 
 (bind-to-modi-map "b" #'modi/switch-to-scratch-and-back)
 (bind-to-modi-map "f" #'modi/frame-setup-1)
+(bind-to-modi-map "F" #'modi/frame-width-2x)
 (bind-to-modi-map "y" #'bury-buffer)
 
 (key-chord-define-global "XX" #'modi/kill-buffer-dwim)
