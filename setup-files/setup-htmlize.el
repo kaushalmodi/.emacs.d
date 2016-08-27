@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-20 15:19:10 kmodi>
+;; Time-stamp: <2016-08-27 17:35:58 kmodi>
 
 ;; Htmlize
 
@@ -29,8 +29,9 @@
 
     ;; `flyspell-mode' also has to be disabled because depending on the
     ;; theme, the squiggly underlines can either show up in the html file
-    ;; or cause elisp errors.
-    (with-eval-after-load 'flyspell-mode
+    ;; or cause elisp errors like:
+    ;; (wrong-type-argument number-or-marker-p (nil . 100))
+    (with-eval-after-load 'flyspell
       (defvar modi/htmlize-initial-flyspell-state nil
         "Variable to store the state of `flyspell-mode' when `htmlize-buffer' is called.")
 
