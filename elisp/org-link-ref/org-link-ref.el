@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-10 16:46:39 kmodi>
+;; Time-stamp: <2016-08-27 17:05:07 kmodi>
 
 ;; Implementing Markdown style link IDs in org-mode
 ;; http://emacs.stackexchange.com/q/594/115
@@ -29,9 +29,13 @@ FORMATs understood are `html', `latex' and `ascii'."
      ((eq format 'ascii) (format "[%s](%s)" desc link))
      (t desc))))
 
-(org-link-set-parameters "link-ref"
-                         :follow #'org-link-ref-follow-link
-                         :export #'org-link-ref-export-link)
+(if (fboundp 'org-link-set-parameters)  ; org 9.x
+    (org-link-set-parameters "link-ref"
+                             :follow #'org-link-ref-follow-link
+                             :export #'org-link-ref-export-link)
+  (org-add-link-type "link-ref"         ; org 8.x and older
+                     #'org-link-ref/follow-link
+                     #'org-link-ref/export-link))
 
 
 (provide 'org-link-ref)
