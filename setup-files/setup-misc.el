@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-18 12:38:42 kmodi>
+;; Time-stamp: <2016-08-29 17:14:26 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -217,21 +217,25 @@ in the mode line."
  ("C-x C-c" . modi/quit-emacs)
  ("C-x M-c" . modi/quit-emacs-no-desktop-save))
 
-;; Basic `global-map' bindings saved to `modi-mode-map' also in the event the
-;; former gets wiped off due to a bug or by mistake.
-;; https://lists.gnu.org/archive/html/emacs-devel/2016-07/msg00519.html
-(bind-keys
- :map modi-mode-map
-  ("M-w" . kill-ring-save)
-  ("C-y" . yank)
-  ("C-p" . previous-line)
-  ("C-n" . next-line)
-  ("C-b" . backward-char)
-  ("C-f" . forward-char)
-  ("C-c t" . hydra-toggle/body)
-  ("C-h l" . view-lossage)
-  ("C-x C-c" . modi/quit-emacs)
-  ("C-x M-c" . modi/quit-emacs-no-desktop-save))
+(defun modi/restore-imp-keys ()
+  "Basic `global-map' bindings saved to `modi-mode-map'.
+This comes helpful in the event that the former gets wiped off due to a bug or
+by mistake.
+https://lists.gnu.org/archive/html/emacs-devel/2016-07/msg00519.html "
+  (interactive)
+  (bind-keys
+   :map modi-mode-map
+    ("M-w" . kill-ring-save)
+    ("C-y" . yank)
+    ("C-p" . previous-line)
+    ("C-n" . next-line)
+    ("C-b" . backward-char)
+    ("C-f" . forward-char)
+    ("C-c t" . hydra-toggle/body)
+    ("C-h l" . view-lossage)
+    ("C-x C-c" . modi/quit-emacs)
+    ("C-x M-c" . modi/quit-emacs-no-desktop-save)))
+(bind-key "C-c ;" #'modi/restore-imp-keys)
 
 
 (provide 'setup-misc)
