@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-27 00:27:47 kmodi>
+;; Time-stamp: <2016-08-29 17:18:54 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -376,7 +376,8 @@ If LN is positive, scroll the buffer up.
 If LN is negative, scroll the buffer down."
   (interactive "p")
   (let ((other-win (other-window-for-scrolling)))
-    (if (pdf-util-pdf-window-p other-win)
+    (if (and (fboundp #'pdf-util-pdf-window-p)
+             (pdf-util-pdf-window-p other-win))
         (with-current-buffer (window-buffer other-win)
           (with-selected-window other-win
             (if (>= ln 1)
