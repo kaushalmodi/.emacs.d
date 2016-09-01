@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-29 17:18:54 kmodi>
+;; Time-stamp: <2016-09-01 11:10:04 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -269,7 +269,11 @@ of the buffer from where this function is called.
         COMMAND -> Open/switch to a scratch buffer in the current buffer's major mode
     C-0 COMMAND -> Open/switch to a scratch buffer in `fundamental-mode'
     C-u COMMAND -> Open/switch to a scratch buffer in `org-mode'
-C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'"
+C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'
+
+PS: Even if the current major mode is a read-only mode (derived from `special-mode')
+    we would want to be able to write in the scratch buffer. So the scratch
+    major mode is set to `org-mode' for such cases."
   (interactive "p")
   (if (and (= arg 1) ; no prefix
            (string-match-p "\\*scratch" (buffer-name)))
