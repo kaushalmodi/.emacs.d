@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-24 09:59:31 kmodi>
+;; Time-stamp: <2016-09-06 12:28:40 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -59,17 +59,21 @@ to be installed.")
 
 ;; Mark packages to not be updated
 ;; http://emacs.stackexchange.com/a/9342/115
-(defvar package-menu-exclude-packages '()
-  "List of packages for which the package manager should not look for updates.")
-(defun package-menu--remove-excluded-packages (orig-fun &rest args)
+(defvar modi/package-menu-dont-update-packages '()
+  "List of packages for which the package manager should not look for updates.
+   Example: '(org org-plus-contrib) ")
+
+(defun modi/package-menu-remove-excluded-packages (orig-fun &rest args)
+  "Remove the packages listed in `modi/package-menu-dont-update-packages' from
+the `tabulated-list-entries' variable."
   (let ((included (-filter
                    (lambda (entry)
-                     (let ((name (symbol-name (package-desc-name (car entry)))))
-                       (not (member name package-menu-exclude-packages))))
+                     (let ((pkg-name (package-desc-name (car entry))))
+                       (not (member pkg-name modi/package-menu-dont-update-packages))))
                    tabulated-list-entries)))
     (setq-local tabulated-list-entries included)
     (apply orig-fun args)))
-(advice-add 'package-menu--find-upgrades :around #'package-menu--remove-excluded-packages)
+(advice-add 'package-menu--find-upgrades :around #'modi/package-menu-remove-excluded-packages)
 
 ;; Inspired from paradox.el
 (defun my/package-upgrade-packages (&optional no-fetch)
