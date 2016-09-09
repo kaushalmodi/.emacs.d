@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-23 18:18:07 kmodi>
+;; Time-stamp: <2016-09-09 10:12:30 kmodi>
 
 ;; Search / Replace
 
@@ -140,6 +140,11 @@ If ALL is non-nil, `swiper-all' is run."
                    eos)))
       "Files to ignore when searching buffers via \\[offby1/search-all-buffers]."
       :type 'editable-list)
+
+    ;; http://stackoverflow.com/q/7014455/1219634
+    ;; Workaround for the issue where the `grep-find-template' stays nil when
+    ;; `rgrep' is called non-interactively.
+    (grep-compute-defaults)
 
     (defun offby1/search-all-buffers (regexp prefix)
       "Searches file-visiting buffers for occurence of REGEXP.  With
