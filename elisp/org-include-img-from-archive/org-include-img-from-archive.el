@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-12 11:02:23 kmodi>
+;; Time-stamp: <2016-09-09 11:09:52 kmodi>
 
 ;; http://stackoverflow.com/q/28697108/1219634
 
@@ -21,24 +21,23 @@
 ;; as you can't have a file and a folder with the exact same name in the same
 ;; folder.
 
-;;; * How to enable this package
-;; Add below to your config
-;;   ;; Execute `modi/org-include-img-from-archive' before saving the
-;;   ;; file or before processing the file for export.
+;; How to use this package:
+;; 
+;;   ;; Execute `modi/org-include-img-from-archive' before saving the file.
 ;;   (defun modi/org-include-img-from-archive-before-save ()
 ;;     "Execute `modi/org-include-img-from-archive' just before saving the file."
 ;;     (add-hook 'before-save-hook #'modi/org-include-img-from-archive nil :local))
 ;;   (add-hook 'org-mode-hook #'modi/org-include-img-from-archive-before-save)
-;;   (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive)
+;;   ;; Execute `modi/org-include-img-from-archive' before exporting.
+;;   (with-eval-after-load 'ox
+;;     (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive))
 
 ;;;###autoload
-(defun modi/org-include-img-from-archive (&rest ignore)
+(defun modi/org-include-img-from-archive (&rest _)
   "Extract image files from the archive files.
-** Only .zip files are supported as of now.
+Only .zip archives are supported as of now.
 
-Only looks at #HEADER: lines that have \":extractfromarchive t\".
-This function does nothing if not in org-mode, so you can safely
-add it to `before-save-hook'."
+Only looks at #+HEADER: lines that have \":extractfromarchive t\"."
   (interactive)
   (when (derived-mode-p 'org-mode)
     (save-excursion

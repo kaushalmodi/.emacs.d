@@ -1,24 +1,23 @@
-;; Time-stamp: <2016-05-12 11:02:08 kmodi>
+;; Time-stamp: <2016-09-09 11:10:20 kmodi>
 
 ;; http://emacs.stackexchange.com/a/401/115
 
-;;; * How to enable this package
-;; Add below to your config
-;;   ;; Execute `modi/org-include-img-from-pdf' before saving the file or
-;;   ;; before processing the file for export.
+;; How to use this package:
+;;
+;;   ;; Execute `modi/org-include-img-from-pdf' before saving the file.
 ;;   (defun modi/org-include-img-from-pdf-before-save ()
 ;;     "Execute `modi/org-include-img-from-pdf' just before saving the file."
 ;;     (add-hook 'before-save-hook #'modi/org-include-img-from-pdf nil :local))
 ;;   (add-hook 'org-mode-hook #'modi/org-include-img-from-pdf-before-save)
-;;   (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf)
+;;   ;; Execute `modi/org-include-img-from-pdf' before exporting.
+;;   (with-eval-after-load 'ox
+;;     (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf))
 
 ;;;###autoload
-(defun modi/org-include-img-from-pdf (&rest ignore)
+(defun modi/org-include-img-from-pdf (&rest _)
   "Convert the pdf files to image files.
 
-Only looks at #HEADER: lines that have \":convertfrompdf t\".  This function
-does nothing if not in org-mode, so you can safely add it to
-`before-save-hook'."
+Only looks at #+HEADER: lines that have \":convertfrompdf t\"."
   (interactive)
   (when (derived-mode-p 'org-mode)
     (save-excursion
