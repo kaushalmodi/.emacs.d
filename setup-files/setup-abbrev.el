@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-04 23:10:24 kmodi>
+;; Time-stamp: <2016-09-08 15:40:30 kmodi>
 
 ;; Abbrev
 
@@ -31,7 +31,16 @@
         (remove-hook hook #'abbrev-mode)))
 
     (modi/turn-on-abbrev-mode)
-    (quietly-read-abbrev-file))) ; Read the abbreviations file on startup
+    (quietly-read-abbrev-file) ; Read the abbreviations file on startup
+
+    (dolist (pair '((inverse-add-mode-abbrev . abbrev-now-add-mode-expansion)
+                    (inverse-add-global-abbrev . abbrev-now-add-global-expansion)
+                    (add-mode-abbrev . abbrev-now-add-mode-abbrev)
+                    (add-global-abbrev . abbrev-now-add-global-abbrev)))
+      (let ((remap-from (car pair))
+            (remap-to (cdr pair)))
+        (defalias remap-to remap-from)
+        (global-set-key `[remap ,remap-from] remap-to)))))
 
 ;; Hippie Expand
 (use-package hippie-exp
