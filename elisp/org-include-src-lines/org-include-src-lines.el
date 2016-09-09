@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-12 10:58:31 kmodi>
+;; Time-stamp: <2016-09-09 10:49:29 kmodi>
 
 ;; Updating the #+INCLUDE source code line numbers automatically
 ;; http://emacs.stackexchange.com/q/64/115
@@ -33,30 +33,57 @@
 ;; find out which hook you need! (org-mode is full of hooks)
 
 ;;;###autoload
-(defun endless/org-include-update (&rest ignore)
-  "Update the line numbers of #+INCLUDE:s in current buffer.
-Only looks at INCLUDEs that have either :range-begin or :range-end.
-This function does nothing if not in org-mode, so you can safely
-add it to `before-save-hook'."
+(defun endless/org-include-update (&rest _)
+  "Auto-update the line numbers of #+INCLUDE:s in current buffer.
+Only looks at INCLUDEs that have either `:range-begin' or `:range-end'.
+
+Considering the lines syntax `:lines \"L-R\"',
+  - If the `:range-begin' keyword is present, `L' is calculated such that the
+    exported code includes the line matching the regexp following this keyword.
+  - If the `:range-end' keyword is present, `R' is calculated such that the
+    exported code includes the line matching the regexp following this keyword.
+
+Examples:
+
+  (1) Include lines L to R-1 (Rth line is excluded)
+      Here L and R are auto-calculated such that all code including and between
+      the first line matching \"defcustom\" and the first line matching
+      \"provide\" is exported.
+
+      #+INCLUDE: \"foo.el\" :range-begin \"defcustom\" :range-end \"provide\" :lines \"L-R\"
+
+  (2) Include lines 1 to R-1 (Rth line is excluded)
+      Here only R needs to be auto-calculated such that all code including and
+      between line 1 and the first line matching \"provide\" is exported.
+
+      #+INCLUDE: \"foo.el\" :range-end \"provide\" :lines \"-R\"
+
+  (3) Include lines from L to EOF
+      Here only L needs to be auto-calculated such that all code including and
+      between the first line matching \"defcustom\" and the last line of the
+      file is exported.
+
+      #+INCLUDE: \"foo.el\" :range-begin \"defcustom\" :lines \"L-\"
+"
   (interactive)
   (when (derived-mode-p 'org-mode)
     (save-excursion
       (goto-char (point-min))
       (while (search-forward-regexp
               "^\\s-*#\\+INCLUDE: *\"\\([^\"]+\\)\".*:range-\\(begin\\|end\\)"
-              nil 'noerror)
+              nil :noerror)
         (let* ((file (expand-file-name (match-string-no-properties 1)))
                (adj-begin 0)
                (adj-end 0)
                lines begin end)
           (forward-line 0)
-          (when (looking-at "^.*:range-begin *\"\\([^\"]+\\)\"")
+          (when (looking-at "^.*:range-begin +\"\\([^\"]+\\)\"")
             (setq begin (match-string-no-properties 1)))
-          (when (looking-at "^.*:range-end *\"\\([^\"]+\\)\"")
+          (when (looking-at "^.*:range-end +\"\\([^\"]+\\)\"")
             (setq end (match-string-no-properties 1)))
-          (when (looking-at "^.*:adj-begin *\\([-+0-9]+\\)")
+          (when (looking-at "^.*:adj-begin +\\([-+0-9]+\\)")
             (setq adj-begin (string-to-number (match-string-no-properties 1))))
-          (when (looking-at "^.*:adj-end *\\([-+0-9]+\\)")
+          (when (looking-at "^.*:adj-end +\\([-+0-9]+\\)")
             (setq adj-end (string-to-number (match-string-no-properties 1))))
           (setq lines (endless/org-include-decide-line-range file begin end adj-begin adj-end))
           (when lines
