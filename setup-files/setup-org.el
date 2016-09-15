@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-09 11:13:17 kmodi>
+;; Time-stamp: <2016-09-15 09:50:24 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -979,7 +979,37 @@ inserting an empty column before and adding `/' in $1."
             (org-table-delete-column)
             (beginning-of-line)))
         (add-hook 'org-export-before-processing-hook
-                  #'mbrand/org-export-delete-commented-cols)))
+                  #'mbrand/org-export-delete-commented-cols)
+
+        ;; http://lists.gnu.org/archive/html/emacs-orgmode/2016-09/msg00168.html
+        (defun cpit/filter-begin-only (type)
+          "Remove BEGIN_ONLY %s blocks whose %s doesn't equal TYPE.
+For those that match, only remove the delimiters.
+
+On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
+          (goto-char (point-min))
+          (while (re-search-forward " *#\\+BEGIN_\\(ONLY\\|EXCEPT\\) +\\([a-z]+\\)\n"
+                                    nil :noerror)
+            (let ((only-or-export (match-string-no-properties 1))
+                  (block-type (match-string-no-properties 2))
+                  (begin-from (match-beginning 0))
+                  (begin-to (match-end 0)))
+              (re-search-forward (format " *#\\+END_%s +%s\n"
+                                         only-or-export block-type))
+              (let ((end-from (match-beginning 0))
+                    (end-to (match-end 0)))
+                (if (or (and (string= "ONLY" only-or-export)
+                             (string= type block-type))
+                        (and (string= "EXCEPT" only-or-export)
+                             (not (string= type block-type))))
+                    (progn              ; Keep the block,
+                                        ; delete just the comment markers
+                      (delete-region end-from end-to)
+                      (delete-region begin-from begin-to))
+                  ;; Delete the block
+                  (message "Removing %s block" block-type)
+                  (delete-region begin-from end-to))))))
+        (add-hook 'org-export-before-processing-hook #'cpit/filter-begin-only)))
 
 ;;; Easy Templates
     ;; http://orgmode.org/manual/Easy-Templates.html
