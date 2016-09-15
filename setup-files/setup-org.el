@@ -899,6 +899,10 @@ INFO is the property list of export options."
                     (org-export-to-file 'reveal clientfile
                       async subtreep visible-only body-only ext-plist))
                 (cond (t retfile))))))
+        ;; Do not print date in the reveal title slide
+        ;;   #+OPTIONS: date:nil
+        ;; Do not print file time stamp in the reveal title slide
+        ;;   #+OPTIONS: timestamp:nil
 
 ;;;; ox-twbs - Twitter Bootstrap
         ;; https://github.com/marsmining/ox-twbs
