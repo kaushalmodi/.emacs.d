@@ -907,8 +907,10 @@ INFO is the property list of export options."
 ;;;; ox-twbs - Twitter Bootstrap
         ;; https://github.com/marsmining/ox-twbs
         (use-package ox-twbs
-          ;; My fork of ox-twbs has the ":export-block .." line commented out,
-          ;; which is now not supported in org 9.0+
+          ;; My fork of ox-twbs has the following fixes in order to work with
+          ;; org 9.0+
+          ;;  - https://github.com/kaushalmodi/ox-twbs/commit/c72586abbcf857a3ecf5b665112d9672142b8504
+          ;;  - https://github.com/kaushalmodi/ox-twbs/commit/0ef10224c332cf79e6724019a863180484026ef7
           :load-path "elisp/ox-twbs"
           :config
           (progn
