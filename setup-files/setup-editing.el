@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-26 18:51:22 kmodi>
+;; Time-stamp: <2016-09-20 11:41:38 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -38,6 +38,7 @@
 ;;  Tweaking `region-extract-function'
 ;;  Mouse Copy
 ;;  Commenting
+;;  Anonymize
 ;;  Bindings
 
 ;;; Coding System
@@ -1055,6 +1056,26 @@ Else, execute ORIG function."
        (apply #'max range)))
     (forward-line 1)
     (back-to-indentation)))
+
+;;; Anonymize
+(defun modi/anonymize ()
+  "Replace alphabetical and numerical characters with random lowercase alphabets.
+
+Anonymize the selected region. If no region is selected, apply this function on
+the whole buffer.
+
+This function is useful when you want share an anonymized code snippet to someone
+to help with some debug."
+  (interactive)
+  (let ((beg (if (use-region-p) (region-beginning) (point-min)))
+        (end (if (use-region-p) (region-end) (point-max))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward "[a-zA-z0-9]" nil :noerror)
+          (let ((rand-char (char-to-string (+ ?a (random (- ?z ?a))))))
+            (replace-match rand-char)))))))
 
 ;;; Bindings
 
