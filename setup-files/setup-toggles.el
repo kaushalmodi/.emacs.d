@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-17 16:15:20 kmodi>
+;; Time-stamp: <2016-09-20 08:42:56 kmodi>
 
 ;; Toggles
 
@@ -17,9 +17,9 @@
   ("f"     toggle-fill-unfill "fill/unfill")
   ("F"     follow-mode "follow mode")
   ("g"     indent-guide-mode "indent guide")
+  ("hc"    hardcore-mode "arrow key navigation")
   ("hl"    hl-line-mode "highlight line")
   ("hs"    modi/hideshow-mode "hideshow mode")
-  ("H"     hardcore-mode "arrow key navigation")
   ("i"     modi/imenu-list-display-toggle "imenu list")
   ("k"     key-chord-mode "key chord mode" :color red)
   ("l"     modi/toggle-linum "line numbers")
@@ -31,7 +31,8 @@
   ("sa"    scroll-all-mode "scroll all mode")
   ("t"     toggle-truncate-lines "truncate lines" :color red)
   ("C-t"   toggle-theme "dark/light theme")
-  ("v"     visible-mode "visible mode")
+  ("v"     view-mode "view mode") ; make buffer read-only, then use SPC/DEL to nav
+  ("V"     visible-mode "visible mode") ; view all hidden text in org-mode (e.g. links)
   ("<SPC>" whitespace-mode "whitespace mode")
   ("q"     nil "cancel" :color blue))
 
