@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:15:43 kmodi>
+;; Time-stamp: <2016-09-20 11:27:42 kmodi>
 
 ;; Weather Forecast
 
@@ -32,10 +32,10 @@
     (set-face-attribute 'forecast-upcoming-temperature nil
                         :inherit font-lock-function-name-face)
 
-    ;; The "forecast-api" file is supposed to contain this line:
+    ;; The "darksky-api" file is supposed to contain this line:
     ;;     (setq forecast-api-key "<YOUR_API>")
-    ;; Register at https://developer.forecast.io/ to get your API KEY.
-    (load (locate-user-emacs-file "forecast-api") :noerror :nomessage)
+    ;; Register at https://darksky.net/dev/account/ to get your API KEY.
+    (load (locate-user-emacs-file "darksky-api") :noerror :nomessage)
 
     (setq forecast-latitude  36.070556)
     (setq forecast-longitude -79.104167)
