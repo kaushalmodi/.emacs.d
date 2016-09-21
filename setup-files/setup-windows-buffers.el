@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-01 11:26:50 kmodi>
+;; Time-stamp: <2016-09-21 15:02:12 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -187,25 +187,27 @@
 ;; Display the file path of the file in current buffer and also copy it to
 ;; the kill-ring
 ;; http://camdez.com/blog/2013/11/14/emacs-show-buffer-file-name/
-(defun show-copy-buffer-file-name (arg)
+(defun modi/copy-buffer-file-name (arg)
   "Show the full path to the current file in the minibuffer and also copy it.
+
+If the full file path has a sub-string \"_xyz\" where xyz is the user name,
+replace that with \"_${USER}\".
 
     C-u COMMAND -> Copy only the file name (not the full path).
 C-u C-u COMMAND -> Copy the full path without env var replacement."
   (interactive "p")
   (let* ((file-name-full (buffer-file-name))
-         file-name)
-    (if file-name-full
+         (file-name (when file-name-full
+                      (cl-case arg
+                        (4 (file-name-nondirectory file-name-full)) ; C-u
+                        (16 file-name-full) ; C-u C-u
+                        (t ; If $USER==xyz, replace _xyz with _${USER} in file name
+                         (replace-regexp-in-string ; no prefix
+                          (concat "_" (getenv "USER")) "_${USER}" file-name-full))))))
+    (if file-name
         (progn
-          (setq file-name (cl-case arg
-                            (4 (concat (file-name-base file-name-full) ; C-u
-                                       (file-name-extension file-name-full :period)))
-                            (16 file-name-full) ; C-u C-u
-                            (t (replace-regexp-in-string ; no prefix
-                                (concat "_" (getenv "USER"))
-                                "_${USER}" file-name-full))))
           (kill-new file-name)
-          (message file-name))
+          (message "Copied file name `%s'" file-name))
       (error "Buffer not visiting a file"))))
 
 ;;; Revert buffer
@@ -561,11 +563,11 @@ buffers: *gtags-global*, *ag*, *Occur*."
 ;;;; Mode-line Mouse Bindings
 ;; Bind a function to execute when middle clicking a buffer name in mode line
 ;; http://stackoverflow.com/a/26629984/1219634
-(bind-key "<mode-line> <mouse-2>" #'show-copy-buffer-file-name
+(bind-key "<mode-line> <mouse-2>" #'modi/copy-buffer-file-name
           mode-line-buffer-identification-keymap)
 (bind-key "<mode-line> <S-mouse-2>" (lambda ()
                                       (interactive)
-                                      (show-copy-buffer-file-name 4))
+                                      (modi/copy-buffer-file-name 4))
           mode-line-buffer-identification-keymap)
 
 ;;;; Other Bindings
@@ -573,7 +575,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
  :map modi-mode-map
   ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
   ;; overriding `C-x C-p' originally bound to `mark-page'
-  ("C-x C-p"      . show-copy-buffer-file-name)
+  ("C-x C-p"      . modi/copy-buffer-file-name)
   ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence'
   ("C-x <delete>" . modi/delete-current-buffer-file)
   ("C-x C-r"      . rename-current-buffer-file)
