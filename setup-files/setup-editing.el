@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-20 11:41:38 kmodi>
+;; Time-stamp: <2016-09-21 15:05:59 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -136,9 +136,13 @@ Additional control:
 ;; Non-nil means cutting and pasting uses the primary selection
 ;; The existence of a primary selection depends on the underlying GUI you use.
 ;; E.g. it doesn't exist under MS-Windows.
+;; Wed Sep 21 15:04:49 EDT 2016 - kmodi
+;; Set `select-enable-primary' to non-nil as well so that any text copied/cut
+;; within emacs gets copied to the primary too. For example, any text that
+;; gets saved to the kill-ring using the `kill-new' function.
 (>=e "25.0"
-    (setq select-enable-primary nil)    ; default = nil
-  (setq x-select-enable-primary nil))
+    (setq select-enable-primary t)    ; default = nil
+  (setq x-select-enable-primary t))
 
 ;; Save text copied from an external program to the kill ring before killing
 ;; new text from within emacs.
