@@ -1,10 +1,11 @@
-;; Time-stamp: <2015-11-04 10:57:22 kmodi>
+;; Time-stamp: <2016-09-23 13:14:12 kmodi>
 
 ;; Matlab
 
 (use-package matlab-load
   :load-path "elisp/matlab-emacs"
   :mode (("\\.m\\'" . matlab-mode))
+  :commands (matlab-shell)
   :config
   (progn
     (with-eval-after-load 'matlab
