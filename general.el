@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-12 17:12:07 kmodi>
+;; Time-stamp: <2016-09-26 09:34:29 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -10,6 +10,7 @@
 ;;  Quitting emacs
 ;;  Fringe face setting
 ;;  Default ag arguments
+;;  Default rg arguments
 ;;  Emacs version and git branch
 
 ;;; Emacs version check
@@ -86,14 +87,25 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
                                       "#282828" (face-background 'default))))
 
 ;;; Default ag arguments
+;; https://github.com/ggreer/the_silver_searcher
 (defconst modi/ag-arguments
   '("--nogroup" ; mandatory argument for ag.el as per https://github.com/Wilfred/ag.el/issues/41
-    "--skip-vcs-ignores" ; Ignore files/dirs ONLY from `.agignore'
-    "--numbers" ; line numbers
+    "--skip-vcs-ignores"               ; Ignore files/dirs ONLY from `.ignore'
+    "--numbers"                        ; line numbers
     "--smart-case"
-    "--follow") ; follow symlinks
+    ;; "--one-device"                      ; do not cross mounts when searching
+    "--follow")                        ; follow symlinks
   "Default ag arguments used in the functions in `ag', `counsel' and `projectile'
 packages.")
+
+;;; Default rg arguments
+;; https://github.com/BurntSushi/ripgrep
+(defconst modi/rg-arguments
+  '("--no-ignore-vcs"                  ; Ignore files/dirs ONLY from `.ignore'
+    "--line-number"                    ; line numbers
+    "--smart-case"
+    "--follow")                        ; follow symlinks
+  "Default rg arguments used in the functions in `projectile' package.")
 
 ;;; Emacs version and git branch
 (defvar emacs-build-hash emacs-repository-version

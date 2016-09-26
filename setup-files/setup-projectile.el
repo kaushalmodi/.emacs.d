@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-29 13:42:17 kmodi>
+;; Time-stamp: <2016-09-26 08:52:13 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -93,7 +93,6 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
         project-name))
     (setq projectile-project-name-function #'modi/projectile-project-name)
 
-    ;; Use `ag' all the time if available
     (defun modi/advice-projectile-use-ag ()
       "Always use `ag' for getting a list of all files in the project."
       (mapconcat 'identity
@@ -102,9 +101,26 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
                          '("-0" ; output null separated results
                            "-g ''")) ; get file names matching the regex '' (all files)
                  " "))
-    (when (executable-find "ag")
-      (advice-add 'projectile-get-ext-command :override
-                  #'modi/advice-projectile-use-ag))
+
+    (defun modi/advice-projectile-use-rg ()
+      "Always use `rg' for getting a list of all files in the project."
+      (mapconcat 'identity
+                 (append '("\\rg") ; used unaliased version of `rg': \rg
+                         modi/rg-arguments
+                         '("--files") ; get file names matching the regex '' (all files)
+                         '("| \\tr '\\n' '\\0'")) ; output null separated results,
+                                        ; replace newlines with nulls
+                 " "))
+
+    ;; Use `rg' all the time if available
+    (if (executable-find "rg")
+        (progn
+          (advice-remove 'projectile-get-ext-command #'modi/advice-projectile-use-ag)
+          (advice-add 'projectile-get-ext-command :override #'modi/advice-projectile-use-rg))
+      ;; Else use `ag' if available
+      (when (executable-find "ag")
+        (advice-remove 'projectile-get-ext-command #'modi/advice-projectile-use-rg)
+        (advice-add 'projectile-get-ext-command :override #'modi/advice-projectile-use-ag)))
 
     ;; Make the file list creation faster by NOT calling `projectile-get-sub-projects-files'
     (defun modi/advice-projectile-no-sub-project-files ()
