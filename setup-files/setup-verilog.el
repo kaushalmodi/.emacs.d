@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-25 13:45:37 kmodi>
+;; Time-stamp: <2016-09-26 08:28:44 kmodi>
 
 ;; Verilog
 
@@ -460,7 +460,8 @@ Reference: IEEE 1800-2012 SystemVerilog Section 9.3.4 Block Names.
 
 Examples: endmodule // module_name             → endmodule : module_name
           endfunction // some comment          → endfunction // some comment
-          endfunction // class_name::func_name → endfunction : func_name "
+          endfunction // class_name::func_name → endfunction : func_name
+          end // block: block_name             → end : block_name "
       (interactive)
       (save-excursion
         (goto-char (point-min))
@@ -486,7 +487,8 @@ Examples: endmodule // module_name             → endmodule : module_name
           (while (re-search-forward (concat "^"
                                             "\\(?1:\\s-*" end-block-keywords-re "\\)"
                                             "\\s-*//\\s-*"
-                                            "\\(" modi/verilog-identifier-re "\\s-*::\\s-*\\)*"
+                                            "\\(\\(block:\\|"
+                                            modi/verilog-identifier-re "\\s-*::\\)\\s-*\\)*"
                                             "\\(?2:" modi/verilog-identifier-re "\\)"
                                             "\\s-*$")
                                     nil :noerror)
