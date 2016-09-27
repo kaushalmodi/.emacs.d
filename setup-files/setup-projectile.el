@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-26 08:52:13 kmodi>
+;; Time-stamp: <2016-09-26 20:58:31 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -107,9 +107,8 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
       (mapconcat 'identity
                  (append '("\\rg") ; used unaliased version of `rg': \rg
                          modi/rg-arguments
-                         '("--files") ; get file names matching the regex '' (all files)
-                         '("| \\tr '\\n' '\\0'")) ; output null separated results,
-                                        ; replace newlines with nulls
+                         '("--null" ; output null separated results,
+                           "--files")) ; get file names matching the regex '' (all files)
                  " "))
 
     ;; Use `rg' all the time if available
