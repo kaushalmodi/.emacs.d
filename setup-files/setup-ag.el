@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-05 10:54:15 kmodi>
+;; Time-stamp: <2016-09-25 12:19:57 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -38,8 +38,8 @@
           ("C-x s" . wgrep-save-all-buffers))))
 
     ;; Set default ag arguments
-    ;; It looks like the ~/.agignore is used when launching ag from emacs too.
-    ;; So the ignores from ~/.agignore don't have to be set here again.
+    ;; It looks like the ~/.ignore is used when launching ag from emacs too.
+    ;; So the ignores from ~/.ignore don't have to be set here again.
     (setq ag-arguments
           (append modi/ag-arguments
                   '("--stats")))
