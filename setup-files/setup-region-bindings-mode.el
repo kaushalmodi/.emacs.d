@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-02-28 00:21:34 kmodi>
+;; Time-stamp: <2016-09-27 22:13:54 kmodi>
 
 ;; Region Bindings Mode
 ;; https://github.com/fgallina/region-bindings-mode
@@ -9,9 +9,16 @@
 (use-package region-bindings-mode
   :config
   (progn
+    ;; Do not activate `region-bindings-mode' in Special modes like `dired' and
+    ;; `ibuffer'. Single-key bindings like 'm' are useful in those modes even
+    ;; when a region is selected.
+    (setq region-bindings-mode-disabled-modes '(dired-mode
+                                                ibuffer-mode))
+
     (region-bindings-mode-enable)
 
     (defun modi/disable-rbm-deactivate-mark ()
+      "Disable `region-bindings-mode' and deactivate mark."
       (interactive)
       (region-bindings-mode -1)
       (deactivate-mark)
