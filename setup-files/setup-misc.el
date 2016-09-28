@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-29 17:14:26 kmodi>
+;; Time-stamp: <2016-09-27 22:28:58 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -39,6 +39,9 @@
                                                      "url_" emacs-version-short "/")))
                                     (make-directory dir :parents)
                                     dir))
+
+;; Don't ask if I want to visit a sym-linked file under VC. I always do!
+(setq vc-follow-symlinks t)
 
 ;; Execute the script in current buffer
 ;; http://ergoemacs.org/emacs/elisp_run_current_file.html
