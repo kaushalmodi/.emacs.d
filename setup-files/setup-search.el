@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-09 10:12:30 kmodi>
+;; Time-stamp: <2016-09-28 13:09:02 kmodi>
 
 ;; Search / Replace
 
@@ -12,14 +12,22 @@
 ;;  grep
 ;;  Key bindings
 
-;;; isearch
+(setq-default case-fold-search t)       ; Ignore case when searching
 
-(setq-default case-fold-search t) ; Ignore case when searching
+;;; isearch
 
 ;; Fuzzy isearch
 ;; https://www.reddit.com/r/emacs/comments/3yxk2x/flexible_isearch_without_a_package
 ;; Isearch convenience, space matches anything (non-greedy)
 (setq search-whitespace-regexp ".*?")
+
+;; Allow scrolling while isearch is active
+;; Example: C-s foo C-l (to recenter the point in buffer to center/top/bottom)
+;; http://emacs.stackexchange.com/a/10313/115
+(setq isearch-allow-scroll t)
+;; The beauty of scrolling while searching is that the current match never goes
+;; off-screen. So you can even use C-v/M-v without worrying that you'll lose
+;; the current match location.
 
 ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
 ;; DEL during isearch should edit the search string, not jump back to
