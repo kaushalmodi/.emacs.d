@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 18:19:48 kmodi>
+;; Time-stamp: <2016-10-06 13:31:24 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -7,6 +7,12 @@
   :defer 10
   :config
   (progn
+    (>=e "26.0"
+        ;; https://github.com/justbur/emacs-which-key/issues/146
+        ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=b8fd71d5709650c1aced92c772f70595c51881d2
+        ;; `display-buffer-in-major-side-window' renamed to `window--make-major-side-window' in emacs 26+
+        (defalias 'display-buffer-in-major-side-window 'window--make-major-side-window))
+
     (setq which-key-popup-type 'side-window) ; default
     ;; (setq which-key-popup-type 'minibuffer)
 
