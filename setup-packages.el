@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-06 12:28:40 kmodi>
+;; Time-stamp: <2016-10-05 11:45:20 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -15,8 +15,8 @@
 (add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
 
 ;; Create the package install directory if it doesn't exist
-(setq package-user-dir (concat user-emacs-directory "elpa_"
-                               emacs-version-short "/")) ; default = ~/.emacs.d/elpa/
+(setq package-user-dir (format "%selpa_%s/"
+                               user-emacs-directory emacs-major-version)) ; default = ~/.emacs.d/elpa/
 
 ;; add theme paths
 (add-to-list 'custom-theme-load-path
