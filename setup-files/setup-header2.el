@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-11 13:33:10 kmodi>
+;; Time-stamp: <2016-10-07 13:43:25 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -122,14 +122,10 @@ is non-nil."
         (modi/header-sep-line)))
 
     (defsubst modi/header-position-point ()
-      "Bring the point into the body of the file (2 lines below the last
-separator line. It is assumed that the separator line has at least 10 characters."
-      (goto-char (point-max))
-      (re-search-backward (concat (char-to-string modi/header-sep-line-char)
-                                  "\\{10,\\}")
-                          nil :noerror)
-      (forward-line 1)
-      (newline 1))
+      "Position the point at a particular point in the file.
+Bring the point 2 lines below the current point."
+      (forward-line 0)
+      (newline 2))
 
     (setq make-header-hook '(modi/header-timestamp        ; // Time-stamp: <>
                              modi/header-sep-line         ; // ---------------
