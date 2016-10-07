@@ -1,10 +1,12 @@
-;; Time-stamp: <2016-08-18 09:40:58 kmodi>
+;; Time-stamp: <2016-10-06 17:43:19 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
 (use-package ivy
   :bind (:map modi-mode-map
-         ("M-u" . ivy-resume)) ; Override the default binding for `upcase-word'
+         ("M-u" . ivy-resume)   ; Override the default binding for `upcase-word'
+         ("C-c w" . ivy-push-view)      ; Push window configuration to `ivy-views'
+         ("C-c W" . ivy-pop-view))      ; Remove window configuration from `ivy-views'
   :config
   (progn
     ;; Disable ido
@@ -139,3 +141,7 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
 ;; |                            |                | only one action is available, there is no difference |
 ;; |                            |                | between this and `ivy-done'.                         |
 ;; |----------------------------+----------------+------------------------------------------------------|
+
+;; Switch to any of the saved `ivy-views' using `M-x ivy-switch-buffer'.
+;; When `ivy-mode' is enabled, binding for `switch-to-buffer' is remapped to
+;; `ivy-switch-buffer'.
