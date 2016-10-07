@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-26 20:58:31 kmodi>
+;; Time-stamp: <2016-10-07 12:11:53 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -148,16 +148,19 @@ The return value of this function is unused as it is added as an :after advice."
     (defun modi/projectile-known-projects-sort ()
       "Move the now current project to the top of the `projectile-known-projects' list."
       (let* ((prj (projectile-project-root))
-             (prj-true (file-truename prj))
-             (prj-abbr (abbreviate-file-name prj-true)))
-        ;; First remove the current project from `projectile-known-projects'.
-        ;; Also make sure that duplicate instance of the project name in form of symlink
-        ;; name, true name and abbreviated name, if any, are also removed.
-        (setq projectile-known-projects
-              (delete prj (delete prj-true (delete prj-abbr projectile-known-projects))))
-        ;; Then add back only the abbreviated true name to the beginning of
-        ;; `projectile-known-projects'.
-        (add-to-list 'projectile-known-projects prj-abbr)))
+             ;; Set `prj' to nil if that project is supposed to be ignored
+             (prj (and (not (projectile-ignored-project-p prj)) prj))
+             (prj-true (and prj (file-truename prj)))
+             (prj-abbr (and prj (abbreviate-file-name prj-true))))
+        (when prj
+          ;; First remove the current project from `projectile-known-projects'.
+          ;; Also make sure that duplicate instance of the project name in form of symlink
+          ;; name, true name and abbreviated name, if any, are also removed.
+          (setq projectile-known-projects
+                (delete prj (delete prj-true (delete prj-abbr projectile-known-projects))))
+          ;; Then add back only the abbreviated true name to the beginning of
+          ;; `projectile-known-projects'.
+          (add-to-list 'projectile-known-projects prj-abbr))))
     (add-hook 'projectile-after-switch-project-hook #'modi/projectile-known-projects-sort)
 
     (defhydra hydra-projectile-other-window (:color teal)
