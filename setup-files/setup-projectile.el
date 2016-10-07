@@ -52,32 +52,6 @@
     ;;                                  "P"
     ;;                                (format "‹%s›" (projectile-project-name)))))
 
-    ;; ;; Show the projectile project name after the buffer name instead of in the
-    ;; ;; minor mode lighter area.
-    ;; (setq projectile-mode-line nil)
-    ;; (defconst modi/projectile-mode-line-project-name
-    ;;   ;; Having this as `defvar' instead of `defconst' does not work for some
-    ;;   ;; reason. -- Mon Jul 25 17:59:26 EDT 2016
-    ;;   '("‹" (:eval (let ((prj (projectile-project-name)))
-    ;;                  (if (file-remote-p default-directory)
-    ;;                      "P"
-    ;;                    (propertize prj 'face compilation-info-face))))
-    ;;     "›")
-    ;;   "Mode line construct for displaying current project name.")
-    ;; (defun modi/projectile-hook-fn ()
-    ;;   "Function to run in `projectile-mode-hook'."
-    ;;   (if projectile-mode
-    ;;       (unless (memq 'modi/projectile-mode-line-project-name
-    ;;                     mode-line-buffer-identification)
-    ;;         (setq mode-line-buffer-identification
-    ;;               (append mode-line-buffer-identification
-    ;;                       '(modi/projectile-mode-line-project-name))))
-    ;;     (setq mode-line-buffer-identification
-    ;;           (delq 'modi/projectile-mode-line-project-name
-    ;;                 mode-line-buffer-identification))))
-    ;; (add-hook 'projectile-mode-hook #'modi/projectile-hook-fn)
-    ;; ;; (remove-hook 'projectile-mode-hook #'modi/projectile-hook-fn)
-
     (defun modi/projectile-project-name (project-root)
       "Return project name after some modification if needed.
 
