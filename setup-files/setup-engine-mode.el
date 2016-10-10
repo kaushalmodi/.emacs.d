@@ -1,14 +1,15 @@
-;; Time-stamp: <2016-07-11 14:54:38 kmodi>
+;; Time-stamp: <2016-10-10 09:35:56 kmodi>
 
 ;; Engine mode
 ;; https://github.com/hrs/engine-mode
 
 (use-package engine-mode
+  :init
+  (progn
+    (setq engine/keybinding-prefix "C-c /"))
   :config
   (progn
     (setq engine/browser-function 'eww-browse-url)
-
-    (engine/set-keymap-prefix (kbd "C-c /"))
 
     (defengine duckduckgo
       "https://duckduckgo.com/html/?q=%s"
