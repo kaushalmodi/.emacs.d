@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-25 12:19:57 kmodi>
+;; Time-stamp: <2016-10-10 13:19:30 kmodi>
 
 ;; Ag
 ;; https://github.com/Wilfred/ag.el
@@ -47,6 +47,11 @@
     (setq ag-highlight-search t)
 
     (setq ag-reuse-buffers nil) ; Open new buffers for new searches
+
+    ;; Workaround for issue where the edits in `wgrep' mode always resulted in
+    ;; (No changes to be performed)
+    ;; https://github.com/Wilfred/ag.el/issues/119
+    (setq ag-group-matches nil)
 
     (with-eval-after-load 'projectile
       ;; Override the default function to use the projectile function instead
