@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-21 17:03:38 kmodi>
+;; Time-stamp: <2016-10-11 12:19:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -296,6 +296,10 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (when (executable-find "sml")
   (require 'setup-sml))
 (require 'setup-tcl)
+(when (executable-find "hugo")
+  ;; Setup `toml-mode' is used for the `config.toml' configuration files for
+  ;; the Static Site Generator hugo.
+  (require 'setup-toml))
 (require 'setup-verilog)
 (require 'setup-web-mode)
 (require 'setup-yaml-mode)
