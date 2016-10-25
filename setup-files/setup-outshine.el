@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-10 11:52:37 kmodi>
+;; Time-stamp: <2016-10-25 08:54:50 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -43,7 +43,9 @@ Don't add “Revision Control” heading to TOC."
                          (concat
                           "\\|"
                           ;; trim white space from comment-start
-                          (replace-regexp-in-string " " "" comment-start)))
+                          ;; `regexp-quote' is used to escape characters like `*'
+                          ;; when `comment-start' holds a value like "/*".
+                          (replace-regexp-in-string " " "" (regexp-quote comment-start))))
                        "\\)"))
               (el-mode (derived-mode-p 'emacs-lisp-mode))
               parsed-outline-comment-start
