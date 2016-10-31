@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-26 09:34:29 kmodi>
+;; Time-stamp: <2016-10-31 16:50:03 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -104,7 +104,8 @@ packages.")
   '("--no-ignore-vcs"                  ; Ignore files/dirs ONLY from `.ignore'
     "--line-number"                    ; line numbers
     "--smart-case"
-    "--follow")                        ; follow symlinks
+    "--follow"                          ; follow symlinks
+    "--ignore-file ~/.ignore")
   "Default rg arguments used in the functions in `projectile' package.")
 
 ;;; Emacs version and git branch

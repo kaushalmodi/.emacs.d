@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-07 12:11:53 kmodi>
+;; Time-stamp: <2016-10-31 16:48:30 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -78,12 +78,17 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
 
     (defun modi/advice-projectile-use-rg ()
       "Always use `rg' for getting a list of all files in the project."
-      (mapconcat 'identity
-                 (append '("\\rg") ; used unaliased version of `rg': \rg
-                         modi/rg-arguments
-                         '("--null" ; output null separated results,
-                           "--files")) ; get file names matching the regex '' (all files)
-                 " "))
+      (let* ((prj-user-ignore-name (concat (projectile-project-root)
+                                           ".ignore." (getenv "USER")))
+             (prj-user-ignore (when (file-exists-p prj-user-ignore-name)
+                                (concat "--ignore-file " prj-user-ignore-name))))
+        (mapconcat 'identity
+                   (append '("\\rg") ; used unaliased version of `rg': \rg
+                           modi/rg-arguments
+                           `(,prj-user-ignore) ; If nil, this will not be appended
+                           '("--null" ; output null separated results,
+                             "--files")) ; get file names matching the regex '' (all files)
+                   " ")))
 
     ;; Use `rg' all the time if available
     (if (executable-find "rg")
