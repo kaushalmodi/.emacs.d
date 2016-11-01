@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:31:38 kmodi>
+;; Time-stamp: <2016-11-01 10:17:49 kmodi>
 
 ;; PDF
 
@@ -77,11 +77,11 @@ instead of the one present in `package-user-dir'."
 (use-package interleave
   :init
   (progn
-    (bind-to-modi-map "i" #'interleave)
+    (bind-to-modi-map "i" #'interleave-mode)
     (with-eval-after-load 'doc-view
-      (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
+      (bind-key "i" #'interleave-open-notes-file-for-pdf doc-view-mode-map))
     (with-eval-after-load 'pdf-view
-      (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map)))
+      (bind-key "i" #'interleave-open-notes-file-for-pdf pdf-view-mode-map)))
   :defer t)
 
 (with-eval-after-load 'doc-view
