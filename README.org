@@ -1,6 +1,9 @@
 #+TITLE: modi .emacs.d
 
-*NOTE*: My emacs setup is tested to work only with emacs 24.5 and newer versions. If you are on older versions, I would recommend that you upgrade to the latest available stable version.
+*NOTE*: 
+My emacs setup is tested to work only with emacs 24.5 and newer versions. If you are on older versions, I would recommend that you upgrade to the latest available stable version.
+ 
+For the following steps to work, you should have ``` csh ``` shell installed in your system. If you don't want to install ```csh``` shell, then you could simply clone the repo ``` git clone https://github.com/kaushalmodi/.emacs.d.git ~/.emacs.d ```, navigate into ``` .emacs.d ``` directory and give ``` git submodule init ```, ``` git submodule update --force ``` to initialize and update all necessary modules.
 
 * Using my emacs setup
 You can start using my emacs setup by following these steps:
