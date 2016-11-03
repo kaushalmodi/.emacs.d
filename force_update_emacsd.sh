@@ -1,5 +1,5 @@
-#!/bin/sh
-# Time-stamp: <2016-11-02 13:11:30 kmodi>
+#!/usr/bin/env bash
+# Time-stamp: <2016-11-03 13:16:50 kmodi>
 
 # Usage  : ./force_update_emacsd.sh <YOUR-EMACSD-PATH>
 # Example: ./force_update_emacsd.sh ~/.emacs.d
