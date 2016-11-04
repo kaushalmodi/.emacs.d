@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-15 10:52:00 kmodi>
+;; Time-stamp: <2016-11-04 15:15:31 kmodi>
 
 ;; Shell Script Mode
 
@@ -11,6 +11,10 @@
          ("crontab.*\\'"     . shell-script-mode))
   :config
   (progn
+
+    (defvar modi/indent-bash-as-sh t
+      "When non-nil, bash scripts will be indented using sh indentation logic.
+I prefer the default sh indentation style to the default bash style.")
 
     ;; https://github.com/Tux/tcsh/blob/master/csh-mode.el
     ;; For `csh-indent-line' and `csh-indent-region'
@@ -59,8 +63,15 @@ whose value is the shell name (don't quote it)."
       (if (string-match "\\.exe\\'" shell)
           (setq shell (substring shell 0 (match-beginning 0))))
       ;; (message "shell: %s" shell)
+
+      ;; Thu Nov 03 14:00:44 EDT 2016 - kmodi
+      (when modi/indent-bash-as-sh
+        ;; If `shell' is "bash", set it to "sh"
+        (setq shell (replace-regexp-in-string "\\`bash\\'" "sh" shell)))
+
       (setq sh-shell (sh-canonicalize-shell shell))
       ;; (message "sh-shell: %s" sh-shell)
+
       (if insert-flag
           (setq sh-shell-file
                 (executable-set-magic shell (sh-feature sh-shell-arg)
