@@ -1,5 +1,10 @@
-#!/bin/tcsh -f
-# Time-stamp: <2016-07-07 15:24:22 kmodi>
+#!/usr/bin/env tcsh
+# Time-stamp: <2016-11-10 18:33:47 kmodi>
+
+################################################################################
+# NOTE:: Use the mybuild.sh (bash version of this script). This script is no
+#        longer maintained.
+################################################################################
 
 # Generic script to build (without root access) any version of emacs from git.
 
