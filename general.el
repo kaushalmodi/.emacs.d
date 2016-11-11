@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-31 16:50:03 kmodi>
+;; Time-stamp: <2016-11-11 00:52:50 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -101,11 +101,11 @@ packages.")
 ;;; Default rg arguments
 ;; https://github.com/BurntSushi/ripgrep
 (defconst modi/rg-arguments
-  '("--no-ignore-vcs"                  ; Ignore files/dirs ONLY from `.ignore'
-    "--line-number"                    ; line numbers
+  `("--no-ignore-vcs"                   ; Ignore files/dirs ONLY from `.ignore'
+    "--line-number"                     ; line numbers
     "--smart-case"
     "--follow"                          ; follow symlinks
-    "--ignore-file ~/.ignore")
+    ,(concat "--ignore-file /home/" (getenv "USER") "/.ignore"))
   "Default rg arguments used in the functions in `projectile' package.")
 
 ;;; Emacs version and git branch
