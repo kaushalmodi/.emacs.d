@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-04-01 09:35:52 kmodi>
+;; Time-stamp: <2016-11-13 23:33:29 kmodi>
 
 ;; Perl
 
@@ -15,11 +15,13 @@
     (setq cperl-indent-parens-as-block     t)
     (setq cperl-tab-always-indent          t)
 
-    (with-eval-after-load 'setup-editing
-      (defun my-cperl-mode-customizations()
-        (define-key cperl-mode-map "\177"      #'delete-backward-char)
-        (define-key cperl-mode-map (kbd "C-j") #'pull-up-line))
-      (add-hook 'cperl-mode-hook #'my-cperl-mode-customizations))
+    ;; No paren electricity!
+    (setq cperl-electric-parens-string nil)
+
+    (defun my/cperl-mode-customizations ()
+      ;; Disable abbrev mode that auto-expands keywords like `if'
+      (abbrev-mode -1))
+    (add-hook 'cperl-mode-hook #'my/cperl-mode-customizations)
 
     ;; Source: http://stackoverflow.com/a/13632665/1219634
     ;; Debugging Perl scripts using `isend-mode'
