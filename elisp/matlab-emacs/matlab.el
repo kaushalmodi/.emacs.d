@@ -1184,8 +1184,6 @@ All Key Bindings:
   (setq comment-indent-function 'matlab-comment-indent)
   (make-local-variable 'add-log-current-defun-function)
   (setq add-log-current-defun-function 'matlab-current-defun)
-  (make-local-variable 'fill-column)
-  (setq fill-column default-fill-column)
   (make-local-variable 'auto-fill-function)
   (if matlab-auto-fill (setq auto-fill-function 'matlab-auto-fill))
   ;; Emacs 20 supports this variable.  This lets users turn auto-fill
