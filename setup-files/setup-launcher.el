@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-20 17:29:48 kmodi>
+;; Time-stamp: <2016-11-19 16:22:17 kmodi>
 
 ;; Launcher
 
@@ -31,6 +31,7 @@
   ("p"       paradox-list-packages "packages")
   ;; chmod usage: s-SPC 644 P, s-SPC 400 P
   ("P"       modi/set-file-permissions "file permissions")
+  ("r"       counsel-rg "ripgrep cwd")
   ("sa"      async-shell-command "shell async cmd")
   ("ss"      shell-command "shell cmd")
   ("se"      (sx-tab-all-questions nil "emacs") "emacs.SE")
