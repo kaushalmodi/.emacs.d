@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-31 16:48:30 kmodi>
+;; Time-stamp: <2016-11-19 11:53:46 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -87,7 +87,8 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
                            modi/rg-arguments
                            `(,prj-user-ignore) ; If nil, this will not be appended
                            '("--null" ; output null separated results,
-                             "--files")) ; get file names matching the regex '' (all files)
+                             "--files")) ; get names of all the to-be-searched files
+                                        ; same as the "-g ''" argument in ag
                    " ")))
 
     ;; Use `rg' all the time if available
