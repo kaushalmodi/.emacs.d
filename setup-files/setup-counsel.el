@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-18 09:42:19 kmodi>
+;; Time-stamp: <2016-11-19 16:20:32 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -51,7 +51,8 @@
 
     ;; counsel-ag
     ;; Redefine `counsel-ag-base-command' with my required options, especially
-    ;; the `--follow' option to allow search through symbolic links.
+    ;; the `--follow' option to allow search through symbolic links (part of
+    ;; `modi/ag-arguments').
     ;; (setq counsel-ag-base-command "\\ag --vimgrep %s") ; default
     (setq counsel-ag-base-command
           ;; http://stackoverflow.com/a/12999828/1219634
@@ -65,7 +66,21 @@
                                ))
                      " "))
     ;; Show parent directory in the prompt
-    (ivy-set-prompt 'counsel-ag #'counsel-prompt-function-dir)))
+    (ivy-set-prompt 'counsel-ag #'counsel-prompt-function-dir)
+
+    ;; counsel-rg
+    ;; Redefine `counsel-rg-base-command' with my required options, especially
+    ;; the `--follow' option to allow search through symbolic links (part of
+    ;; `modi/rg-arguments').
+    (setq counsel-rg-base-command
+          (mapconcat 'identity
+                     (append '("\\rg") ; used unaliased version of `rg': \rg
+                             modi/rg-arguments
+                             '("--no-heading" ; no file names above matching content
+                               "%s" ; This MUST be %s, not %S
+                                        ; https://github.com/abo-abo/swiper/issues/427
+                               ))
+                     " "))))
 
 
 (provide 'setup-counsel)

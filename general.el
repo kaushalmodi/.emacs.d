@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-11 00:52:50 kmodi>
+;; Time-stamp: <2016-11-19 16:24:30 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -106,7 +106,8 @@ packages.")
     "--smart-case"
     "--follow"                          ; follow symlinks
     ,(concat "--ignore-file /home/" (getenv "USER") "/.ignore"))
-  "Default rg arguments used in the functions in `projectile' package.")
+  "Default rg arguments used in the functions in `counsel' and `projectile'
+packages.")
 
 ;;; Emacs version and git branch
 (defvar emacs-build-hash emacs-repository-version
