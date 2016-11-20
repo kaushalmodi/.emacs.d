@@ -1,29 +1,33 @@
-;; Time-stamp: <2016-05-19 22:06:42 kmodi>
+;; Time-stamp: <2016-11-20 00:32:19 kmodi>
 
 ;; server/daemon setup
 
 (use-package server
   :init
   (progn
-    (setq server-auth-dir
-          (let ((dir (concat user-emacs-directory
-                             "server_" emacs-version-short
-                             ;; Prevent server file clashes when the same emacs
-                             ;; config is shared simultaneously across different
-                             ;; machines (e.g. via Dropbox)
-                             "_" (>=e "25.0" (system-name) system-name)
-                             "/"))) ; must end with /
-            (make-directory dir :parents)
-            dir)))
+    (when (equal window-system 'w32)
+      (setq server-use-tcp t))
+    (when server-use-tcp
+      ;; `server-auth-dir' is used for server authentication files only if
+      ;; `server-use-tcp' is non-nil.
+      ;; On Windows, also set the EMACS_SERVER_FILE environment variable to
+      ;; point to the `server' file. For example, for emacs 25.1, that location
+      ;; would be "PATH\TO\.emacs.d\server_25_1_HOSTNAME\server".
+      (setq server-auth-dir
+            (let ((dir (concat user-emacs-directory
+                               "server_" emacs-version-short
+                               ;; Prevent server file clashes when the same emacs
+                               ;; config is shared simultaneously across different
+                               ;; machines (e.g. via Dropbox)
+                               "_" (>=e "25.0" (system-name) system-name)
+                               "/"))) ; must end with /
+              (make-directory dir :parents)
+              dir))))
   :config
   (progn
-    ;; (setq server-use-tcp t)
     (when (equal window-system 'w32)
       ;; Suppress error "directory  ~/.emacs.d/server is unsafe". It is needed
       ;; needed for the server to start on Windows.
-      ;;   On Windows, also set the EMACS_SERVER_FILE environment variable to
-      ;; point to the `server' file. For example, for emacs 25.0, that location
-      ;; would be "PATH\TO\.emacs.d\server_25_0\server".
       (defun server-ensure-safe-dir (dir) "Noop" t)
 
       ;; http://www.emacswiki.org/emacs/Edit_with_Emacs
