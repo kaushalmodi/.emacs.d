@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-21 12:24:27 kmodi>
+;; Time-stamp: <2016-11-21 14:21:22 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -435,10 +435,12 @@ returned value `entity-name' will be nil."
                                         "dot" ; graphviz
                                         "ditaa"
                                         "plantuml"
-                                        "awk")
+                                        "awk"
+                                        "shell")
       "List of languages for which the ob-* packages need to be loaded.")
 
-    (defvar modi/ob-eval-unsafe-languages '("emacs-lisp")
+    (defvar modi/ob-eval-unsafe-languages '("emacs-lisp"
+                                            "shell")
       "List of languages which are unsafe for babel evaluation without
 confirmation. Languages present in `modi/ob-enabled-languages' will be marked
 as safe for babel evaluation except for the languages in this variable.")
