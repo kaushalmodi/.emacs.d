@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-20 00:32:19 kmodi>
+;; Time-stamp: <2016-11-20 21:49:43 kmodi>
 
 ;; server/daemon setup
 
@@ -6,8 +6,7 @@
   :init
   (progn
     (when (equal window-system 'w32)
-      (setq server-use-tcp t))
-    (when server-use-tcp
+      (setq server-use-tcp t)
       ;; `server-auth-dir' is used for server authentication files only if
       ;; `server-use-tcp' is non-nil.
       ;; On Windows, also set the EMACS_SERVER_FILE environment variable to
