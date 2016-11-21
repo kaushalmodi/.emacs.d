@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-10-05 10:32:14 kmodi>
+;; Time-stamp: <2016-11-21 07:47:39 kmodi>
 
 ;; Wordnut
 ;; https://github.com/gromnitsky/wordnut
@@ -9,7 +9,9 @@
 
 (use-package wordnut
   :bind (:map modi-mode-map
-         ("C-c / /" . wordnut-search))
+         ;; I don't want to override the `org-sparse-tree' binding (C-c /) in
+         ;; org-mode.
+         ("C-x / /" . wordnut-search))
   :config
   (progn
     (bind-keys

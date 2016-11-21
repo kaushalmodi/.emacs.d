@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-10 09:35:56 kmodi>
+;; Time-stamp: <2016-11-21 07:47:57 kmodi>
 
 ;; Engine mode
 ;; https://github.com/hrs/engine-mode
@@ -6,7 +6,8 @@
 (use-package engine-mode
   :init
   (progn
-    (setq engine/keybinding-prefix "C-c /"))
+    ;; I don't want to override the `org-sparse-tree' binding (C-c /) in org-mode.
+    (setq engine/keybinding-prefix "C-x /"))
   :config
   (progn
     (setq engine/browser-function 'eww-browse-url)
