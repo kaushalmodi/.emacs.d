@@ -10,7 +10,7 @@ On the other hand, I keep my emacs updated to the [[http://git.savannah.gnu.org/
 You can start using my emacs setup by following these steps:
 
 1. Download the latest update script for this config
- #+BEGIN_SRC sh
+ #+BEGIN_SRC shell
  curl https://raw.githubusercontent.com/kaushalmodi/.emacs.d/master/force_update_emacsd.sh > force_update_emacsd.sh
  chmod 744 force_update_emacsd.sh
  #+END_SRC

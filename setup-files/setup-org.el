@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-15 09:50:24 kmodi>
+;; Time-stamp: <2016-11-21 12:24:27 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1095,7 +1095,7 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
       ("v" (modi/org-template-expand "<s" "systemverilog"))
       ("m" (modi/org-template-expand "<s" "matlab"))
-      ("S" (modi/org-template-expand "<s" "sh"))
+      ("S" (modi/org-template-expand "<s" "shell"))
       ("t" (modi/org-template-expand "<s" "text"))
       ("e" (modi/org-template-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
       ("x" (modi/org-template-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
