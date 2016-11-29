@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-29 01:13:57 kmodi>
+;; Time-stamp: <2016-11-29 09:55:47 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -52,7 +52,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
     el2markdown ; Generate README.md files from Commentary section in .el files
     elfeed
-    elisp-slime-nav ; tag based code navigation for elisp; works even for compressed code
     engine-mode ; search engines
     expand-region
     eww-lnum ; jump to links in eww buffer ace-jump style
@@ -216,7 +215,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
   (require 'setup-emamux))
 (require 'setup-eww)
 (require 'setup-el2markdown)
-(require 'setup-elisp-slime-nav)
 (require 'setup-engine-mode)
 (require 'setup-expand-region)
 ;; Below will cause emacs to freeze on evaluating "(string-match-p "." nil)"
@@ -305,6 +303,11 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-verilog)
 (require 'setup-web-mode)
 (require 'setup-yaml-mode)
+
+(>=e "25.1"
+    nil       ; Emacs 25.1 has `M-.' bound to `xref-find-definitions' by default
+              ; which works better than elisp-slime-nav
+  (require 'setup-elisp-slime-nav))
 
 ;; Blend of other setup
 (require 'setup-backup)

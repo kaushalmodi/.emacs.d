@@ -1,10 +1,14 @@
-;; Time-stamp: <2016-02-15 15:01:15 kmodi>
+;; Time-stamp: <2016-11-29 09:54:04 kmodi>
 
 ;; Elisp Slime Nav
 ;; gtags/ctags like navigation into elisp source codes (even the compressed ones)
 ;; https://github.com/purcell/elisp-slime-nav
 
+;; Note that starting from emacs 25.1, we do not need this package. The default
+;; binding "M-." to `xref-find-definitions' works great!
+
 (use-package elisp-slime-nav
+  :ensure t
   :config
   (progn
     (dolist (hook '(emacs-lisp-mode-hook
