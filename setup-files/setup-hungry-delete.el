@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-21 08:46:41 kmodi>
+;; Time-stamp: <2016-11-28 23:10:06 kmodi>
 
 ;; Hungry Delete
 ;; https://github.com/nflath/hungry-delete
@@ -35,7 +35,9 @@ This function skips over horizontal and vertical whitespace."
     ;; Except ..
     ;; `hungry-delete-mode'-loaded backspace does not work in `wdired-mode',
     ;; i.e. when editing file names in the *Dired* buffer.
-    (add-hook 'wdired-mode-hook #'modi/turn-off-hungry-delete-mode)))
+    (add-hook 'wdired-mode-hook #'modi/turn-off-hungry-delete-mode)
+    ;; and in minibuffer
+    (add-hook 'minibuffer-setup-hook #'modi/turn-off-hungry-delete-mode)))
 
 
 (provide 'setup-hungry-delete)
