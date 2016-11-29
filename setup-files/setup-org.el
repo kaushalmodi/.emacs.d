@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-21 14:21:22 kmodi>
+;; Time-stamp: <2016-11-29 01:38:06 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -871,8 +871,7 @@ INFO is the property list of export options."
           :load-path "elisp/ox-reveal"
           :config
           (progn
-            ;; Download reveal.js from https://github.com/hakimel/reveal.js/
-            (setq org-reveal-root (concat user-emacs-directory "software/reveal.js/"))
+            (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
             (setq org-reveal-hlevel 1)
             (setq org-reveal-theme "simple") ; beige blood moon night serif simple sky solarized
             (setq org-reveal-mathjax t) ; Use mathjax.org to render LaTeX equations

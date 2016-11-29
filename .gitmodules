@@ -7,9 +7,6 @@
 [submodule "elisp/unfill"]
 	path = elisp/unfill
 	url = https://github.com/kaushalmodi/unfill
-[submodule "software/reveal.js"]
-	path = software/reveal.js
-	url = http://github.com/hakimel/reveal.js
 [submodule "elisp/highlight-global"]
 	path = elisp/highlight-global
 	url = http://www.github.com/kaushalmodi/highlight-global
