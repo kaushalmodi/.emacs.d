@@ -1,10 +1,16 @@
-;; Time-stamp: <2016-05-19 22:28:30 kmodi>
+;; Time-stamp: <2016-12-02 15:38:54 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
 
 (use-package elfeed
   :defer t
+  :preface
+  (progn
+    (setq elfeed-db-directory
+          (let ((dir (locate-user-emacs-file "elfeed_db/"))) ; must end with /
+            (make-directory dir :parents)
+            dir)))
   :config
   (progn
     (setq elfeed-feeds
