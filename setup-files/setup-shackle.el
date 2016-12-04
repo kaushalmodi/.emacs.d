@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-23 07:42:46 kmodi>
+;; Time-stamp: <2016-12-02 16:48:27 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -16,6 +16,7 @@
           ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
           '((compilation-mode              :select nil                                               )
             ("*undo-tree*"                                                    :size 0.25 :align right)
+            ("*eshell*"                    :select t                          :other t               )
             ("*Shell Command Output*"      :select nil                                               )
             ("\\*Async Shell.*\\*" :regexp t :ignore t                                                 )
             (occur-mode                    :select nil                                   :align t    )
