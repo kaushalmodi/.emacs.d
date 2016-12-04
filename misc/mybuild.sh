@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2016-11-10 18:26:17 kmodi>
+# Time-stamp: <2016-11-30 18:07:45 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -38,6 +38,9 @@
 # Ensure that PKG_CONFIG_PATH has /usr/share/pkgconfig for xproto.pc
 # and related files. This is necessary for XFT and related X11
 # features.. otherwise the fonts will look horrible.
+
+set -euo pipefail # http://redsymbol.net/articles/unofficial-bash-strict-mode
+IFS=$'\n\t'
 
 # emacs_rev="origin/master"
 emacs_rev="origin/emacs-25"
