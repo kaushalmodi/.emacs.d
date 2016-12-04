@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-19 16:22:17 kmodi>
+;; Time-stamp: <2016-12-04 12:35:25 kmodi>
 
 ;; Launcher
 
@@ -18,6 +18,7 @@
   ("el"      modi/eww-im-feeling-lucky "eww Lucky")
   ("eu"      (eww (browse-url-url-at-point)) "eww url at point")
   ("ev"      modi/eww-browse-url-of-file "eww current file")
+  ("es"      eshell "eshell")
   ("ff"      browse-url-firefox "firefox")
   ("fv"      browse-url-of-file "firefox current file")
   ("g"       magit-status "magit status")

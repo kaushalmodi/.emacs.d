@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-21 15:02:12 kmodi>
+;; Time-stamp: <2016-12-04 12:34:32 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -592,8 +592,7 @@ buffers: *gtags-global*, *ag*, *Occur*."
 (bind-keys
  ("<f5>"   . revert-buffer)
  ("C-c 5"  . revert-buffer) ; alternative to f5
- ("<S-f5>" . modi/revert-all-file-buffers)
- ("<S-f9>" . eshell))
+ ("<S-f5>" . modi/revert-all-file-buffers))
 
 (bind-to-modi-map "b" #'modi/switch-to-scratch-and-back)
 (bind-to-modi-map "f" #'modi/frame-setup-1)
