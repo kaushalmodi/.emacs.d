@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-03 15:11:55 kmodi>
+;; Time-stamp: <2016-12-01 01:35:16 kmodi>
 
 ;; Verilog
 
@@ -492,7 +492,11 @@ Examples: endmodule // module_name             → endmodule : module_name
                                             "\\(?2:" modi/verilog-identifier-re "\\)"
                                             "\\s-*$")
                                     nil :noerror)
-            (replace-match "\\1 : \\2")))))
+            ;; Make sure that the matched string after "//" is not a verilog
+            ;; keyword.
+            (when (not (string-match-p (regexp-opt verilog-keywords 'words)
+                                       (match-string 2)))
+              (replace-match "\\1 : \\2"))))))
 
 ;;; hideshow
     (with-eval-after-load 'hideshow
