@@ -1,9 +1,9 @@
-;; Time-stamp: <2016-12-07 18:10:28 kmodi>
+;; Time-stamp: <2016-12-07 18:26:47 kmodi>
 
 ;; Verilog
 
 ;; Contents:
-;; 
+;;
 ;;  Variables
 ;;  Functions
 ;;    modi/verilog-find-module-instance
@@ -576,13 +576,32 @@ _a_lways         _f_or              _g_enerate         _O_utput
       (defun modi/verilog-outshine-imenu-generic-expression (&rest _)
         "Update `imenu-generic-expression' when using outshine."
         (when (derived-mode-p 'verilog-mode)
+          ;; Do not require the "// *" style comments used by `outshine' to start
+          ;; at column 0 just for this major mode
+          (setq-local outshine-outline-regexp-outcommented-p nil)
+
           (setq-local imenu-generic-expression
-                      (append '(("*Level 1*"
-                                 "^// \\*\\{1\\} \\(?1:.*$\\)" 1)
+                      (append `(("*Level 1*"
+                                 ,(concat "^"
+                                          (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
+                                              ""
+                                            "\\s-*")
+                                          "// \\*\\{1\\} \\(?1:.*$\\)")
+                                 1)
                                 ("*Level 2*"
-                                 "^// \\*\\{2\\} \\(?1:.*$\\)" 1)
+                                 ,(concat "^"
+                                          (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
+                                              ""
+                                            "\\s-*")
+                                          "// \\*\\{2\\} \\(?1:.*$\\)")
+                                 1)
                                 ("*Level 3*"
-                                 "^// \\*\\{3\\} \\(?1:.*$\\)" 1))
+                                 ,(concat "^"
+                                          (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
+                                              ""
+                                            "\\s-*")
+                                          "// \\*\\{3\\} \\(?1:.*$\\)")
+                                 1))
                               verilog-imenu-generic-expression))))
       (advice-add 'outshine-hook-function :after
                   #'modi/verilog-outshine-imenu-generic-expression))
@@ -597,10 +616,6 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; Above solution highlights those keywords anywhere in the buffer (not
       ;; just in comments). To do the highlighting intelligently, install the
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
-
-      ;; Do not require the "// *" style comments used by `outshine' to start
-      ;; at column 0 just for this major mode
-      (setq-local outshine-outline-regexp-outcommented-p nil)
 
       ;; Convert end-block comments to ': BLOCK_NAME' in verilog-mode.
       (add-hook 'before-save-hook #'modi/verilog-end-block-comments-to-block-names nil :local)
