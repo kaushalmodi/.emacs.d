@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-17 16:16:02 kmodi>
+;; Time-stamp: <2016-12-07 00:40:44 kmodi>
 
 ;; Customize the mode-line
 
@@ -118,16 +118,17 @@ If nil, show the same in the minibuffer.")
                                    prj-abbrev
                                    "/" user))
                          ":" dir-abbrev ":"))))
-            ("\\(.*:\\)DIG:tb/"                    "\\1TB:"  )
-            ("\\(.*:\\)DIG:syslvl_tb/"             "\\1TB:"  )
-            ("\\(.*:\\)TB:agents/"                 "\\1AGT:" )
-            ("\\(.*:\\)TB:patterns/"               "\\1PAT:" )
-            ("\\(.*:\\)TB:tests/"                  "\\1TST:" )
-            ("\\(.*:\\)TB:tests_sv/"               "\\1TST:" )
-            ("\\(.*:\\)TB:uvm.*src/"               "\\1UVM:" )
-            ("\\(.*:\\)DIG:design_code/"           "\\1DSGN:")
-            ("\\(.*:\\)DSGN:rtl/"                  "\\1RTL:" )
-            ("\\(.*:\\)DSGN:analog_partition_rtl/" "\\1ANA:" ))))
+            ("\\(.*:\\)CAD:.*?/\\([^/]+\\)/systemVerilog/" "\\1\\2:")
+            ("\\(.*:\\)DIG:tb/"                            "\\1TB:")
+            ("\\(.*:\\)DIG:syslvl_tb/"                     "\\1TB:")
+            ("\\(.*:\\)TB:agents/"                         "\\1AGT:")
+            ("\\(.*:\\)TB:patterns/"                       "\\1PAT:")
+            ("\\(.*:\\)TB:tests/"                          "\\1TST:")
+            ("\\(.*:\\)TB:tests_sv/"                       "\\1TST:")
+            ("\\(.*:\\)TB:uvm.*src/"                       "\\1UVM:")
+            ("\\(.*:\\)DIG:design_code/"                   "\\1DSGN:")
+            ("\\(.*:\\)DSGN:rtl/"                          "\\1RTL:")
+            ("\\(.*:\\)DSGN:analog_partition_rtl/"         "\\1ANA:"))))
   :config
   (progn
     (use-package rich-minority
