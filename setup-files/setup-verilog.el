@@ -1,9 +1,9 @@
-;; Time-stamp: <2016-12-01 01:35:16 kmodi>
+;; Time-stamp: <2016-12-07 10:24:29 kmodi>
 
 ;; Verilog
 
 ;; Contents:
-;;
+;; 
 ;;  Variables
 ;;  Functions
 ;;    modi/verilog-find-module-instance
@@ -20,7 +20,7 @@
 ;;  hideshow
 ;;  hydra-verilog-template
 ;;  imenu + outshine
-;;  my/verilog-mode-customizations
+;;  modi/verilog-mode-customization
 ;;  Key bindings
 
 (use-package verilog-mode
@@ -585,8 +585,9 @@ _a_lways         _f_or              _g_enerate         _O_utput
       (advice-add 'outshine-hook-function :after
                   #'modi/verilog-outshine-imenu-generic-expression))
 
-;;; my/verilog-mode-customizations
-    (defun my/verilog-mode-customizations ()
+;;; modi/verilog-mode-customization
+    (defun modi/verilog-mode-customization ()
+      "My customization for `verilog-mode'."
       ;; http://emacs-fu.blogspot.com/2008/12/highlighting-todo-fixme-and-friends.html
       (font-lock-add-keywords nil
                               '(("\\b\\(FIXME\\|TODO\\|BUG\\)\\b" 1
@@ -601,9 +602,9 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; Replace tabs with spaces when saving files in verilog-mode.
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
 
-    ;; *Append* `my/verilog-mode-customizations' to `verilog-mode-hook' so that
+    ;; *Append* `modi/verilog-mode-customization' to `verilog-mode-hook' so that
     ;; that function is run very last of all other functions added to that hook.
-    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations :append)
+    (add-hook 'verilog-mode-hook #'modi/verilog-mode-customization :append)
 
 ;;; Key bindings
     (bind-keys

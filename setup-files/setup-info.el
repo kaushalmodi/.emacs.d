@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 10:08:21 kmodi>
+;; Time-stamp: <2016-12-07 10:14:36 kmodi>
 
 ;; Info
 
@@ -27,8 +27,8 @@
                "<\\(?:[[:alpha:]][^>]*\\|\\(\\\\\\(.\\|[\n]\\)\\)*\\)>" ; <...>
                ))
 
-        (defun modi/Info-mode-customizations ()
-          "My customizations for `Info-mode'."
+        (defun modi/Info-mode-customization ()
+          "My customization for `Info-mode'."
           ;; Show the Info node breadcrumbs only in the header
           ;; Tue Dec 06 23:10:05 EST 2016 - kmodi
           ;; Using both anzu and info+ results in error if info+ breadcrumbs are
@@ -37,7 +37,7 @@
           (when (not Info-breadcrumbs-in-header-flag)
             (Info-toggle-breadcrumbs-in-header))
           (Info-breadcrumbs-in-mode-line-mode -1))
-        (add-hook 'Info-mode-hook #'modi/Info-mode-customizations)
+        (add-hook 'Info-mode-hook #'modi/Info-mode-customization)
 
         (bind-keys
          :map Info-mode-map

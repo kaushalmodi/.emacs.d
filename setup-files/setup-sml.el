@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-18 01:28:15 kmodi>
+;; Time-stamp: <2016-12-07 10:15:17 kmodi>
 
 ;; Standard ML
 
@@ -32,8 +32,8 @@
     (setcdr (assoc "andalso" sml-font-lock-symbols-alist) "&")
     (setcdr (assoc "orelse" sml-font-lock-symbols-alist) "|")
 
-    (defun modi/sml-mode-hook-fn ()
-      "My customizations for `sml-mode'."
+    (defun modi/sml-mode-customization ()
+      "My customization for `sml-mode'."
       ;; ;; In SML, it is perfectly fine to have the statements not ending in
       ;; ;; semicolons as below (in files, *not* in REPL!):
       ;; ;;   val x = 34
@@ -43,7 +43,7 @@
       ;; ;; disabled for this major mode.
       ;; (electric-indent-local-mode -1)
       (auto-fill-mode))
-    (add-hook 'sml-mode-hook #'modi/sml-mode-hook-fn)
+    (add-hook 'sml-mode-hook #'modi/sml-mode-customization)
 
     (defun modi/sml-indent-new-comment-line ()
       "Pretty block comments.

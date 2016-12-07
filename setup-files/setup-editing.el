@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-21 15:05:59 kmodi>
+;; Time-stamp: <2016-12-07 10:14:16 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -270,9 +270,9 @@ like the function return values).
 
 So below would be a recommended way of using this function:
 
-    (defun my/verilog-mode-customizations ()
+    (defun modi/verilog-mode-customization ()
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
-    (add-hook 'verilog-mode-hook #'my/verilog-mode-customizations)
+    (add-hook 'verilog-mode-hook #'modi/verilog-mode-customization)
 
 Note that it is suggested to add this function to the `before-save-hook'
 *locally* within a hook for a major mode which does not require the use of

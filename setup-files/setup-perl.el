@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-13 23:33:29 kmodi>
+;; Time-stamp: <2016-12-07 10:15:06 kmodi>
 
 ;; Perl
 
@@ -18,10 +18,11 @@
     ;; No paren electricity!
     (setq cperl-electric-parens-string nil)
 
-    (defun my/cperl-mode-customizations ()
+    (defun modi/cperl-mode-customization ()
+      "My customization for `cperl-mode'."
       ;; Disable abbrev mode that auto-expands keywords like `if'
       (abbrev-mode -1))
-    (add-hook 'cperl-mode-hook #'my/cperl-mode-customizations)
+    (add-hook 'cperl-mode-hook #'modi/cperl-mode-customization)
 
     ;; Source: http://stackoverflow.com/a/13632665/1219634
     ;; Debugging Perl scripts using `isend-mode'

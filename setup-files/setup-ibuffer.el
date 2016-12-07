@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:03:47 kmodi>
+;; Time-stamp: <2016-12-07 10:14:27 kmodi>
 
 ;; Ibuffer
 
@@ -12,7 +12,8 @@
     (use-package ibuffer-projectile
       :config
       (progn
-        (defun my/ibuffer-customization ()
+        (defun modi/ibuffer-customization ()
+          "My customization for `ibuffer'."
           ;; ibuffer-projectile setup
           (ibuffer-projectile-set-filter-groups)
           (unless (eq ibuffer-sorting-mode 'alphabetic)
@@ -20,7 +21,7 @@
             (ibuffer-do-sort-by-major-mode))))) ; then do major-mode sort
 
     ;; ibuffer-projectile setup
-    (add-hook 'ibuffer-hook #'my/ibuffer-customization)))
+    (add-hook 'ibuffer-hook #'modi/ibuffer-customization)))
 
 
 (provide 'setup-ibuffer)
