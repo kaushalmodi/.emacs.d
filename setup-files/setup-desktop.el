@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-09 11:45:44 kmodi>
+;; Time-stamp: <2016-12-07 00:16:21 kmodi>
 
 ;; Desktop save and restore
 
@@ -56,21 +56,38 @@ saved desktop at startup:
                     ;; tags-table-list
                     )))
 
-    ;; Don't save .gpg files. Restoring those files in emacsclients causes
-    ;; a problem as the password prompt appears before the frame is loaded.
-    (setq desktop-files-not-to-save
-          (concat "\\(^/[^/:]*:\\|(ftp)$\\)" ; original value
-                  "\\|\\(\\.gpg$\\)"
-                  "\\|\\(\\.plstore$\\)"
-                  "\\|\\(\\.desktop$\\)"
-                  ;; FIXME
-                  ;; If backup files with names like "file.sv.20150619_1641.bkp"
-                  ;; are saved to the desktop file, emacsclient crashes at launch
-                  ;; Need to debug why that's the case. But for now, simply not
-                  ;; saving the .bkp files to the desktop file is a workable
-                  ;; solution -- Fri Jun 19 16:45:50 EDT 2015 - kmodi
-                  "\\|\\(\\.bkp$\\)"
-                  "\\|\\(\\TAGS$\\)"))
+    (let ((default (eval (car (get 'desktop-files-not-to-save 'standard-value)))))
+      (setq desktop-files-not-to-save
+            (eval
+             `(rx (or (regexp ,default)
+                      (and (or ".plstore"
+                               ".desktop"
+                               ;; Don't save .gpg files. Restoring those files
+                               ;; in emacsclient causes a problem as the
+                               ;; password prompt appears before the frame is
+                               ;; loaded.
+                               ".gpg"
+                               ;; FIXME
+                               ;; If backup files with names like
+                               ;; "file.sv.1.bkp" are saved to the desktop file,
+                               ;; emacsclient crashes at launch Need to debug
+                               ;; why that's the case. But for now, simply not
+                               ;; saving the .bkp files to the desktop file
+                               ;; works -- Fri Jun 19 16:45:50 EDT 2015
+                               ".bkp"
+                               ;; I do not typically plan to re-open the .el.gz
+                               ;; files opened in my previous sessions.
+                               ".el.gz"
+                               "TAGS")
+                           line-end))))))
+
+    ;; I use `modi/desktop-files-not-to-save' to set additional regexp for my
+    ;; work files.
+    (when (bound-and-true-p modi/desktop-files-not-to-save)
+      (setq desktop-files-not-to-save
+            (eval
+             `(rx (or (regexp ,desktop-files-not-to-save)
+                      (regexp ,modi/desktop-files-not-to-save))))))
 
     ;; Don't save the eww buffers
     (let (;; http://thread.gmane.org/gmane.emacs.devel/202463/focus=202496
