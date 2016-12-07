@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-04 11:08:10 kmodi>
+;; Time-stamp: <2016-12-06 23:11:37 kmodi>
 
 ;; Info
 
@@ -26,6 +26,15 @@
                "\“\\(?:[^”]\\|\\\\\\(.\\|[\n]\\)\\)*”\\|"               ; “...”
                "<\\(?:[[:alpha:]][^>]*\\|\\(\\\\\\(.\\|[\n]\\)\\)*\\)>" ; <...>
                ))
+
+        ;; Show the Info node breadcrumbs only in the header
+        ;; Tue Dec 06 23:10:05 EST 2016 - kmodi
+        ;; Using both anzu and info+ results in error if info+ breadcrumbs are
+        ;; shown in the mode line because anzu modifies the mode line by adding
+        ;; its info as a cons, whereas info+ updates the mode line directly.
+        (when (not Info-breadcrumbs-in-header-flag)
+          (Info-toggle-breadcrumbs-in-header))
+        (Info-breadcrumbs-in-mode-line-mode -1)
 
         (bind-keys
          :map Info-mode-map
