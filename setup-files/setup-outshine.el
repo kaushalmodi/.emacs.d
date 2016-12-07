@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-25 08:54:50 kmodi>
+;; Time-stamp: <2016-12-07 18:07:45 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -53,15 +53,17 @@ Don't add “Revision Control” heading to TOC."
               heading star)
           ;; (message "%s" outline-comment-start)
           (while (re-search-forward
-                  (concat "^\\(?1:" ; beginning of line
+                  (concat "^"           ; beginning of line
+                          (if outshine-outline-regexp-outcommented-p "" "\\s-*")
+                          "\\(?1:"
                           outline-comment-start
                           (if el-mode
                               (concat "\\{2\\}\\)" ; 2 consecutive ; in `emacs-lisp-mode'
                                       ";\\(?2:;*\\)") ; followed by one or more ; chars
                             (concat "\\s-\\{1\\}\\)" ; SINGLE white space
                                     "\\*\\(?2:\\**\\)")) ; followed by one or more * chars
-                          " " ; followed by a space
-                          "\\(?3:.+\\)") ; followed by heading
+                          " "                        ; followed by a space
+                          "\\(?3:.+\\)")               ; followed by heading
                   nil :noerror)
             (setq parsed-outline-comment-start (match-string-no-properties 1))
             ;; Note that the below `star' var stores one less * than the actual;
