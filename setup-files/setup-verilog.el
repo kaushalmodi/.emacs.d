@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 10:24:29 kmodi>
+;; Time-stamp: <2016-12-07 18:10:28 kmodi>
 
 ;; Verilog
 
@@ -420,14 +420,16 @@ The match with \"//.\" resolves this issue:
         (let* ((outline-comment (looking-at "^[[:blank:]]*// \\*+\\s-")) ; // *(space)
                (dont-touch-indentation (looking-at "^.*//\\.")) ; Line contains "//."
                (is-in-multi-line-define (looking-at "^.*\\\\$")) ; \ at EOL
-               (do-not-run-orig-fn (or outline-comment
+               (do-not-run-orig-fn (or (and (bound-and-true-p outshine-outline-regexp-outcommented-p)
+                                            outline-comment)
                                        dont-touch-indentation
                                        is-in-multi-line-define
                                        modi/verilog-multi-line-define-line-cache)))
           ;; Cache the current value of `is-in-multi-line-define'
           (setq modi/verilog-multi-line-define-line-cache is-in-multi-line-define)
           ;; Force remove any indentation for outline comments
-          (when outline-comment
+          (when (and (bound-and-true-p outshine-outline-regexp-outcommented-p)
+                     outline-comment)
             (delete-horizontal-space))
           do-not-run-orig-fn)))
     ;; Advise the indentation behavior of `indent-region' done using `C-M-\'
@@ -595,6 +597,10 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; Above solution highlights those keywords anywhere in the buffer (not
       ;; just in comments). To do the highlighting intelligently, install the
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
+
+      ;; Do not require the "// *" style comments used by `outshine' to start
+      ;; at column 0 just for this major mode
+      (setq-local outshine-outline-regexp-outcommented-p nil)
 
       ;; Convert end-block comments to ': BLOCK_NAME' in verilog-mode.
       (add-hook 'before-save-hook #'modi/verilog-end-block-comments-to-block-names nil :local)
