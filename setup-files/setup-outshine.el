@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 18:07:45 kmodi>
+;; Time-stamp: <2016-12-07 18:17:39 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -9,7 +9,45 @@
   ;; changing this prefix key requires manipulating keymaps.
   :preface
   (setq outline-minor-mode-prefix "\M-#")
-  :defer t)
+  :defer t
+  :config
+  (progn
+    (defun modi/outline-next-visible-heading (arg)
+      "Move to the next visible heading line.
+With ARG, repeats or can move backward if negative.
+A heading line is one that starts with a `*' (or that
+`outline-regexp' matches)."
+      (interactive "p")
+      (if (< arg 0)
+          (beginning-of-line)
+        (end-of-line))
+      (let (found-heading-p)
+        (while (and (not (bobp)) (< arg 0))
+          (while (and (not (bobp))
+                      (setq found-heading-p
+                            (re-search-backward
+                             (concat "^"
+                                     (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
+                                         ""
+                                       "\\s-*")
+                                     "\\(?:" outline-regexp "\\)")
+                             nil 'move))
+                      (outline-invisible-p)))
+          (setq arg (1+ arg)))
+        (while (and (not (eobp)) (> arg 0))
+          (while (and (not (eobp))
+                      (setq found-heading-p
+                            (re-search-forward
+                             (concat "^"
+                                     (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
+                                         ""
+                                       "\\s-*")
+                                     "\\(?:" outline-regexp "\\)")
+                             nil 'move))
+                      (outline-invisible-p (match-beginning 0))))
+          (setq arg (1- arg)))
+        (if found-heading-p (beginning-of-line))))
+    (advice-add 'outline-next-visible-heading :override #'modi/outline-next-visible-heading)))
 
 (use-package outshine
   :config
