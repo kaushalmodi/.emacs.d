@@ -45,7 +45,7 @@ prefix), do the above and also open the html file in the default browser."
                          "temp")
                        ".html"))
         (current-date-time-format "%a %b %d %H:%M:%S %Z %Y")
-        (comment-char comment-start)
+        (comment-char (if comment-start comment-start "#"))
         start end html-string)
     (if (use-region-p)
         (progn
