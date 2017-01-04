@@ -16,10 +16,11 @@
                                      "misc/css/leuven_theme.css")
   "CSS file to be embedded in the exported html file.")
 
-(defvar htmlize-r2f-preserve-file-path-in-name nil
+(defcustom htmlize-r2f-preserve-file-path-in-name nil
   "When non-nil, the generated html file name contains the full path.
 If the buffer file path is \"/a/b/c.txt\", the exported html file name becomes
-\"!a!b!c.txt.html\". That file is still exported to `htmlize-r2f-output-directory'.")
+\"!a!b!c.txt.html\". That file is still exported to `htmlize-r2f-output-directory'."
+  :type 'boolean)
 
 (defun htmlize-r2f (option)
   "Export the selected region/whole buffer to an html file.
