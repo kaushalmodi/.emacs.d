@@ -44,6 +44,8 @@ prefix), do the above and also open the html file in the default browser."
                              (file-name-nondirectory (buffer-file-name)))
                          "temp")
                        ".html"))
+        (current-date-time-format "%a %b %d %H:%M:%S %Z %Y")
+        (comment-char comment-start)
         start end html-string)
     (if (use-region-p)
         (progn
@@ -69,6 +71,14 @@ prefix), do the above and also open the html file in the default browser."
       ;; tag for `body'.
       (goto-char (point-max))
       (insert "</style>\n</head>\n<body>\n")
+      ;; Insert time stamp
+      (insert (concat "<pre>"
+                      "<span class=\"org-comment-delimiter\"> " comment-char
+                      " </span>"
+                      "<span class=\"org-comment\">This HTML page was updated on "
+                      (format-time-string current-date-time-format (current-time))
+                      "</span>"
+                      "</pre>"))
       ;; Insert the HTML for fontified text in `html-string'.
       (insert html-string)
       ;; Close the `body' and `html' tags.
