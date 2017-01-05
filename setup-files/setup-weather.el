@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-20 11:27:42 kmodi>
+;; Time-stamp: <2017-01-05 18:13:14 kmodi>
 
 ;; Weather Forecast
 
@@ -28,9 +28,6 @@
     ;; Use Quivira font for moon phases
     (when (find-font (font-spec :name "Quivira"))
       (set-face-attribute 'forecast-moon-phase nil :font "Quivira"))
-
-    (set-face-attribute 'forecast-upcoming-temperature nil
-                        :inherit font-lock-function-name-face)
 
     ;; The "darksky-api" file is supposed to contain this line:
     ;;     (setq forecast-api-key "<YOUR_API>")
