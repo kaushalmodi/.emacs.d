@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-05 18:13:14 kmodi>
+;; Time-stamp: <2017-01-06 14:46:14 kmodi>
 
 ;; Weather Forecast
 
@@ -29,16 +29,37 @@
     (when (find-font (font-spec :name "Quivira"))
       (set-face-attribute 'forecast-moon-phase nil :font "Quivira"))
 
+    (setq forecast-api-url "https://api.darksky.net")
+
     ;; The "darksky-api" file is supposed to contain this line:
     ;;     (setq forecast-api-key "<YOUR_API>")
     ;; Register at https://darksky.net/dev/account/ to get your API KEY.
     (load (locate-user-emacs-file "darksky-api") :noerror :nomessage)
 
-    (setq forecast-latitude  36.070556)
-    (setq forecast-longitude -79.104167)
-    (setq forecast-city      "Hillsborough, NC")
-    (setq forecast-country   "USA")
-    (setq forecast-units     'us)))
+    ;; The below calendar-* variables from `solar.el' are used by `forecast.el'.
+    (use-package solar
+      :config
+      (progn
+        (setq calendar-latitude 36.070556)
+        (setq calendar-longitude -79.104167)
+        (setq calendar-location-name "Hillsborough, NC")))
+
+    (setq forecast-units 'us)
+
+    ;; Patch the forecast--insert-io-link to change references to Dark Sky
+    (defun forecast--insert-io-link ()
+      "Insert link to Dark Sky."
+      (newline)
+      (insert "Powered by")
+      (insert " ")
+      (insert-text-button
+       "Dark Sky"
+       'follow-link t 'action
+       (lambda (b)
+         (ignore b)
+         (browse-url (format "https://darksky.net/forecast/%s,%s/us12/en"
+                             (number-to-string calendar-latitude)
+                             (number-to-string calendar-longitude))))))))
 
 (defun modi/weather (arg)
   "Display the weather in varying detail as specified by ARG.
