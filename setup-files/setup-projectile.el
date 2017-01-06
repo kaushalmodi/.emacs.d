@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-05 11:27:41 kmodi>
+;; Time-stamp: <2017-01-06 14:00:19 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -150,23 +150,6 @@ The return value of this function is unused as it is added as an :after advice."
     (with-eval-after-load 'paradox
       (advice-add 'paradox--perform-package-transaction
                   :after #'modi/package-make-projectile-cache-stale))
-
-    ;; Fix the issue where the older project name is prepended to 'Find File:'
-    ;; prompt after `projectile-switch-project'
-    ;; https://github.com/bbatsov/projectile/issues/1067#issuecomment-270656085
-    ;; https://github.com/bbatsov/projectile/issues/1067#issuecomment-270686996
-    (defun projectile-project-name-old ()
-      "Return project name."
-      (if projectile-project-name
-          projectile-project-name
-        (let ((project-root
-               (condition-case nil
-                   (projectile-project-root)
-                 (error nil))))
-          (if project-root
-              (funcall projectile-project-name-function project-root)
-            "-"))))
-    (advice-add 'projectile-project-name :override #'projectile-project-name-old)
 
     (defun modi/projectile-known-projects-sort ()
       "Move the now current project to the top of the `projectile-known-projects' list."
