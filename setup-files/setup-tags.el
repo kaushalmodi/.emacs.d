@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-29 09:59:20 kmodi>
+;; Time-stamp: <2017-01-09 09:54:47 kmodi>
 
 ;; Setup for different tags
 
@@ -104,7 +104,7 @@
         ("C-g" . etags-select-quit))))
 
 ;;;; ctags-update
-  ;; https://github.com/jixiuf/helm-etags-plus
+  ;; https://github.com/jixiuf/ctags-update
   (use-package ctags-update
     :config
     (progn
