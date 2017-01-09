@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-27 22:28:58 kmodi>
+;; Time-stamp: <2017-01-09 08:11:54 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -106,8 +106,9 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   (progn
     ;; http://emacs.stackexchange.com/a/16854/115
     (defun modi/text-mode-comments ()
-      "Make text beginning with # look like comments."
-      (font-lock-add-keywords nil '(("#.+" . font-lock-comment-face))))
+      "Make text beginning with # look like comments only in `text-mode'."
+      (when (equal major-mode 'text-mode)
+        (font-lock-add-keywords nil '(("#.+" . font-lock-comment-face)))))
     (add-hook 'text-mode-hook #'modi/text-mode-comments)))
 
 ;; Help Functions +
