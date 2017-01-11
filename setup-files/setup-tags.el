@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-09 09:54:47 kmodi>
+;; Time-stamp: <2017-01-11 18:27:56 kmodi>
 
 ;; Setup for different tags
 
@@ -11,6 +11,7 @@
 ;;      etags-table
 ;;    ctags-update
 ;;  modi/find-tag
+;;  xref, semantic/symref
 
 ;;; gtags, GNU global
 
@@ -110,11 +111,10 @@
     (progn
       ;; Auto update
       (setq ctags-update-delay-seconds (* 30 60)) ; every 1/2 hour
-      (add-hook 'verilog-mode-hook    #'turn-on-ctags-auto-update-mode)
-      (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode))))
+      ;; (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode)
+      (add-hook 'verilog-mode-hook #'turn-on-ctags-auto-update-mode))))
 
 ;;; modi/find-tag
-
 (defun modi/find-tag (&optional use-ctags)
   "Use `ggtags' if available, else use `ctags' to find tags.
 
@@ -126,6 +126,21 @@ If USE-CTAGS is non-nil, use `ctags'."
         (modi/update-etags-table)
         (etags-select-find-tag-at-point))
     (call-interactively #'ggtags-find-tag-dwim)))
+
+;;; xref, semantic/symref
+;; `xref' using `semantic-symref-detect-symref-tool' and
+;; `semantic-symref-calculate-rootdir' to figure out which tool is available
+;; for finding definitions and references. It looks for `global', `idutils',
+;; and `cscope'. If none of those are found, it defaults to `grep'.
+(use-package semantic/symref
+  :defer t
+  :config
+  (progn
+    ;; The `semantic-symref-calculate-rootdir' function does not find the
+    ;; "right" rootdir by default. So using `projectile-project-root' to do
+    ;; that job instead.
+    (with-eval-after-load 'projectile
+      (defalias 'semantic-symref-calculate-rootdir 'projectile-project-root))))
 
 (bind-keys
  :map modi-mode-map
