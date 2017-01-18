@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 18:26:47 kmodi>
+;; Time-stamp: <2017-01-18 13:54:42 kmodi>
 
 ;; Verilog
 
@@ -17,6 +17,7 @@
 ;;    modi/verilog-selective-indent
 ;;    modi/verilog-compile
 ;;    convert end-block comments to block names
+;;    Do not open all `included files
 ;;  hideshow
 ;;  hydra-verilog-template
 ;;  imenu + outshine
@@ -500,6 +501,30 @@ Examples: endmodule // module_name             → endmodule : module_name
                                        (match-string 2)))
               (replace-match "\\1 : \\2"))))))
 
+;;;; Do not open all `included files
+    (defun modi/verilog-do-not-read-includes ()
+      "Replacement for `verilog-read-includes'."
+      (message "`verilog-read-includes' has been advised to do nothing"))
+
+    (defun modi/verilog-do-not-read-defines ()
+      "Replacement for `verilog-read-defines'."
+      (message "`verilog-read-defines' has been advised to do nothing"))
+
+    (define-minor-mode modi/verilog-do-not-read-includes-defines-mode
+      "Do not read all the includes and defines.
+
+Useful to enable this minor mode if you do not want buffers being auto-opened
+for all the `included files."
+      :init-value nil
+      :lighter ""
+      (if modi/verilog-do-not-read-includes-defines-mode
+          (progn
+            (advice-add 'verilog-read-includes :override #'modi/verilog-do-not-read-includes)
+            (advice-add 'verilog-read-defines :override #'modi/verilog-do-not-read-defines))
+        (progn
+          (advice-remove 'verilog-read-includes #'modi/verilog-do-not-read-includes)
+          (advice-remove 'verilog-read-defines #'modi/verilog-do-not-read-defines))))
+
 ;;; hideshow
     (with-eval-after-load 'hideshow
       (add-to-list 'hs-special-modes-alist
@@ -621,7 +646,10 @@ _a_lways         _f_or              _g_enerate         _O_utput
       (add-hook 'before-save-hook #'modi/verilog-end-block-comments-to-block-names nil :local)
 
       ;; Replace tabs with spaces when saving files in verilog-mode.
-      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
+      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
+
+      ;; Stop cluttering my buffer list by not opening all the `included files
+      (modi/verilog-do-not-read-includes-defines-mode 1))
 
     ;; *Append* `modi/verilog-mode-customization' to `verilog-mode-hook' so that
     ;; that function is run very last of all other functions added to that hook.
