@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-18 11:04:32 kmodi>
+;; Time-stamp: <2017-01-18 11:31:04 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -117,6 +117,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     volatile-highlights
     web-mode
     which-key ; > guide-key
+    wolfram ; query wolframalpha; needs user to sign up for a developer AppID
     wordnut ; offline dictionary (requires installing Wordnet wn application)
     wrap-region ; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
     writegood-mode ; highlight passive voice, weasel words and duplicates

@@ -25,6 +25,3 @@
 [submodule "elisp/el2markdown"]
 	path = elisp/el2markdown
 	url = https://kaushalmodi@github.com/kaushalmodi/el2markdown
-[submodule "elisp/wolfram.el"]
-	path = elisp/wolfram.el
-	url = https://github.com/hsjunnesson/wolfram.el

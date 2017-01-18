@@ -1,10 +1,9 @@
-;; Time-stamp: <2017-01-18 11:09:41 kmodi>
+;; Time-stamp: <2017-01-18 11:31:21 kmodi>
 
 ;; WolframAlpha
 ;; https://github.com/hsjunnesson/wolfram.el
 
 (use-package wolfram
-  :load-path "elisp/wolfram.el"
   :bind (:map modi-mode-map
          ("C-x / a" . wolfram-alpha))
   :config
