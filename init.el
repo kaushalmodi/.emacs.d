@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-29 09:55:47 kmodi>
+;; Time-stamp: <2017-01-18 11:04:32 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -271,6 +271,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-weather)
 (require 'setup-which-func)
 (require 'setup-which-key)
+(require 'setup-wolfram)
 (when (executable-find "wn")
   (require 'setup-wordnut))
 (require 'setup-wrap-region)
