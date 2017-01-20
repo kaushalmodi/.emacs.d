@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-28 16:25:54 kmodi>
+;; Time-stamp: <2017-01-19 12:48:58 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -157,7 +157,7 @@ the smart-mode-line theme."
        (setq dark-theme (equal ,dark 'dark))
        (my/disable-enabled-themes)
        (when (not (equal ',theme-name 'default))
-         (load-theme ',theme-name t))
+         (load-theme ',theme-name :no-confirm))
        (with-eval-after-load 'general
          (modi/blend-fringe))
        (with-eval-after-load 'setup-linum
