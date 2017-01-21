@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-11 18:27:56 kmodi>
+;; Time-stamp: <2017-01-20 23:53:05 kmodi>
 
 ;; Setup for different tags
 
@@ -111,7 +111,42 @@
     (progn
       ;; Auto update
       (setq ctags-update-delay-seconds (* 30 60)) ; every 1/2 hour
-      ;; (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode)
+
+      ;; Override `ctags-update-how-to-update' so that when it called
+      ;; non-interactively (via `after-save-hook), then the user is not nagged
+      ;; to generate the TAGS file if it is not present. If TAGS file generation
+      ;; is necessary, do M-x ctags-update.
+      (defun modi/ctags-update-how-to-update (is-interactive)
+        "Return the TAGS file name (maybe).
+
+If \\[universal-argument] or \\[universal-argument] \\[universal-argument]
+argument is used when calling `ctags-update' interactively, user is asked for
+the location to generate the TAGS file.
+
+If `ctags-update' is called interactively without any prefix argument, user is
+asked for the TAGS file location, but only if that file is not present.
+
+Otherwise, if `ctags-update' is called non-interactively (example, via the
+`after-save-hook'), if the TAGS file is present, return that file's path; else
+do nothing and return nil."
+        (let (tags)
+          (cond
+           ((> (prefix-numeric-value current-prefix-arg) 1)  ;C-u or C-uC-u ,generate new tags in selected directory
+            (setq tags (expand-file-name "TAGS"
+                                         (read-directory-name "Generate TAGS in dir:"))))
+           (is-interactive
+            (setq tags (ctags-update-find-tags-file))
+            (unless tags
+              (setq tags (expand-file-name "TAGS"
+                                           (read-directory-name "Generate TAGS in dir:")))))
+           (t
+            (setq tags (ctags-update-find-tags-file))
+            ;; If the TAGS file does not exist in this case, `tags' is set to nil.
+            ))
+          tags))
+      (advice-add 'ctags-update-how-to-update :override #'modi/ctags-update-how-to-update)
+
+      (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode)
       (add-hook 'verilog-mode-hook #'turn-on-ctags-auto-update-mode))))
 
 ;;; modi/find-tag
