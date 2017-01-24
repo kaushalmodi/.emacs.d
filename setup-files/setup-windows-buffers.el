@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-04 12:34:32 kmodi>
+;; Time-stamp: <2017-01-24 17:27:25 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -203,7 +203,7 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
                         (16 file-name-full) ; C-u C-u
                         (t ; If $USER==xyz, replace _xyz with _${USER} in file name
                          (replace-regexp-in-string ; no prefix
-                          (concat "_" (getenv "USER")) "_${USER}" file-name-full))))))
+                          (concat "_" (getenv "USER")) "_$USER" file-name-full))))))
     (if file-name
         (progn
           (kill-new file-name)

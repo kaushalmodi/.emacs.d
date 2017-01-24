@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 10:14:16 kmodi>
+;; Time-stamp: <2017-01-24 17:26:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -433,7 +433,7 @@ remove the comment characters from that line."
 
 ;;; Kill with line numbers
 ;; http://stackoverflow.com/q/12165205/1219634
-(defun kill-with-linenum (beg end unicode)
+(defun modi/kill-with-linenum (beg end unicode)
   "Copy the selected region with file name, starting and ending
 line numbers, date and user name.
 
@@ -458,7 +458,7 @@ instead of ASCII characters for adorning the copied snippet."
                            (line-number-at-pos beg)
                            chars-n-dash
                            (replace-regexp-in-string
-                            (concat "_" user) "_${USER}" buffer-or-file-name)
+                            (concat "_" user) "_$USER" buffer-or-file-name)
                            chars-m-dash
                            chars-pipe)
                    (replace-regexp-in-string
@@ -473,17 +473,17 @@ instead of ASCII characters for adorning the copied snippet."
       (kill-new chunk)))
   (deactivate-mark))
 
-(defun kill-with-linenum-unicode (beg end)
+(defun modi/kill-with-linenum-unicode (beg end)
   (interactive "r")
-  (kill-with-linenum beg end :unicode))
+  (modi/kill-with-linenum beg end :unicode))
 
 (bind-keys
  :map region-bindings-mode-map
   ;; When region is selected, pressing `c' will copy the region
   ;; with ASCII character adornment.
   ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
-  ("c" . kill-with-linenum)
-  ("C" . kill-with-linenum-unicode))
+  ("c" . modi/kill-with-linenum)
+  ("C" . modi/kill-with-linenum-unicode))
 
 ;;; Rectangle
 
