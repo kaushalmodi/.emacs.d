@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-29 01:38:06 kmodi>
+;; Time-stamp: <2017-01-23 17:49:32 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -845,8 +845,26 @@ INFO is the property list of export options."
                         ".")))
             (setq org-html-postamble #'modi/org-html-postamble-fn) ; default: 'auto
 
-            (setq org-html-htmlize-output-type 'css) ; default: 'inline-css
-            (setq org-html-htmlize-font-prefix "org-"))) ; default: "org-"
+            (setq org-html-htmlize-output-type 'css)   ; default: 'inline-css
+            (setq org-html-htmlize-font-prefix "org-") ; default: "org-"
+
+            (define-minor-mode modi/org-html-export-on-save-mode
+              "Minor mode to enable org export to HTML when saving the buffer.
+
+Example use: Add below at the end of org files that you would like to export
+on each save.
+
+  * Local Variables :noexport:
+  # Local Variables:
+  # eval: (modi/org-html-export-on-save-mode 1)
+  # End:
+"
+              :initial-value nil
+              :lighter "AutoExp"
+              (if (and modi/org-html-export-on-save-mode
+                       (derived-mode-p 'org-mode))
+                  (add-hook 'after-save-hook #'org-html-export-to-html nil :local)
+                (remove-hook 'after-save-hook #'org-html-export-to-html :local)))))
 
 ;;;; ox-beamer - Beamer export
         (use-package ox-beamer
