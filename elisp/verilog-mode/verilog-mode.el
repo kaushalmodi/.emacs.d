@@ -1,6 +1,6 @@
 ;;; verilog-mode.el --- major mode for editing verilog source in Emacs
 
-;; Copyright (C) 1996-2016 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2017 Free Software Foundation, Inc.
 
 ;; Author: Michael McNamara <mac@verilog.com>
 ;;    Wilson Snyder <wsnyder@wsnyder.org>
@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2016-07-24-cdd9115-vpo"
+(defconst verilog-mode-version "2017-01-26-4d0d912-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -1356,13 +1356,13 @@ See also `verilog-case-fold'."
   :type 'hook)
 
 (defcustom verilog-before-save-font-hook nil
-  "Hook run before `verilog-save-font-mods' removes highlighting."
+  "Hook run before `verilog-save-font-no-change-functions' removes highlighting."
   :version "24.3"  ; rev735
   :group 'verilog-mode-auto
   :type 'hook)
 
 (defcustom verilog-after-save-font-hook nil
-  "Hook run after `verilog-save-font-mods' restores highlighting."
+  "Hook run after `verilog-save-font-no-change-functions' restores highlighting."
   :version "24.3"  ; rev735
   :group 'verilog-mode-auto
   :type 'hook)
@@ -1416,8 +1416,10 @@ If set will become buffer local.")
     (define-key map "\M-\C-b"  'electric-verilog-backward-sexp)
     (define-key map "\M-\C-f"  'electric-verilog-forward-sexp)
     (define-key map "\M-\r"    `electric-verilog-terminate-and-indent)
-    (define-key map "\M-\t"    'verilog-complete-word)
-    (define-key map "\M-?"     'verilog-show-completions)
+    (define-key map "\M-\t"    (if (fboundp 'completion-at-point)
+                                   'completion-at-point 'verilog-complete-word))
+    (define-key map "\M-?"     (if (fboundp 'completion-help-at-point)
+                                   'completion-help-at-point 'verilog-show-completions))
     ;; Note \C-c and letter are reserved for users
     (define-key map "\C-c`"    'verilog-lint-off)
     (define-key map "\C-c*"    'verilog-delete-auto-star-implicit)
@@ -1448,7 +1450,7 @@ If set will become buffer local.")
 (easy-menu-define
   verilog-menu verilog-mode-map "Menu for Verilog mode"
   (verilog-easy-menu-filter
-   '("Verilog"
+   `("Verilog"
      ("Choose Compilation Action"
       ["None"
        (progn
@@ -1540,7 +1542,8 @@ If set will become buffer local.")
       :help		"Take a signal vector on the current line and expand it to multiple lines"]
      ["Insert begin-end block"		verilog-insert-block
       :help		"Insert begin ... end"]
-     ["Complete word"			verilog-complete-word
+     ["Complete word" ,(if (fboundp 'completion-at-point)
+                           'completion-at-point 'verilog-complete-word)
       :help		"Complete word at point"]
      "----"
      ["Recompute AUTOs"			verilog-auto
@@ -1940,13 +1943,29 @@ be substituted."
 		 t t command))
   command)
 
+;; Eliminate compile warning
+(defvar verilog-compile-command-pre-mod)
+(defvar verilog-compile-command-post-mod)
+
 (defun verilog-modify-compile-command ()
   "Update `compile-command' using `verilog-expand-command'."
-  (when (and
-	 (stringp compile-command)
-	 (string-match "\\b\\(__FLAGS__\\|__FILE__\\)\\b" compile-command))
-    (set (make-local-variable 'compile-command)
-	 (verilog-expand-command compile-command))))
+  ;; Entry into verilog-mode a call to this before Local Variables exist
+  ;; Likewise user may have hook or something that changes the flags.
+  ;; So, remember we're responsible for the expansion and on re-entry
+  ;; recompute __FLAGS__ on each reentry.
+  (when (stringp compile-command)
+    (when (and
+           (boundp 'verilog-compile-command-post-mod)
+           (equal compile-command verilog-compile-command-post-mod))
+      (setq compile-command verilog-compile-command-pre-mod))
+    (when (and
+           (string-match "\\b\\(__FLAGS__\\|__FILE__\\)\\b" compile-command))
+      (set (make-local-variable 'verilog-compile-command-pre-mod)
+           compile-command)
+      (set (make-local-variable 'compile-command)
+           (verilog-expand-command compile-command))
+      (set (make-local-variable 'verilog-compile-command-post-mod)
+           compile-command))))
 
 (if (featurep 'xemacs)
     ;; Following code only gets called from compilation-mode-hook on XEmacs to add error handling.
@@ -2854,6 +2873,7 @@ find the errors."
     "\\(\\<\\(import\\|export\\)\\>\\s-+\"DPI\\(-C\\)?\"\\s-+\\(\\<\\(context\\|pure\\)\\>\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_]*\\s-*=\\s-*\\)?\\<\\(function\\|task\\)\\>\\)"
     ))
 
+(defconst verilog-default-clocking-re "\\<default\\s-+clocking\\>")
 (defconst verilog-disable-fork-re "\\(disable\\|wait\\)\\s-+fork\\>")
 (defconst verilog-extended-case-re "\\(\\(unique0?\\s-+\\|priority\\s-+\\)?case[xz]?\\|randcase\\)")
 (defconst verilog-extended-complete-re
@@ -3805,7 +3825,7 @@ AUTO expansion functions are, in part:
 
 Some other functions are:
 
-    \\[verilog-complete-word]    Complete word with appropriate possibilities.
+    \\[completion-at-point]    Complete word with appropriate possibilities.
     \\[verilog-mark-defun]  Mark function.
     \\[verilog-beg-of-defun]  Move to beginning of current function.
     \\[verilog-end-of-defun]  Move to end of current function.
@@ -3919,6 +3939,9 @@ Key bindings specific to `verilog-mode-map' are:
 				       verilog-forward-sexp-function)
 		  hs-special-modes-alist))))
 
+  (add-hook 'completion-at-point-functions
+            #'verilog-completion-at-point nil 'local)
+
   ;; Stuff for autos
   (add-hook 'write-contents-hooks 'verilog-auto-save-check nil 'local)
   ;; verilog-mode-hook call added by define-derived-mode
@@ -3927,9 +3950,10 @@ Key bindings specific to `verilog-mode-map' are:
 ;;; Integration with the speedbar
 ;;
 
-;; This causes problems with XEmacs byte-compiles.
+;; Avoid problems with XEmacs byte-compiles.
 ;; For GNU Emacs, the eval-after-load will handle if it isn't loaded yet.
-;;(declare-function speedbar-add-supported-extension "speedbar" (extension))
+(when (eval-when-compile (fboundp 'declare-function))
+  (declare-function speedbar-add-supported-extension "speedbar" (extension)))
 
 (defun verilog-speedbar-initialize ()
   "Initialize speedbar to understand `verilog-mode'."
@@ -5739,11 +5763,15 @@ Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
 
              ((match-end 17)  ; *sigh* might be a clocking declaration
               (let ((here (point)))
-                (if (verilog-in-paren)
-                    t ; this is a normal statement
-                  (progn ; or is fork, starts a new block
-                    (goto-char here)
-                    (throw 'nesting 'block)))))
+                (cond ((verilog-in-paren)
+                       t) ; this is a normal statement
+                      ((save-excursion
+                         (verilog-beg-of-statement)
+                         (looking-at verilog-default-clocking-re))
+                       t) ; default clocking, normal statement
+                      (t
+                       (goto-char here) ; or is clocking, starts a new block
+                       (throw 'nesting 'block)))))
 
              ((looking-at "\\<class\\|struct\\|function\\|task\\>")
               ;; *sigh* These words have an optional prefix:
@@ -7194,6 +7222,9 @@ Region is defined by B and EDPOS."
 Repeated use of \\[verilog-complete-word] will show you all of them.
 Normally, when there is more than one possible completion,
 it displays a list of all possible completions.")
+(when (boundp 'completion-cycle-threshold)
+  (make-obsolete-variable
+   'verilog-toggle-completions 'completion-cycle-threshold "26.1"))
 
 
 (defvar verilog-type-keywords
@@ -7476,21 +7507,33 @@ exact match, nil otherwise."
 (defvar verilog-last-word-shown nil)
 (defvar verilog-last-completions nil)
 
+(defun verilog-completion-at-point ()
+  "Used as an element of `completion-at-point-functions'.
+\(See also `verilog-type-keywords' and
+`verilog-separator-keywords'.)"
+  (let* ((b (save-excursion (skip-chars-backward "a-zA-Z0-9_") (point)))
+         (e (save-excursion (skip-chars-forward "a-zA-Z0-9_") (point)))
+         (verilog-str (buffer-substring b e))
+         ;; The following variable is used in verilog-completion
+         (verilog-buffer-to-use (current-buffer))
+         (allcomp (if (and verilog-toggle-completions
+                           (string= verilog-last-word-shown verilog-str))
+                      verilog-last-completions
+                    (all-completions verilog-str 'verilog-completion))))
+    (list b e allcomp)))
+
 (defun verilog-complete-word ()
   "Complete word at current point.
 \(See also `verilog-toggle-completions', `verilog-type-keywords',
 and `verilog-separator-keywords'.)"
-  ;; FIXME: Provide completion-at-point-function.
+  ;; NOTE: This is just a fallback for Emacs versions lacking
+  ;; `completion-at-point'.
   (interactive)
-  (let* ((b (save-excursion (skip-chars-backward "a-zA-Z0-9_") (point)))
-	 (e (save-excursion (skip-chars-forward "a-zA-Z0-9_") (point)))
+  (let* ((comp-info (verilog-completion-at-point))
+         (b (nth 0 comp-info))
+	 (e (nth 1 comp-info))
 	 (verilog-str (buffer-substring b e))
-	 ;; The following variable is used in verilog-completion
-	 (verilog-buffer-to-use (current-buffer))
-	 (allcomp (if (and verilog-toggle-completions
-			   (string= verilog-last-word-shown verilog-str))
-		      verilog-last-completions
-		    (all-completions verilog-str 'verilog-completion)))
+	 (allcomp (nth 2 comp-info))
 	 (match (if verilog-toggle-completions
 		    "" (try-completion
 			verilog-str (mapcar (lambda (elm)
@@ -7538,23 +7581,15 @@ and `verilog-separator-keywords'.)"
 
 (defun verilog-show-completions ()
   "Show all possible completions at current point."
+  ;; NOTE: This is just a fallback for Emacs versions lacking
+  ;; `completion-help-at-point'.
   (interactive)
-  (let* ((b (save-excursion (skip-chars-backward "a-zA-Z0-9_") (point)))
-	 (e (save-excursion (skip-chars-forward "a-zA-Z0-9_") (point)))
-	 (verilog-str (buffer-substring b e))
-	 ;; The following variable is used in verilog-completion
-	 (verilog-buffer-to-use (current-buffer))
-	 (allcomp (if (and verilog-toggle-completions
-			   (string= verilog-last-word-shown verilog-str))
-		      verilog-last-completions
-		    (all-completions verilog-str 'verilog-completion))))
-    ;; Show possible completions in a temporary buffer.
-    (with-output-to-temp-buffer "*Completions*"
-      (display-completion-list allcomp))
-    ;; Wait for a key press. Then delete *Completion*  window
-    (momentary-string-display "" (point))
-    (delete-window (get-buffer-window (get-buffer "*Completions*")))))
-
+  ;; Show possible completions in a temporary buffer.
+  (with-output-to-temp-buffer "*Completions*"
+    (display-completion-list (nth 2 (verilog-completion-at-point))))
+  ;; Wait for a key press. Then delete *Completion*  window
+  (momentary-string-display "" (point))
+  (delete-window (get-buffer-window (get-buffer "*Completions*"))))
 
 (defun verilog-get-default-symbol ()
   "Return symbol around current point as a string."
@@ -8399,7 +8434,8 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 	in-modport in-clocking in-ign-to-semi ptype ign-prop
 	sigs-in sigs-out sigs-inout sigs-var sigs-assign sigs-const
 	sigs-gparam sigs-intf sigs-modports
-	vec expect-signal keywd newsig rvalue enum io signed typedefed multidim
+	vec expect-signal keywd last-keywd newsig rvalue enum io
+	signed typedefed multidim
 	modport
 	varstack tmp)
     ;;(if dbg (setq dbg (concat dbg (format "\n\nverilog-read-decls START PT %s END %s\n" (point) end-mod-point))))
@@ -8480,7 +8516,8 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 	 ;; Normal or escaped identifier -- note we remember the \ if escaped
 	 ((looking-at "\\s-*\\([a-zA-Z0-9`_$]+\\|\\\\[^ \t\n\f]+\\)")
 	  (goto-char (match-end 0))
-	  (setq keywd (match-string-no-properties 1))
+	  (setq last-keywd keywd
+                keywd (match-string-no-properties 1))
 	  (when (string-match "^\\\\" (match-string 1))
             (setq keywd (concat keywd " ")))  ; Escaped ID needs space at end
 	  ;; Add any :: package names to same identifier
@@ -8545,7 +8582,8 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 		 (setq functask (1- functask)))
 		((equal keywd "modport")
 		 (setq in-modport t))
-		((equal keywd "clocking")
+		((and (equal keywd "clocking")
+                      (not (equal last-keywd "default")))
 		 (setq in-clocking t))
 		((equal keywd "import")
                  (if v2kargs-ok  ; import in module header, not a modport import
@@ -9422,7 +9460,14 @@ like:
     // End:
 
 If macros are defined earlier in the same file and you want their values,
-you can read them automatically (provided `enable-local-eval' is on):
+you can read them automatically with:
+
+    // Local Variables:
+    // verilog-auto-read-includes:t
+    // End:
+
+Or a more specific alternative example, which requires having
+`enable-local-eval' non-nil:
 
     // Local Variables:
     // eval:(verilog-read-defines)
@@ -9488,6 +9533,13 @@ ignoring any ifdefs or multiline comments around them.
 file.
 
 It is often useful put at the *END* of your file something like:
+
+    // Local Variables:
+    // verilog-auto-read-includes:t
+    // End:
+
+Or the equivalent longer version, which requires having
+`enable-local-eval' non-nil:
 
     // Local Variables:
     // eval:(verilog-read-defines)
@@ -10890,9 +10942,9 @@ Ignores WHITESPACE if t, and writes output to stdout if SHOW."
 Differences are between buffers B1 and B2, starting at point
 DIFFPT.  This function is called via `verilog-diff-function'."
   (let ((name1 (with-current-buffer b1 (buffer-file-name))))
-    (verilog-warn "%s:%d: Difference in AUTO expansion found"
-		  name1 (with-current-buffer b1
-			  (count-lines (point-min) diffpt)))
+    (verilog-warn-error "%s:%d: Difference in AUTO expansion found"
+                        name1 (with-current-buffer b1
+                                (count-lines (point-min) diffpt)))
     (cond (noninteractive
 	   (verilog-diff-file-with-buffer name1 b2 t t))
 	  (t
