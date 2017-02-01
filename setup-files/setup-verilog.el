@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-18 13:54:42 kmodi>
+;; Time-stamp: <2017-02-01 09:01:35 kmodi>
 
 ;; Verilog
 
@@ -38,7 +38,7 @@
     (setq verilog-indent-level-module      3)   ; 3
     (setq verilog-indent-level-declaration 3)   ; 3
     (setq verilog-indent-level-behavioral  3)   ; 3
-    (setq verilog-indent-level-directive   0)   ; 1
+    (setq verilog-indent-level-directive   3)   ; 1
     (setq verilog-case-indent              2)   ; 2
     (setq verilog-auto-newline             nil) ; t
     (setq verilog-auto-indent-on-newline   t)   ; t
