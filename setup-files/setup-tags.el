@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-20 23:53:05 kmodi>
+;; Time-stamp: <2017-02-02 15:20:47 kmodi>
 
 ;; Setup for different tags
 
@@ -49,6 +49,8 @@
 
       ;; Remove the default binding for `M-.' in `ggtags-mode-map'
       (bind-key "M-." nil ggtags-mode-map)
+      ;; Remove the default binding for `M-o' in `ggtags-navigation-map'
+      (bind-key "M-o" nil ggtags-navigation-map)
 
       (key-chord-define-global "??" #'ggtags-show-definition))))
 
