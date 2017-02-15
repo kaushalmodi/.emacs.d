@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-24 17:26:45 kmodi>
+;; Time-stamp: <2017-02-14 16:26:19 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -1108,7 +1108,8 @@ to help with some debug."
   ("M-;" . endless/comment-line-or-region)
   ;; Override the default binding for `comment-set-column'
   ("C-x ;" . comment-dwim)
-  ("<M-delete>" . backward-kill-word))
+  ("<M-delete>" . backward-kill-word)
+  ("<C-M-backspace>" . backward-kill-sexp))
 (bind-to-modi-map "=" #'modi/align-to-equals)
 
 
