@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-17 15:36:22 kmodi>
+;; Time-stamp: <2017-02-17 18:37:38 kmodi>
 
 ;; Git Link
 ;; https://github.com/sshaw/git-link
@@ -16,18 +16,6 @@
     (defvar git-link-commit-fallback-use-latest-commit t
       "If non-nil, use the latest commit of the current file in the buffer if the
 word under point is not a valid commit hash.")
-
-    ;; The `git-link-remote-regex' is fixed to support links like
-    ;; http://orgmode@orgmode.org/org-mode.git
-    ;;
-    ;; Note that earlier regexp expected 2 forward slashes in the path, like
-    ;; http://git.savannah.gnu.org/r/emacs.git
-    ;;
-    ;;   "\\([-.[:word:]]+\\)[:/]\\([^/]+/[^/]+?\\)\\(?:\\.git\\)?$"
-    ;;
-    ;; Now the second forward slash part is put into an optional regexp
-    ;; sub-group "\\(/[^/]+?\\)*"
-    (setq git-link-remote-regex "\\([-.[:word:]]+\\)[:/]\\([^/]+\\(/[^/]+?\\)*\\)\\(?:\\.git\\)?$")
 
     ;; Support emacs git links
     (defun git-link-savannah-gnu (hostname dirname filename branch commit start end)
