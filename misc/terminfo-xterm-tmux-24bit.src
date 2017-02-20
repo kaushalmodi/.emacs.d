@@ -1,0 +1,25 @@
+# 24-bit color support for emacs in terminal
+# See info node -- (efaq) Colors on a TTY
+# Rami Ylimäki - http://lists.gnu.org/archive/html/emacs-devel/2017-02/msg00635.html
+# Compile this with:
+#   tic -x -o ~/.terminfo terminfo-xterm-tmux-24bit.src, or
+#   tic -x -o $TERMINFO terminfo-xterm-tmux-24bit.src
+# Support italics in tmux - https://github.com/ThomasAdam/tmux/blob/master/FAQ
+xterm-24bits|xterm with 24-bit direct color mode with Tc option support for 24-bit color in tmux,
+ use=xterm-256color,
+ Tc,
+ ritm=\E[23m, rmso=\E[27m, sitm=\E[3m, smso=\E[7m, Ms@,
+ setb24=\E[48;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
+ setf24=\E[38;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
+
+tmux|tmux terminal multiplexer with italics,
+ ritm=\E[23m, rmso=\E[27m, sitm=\E[3m, smso=\E[7m, Ms@,
+ use=xterm+tmux, use=screen,
+
+tmux-256color|tmux with 256 colors and italics,
+ use=xterm+256setaf, use=tmux,
+
+# I am not sure if the below works; but it doesn't seem to hurt too.
+tmux-24bits|tmux with 24-bit colors and italics,
+ use=tmux-256color,
+ Tc,
