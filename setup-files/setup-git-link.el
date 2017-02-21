@@ -25,14 +25,14 @@ word under point is not a valid commit hash.")
               filename
               commit
               start))
-    (add-to-list 'git-link-remote-alist '("git.savannah.gnu.org" git-link-savannah-gnu))
+    (add-to-list 'git-link-remote-alist '("git\\.savannah\\.gnu\\.org" git-link-savannah-gnu))
 
     (defun git-link-commit-savannah-gnu (hostname dirname commit)
       (format "http://%s/cgit/%s/commit/?id=%s"
               hostname
               (replace-regexp-in-string "^r/\\(.*\\)" "\\1.git" dirname)
               commit))
-    (add-to-list 'git-link-commit-remote-alist '("git.savannah.gnu.org" git-link-commit-savannah-gnu))
+    (add-to-list 'git-link-commit-remote-alist '("git\\.savannah\\.gnu\\.org" git-link-commit-savannah-gnu))
 
     ;; Support org-mode git links
     (defun git-link-org-mode (hostname dirname filename branch commit start end)
@@ -42,14 +42,14 @@ word under point is not a valid commit hash.")
               filename
               commit
               start))
-    (add-to-list 'git-link-remote-alist '("orgmode.org" git-link-org-mode))
+    (add-to-list 'git-link-remote-alist '("orgmode\\.org" git-link-org-mode))
 
     (defun git-link-commit-org-mode (hostname dirname commit)
       (format "http://%s/cgit.cgi/%s/commit/?id=%s"
               hostname
               (replace-regexp-in-string "^r/\\(.*\\)" "\\1.git" dirname)
               commit))
-    (add-to-list 'git-link-commit-remote-alist '("orgmode.org" git-link-commit-org-mode))
+    (add-to-list 'git-link-commit-remote-alist '("orgmode\\.org" git-link-commit-org-mode))
 
     (defun git-link-commit (remote)
       "Create a URL representing the commit for the hash under point
