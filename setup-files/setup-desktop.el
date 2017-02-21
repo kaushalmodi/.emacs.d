@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 00:16:21 kmodi>
+;; Time-stamp: <2017-02-18 21:37:55 kmodi>
 
 ;; Desktop save and restore
 
@@ -22,10 +22,23 @@ saved desktop at startup:
 
     ;; Wed Jul 20 09:36:15 EDT 2016 - kmodi
     ;; Below problem seems to be fixed in emacs 25.x
+    ;; Sat Feb 18 16:31:50 EST 2017 - kmodi
+    ;; Nope! It's not! https://github.com/purcell/emacs.d/issues/259
+    ;; The problem occurs when opening emacs in -nw mode, saving desktop,
+    ;; quitting, and then reopening emacs in GUI mode. I get this in a
+    ;; *Warning* buffer:
+    ;;     Error (frameset): Font ‘tty’ is not defined
     (>=e "25.0"
         nil
-      ;; Fix the frameset error at startup
+      ;; 'Fix' the frameset error at startup
+      ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=17352
       (setq desktop-restore-frames nil))
+
+    ;; Fix the below error when starting emacs:
+    ;;   Error (frameset): Wrong type argument: number-or-marker-p, nil
+    ;; This error appears when switching emacs use between -nw and GUI modes.
+    ;; http://stackoverflow.com/a/26546872/1219634
+    (setq desktop-restore-forces-onscreen nil)
 
     ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-sessions.el
     ;; Save a bunch of variables to the desktop file.
