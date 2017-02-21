@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 10:14:36 kmodi>
+;; Time-stamp: <2017-02-20 08:04:46 kmodi>
 
 ;; Info
 
@@ -141,6 +141,7 @@ _i_nfo      _o_rg      e_l_isp      e_L_isp intro      _e_macs      _c_alc      
   ("L" (ora-open-info "eintr" "*elisp intro info*"))
   ("e" (ora-open-info "emacs" "*emacs info*"))
   ("c" (ora-open-info "calc" "*calc info*"))
+  ("C" (ora-open-info "cl" "*emacs common lisp info*"))
   ("g" counsel-ag-emacs-info))
 (bind-key "C-h i" #'hydra-info-to/body modi-mode-map)
 
