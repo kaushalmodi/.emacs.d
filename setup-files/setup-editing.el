@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-14 16:26:19 kmodi>
+;; Time-stamp: <2017-02-21 15:57:21 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -227,10 +227,12 @@ that sub-directory will the below contents:
 
 ;; http://stackoverflow.com/a/35781486/1219634
 (defun modi/delete-trailing-whitespace-buffer ()
-  "Delete trailing whitespace in the whole buffer, except on the current line.
-The current line exception is because we do want to remove any whitespace
-on the current line on saving the file (`before-save-hook') while we are
-in-between typing something.
+  "Delete trailing whitespace in the whole buffer.
+
+If the major-mode is org-mode, and if the point is after a heading or list
+marker, do that in the whole buffer *except* on the current line. The reason is
+that if I am about to type a heading (\"* |\"), and if I save the file, I do not
+want my cursor to move back (\"*|\").
 
 Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
   (interactive)
@@ -245,10 +247,22 @@ Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
         ;; Also set the value of modi/org-capture-buffer-file-name back to nil
         ;; to prevent false executions of this `when' form.
         (setq modi/org-capture-buffer-file-name nil)))
-    (delete-trailing-whitespace (point-min) (line-beginning-position))
-    ;; Below, the END argument is left nil so that trailing empty lines are
-    ;; also deleted if `delete-trailing-lines' is non-nil.
-    (delete-trailing-whitespace (line-end-position))))
+    (if (and (derived-mode-p 'org-mode)
+             ;; Match examples "* ", "** ", "- ", " - ", "+ ", " + ", "** TODO "
+             (looking-back (concat "^\\(?:\\*+\\(?:\\s-"
+                                   ;; If `org-todo-keywords' is '((sequence "TODO" "DONE")),
+                                   ;; the regexp will be ""\\<\\(DONE\\|TODO\\)\\>""
+                                   (regexp-opt (cdr (car org-todo-keywords)) 'words)
+                                   "\\)*\\|\\s-*[-+]\\)\\s-+")
+                           (save-excursion ;get the BOL point
+                             (beginning-of-line)
+                             (point))))
+        (progn
+          (delete-trailing-whitespace (point-min) (line-beginning-position))
+          ;; Below, the END argument is nil so that trailing empty lines are
+          ;; also deleted if `delete-trailing-lines' is non-nil.
+          (delete-trailing-whitespace (line-end-position) nil))
+      (delete-trailing-whitespace (point-min) nil))))
 (add-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
 
 ;;; Untabify
