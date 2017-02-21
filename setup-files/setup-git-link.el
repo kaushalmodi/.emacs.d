@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-17 18:37:38 kmodi>
+;; Time-stamp: <2017-02-20 23:27:26 kmodi>
 
 ;; Git Link
 ;; https://github.com/sshaw/git-link
@@ -10,13 +10,9 @@
   :init
   (progn
     (bind-to-modi-map "g" #'modi/git-link)
-    (bind-to-modi-map "G" #'git-link-commit))
+    (bind-to-modi-map "G" #'modi/git-link-commit-dwim))
   :config
   (progn
-    (defvar git-link-commit-fallback-use-latest-commit t
-      "If non-nil, use the latest commit of the current file in the buffer if the
-word under point is not a valid commit hash.")
-
     ;; Support emacs git links
     (defun git-link-savannah-gnu (hostname dirname filename branch commit start end)
       (format "http://%s/cgit/%s/tree/%s?id=%s#n%s"
@@ -51,41 +47,27 @@ word under point is not a valid commit hash.")
               commit))
     (add-to-list 'git-link-commit-remote-alist '("orgmode\\.org" git-link-commit-org-mode))
 
-    (defun git-link-commit (remote)
+    (defun modi/git-link-commit-dwim (remote)
       "Create a URL representing the commit for the hash under point
 in the current buffer's GitHub/Bitbucket/GitLab/... repository. The URL will be
 added to the kill ring.
 
-If the word under point is not a valid commit hash and if
-`git-link-commit-fallback-use-latest-commit' is non-nil, use the latest commit
-hash of the file in the buffer.
+If the word under point is not a valid commit hash, use the latest commit hash
+of the file in the buffer.
 
 With a prefix argument prompt for the remote's name. Defaults to \"origin\"."
       (interactive (list (git-link--select-remote)))
-      (let* ((valid-commit-regexp "[a-z0-9]\\{7,40\\}")
-             (remote-host (git-link--remote-host remote))
-             (word-at-pt (word-at-point))
-             (commit (if (and word-at-pt
-                              (string-match valid-commit-regexp word-at-pt))
-                         word-at-pt
-                       (if git-link-commit-fallback-use-latest-commit
-                           (git-link--last-commit)
-                         "")))
-             (handler (cl-loop for (key . value) in git-link-commit-remote-alist
-                               when (string-match-p key remote-host)
-                               finally return (car value))))
-        (cond ((null remote-host)
-               (message "Remote `%s' is unknown or contains an unsupported URL" remote))
-              ((not (string-match valid-commit-regexp commit))
-               (message "Invalid commit hash"))
-              ((not (functionp handler))
-               (message "No handler for %s" remote-host))
-              ;; null ret val
-              ((git-link--new
-                (funcall handler
-                         remote-host
-                         (git-link--remote-dir remote)
-                         commit))))))
+      ;; Replace the `word-at-point' function within `git-link-commit' with a
+      ;; custom function that returns the latest commit hash of the file in
+      ;; buffer if point is not on a valid commit hash.
+      (cl-letf (((symbol-function 'word-at-point)
+                 (lambda ()
+                   (let ((word (thing-at-point 'word))
+                         (valid-commit-regexp "[a-z0-9]\\{7,40\\}"))
+                     (if (and word (string-match-p valid-commit-regexp word))
+                         word
+                       (git-link--last-commit))))))
+        (git-link-commit remote)))
 
     (defun modi/git-link (use-branch-maybe)
       "Get git link with the exact commit hash, not the branch name.
