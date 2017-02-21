@@ -1,10 +1,12 @@
-;; Time-stamp: <2016-05-19 22:28:44 kmodi>
+;; Time-stamp: <2017-02-21 18:32:35 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
 (use-package tiny
-  :bind (:map modi-mode-map
-         ("C-c \\" . modi/tiny-helper))
+  :defer t
+  :init
+  (progn
+    (bind-to-modi-map "\\" #'modi/tiny-helper))
   :chords (("]\\" . modi/tiny-helper))
   :config
   (progn
@@ -23,25 +25,35 @@ Usage: M-x COMMAND ↵↵↵↵↵            -> 0 1 2 3 4 5 6 7 8 9
                                         ; not possible at point.
          (list (number-to-string (string-to-number
                                   (read-string
-                                   (concat "END value "
+                                   (concat (propertize "tiny-helper: "
+                                                       'face 'font-lock-function-name-face)
+                                           "END value "
                                            "[Hit RET for default=0; "
                                            "auto-set to 9 if both "
                                            "begin and end values are 0]: "))))
                (number-to-string (string-to-number
                                   (read-string
-                                   (concat "BEGIN value "
+                                   (concat (propertize "tiny-helper: "
+                                                       'face 'font-lock-function-name-face)
+                                           "BEGIN value "
                                            "[Hit RET for default=0; "
                                            "this has to be *smaller* than the "
                                            "end value]: "))))
-               (read-string (concat "Separator "
+               (read-string (concat (propertize "tiny-helper: "
+                                                'face 'font-lock-function-name-face)
+                                    "Separator "
                                     "[Hit RET for default=Space; "
                                     "eg: \\n; "
                                     "no math operators like - or = allowed]: "))
-               (read-string (concat "Lisp Operation "
+               (read-string (concat (propertize "tiny-helper: "
+                                                'face 'font-lock-function-name-face)
+                                    "Lisp Operation "
                                     "[Hit RET for default=no Lisp operation; "
                                     "parentheses are optional; "
                                     "eg: *xx | (+ x ?A) | *2+3x]: "))
-               (read-string (concat "Format "
+               (read-string (concat (propertize "tiny-helper: "
+                                                'face 'font-lock-function-name-face)
+                                    "Format "
                                     "[Hit RET for default=%0d; "
                                     "eg: %x | 0x%x | %c | %s | %(+ x x) | "
                                     "%014.2f | %03d; parentheses required "
