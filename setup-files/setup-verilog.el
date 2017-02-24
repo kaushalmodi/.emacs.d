@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-01 09:01:35 kmodi>
+;; Time-stamp: <2017-02-24 16:12:25 kmodi>
 
 ;; Verilog
 
@@ -444,6 +444,10 @@ The match with \"//.\" resolves this issue:
 If OPTION is \\='(4) (using `\\[universal-argument]' prefix), run simulation.
 If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' prefix), run linter."
       (interactive "P")
+      (when (fboundp #'modi/verilog-tool-setup)
+        ;; Update values of `verilog-simualator', `verilog-compiler', etc here
+        ;; if this function is defined.
+        (modi/verilog-tool-setup))
       (cl-case (car option)
         (4  (setq verilog-tool 'verilog-simulator))
         (16 (setq verilog-tool 'verilog-linter))
