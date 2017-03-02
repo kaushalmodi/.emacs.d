@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-19 16:24:30 kmodi>
+;; Time-stamp: <2017-03-02 18:21:16 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -174,7 +174,8 @@ Example usage:
      (require 'package)
      (setq user-emacs-directory (concat temporary-file-directory
                                         (getenv "USER") "/" ".emacs.d-debug/"))
-     (setq package-user-dir (concat user-emacs-directory "elpa/"))
+     (setq package-user-dir (format "%selpa_%s/"
+                                    user-emacs-directory emacs-major-version))
      (let (archive pkgs)
        (dolist (archive-alist ,pkg-alist)
 	 (setq archive (car archive-alist))
