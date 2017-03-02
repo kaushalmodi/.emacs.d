@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-02 15:20:47 kmodi>
+;; Time-stamp: <2017-03-02 18:44:08 kmodi>
 
 ;; Setup for different tags
 
@@ -130,7 +130,11 @@ asked for the TAGS file location, but only if that file is not present.
 
 Otherwise, if `ctags-update' is called non-interactively (example, via the
 `after-save-hook'), if the TAGS file is present, return that file's path; else
-do nothing and return nil."
+do nothing and return nil.
+
+This function also prevents the user-error \"Another ctags-update process is
+already running\" caused in `ctags-update' function if value returned by this
+function is non-nil and the tag generation process is already running."
         (let (tags)
           (cond
            ((> (prefix-numeric-value current-prefix-arg) 1)  ;C-u or C-uC-u ,generate new tags in selected directory
@@ -142,9 +146,15 @@ do nothing and return nil."
               (setq tags (expand-file-name "TAGS"
                                            (read-directory-name "Generate TAGS in dir:")))))
            (t
-            (setq tags (ctags-update-find-tags-file))
             ;; If the TAGS file does not exist in this case, `tags' is set to nil.
-            ))
+            (setq tags (ctags-update-find-tags-file))
+            (when tags
+              (let ((process-already-running (get-process tags)))
+                (when process-already-running
+                  ;; Prevent the user-error "Another ctags-update process is
+                  ;; already running" caused in `ctags-update' function if tags
+                  ;; is non-nil and the tag generation process is already running.
+                  (setq tags nil))))))
           tags))
       (advice-add 'ctags-update-how-to-update :override #'modi/ctags-update-how-to-update)
 
