@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-27 23:27:12 kmodi>
+;; Time-stamp: <2017-03-02 10:31:22 kmodi>
 
 ;; Git Link
 ;; https://github.com/sshaw/git-link
@@ -62,11 +62,11 @@ With a prefix argument prompt for the remote's name. Defaults to \"origin\"."
       ;; buffer if point is not on a valid commit hash.
       (cl-letf (((symbol-function 'word-at-point)
                  (lambda ()
-                   (let ((word (downcase (thing-at-point 'word)))
-                         (valid-commit-regexp "[a-f0-9]\\{7,40\\}"))
+                   (let ((word (thing-at-point 'word))
+                         (valid-commit-regexp "[a-fA-F0-9]\\{7,40\\}"))
                      (if (and word (string-match-p valid-commit-regexp word))
                          word
-                       (git-link--last-commit))))))
+                       (git-link--commit))))))
         (git-link-commit remote)))
 
     (defun modi/git-link (use-branch-maybe)
