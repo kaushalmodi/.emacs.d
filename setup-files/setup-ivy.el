@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-06 17:43:19 kmodi>
+;; Time-stamp: <2017-03-02 12:14:27 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
@@ -34,6 +34,26 @@
     (setq ivy-set-prompt-text-properties-function 'modi/ivy-set-prompt-text-properties)
 
     ;; https://github.com/abo-abo/swiper/blob/master/ivy-hydra.el
+    ;; https://www.reddit.com/r/emacs/comments/5wwkg6/using_emacs_31_elfeed_part_3_macros/deds4jx/
+    (defun ivy-dispatching-done-hydra ()
+      "Select one of the available actions and call `ivy-done'."
+      (interactive)
+      (let ((actions (ivy-state-action ivy-last)))
+        (if (null (ivy--actionp actions))
+            (ivy-done)
+          (funcall
+           (eval
+            `(defhydra ivy-read-action (:color teal)
+               "action"
+               ,@(mapcar (lambda (x)
+                           (list (nth 0 x)
+                                 `(progn
+                                    (ivy-set-action ',(nth 1 x))
+                                    (ivy-done))
+                                 (nth 2 x)))
+                         (cdr actions))
+               ("M-o" nil "back")))))))
+
     (defun ivy--matcher-desc () ; used in `hydra-ivy'
       (if (eq ivy--regex-function
               'ivy--regex-fuzzy)
@@ -83,7 +103,8 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
       ("C-j" . ivy-done) ; default C-m
       ("C-S-m" . ivy-immediate-done)
       ("C-t" . ivy-toggle-fuzzy)
-      ("C-o" . hydra-ivy/body))
+      ("C-o" . hydra-ivy/body)
+      ("M-o" . ivy-dispatching-done-hydra))
     (key-chord-define ivy-minibuffer-map "m," #'ivy-beginning-of-buffer)
     (key-chord-define ivy-minibuffer-map ",." #'ivy-end-of-buffer)
 
