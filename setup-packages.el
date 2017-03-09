@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-05 11:45:20 kmodi>
+;; Time-stamp: <2017-03-09 14:19:42 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -116,6 +116,16 @@ package installations."
     new-ret))
 (advice-add 'package-compute-transaction :filter-return #'modi/package-dependency-check-ignore)
 ;; (advice-remove 'package-compute-transaction #'modi/package-dependency-check-ignore)
+
+(defun modi/byte-recompile-elpa ()
+  "Force byte-compile every `.el' file in `package-user-dir'.
+The `.el' files are re-compiled even if the corresponding `.elc' files exist,
+in all the sub-directories under `package-user-dir'.
+
+If the `.elc' file does not exist, this function *does not* compile the
+corresponding `.el' file."
+  (interactive)
+  (byte-recompile-directory package-user-dir nil :force))
 
 
 (provide 'setup-packages)
