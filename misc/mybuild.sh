@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2016-11-30 18:07:45 kmodi>
+# Time-stamp: <2017-03-20 10:31:30 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -89,8 +89,7 @@ if [[ ${no_git_update} -eq 0 ]]
 then
     git fetch --all # fetch new branch names if any
     git checkout ${emacs_rev_basename}
-    git fetch --all
-    git reset --hard ${emacs_rev}
+    git pull
     echo "Waiting for 5 seconds .. "
     sleep 5
 fi
