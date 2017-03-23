@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-05 11:00:55 kmodi>
+;; Time-stamp: <2017-03-23 12:59:29 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -121,28 +121,37 @@ If point reaches the beginning or end of the buffer, stop there."
   :defer t
   :config
   (progn
-    ;; I like to use the `find-file-at-point' feature if my cursor is on the
-    ;; file name in a line like below,
-    ;;
-    ;;   `include "some_file.v".
-    ;;
-    ;; In Verilog/C/C++, comments can begin with //.
-    ;;
-    ;;   //This is an example comment
-    ;;
-    ;; Pre-requisites for this bug to show up in emacs -Q:
-    ;;
-    ;;  (ido-mode 1)
-    ;;  (setq ido-use-filename-at-point 'guess)
-    ;;
-    ;; Now if my cursor is on the above example comment and if I hit C-x C-f,
-    ;; emacs tries to open a tentative path "//This"!
-    ;;
-    ;; Below `modi/ffap-string-at-point' function is used to advice the
-    ;; `ffap-string-at-point' using ":override" to fix this. This function is
-    ;; based on the solution from http://emacs.stackexchange.com/q/107/115.
-    (defun modi/ffap-string-at-point (&optional mode)
-      "Return a string of characters from around point.
+
+    ;; Thu Mar 23 12:57:19 EDT 2017 - kmodi
+    ;; Below fix to `ffap-string-at-point' got merged into emacs master branch
+    ;; today, so that will be seen in the 26.1 release.
+    ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=e472cfe8f3b01f29a49614f6207e4128e8b36b8c
+    ;; So the below advice is not needed if using the current emacs master
+    ;; branch version 26.0, or newer.
+    (>=e "26.0"
+        nil                    ;Don't apply the advice if on emacs 26.0 or newer
+      ;; I like to use the `find-file-at-point' feature if my cursor is on the
+      ;; file name in a line like below,
+      ;;
+      ;;   `include "some_file.v".
+      ;;
+      ;; In Verilog/C/C++, comments can begin with //.
+      ;;
+      ;;   //This is an example comment
+      ;;
+      ;; Pre-requisites for this bug to show up in emacs -Q:
+      ;;
+      ;;  (ido-mode 1)
+      ;;  (setq ido-use-filename-at-point 'guess)
+      ;;
+      ;; Now if my cursor is on the above example comment and if I hit C-x C-f,
+      ;; emacs tries to open a tentative path "//This"!
+      ;;
+      ;; Below `modi/ffap-string-at-point' function is used to advice the
+      ;; `ffap-string-at-point' using ":override" to fix this. This function is
+      ;; based on the solution from http://emacs.stackexchange.com/q/107/115.
+      (defun modi/ffap-string-at-point (&optional mode)
+        "Return a string of characters from around point.
 
 MODE (defaults to value of `major-mode') is a symbol used to look up
 string syntax parameters in `ffap-string-at-point-mode-alist'.
@@ -170,61 +179,61 @@ Sets variables `ffap-string-at-point' and `ffap-string-at-point-region'.
 | // ▮/tmp                          | /tmp                            |
 | // ▮//tmp                         | //tmp                           |
 |-----------------------------------+---------------------------------| "
-      (let* ((args
-              (cdr
-               (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
-                   (assq 'file ffap-string-at-point-mode-alist))))
-             (region-selected (use-region-p))
-             (pt (point))
-             (beg (if region-selected
-                      (region-beginning)
-                    (save-excursion
-                      (skip-chars-backward (car args))
-                      (skip-chars-forward (nth 1 args) pt)
-                      (point))))
-             (end (if region-selected
-                      (region-end)
-                    (save-excursion
-                      (skip-chars-forward (car args))
-                      (skip-chars-backward (nth 2 args) pt)
-                      (point))))
-             (beg-new beg))
-        ;; (message "ffap-string-at-point dbg: beg = %d end = %d" beg end)
-        ;; If the initial characters of the to-be-returned string are the
-        ;; current major mode's comment starter characters, *and* are not part
-        ;; of a comment, remove those from the returned string (Bug#24057).
-        ;; Example comments in `c-mode' (which considers lines beginning with
-        ;; "//" as comments):
-        ;;  //tmp - This is a comment. It does not contain any path reference.
-        ;;  ///tmp - This is a comment. The "/tmp" portion in that is a path.
-        ;;  ////tmp - This is a comment. The "//tmp" portion in that is a path.
-        (when (and
-               ;; Proceed if no region is selected by the user.
-               (null region-selected)
-               ;; Check if END character is part of a comment.
-               (save-excursion
-                 (goto-char end)
-                 (nth 4 (syntax-ppss))))
-          (save-excursion
-            ;; Increment BEG till point at BEG is in a comment too.
-            ;; (nth 4 (syntax-ppss)) will be nil for comment start characters
-            ;; (for example, for the "//" characters in `c-mode' line comments).
-            (setq beg (catch 'break
-                        (while (< beg-new end)
-                          (goto-char beg-new)
-                          (if (nth 4 (syntax-ppss)) ; in a comment
-                              (throw 'break beg-new)
-                            (setq beg-new (1+ beg-new))))
-                        end)))) ; Set BEG to END if no throw happens
-        ;; (message "ffap-string-at-point dbg: beg = %d beg-new = %d" beg beg-new)
-        (setq ffap-string-at-point
-              (buffer-substring-no-properties
-               (setcar ffap-string-at-point-region beg)
-               (setcar (cdr ffap-string-at-point-region) end)))
-        ;; (message "ffap-string-at-point dbg: ffap-string-at-point = %S"
-        ;;          ffap-string-at-point)
-        ffap-string-at-point))
-    (advice-add 'ffap-string-at-point :override #'modi/ffap-string-at-point)))
+        (let* ((args
+                (cdr
+                 (or (assq (or mode major-mode) ffap-string-at-point-mode-alist)
+                     (assq 'file ffap-string-at-point-mode-alist))))
+               (region-selected (use-region-p))
+               (pt (point))
+               (beg (if region-selected
+                        (region-beginning)
+                      (save-excursion
+                        (skip-chars-backward (car args))
+                        (skip-chars-forward (nth 1 args) pt)
+                        (point))))
+               (end (if region-selected
+                        (region-end)
+                      (save-excursion
+                        (skip-chars-forward (car args))
+                        (skip-chars-backward (nth 2 args) pt)
+                        (point))))
+               (beg-new beg))
+          ;; (message "ffap-string-at-point dbg: beg = %d end = %d" beg end)
+          ;; If the initial characters of the to-be-returned string are the
+          ;; current major mode's comment starter characters, *and* are not part
+          ;; of a comment, remove those from the returned string (Bug#24057).
+          ;; Example comments in `c-mode' (which considers lines beginning with
+          ;; "//" as comments):
+          ;;  //tmp - This is a comment. It does not contain any path reference.
+          ;;  ///tmp - This is a comment. The "/tmp" portion in that is a path.
+          ;;  ////tmp - This is a comment. The "//tmp" portion in that is a path.
+          (when (and
+                 ;; Proceed if no region is selected by the user.
+                 (null region-selected)
+                 ;; Check if END character is part of a comment.
+                 (save-excursion
+                   (goto-char end)
+                   (nth 4 (syntax-ppss))))
+            (save-excursion
+              ;; Increment BEG till point at BEG is in a comment too.
+              ;; (nth 4 (syntax-ppss)) will be nil for comment start characters
+              ;; (for example, for the "//" characters in `c-mode' line comments).
+              (setq beg (catch 'break
+                          (while (< beg-new end)
+                            (goto-char beg-new)
+                            (if (nth 4 (syntax-ppss)) ; in a comment
+                                (throw 'break beg-new)
+                              (setq beg-new (1+ beg-new))))
+                          end)))) ; Set BEG to END if no throw happens
+          ;; (message "ffap-string-at-point dbg: beg = %d beg-new = %d" beg beg-new)
+          (setq ffap-string-at-point
+                (buffer-substring-no-properties
+                 (setcar ffap-string-at-point-region beg)
+                 (setcar (cdr ffap-string-at-point-region) end)))
+          ;; (message "ffap-string-at-point dbg: ffap-string-at-point = %S"
+          ;;          ffap-string-at-point)
+          ffap-string-at-point))
+      (advice-add 'ffap-string-at-point :override #'modi/ffap-string-at-point))))
 
 ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
 ;; A three-headed hydra for jumping between "errors", useful for
