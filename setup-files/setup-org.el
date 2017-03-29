@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-23 17:49:32 kmodi>
+;; Time-stamp: <2017-03-29 18:05:32 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -161,6 +161,19 @@
     ;; set to nil, formula will not be automatically evaluated when hitting TAB.
     ;; But you can still using ‘C-c =’ to evaluate it manually when needed.
     (setq org-table-formula-evaluate-inline nil) ; default = t
+
+    ;; The default value of `org-highlight-links' contains `plain' too.
+    ;; - "plain" links are links in normal text, no whitespace, like http://foo.com.
+    ;; Here's why I remove "plain" from this list:
+    ;; - If I have two bracketed links next to each-other in org-mode (like below),
+    ;;     [[http://google.com][1]],[[http://orgmode.org][2]]
+    ;; - and, if `plain' is in the `org-highlight-links' list,
+    ;;  the "," in there will also be highlighted as a link. So it would look
+    ;;  as if the "1,2" string pointed to a single link!
+    ;;    But without `plain' as part of this list, the "1" and "2" strings will
+    ;; look like separate links (as should be the case), as the "," will not be
+    ;; highlighted as a link.
+    (setq org-highlight-links (delete 'plain org-highlight-links))
 
 ;;; Agenda and Capture
     ;; http://orgmode.org/manual/Template-elements.html
