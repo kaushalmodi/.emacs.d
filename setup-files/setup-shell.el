@@ -31,7 +31,7 @@ I prefer the default sh indentation style to the default bash style.")
                                 (csh . csh)
                                 (tcsh . csh)))
 
-    (defun sh-set-shell (shell &optional no-query-flag insert-flag)
+    (defun modi/sh-set-shell (shell &optional no-query-flag insert-flag)
       "Set this buffer's shell to SHELL (a string).
 When used interactively, insert the proper starting #!-line,
 and make the visited file executable via `executable-set-magic',
@@ -106,8 +106,8 @@ whose value is the shell name (don't quote it)."
                       (funcall mksym "rules")
                       :forward-token  (funcall mksym "forward-token")
                       :backward-token (funcall mksym "backward-token")))
+        (setq-local parse-sexp-lookup-properties t)
         (unless sh-use-smie
-          (setq-local parse-sexp-lookup-properties t)
           (setq-local sh-kw-alist (sh-feature sh-kw))
           (let ((regexp (sh-feature sh-kws-for-done)))
             (if regexp
@@ -133,7 +133,8 @@ whose value is the shell name (don't quote it)."
         (font-lock-set-defaults)
         (font-lock-flush))
       (setq sh-shell-process nil)
-      (run-hooks 'sh-set-shell-hook))))
+      (run-hooks 'sh-set-shell-hook))
+    (advice-add 'sh-set-shell :override #'modi/sh-set-shell)))
 
 (defun modi/shell-region (start end)
   "Execute region in a shell corresponding to the local value of `sh-shell'.
