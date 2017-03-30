@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-04 15:15:31 kmodi>
+;; Time-stamp: <2017-03-30 15:44:45 kmodi>
 
 ;; Shell Script Mode
 
@@ -30,6 +30,22 @@ I prefer the default sh indentation style to the default bash style.")
                                 (rc . rc)
                                 (csh . csh)
                                 (tcsh . csh)))
+
+    ;; Thu Mar 30 15:41:39 EDT 2017 - kmodi
+    ;; Below function is the same as original except that that message is not
+    ;; displayed at the end.
+    (defun modi/sh-make-vars-local ()
+      "Make the indentation variables local to this buffer.
+Normally they already are local.  This command is provided in case
+variable `sh-make-vars-local' has been set to nil.
+
+To revert all these variables to the global values, use
+command `sh-reset-indent-vars-to-global-values'."
+      (interactive)
+      (mapc 'make-local-variable sh-var-list)
+      ;; (message "Indentation variables are now local.")
+      )
+    (advice-add 'sh-make-vars-local :override #'modi/sh-make-vars-local)
 
     (defun modi/sh-set-shell (shell &optional no-query-flag insert-flag)
       "Set this buffer's shell to SHELL (a string).
