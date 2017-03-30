@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-21 15:57:21 kmodi>
+;; Time-stamp: <2017-03-30 08:07:36 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -36,7 +36,6 @@
 ;;    Popping marks
 ;;    Smart Mark
 ;;  Tweaking `region-extract-function'
-;;  Mouse Copy
 ;;  Commenting
 ;;  Anonymize
 ;;  Bindings
@@ -1041,18 +1040,6 @@ Else, execute ORIG function."
           (buffer-string)))
     (funcall orig delete)))
 (add-function :around region-extract-function #'modi/region-extract-function--C-u-kill)
-
-;;; Mouse Copy
-(use-package mouse-copy
-  :bind (:map modi-mode-map
-         ;; Mouse drag secondary pasting
-         ;; Put the point at one place, then click-drag using the below binding,
-         ;; and the selected region will be COPIED at the point location.
-         ("<s-down-mouse-1>" . mouse-drag-secondary-pasting)
-         ;; Mouse drag secondary moving
-         ;; Put the point at one place, then click-drag using the below binding,
-         ;; and the selected region will be MOVED to the point location.
-         ("<S-s-down-mouse-1>" . mouse-drag-secondary-moving)))
 
 ;;; Commenting
 ;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line

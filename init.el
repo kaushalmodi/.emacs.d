@@ -308,7 +308,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 
 (>=e "25.1"
     nil       ; Emacs 25.1 has `M-.' bound to `xref-find-definitions' by default
-              ; which works better than elisp-slime-nav
+                                        ; which works better than elisp-slime-nav
   (require 'setup-elisp-slime-nav))
 
 ;; Blend of other setup
@@ -316,6 +316,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-editing)
 (require 'setup-image)
 (require 'setup-launcher)
+(require 'setup-mouse)
 (require 'setup-navigation)
 (require 'setup-pdf)
 (require 'setup-print)

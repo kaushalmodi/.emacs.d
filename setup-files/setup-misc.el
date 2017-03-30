@@ -12,9 +12,6 @@
         (make-directory dir :parents)
         dir))
 
-;; Do not make mouse wheel accelerate its action (example: scrolling)
-(setq mouse-wheel-progressive-speed nil)
-
 ;; Make apropos commands search more extensively
 (setq apropos-do-all t)
 

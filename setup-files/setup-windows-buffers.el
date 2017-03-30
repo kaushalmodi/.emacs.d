@@ -19,16 +19,13 @@
 ;;  Untouchable Minibuffer Prompt
 ;;  Toggle between buffers
 ;;  Scrolling
-;;    Mouse Scrolling
 ;;  File Permissions
 ;;  One Window Toggle
-;;  Swap Buffers using Mouse
 ;;  Kill/Bury Buffer
 ;;  Other Window/Buffer
 ;;  *Messages* Auto-tail
 ;;  Bindings
 ;;    Read-only Buffer Bindings
-;;    Mode-line Mouse Bindings
 ;;    Other Bindings
 
 ;;; Variables
@@ -413,33 +410,6 @@ If LN is nil, defaults to 1 line."
  ("<C-M-left>"  . modi/scroll-other-window-down)
  ("<C-M-right>" . modi/scroll-other-window-up))
 
-;;;; Mouse Scrolling
-(bind-keys
- ("<mouse-4>" . modi/scroll-down)
- ("<mouse-5>" . modi/scroll-up))
-
-(bind-keys
- :map modi-mode-map
-  ;; Make Alt+mousewheel scroll the other buffer
-  ("<M-mouse-4>" . modi/scroll-other-window-down) ; M + wheel up
-  ("<M-mouse-5>" . modi/scroll-other-window-up)) ; M + wheel down
-
-;; Allow scrolling of all buffers using mouse-wheel in `scroll-all-mode'.
-;; By default, `scroll-all-mode' works only with C-v/M-v.
-(defun modi/advice-mwhell-scroll-all (orig-fun &rest args)
-  "Execute ORIG-FUN in all the windows."
-  (let (ret)
-    (if scroll-all-mode
-        (save-selected-window (walk-windows (lambda (win)
-                                              (select-window win)
-                                              (condition-case nil
-                                                  (setq ret (apply orig-fun args))
-                                                (error nil)))))
-      (setq ret (apply orig-fun args)))
-    ret))
-(advice-add 'scroll-up   :around #'modi/advice-mwhell-scroll-all)
-(advice-add 'scroll-down :around #'modi/advice-mwhell-scroll-all)
-
 ;;; File Permissions
 (defun modi/set-file-permissions (perm)
   "Change permissions of the file in current buffer.
@@ -475,25 +445,6 @@ the current window and the windows state prior to that."
       (when modi/toggle-one-window--buffer-name
         (set-window-configuration modi/toggle-one-window--window-configuration)
         (switch-to-buffer modi/toggle-one-window--buffer-name)))))
-
-;;; Swap Buffers using Mouse
-;; https://tsdh.wordpress.com/2015/03/03/swapping-emacs-windows-using-dragndrop/
-(defun th/swap-window-buffers-by-dnd (drag-event)
-  "Swaps the buffers displayed in the DRAG-EVENT's start and end window."
-  (interactive "e")
-  (let ((start-win (cl-caadr drag-event))
-        (end-win   (cl-caaddr drag-event)))
-    (when (and (windowp start-win)
-               (windowp end-win)
-               (not (eq start-win end-win))
-               (not (memq (minibuffer-window)
-                          (list start-win end-win))))
-      (let ((bs (window-buffer start-win))
-            (be (window-buffer end-win)))
-        (unless (eq bs be)
-          (set-window-buffer start-win be)
-          (set-window-buffer end-win bs))))))
-(bind-key "<C-S-drag-mouse-1>" #'th/swap-window-buffers-by-dnd modi-mode-map)
 
 ;;; Kill/Bury Buffer
 (defun modi/kill-buffer-dwim (kill-next-error-buffer)
@@ -559,16 +510,6 @@ buffers: *gtags-global*, *ag*, *Occur*."
   (define-key map (kbd "k") #'modi/kill-buffer-dwim) ; only kill
   (define-key map (kbd "z") #'quit-window) ; quit + bury
   (define-key map (kbd "q") #'modi/quit-and-kill-window)) ; quit + kill
-
-;;;; Mode-line Mouse Bindings
-;; Bind a function to execute when middle clicking a buffer name in mode line
-;; http://stackoverflow.com/a/26629984/1219634
-(bind-key "<mode-line> <mouse-2>" #'modi/copy-buffer-file-name
-          mode-line-buffer-identification-keymap)
-(bind-key "<mode-line> <S-mouse-2>" (lambda ()
-                                      (interactive)
-                                      (modi/copy-buffer-file-name 4))
-          mode-line-buffer-identification-keymap)
 
 ;;;; Other Bindings
 (bind-keys
