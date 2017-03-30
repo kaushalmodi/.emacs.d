@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-24 17:27:25 kmodi>
+;; Time-stamp: <2017-03-30 09:01:31 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -392,7 +392,15 @@ If LN is negative, scroll the buffer down."
                 (pdf-view-next-line-or-next-page ln)
               (pdf-view-previous-line-or-previous-page (- ln))))
           (set-window-point other-win (point)))
-      (scroll-other-window ln))))
+      (if (modi/mouse-scroll-p last-input-event) ;defined in `setup-mouse.el'
+          ;; If using mouse to scroll the other window, respect the scroll
+          ;; amount set in `mouse-wheel-scroll-amount'.
+          (let* ((mouse-ln-1 (car mouse-wheel-scroll-amount))
+                 (mouse-ln (if (natnump ln)
+                               mouse-ln-1 ;scroll up
+                             (- mouse-ln-1)))) ;scroll down
+            (scroll-other-window mouse-ln))
+        (scroll-other-window ln)))))
 
 (defalias 'modi/scroll-other-window-up 'modi/scroll-other-window)
 
