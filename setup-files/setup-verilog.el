@@ -586,27 +586,10 @@ for all the `included files."
 ;;; hideshow
     (with-eval-after-load 'hideshow
       (add-to-list 'hs-special-modes-alist
-                   `(verilog-mode ,(concat "\\b\\(begin"
-                                           "\\|task"
-                                           "\\|function"
-                                           "\\|class"
-                                           "\\|module"
-                                           "\\|program"
-                                           "\\|interface"
-                                           "\\|module"
-                                           "\\|case"
-                                           "\\|fork\\)\\b")
-                                  ,(concat "\\b\\(end"
-                                           "\\|endtask"
-                                           "\\|endfunction"
-                                           "\\|endclass"
-                                           "\\|endmodule"
-                                           "\\|endprogram"
-                                           "\\|endinterface"
-                                           "\\|endmodule"
-                                           "\\|endcase"
-                                           "\\|join\\|join_none\\|join_any\\)\\b")
-                                  nil verilog-forward-sexp-function)))
+                   `(verilog-mode ,modi/verilog-block-start-keywords-re
+                                  ,modi/verilog-block-end-keywords-re
+                                  nil
+                                  verilog-forward-sexp-function)))
 
 ;;; hydra-verilog-template
     (defhydra hydra-verilog-template (:color blue
