@@ -16,7 +16,7 @@
 ;;    modi/verilog-find-parent-module (interactive)
 ;;    modi/verilog-selective-indent
 ;;    modi/verilog-compile
-;;    convert end-block comments to block names
+;;    convert block-end comments to block names
 ;;    Do not open all `included files
 ;;  hideshow
 ;;  hydra-verilog-template
@@ -111,6 +111,29 @@ IEEE 1800-2012 SystemVerilog Section 5.6 Identifiers, keywords,and system names.
               "(" ; opening parenthesis `(' before port list
               )
       "Regexp for a valid verilog module instance declaration.")
+    (defvar modi/verilog-block-end-keywords '("end"
+                                              "join" "join_any" "join_none"
+                                              "endchecker"
+                                              "endclass"
+                                              "endclocking"
+                                              "endconfig"
+                                              "endfunction"
+                                              "endgroup"
+                                              "endinterface"
+                                              "endmodule"
+                                              "endpackage"
+                                              "endprimitive"
+                                              "endprogram"
+                                              "endproperty"
+                                              "endsequence"
+                                              "endtask")
+      "Verilog/SystemVerilog block end keywords.
+IEEE 1800-2012 SystemVerilog Section 9.3.4 Block names.")
+
+    (defvar modi/verilog-block-end-keywords-re
+      (regexp-opt modi/verilog-block-end-keywords 'symbols)
+      "Regexp to match the Verilog/SystemVerilog block end keywords.
+See `modi/verilog-block-end-keywords' for more.")
 
     (defconst modi/verilog-header-re
       (concat "^\\s-*"
@@ -501,10 +524,9 @@ If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' pre
       (interactive)
       (modi/verilog-compile '(4)))
 
-;;;; convert end-block comments to block names
-    (defun modi/verilog-end-block-comments-to-block-names ()
-      "Convert valid end-block comments to ': BLOCK_NAME'.
-Reference: IEEE 1800-2012 SystemVerilog Section 9.3.4 Block Names.
+;;;; convert block-end comments to block names
+    (defun modi/verilog-block-end-comments-to-block-names ()
+      "Convert valid block-end comments to ': BLOCK_NAME'.
 
 Examples: endmodule // module_name             → endmodule : module_name
           endfunction // some comment          → endfunction // some comment
@@ -513,38 +535,21 @@ Examples: endmodule // module_name             → endmodule : module_name
       (interactive)
       (save-excursion
         (goto-char (point-min))
-        (let* ((end-block-keywords '("end"
-                                     "join"
-                                     "join_any"
-                                     "join_none"
-                                     "endchecker"
-                                     "endclass"
-                                     "endclocking"
-                                     "endconfig"
-                                     "endfunction"
-                                     "endgroup"
-                                     "endinterface"
-                                     "endmodule"
-                                     "endpackage"
-                                     "endprimitive"
-                                     "endprogram"
-                                     "endproperty"
-                                     "endsequence"
-                                     "endtask"))
-               (end-block-keywords-re (regexp-opt end-block-keywords 'words)))
-          (while (re-search-forward (concat "^"
-                                            "\\(?1:\\s-*" end-block-keywords-re "\\)"
-                                            "\\s-*//\\s-*"
-                                            "\\(\\(block:\\|"
-                                            modi/verilog-identifier-re "\\s-*::\\)\\s-*\\)*"
-                                            "\\(?2:" modi/verilog-identifier-re "\\)"
-                                            "\\s-*$")
-                                    nil :noerror)
-            ;; Make sure that the matched string after "//" is not a verilog
-            ;; keyword.
-            (when (not (string-match-p (regexp-opt verilog-keywords 'words)
-                                       (match-string 2)))
-              (replace-match "\\1 : \\2"))))))
+        (while (re-search-forward (concat "^"
+                                          "\\(?1:\\s-*"
+                                          modi/verilog-block-end-keywords-re
+                                          "\\)"
+                                          "\\s-*//\\s-*"
+                                          "\\(\\(block:\\|"
+                                          modi/verilog-identifier-re "\\s-*::\\)\\s-*\\)*"
+                                          "\\(?2:" modi/verilog-identifier-re "\\)"
+                                          "\\s-*$")
+                                  nil :noerror)
+          ;; Make sure that the matched string after "//" is not a verilog
+          ;; keyword.
+          (when (not (string-match-p (regexp-opt verilog-keywords 'words)
+                                     (match-string 2)))
+            (replace-match "\\1 : \\2")))))
 
 ;;;; Do not open all `included files
     (defun modi/verilog-do-not-read-includes ()
@@ -687,8 +692,8 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; just in comments). To do the highlighting intelligently, install the
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
 
-      ;; Convert end-block comments to ': BLOCK_NAME' in verilog-mode.
-      (add-hook 'before-save-hook #'modi/verilog-end-block-comments-to-block-names nil :local)
+      ;; Convert block-end comments to ': BLOCK_NAME' in verilog-mode.
+      (add-hook 'before-save-hook #'modi/verilog-block-end-comments-to-block-names nil :local)
 
       ;; Replace tabs with spaces when saving files in verilog-mode.
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
