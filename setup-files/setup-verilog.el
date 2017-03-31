@@ -137,55 +137,38 @@ See `modi/verilog-block-end-keywords' for more.")
 
     (defconst modi/verilog-header-re
       (concat "^\\s-*"
-              "\\([a-z]+\\s-+\\)*" ; virtual, local, protected
-              "\\(?1:" "case" ; force group number to 1
-              "\\|" "class"
-              "\\|" "clocking"
-              "\\|" "`define"
-              "\\|" "function"
-              "\\|" "group"
-              "\\|" "interface"
-              "\\|" "module"
-              "\\|" "program"
-              "\\|" "primitive"
-              "\\|" "package"
-              "\\|" "property"
-              "\\|" "sequence"
-              "\\|" "specify"
-              "\\|" "table"
-              "\\|" "task" "\\)"
+              "\\([a-z]+\\s-+\\)*" ; optional virtual, local, protected
+              "\\(?1:"          ; force group number to 1
+              (regexp-opt '("case"
+                            "class"
+                            "clocking"
+                            "`define"
+                            "function"
+                            "group"
+                            "interface"
+                            "module"
+                            "program"
+                            "primitive"
+                            "package"
+                            "property"
+                            "sequence"
+                            "specify"
+                            "table"
+                            "task")
+                          'symbols)
+              "\\)"
               "\\s-+"
-              "\\([a-z]+\\s-+\\)*" ; void, static, automatic, ..
+              "\\([a-z]+\\s-+\\)*" ; optional void, static, automatic, ..
               "\\(?2:"
               "\\(?:" modi/verilog-identifier-re "::\\)*" ; allow parsing extern methods like class::task
               modi/verilog-identifier-re ; block name, force group number to 2
               "\\)"
               "\\b"
               )
-      "Regexp for a valid verilog block header statement.")
+      "Regexp to match valid Verilog/SystemVerilog block header statement.")
 
-    (defvar modi/verilog-keywords-re nil
-      "Regexp for reserved verilog keywords which should not be incorrectly
-parsed as a module or instance name.")
-    ;; Generate the regexp `modi/verilog-keywords-re' based on the list of
-    ;; keywords in `verilog-keywords'.
-    (let ((cnt 1)
-          ;; `verilog-keywords' list is defined in the `verilog-mode.el'
-          (max-cnt (safe-length verilog-keywords)))
-      (dolist (keyword verilog-keywords)
-        (cond
-         ((= cnt 1)       (setq modi/verilog-keywords-re
-                                (concat "\\("
-                                        "\\b" keyword "\\b")))
-         ((= cnt max-cnt) (setq modi/verilog-keywords-re
-                                (concat modi/verilog-keywords-re
-                                        "\\|"
-                                        "\\b" keyword "\\b" "\\)")))
-         (t               (setq modi/verilog-keywords-re
-                                (concat modi/verilog-keywords-re
-                                        "\\|"
-                                        "\\b" keyword "\\b"))))
-        (setq cnt (1+ cnt))))
+    (defvar modi/verilog-keywords-re (regexp-opt verilog-keywords 'symbols)
+      "Regexp to match reserved Verilog/SystemVerilog keywords.")
 
 ;;; Functions
 
@@ -547,8 +530,7 @@ Examples: endmodule // module_name             → endmodule : module_name
                                   nil :noerror)
           ;; Make sure that the matched string after "//" is not a verilog
           ;; keyword.
-          (when (not (string-match-p (regexp-opt verilog-keywords 'words)
-                                     (match-string 2)))
+          (when (not (string-match-p modi/verilog-keywords-re (match-string 2)))
             (replace-match "\\1 : \\2")))))
 
 ;;;; Do not open all `included files
