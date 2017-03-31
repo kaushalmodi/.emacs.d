@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-24 16:12:25 kmodi>
+;; Time-stamp: <2017-03-31 09:59:14 kmodi>
 
 ;; Verilog
 
@@ -98,19 +98,24 @@ For example:
 IEEE 1800-2012 SystemVerilog Section 5.6 Identifiers, keywords,and system names.")
 
     (defconst modi/verilog-module-instance-re
-      (concat "^\\s-*"
-              ;; force group number to 1; module name
-              "\\(?1:" modi/verilog-identifier-re "\\)"
-              "\\(?:\n\\|\\s-\\)+" ; newline/space
-              ;; optional hardware parameters followed by optional comments
-              ;; followed by optional space/newline before instance name
-              "\\(#([^;]+?)\\(\\s-*//.*?\\)*[^;\\./]+?\\)*"
-              ;; force group number to 2; instance name
-              "\\(?2:" modi/verilog-identifier-re "\\)"
-              "\\(?:\n\\|\\s-\\)*" ; optional newline/space
-              "(" ; opening parenthesis `(' before port list
-              )
-      "Regexp for a valid verilog module instance declaration.")
+      (let* ((newline-or-space-optional "\\(?:\n\\|\\s-\\)*")
+             (newline-or-space-mandatory "\\(?:\n\\|\\s-\\)+")
+             (param-port-list "([^;]+?)"))
+        (concat "^\\s-*"
+                "\\(?1:" modi/verilog-identifier-re "\\)" ;module name (subgroup 1)
+                newline-or-space-mandatory
+                ;; optional port parameters
+                "\\("
+                "#" newline-or-space-optional param-port-list
+                "\\(\\s-*//.*?\\)*"          ;followed by optional comments
+                "[^;\\./]+?"  ;followed by 'almost anything' before instance name
+                "\\)*"
+                "\\(?2:" modi/verilog-identifier-re "\\)" ;instance name (subgroup 2)
+                newline-or-space-optional
+                "(" ;And finally .. the opening parenthesis `(' before port list
+                ))
+      "Regexp to match valid Verilog/SystemVerilog module instance declaration.")
+
     (defvar modi/verilog-block-end-keywords '("end"
                                               "join" "join_any" "join_none"
                                               "endchecker"
