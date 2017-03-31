@@ -135,6 +135,32 @@ IEEE 1800-2012 SystemVerilog Section 9.3.4 Block names.")
       "Regexp to match the Verilog/SystemVerilog block end keywords.
 See `modi/verilog-block-end-keywords' for more.")
 
+    (defvar modi/verilog-block-start-keywords '("begin"
+                                                "fork"
+                                                "checker"
+                                                "class"
+                                                "clocking"
+                                                "config"
+                                                "function"
+                                                "covergroup"
+                                                "interface"
+                                                "module"
+                                                "package"
+                                                "primitive"
+                                                "program"
+                                                "property"
+                                                "sequence"
+                                                "task"
+                                                )
+      "Verilog/SystemVerilog block start keywords.
+
+These keywords mirror the block end keywords (See `modi/verilog-block-end-keywords').")
+
+    (defvar modi/verilog-block-start-keywords-re
+      (regexp-opt modi/verilog-block-start-keywords 'symbols)
+      "Regexp to match the Verilog/SystemVerilog block start keywords.
+See `modi/verilog-block-start-keywords' for more.")
+
     (defconst modi/verilog-header-re
       (concat "^\\s-*"
               "\\([a-z]+\\s-+\\)*" ; optional virtual, local, protected
