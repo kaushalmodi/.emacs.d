@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-31 09:59:14 kmodi>
+;; Time-stamp: <2017-03-31 10:35:44 kmodi>
 
 ;; Verilog
 
@@ -96,6 +96,15 @@ For example:
   \\a*(b+c)
 
 IEEE 1800-2012 SystemVerilog Section 5.6 Identifiers, keywords,and system names.")
+
+    (defconst modi/verilog-identifier-pcre
+      (concat "\\b"
+              "([a-zA-Z_][a-zA-Z0-9$_]*)" ;simple identifier
+              "|(\\\\[!-~]+\\s+)"            ;escaped identifier
+              "\\b")
+      "Perl regex to match a valid Verilog/SystemVerilog identifier.
+This is a Perl regex equivalent of the Elips regexp in
+`modi/verilog-identifier-re'.")
 
     (defconst modi/verilog-module-instance-re
       (let* ((newline-or-space-optional "\\(?:\n\\|\\s-\\)*")
@@ -423,36 +432,36 @@ and to have a `ctags' TAGS file pre-generated for this command to work."
                 (user-error "Ctags TAGS file `%s' was not found" tags-file)))
           (user-error "Executable `ctags' is required for this command to work")))
 
-      (with-eval-after-load 'ag
+      (with-eval-after-load 'ag         ;For `ag-regexp'
 
 ;;;; modi/verilog-find-parent-module (interactive)
         (defun modi/verilog-find-parent-module ()
           "Find the places where the current verilog module is instantiated in
 the project."
           (interactive)
-          (let ((verilog-module-re (concat "^\\s-*" ; elisp regexp
+          (let ((verilog-module-re (concat "^\\s-*"          ; elisp regexp
                                            "\\(?:module\\)\\s-+" ; shy group
-                                           "\\("
-                                           modi/verilog-identifier-re
+                                           "\\(?1:"
+                                           modi/verilog-identifier-re ;Elisp regexp here!
                                            "\\)\\b"))
                 module-name
-                module-instance-re)
+                module-instance-pcre)
             (save-excursion
               (re-search-backward verilog-module-re)
               (setq module-name (match-string 1))
-              (setq module-instance-pcre ; pcre regex
+              (setq module-instance-pcre ;PCRE regex
                     (concat "^\\s*"
                             module-name
                             "\\s+"
-                            "(#\\s*\\((\\n|.)*?\\))*" ; optional hardware parameters
-                                        ; '(\n|.)*?' does non-greedy multi-line grep
-                            "(\\n|.)*?" ; optional newline/space before instance name
-                            "[^.]" ; do not match ".PARAM (PARAM_VAL),"
-                            "\\K" ; don't highlight anything till this point
-                            modi/verilog-identifier-re ; instance name
-                            "(?=[^a-zA-Z0-9_]*\\()")) ; optional space/newline after instance name
-                                        ; and before opening parenthesis `('
-                                        ; don't highlight anything in (?=..)
+                            "(#\\s*\\((\\n|.)*?\\))*" ;optional hardware parameters
+                                        ;'(\n|.)*?' does non-greedy multi-line grep
+                            "(\\n|.)*?" ;optional newline/space before instance name
+                            "([^.])*?" ;do not match ".PARAM (PARAM_VAL)," if any
+                            "\\K"       ;don't highlight anything till this point
+                            modi/verilog-identifier-pcre ;instance name
+                            "(?=[^a-zA-Z0-9_]*\\()")) ;optional space/newline after instance name
+                                        ;and before opening parenthesis `('
+                                        ;don't highlight anything in (?=..)
               ;; (message module-instance-pcre)
               (ag-regexp module-instance-pcre (projectile-project-root)))))))
 
