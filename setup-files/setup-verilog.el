@@ -51,10 +51,51 @@
     (setq verilog-tab-to-comment           nil) ; nil
     (setq verilog-date-scientific-format   t)   ; t
 
-    (defconst modi/verilog-identifier-re "\\b[a-zA-Z][a-zA-Z0-9$_]*"
-      "Regexp for a valid verilog identifier.
-Reference: IEEE 1800-2012 SystemVerilog Section 5.6 Identifiers, keywords,
-and system names. ")
+    (defconst modi/verilog-identifier-re
+      (concat "\\_<\\(?:"
+              "\\(?:[a-zA-Z_][a-zA-Z0-9$_]*\\)" ;simple identifier
+              "\\|\\(?:\\\\[!-~]+\\)"               ;escaped identifier
+              "\\)\\_>")
+      "Regexp to match a valid Verilog/SystemVerilog identifier.
+
+An identifier is used to give an object a unique name so it can be
+referenced.  An identifier is either a simple identifier or an escaped
+identifier.
+
+A simple identifier shall be any sequence of letters, digits, dollar signs ( $ ),
+and underscore characters ( _ ).
+
+The first character of a simple identifier shall not be a digit or $ ; it can be
+a letter or an underscore.  Identifiers shall be case sensitive.
+
+For example:
+
+  shiftreg_a
+  busa_index
+  error_condition
+  merge_ab
+  _bus3
+  n$657
+
+Escaped identifiers shall start with the backslash character ( \\ ) and end with
+white space (space, tab, newline). They provide a means of including any of the
+printable ASCII characters in an identifier (the decimal values 33 through 126,
+or 21 through 7E in hexadecimal).
+
+Neither the leading backslash character nor the terminating white space is
+considered to be part of the identifier. Therefore, an escaped identifier \cpu3
+is treated the same as a nonescaped identifier cpu3 .
+
+For example:
+
+  \\busa+index
+  \\-clock
+  \\***error-condition***
+  \\net1/\\net2
+  \\{a,b}
+  \\a*(b+c)
+
+IEEE 1800-2012 SystemVerilog Section 5.6 Identifiers, keywords,and system names.")
 
     (defconst modi/verilog-module-instance-re
       (concat "^\\s-*"
