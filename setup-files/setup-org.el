@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-29 18:05:32 kmodi>
+;; Time-stamp: <2017-04-04 17:15:39 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -176,15 +176,31 @@
     (setq org-highlight-links (delete 'plain org-highlight-links))
 
 ;;; Agenda and Capture
-    ;; http://orgmode.org/manual/Template-elements.html
-    ;; http://orgmode.org/manual/Template-expansion.html
-    (setq org-capture-templates
-          '(("j" "Journal" entry ; `org-capture' binding + j
-             (file+datetree "journal.org")
-             "\n* %?\n  Entered on %U")
-            ("n" "Note" entry ; `org-capture' binding + n
-             (file "notes.org")
-             "\n* %?\n  Context:\n    %i\n  Entered on %U")))
+    (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
+
+    (with-eval-after-load 'org-capture
+      ;; See `org-capture-templates' doc-string for info on Capture templates
+      (if (bound-and-true-p org-load-version-dev)
+          (progn
+            ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-02/msg00084.html
+            (add-to-list 'org-capture-templates
+                         '("j"          ;`org-capture' binding + j
+                           "Journal"
+                           entry
+                           (file+olp+datetree "journal.org")
+                           "\n* %?\n  Entered on %U")))
+        (add-to-list 'org-capture-templates
+                     '("j"              ;`org-capture' binding + j
+                       "Journal"
+                       entry
+                       (file+datetree "journal.org")
+                       "\n* %?\n  Entered on %U")))
+      (add-to-list 'org-capture-templates
+                   '("n"                ;`org-capture' binding + n
+                     "Note"
+                     entry
+                     (file "") ;empty string defaults to `org-default-notes-file'
+                     "\n* %?\n  Context:\n    %i\n  Entered on %U")))
 
     (defvar modi/one-org-agenda-file (expand-file-name "agenda.files"
                                                        org-directory)
