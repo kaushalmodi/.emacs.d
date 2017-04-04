@@ -36,6 +36,42 @@
                                                :foreground "white"
                                                :background "red")
                                              prepend))
+                                         ;; Compilation warning
+                                         ("\\(\\*W,\\(.*?\\)\\)\\s-+.*/\\(.*?,\\)\\([0-9]+|[0-9]+\\)"
+                                          (1 '(:inherit default
+                                               :foreground "black"
+                                               :background "orange")
+                                             prepend)
+                                          (2 '(:inherit default
+                                               :foreground "black"
+                                               :background "orange"
+                                               :weight bold)
+                                             prepend)
+                                          (3 '(:inherit default
+                                               :foreground "black"
+                                               :background "orange")
+                                             prepend)
+                                          (4 '(:inherit default
+                                               :foreground "black"
+                                               :background "orange"
+                                               :weight bold)
+                                             prepend))
+                                         ;; Run time warning
+                                         ("\\(\\*W,\\(.*?\\):\\s-+\\(.*?\\)\\(?:{.*\\)*\\)"
+                                          (1 '(:inherit default
+                                               :foreground "black"
+                                               :background "orange")
+                                             prepend)
+                                          (2 '(:inherit default
+                                               :foreground "black"
+                                               :background "orange"
+                                               :weight bold)
+                                             prepend)
+                                          (3 '(:inherit default
+                                               :foreground "black"
+                                               :background "orange"
+                                               :weight bold)
+                                             prepend))
                                          ;; UVM_WARNING
                                          ("^\\s-*\\(UVM_WARNING\\)\\s-+[^:]"
                                           (1 '(:inherit default
@@ -49,6 +85,26 @@
                                                :background "orange"
                                                :box (:line-width 2 :color "green")
                                                :height 1.1
+                                               :weight bold)
+                                             prepend))
+                                         ;; Compilation error
+                                         ("\\(\\*E,\\(.*?\\)\\)\\s-+.*/\\(.*?,\\)\\([0-9]+\\(|[0-9]+\\)?\\)"
+                                          (1 '(:inherit default
+                                               :foreground "white"
+                                               :background "red")
+                                             prepend)
+                                          (2 '(:inherit default
+                                               :foreground "white"
+                                               :background "red"
+                                               :weight bold)
+                                             prepend)
+                                          (3 '(:inherit default
+                                               :foreground "white"
+                                               :background "red")
+                                             prepend)
+                                          (4 '(:inherit default
+                                               :foreground "white"
+                                               :background "red"
                                                :weight bold)
                                              prepend))
                                          ;; UVM_ERROR
