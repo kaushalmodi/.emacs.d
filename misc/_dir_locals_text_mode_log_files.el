@@ -1,3 +1,7 @@
+;; 1. Save this file as .dir-locals.el in a parent directory that contains
+;;    all log files (directly or one of the sub-directories).
+;; 2. See setup-files/setup-highlight.el, the part about marking
+;;    `hi-lock-file-patterns' as a safe variable.
 ((text-mode . ((hi-lock-file-patterns . (;; seed
                                          ("^\\(SVSEED set from command line: \\([0-9]+\\)\\)"
                                           (1 '(:inherit default
@@ -10,8 +14,8 @@
                                                :height 1.1
                                                :weight bold)
                                              prepend))
-                                         ;; standard use case
-                                         ("\\(Standard Use Case \\([0-9]+\\)\\)\\s-+:STD_USE_CASE"
+                                         ;; use case
+                                         ("\\(Use Case \\([0-9]+\\)\\).*:USE_CASE"
                                           (1 '(:inherit default
                                                :foreground "white"
                                                :background "blue")
