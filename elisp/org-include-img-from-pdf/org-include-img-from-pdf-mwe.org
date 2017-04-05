@@ -1,3 +1,5 @@
+#+STARTUP: inlineimages
+
 # ()convertfrompdf:t # This is a special comment; tells that the upcoming
                      # link points to a to-be-converted-to file.
 # If you have a foo.pdf that you need to convert to foo.png, mention the
