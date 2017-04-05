@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-04 17:15:39 kmodi>
+;; Time-stamp: <2017-04-04 23:03:22 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -611,14 +611,14 @@ the languages in `modi/ob-enabled-languages'."
       :load-path "elisp/org-include-img-from-pdf"
       :config
       (progn
-        ;; ;; Execute `modi/org-include-img-from-pdf' before saving the file.
+        ;; ;; Execute `org-include-img-from-pdf' before saving the file.
         ;; (defun modi/org-include-img-from-pdf-before-save ()
-        ;;   "Execute `modi/org-include-img-from-pdf' just before saving the file."
-        ;;   (add-hook 'before-save-hook #'modi/org-include-img-from-pdf nil :local))
+        ;;   "Execute `org-include-img-from-pdf' just before saving the file."
+        ;;   (add-hook 'before-save-hook #'org-include-img-from-pdf nil :local))
         ;; (add-hook 'org-mode-hook #'modi/org-include-img-from-pdf-before-save)
-        ;; Execute `modi/org-include-img-from-pdf' before exporting.
+        ;; Execute `org-include-img-from-pdf' before exporting.
         (with-eval-after-load 'ox
-          (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf))))
+          (add-hook 'org-export-before-processing-hook #'org-include-img-from-pdf))))
 
 ;;; Extract image from included .zip
     ;; Auto extract images from zip files when saving org files.

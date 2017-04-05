@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-01-10 Tue 12:44 -->
+<!-- 2017-04-04 Tue 23:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PDF Image</title>
+<title></title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Kaushal.Modi" />
 <style type="text/css">
@@ -68,6 +68,7 @@
   pre.src-fortran:before { content: 'Fortran'; }
   pre.src-gnuplot:before { content: 'gnuplot'; }
   pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
   pre.src-java:before { content: 'Java'; }
   pre.src-js:before { content: 'Javascript'; }
   pre.src-latex:before { content: 'LaTeX'; }
@@ -184,7 +185,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+Copyright (C) 2012-2017 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -228,12 +229,10 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">PDF Image</h1>
 
 <div class="figure">
 <p><img src="./org-mode-unicorn-logo.png" alt="org-mode-unicorn-logo.png" />
 </p>
-<p><span class="figure-number">Figure 1: </span>Org-mode Unicorn Logo</p>
 </div>
 
 <ol class="org-ol">
@@ -242,13 +241,13 @@ for the JavaScript code in this tag.
 Add below to your emacs setup and evaluate it.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">org-include-img-from-pdf</span>
-      <span class="org-builtin">:load-path</span> <span class="org-string">"elisp/org-include-img-from-pdf"</span>
-      <span class="org-builtin">:config</span>
-      <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">progn</span>
-        <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">with-eval-after-load</span> 'ox
-          <span class="org-rainbow-delimiters-depth-4">(</span>add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
-</pre>
+<pre><code class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">org-include-img-from-pdf</span>
+  <span class="org-builtin">:load-path</span> <span class="org-string">"elisp/org-include-img-from-pdf"</span>
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">progn</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">with-eval-after-load</span> 'ox
+      <span class="org-rainbow-delimiters-depth-4">(</span>add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</code></pre>
 </div></li>
 <li>Have <code>org-mode-unicorn-logo.pdf</code> file in the same directory as this one.</li>
 <li>Do <code>C-c C-e h o</code>.</li>
@@ -256,7 +255,7 @@ Add below to your emacs setup and evaluate it.
 </ol>
 </div>
 <div id="postamble" class="status">
-Exported using <div style="display: inline" class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 26.0.50.7 (<a href="http://orgmode.org">Org</a> mode 9.0.3)</div> by Kaushal.Modi.
+Exported using <div style="display: inline" class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 26.0.50 (<a href="http://orgmode.org">Org</a> mode 9.0.5)</div> by Kaushal.Modi.
 </div>
 </body>
 </html>
