@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-18 11:31:04 kmodi>
+;; Time-stamp: <2017-04-11 18:09:52 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -7,24 +7,24 @@
 (setq gc-cons-threshold (* 100 1024 1024)) ; 100 MB before garbage collection
 
 (defvar user-home-directory (concat (getenv "HOME") "/")) ; must end with /
+(setq user-emacs-directory (concat user-home-directory ".emacs.d/")) ; must end with /
 
-(defvar emacs-version-short (format "%s_%s"
-                                    emacs-major-version emacs-minor-version)
-  "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
-So, for emacs version 25.0.50.1, this variable will be 25_0.")
+(setq org-directory (let ((dir (concat user-home-directory
+                                       "org/"))) ; must end with /
+                      (make-directory dir :parents)
+                      dir))
 
 (defvar user-personal-directory (let ((dir (concat user-emacs-directory
                                                    "personal/"))) ; must end with /
                                   (make-directory dir :parents)
                                   dir)
   "User's personal directory to contain non-git-controlled files.")
-
-(setq user-emacs-directory (concat user-home-directory ".emacs.d/")) ; must end with /
-(setq org-directory (let ((dir (concat user-home-directory
-                                       "org/"))) ; must end with /
-                      (make-directory dir :parents)
-                      dir))
 (setq custom-file (expand-file-name "custom.el" user-personal-directory))
+
+(defvar emacs-version-short (format "%s_%s"
+                                    emacs-major-version emacs-minor-version)
+  "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
+So, for emacs version 25.0.50.1, this variable will be 25_0.")
 
 (defconst my-packages
   '(ace-window
