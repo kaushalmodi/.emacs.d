@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-09 14:19:42 kmodi>
+;; Time-stamp: <2017-04-11 17:52:12 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -74,6 +74,7 @@ the `tabulated-list-entries' variable."
     (setq-local tabulated-list-entries included)
     (apply orig-fun args)))
 (advice-add 'package-menu--find-upgrades :around #'modi/package-menu-remove-excluded-packages)
+;; (advice-remove 'package-menu--find-upgrades #'modi/package-menu-remove-excluded-packages)
 
 ;; Inspired from paradox.el
 (defun my/package-upgrade-packages (&optional no-fetch)
@@ -105,6 +106,7 @@ package installations."
   (let ((pkg-black-list '(org))
         new-ret
         pkg-name)
+    ;; (message "before %S" orig-ret)
     (dolist (pkg-struct orig-ret)
       (setq pkg-name (package-desc-name pkg-struct))
       (if (member pkg-name pkg-black-list)
@@ -113,6 +115,16 @@ package installations."
                    pkg-name)
         ;; (message "Package to be installed: %s" pkg-name)
         (push pkg-struct new-ret)))
+    ;; Tue Apr 11 17:48:16 EDT 2017 - kmodi
+    ;; It's *very* critical that the order of packages stays the same in NEW-RET
+    ;; as in ORIG-RET. The `push' command flips the order, so use `reverse'
+    ;; to flip the order back to the original.
+    ;;   Without this step, you will get errors like below when installing
+    ;; packages with dependencies:
+    ;;   Debugger entered--Lisp error: (error "Unable to activate package ‘nim-mode’.
+    ;;   Required package ‘flycheck-28’ is unavailable")
+    (setq new-ret (reverse new-ret))
+    ;; (message "after  %S" new-ret)
     new-ret))
 (advice-add 'package-compute-transaction :filter-return #'modi/package-dependency-check-ignore)
 ;; (advice-remove 'package-compute-transaction #'modi/package-dependency-check-ignore)
