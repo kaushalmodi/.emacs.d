@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2016-11-28 12:11:13 kmodi>
+# Time-stamp: <2017-04-11 17:01:29 kmodi>
 
 # Open emacsclient with a new frame only if one does not exist.
 # http://emacs.stackexchange.com/a/12897/115
@@ -15,9 +15,16 @@
 
 if [[ "$DISPLAY" ]]
 then
+    # Handle the cases where the display number returned by `terminal-name'
+    # could be either something like ":1" or ":1.0"
     frame=$(emacsclient -a '' \
-                        -e "(member \"$DISPLAY\" (mapcar 'terminal-name (frames-on-display-list)))" \
-                        2>/dev/null)
+                        -e "(or
+                               (member \"$DISPLAY.0\" (mapcar 'terminal-name (frames-on-display-list)))
+                               (member \"$DISPLAY\" (mapcar 'terminal-name (frames-on-display-list)))
+                            )" \
+                                2>/dev/null)
+
+    # echo "dgb: $DISPLAY frame=$frame"
 
     # If there is no frame open create one
     if [[ "$frame" == "nil" ]]
