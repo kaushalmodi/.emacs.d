@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-30 09:01:31 kmodi>
+;; Time-stamp: <2017-04-11 15:04:32 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -245,8 +245,8 @@ will be killed."
   "Set the frame to fill the center screen."
   (interactive)
   (let ((frame-resize-pixelwise t)) ; do not round frame sizes to character h/w
-    (set-frame-position nil 1910 0) ; pixels x y from upper left
-    (set-frame-size nil 1894 1096 :pixelwise))) ; width, height
+    (set-frame-position nil 2560 0) ; pixels x y from upper left
+    (set-frame-size nil 2540 1347 :pixelwise))) ; width, height
 
 (defun modi/frame-width-2x (double)
   "Set the frame text width to half the current width.
