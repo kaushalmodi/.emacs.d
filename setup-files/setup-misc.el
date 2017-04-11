@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-09 08:11:54 kmodi>
+;; Time-stamp: <2017-03-30 08:08:33 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -79,7 +79,8 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
                              ("pl" . "perl")
                              ("tex" . "pdflatex")
                              ("latex" . "pdflatex")
-                             ("d" . "dmd -de -w -unittest -run")))
+                             ("d" . "dmd -de -w -unittest -run")
+                             ("nim" . "nim c -r --verbosity:0")))
                (file-name (progn
                             ;; Save buffer as a file if it's not already a file.
                             (when (null (buffer-file-name)) (save-buffer))
