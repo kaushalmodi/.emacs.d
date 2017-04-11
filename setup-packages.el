@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-11 17:52:12 kmodi>
+;; Time-stamp: <2017-04-11 18:41:09 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -6,6 +6,9 @@
 ;; Load newer version of .el and .elc if both are available
 (setq load-prefer-newer t)
 
+;; Create the package install directory if it doesn't exist
+(setq package-user-dir (format "%selpa_%s/"
+                               user-emacs-directory emacs-major-version)) ; default = ~/.emacs.d/elpa/
 (require 'package)
 
 (>=e "25.0"
@@ -14,11 +17,7 @@
 (add-to-list 'load-path (concat user-emacs-directory "elisp/"))
 (add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
 
-;; Create the package install directory if it doesn't exist
-(setq package-user-dir (format "%selpa_%s/"
-                               user-emacs-directory emacs-major-version)) ; default = ~/.emacs.d/elpa/
-
-;; add theme paths
+;; Add theme paths
 (add-to-list 'custom-theme-load-path
              (concat user-emacs-directory "elisp/zenburn-emacs/"))
 (add-to-list 'custom-theme-load-path
