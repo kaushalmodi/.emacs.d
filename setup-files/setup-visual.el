@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-19 12:48:58 kmodi>
+;; Time-stamp: <2017-04-12 11:46:55 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -296,22 +296,24 @@ font size."
 (with-eval-after-load 'setup-font-check
   (modi/global-font-size-reset))
 
-;; Usage: C-c - = - 0 = = = = - - 0
-;; Usage: C-c = = 0 - = - = = = = - - 0
+;; Usage: C-c C-- = - 0 = = = = - - 0
+;; Usage: C-c C-= = 0 - = - = = = = - - 0
 (defhydra hydra-font-resize (nil
                              "C-c"
                              :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
                              :color red
                              :hint nil)
   "
-[Font Size]     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset     _q_ Cancel
+Font Size:     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset     _q_ Cancel
 "
+  ;; Hydra entry bindings
   ("C--" modi/global-font-size-decr)
-  ("-"   modi/global-font-size-decr :bind nil)
   ("C-=" modi/global-font-size-incr)
+  ("C-0" modi/global-font-size-reset :color blue)
+  ;; Hydra-internal bindings.. below work only when the hydra is active!
+  ("-"   modi/global-font-size-decr :bind nil)
   ("="   modi/global-font-size-incr :bind nil)
   ("+"   modi/global-font-size-incr :bind nil)
-  ("C-0" modi/global-font-size-reset :color blue)
   ("0"   modi/global-font-size-reset :bind nil)
   ("q"   nil :color blue))
 
