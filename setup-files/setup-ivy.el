@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-02 12:14:27 kmodi>
+;; Time-stamp: <2017-04-12 16:48:11 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
@@ -105,6 +105,13 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
       ("C-t" . ivy-toggle-fuzzy)
       ("C-o" . hydra-ivy/body)
       ("M-o" . ivy-dispatching-done-hydra))
+
+    (with-eval-after-load 'setup-windows-buffers
+      (bind-keys
+       :map ivy-minibuffer-map
+        ("C-x k" . modi/kill-buffer-dwim) ;Aborts recursive edit
+        ("C-)" . modi/kill-buffer-dwim))) ;Aborts recursive edit
+
     (key-chord-define ivy-minibuffer-map "m," #'ivy-beginning-of-buffer)
     (key-chord-define ivy-minibuffer-map ",." #'ivy-end-of-buffer)
 

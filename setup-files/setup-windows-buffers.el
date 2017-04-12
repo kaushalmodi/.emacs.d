@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-11 15:04:32 kmodi>
+;; Time-stamp: <2017-04-12 17:08:22 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -455,15 +455,35 @@ the current window and the windows state prior to that."
         (switch-to-buffer modi/toggle-one-window--buffer-name)))))
 
 ;;; Kill/Bury Buffer
+
+;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=2e4f4c9d48c563ff8bec102b66da0225587786c6
+(>=e "26.0"
+    nil  ;The `kill-current-buffer' command will be defined in core in emacs 26+
+  (defun kill-current-buffer ()
+    "Kill the current buffer.
+When called in the minibuffer, get out of the minibuffer
+using `abort-recursive-edit'.
+
+This is like `kill-this-buffer', but it doesn't have to be invoked
+via the menu bar, and pays no attention to the menu-bar's frame."
+    (interactive)
+    (let ((frame (selected-frame)))
+      (if (and (frame-live-p frame)
+               (not (window-minibuffer-p (frame-selected-window frame))))
+          (kill-buffer (current-buffer))
+        (abort-recursive-edit)))))
+
 (defun modi/kill-buffer-dwim (kill-next-error-buffer)
   "Kill the current buffer.
+When called in the minibuffer, get out of the minibuffer
+using `abort-recursive-edit'.
 
-If KILL-NEXT-ERROR-BUFFER is non-nil, kill the `next-error' buffer. Examples of such
-buffers: *gtags-global*, *ag*, *Occur*."
+If KILL-NEXT-ERROR-BUFFER is non-nil, kill the `next-error' buffer.
+Examples of such buffers: *gtags-global*, *ag*, *Occur*."
   (interactive "P")
   (if kill-next-error-buffer
       (kill-buffer (next-error-find-buffer))
-    (kill-buffer (current-buffer))))
+    (kill-current-buffer)))
 
 (defun modi/quit-and-kill-window ()
   "Quit window and kill instead of burying the buffer in it."
