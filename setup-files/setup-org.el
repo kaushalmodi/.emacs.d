@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-12 10:52:16 kmodi>
+;; Time-stamp: <2017-04-12 12:18:52 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -894,7 +894,7 @@ on each save.
   # eval: (modi/org-html-export-on-save-mode 1)
   # End:
 "
-              :initial-value nil
+              :init-value nil
               :lighter "AutoExp"
               (if (and modi/org-html-export-on-save-mode
                        (derived-mode-p 'org-mode))
