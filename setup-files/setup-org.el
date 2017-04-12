@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-04 23:03:22 kmodi>
+;; Time-stamp: <2017-04-12 10:52:16 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -824,6 +824,12 @@ See `org-latex-format-headline-function' for details."
         (use-package ox-html
           :config
           (progn
+            ;; https://www.mathjax.org/cdn-shutting-down/
+            (setq org-html-mathjax-options
+                  (delq (assoc 'path org-html-mathjax-options) org-html-mathjax-options))
+            (add-to-list 'org-html-mathjax-options
+                    '(path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"))
+
             ;; ox-html patches
             (load (expand-file-name
                    "ox-html-patches.el"
@@ -918,7 +924,10 @@ on each save.
           :load-path "elisp/ox-reveal"
           :config
           (progn
-            (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+            ;; (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+            (setq org-reveal-root "https://cdn.rawgit.com/hakimel/reveal.js/3.4.1/")
+            ;; https://www.mathjax.org/cdn-shutting-down/
+            (setq org-reveal-mathjax-url "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
             (setq org-reveal-hlevel 1)
             (setq org-reveal-theme "simple") ; beige blood moon night serif simple sky solarized
             (setq org-reveal-mathjax t) ; Use mathjax.org to render LaTeX equations
