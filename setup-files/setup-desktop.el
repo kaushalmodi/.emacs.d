@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-18 21:37:55 kmodi>
+;; Time-stamp: <2017-04-12 11:35:04 kmodi>
 
 ;; Desktop save and restore
 
@@ -33,6 +33,15 @@ saved desktop at startup:
       ;; 'Fix' the frameset error at startup
       ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=17352
       (setq desktop-restore-frames nil))
+
+    ;; Wed Apr 12 11:30:03 EDT 2017 - kmodi
+    ;; Something changed in emacs master in the last week or so. If
+    ;; `desktop-restore-frames' is non-nil, nlinum get enabled in the
+    ;; beginning, but then it gets disabled.
+    ;; (setq desktop-restore-frames nil)
+    ;; Wed Apr 12 11:34:37 EDT 2017 - kmodi
+    ;; And then.. commenting out the above again.. magically the nlinum
+    ;; issue went away.. may be corrupt desktop files?
 
     ;; Fix the below error when starting emacs:
     ;;   Error (frameset): Wrong type argument: number-or-marker-p, nil
