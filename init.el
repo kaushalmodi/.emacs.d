@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-11 18:09:52 kmodi>
+;; Time-stamp: <2017-04-14 23:54:06 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -263,7 +263,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-rainbow-delimiters)
 (require 'setup-rainbow-mode)
 (require 'setup-server)
-(require 'setup-smart-compile)
 (require 'setup-smex)
 (require 'setup-sx)
 (require 'setup-term)
@@ -315,6 +314,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 
 ;; Blend of other setup
 (require 'setup-backup)
+(require 'setup-compile)
 (require 'setup-editing)
 (require 'setup-image)
 (require 'setup-launcher)

@@ -1,9 +1,20 @@
-;; Time-stamp: <2017-04-14 23:45:33 kmodi>
+;; Time-stamp: <2017-04-14 23:54:28 kmodi>
 
-;; Smart Compile
+;;; Compile
+
+(use-package compile
+  :defer t
+  :config
+  (progn
+    ;; http://stackoverflow.com/a/13408008/1219634
+    (require 'ansi-color)
+    (defun modi/colorize-compilation-buffer ()
+      (ansi-color-apply-on-region compilation-filter-start (point)))
+    (add-hook 'compilation-filter-hook #'modi/colorize-compilation-buffer)))
+
+;;; Smart Compile
 ;; https://www.emacswiki.org/emacs/SmartCompile
 ;; https://github.com/zenitani/elisp/blob/master/smart-compile.el
-
 (use-package smart-compile
   :commands (modi/save-compile-execute)
   :init
@@ -46,4 +57,4 @@
       (smart-compile 1))))
 
 
-(provide 'setup-smart-compile)
+(provide 'setup-compile)
