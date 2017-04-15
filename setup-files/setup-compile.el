@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-15 00:03:36 kmodi>
+;; Time-stamp: <2017-04-15 00:22:20 kmodi>
 
 ;;; Compile
 
@@ -30,19 +30,19 @@
     (setcdr (assoc "\\.c\\'" smart-compile-alist) "gcc -O2 %f -lm -o %n -std=gnu99")
 
     ;; http://stackoverflow.com/a/15724162/1219634
-    (defun modi/do--execute (bin)
-      "Execute BIN in eshell."
-      (eshell) ; Start eshell or switch to an existing eshell session
-      (goto-char (point-max))
-      (insert bin)
-      (eshell-send-input))
+    (defun modi/do--execute (bin dir)
+      "Execute BIN in eshell in DIR directory."
+      (let ((default-directory dir))
+        (eshell) ; Start eshell or switch to an existing eshell session
+        (goto-char (point-max))
+        (insert bin)
+        (eshell-send-input)))
 
     (defun modi/save-compile-execute ()
-      "Save, compile and execute"
+      "Save, compile and execute."
       (interactive)
       (save-buffer)
-      (lexical-let ((code-buf (buffer-name))
-                    (bin (smart-compile-string "./%n"))
+      (lexical-let ((bin (smart-compile-string "./%n"))
                     ;; %n - file name without extension
                     ;; See `smart-compile-alist'.
                     finish-callback)
@@ -52,7 +52,11 @@
                 (with-selected-window (get-buffer-window "*compilation*")
                   (bury-buffer))
                 ;; Execute the binary
-                (modi/do--execute bin)
+                ;; Start eshell in a different window. But save the
+                ;; `default-directory' for eshell before doing that.
+                (let ((dir default-directory))
+                  (other-window 1)
+                  (modi/do--execute bin dir))
                 ;; When compilation is done, execute the program and remove the
                 ;; callback from `compilation-finish-functions'
                 (setq compilation-finish-functions
