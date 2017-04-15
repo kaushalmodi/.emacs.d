@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 18:17:39 kmodi>
+;; Time-stamp: <2017-04-13 15:22:28 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -71,87 +71,91 @@ For other major modes:
  - Level 2 headers will be of the form “<comment-start> ** L2 Header”
  - ..
 
+The function will end silently if the Contents header is not found in the file.
+
 Don't add “Revision Control” heading to TOC."
       (interactive)
       (save-excursion
-        (goto-char (point-min))
-        (let ((outline-comment-start
-               (concat "\\(\\s<"
-                       (when comment-start
-                         (concat
-                          "\\|"
-                          ;; trim white space from comment-start
-                          ;; `regexp-quote' is used to escape characters like `*'
-                          ;; when `comment-start' holds a value like "/*".
-                          (replace-regexp-in-string " " "" (regexp-quote comment-start))))
-                       "\\)"))
-              (el-mode (derived-mode-p 'emacs-lisp-mode))
-              parsed-outline-comment-start
-              headings-list stars-list
-              heading star)
-          ;; (message "%s" outline-comment-start)
-          (while (re-search-forward
-                  (concat "^"           ; beginning of line
-                          (if outshine-outline-regexp-outcommented-p "" "\\s-*")
-                          "\\(?1:"
-                          outline-comment-start
-                          (if el-mode
-                              (concat "\\{2\\}\\)" ; 2 consecutive ; in `emacs-lisp-mode'
-                                      ";\\(?2:;*\\)") ; followed by one or more ; chars
-                            (concat "\\s-\\{1\\}\\)" ; SINGLE white space
-                                    "\\*\\(?2:\\**\\)")) ; followed by one or more * chars
-                          " "                        ; followed by a space
-                          "\\(?3:.+\\)")               ; followed by heading
-                  nil :noerror)
-            (setq parsed-outline-comment-start (match-string-no-properties 1))
-            ;; Note that the below `star' var stores one less * than the actual;
-            ;; that's intentional. Also note that for `emacs-lisp-mode' the 3rd
-            ;; consecutive ; onwards is counted as a “star”.
-            (setq star    (match-string-no-properties 2))
-            (setq heading (match-string-no-properties 3))
-            ;; (message "%s %s %s" parsed-outline-comment-start star heading)
-            (when (not (string= heading "Revision Control"))
-              (setq stars-list    (cons star stars-list))
-              (setq headings-list (cons heading headings-list))))
-          (setq stars-list    (nreverse stars-list))
-          (setq headings-list (nreverse headings-list))
-
+        (let* ((outline-comment-start
+                (concat "\\(\\s<"
+                        (when comment-start
+                          (concat
+                           "\\|"
+                           ;; trim white space from comment-start
+                           ;; `regexp-quote' is used to escape characters like `*'
+                           ;; when `comment-start' holds a value like "/*".
+                           (replace-regexp-in-string " " "" (regexp-quote comment-start))))
+                        "\\)"))
+               (el-mode (derived-mode-p 'emacs-lisp-mode))
+               (content-header-regexp (concat "^"
+                                              outline-comment-start
+                                              (when el-mode
+                                                "\\{2\\}") ; 2 consecutive ; in `emacs-lisp-mode'
+                                              " Contents:")))
           (goto-char (point-min))
-          (while (re-search-forward
-                  (concat "^"
-                          outline-comment-start
-                          (when el-mode
-                            "\\{2\\}") ; 2 consecutive ; in `emacs-lisp-mode'
-                          " Contents:")
-                  nil :noerror)
-            (forward-line 1)
-            ;; First delete old contents
-            ;; Keep on going on to the next line till it reaches a blank line
-            (while (progn
-                     (when (looking-at (concat "^" outline-comment-start))
-                       ;; Delete current line without saving to kill-ring
-                       (let (p1 p2)
-                         (save-excursion
-                           (setq p1 (line-beginning-position))
-                           (next-line 1)
-                           (setq p2 (line-beginning-position))
-                           (delete-region p1 p2))))
-                     (not (looking-at "^\n"))))
-            ;; Then print table of contents
-            (let ((content-comment-prefix
-                   (if el-mode
-                       ";; " ; 2 consecutive ; in `emacs-lisp-mode'
-                     parsed-outline-comment-start)))
-              (insert (format "%s\n" content-comment-prefix))
-              (let ((n 1))
-                (dolist (h headings-list)
-                  ;; (insert (format "// %2d. %s\n" n heading))
-                  (insert (format "%s %s%s\n"
-                                  content-comment-prefix
-                                  (replace-regexp-in-string
-                                   (if el-mode ";" "\\*") "  " (pop stars-list))
-                                  h))
-                  (setq n (1+ n)))))))))
+          (when (re-search-forward content-header-regexp nil :noerror)
+            ;; Continue with parsing the whole file only if a "Contents:"
+            ;; comment header exists in the file.
+            (let ((contents-start-point (point))
+                  parsed-outline-comment-start
+                  headings-list stars-list
+                  heading star)
+              ;; (message "%s" outline-comment-start)
+              (while (re-search-forward
+                      (concat "^"           ; beginning of line
+                              (if outshine-outline-regexp-outcommented-p "" "\\s-*")
+                              "\\(?1:"
+                              outline-comment-start
+                              (if el-mode
+                                  (concat "\\{2\\}\\)" ; 2 consecutive ; in `emacs-lisp-mode'
+                                          ";\\(?2:;*\\)") ; followed by one or more ; chars
+                                (concat "\\s-\\{1\\}\\)" ; SINGLE white space
+                                        "\\*\\(?2:\\**\\)")) ; followed by one or more * chars
+                              " "                        ; followed by a space
+                              "\\(?3:.+\\)")               ; followed by heading
+                      nil :noerror)
+                (setq parsed-outline-comment-start (match-string-no-properties 1))
+                ;; Note that the below `star' var stores one less * than the actual;
+                ;; that's intentional. Also note that for `emacs-lisp-mode' the 3rd
+                ;; consecutive ; onwards is counted as a “star”.
+                (setq star    (match-string-no-properties 2))
+                (setq heading (match-string-no-properties 3))
+                ;; (message "%s %s %s" parsed-outline-comment-start star heading)
+                (when (not (string= heading "Revision Control"))
+                  (setq stars-list    (cons star stars-list))
+                  (setq headings-list (cons heading headings-list))))
+              (setq stars-list    (nreverse stars-list))
+              (setq headings-list (nreverse headings-list))
+
+              (goto-char contents-start-point)
+              (forward-line 1)
+              ;; First delete old contents
+              ;; Keep on going on to the next line till it reaches a blank line
+              (while (progn
+                       (when (looking-at (concat "^" outline-comment-start))
+                         ;; Delete current line without saving to kill-ring
+                         (let (p1 p2)
+                           (save-excursion
+                             (setq p1 (line-beginning-position))
+                             (next-line 1)
+                             (setq p2 (line-beginning-position))
+                             (delete-region p1 p2))))
+                       (not (looking-at "^\n"))))
+              ;; Then print table of contents
+              (let ((content-comment-prefix
+                     (if el-mode
+                         ";; " ; 2 consecutive ; in `emacs-lisp-mode'
+                       parsed-outline-comment-start)))
+                (insert (format "%s\n" content-comment-prefix))
+                (let ((n 1))
+                  (dolist (h headings-list)
+                    ;; (insert (format "// %2d. %s\n" n heading))
+                    (insert (format "%s %s%s\n"
+                                    content-comment-prefix
+                                    (replace-regexp-in-string
+                                     (if el-mode ";" "\\*") "  " (pop stars-list))
+                                    h))
+                    (setq n (1+ n))))))))))
 
     (defvar modi/outline-minor-mode-hooks '(verilog-mode-hook
                                             emacs-lisp-mode-hook
