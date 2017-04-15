@@ -1,6 +1,8 @@
-;; Time-stamp: <2016-12-04 12:33:25 kmodi>
+;; Time-stamp: <2017-04-14 23:45:33 kmodi>
 
 ;; Smart Compile
+;; https://www.emacswiki.org/emacs/SmartCompile
+;; https://github.com/zenitani/elisp/blob/master/smart-compile.el
 
 (use-package smart-compile
   :commands (modi/save-compile-execute)
