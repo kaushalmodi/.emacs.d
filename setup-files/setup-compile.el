@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-15 00:22:20 kmodi>
+;; Time-stamp: <2017-04-15 01:10:39 kmodi>
 
 ;;; Compile
 
@@ -36,7 +36,17 @@
         (eshell) ; Start eshell or switch to an existing eshell session
         (goto-char (point-max))
         (insert bin)
-        (eshell-send-input)))
+        (eshell-send-input)
+        (sit-for 1) ;Let's assume the binary finishes executing in this time.
+        ;; After that time, if the point is after the eshell prompt (i.e. user
+        ;; input not expected), switch to the other window (which should be the
+        ;; original code window).
+        (save-excursion
+          (forward-line 0)
+          ;; This moves the point to the beginning of the line even if that
+          ;; happens to be over the eshell prompt.
+          (when (looking-at-p eshell-prompt-regexp)
+            (other-window 1)))))
 
     (defun modi/save-compile-execute ()
       "Save, compile and execute."
@@ -48,15 +58,21 @@
                     finish-callback)
         (setq finish-callback
               (lambda (buf msg)
-                ;; Bury the compilation buffer
                 (with-selected-window (get-buffer-window "*compilation*")
                   (bury-buffer))
-                ;; Execute the binary
-                ;; Start eshell in a different window. But save the
-                ;; `default-directory' for eshell before doing that.
-                (let ((dir default-directory))
-                  (other-window 1)
-                  (modi/do--execute bin dir))
+                ;; Bring up the buried compilation buffer in the other window
+                ;; if the compilation failed. Else execute the binary.
+                ;; https://lists.gnu.org/archive/html/help-gnu-emacs/2012-02/msg00133.html
+                (if (string= "finished\n" msg)
+                    (progn
+                      ;; Execute the binary
+                      ;; Start eshell in a different window. But save the
+                      ;; `default-directory' for eshell before doing that.
+                      (let ((dir default-directory))
+                        (other-window 1)
+                        (modi/do--execute bin dir)))
+                  (switch-to-buffer-other-window "*compilation*")
+                  (other-window 1)) ;And then switch back to the other window (code)
                 ;; When compilation is done, execute the program and remove the
                 ;; callback from `compilation-finish-functions'
                 (setq compilation-finish-functions
