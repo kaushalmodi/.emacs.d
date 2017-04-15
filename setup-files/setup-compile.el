@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-14 23:54:28 kmodi>
+;; Time-stamp: <2017-04-15 00:03:36 kmodi>
 
 ;;; Compile
 
@@ -30,25 +30,29 @@
     (setcdr (assoc "\\.c\\'" smart-compile-alist) "gcc -O2 %f -lm -o %n -std=gnu99")
 
     ;; http://stackoverflow.com/a/15724162/1219634
-    (defun modi/do-execute (exe)
-      "Run EXE in eshell."
+    (defun modi/do--execute (bin)
+      "Execute BIN in eshell."
       (eshell) ; Start eshell or switch to an existing eshell session
       (goto-char (point-max))
-      (insert exe)
+      (insert bin)
       (eshell-send-input))
 
     (defun modi/save-compile-execute ()
       "Save, compile and execute"
       (interactive)
+      (save-buffer)
       (lexical-let ((code-buf (buffer-name))
-                    (exe (smart-compile-string "./%n"))
+                    (bin (smart-compile-string "./%n"))
+                    ;; %n - file name without extension
+                    ;; See `smart-compile-alist'.
                     finish-callback)
         (setq finish-callback
               (lambda (buf msg)
                 ;; Bury the compilation buffer
                 (with-selected-window (get-buffer-window "*compilation*")
                   (bury-buffer))
-                (modi/do-execute exe)
+                ;; Execute the binary
+                (modi/do--execute bin)
                 ;; When compilation is done, execute the program and remove the
                 ;; callback from `compilation-finish-functions'
                 (setq compilation-finish-functions
