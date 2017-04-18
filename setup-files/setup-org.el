@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-12 12:18:52 kmodi>
+;; Time-stamp: <2017-04-18 15:54:23 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -21,6 +21,7 @@
 ;;  Include src lines
 ;;  Convert included pdf to image
 ;;  Extract image from included .zip
+;;  Sticky Header Line
 ;;  Org Export
 ;;    ox-latex - LaTeX export
 ;;    ox-html - HTML export
@@ -635,6 +636,15 @@ the languages in `modi/ob-enabled-languages'."
         (with-eval-after-load 'ox
           (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-archive))))
 
+;;; Sticky Header Line
+    ;; https://github.com/alphapapa/org-sticky-header
+    (use-package org-sticky-header
+      :ensure t
+      :config
+      (progn
+        (setq org-sticky-header-full-path t)
+        (add-hook 'org-mode-hook #'org-sticky-header-mode)))
+
 ;;; Org Export
     (use-package ox
       :defer t
@@ -828,7 +838,7 @@ See `org-latex-format-headline-function' for details."
             (setq org-html-mathjax-options
                   (delq (assoc 'path org-html-mathjax-options) org-html-mathjax-options))
             (add-to-list 'org-html-mathjax-options
-                    '(path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"))
+                         '(path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"))
 
             ;; ox-html patches
             (load (expand-file-name
