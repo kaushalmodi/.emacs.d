@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-10-31 16:07:18 kmodi>
+;; Time-stamp: <2017-04-18 12:16:55 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -10,40 +10,38 @@
     (setq which-key-popup-type 'side-window) ; default
     ;; (setq which-key-popup-type 'minibuffer)
 
-    ;; Replacements for how KEY is replaced when which-key displays
-    ;;   KEY → FUNCTION
-    ;; Eg: After "C-c", display "right → winner-redo" as "▶ → winner-redo"
-    (setq which-key-key-replacement-alist
-          '(("<\\([[:alnum:]-]+\\)>" . "\\1")
-            ("left"                . "◀")
-            ("right"               . "▶")
-            ("up"                  . "▲")
-            ("down"                . "▼")
-            ("delete"              . "DLT") ; delete key
-            ("\\`DEL\\'"             . "BS") ; backspace key
-            ("next"                . "PgDn")
-            ("prior"               . "PgUp")))
-
-    ;; Replacements for how part or whole of FUNCTION is replaced when
-    ;; which-key displays
-    ;;   KEY → FUNCTION
-    ;; Eg: After "d" in `calc', display "6 → calc-hex-radix" as "6 → 🖩hex-radix"
-    (setq which-key-description-replacement-alist
-          '(("Prefix Command" . "prefix")
-            ("which-key-show-next-page" . "wk next pg")
-            ("\\`calc-" . "") ; Hide "calc-" prefixes when listing M-x calc keys
-            ("/body\\'" . "") ; Remove display the "/body" portion of hydra fn names
-            ("\\`artist-select-op-" . "") ; Make artist-mode function names less verbose
-            ("\\`artist-select-" . "sel-")
-            ("\\`artist-toggle-" . "toggle-")
-            ("modi/" . "m/") ; The car is intentionally not "\\`modi/" to cover
-                                        ; cases like `hydra-toggle/modi/..'.
-            ("\\`hydra-" . "+h/")
-            ("\\`org-babel-" . "ob/")))
+    (setq which-key-replacement-alist
+          '(
+            ;; Replacements for how part or whole of FUNCTION is replaced when
+            ;; which-key displays
+            ;;   KEY → FUNCTION
+            ;; Eg: After "d" in `calc', display "6 → calc-hex-radix" as "6 → 🖩hex-radix"
+            ((nil . "Prefix Command")           . (nil . "prefix"))
+            ((nil . "which-key-show-next-page") . (nil . "wk next pg"))
+            ((nil . "\\`calc-")                  . (nil . "")) ; Hide "calc-" prefixes when listing M-x calc keys
+            ((nil . "/body\\'")                  . (nil . "")) ; Remove display the "/body" portion of hydra fn names
+            ((nil . "\\`artist-select-op-")      . (nil . "")) ; Make artist-mode function names less verbose
+            ((nil . "\\`artist-select-")         . (nil . "sel-"))
+            ((nil . "\\`artist-toggle-")         . (nil . "toggle-"))
+            ((nil . "modi/")                    . (nil . "m/")) ; The car is intentionally not "\\`modi/" to cover cases like `hydra-toggle/modi/..'.
+            ((nil . "\\`hydra-")                 . (nil . "+h/"))
+            ((nil . "\\`org-babel-")             . (nil . "ob/"))
+            ;; Replacements for how KEY is replaced when which-key displays
+            ;;   KEY → FUNCTION
+            ;; Eg: After "C-c", display "right → winner-redo" as "▶ → winner-redo"
+            (("<left>"   . nil)                 . ("◀" . nil))
+            (("<right>"  . nil)                 . ("▶" . nil))
+            (("<up>"     . nil)                 . ("▲" . nil))
+            (("<down>"   . nil)                 . ("▼" . nil))
+            (("<delete>" . nil)                 . ("DLT" . nil)) ; delete key
+            (("\\`DEL\\'"  . nil)                 . ("BS" . nil)) ; backspace key
+            (("<next>"   . nil)                 . ("PgDn" . nil))
+            (("<prior>"  . nil)                 . ("PgUp" . nil))
+            ))
     ;; Use cool unicode characters if available
     (with-eval-after-load 'setup-font-check
       (when font-symbola-p
-        (add-to-list 'which-key-description-replacement-alist '("\\`calc-" . "🖩"))))
+        (add-to-list 'which-key-replacement-alist '((nil . "\\`calc-") . (nil . "🖩")))))
 
     ;; Change what string to display for a given *complete* key binding
     ;; Eg: After "C-x", display "8 → +unicode" instead of "8 → +prefix"
