@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-11 18:41:09 kmodi>
+;; Time-stamp: <2017-04-18 07:43:52 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -6,9 +6,9 @@
 ;; Load newer version of .el and .elc if both are available
 (setq load-prefer-newer t)
 
-;; Create the package install directory if it doesn't exist
 (setq package-user-dir (format "%selpa_%s/"
                                user-emacs-directory emacs-major-version)) ; default = ~/.emacs.d/elpa/
+;; Below require will auto-create `package-user-dir' it doesn't exist.
 (require 'package)
 
 (>=e "25.0"
@@ -140,19 +140,3 @@ corresponding `.el' file."
 
 
 (provide 'setup-packages)
-
-;; Paradox
-;; |----------+---------------------------------------|
-;; | Shortcut | Description                           |
-;; |----------+---------------------------------------|
-;; | v        | Visit the package's homepage          |
-;; | l        | View a list of recent commits         |
-;; | f r      | filters by regexp (occur);            |
-;; | f u      | display only packages with upgrades;  |
-;; | f k      | filters by keyword (emacs 24.4 only). |
-;; | f c      | clear filters                         |
-;; | h        | See all keys                          |
-;; | s        | Star/unstar package                   |
-;; |----------+---------------------------------------|
-;;
-;; Use paradox-require instead of require to automatically install absent packages.

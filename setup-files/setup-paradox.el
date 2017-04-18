@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-11 17:55:49 kmodi>
+;; Time-stamp: <2017-04-18 07:44:20 kmodi>
 
 ;; Paradox
 ;; https://github.com/Malabarba/paradox
@@ -18,3 +18,18 @@
 
 
 (provide 'setup-paradox)
+
+;; |----------+---------------------------------------|
+;; | Shortcut | Description                           |
+;; |----------+---------------------------------------|
+;; | v        | Visit the package's homepage          |
+;; | l        | View a list of recent commits         |
+;; | f r      | filters by regexp (occur);            |
+;; | f u      | display only packages with upgrades;  |
+;; | f k      | filters by keyword (emacs 24.4 only). |
+;; | f c      | clear filters                         |
+;; | h        | See all keys                          |
+;; | s        | Star/unstar package                   |
+;; |----------+---------------------------------------|
+;;
+;; Use paradox-require instead of require to automatically install absent packages.
