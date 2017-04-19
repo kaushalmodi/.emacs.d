@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-18 15:54:23 kmodi>
+;; Time-stamp: <2017-04-19 12:35:24 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -642,7 +642,10 @@ the languages in `modi/ob-enabled-languages'."
       :ensure t
       :config
       (progn
-        (setq org-sticky-header-full-path t)
+        (setq org-sticky-header-full-path 'full) ;'reversed, nil
+        ;; Always show the header if the option to show the full or reversed
+        ;; path is set.
+        (setq org-sticky-header-always-show-header (if org-sticky-header-full-path t nil))
         (add-hook 'org-mode-hook #'org-sticky-header-mode)))
 
 ;;; Org Export
