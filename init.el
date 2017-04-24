@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-14 23:54:06 kmodi>
+;; Time-stamp: <2017-04-24 16:16:50 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -89,7 +89,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     neotree
     nlinum ; better performance than linum
     org-cliplink ; paste copied links as well-formatted org-mode links with desc
-    org-plus-contrib ; latest stable version of org-mode, includes org-eww
     org-tree-slide
     outorg navi-mode ; supporting packages for outshine
     outshine ; org-mode navigation and organization outside org-mode

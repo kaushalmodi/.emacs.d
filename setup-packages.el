@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-18 07:43:52 kmodi>
+;; Time-stamp: <2017-04-24 16:42:52 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -27,7 +27,9 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
 ;; For org-plus-contrib
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(unless (bound-and-true-p org-load-version-dev)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (add-to-list 'my-packages '(org-plus-contrib))) ;Latest stable version of org-mode, includes org-eww
 
 ;; Load emacs packages and activate them
 ;; This must come before configurations of installed packages.
