@@ -25,3 +25,6 @@
 [submodule "elisp/el2markdown"]
 	path = elisp/el2markdown
 	url = https://kaushalmodi@github.com/kaushalmodi/el2markdown
+[submodule "eless"]
+	path = misc/eless
+	url = https://kaushalmodi@github.com/kaushalmodi/eless
