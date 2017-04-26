@@ -29,7 +29,7 @@
 ;; For org-plus-contrib
 (unless (bound-and-true-p org-load-version-dev)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-  (add-to-list 'my-packages '(org-plus-contrib))) ;Latest stable version of org-mode, includes org-eww
+  (add-to-list 'my-packages 'org-plus-contrib)) ;Latest stable version of org-mode, includes org-eww
 
 ;; Load emacs packages and activate them
 ;; This must come before configurations of installed packages.
