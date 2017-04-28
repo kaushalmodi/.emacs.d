@@ -63,6 +63,9 @@ instead of the one present in `package-user-dir'."
       ;; `pdf-info-epdfinfo-program' variable
       (pdf-tools-install))
 
+    (my/pdf-tools-install)
+
+    ;; Update `pdf-view-mode-map' bindings
     (dolist (pair '((beginning-of-buffer . pdf-view-first-page)
                     (end-of-buffer . pdf-view-last-page)
                     (modi/scroll-up . pdf-view-next-line-or-next-page)
@@ -71,7 +74,10 @@ instead of the one present in `package-user-dir'."
             (remap-to (cdr pair)))
         (define-key pdf-view-mode-map `[remap ,remap-from] remap-to)))
 
-    (my/pdf-tools-install)))
+    (bind-keys
+     :map pdf-view-mode-map
+      ("l" . pdf-history-backward)
+      ("r" . pdf-history-forward))))
 
 ;; https://github.com/rudolfochrist/interleave
 (use-package interleave
