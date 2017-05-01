@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-31 10:35:44 kmodi>
+;; Time-stamp: <2017-05-01 18:26:46 kmodi>
 
 ;; Verilog
 
@@ -697,8 +697,12 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; just in comments). To do the highlighting intelligently, install the
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
 
-      ;; Convert block-end comments to ': BLOCK_NAME' in verilog-mode.
-      (add-hook 'before-save-hook #'modi/verilog-block-end-comments-to-block-names nil :local)
+      ;; Convert block-end comments to ': BLOCK_NAME' in verilog-mode
+      ;; Do this *only* for .sv files. This prevents the slowness of saving
+      ;; super-huge .v RTL/Netlist files.
+      (when (and (buffer-file-name)
+                 (string= "sv" (file-name-extension (buffer-file-name))))
+        (add-hook 'before-save-hook #'modi/verilog-block-end-comments-to-block-names nil :local))
 
       ;; Replace tabs with spaces when saving files in verilog-mode.
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
