@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-01 18:26:46 kmodi>
+;; Time-stamp: <2017-05-02 11:55:04 kmodi>
 
 ;; Verilog
 
@@ -696,6 +696,13 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; Above solution highlights those keywords anywhere in the buffer (not
       ;; just in comments). To do the highlighting intelligently, install the
       ;; `fic-mode' package - https://github.com/lewang/fic-mode
+
+      ;; Do not consider the backquotes as part of words. Now if we have
+      ;;   `define FOO `BAR.baz
+      ;; with the point somewhere on BAR, if we do "M-s .", it will search
+      ;; through all instances of "`BAR" as now "`" is set as an expression
+      ;; quote or prefix operator in the verilog syntax table.
+      (modify-syntax-entry ?` "'" verilog-mode-syntax-table)
 
       ;; Convert block-end comments to ': BLOCK_NAME' in verilog-mode
       ;; Do this *only* for .sv files. This prevents the slowness of saving
