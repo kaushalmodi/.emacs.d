@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-30 15:44:45 kmodi>
+;; Time-stamp: <2017-05-03 15:53:22 kmodi>
 
 ;; Shell Script Mode
 
@@ -11,11 +11,6 @@
          ("crontab.*\\'"     . shell-script-mode))
   :config
   (progn
-
-    (defvar modi/indent-bash-as-sh t
-      "When non-nil, bash scripts will be indented using sh indentation logic.
-I prefer the default sh indentation style to the default bash style.")
-
     ;; https://github.com/Tux/tcsh/blob/master/csh-mode.el
     ;; For `csh-indent-line' and `csh-indent-region'
     (use-package csh-mode
@@ -80,11 +75,6 @@ whose value is the shell name (don't quote it)."
           (setq shell (substring shell 0 (match-beginning 0))))
       ;; (message "shell: %s" shell)
 
-      ;; Thu Nov 03 14:00:44 EDT 2016 - kmodi
-      (when modi/indent-bash-as-sh
-        ;; If `shell' is "bash", set it to "sh"
-        (setq shell (replace-regexp-in-string "\\`bash\\'" "sh" shell)))
-
       (setq sh-shell (sh-canonicalize-shell shell))
       ;; (message "sh-shell: %s" sh-shell)
 
@@ -106,6 +96,7 @@ whose value is the shell name (don't quote it)."
       (setq-local sh-indent-supported-here (sh-feature sh-indent-supported))
       (cond
        ((or (eq sh-shell 'sh)
+            (eq sh-shell 'bash)
             (eq sh-shell 'rc))
         ;; (message "sh-indent-supported-here: %s" sh-indent-supported-here)
         ;; (message "Setting up indent for shell type %s" sh-shell)
