@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-24 16:16:50 kmodi>
+;; Time-stamp: <2017-05-03 15:39:02 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -56,6 +56,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     expand-region
     eww-lnum ; jump to links in eww buffer ace-jump style
     fill-column-indicator
+    flycheck                    ; sh-shellcheck
     flyspell-correct-ivy ; ivy interface for correct spelling suggestions
     fold-this
     gist
@@ -222,6 +223,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23949
 (require 'setup-fci)
 (require 'setup-fold)
+(require 'setup-flycheck)
 (require 'setup-gist)
 (when (executable-find "git")
   (require 'setup-diff)
