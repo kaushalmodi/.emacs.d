@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-02 11:55:04 kmodi>
+;; Time-stamp: <2017-05-05 12:56:23 kmodi>
 
 ;; Verilog
 
@@ -702,7 +702,11 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; with the point somewhere on BAR, if we do "M-s .", it will search
       ;; through all instances of "`BAR" as now "`" is set as an expression
       ;; quote or prefix operator in the verilog syntax table.
-      (modify-syntax-entry ?` "'" verilog-mode-syntax-table)
+      ;; Fri May 05 12:47:47 EDT 2017 - kmodi
+      ;; FIXME: This `modify-syntax-entry' change broke verilog indentation!
+      ;; Commenting it out and leaving it as a comment so that I do not re-add
+      ;; by mistake.
+      ;; (modify-syntax-entry ?` "'" verilog-mode-syntax-table)
 
       ;; Convert block-end comments to ': BLOCK_NAME' in verilog-mode
       ;; Do this *only* for .sv files. This prevents the slowness of saving
