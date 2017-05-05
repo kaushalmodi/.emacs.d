@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-03 15:55:27 kmodi>
+;; Time-stamp: <2017-05-04 09:31:53 kmodi>
 
 ;; Flycheck
 ;; https://github.com/flycheck/flycheck
@@ -7,8 +7,7 @@
   :defer t
   :config
   (progn
-    (defconst modi/flycheck-mode-hooks '(emacs-lisp-mode-hook
-                                         python-mode-hook
+    (defconst modi/flycheck-mode-hooks '(python-mode-hook
                                          sh-mode-hook
                                          nim-mode-hook)
       "List of hooks of major modes in which flycheck mode should be enabled.")
