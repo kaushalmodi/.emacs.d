@@ -1,10 +1,11 @@
-;; Time-stamp: <2017-03-02 10:31:22 kmodi>
+;; Time-stamp: <2017-05-05 12:45:23 kmodi>
 
 ;; Git Link
 ;; https://github.com/sshaw/git-link
 
 (use-package git-link
   :load-path "elisp/git-link"
+  :commands (git-link)
   :bind (:map region-bindings-mode-map
          ("g" . modi/git-link))
   :init
