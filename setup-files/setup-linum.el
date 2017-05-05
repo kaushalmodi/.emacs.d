@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-28 00:28:08 kmodi>
+;; Time-stamp: <2017-05-03 16:59:02 kmodi>
 
 ;; Line number package manager
 
@@ -33,7 +33,8 @@ mode hooks added to the `modi/linum-mode-hooks' variable.")
                                   tcl-mode-hook
                                   conf-space-mode-hook
                                   d-mode-hook
-                                  sml-mode-hook)
+                                  sml-mode-hook
+                                  nim-mode-hook)
   "List of hooks of major modes in which a “linum” mode should be enabled.")
 
 ;; linum
