@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-02 18:21:16 kmodi>
+;; Time-stamp: <2017-05-07 10:52:32 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -22,7 +22,7 @@
 Usage: (>=e \"25.0\"
            (defun-compatible-with-25.0)
          (defun-not-compatible-in-older-version))"
-  (declare (indent 2)) ; `if'-style indentation where this macro is used
+  (declare (indent 2)) ;`if'-style indentation where this macro is used
   `(if (version<= ,V emacs-version)
        ,@body))
 
@@ -89,22 +89,23 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
 ;;; Default ag arguments
 ;; https://github.com/ggreer/the_silver_searcher
 (defconst modi/ag-arguments
-  '("--nogroup" ; mandatory argument for ag.el as per https://github.com/Wilfred/ag.el/issues/41
-    "--skip-vcs-ignores"               ; Ignore files/dirs ONLY from `.ignore'
-    "--numbers"                        ; line numbers
+  '("--nogroup" ;mandatory argument for ag.el as per https://github.com/Wilfred/ag.el/issues/41
+    "--skip-vcs-ignores"               ;Ignore files/dirs ONLY from `.ignore'
+    "--numbers"                        ;Line numbers
     "--smart-case"
-    ;; "--one-device"                      ; do not cross mounts when searching
-    "--follow")                        ; follow symlinks
+    ;; "--one-device"                      ;Do not cross mounts when searching
+    "--follow")                        ;Follow symlinks
   "Default ag arguments used in the functions in `ag', `counsel' and `projectile'
 packages.")
 
 ;;; Default rg arguments
 ;; https://github.com/BurntSushi/ripgrep
 (defconst modi/rg-arguments
-  `("--no-ignore-vcs"                   ; Ignore files/dirs ONLY from `.ignore'
-    "--line-number"                     ; line numbers
+  `("--no-ignore-vcs"                   ;Ignore files/dirs ONLY from `.ignore'
+    "--line-number"                     ;Line numbers
     "--smart-case"
-    "--follow"                          ; follow symlinks
+    "--follow"                 ;Follow symlinks
+    "--max-columns 150"        ;Emacs doesn't handle long line lengths very well
     ,(concat "--ignore-file /home/" (getenv "USER") "/.ignore"))
   "Default rg arguments used in the functions in `counsel' and `projectile'
 packages.")
@@ -118,7 +119,7 @@ packages.")
              (file-exists-p source-directory))
     (let ((shell-return
            (replace-regexp-in-string
-            "[\n)]" " " ; Replace newline and ) chars with spaces
+            "[\n)]" " "                 ;Replace newline and ) chars with spaces
             (shell-command-to-string
              (concat "cd " source-directory " && "
                      "git branch --contains "
