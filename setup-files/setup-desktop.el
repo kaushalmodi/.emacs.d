@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-12 11:35:04 kmodi>
+;; Time-stamp: <2017-05-08 11:31:21 kmodi>
 
 ;; Desktop save and restore
 
@@ -100,6 +100,9 @@ saved desktop at startup:
                                ;; I do not typically plan to re-open the .el.gz
                                ;; files opened in my previous sessions.
                                ".el.gz"
+                               ;; Don't auto-open .ckt files as the Spice mode
+                               ;; loading is time-consuming
+                               ".ckt"
                                "TAGS")
                            line-end))))))
 
