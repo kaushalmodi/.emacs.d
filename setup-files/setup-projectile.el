@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-06 14:00:19 kmodi>
+;; Time-stamp: <2017-05-08 12:36:35 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -169,6 +169,22 @@ The return value of this function is unused as it is added as an :after advice."
           (add-to-list 'projectile-known-projects prj-abbr))))
     (add-hook 'projectile-after-switch-project-hook #'modi/projectile-known-projects-sort)
 
+    (defun modi/projectile-find-file-literally (&optional arg)
+      "Jump to a project's file literally (see `find-file-literally') using
+completion.  With a prefix ARG invalidates the cache first.
+
+Using this function over `projectile-find-file' is useful for opening files that
+are slow to open because of their major mode. `find-file-literally' always opens
+files in Fundamental mode."
+      (interactive "P")
+      (projectile-maybe-invalidate-cache arg)
+      (projectile-completing-read
+       "Find file literally: "
+       (projectile-current-project-files)
+       :action `(lambda (file)
+                  (find-file-literally (expand-file-name file ,(projectile-project-root)))
+                  (run-hooks 'projectile-find-file-hook))))
+
     (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
       ("f"  projectile-find-file-other-window        "file")
@@ -187,9 +203,8 @@ The return value of this function is unused as it is added as an :after advice."
 _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear               ^^    _E_: edit project's .dir-locals.el
 ^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project      _s-p_/_p_: switch to any other project
 ^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: kill all buffers      _X_: cleanup non-existing      ^^    _P_: switch to an open project
-^^    _r_: recent file        ^^                     ^^^^                             _z_: cache current
-^^    _D_: dir
-
+^^    _l_: file literally     ^^                     ^^^^                             _z_: cache current             ^^    _D_: find dir
+^^    _r_: recent file
 "
       ("a"   projectile-ag)
       ("b"   projectile-switch-to-buffer)
@@ -204,6 +219,7 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
       ("i"   projectile-ibuffer)
       ("K"   projectile-kill-buffers)
       ("s-k" projectile-kill-buffers)
+      ("l"   modi/projectile-find-file-literally)
       ("m"   projectile-multi-occur)
       ("o"   projectile-multi-occur)
       ("p"   projectile-switch-project)
