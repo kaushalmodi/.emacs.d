@@ -123,7 +123,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2017-01-26-4d0d912-vpo"
+(defconst verilog-mode-version "2017-05-08-eab72ed-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -386,6 +386,14 @@ wherever possible, since it is slow."
 ;;(verilog-easy-menu-filter
 ;;  `("Verilog" ("MA" ["SAA" nil :help "Help SAA"] ["SAB" nil :help "Help SAA"])
 ;;     "----" ["MB" nil :help "Help MB"]))
+
+(defun verilog-define-abbrev-table (tablename definitions &optional docstring &rest props)
+  "Filter `define-abbrev-table' TABLENAME DEFINITIONS
+Provides DOCSTRING PROPS in newer Emacs (23.1)."
+  (condition-case nil
+      (apply 'define-abbrev-table tablename definitions docstring props)
+    (error
+     (define-abbrev-table tablename definitions))))
 
 (defun verilog-define-abbrev (table name expansion &optional hook)
   "Filter `define-abbrev' TABLE NAME EXPANSION and call HOOK.
@@ -762,10 +770,13 @@ mode is experimental."
 
 (defcustom verilog-auto-wire-type nil
   "Non-nil specifies the data type to use with `verilog-auto-wire' etc.
-Set this to \"logic\" for SystemVerilog code, or use `verilog-auto-logic'."
+Set this to \"logic\" for SystemVerilog code, or use `verilog-auto-logic'.
+Set this to \"wire\" to force use of wire when logic is otherwise appropriate;
+this is generally only appropriate when making a non-SystemVerilog wrapper
+containing SystemVerilog cells."
   :version "24.1"  ; rev673
   :group 'verilog-mode-actions
-  :type 'boolean)
+  :type 'string)
 (put 'verilog-auto-wire-type 'safe-local-variable `stringp)
 
 (defcustom verilog-auto-endcomments t
@@ -1702,7 +1713,13 @@ If set will become buffer local.")
 (defvar verilog-mode-abbrev-table nil
   "Abbrev table in use in Verilog-mode buffers.")
 
-(define-abbrev-table 'verilog-mode-abbrev-table ())
+;;(makunbound 'verilog-mode-abbrev-table) ; For testing, clear out old defvar
+(verilog-define-abbrev-table
+ 'verilog-mode-abbrev-table ()
+ "Abbrev table for Verilog mode skeletons."
+ :case-fixed t
+ ;; Only expand in code.
+ :enable-function (lambda () (not (verilog-in-comment-or-string-p))))
 (verilog-define-abbrev verilog-mode-abbrev-table "class" "" 'verilog-sk-ovm-class)
 (verilog-define-abbrev verilog-mode-abbrev-table "always" "" 'verilog-sk-always)
 (verilog-define-abbrev verilog-mode-abbrev-table "begin" nil `verilog-sk-begin)
@@ -1939,7 +1956,7 @@ be substituted."
 		 t t command))
   (setq command	(verilog-string-replace-matches
 		 "\\b__FILE__\\b" (file-name-nondirectory
-                                   (or (buffer-file-name) ""))
+                                 (or (buffer-file-name) ""))
 		 t t command))
   command)
 
@@ -3273,14 +3290,14 @@ See also `verilog-font-lock-extra-types'.")
 		 '("\\(\\\\\\S-*\\s-\\)"  0 font-lock-function-name-face)
 		 ;; Fontify macro definitions/ uses
 		 '("`\\s-*[A-Za-z][A-Za-z0-9_]*" 0 (if (boundp 'font-lock-preprocessor-face)
-                                                       'font-lock-preprocessor-face
-                                                     'font-lock-type-face))
+                                                      'font-lock-preprocessor-face
+                                                    'font-lock-type-face))
 		 ;; Fontify delays/numbers
 		 '("\\(@\\)\\|\\([ \t\n\f\r]#\\s-*\\(\\([0-9_.]+\\('s?[hdxbo][0-9a-fA-F_xz]*\\)?\\)\\|\\(([^()]+)\\|\\sw+\\)\\)\\)"
 		   0 font-lock-type-face append)
-                 ;; Fontify property/sequence cycle delays - these start with '##'
-                 '("\\(##\\(\\sw+\\|\\[[^]]+\\]\\)\\)"
-                   0 font-lock-type-face append)
+     ;; Fontify property/sequence cycle delays - these start with '##'
+     '("\\(##\\(\\sw+\\|\\[[^]]+\\]\\)\\)"
+       0 font-lock-type-face append)
 		 ;; Fontify instantiation names
 		 '("\\([A-Za-z][A-Za-z0-9_]*\\)\\s-*(" 1 font-lock-function-name-face)
 		 )))
@@ -3333,37 +3350,37 @@ user-visible changes to the buffer must not be within a
 (make-variable-buffer-local 'verilog-save-font-mod-hooked)
 
 (defmacro verilog-save-font-no-change-functions (&rest body)
-  "Execute BODY forms, disabling all change hooks in BODY.
+ "Execute BODY forms, disabling all change hooks in BODY.
 Includes temporary disabling of `font-lock' to restore the buffer
 to full text form for parsing.  Additional actions may be specified with
 `verilog-before-save-font-hook' and `verilog-after-save-font-hook'.
 For insignificant changes, see instead `verilog-save-buffer-state'."
-  `(if verilog-save-font-mod-hooked ; Short-circuit a recursive call
-       (progn ,@body)
-     ;; Before version 20, match-string with font-lock returns a
-     ;; vector that is not equal to the string.  IE if on "input"
-     ;; nil==(equal "input" (progn (looking-at "input") (match-string 0)))
-     ;; Therefore we must remove and restore font-lock mode
-     (verilog-run-hooks 'verilog-before-save-font-hook)
-     (let* ((verilog-save-font-mod-hooked (- (point-max) (point-min)))
-            ;; Significant speed savings with no font-lock properties
-            (fontlocked (when (and (boundp 'font-lock-mode) font-lock-mode)
-                          (font-lock-mode 0)
-                          t)))
-       (run-hook-with-args 'before-change-functions (point-min) (point-max))
-       (unwind-protect
-           ;; Must inhibit and restore hooks before restoring font-lock
-           (let* ((inhibit-point-motion-hooks t)
-                  (inhibit-modification-hooks t)
-                  (verilog-no-change-functions t)
-                  ;; XEmacs and pre-Emacs 21 ignore inhibit-modification-hooks.
-                  before-change-functions after-change-functions)
-             (progn ,@body))
-         ;; Unwind forms
-         (run-hook-with-args 'after-change-functions (point-min) (point-max)
-                             verilog-save-font-mod-hooked) ; old length
-         (when fontlocked (font-lock-mode t))
-         (verilog-run-hooks 'verilog-after-save-font-hook)))))
+ `(if verilog-save-font-mod-hooked ; Short-circuit a recursive call
+      (progn ,@body)
+    ;; Before version 20, match-string with font-lock returns a
+    ;; vector that is not equal to the string.  IE if on "input"
+    ;; nil==(equal "input" (progn (looking-at "input") (match-string 0)))
+    ;; Therefore we must remove and restore font-lock mode
+    (verilog-run-hooks 'verilog-before-save-font-hook)
+    (let* ((verilog-save-font-mod-hooked (- (point-max) (point-min)))
+           ;; Significant speed savings with no font-lock properties
+           (fontlocked (when (and (boundp 'font-lock-mode) font-lock-mode)
+                         (font-lock-mode 0)
+                         t)))
+      (run-hook-with-args 'before-change-functions (point-min) (point-max))
+      (unwind-protect
+          ;; Must inhibit and restore hooks before restoring font-lock
+          (let* ((inhibit-point-motion-hooks t)
+                 (inhibit-modification-hooks t)
+                 (verilog-no-change-functions t)
+                 ;; XEmacs and pre-Emacs 21 ignore inhibit-modification-hooks.
+                 before-change-functions after-change-functions)
+            (progn ,@body))
+        ;; Unwind forms
+        (run-hook-with-args 'after-change-functions (point-min) (point-max)
+                            verilog-save-font-mod-hooked) ; old length
+        (when fontlocked (font-lock-mode t))
+        (verilog-run-hooks 'verilog-after-save-font-hook)))))
 
 ;;
 ;; Comment detection and caching
@@ -4228,9 +4245,9 @@ This puts the mark at the end, and point at the beginning."
   (interactive)
   (if (featurep 'xemacs)
       (progn
-	(push-mark (point))
+	(push-mark)
 	(verilog-end-of-defun)
-	(push-mark (point))
+	(push-mark)
 	(verilog-beg-of-defun)
 	(if (fboundp 'zmacs-activate-region)
 	    (zmacs-activate-region)))
@@ -5766,8 +5783,8 @@ Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
                 (cond ((verilog-in-paren)
                        t) ; this is a normal statement
                       ((save-excursion
-                         (verilog-beg-of-statement)
-                         (looking-at verilog-default-clocking-re))
+                        (verilog-beg-of-statement)
+                        (looking-at verilog-default-clocking-re))
                        t) ; default clocking, normal statement
                       (t
                        (goto-char here) ; or is clocking, starts a new block
@@ -8446,13 +8463,13 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 	;;(if dbg (setq dbg (concat dbg (format "Pt %s  Vec %s   C%c Kwd'%s'\n" (point) vec (following-char) keywd))))
 	(cond
 	 ((looking-at "//")
-	  (if (looking-at "[^\n]*\\(auto\\|synopsys\\)\\s +enum\\s +\\([a-zA-Z0-9_]+\\)")
-	      (setq enum (match-string 2)))
+	  (when (looking-at "[^\n]*\\(auto\\|synopsys\\)\\s +enum\\s +\\([a-zA-Z0-9_]+\\)")
+            (setq enum (match-string 2)))
 	  (search-forward "\n"))
 	 ((looking-at "/\\*")
 	  (forward-char 2)
-	  (if (looking-at "[^\n]*\\(auto\\|synopsys\\)\\s +enum\\s +\\([a-zA-Z0-9_]+\\)")
-	      (setq enum (match-string 2)))
+	  (when (looking-at "[^\n]*\\(auto\\|synopsys\\)\\s +enum\\s +\\([a-zA-Z0-9_]+\\)")
+            (setq enum (match-string 2)))
 	  (or (search-forward "*/")
 	      (error "%s: Unmatched /* */, at char %d" (verilog-point-text) (point))))
 	 ((looking-at "(\\*")
@@ -8465,7 +8482,7 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 	      (error "%s: Unmatched quotes, at char %d" (verilog-point-text) (point))))
 	 ((eq ?\; (following-char))
           (cond (in-ign-to-semi  ; Such as inside a "import ...;" in a module header
-		 (setq in-ign-to-semi nil))
+                 (setq in-ign-to-semi nil  rvalue nil))
                 ((and in-modport (not (eq in-modport t)))  ; end of a modport declaration
 		 (verilog-modport-decls-set
 		  in-modport
@@ -8521,7 +8538,8 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 	  (when (string-match "^\\\\" (match-string 1))
             (setq keywd (concat keywd " ")))  ; Escaped ID needs space at end
 	  ;; Add any :: package names to same identifier
-	  (while (looking-at "\\s-*::\\s-*\\([a-zA-Z0-9`_$]+\\|\\\\[^ \t\n\f]+\\)")
+          ;; '*' here is for "import x::*"
+          (while (looking-at "\\s-*::\\s-*\\(\\*\\|[a-zA-Z0-9`_$]+\\|\\\\[^ \t\n\f]+\\)")
 	    (goto-char (match-end 0))
 	    (setq keywd (concat keywd "::" (match-string 1)))
 	    (when (string-match "^\\\\" (match-string 1))
@@ -8586,8 +8604,8 @@ Return an array of [outputs inouts inputs wire reg assign const]."
                       (not (equal last-keywd "default")))
 		 (setq in-clocking t))
 		((equal keywd "import")
-                 (if v2kargs-ok  ; import in module header, not a modport import
-		     (setq in-ign-to-semi t  rvalue t)))
+                 (when v2kargs-ok  ; import in module header, not a modport import
+                   (setq in-ign-to-semi t  rvalue t)))
 		((equal keywd "type")
 		 (setq ptype t))
 		((equal keywd "var"))
@@ -10376,13 +10394,21 @@ When MODI is non-null, also add to modi-cache, for tracking."
       (verilog-insert-one-definition
        sig
        ;; Want "type x" or "output type x", not "wire type x"
-       (cond ((or (verilog-sig-type sig)
+       (cond ((and (equal "wire" verilog-auto-wire-type)
+                   (or (not (verilog-sig-type sig))
+                       (equal "logic" (verilog-sig-type sig))))
+              (if (member direction '("input" "output" "inout"))
+                  direction
+                "wire"))
+             ;;
+             ((or (verilog-sig-type sig)
 		  verilog-auto-wire-type)
 	      (concat
 	       (when (member direction '("input" "output" "inout"))
 		 (concat direction " "))
-	       (or (verilog-sig-type sig)
+               (or (verilog-sig-type sig)
                    verilog-auto-wire-type)))
+             ;;
 	     ((and verilog-auto-declare-nettype
 		   (member direction '("input" "output" "inout")))
 	      (concat direction " " verilog-auto-declare-nettype))
@@ -13779,9 +13805,6 @@ Wilson Snyder (wsnyder@wsnyder.org)."
           (verilog-auto-re-search-do "/\\*AUTOINSTPARAM\\*/" 'verilog-auto-inst-param)
           (verilog-auto-re-search-do "/\\*AUTOINST\\*/" 'verilog-auto-inst)
           (verilog-auto-re-search-do "\\.\\*" 'verilog-auto-star)
-          ;; Doesn't matter when done, but combine it with a common changer
-          (verilog-auto-re-search-do "/\\*\\(AUTOSENSE\\|AS\\)\\*/" 'verilog-auto-sense)
-          (verilog-auto-re-search-do "/\\*AUTORESET\\*/" 'verilog-auto-reset)
           ;; Must be done before autoin/out as creates a reg
           (verilog-auto-re-search-do "/\\*AUTOASCIIENUM(.*?)\\*/" 'verilog-auto-ascii-enum)
           ;;
@@ -13807,6 +13830,10 @@ Wilson Snyder (wsnyder@wsnyder.org)."
           (verilog-auto-re-search-do "/\\*AUTOREGINPUT\\*/" 'verilog-auto-reg-input)
           ;; outputevery needs AUTOOUTPUTs done first
           (verilog-auto-re-search-do "/\\*AUTOOUTPUTEVERY\\((.*?)\\)?\\*/" 'verilog-auto-output-every)
+          ;; Doesn't matter when done, but combine it with a common changer
+          (verilog-auto-re-search-do "/\\*\\(AUTOSENSE\\|AS\\)\\*/" 'verilog-auto-sense)
+          ;; After AUTOREG*, as they may have set signal widths
+          (verilog-auto-re-search-do "/\\*AUTORESET\\*/" 'verilog-auto-reset)
           ;; After we've created all new variables
           (verilog-auto-re-search-do "/\\*AUTOUNUSED\\*/" 'verilog-auto-unused)
           ;; Must be after all inputs outputs are generated
@@ -14021,7 +14048,7 @@ See also `verilog-header' for an alternative format."
 (define-skeleton verilog-sk-task
   "Insert a task definition."
   ()
-  > "task " '(verilog-sk-prompt-name) & ?; \n
+  > "task " '(verilog-sk-prompt-name) & ?\; \n
   > _ \n
   > "begin" \n
   > \n
@@ -14031,7 +14058,7 @@ See also `verilog-header' for an alternative format."
 (define-skeleton verilog-sk-function
   "Insert a function definition."
   ()
-  > "function [" '(verilog-sk-prompt-width) | -1 '(verilog-sk-prompt-name) ?; \n
+  > "function [" '(verilog-sk-prompt-width) | -1 '(verilog-sk-prompt-name) ?\; \n
   > _ \n
   > "begin" \n
   > \n
@@ -14226,13 +14253,13 @@ and the case items."
   '(setq input "state")
   > "// State registers for " str | -23 \n
   '(setq verilog-sk-state str)
-  > "reg [" '(verilog-sk-prompt-width) | -1 verilog-sk-state ", next_" verilog-sk-state ?; \n
+  > "reg [" '(verilog-sk-prompt-width) | -1 verilog-sk-state ", next_" verilog-sk-state ?\; \n
   '(setq input nil)
   > \n
   > "// State FF for " verilog-sk-state \n
   > "always @ ( " (read-string "clock:" "posedge clk") " or " (verilog-sk-prompt-reset) " ) begin" \n
   > "if ( " verilog-sk-reset " ) " verilog-sk-state " = 0; else" \n
-  > verilog-sk-state " = next_" verilog-sk-state ?; \n
+  > verilog-sk-state " = next_" verilog-sk-state ?\; \n
   > (- verilog-indent-level-behavioral) "end" (progn (electric-verilog-terminate-line) nil)
   > \n
   > "// Next State Logic for " verilog-sk-state \n
