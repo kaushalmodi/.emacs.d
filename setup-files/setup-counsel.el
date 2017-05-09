@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-09 17:05:45 kmodi>
+;; Time-stamp: <2017-05-09 17:06:55 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -11,6 +11,7 @@
     (when (not (bound-and-true-p disable-pkg-ivy))
       (bind-keys
        :map modi-mode-map
+       ("M-i" . counsel-grep-or-swiper)
        ("M-x" . counsel-M-x)
        ("C-M-y" . counsel-yank-pop)
        ("C-x r b" . counsel-bookmark) ;Jump to book or set it if it doesn't exist
@@ -31,6 +32,7 @@
         ("C-r" . counsel-expression-history)) ; useful in `eval-expression' (`M-:')
       (bind-chords
        ("JJ" . counsel-imenu)
+       ("'/" . counsel-grep-or-swiper)
        (";'" . counsel-M-x))
       (with-eval-after-load 'org
         (bind-key "C-c C-q" #'counsel-org-tag org-mode-map))

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-28 13:09:02 kmodi>
+;; Time-stamp: <2017-05-09 17:05:10 kmodi>
 
 ;; Search / Replace
 
@@ -110,28 +110,8 @@ happens within a region if one is selected."
 (use-package swiper
   :bind (:map isearch-mode-map
          ("M-i" . swiper-from-isearch)) ; isearch > swiper
-  :bind (:map modi-mode-map
-         ("M-i" . modi/swiper))
-  :chords (("'/" . modi/swiper))
   :config
   (progn
-    (defun modi/swiper (all)
-      "Run `swiper' or `swiper-all'.
-
-If a region is selected, the selected text is provided as initial input to
-`swiper'. Otherwise, `swiper' is started without any initial input.
-
-If ALL is non-nil, `swiper-all' is run."
-      (interactive "P")
-      (if all ; C-u
-          (swiper-all)
-        (if (use-region-p)
-            (progn
-              (deactivate-mark)
-              (swiper (buffer-substring-no-properties
-                       (region-beginning) (region-end))))
-          (swiper))))
-
     (bind-key "M-a" #'swiper-avy swiper-map))) ; swiper > avy
 
 ;;; grep
@@ -178,8 +158,8 @@ searches all buffers."
 ;;; Key bindings
 (bind-keys
  :map modi-mode-map
-  ("C-S-s" . isearch-forward-symbol-at-point)
-  ("C-S-r" . modi/isearch-backward-symbol-at-point))
+ ("C-S-s" . isearch-forward-symbol-at-point)
+ ("C-S-r" . modi/isearch-backward-symbol-at-point))
 
 
 (provide 'setup-search)
