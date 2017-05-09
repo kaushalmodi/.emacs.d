@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-02 16:48:27 kmodi>
+;; Time-stamp: <2017-05-09 16:12:14 kmodi>
 
 ;; Shackle
 ;; https://github.com/wasamasa/shackle
@@ -27,6 +27,9 @@
             ("\\*poporg.*\\*"      :regexp t :select t                          :other t               )
             ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :size 0.3  :align t    )
             ("*Calendar*"                  :select t                          :size 0.3  :align below)
+            ("*info*"                      :select t   :inhibit-window-quit t                         :same t)
+            (magit-status-mode             :select t   :inhibit-window-quit t                         :same t)
+            (magit-log-mode                :select t   :inhibit-window-quit t                         :same t)
             ))
 
     (shackle-mode 1)))
