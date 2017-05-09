@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-05 12:56:23 kmodi>
+;; Time-stamp: <2017-05-09 13:51:25 kmodi>
 
 ;; Verilog
 
@@ -712,7 +712,12 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; Do this *only* for .sv files. This prevents the slowness of saving
       ;; super-huge .v RTL/Netlist files.
       (when (and (buffer-file-name)
-                 (string= "sv" (file-name-extension (buffer-file-name))))
+                 (string= "sv" (file-name-extension (buffer-file-name)))
+                 ;; Do not add this hook when working in the verilog-mode repo
+                 (not (and (buffer-file-name) ;Has to be a file, and
+                           (vc-git-root (buffer-file-name)) ;In a git repo, and
+                           (string-match-p "veripool/verilog-mode" ;Upstream URL has to match this.
+                                           (vc-git--out-ok "config" "remote.upstream.url")))))
         (add-hook 'before-save-hook #'modi/verilog-block-end-comments-to-block-names nil :local))
 
       ;; Replace tabs with spaces when saving files in verilog-mode.
