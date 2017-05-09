@@ -5,7 +5,7 @@
              ;; user-error: Whitespace-Mode isn’t compatible with Magit.  See
              ;; `magit-diff-paint-whitespace' for an alternative.
              ;; (eval . (whitespace-mode 1))
-             ))
+             (fill-column . 70)))
      (emacs-lisp-mode . ((lisp-indent-function . lisp-indent-function)
                          (aggressive-indent-mode . nil)))))
  ("matlab-emacs/src"
