@@ -1,10 +1,27 @@
-;; Time-stamp: <2016-05-19 22:18:00 kmodi>
+;; Time-stamp: <2017-05-09 15:49:51 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
 
 (use-package magit
-  :defer t)
+  :bind (:map modi-mode-map
+         ("C-c g". hydra-magit/body))
+  :commands (magit-status magit-log-all-branches)
+  :config
+  (progn
+    (defhydra hydra-magit (:color blue
+                           :columns 4)
+      "Magit"
+      ("g" magit-status "status")
+      ("s" magit-status "status")
+      ("l" magit-log-all-branches "log")
+      ("b" magit-branch-popup "branch popup")
+      ("r" magit-rebase-popup "rebase popup")
+      ("f" magit-fetch-popup "fetch popup")
+      ("P" magit-push-popup "push popup")
+      ("F" magit-pull-popup "pull popup")
+      ("W" magit-format-patch "format patch")
+      ("$" magit-process "process"))))
 
 
 (provide 'setup-magit)
