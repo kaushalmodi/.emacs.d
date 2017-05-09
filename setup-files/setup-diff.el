@@ -1,15 +1,21 @@
-;; Time-stamp: <2017-03-21 10:40:34 kmodi>
+;; Time-stamp: <2017-05-09 18:12:17 kmodi>
 
 ;; All things diff
 
 ;; Contents:
 ;;
-;;  vc
+;;  vc-git
+;;    vc
 ;;  Diff-hl
 ;;  Ediff
 ;;  Smerge
 
-;;; vc
+;;; vc-git
+(use-package vc-git
+  ;; Auto-load `vc-git' when `vc-git-root' is used (in /setup-verilog.el)
+  :commands (vc-git-root))
+
+;;;; vc
 (use-package vc
   :bind (:map modi-mode-map
          ("C-x v =" . modi/vc-diff)
