@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-18 12:16:55 kmodi>
+;; Time-stamp: <2017-05-09 16:24:59 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -48,7 +48,7 @@
     (which-key-add-key-based-replacements
       "C-x 8"   "unicode"
       "C-x a"   "abbrev/expand"
-      "C-x r"   "rect/reg"
+      "C-x r"   "rectangle/register/bookmark"
       "C-c /"   "engine-mode-map"
       "C-c C-v" "org-babel"
       "C-x 8 0" "ZWS")
@@ -63,14 +63,23 @@
                                    "ESC"))
 
     ;; Highlight certain commands
-    (defface modi/wk-highlight-modi-face
+    (defface modi/which-key-highlight-2-face
       '((t . (:inherit which-key-command-description-face :foreground "indian red")))
-      "Face for highlighting commands starting with \"modi/\".")
+      "Another face for highlighting commands in `which-key'.")
+
+    (defface modi/which-key-highlight-3-face
+      '((t . (:inherit which-key-command-description-face :foreground "DarkOrange3")))
+      "Another face for highlighting commands in `which-key'.")
 
     (setq which-key-highlighted-command-list
           '(("\\`hydra-" . which-key-group-description-face)
-            ("\\`modi/" . modi/wk-highlight-modi-face)
+            ;; Highlight using the `modi/which-key-highlight-2-face'
+            ("\\`modi/" . modi/which-key-highlight-2-face)
+            ;; Highlight using the `modi/which-key-highlight-3-face'
+            ("\\`bookmark-" . modi/which-key-highlight-3-face)
+            ("\\`counsel-" . modi/which-key-highlight-3-face)
             ;; Highlight using the default `which-key-highlighted-command-face'
+            "\\`describe-"
             "\\(rectangle-\\)\\|\\(-rectangle\\)"
             "\\`org-"))
 
