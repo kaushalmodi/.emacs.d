@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-09 17:06:55 kmodi>
+;; Time-stamp: <2017-05-10 09:17:13 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -12,19 +12,19 @@
       (bind-keys
        :map modi-mode-map
        ("M-i" . counsel-grep-or-swiper)
-       ("M-x" . counsel-M-x)
        ("C-M-y" . counsel-yank-pop)
-       ("C-x r b" . counsel-bookmark) ;Jump to book or set it if it doesn't exist
-       ("C-x r m" . counsel-bookmark) ;Overrides `bookmark-jump' and `bookmark-set'
-       ("C-x C-f" . counsel-find-file)       ;Overrides `find-file'
-       ("C-h b" . counsel-descbinds)         ;Overrides `describe-bindings'
-       ("C-h p" . counsel-package)           ;Overrides `finder-by-keyword'
-       ("C-h v" . counsel-describe-variable) ;Overrides `describe-variable'
-       ("C-h f" . counsel-describe-function) ;Overrides `describe-function'
        ("C-h F" . counsel-faces)       ;Overrides `Info-goto-emacs-command-node'
        ("C-h S" . counsel-info-lookup-symbol)
        ("C-c u" . counsel-unicode-char)
-       ("C-c C" . counsel-colors-emacs)) ;Alternative to `list-colors-display'
+       ("C-c C" . counsel-colors-emacs) ;Alternative to `list-colors-display'
+       ([remap execute-extended-command] . counsel-M-x)
+       ([remap bookmark-jump] . counsel-bookmark) ;Jump to book or set it if it doesn't exist, C-x r b
+       ([remap bookmark-set] . counsel-bookmark)  ;C-x r m
+       ([remap find-file]  . counsel-find-file)
+       ([remap describe-bindings] . counsel-descbinds)
+       ([remap finder-by-keyword] . counsel-package) ;C-h p
+       ([remap describe-variable] . counsel-describe-variable)
+       ([remap describe-function] . counsel-describe-function))
       (bind-keys
        ("M-o" . counsel-recentf))
       (bind-to-modi-map "v" #'counsel-set-variable)

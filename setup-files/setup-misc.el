@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-30 08:08:33 kmodi>
+;; Time-stamp: <2017-05-10 09:23:50 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -213,10 +213,9 @@ in the mode line."
 (add-hook 'after-revert-hook #'modi/organize-minor-mode-lighters)
 
 (bind-keys
- ;; Override the default binding of C-x C-c to `save-buffer-kill-terminal'
  ;; `save-buffers-kill-terminal' kills only the current frame; it will NOT
- ;; kill the emacs server.
- ("C-x C-c" . modi/quit-emacs)
+ ;; kill the emacs server. So remap its binding to `modi/quit-emacs'.
+ ([remap save-buffers-kill-terminal] . modi/quit-emacs)
  ("C-x M-c" . modi/quit-emacs-no-desktop-save))
 
 (defun modi/restore-imp-keys ()

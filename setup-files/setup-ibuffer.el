@@ -1,10 +1,10 @@
-;; Time-stamp: <2016-12-07 10:14:27 kmodi>
+;; Time-stamp: <2017-05-10 09:26:23 kmodi>
 
 ;; Ibuffer
 
 (use-package ibuffer
   :bind (:map modi-mode-map
-         ("C-x C-b" . ibuffer)) ; Override default binding for `buffer-menu'
+         ([remap list-buffers] . ibuffer))
   :config
   (progn
     (setq ibuffer-default-sorting-mode 'major-mode)

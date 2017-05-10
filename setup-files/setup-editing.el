@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-30 08:07:36 kmodi>
+;; Time-stamp: <2017-05-10 09:20:10 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -1092,23 +1092,19 @@ to help with some debug."
  :map modi-mode-map
   ("C-x d" . delete-region)
   ("C-S-d" . duplicate-current-line-or-region)
-  ;; Override the default binding for `down-list'
-  ("C-M-d" . duplicate-current-line-or-region) ; alternative to C-S-d in terminal mode
+  ("C-M-d" . duplicate-current-line-or-region) ;Alternative to C-S-d in terminal mode, overrides `down-list'
   ("C-x \\" . align-regexp) ; align selected region to the entered regexp
   ;; Align multiple columns in the selected region. Of course all the selected
   ;; lines must have the same number of columns of groups of non-space characters
   ("C-x |" . modi/align-columns)
   ("C-k" . modi/kill-line)
-  ;; Override the binding of `C-o' for `open-line'.
-  ("C-o" . modi/smart-open-line)
+  ("C-o" . modi/smart-open-line)        ;Overrides `open-line'
   ("C-j" . modi/pull-up-line)
   ("M-=" . count-words) ; count words in buffer if no region selected
+  ("M-;" . endless/comment-line-or-region) ;Overrides`comment-dwim'
+  ("C-x ;" . comment-dwim)                 ;Overrides `comment-set-column'
   ;; Override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
   ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
-  ;; Override the default binding for `comment-dwim'
-  ("M-;" . endless/comment-line-or-region)
-  ;; Override the default binding for `comment-set-column'
-  ("C-x ;" . comment-dwim)
   ("<M-delete>" . backward-kill-word)
   ("<C-M-backspace>" . backward-kill-sexp))
 (bind-to-modi-map "=" #'modi/align-to-equals)
