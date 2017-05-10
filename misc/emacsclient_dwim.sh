@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2017-04-11 17:01:29 kmodi>
+# Time-stamp: <2017-05-11 16:55:04 kmodi>
 
 # Open emacsclient with a new frame only if one does not exist.
 # http://emacs.stackexchange.com/a/12897/115
@@ -13,18 +13,33 @@
 #               # loads files from my saved desktop, etc.
 # > e foo.txt & # Opens foo.txt in the already opened emacsclient frame.
 
+debug=0
+
 if [[ "$DISPLAY" ]]
 then
+    # If $DISPLAY is ":1", set $disp to ":1"
+    # If $DISPLAY is ":1.0", still set $disp to ":1"
+    # shellcheck disable=SC2001
+    disp=$(echo "$DISPLAY" | sed 's/\.0$//')
     # Handle the cases where the display number returned by `terminal-name'
-    # could be either something like ":1" or ":1.0"
+    # could be either something like ":1" or ":1.0", and even $DISPLAY can be
+    # ":1" or ":1.0"!
     frame=$(emacsclient -a '' \
-                        -e "(or
-                               (member \"$DISPLAY.0\" (mapcar 'terminal-name (frames-on-display-list)))
-                               (member \"$DISPLAY\" (mapcar 'terminal-name (frames-on-display-list)))
-                            )" \
-                                2>/dev/null)
+                        -e '(or
+                               (member "'"$disp.0"'" (mapcar (quote terminal-name) (frames-on-display-list)))
+                               (member "'"$disp"'" (mapcar (quote terminal-name) (frames-on-display-list)))
+                            )' 2>/dev/null)
 
-    # echo "dgb: $DISPLAY frame=$frame"
+    if [[ ${debug} -eq 1 ]]
+    then
+        echo "try1"
+        echo "disp = $disp"
+        echo "(mapcar (quote terminal-name) (frames-on-display-list)) = $(emacsclient -a '' -e '(mapcar (quote terminal-name) (frames-on-display-list))')"
+        emacsclient -a '' -e '(member "'"$disp.0"'" (mapcar (quote terminal-name) (frames-on-display-list)))'
+        echo "try2"
+        emacsclient -a '' -e '(member "'"$disp"'" (mapcar (quote terminal-name) (frames-on-display-list)))'
+        echo "dgb: DISPLAY=$DISPLAY disp=$disp frame=$frame"
+    fi
 
     # If there is no frame open create one
     if [[ "$frame" == "nil" ]]
