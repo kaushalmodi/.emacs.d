@@ -733,19 +733,19 @@ _a_lways         _f_or              _g_enerate         _O_utput
 ;;; Key bindings
     (bind-keys
      :map verilog-mode-map
-      ;; Unbind the backtick binding done to `electric-verilog-tick'
-      ;; With binding done to `electric-verilog-tick', it's not possible to type
-      ;; backticks on multiple lines simultaneously in multiple-cursors mode.
-      ("`"         . nil)
-      ;; Bind `verilog-header' to "C-c C-H" instead of to "C-c C-h"
-      ("C-c C-h"   . nil)
-      ("C-c C-S-h" . verilog-header)
-      ;;
-      ("C-c C-t"   . hydra-verilog-template/body)
-      ("C-^"       . modi/verilog-jump-to-header-dwim)
-      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd)
-      ("<f9>"      . modi/verilog-compile)
-      ("<S-f9>"    . modi/verilog-simulate))
+     ;; Unbind the backtick binding done to `electric-verilog-tick'
+     ;; With binding done to `electric-verilog-tick', it's not possible to type
+     ;; backticks on multiple lines simultaneously in multiple-cursors mode.
+     ("`"         . nil)
+     ;; Bind `verilog-header' to "C-c C-H" instead of to "C-c C-h"
+     ("C-c C-h"   . nil)
+     ("C-c C-S-h" . verilog-header)
+     ;;
+     ("C-c C-t"   . hydra-verilog-template/body)
+     ("C-^"       . modi/verilog-jump-to-header-dwim)
+     ("C-&"       . modi/verilog-jump-to-header-dwim-fwd)
+     ("<f9>"      . modi/verilog-compile)
+     ("<S-f9>"    . modi/verilog-simulate))
     (bind-chord "\\\\" #'modi/verilog-jump-to-module-at-point verilog-mode-map) ; "\\"
     (when (executable-find "ag")
       (bind-chord "^^" #'modi/verilog-find-parent-module verilog-mode-map))))

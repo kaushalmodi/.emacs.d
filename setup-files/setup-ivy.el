@@ -98,19 +98,20 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
 
     (bind-keys
      :map ivy-minibuffer-map
-      ;; Exchange the default bindings for C-j and C-m
-      ("C-m" . ivy-alt-done) ; RET, default C-j
-      ("C-j" . ivy-done) ; default C-m
-      ("C-S-m" . ivy-immediate-done)
-      ("C-t" . ivy-toggle-fuzzy)
-      ("C-o" . hydra-ivy/body)
-      ("M-o" . ivy-dispatching-done-hydra))
+     ;; Exchange the default bindings for C-j and C-m
+     ("C-m" . ivy-alt-done) ; RET, default C-j
+     ("C-j" . ivy-done) ; default C-m
+     ("C-S-m" . ivy-immediate-done)
+     ("C-t" . ivy-toggle-fuzzy)
+     ("C-o" . hydra-ivy/body)
+     ("M-o" . ivy-dispatching-done-hydra))
+
 
     (with-eval-after-load 'setup-windows-buffers
       (bind-keys
        :map ivy-minibuffer-map
-        ("C-x k" . modi/kill-buffer-dwim) ;Aborts recursive edit
-        ("C-)" . modi/kill-buffer-dwim))) ;Aborts recursive edit
+       ("C-x k" . modi/kill-buffer-dwim) ;Aborts recursive edit
+       ("C-)" . modi/kill-buffer-dwim))) ;Aborts recursive edit
 
     (key-chord-define ivy-minibuffer-map "m," #'ivy-beginning-of-buffer)
     (key-chord-define ivy-minibuffer-map ",." #'ivy-end-of-buffer)
@@ -123,7 +124,7 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
       (ivy-done))
     (bind-keys
      :map ivy-switch-buffer-map
-      ("C-k" . modi/ivy-kill-buffer))))
+     ("C-k" . modi/ivy-kill-buffer))))
 
 
 (provide 'setup-ivy)

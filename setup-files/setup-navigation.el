@@ -8,7 +8,7 @@
 ;; need to retain the default <f1> binding for help functions.
 (bind-keys
  :filter (display-graphic-p)
-  ("<f1>" . goto-line))
+ ("<f1>" . goto-line))
 
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
@@ -340,32 +340,32 @@ Here 'words' are defined as characters separated by whitespace."
 
 (bind-keys
  :map modi-mode-map
-  ("M-f" . forward-word)
-  ("M-F" . modi/forward-word-begin)
-  ("M-b" . backward-word)
-  ("M-B" . modi/backward-word-end)
-  ;; WARNING: `C-[` key combination is the same as pressing the meta key Esc|Alt
-  ;; Do NOT reconfigure that key combination.
-  ("C-}" . forward-paragraph)
-  ("C-{" . backward-paragraph))
+ ("M-f" . forward-word)
+ ("M-F" . modi/forward-word-begin)
+ ("M-b" . backward-word)
+ ("M-B" . modi/backward-word-end)
+ ;; WARNING: `C-[` key combination is the same as pressing the meta key Esc|Alt
+ ;; Do NOT reconfigure that key combination.
+ ("C-}" . forward-paragraph)
+ ("C-{" . backward-paragraph))
 
 (bind-keys
  :filter (display-graphic-p)
-  ("C-S-a" . move-beginning-of-line))
+ ("C-S-a" . move-beginning-of-line))
 
 (bind-keys
  :map modi-mode-map
  :filter (display-graphic-p)
-  ;; Move faster
-  ("C-S-n" . next-line-fast)
-  ("C-S-p" . previous-line-fast)
-  ("C-S-f" . forward-char-fast)
-  ("C-S-b" . backward-char-fast)
-  ;; Scroll down; does the same as `M-v'. It makes scrolling up and down quick
-  ;; as the `scroll-up' is bound to `C-v'.
-  ("C-S-v" . scroll-down)
-  ("M-]" . forward-paragraph)
-  ("M-[" . backward-paragraph))
+ ;; Move faster
+ ("C-S-n" . next-line-fast)
+ ("C-S-p" . previous-line-fast)
+ ("C-S-f" . forward-char-fast)
+ ("C-S-b" . backward-char-fast)
+ ;; Scroll down; does the same as `M-v'. It makes scrolling up and down quick
+ ;; as the `scroll-up' is bound to `C-v'.
+ ("C-S-v" . scroll-down)
+ ("M-]" . forward-paragraph)
+ ("M-[" . backward-paragraph))
 
 (key-chord-define-global "m," #'beginning-of-buffer)
 (key-chord-define-global ",." #'end-of-buffer)

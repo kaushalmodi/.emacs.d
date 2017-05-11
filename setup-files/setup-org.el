@@ -243,9 +243,9 @@ this with to-do items than with projects or headings."
               (lambda ()
                 (bind-keys
                  :map org-agenda-mode-map
-                  ("x" . sacha/org-agenda-done)
-                  ("X" . sacha/org-agenda-mark-done-and-add-followup)
-                  ("N" . sacha/org-agenda-new))))
+                 ("x" . sacha/org-agenda-done)
+                 ("X" . sacha/org-agenda-mark-done-and-add-followup)
+                 ("N" . sacha/org-agenda-new))))
 
 ;;; Org Goto
     (defun modi/org-goto-override-bindings (&rest _)
@@ -312,14 +312,14 @@ Execute this command while the point is on or after the hyper-linked org link."
     (bind-keys
      :map org-mode-map
      :filter (org-at-table-p)
-      ("C-c ?" . org-table-field-info)
-      ("C-c SPC" . org-table-blank-field)
-      ("C-c +" . org-table-sum)
-      ("C-c =" . org-table-eval-formula)
-      ("C-c `" . org-table-edit-field)
-      ("C-#" . org-table-rotate-recalc-marks)
-      ("C-c }" . org-table-toggle-coordinate-overlays)
-      ("C-c {" . org-table-toggle-formula-debugger))
+     ("C-c ?" . org-table-field-info)
+     ("C-c SPC" . org-table-blank-field)
+     ("C-c +" . org-table-sum)
+     ("C-c =" . org-table-eval-formula)
+     ("C-c `" . org-table-edit-field)
+     ("C-#" . org-table-rotate-recalc-marks)
+     ("C-c }" . org-table-toggle-coordinate-overlays)
+     ("C-c {" . org-table-toggle-formula-debugger))
 
     ;; Recalculate all org tables in the buffer when saving.
     ;; http://emacs.stackexchange.com/a/22221/115
@@ -392,7 +392,7 @@ function is ever added to that hook."
     (bind-keys
      :map org-mode-map
      :filter (org-at-table-p)
-      ("S-SPC" . hydra-org-table-mark-field/body))
+     ("S-SPC" . hydra-org-table-mark-field/body))
 
 ;;; Org Entities
     ;; http://www.mail-archive.com/emacs-orgmode@gnu.org/msg100527.html
@@ -568,15 +568,15 @@ the languages in `modi/ob-enabled-languages'."
 
         (bind-keys
          :map org-tree-slide-mode-map
-          ("<left>" . org-tree-slide-move-previous-tree)
-          ("<right>" . org-tree-slide-move-next-tree)
-          ("C-0" . modi/org-tree-slide-text-scale-reset)
-          ("C-=" . modi/org-tree-slide-text-scale-inc1)
-          ("C--" . modi/org-tree-slide-text-scale-dec1)
-          ("C-1" . org-tree-slide-content)
-          ("C-2" . modi/org-tree-slide-set-profile)
-          ("C-3" . org-tree-slide-simple-profile)
-          ("C-4" . org-tree-slide-presentation-profile))))
+         ("<left>" . org-tree-slide-move-previous-tree)
+         ("<right>" . org-tree-slide-move-next-tree)
+         ("C-0" . modi/org-tree-slide-text-scale-reset)
+         ("C-=" . modi/org-tree-slide-text-scale-inc1)
+         ("C--" . modi/org-tree-slide-text-scale-dec1)
+         ("C-1" . org-tree-slide-content)
+         ("C-2" . modi/org-tree-slide-set-profile)
+         ("C-3" . org-tree-slide-simple-profile)
+         ("C-4" . org-tree-slide-presentation-profile))))
 
 ;;; Org Cliplink
     ;; https://github.com/rexim/org-cliplink
@@ -1207,16 +1207,16 @@ region is selected. Else call `self-insert-command'."
 
     (bind-keys
      :map org-mode-map
-      ("C-m" . modi/org-return-no-indent)
-      ("<" . modi/org-template-maybe)
-      ("M-p". org-previous-visible-heading)
-      ("M-n". org-next-visible-heading))
+     ("C-m" . modi/org-return-no-indent)
+     ("<" . modi/org-template-maybe)
+     ("M-p". org-previous-visible-heading)
+     ("M-n". org-next-visible-heading))
 
     (bind-keys
      :map modi-mode-map
-      ("C-c a" . org-agenda)
-      ("C-c c" . org-capture)
-      ("C-c i" . org-store-link))))
+     ("C-c a" . org-agenda)
+     ("C-c c" . org-capture)
+     ("C-c i" . org-store-link))))
 
 
 (provide 'setup-org)
