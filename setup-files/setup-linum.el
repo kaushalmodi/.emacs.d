@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-10 09:50:12 kmodi>
+;; Time-stamp: <2017-05-11 15:29:06 kmodi>
 
 ;; Line number package manager
 
@@ -34,7 +34,8 @@ mode hooks added to the `modi/linum-mode-hooks' variable.")
                                   conf-space-mode-hook
                                   d-mode-hook
                                   sml-mode-hook
-                                  nim-mode-hook)
+                                  nim-mode-hook
+                                  yaml-mode-hook)
   "List of hooks of major modes in which a “linum” mode should be enabled.")
 
 ;; linum
@@ -106,7 +107,7 @@ background color to that of the theme."
       (dolist (hook modi/linum-mode-hooks)
         (remove-hook hook #'nlinum-mode)))))
 
-(defun modi/set-linum (linum-pkg)
+(defun modi/linum-set (linum-pkg)
   "Enable or disable linum.
 With LINUM-PKG set to either 'nlinum or 'linum, the
 respective linum mode will be enabled. When LINUM-PKG is nil, linum will be
@@ -139,22 +140,22 @@ disabled altogether."
     (message (format "%s Revert buffer to see the change." state-str)))
   (setq modi/linum--state linum-pkg))
 
-(defun modi/toggle-linum ()
+(defun modi/linum-toggle ()
   "Toggle “linum” between the disabled and enabled states using the default
 package set by the user in `modi/linum-fn-default'."
   (interactive)
   (if modi/linum--state
-      (modi/set-linum nil)
-    (modi/set-linum modi/linum-fn-default)))
+      (modi/linum-set nil)
+    (modi/linum-set modi/linum-fn-default)))
 
-(defun modi/linum-set (&optional frame)
+(defun modi/linum-enable (&optional frame)
   "Set “linum” using the default package set by the user in
 `modi/linum-fn-default'.
 
 The optional FRAME argument is added as it is needed when this function is
 added to the `after-make-frame-functions' hook."
-  (let (modi/linum--state)
-    (modi/set-linum modi/linum-fn-default)))
+  (let (modi/linum--state)        ;Force let-bound `modi/linum--state' to be nil
+    (modi/linum-toggle)))
 
 ;; Set linum
 (if (daemonp)
@@ -163,12 +164,12 @@ added to the `after-make-frame-functions' hook."
     ;; frame is loaded *before* the emacs config is read. Not doing so results
     ;; in the below error in emacs 24.5:
     ;;   *ERROR*: Invalid face: linum
-    (add-hook 'after-make-frame-functions #'modi/linum-set)
-  ;; Even when running in non-daemon mode, run `modi/linum-set' only after the
+    (add-hook 'after-make-frame-functions #'modi/linum-enable)
+  ;; Even when running in non-daemon mode, run `modi/linum-enable' only after the
   ;; init has loaded, so that the last modified value of `modi/linum-fn-default'
   ;; if any in setup-personal.el is the one effective, not its standard value
   ;; in its defvar form above.
-  (add-hook 'after-init-hook #'modi/linum-set))
+  (add-hook 'after-init-hook #'modi/linum-enable))
 
 
 (provide 'setup-linum)

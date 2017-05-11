@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-09 18:12:17 kmodi>
+;; Time-stamp: <2017-05-11 13:45:39 kmodi>
 
 ;; All things diff
 
@@ -50,11 +50,12 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
   :init
   (progn
     (defvar modi/diff-hl-mode-hooks '(emacs-lisp-mode-hook
-                                      conf-space-mode-hook ; .tmux.conf
+                                      conf-space-mode-hook ;.tmux.conf
                                       markdown-mode-hook
                                       css-mode-hook
                                       web-mode-hook
-                                      sh-mode-hook)
+                                      sh-mode-hook
+                                      yaml-mode-hook) ;tmuxp yaml configs
       "List of hooks of major modes in which diff-hl-mode should be enabled.")
 
     (dolist (hook modi/diff-hl-mode-hooks)

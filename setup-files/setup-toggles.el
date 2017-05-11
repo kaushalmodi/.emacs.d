@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-09-20 08:42:56 kmodi>
+;; Time-stamp: <2017-05-11 13:40:41 kmodi>
 
 ;; Toggles
 
@@ -22,7 +22,7 @@
   ("hs"    modi/hideshow-mode "hideshow mode")
   ("i"     modi/imenu-list-display-toggle "imenu list")
   ("k"     key-chord-mode "key chord mode" :color red)
-  ("l"     modi/toggle-linum "line numbers")
+  ("l"     modi/linum-toggle "line numbers")
   ("m"     modi-mode "Modi mode")
   ("n"     neotree-toggle "neotree")
   ("o"     modi/toggle-one-window "one window" :color red)
