@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-12 17:08:22 kmodi>
+;; Time-stamp: <2017-05-11 18:12:42 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -33,6 +33,16 @@
 ;; do not display an already visible buffer when switching to next/previous
 ;; buffers or after killing buffers.
 (setq switch-to-visible-buffer nil)
+
+(setq recenter-positions '(0.50 0.07 0.93)) ;default: '(middle top bottom)
+;; First C-l  -> 0.50: Put point vertically at the middle of the window
+;; Second C-l -> 0.07: Put point close to the top of the window. If
+;;                     (window-height) returns 70, that's roughly 4 lines.
+;; Third C-l  -> 0.93: Put point close to the bottom of the window ~ 3 lines.
+;; With the default values of `recenter-positions' and `scroll-margin' (0),
+;; the "top" position is the first line of the window, and the "bottom"
+;; position is the last line. Above settings provides a margin of 3 or 4 lines
+;; for my default window size for the "top" and "bottom" iterations.
 
 ;;; Winner Mode
 ;; http://www.emacswiki.org/emacs/WinnerMode
@@ -578,6 +588,6 @@ Examples of such buffers: *gtags-global*, *ag*, *Occur*."
 
 ;; (1) `C-l'
 ;; C-l calls the `recenter-top-bottom' command. But typing C-l twice in a row
-;; (C-l C-l) scrolls the window so that point is on the topmost screen line.
-;; Typing a third C-l scrolls the window so that point is on the bottom-most
-;; screen line. Each successive C-l cycles through these three positions.
+;; scrolls the window so that point is on the topmost screen line.  Typing a
+;; third C-l scrolls the window so that point is on the bottom-most screen
+;; line. Each successive C-l cycles through these three positions.
