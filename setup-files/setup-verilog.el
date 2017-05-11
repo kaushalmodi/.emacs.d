@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-09 13:51:25 kmodi>
+;; Time-stamp: <2017-05-11 13:12:30 kmodi>
 
 ;; Verilog
 
@@ -463,7 +463,11 @@ the project."
                                         ;and before opening parenthesis `('
                                         ;don't highlight anything in (?=..)
               ;; (message module-instance-pcre)
-              (ag-regexp module-instance-pcre (projectile-project-root)))))))
+              (let* ((ag-arguments ag-arguments)) ;Save the global value of `ag-arguments'
+                ;; Search only through verilog type files.
+                ;; See "ag --list-file-types".
+                (add-to-list 'ag-arguments "--verilog" :append)
+                (ag-regexp module-instance-pcre (projectile-project-root))))))))
 
 ;;;; modi/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
