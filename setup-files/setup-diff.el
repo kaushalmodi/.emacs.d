@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-11 13:45:39 kmodi>
+;; Time-stamp: <2017-05-12 09:40:49 kmodi>
 
 ;; All things diff
 
@@ -49,13 +49,14 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
          ("C-c v" . hydra-diff-hl/body))
   :init
   (progn
-    (defvar modi/diff-hl-mode-hooks '(emacs-lisp-mode-hook
-                                      conf-space-mode-hook ;.tmux.conf
-                                      markdown-mode-hook
-                                      css-mode-hook
-                                      web-mode-hook
-                                      sh-mode-hook
-                                      yaml-mode-hook) ;tmuxp yaml configs
+    (defconst modi/diff-hl-mode-hooks '(emacs-lisp-mode-hook
+                                        conf-space-mode-hook ;.tmux.conf
+                                        markdown-mode-hook
+                                        css-mode-hook
+                                        web-mode-hook
+                                        sh-mode-hook
+                                        yaml-mode-hook ;tmuxp yaml configs
+                                        c-mode-hook)
       "List of hooks of major modes in which diff-hl-mode should be enabled.")
 
     (dolist (hook modi/diff-hl-mode-hooks)
