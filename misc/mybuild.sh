@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2017-03-20 10:31:30 kmodi>
+# Time-stamp: <2017-05-15 12:04:03 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -69,7 +69,7 @@ do
         "-N"|"--noinfo" ) no_info=1;;
         "-E"|"--noelc" ) no_elc=1;;
         "-d"|"--debug" ) debug=1;;
-        * ) echo >&2 "Error: Invalid option: $@"
+        * ) echo >&2 "Error: Invalid option: $*"
     esac
     shift # expose next argument
 done
@@ -88,7 +88,7 @@ emacs_rev_basename=$(basename "${emacs_rev}")
 if [[ ${no_git_update} -eq 0 ]]
 then
     git fetch --all # fetch new branch names if any
-    git checkout ${emacs_rev_basename}
+    git checkout "${emacs_rev_basename}"
     git pull
     echo "Waiting for 5 seconds .. "
     sleep 5
@@ -104,7 +104,7 @@ export MY_EMACS_INSTALL_DIR="${HOME}/usr_local/apps/${MY_OSREV}/emacs/${install_
 if [[ $debug -eq 0 ]]
 then
     echo "Creating directory: ${MY_EMACS_INSTALL_DIR} .."
-    \mkdir -p ${MY_EMACS_INSTALL_DIR}
+    mkdir -p "${MY_EMACS_INSTALL_DIR}"
 fi
 
 # Basic configure command
@@ -181,7 +181,7 @@ then
     echo "Waiting for 5 seconds .. Press Ctrl+C to cancel this installation."
     sleep 5
 
-    if [[ ! -f "configure" ]]
+    if [[ ! -f "./configure" ]]
     then
         ./autogen.sh all
     fi
@@ -199,12 +199,12 @@ then
     #        --with-gif=no
     #   as options to configure
     #   make: *** [Makefile] Error 1
-    \sed -i 's|./configure|${MY_EMACS_CONFIGURE}|g' GNUmakefile
+    sed -i 's|./configure|'"${MY_EMACS_CONFIGURE}"'|g' GNUmakefile
 
     # Do not build info files
     if [[ ${no_info} -eq 1 ]]
     then
-        \sed -r -i 's/^(\s*all:.*)info/\1/' Makefile.in
+        sed -r -i 's/^(\s*all:.*)info/\1/' Makefile.in
     fi
 
     # Do not build .elc files
@@ -220,8 +220,8 @@ then
             #       -f batch-update-autoloads ${SUBDIRS_ALMOST}
         # with:
         #   true
-        \sed -r -i 's/^(\s*)@echo/\1true\n\0/'lisp/Makefile.in
-        \sed -r -i '/^\s*@echo/,/-f batch/d' lisp/Makefile.in
+        sed -r -i 's/^(\s*)@echo/\1true\n\0/'lisp/Makefile.in
+        sed -r -i '/^\s*@echo/,/-f batch/d' lisp/Makefile.in
     fi
 
     # The below step is needed as we would need to rebuild all the Makefiles
@@ -256,21 +256,20 @@ fi
 
 if [[ -e ${build_info_file} ]]
 then
-    prev_build_time_stamp=$(\grep -oiE '[0-9]{4}/[0-9]{2}/[0-9]{2}.*?[A-Z][a-z]{2}' ${build_info_file} | tr " /:" "_")
-    \mv ${build_info_file} ${build_info_file}.${prev_build_time_stamp}
+    prev_build_time_stamp=$(grep -oiE '[0-9]{4}/[0-9]{2}/[0-9]{2}.*?[A-Z][a-z]{2}' "${build_info_file}" | tr " /:" "_")
+    mv "${build_info_file}" "${build_info_file}.${prev_build_time_stamp}"
 fi
-cat /dev/null > ${build_info_file}
+cat /dev/null > "${build_info_file}"
 if [[ $debug -eq 0 ]]
 then
-    echo "Build date        : $(date +'%Y/%m/%d %H:%M %a')" >> ${build_info_file}
+    echo "Build date        : $(date +'%Y/%m/%d %H:%M %a')" >> "${build_info_file}"
 fi
-echo "Savannah Git link : http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=${current_commit_hash}" >> ${build_info_file}
-echo "" >> ${build_info_file}
-git log -n 1 --pretty=full ${current_commit_hash} >> ${build_info_file}
+echo -e "Savannah Git link : http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=${current_commit_hash}\n" >> "${build_info_file}"
+git log -n 1 --pretty=full "${current_commit_hash}" >> "${build_info_file}"
 
 if [[ $debug -eq 1 ]]
 then
-    cat ${build_info_file}
+    cat "${build_info_file}"
 fi
 
 # Helpful tcsh alias associated with ${build_info_file}
