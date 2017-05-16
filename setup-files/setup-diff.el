@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-12 09:40:49 kmodi>
+;; Time-stamp: <2017-05-16 17:32:52 kmodi>
 
 ;; All things diff
 
@@ -23,7 +23,9 @@
   :config
   (progn
     (defun modi/vc-diff (no-whitespace)
-      "Call `vc-diff' as usual.
+      "Call `vc-diff' as usual if buffer is not modified.
+If the buffer is modified (yet to be saved), call `diff-buffer-with-file'.
+
 If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
       (interactive "P")
       (let* ((no-ws-switch '("-w"))
@@ -39,7 +41,9 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
              ;; Set `current-prefix-arg' to nil so that the HISTORIC arg
              ;; of `vc-diff' stays nil.
              current-prefix-arg)
-        (call-interactively #'vc-diff)))))
+        (if (buffer-modified-p)
+            (diff-buffer-with-file (current-buffer))
+          (call-interactively #'vc-diff))))))
 
 ;;; Diff-hl
 ;; https://github.com/dgutov/diff-hl
