@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-10 09:17:13 kmodi>
+;; Time-stamp: <2017-05-16 17:40:13 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -28,14 +28,20 @@
       (bind-keys
        ("M-o" . counsel-recentf))
       (bind-to-modi-map "v" #'counsel-set-variable)
-      (bind-keys :map read-expression-map
-        ("C-r" . counsel-expression-history)) ; useful in `eval-expression' (`M-:')
+      (bind-keys
+       :map read-expression-map
+       ("C-r" . counsel-expression-history)) ; useful in `eval-expression' (`M-:')
       (bind-chords
        ("JJ" . counsel-imenu)
        ("'/" . counsel-grep-or-swiper)
        (";'" . counsel-M-x))
       (with-eval-after-load 'org
-        (bind-key "C-c C-q" #'counsel-org-tag org-mode-map))
+        (bind-keys
+         :map org-mode-map
+         ("C-c C-q" counsel-org-tag))
+        (bind-chords
+         :map org-mode-map
+         ("JJ" . counsel-org-goto)))    ;Jump to org headings
       (with-eval-after-load 'org-agenda
         (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))))
   :config
@@ -88,7 +94,35 @@
                                "%s" ; This MUST be %s, not %S
                                         ; https://github.com/abo-abo/swiper/issues/427
                                ))
-                     " "))))
+                     " "))
+
+    ;; counsel and org
+    (defface modi/counsel-org-goto-level-1 '((t . (:inherit org-level-1 :weight normal)))
+      "Face for Level 1 in `counsel-org-goto'.")
+    (defface modi/counsel-org-goto-level-2 '((t . (:inherit org-level-2 :weight normal)))
+      "Face for Level 2 in `counsel-org-goto'.")
+    (defface modi/counsel-org-goto-level-3 '((t . (:inherit org-level-3 :weight normal)))
+      "Face for Level 3 in `counsel-org-goto'.")
+    (defface modi/counsel-org-goto-level-4 '((t . (:inherit org-level-4 :weight normal)))
+      "Face for Level 4 in `counsel-org-goto'.")
+    (defface modi/counsel-org-goto-level-5 '((t . (:inherit org-level-5 :weight normal)))
+      "Face for Level 5 in `counsel-org-goto'.")
+    (defface modi/counsel-org-goto-level-6 '((t . (:inherit org-level-6 :weight normal)))
+      "Face for Level 6 in `counsel-org-goto'.")
+    (defface modi/counsel-org-goto-level-7 '((t . (:inherit org-level-7 :weight normal)))
+      "Face for Level 7 in `counsel-org-goto'.")
+    (defface modi/counsel-org-goto-level-8 '((t . (:inherit org-level-8 :weight normal)))
+      "Face for Level 8 in `counsel-org-goto'.")
+
+    (setq counsel-org-goto-face-style 'custom)
+    (setq counsel-org-goto-custom-faces '(modi/counsel-org-goto-level-1
+                                          modi/counsel-org-goto-level-2
+                                          modi/counsel-org-goto-level-3
+                                          modi/counsel-org-goto-level-4
+                                          modi/counsel-org-goto-level-5
+                                          modi/counsel-org-goto-level-6
+                                          modi/counsel-org-goto-level-7
+                                          modi/counsel-org-goto-level-8))))
 
 
 (provide 'setup-counsel)
