@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-11 18:12:42 kmodi>
+;; Time-stamp: <2017-05-16 17:37:11 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -489,10 +489,10 @@ When called in the minibuffer, get out of the minibuffer
 using `abort-recursive-edit'.
 
 If KILL-NEXT-ERROR-BUFFER is non-nil, kill the `next-error' buffer.
-Examples of such buffers: *gtags-global*, *ag*, *Occur*."
+Examples of such buffers: *gtags-global*, *ag*, *Occur*, *Diff*."
   (interactive "P")
   (if kill-next-error-buffer
-      (kill-buffer (next-error-find-buffer))
+      (kill-buffer (next-error-find-buffer :avoid-current))
     (kill-current-buffer)))
 
 (defun modi/quit-and-kill-window ()
