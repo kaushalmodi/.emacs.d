@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-03 15:53:22 kmodi>
+;; Time-stamp: <2017-05-16 22:54:24 kmodi>
 
 ;; Shell Script Mode
 
@@ -16,10 +16,9 @@
     (use-package csh-mode
       :load-path "elisp/csh-mode")
 
-    ;; Change default shell file to tcsh if available
-    (let ((tcsh-bin (executable-find "tcsh")))
-      (when tcsh-bin
-        (setq-default sh-shell-file tcsh-bin)))
+    ;; Change default shell file to bash if available
+    (when-let ((bash-bin (executable-find "bash")))
+      (setq-default sh-shell-file bash-bin))
 
     (setq sh-indent-supported '((sh . sh)
                                 (rc . rc)
@@ -163,7 +162,7 @@ and the output buffer mode is set to the read-only `special-mode'."
  :map modi-mode-map
  :filter (and (derived-mode-p 'sh-mode)
               (use-region-p))
-  ("C-x C-e" . modi/shell-region))
+ ("C-x C-e" . modi/shell-region))
 
 
 (provide 'setup-shell)
