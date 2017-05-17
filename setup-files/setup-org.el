@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-19 12:35:24 kmodi>
+;; Time-stamp: <2017-05-17 12:10:09 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -51,13 +51,9 @@
             (setq Info-directory-list (delete org-stable-install-path
                                               Info-directory-list))
 
-            ;; Also delete the path to the org directory that ships with emacs
+            ;; Remove org that ships with emacs from the `load-path'.
             (dolist (path load-path)
-              (when (string-match-p (concat "emacs/"
-                                            (replace-regexp-in-string
-                                             "\\.[0-9]+\\'" "" emacs-version)
-                                            "/lisp/org\\'")
-                                    path)
+              (when (string-match-p (expand-file-name "org" modi/default-lisp-directory) path)
                 (setq load-path (delete path load-path)))))))
 
     ;; Modules that should always be loaded together with org.el.

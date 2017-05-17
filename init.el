@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-03 15:39:02 kmodi>
+;; Time-stamp: <2017-05-17 11:35:26 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -19,7 +19,7 @@
                                   (make-directory dir :parents)
                                   dir)
   "User's personal directory to contain non-git-controlled files.")
-(setq custom-file (expand-file-name "custom.el" user-personal-directory))
+(setq custom-file (expand-file-name "custom-file.el" user-personal-directory))
 
 (defvar emacs-version-short (format "%s_%s"
                                     emacs-major-version emacs-minor-version)

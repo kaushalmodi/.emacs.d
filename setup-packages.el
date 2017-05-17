@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-24 16:42:52 kmodi>
+;; Time-stamp: <2017-05-17 13:02:34 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -16,6 +16,23 @@
 
 (add-to-list 'load-path (concat user-emacs-directory "elisp/"))
 (add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
+
+(defvar modi/default-lisp-directory
+  (let* ((bin-dir (when (and invocation-directory
+                             (file-exists-p invocation-directory))
+                    invocation-directory))
+         (prefix-dir (when bin-dir
+                       (replace-regexp-in-string "bin/\\'" "" bin-dir)))
+         (lisp-dir (when prefix-dir
+                     (concat prefix-dir "share/emacs/"
+                             ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
+                             ;; Though, this is not needed and also will do nothing in emacs 26+
+                             ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
+                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
+                             "/lisp/"))))
+    (when (file-exists-p lisp-dir)
+      lisp-dir))
+  "Directory containing emacs lisp code installed with emacs.")
 
 ;; Add theme paths
 (add-to-list 'custom-theme-load-path
