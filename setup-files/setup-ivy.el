@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-12 16:48:11 kmodi>
+;; Time-stamp: <2017-05-18 12:33:50 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
@@ -106,6 +106,14 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
      ("C-o" . hydra-ivy/body)
      ("M-o" . ivy-dispatching-done-hydra))
 
+    (bind-keys
+     :map ivy-occur-mode-map
+     ("n" . ivy-occur-next-line)
+     ("p" . ivy-occur-previous-line)
+     ("b" . backward-char)
+     ("f" . forward-char)
+     ("v" . ivy-occur-press)            ;default f
+     ("RET" . ivy-occur-press))
 
     (with-eval-after-load 'setup-windows-buffers
       (bind-keys
