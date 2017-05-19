@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-19 16:06:51 kmodi>
+;; Time-stamp: <2017-05-19 17:05:03 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -43,7 +43,8 @@
     ;; Use cool unicode characters if available
     (with-eval-after-load 'setup-font-check
       (when font-symbola-p
-        (add-to-list 'which-key-replacement-alist '((nil . "\\`calc-") . (nil . "🖩")))))
+        (add-to-list 'which-key-replacement-alist '((nil . "\\`calc-") . (nil . "🖩")))
+        (add-to-list 'which-key-replacement-alist '((nil . "\\`engine/search-") . (nil . "🔎 "))))) ;engine-mode
 
     ;; Change what string to display for a given *complete* key binding
     ;; Eg: After "C-x", display "8 → +unicode" instead of "8 → +prefix"
