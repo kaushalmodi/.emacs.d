@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-09 16:24:59 kmodi>
+;; Time-stamp: <2017-05-19 16:06:51 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -9,6 +9,8 @@
   (progn
     (setq which-key-popup-type 'side-window) ; default
     ;; (setq which-key-popup-type 'minibuffer)
+
+    (setq which-key-compute-remaps t) ;Show correct descriptions for remapped keys
 
     (setq which-key-replacement-alist
           '(
