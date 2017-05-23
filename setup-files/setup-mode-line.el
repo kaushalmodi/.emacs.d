@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 00:40:44 kmodi>
+;; Time-stamp: <2017-05-21 22:11:02 kmodi>
 
 ;; Customize the mode-line
 
@@ -19,6 +19,10 @@ If nil, show the same in the minibuffer.")
 ;; Show line and column numbers in the mode-line
 (line-number-mode 1)
 (column-number-mode 1)
+
+(>=e "26.0"
+    ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=b0b02ca7f3e06d0f092df6f81babd1277bf93b0f
+    (setq mode-line-percent-position '(-3 "%o")))
 
 ;; Display date+time in the minibuffer instead of in the mode-line
 (use-package minibuffer-line
