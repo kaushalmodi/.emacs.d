@@ -1,0 +1,111 @@
+# Time-stamp: <2017-05-23 15:01:37 kmodi>
+*Common org SETUPFILE*
+
+[[https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/org-setupfile.org][URL of this file]]
+
+This file HAS TO BE included in an org file using =#+SETUPFILE: /path/to/this/file=, *not* =#+INCLUDE: ...=.
+
+* Latex Setup
+** Change default font
+Note that fontspec works with only xelatex (not pdflatex).
+#+LaTeX_HEADER: \usepackage{fontspec}
+#+LaTeX_HEADER: \setmainfont[Ligatures=TeX]{Linux Libertine O}
+#+LaTeX_HEADER: \setmonofont[Scale=0.8]{Inconsolata-g}
+** Sans serif fonts for section titles
+#+LaTeX_HEADER: \usepackage{titlesec}
+*** Formatting =section= titles
+#+LaTeX_HEADER: \titleformat{\section}
+#+LaTeX_HEADER:   [hang] % titleformat shape
+#+LaTeX_HEADER:   {\usefont{T1}{qhv}{b}{n}\selectfont\Large} % titleformat format "qhv" - TeX Gyre Heros, "b" - bold
+#+LaTeX_HEADER:   {\thesection} % titleformat label
+#+LaTeX_HEADER:   {0.6em} % titleformat separation
+#+LaTeX_HEADER:   {} % code preceeding title body
+*** Formatting =subsection= titles
+#+LaTeX_HEADER: \titleformat{\subsection}
+#+LaTeX_HEADER:   [hang]           % titleformat shape
+#+LaTeX_HEADER:   {\bfseries\large}  % titleformat format
+#+LaTeX_HEADER:   {\thesubsection} % titleformat label
+#+LaTeX_HEADER:   {0.4em}          % titleformat separation
+#+LaTeX_HEADER:   {}               % code preceeding title body
+*** TODO Look into using the =sectsty= package instead of =titlesec= because of its compatibility issues with =hyperref=
+[[http://tex.stackexchange.com/a/74517/52678][Reference]]
+** Customize left margin indentation of itemize lists
+[[http://tex.stackexchange.com/a/91128/52678][Reference]]
+#+LaTeX_HEADER: \usepackage{enumitem}
+# #+LaTeX_HEADER: \setlist[itemize]{leftmargin=*} % No identation
+#+LaTeX_HEADER: \setlist[itemize]{leftmargin=0.2in}
+*** Increase the max depth of lists to prevent the "Too deeply nested" error
+[[http://stackoverflow.com/a/13120787/1219634][Reference]]
+#+LaTeX_HEADER: \setlistdepth{9}
+*** Customize the bullets used for each level in itemized list
+#+LaTeX_HEADER: \setlist[itemize, 1 ]{label=$\bullet$}
+#+LaTeX_HEADER: \setlist[itemize, 2 ]{label=$\circ$}
+#+LaTeX_HEADER: \setlist[itemize, 3 ]{label=$\diamond$}
+#+LaTeX_HEADER: \setlist[itemize, 4 ]{label=$\ast$}
+#+LaTeX_HEADER: \setlist[itemize, 5 ]{label=$\cdot$}
+#+LaTeX_HEADER: \setlist[itemize, 6 ]{label=$\cdot$}
+#+LaTeX_HEADER: \setlist[itemize, 7 ]{label=$\cdot$}
+#+LaTeX_HEADER: \setlist[itemize, 8 ]{label=$\cdot$}
+#+LaTeX_HEADER: \setlist[itemize, 9 ]{label=$\cdot$}
+#+LaTeX_HEADER: \renewlist{itemize}{itemize}{9}
+** Customizing the title of =\listoflistings= and the caption headers for the listings
+#+LaTeX_HEADER: \renewcommand\listingscaption{Code Snippet}
+#+LaTeX_HEADER: \renewcommand\listoflistingscaption{List of Code Snippets}
+** Caption settings (=caption= package)
+#+LaTeX_HEADER: \captionsetup{margin=10pt,font=small,format=hang,labelfont=bf,labelsep=endash}
+** Allow multi-page code listings by wrapping the =minted= environment with =mdframed= environment
+[[http://tex.stackexchange.com/a/30524/52678][Reference]]
+#+LaTeX_HEADER: \usepackage{mdframed}
+#+LaTeX_HEADER: \mdfsetup{%
+#+LaTeX_HEADER: topline=true, bottomline=true,leftline=true, rightline=true, %
+# #+LaTeX_HEADER: topline=true, bottomline=true,leftline=false, rightline=false, %
+#+LaTeX_HEADER: innerleftmargin=15pt, %
+#+LaTeX_HEADER: leftmargin=-5pt, %
+#+LaTeX_HEADER: rightmargin=-5pt, %
+#+LaTeX_HEADER: linewidth=1pt, backgroundcolor=yellow!20!white %
+#+LaTeX_HEADER: }
+If the below 2 lines are not included, the mdframed config above will not be effective.
+#+LaTeX_HEADER: \BeforeBeginEnvironment{minted}{\begin{mdframed}}
+#+LaTeX_HEADER: \AfterEndEnvironment{minted}{\end{mdframed}}
+* HTML Setup
+** Bootstrap
+[[http://getbootstrap.com/getting-started/][Source]]
+#+HTML_HEAD: <!-- Bootstrap -->
+#+HTML_HEAD: <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+** Get Source Code Pro font
+#+HTML_HEAD: <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+** Leuven theme for code snippets
+#+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/leuven_theme.css" rel="stylesheet">
+** My custom css modifications
+#+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/bootstrap.extra.css" rel="stylesheet">
+* Reveal Setup
+** =reveal.js= source
+#+REVEAL_ROOT: https://cdn.rawgit.com/hakimel/reveal.js/master/
+# #+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+** Themes
+Available theme values: default beige blood moon night serif simple sky solarized
+#+REVEAL_THEME: simple
+** My customizations over =reveal.js=
+#+REVEAL_EXTRA_CSS: https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/reveal.extra.css
+** Use Source Code Pro font for code and use Leuven theme to highlight the code
+#+REVEAL_HEAD_PREAMBLE: <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'> <link href='https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/leuven_theme.css' rel='stylesheet' type='text/css'>
+** Frag Style
+#+REVEAL_DEFAULT_FRAG_STYLE: appear
+* Macros
+** Newline
+#+MACRO: NEWLINE @@latex:​\\@@@@html:<br>@@@@ascii:|@@
+In the =NEWLINE= macro above, =C-x 8 RET 200b= was used to enter a zero-width space character between =@@latex:= and =\\=. If that is not done, then latex->pdf does not work if the ={{{NEWLINE}}}= macro is used at the beginning of a line as below,
+#+BEGIN_SRC org
+​* Vary tone params
+{{{NEWLINE}}} The data driving and tone param variation code blocks
+#+END_SRC
+** Color
+#+MACRO: COLOR @@html:<span style="color: $1">$2</span>@@@@latex:\textcolor{$1}{$2}@@
+#+BEGIN_SRC org
+{{{COLOR(red, This information is important.)}}}
+#+END_SRC
+* References
+- [[http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/][Writing papers using org-mode]]
+- [[http://stackoverflow.com/a/14862555/1219634][How to source files from github]]
+- [[https://www.rpi.edu/dept/arc/training/latex/LaTeX_symbols.pdf][LaTeX symbols]]
+- [[https://github.com/fniessen/org-macros/blob/master/README.org][org-macros by fniessen]]
