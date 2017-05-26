@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-17 11:35:26 kmodi>
+;; Time-stamp: <2017-05-26 10:53:11 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -110,6 +110,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
     sunshine forecast ; weather
     sx
     tiny
+    tldr                ;Concise "man pages"
     transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
     undo-tree ; supercool undo visualization
     use-package use-package-chords ; optimize package loading
@@ -268,6 +269,7 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (require 'setup-sx)
 (require 'setup-term)
 (require 'setup-tiny)
+(require 'setup-tldr)
 (require 'setup-undo-tree)
 (require 'setup-weather)
 (require 'setup-which-func)
