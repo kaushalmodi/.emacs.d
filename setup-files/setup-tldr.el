@@ -1,9 +1,11 @@
-;; Time-stamp: <2017-05-26 13:23:09 kmodi>
+;; Time-stamp: <2017-05-26 13:43:53 kmodi>
 
 ;; TLDR
 ;; https://github.com/tldr-pages/tldr
 ;; https://github.com/kuanyui/tldr.el
 (use-package tldr
+  :bind (:map modi-mode-map
+         ("C-x / t" . tldr))
   :init
   (progn
     (setq tldr-directory-path (concat temporary-file-directory
@@ -26,7 +28,7 @@
         ;;       `max-specpdl-size'.
         ;; q - quiet mode, don't show github/twitter buttons
         (options "?T&q"))
-    (ivy-read "Command or Topic: "
+    (ivy-read "Search cheat.sh: "
               (process-lines "curl" "--silent" (concat url ":list" options))
               :require-match t
               :sort t
@@ -42,6 +44,8 @@
     (when (string-match "^http://cheat.sh/\\([^/?]+\\)" url)
       (rename-buffer (concat "*cheat.sh " (match-string 1 url) "*") :unique))))
 (advice-add 'eww :after #'modi/eww-rename-cheat-sh-buffer)
+
+(bind-key "C-x / c" #'cheat.sh modi-mode-map)
 
 
 (provide 'setup-tldr)
