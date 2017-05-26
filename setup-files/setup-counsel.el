@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-16 17:40:13 kmodi>
+;; Time-stamp: <2017-05-26 13:05:16 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -38,7 +38,7 @@
       (with-eval-after-load 'org
         (bind-keys
          :map org-mode-map
-         ("C-c C-q" counsel-org-tag))
+         ("C-c C-q" . counsel-org-tag))
         (bind-chords
          :map org-mode-map
          ("JJ" . counsel-org-goto)))    ;Jump to org headings
