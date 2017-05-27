@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-16 17:37:11 kmodi>
+;; Time-stamp: <2017-05-27 01:08:47 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -80,55 +80,83 @@
          ("s-<right>" . windmove-right)
          ("s-<up>"    . windmove-up)
          ("s-<down>"  . windmove-down)
-         ("C-c ]"     . hydra-win-resize/body)
-         ("C-c ["     . hydra-win-resize/body))
+         ("C-c ]"     . hydra-resize-window/body)
+         ("C-c ["     . hydra-resize-window/body))
   :config
   (progn
     (setq windmove-wrap-around t) ; default = nil
 
     ;; Move window splitters / Resize windows
     ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
-    (defun hydra-move-splitter-left (delta)
+    (defun modi/move-splitter (direction delta)
+      "Move horizontal/vertical splitter in DIRECTION by DELTA columns."
+      (let* ((windmove-wrap-around nil)
+             (win-left (windmove-find-other-window 'left))
+             (win-right (windmove-find-other-window 'right))
+             (win-up (windmove-find-other-window 'up))
+             (win-down (let ((win (windmove-find-other-window 'down)))
+                         ;; Do not consider minibuffer as a valid window when
+                         ;; figuring out if the current window is the bottom-most
+                         ;; window.
+                         (if (window-minibuffer-p win) nil win))))
+        (cond
+         ((and (or (eq direction 'left)
+                   (eq direction 'right))
+               (null win-left)
+               (null win-right))
+          (user-error "Cannot resize width, window occupies full frame width"))
+         ((and (or (eq direction 'up)
+                   (eq direction 'down))
+               (null win-up)
+               (null win-down))
+          (user-error "Cannot resize height, window occupies full frame height"))
+         (t
+          (cl-case direction
+            (left (cond
+                   (win-right (shrink-window-horizontally delta))
+                   (win-left (enlarge-window-horizontally delta))))
+            (right (cond
+                    (win-left (shrink-window-horizontally delta))
+                    (win-right (enlarge-window-horizontally delta))))
+            (up (cond
+                 (win-down (shrink-window delta))
+                 (win-up (enlarge-window delta))))
+            (down (cond
+                   (win-up (shrink-window delta))
+                   (win-down (enlarge-window delta)))))))))
+
+    (defun modi/move-splitter-left (delta)
       "Move window splitter left."
       (interactive "p")
-      (let ((windmove-wrap-around nil))
-        (if (windmove-find-other-window 'right)
-            (shrink-window-horizontally delta)
-          (enlarge-window-horizontally delta))))
+      (modi/move-splitter 'left delta))
 
-    (defun hydra-move-splitter-right (delta)
+    (defun modi/move-splitter-right (delta)
       "Move window splitter right."
       (interactive "p")
-      (let ((windmove-wrap-around nil))
-        (if (windmove-find-other-window 'right)
-            (enlarge-window-horizontally delta)
-          (shrink-window-horizontally delta))))
+      (modi/move-splitter 'right delta))
 
-    (defun hydra-move-splitter-up (delta)
+    (defun modi/move-splitter-up (delta)
       "Move window splitter up."
       (interactive "p")
-      (let ((windmove-wrap-around nil))
-        (if (windmove-find-other-window 'up)
-            (enlarge-window delta)
-          (shrink-window delta))))
+      (modi/move-splitter 'up delta))
 
-    (defun hydra-move-splitter-down (delta)
+    (defun modi/move-splitter-down (delta)
       "Move window splitter down."
       (interactive "p")
-      (let ((windmove-wrap-around nil))
-        (if (windmove-find-other-window 'up)
-            (shrink-window delta)
-          (enlarge-window delta))))
+      (modi/move-splitter 'down delta))
 
-    (defhydra hydra-win-resize (:color red)
-      "win-resize"
-      ("]"        hydra-move-splitter-right "→")
-      ("["        hydra-move-splitter-left  "←")
-      ("p"        hydra-move-splitter-up    "↑") ; mnemonic: `p' for `up'
-      ("{"        hydra-move-splitter-up    "↑")
-      ("\\"        hydra-move-splitter-down  "↓")
-      ("}"        hydra-move-splitter-down  "↓")
-      ("="        balance-windows           "Balance")
+    (defhydra hydra-resize-window (:color red)
+      "resize window"
+      ("<left>"   modi/move-splitter-left "↤")
+      ("<right>"  modi/move-splitter-right "↦")
+      ("<up>"     modi/move-splitter-up "↥")
+      ("<down>"   modi/move-splitter-down "↧")
+      ("["        modi/move-splitter-left nil)
+      ("]"        modi/move-splitter-right nil)
+      ("{"        modi/move-splitter-up nil) ;Shift + [
+      ("}"        modi/move-splitter-down nil) ;Shift + ]
+      ("="        balance-windows "Balance")
+      ("+"        balance-windows nil)
       ("q"        nil "cancel" :color blue)
       ("<return>" nil "cancel" :color blue))))
 
@@ -552,19 +580,19 @@ Examples of such buffers: *gtags-global*, *ag*, *Occur*, *Diff*."
 ;;;; Other Bindings
 (bind-keys
  :map modi-mode-map
-  ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
-  ;; overriding `C-x C-p' originally bound to `mark-page'
-  ("C-x C-p"      . modi/copy-buffer-file-name)
-  ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence'
-  ("C-x <delete>" . modi/delete-current-buffer-file)
-  ("C-x C-r"      . rename-current-buffer-file)
-  ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
-  ("C-c 6"        . reopen-killed-file) ; alternative to C-S-t for terminal mode
-  ("C-("          . toggle-between-buffers)
-  ("C-c ("        . toggle-between-buffers) ; alternative to C-( for terminal mode
-  ("C-)"          . modi/kill-buffer-dwim)
-  ("C-c )"        . modi/kill-buffer-dwim) ; alternative to C-) for terminal mode
-  ("C-c 0"        . modi/kill-buffer-dwim)) ; alternative to C-) for terminal mode
+ ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
+ ;; overriding `C-x C-p' originally bound to `mark-page'
+ ("C-x C-p"      . modi/copy-buffer-file-name)
+ ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence'
+ ("C-x <delete>" . modi/delete-current-buffer-file)
+ ("C-x C-r"      . rename-current-buffer-file)
+ ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
+ ("C-c 6"        . reopen-killed-file) ; alternative to C-S-t for terminal mode
+ ("C-("          . toggle-between-buffers)
+ ("C-c ("        . toggle-between-buffers) ; alternative to C-( for terminal mode
+ ("C-)"          . modi/kill-buffer-dwim)
+ ("C-c )"        . modi/kill-buffer-dwim) ; alternative to C-) for terminal mode
+ ("C-c 0"        . modi/kill-buffer-dwim)) ; alternative to C-) for terminal mode
 
 ;; Below bindings are made in global map as I want them to work even when my
 ;; minor mode is disabled
