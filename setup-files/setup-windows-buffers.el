@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-27 01:08:47 kmodi>
+;; Time-stamp: <2017-05-27 01:50:05 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -76,15 +76,15 @@
 ;;; Windmove
 (use-package windmove
   :bind (:map modi-mode-map
-         ("s-<left>"  . windmove-left)
+         ("s-<left>" . windmove-left)
          ("s-<right>" . windmove-right)
-         ("s-<up>"    . windmove-up)
-         ("s-<down>"  . windmove-down)
-         ("C-c ]"     . hydra-resize-window/body)
-         ("C-c ["     . hydra-resize-window/body))
+         ("s-<up>" . windmove-up)
+         ("s-<down>" . windmove-down)
+         ("C-c ]" . hydra-resize-window/body)
+         ("C-c [" . hydra-resize-window/body))
   :config
   (progn
-    (setq windmove-wrap-around t) ; default = nil
+    (setq windmove-wrap-around t)       ;default = nil
 
     ;; Move window splitters / Resize windows
     ;; https://github.com/abo-abo/hydra/blob/master/hydra-examples.el
@@ -147,17 +147,17 @@
 
     (defhydra hydra-resize-window (:color red)
       "resize window"
-      ("<left>"   modi/move-splitter-left "↤")
-      ("<right>"  modi/move-splitter-right "↦")
-      ("<up>"     modi/move-splitter-up "↥")
-      ("<down>"   modi/move-splitter-down "↧")
-      ("["        modi/move-splitter-left nil)
-      ("]"        modi/move-splitter-right nil)
-      ("{"        modi/move-splitter-up nil) ;Shift + [
-      ("}"        modi/move-splitter-down nil) ;Shift + ]
-      ("="        balance-windows "Balance")
-      ("+"        balance-windows nil)
-      ("q"        nil "cancel" :color blue)
+      ("<left>" modi/move-splitter-left "↤")
+      ("<right>" modi/move-splitter-right "↦")
+      ("<up>" modi/move-splitter-up "↥")
+      ("<down>" modi/move-splitter-down "↧")
+      ("[" modi/move-splitter-left nil)
+      ("]" modi/move-splitter-right nil)
+      ("{" modi/move-splitter-up nil) ;Shift + [
+      ("}" modi/move-splitter-down nil) ;Shift + ]
+      ("=" balance-windows "Balance")
+      ("+" balance-windows nil)
+      ("q" nil "cancel" :color blue)
       ("<return>" nil "cancel" :color blue))))
 
 ;;; Reopen Killed File
@@ -184,8 +184,8 @@
 ;; http://www.emacswiki.org/emacs/transpose-frame.el
 (use-package transpose-frame
   :bind (:map modi-mode-map
-         ("C-c o"   . rotate-frame)
-         ("C-c C-\\" . transpose-frame))) ; toggles between horz/vert splits
+         ("C-c o" . rotate-frame)
+         ("C-c C-\\" . transpose-frame))) ;Toggles between horz/vert splits
 
 ;;; Current File Buffer Actions
 ;; Delete current buffer file
@@ -234,10 +234,10 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
   (let* ((file-name-full (buffer-file-name))
          (file-name (when file-name-full
                       (cl-case arg
-                        (4 (file-name-nondirectory file-name-full)) ; C-u
-                        (16 file-name-full) ; C-u C-u
-                        (t ; If $USER==xyz, replace _xyz with _${USER} in file name
-                         (replace-regexp-in-string ; no prefix
+                        (4 (file-name-nondirectory file-name-full)) ;C-u
+                        (16 file-name-full)                         ;C-u C-u
+                        (t ;If $USER==xyz, replace _xyz with _${USER} in file name
+                         (replace-regexp-in-string ;No prefix
                           (concat "_" (getenv "USER")) "_$USER" file-name-full))))))
     (if file-name
         (progn
@@ -268,7 +268,7 @@ will be killed."
             (with-current-buffer buf
               (revert-buffer :ignore-auto :noconfirm :preserve-modes))
           ;; Otherwise, kill the buffer.
-          (let (kill-buffer-query-functions) ; No query done when killing buffer
+          (let (kill-buffer-query-functions) ;No query done when killing buffer
             (kill-buffer buf)
             (message "Killed non-existing/unreadable file buffer: %s" filename))))))
   (message "Finished reverting buffers containing unmodified files."))
@@ -282,15 +282,15 @@ will be killed."
 (defun modi/frame-setup-1 ()
   "Set the frame to fill the center screen."
   (interactive)
-  (let ((frame-resize-pixelwise t)) ; do not round frame sizes to character h/w
-    (set-frame-position nil 2560 0) ; pixels x y from upper left
-    (set-frame-size nil 2540 1347 :pixelwise))) ; width, height
+  (let ((frame-resize-pixelwise t))   ;Do not round frame sizes to character h/w
+    (set-frame-position nil 2560 0)   ;Pixels x y from upper left
+    (set-frame-size nil 2540 1347 :pixelwise))) ;Width, height
 
 (defun modi/frame-width-2x (double)
   "Set the frame text width to half the current width.
 If DOUBLE is non-nil, the frame text width is doubled. "
   (interactive "P")
-  (let ((frame-resize-pixelwise t) ; do not round frame sizes to character h/w
+  (let ((frame-resize-pixelwise t)    ;Do not round frame sizes to character h/w
         (factor (if double 2 0.5)))
     (set-frame-size nil
                     (round (* factor (frame-text-width))) (frame-text-height)
@@ -314,24 +314,24 @@ the scratch major mode is set to `org-mode' for such cases.
 
 Return the scratch buffer opened."
   (interactive "p")
-  (if (and (or (null arg)               ; no prefix
+  (if (and (or (null arg)               ;No prefix
                (= arg 1))
            (string-match-p "\\*scratch" (buffer-name)))
       (switch-to-buffer (other-buffer))
     (let* ((mode-str (cl-case arg
-                       (0  "fundamental-mode") ; C-0
-                       (4  "org-mode") ; C-u
-                       (16 "emacs-lisp-mode") ; C-u C-u
+                       (0 "fundamental-mode") ;C-0
+                       (4 "org-mode")         ;C-u
+                       (16 "emacs-lisp-mode") ;C-u C-u
                        ;; If the major mode turns out to be a `special-mode'
                        ;; derived mode, a read-only mode like `help-mode', open
                        ;; an `org-mode' scratch buffer instead.
-                       (t (if (or (derived-mode-p 'special-mode) ; no prefix
+                       (t (if (or (derived-mode-p 'special-mode) ;No prefix
                                   (derived-mode-p 'dired-mode))
                               "org-mode"
                             (format "%s" major-mode)))))
            (buf (get-buffer-create (concat "*scratch-" mode-str "*"))))
       (switch-to-buffer buf)
-      (funcall (intern mode-str))   ; http://stackoverflow.com/a/7539787/1219634
+      (funcall (intern mode-str))    ;http://stackoverflow.com/a/7539787/1219634
       buf)))
 
 ;;; Minibuffer and Recursive Edit
@@ -451,9 +451,9 @@ If LN is nil, defaults to 1 line."
 ;; Below bindings are made in global map and not in my minor mode as I want
 ;; to allow other modes to override these.
 (bind-keys
- ("<C-M-up>"    . modi/scroll-down)
- ("<C-M-down>"  . modi/scroll-up)
- ("<C-M-left>"  . modi/scroll-other-window-down)
+ ("<C-M-up>" . modi/scroll-down)
+ ("<C-M-down>" . modi/scroll-up)
+ ("<C-M-left>" . modi/scroll-other-window-down)
  ("<C-M-right>" . modi/scroll-other-window-up))
 
 ;;; File Permissions
@@ -572,33 +572,31 @@ Examples of such buffers: *gtags-global*, *ag*, *Occur*, *Diff*."
                                          tabulated-list-mode-map)
   "List of read-only mode maps in which few key bindings need to be updated.")
 (dolist (map modi/read-only-mode-maps)
-  (define-key map (kbd "y") #'bury-buffer) ; only bury
-  (define-key map (kbd "k") #'modi/kill-buffer-dwim) ; only kill
-  (define-key map (kbd "z") #'quit-window) ; quit + bury
-  (define-key map (kbd "q") #'modi/quit-and-kill-window)) ; quit + kill
+  (define-key map (kbd "y") #'bury-buffer)                ;Only bury
+  (define-key map (kbd "k") #'modi/kill-buffer-dwim)      ;Only kill
+  (define-key map (kbd "z") #'quit-window)                ;Quit + bury
+  (define-key map (kbd "q") #'modi/quit-and-kill-window)) ;Quit + kill
 
 ;;;; Other Bindings
 (bind-keys
  :map modi-mode-map
- ("C-x 1"        . modi/toggle-one-window) ; default binding to `delete-other-windows'
- ;; overriding `C-x C-p' originally bound to `mark-page'
- ("C-x C-p"      . modi/copy-buffer-file-name)
- ;; overriding `C-x <delete>' originally bound to `backward-kill-sentence'
- ("C-x <delete>" . modi/delete-current-buffer-file)
- ("C-x C-r"      . rename-current-buffer-file)
- ("C-S-t"        . reopen-killed-file) ; mimick reopen-closed-tab in browsers
- ("C-c 6"        . reopen-killed-file) ; alternative to C-S-t for terminal mode
- ("C-("          . toggle-between-buffers)
- ("C-c ("        . toggle-between-buffers) ; alternative to C-( for terminal mode
- ("C-)"          . modi/kill-buffer-dwim)
- ("C-c )"        . modi/kill-buffer-dwim) ; alternative to C-) for terminal mode
- ("C-c 0"        . modi/kill-buffer-dwim)) ; alternative to C-) for terminal mode
+ ("C-x 1" . modi/toggle-one-window) ;Default binding to `delete-other-windows'
+ ("C-x <delete>" . modi/delete-current-buffer-file) ;Default binding to `backward-kill-sentence'
+ ("C-x C-p" . modi/copy-buffer-file-name) ;Default binding to `mark-page'
+ ("C-x C-r" . rename-current-buffer-file)
+ ("C-S-t" . reopen-killed-file) ;Mimick "reopen last closed tab" in browsers
+ ("C-c 6" . reopen-killed-file) ;Alternative to C-S-t for terminal mode
+ ("C-(" . toggle-between-buffers)
+ ("C-c (" . toggle-between-buffers)     ;Alternative to C-( for terminal mode
+ ("C-)" . modi/kill-buffer-dwim)
+ ("C-c )" . modi/kill-buffer-dwim)      ;Alternative to C-) for terminal mode
+ ("C-c 0" . modi/kill-buffer-dwim))     ;Alternative to C-) for terminal mode
 
 ;; Below bindings are made in global map as I want them to work even when my
 ;; minor mode is disabled
 (bind-keys
- ("<f5>"   . revert-buffer)
- ("C-c 5"  . revert-buffer) ; alternative to f5
+ ("<f5>" . revert-buffer)
+ ("C-c 5" . revert-buffer)              ;Alternative to f5 for terminal mode
  ("<S-f5>" . modi/revert-all-file-buffers))
 
 (bind-to-modi-map "b" #'modi/switch-to-scratch-and-back)
