@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-10 09:20:10 kmodi>
+;; Time-stamp: <2017-06-07 14:09:35 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -217,11 +217,33 @@ Do this only if the current buffer is an org capture buffer."
 (defvar-local do-not-delete-trailing-whitespace nil
   "If non-nil, `modi/delete-trailing-whitespace-buffer' will do nothing.
 
-Usage: If you do not want to automatically delete the trailing whitespace in
+This may also be a function to test if `modi/delete-trailing-whitespace-buffer'
+should run.
+
+If you do not want to automatically delete the trailing whitespace in
 any of the files in a given sub-directory, create a `.dir-locals.el' file in
 that sub-directory will the below contents:
-((\"sub-dir-name\"
-  . ((nil . ((do-not-delete-trailing-whitespace . t))))))
+
+    ((\"sub-dir-name\"
+      . ((nil . ((do-not-delete-trailing-whitespace . t))))))
+
+Another way is to set the default value of this variable to a test function.
+This is useful where a public project might already have a .dir-locals.el and
+you do not want to modify that.
+
+Example:
+
+    (defun modi/prevent-trailing-whitespace-deletion-p ()
+      \"Return non-nil for projects where trailing whitespace should not be deleted.\"
+      (if-let ((proj-root-dir (cdr (project-current)))) ;Requires emacs 25.1
+          (string-match-p (concat \"\\\\(\"
+                                  \"git/emacs/\"
+                                  \"\\\\|/org-mode/\"
+                                  \"\\\\)$\")
+                          proj-root-dir)
+        nil))
+    (setq-default do-not-delete-trailing-whitespace
+                  #'modi/prevent-trailing-whitespace-deletion-p)
 ")
 
 ;; http://stackoverflow.com/a/35781486/1219634
@@ -235,7 +257,9 @@ want my cursor to move back (\"*|\").
 
 Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
   (interactive)
-  (when (not (bound-and-true-p do-not-delete-trailing-whitespace))
+  (unless (if (functionp do-not-delete-trailing-whitespace)
+	      (funcall do-not-delete-trailing-whitespace)
+            do-not-delete-trailing-whitespace)
     (let ((pre-marker-restore-point (point)))
       ;; Only in org capture buffers, first restore the point to the marker
       ;; saved by the `modi/advice-basic-save-buffer-save-mark' function.
