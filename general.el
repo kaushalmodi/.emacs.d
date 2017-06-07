@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-25 15:23:31 kmodi>
+;; Time-stamp: <2017-06-07 12:10:55 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -106,8 +106,8 @@ packages.")
     "--line-number"                     ;Line numbers
     "--smart-case"
     "--follow"                 ;Follow symlinks
-    "--max-columns 150"        ;Emacs doesn't handle long line lengths very well
-    ,(concat "--ignore-file /home/" (getenv "USER") "/.ignore"))
+    "--max-columns" "150"      ;Emacs doesn't handle long line lengths very well
+    "--ignore-file" ,(concat "/home/" (getenv "USER") "/.ignore"))
   "Default rg arguments used in the functions in `counsel' and `projectile'
 packages.")
 
