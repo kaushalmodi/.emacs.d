@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-06 20:53:56 kmodi>
+;; Time-stamp: <2017-06-07 14:24:47 kmodi>
 
 ;; Python
 
@@ -12,8 +12,13 @@
     (defvar modi/python-use-ipython t
       "When non-nil, use Ipython as the python interpreter instead of python3.")
 
+    ;; Don't warn if guessing the indention fails, just set it to the value
+    ;; of `python-indent-offset'.
+    (setq python-indent-guess-indent-offset-verbose nil)
+
     (if modi/python-use-ipython
         (progn
+          (setq python-shell-buffer-name "Ipython")
           (setq python-shell-interpreter "ipython")
           ;; https://emacs.stackexchange.com/q/24453/115
           ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25306
