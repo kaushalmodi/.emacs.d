@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-26 13:05:16 kmodi>
+;; Time-stamp: <2017-06-07 12:15:21 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -70,15 +70,16 @@
     ;; (setq counsel-ag-base-command "\\ag --vimgrep %s") ; default
     (setq counsel-ag-base-command
           ;; http://stackoverflow.com/a/12999828/1219634
-          (mapconcat 'identity
-                     (append '("\\ag") ; used unaliased version of `ag': \ag
-                             modi/ag-arguments
-                             '("--noheading" ; no file names above matching content
-                               "--nocolor"
-                               "%s" ; This MUST be %s, not %S
-                                        ; https://github.com/abo-abo/swiper/issues/427
-                               ))
-                     " "))
+          (concat (mapconcat #'shell-quote-argument
+                             (append '("ag")
+                                     modi/ag-arguments
+                                     '("--noheading" ;No file names above matching content
+                                       "--nocolor"
+                                       ))
+                             " ")
+                  " %s"            ;This MUST be %s, not %S
+                                        ;https://github.com/abo-abo/swiper/issues/427
+                  ))
     ;; Show parent directory in the prompt
     (ivy-set-prompt 'counsel-ag #'counsel-prompt-function-dir)
 
@@ -87,14 +88,15 @@
     ;; the `--follow' option to allow search through symbolic links (part of
     ;; `modi/rg-arguments').
     (setq counsel-rg-base-command
-          (mapconcat 'identity
-                     (append '("\\rg") ; used unaliased version of `rg': \rg
-                             modi/rg-arguments
-                             '("--no-heading" ; no file names above matching content
-                               "%s" ; This MUST be %s, not %S
-                                        ; https://github.com/abo-abo/swiper/issues/427
-                               ))
-                     " "))
+          (concat (mapconcat #'shell-quote-argument
+                             (append '("rg")
+                                     modi/rg-arguments
+                                     '("--no-heading" ;No file names above matching content
+                                       ))
+                             " ")
+                  " %s"            ;This MUST be %s, not %S
+                                        ;https://github.com/abo-abo/swiper/issues/427
+                  ))
 
     ;; counsel and org
     (defface modi/counsel-org-goto-level-1 '((t . (:inherit org-level-1 :weight normal)))
