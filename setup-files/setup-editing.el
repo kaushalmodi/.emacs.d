@@ -465,8 +465,8 @@ remove the comment characters from that line."
     (setq zop-to-char-erase-keys         '(?\d ?\C-d))
     (bind-keys
      :map modi-mode-map
-      ("M-z" . zop-up-to-char)
-      ("M-Z" . zop-to-char))))
+     ("M-z" . zop-up-to-char)
+     ("M-Z" . zop-to-char))))
 
 ;;; Kill with line numbers
 ;; http://stackoverflow.com/q/12165205/1219634
@@ -516,11 +516,11 @@ instead of ASCII characters for adorning the copied snippet."
 
 (bind-keys
  :map region-bindings-mode-map
-  ;; When region is selected, pressing `c' will copy the region
-  ;; with ASCII character adornment.
-  ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
-  ("c" . modi/kill-with-linenum)
-  ("C" . modi/kill-with-linenum-unicode))
+ ;; When region is selected, pressing `c' will copy the region
+ ;; with ASCII character adornment.
+ ;; Pressing `C-u c' or `C' will copy with Unicode character adornment.
+ ("c" . modi/kill-with-linenum)
+ ("C" . modi/kill-with-linenum-unicode))
 
 ;;; Rectangle
 
@@ -712,9 +712,9 @@ _b_   _f_      _k_   cut         _r_eset         _o_pen (create blank rectangle 
 
 (bind-keys
  :map modi-mode-map
-  ;; Add an extra binding for `copy-rectangle-as-kill' as the default is a bit
-  ;; inconvenient "C-x r M-w"
-  ("C-x r e" . copy-rectangle-as-kill))
+ ;; Add an extra binding for `copy-rectangle-as-kill' as the default is a bit
+ ;; inconvenient "C-x r M-w"
+ ("C-x r e" . copy-rectangle-as-kill))
 
 ;;; Cycle Letter Case
 ;; http://ergoemacs.org/emacs/modernization_upcase-word.html
@@ -772,7 +772,7 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
 
 (bind-keys
  :map region-bindings-mode-map
-  ("~" . xah-cycle-letter-case))
+ ("~" . xah-cycle-letter-case))
 
 (defhydra hydra-change-case (:color blue
                              :hint nil)
@@ -791,9 +791,9 @@ _C_apitalize        _U_PCASE        _d_owncase        _<SPC>_ →Cap→UP→down
 
 (bind-keys
  :map modi-mode-map
-  ("C-x C-u" . modi/upcase)
-  ("C-x C-l" . modi/downcase)
-  ("M-c"     . hydra-change-case/body))
+ ("C-x C-u" . modi/upcase)
+ ("C-x C-l" . modi/downcase)
+ ("M-c"     . hydra-change-case/body))
 
 ;;; Sort Words
 ;; http://www.emacswiki.org/emacs/SortWords
@@ -839,22 +839,22 @@ See `man par' for more information."
                     ;; Quote characters: space > | <comment-start char>
                     (shell-quote-argument
                      (concat "Q=_s>|" (when comment-start comment-start))) " "
-                     ;; Allow bodiless characters like *, space, .. to inc/dec by
-                     ;; up to 10 characters to adjust line width.
-                     "r10"
-                     "T4" ; Expand tab chars to 4 spaces
-                     ;; Prefixes may not contain any trailing body characters, and
-                     ;; suffixes may not contain any leading body characters
-                     "b"
-                     "e" ; Expel/remove superfluous lines
-                     (when (equal '(16) par-option)
-                       "f") ; Try to make all lines of nearly the same length
-                     "g" ; Make a better guess at inserting line breaks
-                     (when (equal '(4) par-option)
-                       "j") ; Justify the lines by inserting spaces between words
-                     "q" ; Insert blank lines before/after quoted text
-                     "R" ; Throw an error if a word length exceeds the fill width
-                     "E" )) ; Send error to stderr instead of stdout
+                    ;; Allow bodiless characters like *, space, .. to inc/dec by
+                    ;; up to 10 characters to adjust line width.
+                    "r10"
+                    "T4" ; Expand tab chars to 4 spaces
+                    ;; Prefixes may not contain any trailing body characters, and
+                    ;; suffixes may not contain any leading body characters
+                    "b"
+                    "e" ; Expel/remove superfluous lines
+                    (when (equal '(16) par-option)
+                      "f") ; Try to make all lines of nearly the same length
+                    "g" ; Make a better guess at inserting line breaks
+                    (when (equal '(4) par-option)
+                      "j") ; Justify the lines by inserting spaces between words
+                    "q" ; Insert blank lines before/after quoted text
+                    "R" ; Throw an error if a word length exceeds the fill width
+                    "E" )) ; Send error to stderr instead of stdout
            (before-text (buffer-substring-no-properties begin end))
            par-ret
            ;; Do the formatting in a temp buffer so that the text in the original
@@ -1114,23 +1114,23 @@ to help with some debug."
 
 (bind-keys
  :map modi-mode-map
-  ("C-x d" . delete-region)
-  ("C-S-d" . duplicate-current-line-or-region)
-  ("C-M-d" . duplicate-current-line-or-region) ;Alternative to C-S-d in terminal mode, overrides `down-list'
-  ("C-x \\" . align-regexp) ; align selected region to the entered regexp
-  ;; Align multiple columns in the selected region. Of course all the selected
-  ;; lines must have the same number of columns of groups of non-space characters
-  ("C-x |" . modi/align-columns)
-  ("C-k" . modi/kill-line)
-  ("C-o" . modi/smart-open-line)        ;Overrides `open-line'
-  ("C-j" . modi/pull-up-line)
-  ("M-=" . count-words) ; count words in buffer if no region selected
-  ("M-;" . endless/comment-line-or-region) ;Overrides`comment-dwim'
-  ("C-x ;" . comment-dwim)                 ;Overrides `comment-set-column'
-  ;; Override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
-  ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
-  ("<M-delete>" . backward-kill-word)
-  ("<C-M-backspace>" . backward-kill-sexp))
+ ("C-x d" . delete-region)
+ ("C-S-d" . duplicate-current-line-or-region)
+ ("C-M-d" . duplicate-current-line-or-region) ;Alternative to C-S-d in terminal mode, overrides `down-list'
+ ("C-x \\" . align-regexp) ; align selected region to the entered regexp
+ ;; Align multiple columns in the selected region. Of course all the selected
+ ;; lines must have the same number of columns of groups of non-space characters
+ ("C-x |" . modi/align-columns)
+ ("C-k" . modi/kill-line)
+ ("C-o" . modi/smart-open-line)        ;Overrides `open-line'
+ ("C-j" . modi/pull-up-line)
+ ("M-=" . count-words) ; count words in buffer if no region selected
+ ("M-;" . endless/comment-line-or-region) ;Overrides`comment-dwim'
+ ("C-x ;" . comment-dwim)                 ;Overrides `comment-set-column'
+ ;; Override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
+ ;; Below is required so that `verilog-mode' does not bind it to `kill-word'.
+ ("<M-delete>" . backward-kill-word)
+ ("<C-M-backspace>" . backward-kill-sexp))
 (bind-to-modi-map "=" #'modi/align-to-equals)
 
 
