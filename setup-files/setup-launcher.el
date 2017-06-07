@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-06 15:27:50 kmodi>
+;; Time-stamp: <2017-06-07 14:37:30 kmodi>
 
 ;; Launcher
 
@@ -29,7 +29,9 @@
   ("m"       woman "man/woman")
   ("n"       neotree-toggle "neotree")
   ("o"       org-capture "org capture")
-  ("p"       package-list-packages "packages") ;Launches paradox if installed
+  ("p"       (call-interactively (if (package-installed-p 'paradox)
+                                     #'paradox-list-packages ;Launch paradox if installed
+                                   #'package-list-packages)) "packages")
   ;; chmod usage: s-SPC 644 P, s-SPC 400 P
   ("P"       modi/set-file-permissions "file permissions")
   ("r"       counsel-rg "ripgrep cwd")

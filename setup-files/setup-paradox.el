@@ -1,10 +1,10 @@
-;; Time-stamp: <2017-04-18 07:44:20 kmodi>
+;; Time-stamp: <2017-06-07 14:34:58 kmodi>
 
 ;; Paradox
 ;; https://github.com/Malabarba/paradox
 
 (use-package paradox
-  :defer 10
+  :defer t
   :config
   (progn
     ;; The "paradox-token" file is supposed to contain this line:
