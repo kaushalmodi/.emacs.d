@@ -1,35 +1,27 @@
-;; Time-stamp: <2015-10-29 10:49:51 kmodi>
+;; Time-stamp: <2017-06-06 20:53:56 kmodi>
 
 ;; Python
 
 ;; Emacs built-in `python' mode
 (use-package python
   :mode (("\\.py\\'" . python-mode))
-  :interpreter (("python" . python-mode)))
-
-;; https://github.com/emacsmirror/python-mode
-(use-package python-mode
-  :disabled
+  :bind (:map python-mode-map
+         ("<f9>" . python-shell-send-buffer))
   :config
   (progn
-    ;; ;; Use IPython
-    ;; (setq-default py-shell-name "ipython")
-    ;; (setq-default py-which-bufname "IPython")
-    ;; ;; Use python3
-    ;; ;; Use the wx backend, for both mayavi and matplotlib
-    ;; (setq py-python-command-args
-    ;;   '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
-    ;; (setq-default py-shell-name "python3")
-    ;; (setq-default py-which-bufname "Python3")
-    (setq py-force-py-shell-name-p t)
-    ;; Switch to the interpreter after executing code
-    (setq py-shell-switch-buffers-on-execute-p t)
-    ;; Don't switch the code buffer to python shell
-    (setq py-switch-buffers-on-execute-p nil)
-    ;; Split windows
-    (setq py-split-windows-on-execute-p t)
-    ;; Try to automagically figure out indentation
-    (setq py-smart-indentation t)))
+    (defvar modi/python-use-ipython t
+      "When non-nil, use Ipython as the python interpreter instead of python3.")
+
+    (if modi/python-use-ipython
+        (progn
+          (setq python-shell-interpreter "ipython")
+          ;; https://emacs.stackexchange.com/q/24453/115
+          ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25306
+          (setq python-shell-interpreter-args "--simple-prompt -i"))
+      (setq python-shell-interpreter "python3")))) ;Default to python 3.x
 
 
 (provide 'setup-python)
+
+;; | C-c C-p | Start the python shell        |
+;; | C-c C-c | Send current buffer to python |
