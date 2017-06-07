@@ -1,9 +1,10 @@
-;; Time-stamp: <2017-03-30 09:30:38 kmodi>
+;; Time-stamp: <2017-06-06 16:46:16 kmodi>
 
 ;; Mouse
 
 ;; Contents:
 ;;
+;;  Mouse
 ;;  Mouse wheel
 ;;  Scrolling other window using mouse
 ;;  Mouse and Scroll All Mode
@@ -11,6 +12,15 @@
 ;;  Mouse Copy
 ;;  Misc
 ;;  Mode-line mouse bindings
+
+;;; Mouse
+(use-package mouse
+  :config
+  (progn
+    (>=e "26.0"
+        ;; Drag-drop a region to cut/paste it; works across windows too!
+        ;; Drag, press Control, and then drop to copy/paste instead.
+        (setq mouse-drag-and-drop-region 'control))))
 
 ;;; Mouse wheel
 ;; `mouse-wheel-mode' is auto-enabled under X (GUI)
@@ -29,8 +39,8 @@
 (with-eval-after-load 'setup-windows-buffers
   (bind-keys
    :map modi-mode-map
-    ("<M-mouse-4>" . modi/scroll-other-window-down) ; Alt + wheel up
-    ("<M-mouse-5>" . modi/scroll-other-window-up))) ; Alt + wheel down
+   ("<M-mouse-4>" . modi/scroll-other-window-down) ; Alt + wheel up
+   ("<M-mouse-5>" . modi/scroll-other-window-up))) ; Alt + wheel down
 
 ;;; Mouse and Scroll All Mode
 ;; Allow scrolling of all buffers using mouse-wheel in `scroll-all-mode'.
