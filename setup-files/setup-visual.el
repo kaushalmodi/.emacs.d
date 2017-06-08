@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-12 11:46:55 kmodi>
+;; Time-stamp: <2017-06-08 16:38:23 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -203,26 +203,31 @@ the smart-mode-line theme."
 
 ;;; Frame Title
 (defun modi/update-frame-title ()
-  "Update the `frame-title-format'."
-  (interactive)
+  "Show the emacs branch/version and a useful buffer name in the frame title.
+
+If the buffer is showing a file, show the full file name.
+Else if it's showing a `dired' buffer, show the directory name.
+Else show just the buffer name.
+
+At the end, % is shown if the buffer is read-only,
+            * is shown if the buffer has been modified, and
+            - is shown if the buffer is editable, but not yet modified.
+
+See `mode-line-format' to get help on the %-identifers used in this function."
   (setq frame-title-format
         `("emacs "
-          (emacs-git-branch
-           ;; If `emacs-git-branch' is non-nil, show that
-           ,(concat "[" emacs-git-branch "]")
-           ;; Else show the version number
-           ,(concat (number-to-string emacs-major-version)
-                    "."
-                    (number-to-string emacs-minor-version)))
+          ;; If `emacs-git-branch' is non-nil, show that
+          (emacs-git-branch ,(concat "[" emacs-git-branch "]")
+                            ;; Else show the version number
+                            ,(concat (number-to-string emacs-major-version)
+                                     "."
+                                     (number-to-string emacs-minor-version)))
           "   "
-          ;; If `buffer-file-name' exists, show it
-          (buffer-file-name "%f"
-                            ;; Else show the directory name if in dired mode
-                            (dired-directory dired-directory
-                                             ;; Else show the buffer name
-                                             ;; (*scratch*, *Messages*, etc)
-                                             "%b"))
-          "%*"))) ; *=modified, %=read-only, -=editable,not modified
+          (buffer-file-name "%f" ;Show full file path if buffer is showing a file
+                            (dired-directory dired-directory ;Else if in dired mode, show the directory name
+                                             "%b")) ;Else show the buffer name (*scratch*, *Messages*, etc)
+          "%*"))) ;Prints %(read-only), *(modified) or -(editable,not modified)
+                                        ;to show the current buffer status.
 (add-hook 'after-init-hook #'modi/update-frame-title)
 
 ;;; Fonts
@@ -319,15 +324,15 @@ Font Size:     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset    
 
 (bind-keys
  :map modi-mode-map
-  ;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
-  ;; inconvenient when that mouse menu pops up when I don't need it
-  ;; to. And actually I have never used that menu :P
-  ("<C-down-mouse-1>" . modi/global-font-size-reset) ; C + left mouse down event
-  ("<C-mouse-1>"      . modi/global-font-size-reset) ; C + left mouse up event
-  ;; Make Control+mousewheel do increase/decrease font-size
-  ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
-  ("<C-mouse-4>" . modi/global-font-size-incr) ; C + wheel-up
-  ("<C-mouse-5>" . modi/global-font-size-decr)) ; C + wheel-down
+ ;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
+ ;; inconvenient when that mouse menu pops up when I don't need it
+ ;; to. And actually I have never used that menu :P
+ ("<C-down-mouse-1>" . modi/global-font-size-reset) ;Ctrl + left mouse down event
+ ("<C-mouse-1>" . modi/global-font-size-reset)      ;Ctrl + left mouse up event
+ ;; Make Control+mousewheel do increase/decrease font-size
+ ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
+ ("<C-mouse-4>" . modi/global-font-size-incr)  ;Ctrl + wheel-up
+ ("<C-mouse-5>" . modi/global-font-size-decr)) ;Ctrl + wheel-down
 
 (>=e "25.0"
     ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
