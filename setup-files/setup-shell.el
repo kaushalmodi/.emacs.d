@@ -1,6 +1,10 @@
-;; Time-stamp: <2017-05-16 22:54:24 kmodi>
+;; Time-stamp: <2017-06-08 08:23:36 kmodi>
 
 ;; Shell Script Mode
+
+;; On saving, automatically make a file an executable if it begins with "#!"
+;; Example: #!/usr/bin/env bash
+(add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 
 (use-package sh-script
   :mode (("\\.alias\\'"       . shell-script-mode)

@@ -1,7 +1,18 @@
-;; Time-stamp: <2017-05-21 22:11:02 kmodi>
+;; Time-stamp: <2017-06-08 09:51:56 kmodi>
 
 ;; Customize the mode-line
 
+;; Contents:
+;;
+;;  Date/Time
+;;  Line and column numbers
+;;  Buffer percentage
+;;  Minibuffer-line
+;;  Smart Mode-Line
+;;    Rich Minority
+;;  Organize the order of minor mode lighters
+
+;;; Date/Time
 (defvar modi/show-date-time-in-mode-line nil
   "If non-nil, show the date-time in the mode-line.
 If nil, show the same in the minibuffer.")
@@ -16,19 +27,20 @@ If nil, show the same in the minibuffer.")
 
 (display-time-mode 1)
 
-;; Show line and column numbers in the mode-line
+;;; Line and column numbers
 (line-number-mode 1)
 (column-number-mode 1)
 
+;;; Buffer percentage
 (>=e "26.0"
     ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=b0b02ca7f3e06d0f092df6f81babd1277bf93b0f
     (setq mode-line-percent-position '(-3 "%o")))
 
+;;; Minibuffer-line
 ;; Display date+time in the minibuffer instead of in the mode-line
 (use-package minibuffer-line
   :if (null modi/show-date-time-in-mode-line)
-  :defer 1 ; to prevent 'Invalid face reference: minibuffer-line'
-                                        ; when launching emacsclient
+  :defer 1 ;Prevent 'Invalid face reference: minibuffer-line' when launching emacsclient
   :init
   (progn
     (defvar modi/minibuffer-line-right-aligned nil
@@ -50,15 +62,15 @@ If nil, show the same in the minibuffer.")
 
     (minibuffer-line-mode)))
 
-;; smart-mode-line
+;;; Smart Mode-Line
 ;; emacs modeline aka statusbar
 ;; https://github.com/Malabarba/smart-mode-line
 (use-package smart-mode-line
   :init
   (progn
-    (setq sml/line-number-format    "%4l")
-    (setq sml/name-width            40) ; buffer name width in the mode-line
-    (setq sml/mode-width            'full) ; minor mode lighters area width
+    (setq sml/line-number-format "%4l")
+    (setq sml/name-width 40)            ;Buffer name width in the mode-line
+    (setq sml/mode-width 'full)         ;Minor mode lighters area width
     (setq sml/no-confirm-load-theme t)
     (setq sml/theme (if (boundp 'dark-theme)
                         (if (not dark-theme) 'light 'dark)
@@ -98,18 +110,11 @@ If nil, show the same in the minibuffer.")
             ;; In lisp code you have to give it a function. So we need to change the
             ;; replacement string to,
             ;; `(lambda (string) (concat ":" (upcase (match-string 1 string)) ":")))`.
-            (,(concat "\\(?1:/proj.*?/" ; project base
-                      "\\(?2:[a-z0-9_]\\{3\\}\\).*?\\(?3:[a-z0-9_]\\)/" ; project name
-                      "[so]+_\\(?4:[a-z0-9]+\\)\\)/" ; user project root
-                      "\\(?5:[a-z0-9_]\\{0,3\\}\\).*?/") ; dir in user project root
+            (,(concat "\\(?1:/proj.*?/"                         ;Project base
+                      "\\(?2:[a-z0-9_]\\{3\\}\\).*?\\(?3:[a-z0-9_]\\)/" ;Project name
+                      "[so]+_\\(?4:[a-z0-9]+\\)\\)/"                ;User project root
+                      "\\(?5:[a-z0-9_]\\{0,3\\}\\).*?/") ;Dir in user project root
              (lambda (string)
-               ;; (concat ":"
-               ;;         (capitalize (match-string 1 string))
-               ;;         (upcase (match-string 2 string))
-               ;;         (when (not (string= (match-string 3 string) (getenv "USER")))
-               ;;           (concat "[" (match-string 3 string) "]"))
-               ;;         ":" (upcase (match-string 4 string)) ":"
-               ;;         )
                (let* ((prj-root (match-string-no-properties 1 string))
                       (prj-abbrev (concat (capitalize (match-string-no-properties 2 string))
                                           "." (upcase (match-string-no-properties 3 string))))
@@ -118,98 +123,135 @@ If nil, show the same in the minibuffer.")
                       (is-me (string= user (getenv "USER"))))
                  (concat (if is-me
                              (concat prj-root "/")
-                           (concat ":" ; has to begin with ':' to be identified in a different face
+                           (concat ":" ;Has to begin with ':' to be identified in a different face
                                    prj-abbrev
                                    "/" user))
                          ":" dir-abbrev ":"))))
             ("\\(.*:\\)CAD:.*?/\\([^/]+\\)/systemVerilog/" "\\1\\2:")
-            ("\\(.*:\\)DIG:tb/"                            "\\1TB:")
-            ("\\(.*:\\)DIG:syslvl_tb/"                     "\\1TB:")
-            ("\\(.*:\\)TB:agents/"                         "\\1AGT:")
-            ("\\(.*:\\)TB:patterns/"                       "\\1PAT:")
-            ("\\(.*:\\)TB:tests/"                          "\\1TST:")
-            ("\\(.*:\\)TB:tests_sv/"                       "\\1TST:")
-            ("\\(.*:\\)TB:uvm.*src/"                       "\\1UVM:")
-            ("\\(.*:\\)DIG:design_code/"                   "\\1DSGN:")
-            ("\\(.*:\\)DSGN:rtl/"                          "\\1RTL:")
-            ("\\(.*:\\)DSGN:analog_partition_rtl/"         "\\1ANA:"))))
+            ("\\(.*:\\)DIG:tb/"                        "\\1TB:")
+            ("\\(.*:\\)DIG:syslvl_tb/"                 "\\1TB:")
+            ("\\(.*:\\)TB:agents/"                     "\\1AGT:")
+            ("\\(.*:\\)TB:patterns/"                   "\\1PAT:")
+            ("\\(.*:\\)TB:tests/"                      "\\1TST:")
+            ("\\(.*:\\)TB:tests_sv/"                   "\\1TST:")
+            ("\\(.*:\\)TB:uvm.*src/"                   "\\1UVM:")
+            ("\\(.*:\\)DIG:design_code/"               "\\1DSGN:")
+            ("\\(.*:\\)DSGN:rtl/"                      "\\1RTL:")
+            ("\\(.*:\\)DSGN:analog_partition_rtl/"     "\\1ANA:"))))
   :config
   (progn
+
+;;;; Rich Minority
     (use-package rich-minority
       :config
       (progn
         (setq rm-blacklist
-              '(" WK"        ; which-key
-                " hc"        ; hardcore mode
-                " AC"        ; auto-complete
-                " vl"        ; global visual line mode enabled
-                " Wrap"      ; shows up if visual-line-mode is enabled for that buffer
-                " Omit"      ; omit mode in dired
-                " yas"       ; yasnippet
-                " drag"      ; drag-stuff-mode
-                " VHl"       ; volatile highlights
-                " ctagsU"    ; ctags update
-                " Undo-Tree" ; undo tree
-                " wr"        ; Wrap Region
-                " SliNav"    ; elisp-slime-nav
-                " Fly"       ; Flycheck
-                " PgLn"      ; page-line-break
-                " ElDoc"     ; eldoc
-                " GG"        ; ggtags
-                " hs"        ; hideshow
+              '(" WK"        ;which-key
+                " hc"        ;hardcore mode
+                " AC"        ;auto-complete
+                " vl"        ;global visual line mode enabled
+                " Wrap"      ;shows up if visual-line-mode is enabled for that buffer
+                " Omit"      ;omit mode in dired
+                " yas"       ;yasnippet
+                " drag"      ;drag-stuff-mode
+                " VHl"       ;volatile highlights
+                " ctagsU"    ;ctags update
+                " Undo-Tree" ;undo tree
+                " wr"        ;Wrap Region
+                " SliNav"    ;elisp-slime-nav
+                " Fly"       ;Flycheck
+                " PgLn"      ;page-line-break
+                " ElDoc"     ;eldoc
+                " GG"        ;ggtags
+                " hs"        ;hideshow
                 " hs+"       ;
-                " ez-esc"    ; easy-escape
-                " ivy"       ; ivy
-                " h"         ; hungry-delete-mode
+                " ez-esc"    ;easy-escape
+                " ivy"       ;ivy
+                " h"         ;hungry-delete-mode
+                " (*)"       ;beacon
                 ))
-        (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face))) ; default
-        (add-to-list 'rm-text-properties '("\\` Abbrev\\'" 'display "​@")) ; Abbrev
-        (add-to-list 'rm-text-properties '("\\` Ind\\'"    'display "​*>")) ; org indent
-        (add-to-list 'rm-text-properties '("\\` Outl\\'"   'display "​ø")) ; outline
-        (add-to-list 'rm-text-properties '("\\` Server\\'" 'display "​Σ")) ; Server
-        (add-to-list 'rm-text-properties '("\\` μ\\'"      'display "​μ")) ; modi-mode
-        (add-to-list 'rm-text-properties '("\\` Wg\\'"     'display "​w")) ; writegood
-        (add-to-list 'rm-text-properties '("\\` Vis\\'"    'display "​V")) ; visible-mode
+        (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face) ;Overwrite
+                                   ("\\` mc:[0-9]+\\'" 'face 'font-lock-keyword-face) ;Multiple cursors
+                                   ("\\` rk\\'" 'display (propertize "​[]" 'face 'font-lock-warning-face)) ;Region bindings
+
+                                   ("\\` Abbrev\\'" 'display "​@")   ;Abbrev
+                                   ("\\` Ind\\'"    'display "​*>")  ;org indent
+                                   ("\\` Outl\\'"   'display "​ø")   ;outline
+                                   ("\\` Server\\'" 'display "​Σ")   ;Server
+                                   ("\\` μ\\'"      'display "​μ")   ;modi-mode
+                                   ("\\` Wg\\'"     'display "​w")   ;writegood
+                                   ("\\` Vis\\'"    'display "​V")   ;visible-mode
+                                   ("\\` Temp\\'"   'display "​t"))) ;temp-mode
         (with-eval-after-load 'setup-font-check
           (if font-symbola-p
               (progn
-                (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​🢛")) ; auto revert tail
-                (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​𝘵")) ; temp
-                (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​▯")) ; region bindings
-                (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​💡")) ; beacon
-                (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​🞵")) ; Hi-Lock
-                (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​➠")) ; aggressive indent
-                (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​⭮")) ; auto revert
-                (add-to-list 'rm-text-properties '("\\` Fill\\'" 'display "​⮒"))) ; auto fill
+                (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​🞵")) ;Hi-Lock
+                (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​🢛")) ;Auto revert tail
+                (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​➠")) ;aggressive indent
+                (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​⭮")) ;auto revert
+                (add-to-list 'rm-text-properties '("\\` Fill\\'" 'display "​⮒"))) ;auto fill
             (progn
-              (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​Tail|"))
-              (add-to-list 'rm-text-properties '("\\` Temp\\'" 'display "​t"))
-              (add-to-list 'rm-text-properties '("\\` rk\\'"   'display "​r"))
-              (add-to-list 'rm-text-properties '("\\` (\\*)\\'" 'display "​*"))
               (add-to-list 'rm-text-properties '("\\` Hi\\'"   'display "​H"))
-              (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​aI|"))
-              (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​aR|"))
-              (add-to-list 'rm-text-properties '("\\` Fill\\'" 'display "​aF|")))))))
+              (add-to-list 'rm-text-properties '("\\` Tail\\'" 'display "​Tail."))
+              (add-to-list 'rm-text-properties '("\\` =>\\'"   'display "​aI."))
+              (add-to-list 'rm-text-properties '("\\` ARev\\'" 'display "​aR."))
+              (add-to-list 'rm-text-properties '("\\` Fill\\'" 'display "​aF.")))))))
 
     (sml/setup)))
+
+;;; Organize the order of minor mode lighters
+(defvar mode-line-space-mode-lighter " "
+  "Lighter for `mode-line-space-mode'." )
+(define-minor-mode mode-line-space-mode
+  "Global minor mode to keep a space between major mode and minor mode lighters."
+  :lighter mode-line-space-mode-lighter
+  :init-value t                         ;Enable this minor mode by default,
+  :global t)                            ;globally.
+
+(defun modi/organize-minor-mode-lighters ()
+  "The `multiple-cursors-mode' lighter is very useful in showing how many
+cursors are created or if multiple-cursors-mode is enabled. Move that lighter to
+the foremost position in the `minor-mode-alist'.
+
+Move the `mode-line-space-mode' lighter to the second-foremost position in the
+mode line."
+  ;; If `mode-line-space-mode' is not the first in `minor-mode-alist' ..
+  (unless (equal 'mode-line-space-mode (car (car minor-mode-alist)))
+    ;; First remove it from the alist
+    (setq minor-mode-alist (assq-delete-all 'mode-line-space-mode minor-mode-alist))
+    ;; Now add it back but to the beginning of the alist
+    (add-to-list 'minor-mode-alist '(mode-line-space-mode mode-line-space-mode-lighter)))
+
+  ;; If `multiple-cursors-mode' is not the first in `minor-mode-alist' ..
+  (with-eval-after-load 'multiple-cursors
+    (unless (equal 'multiple-cursors-mode (car (car minor-mode-alist)))
+      ;; First remove it from the alist
+      (setq minor-mode-alist (assq-delete-all 'multiple-cursors-mode minor-mode-alist))
+      ;; Now add it back but to the beginning of the alist
+      (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc:.*/mo)))))
+;; Update the minor-mode lighter order on actions like window switching.
+(add-hook 'buffer-list-update-hook #'modi/organize-minor-mode-lighters)
+;; Also add the above fn to `after-revert-hook'. So in the event you don't find
+;; the minor-mode lighters in right order, simply revert the buffer.
+(add-hook 'after-revert-hook #'modi/organize-minor-mode-lighters)
 
 
 (provide 'setup-mode-line)
 
-
 ;; Variables used in display-time-format
-;; Source: http://docs.splunk.com/Documentation/Splunk/5.0.2/SearchReference/Commontimeformatvariables
-;; %y = year in numbers (2-digit)
-;; %Y = year in numbers (4-digit)
-;; %m = month in number (eg: 12)
-;; %B = full month name (eg: December)
-;; %b = short month name (eg: Dec)
-;; %d = day in numbers, with leading zeros (eg: 08)
-;; %e = day in numbers, no leading zeros (eg: 8)
-;; %A = full weekday name (eg: Sunday)
-;; %a = short weekday name (eg: Sun)
-;; %H = hours in 24-clock, with leading zeros
-;; %k = hours in 24-clock, no leading zeros
-;; %l = hours in 12-clock, with leading zeros
-;; %p = am/pm
-;; %T = time in 24-hour notation (%H:%M:%S)
+;; http://docs.splunk.com/Documentation/Splunk/5.0.2/SearchReference/Commontimeformatvariables
+;;
+;; | %y | year in numbers (2-digit)                   |
+;; | %Y | year in numbers (4-digit)                   |
+;; | %m | month in number (eg: 12)                    |
+;; | %B | full month name (eg: December)              |
+;; | %b | short month name (eg: Dec)                  |
+;; | %d | day in numbers, with leading zeros (eg: 08) |
+;; | %e | day in numbers, no leading zeros (eg: 8)    |
+;; | %A | full weekday name (eg: Sunday)              |
+;; | %a | short weekday name (eg: Sun)                |
+;; | %H | hours in 24-clock, with leading zeros       |
+;; | %k | hours in 24-clock, no leading zeros         |
+;; | %l | hours in 12-clock, with leading zeros       |
+;; | %p | am/pm                                       |
+;; | %T | time in 24-hour notation (%H:%M:%S)         |

@@ -1,21 +1,21 @@
-;; Time-stamp: <2017-05-09 17:05:10 kmodi>
+;; Time-stamp: <2017-06-08 08:17:02 kmodi>
 
 ;; Search / Replace
 
 ;; Contents:
 ;;
-;;  isearch
+;;  Isearch
 ;;  anzu
 ;;  Visual Regular Expression search/replace
 ;;  Query exchange
 ;;  Swiper
 ;;  grep
+;;  Apropos
 ;;  Key bindings
 
 (setq-default case-fold-search t)       ; Ignore case when searching
 
-;;; isearch
-
+;;; Isearch
 ;; Fuzzy isearch
 ;; https://www.reddit.com/r/emacs/comments/3yxk2x/flexible_isearch_without_a_package
 ;; Isearch convenience, space matches anything (non-greedy)
@@ -154,6 +154,13 @@ searches all buffers."
           (remove-if-not 'buffer-file-name (buffer-list))))
        regexp))
     (bind-to-modi-map "s" #'offby1/search-all-buffers)))
+
+;;; Apropos
+(use-package apropos
+  :defer t
+  :config
+  (progn
+    (setq apropos-do-all t)))     ;Make apropos commands search more extensively
 
 ;;; Key bindings
 (bind-keys

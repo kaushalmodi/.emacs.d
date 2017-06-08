@@ -1,44 +1,45 @@
-;; Time-stamp: <2017-05-10 09:23:50 kmodi>
+;; Time-stamp: <2017-06-08 08:29:19 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
-(fset 'yes-or-no-p 'y-or-n-p) ; Use y or n instead of yes or no
+(fset 'yes-or-no-p 'y-or-n-p)           ;Use y or n instead of yes or no
 
 ;; Delete stuff to a trash directory
 (setq delete-by-moving-to-trash t)
 (setq trash-directory
       (let ((dir (concat temporary-file-directory
-                         (getenv "USER") "/.trash_emacs/"))) ; must end with /
+                         (getenv "USER") "/.trash_emacs/"))) ;Must end with /
         (make-directory dir :parents)
         dir))
-
-;; Make apropos commands search more extensively
-(setq apropos-do-all t)
-
-;; On saving, automatically make a file an executable if it begins with "#!"
-;; Example: #!/bin/csh
-(add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 
 ;; Uncompress->edit->save->compress .gz, .bz2, .Z files on the fly
 (auto-compression-mode 1)
 
-;; Send mail using `Sendmail' package
-(setq send-mail-function #'sendmail-send-it)
+(use-package sendmail
+  :defer t
+  :config
+  (progn
+    ;; Send mail using `sendmail' package
+    (setq send-mail-function #'sendmail-send-it)))
 
 ;; url
-;; First delete the old `url/' directory if present
-(let ((url-dir-old (concat user-emacs-directory "url/")))
-  (when (file-exists-p url-dir-old)
-    (delete-directory url-dir-old :recursive)))
-;; Solve the issue with `sx.el' when using that package simultaneously in
-;; different emacs versions
-(setq url-configuration-directory (let ((dir (concat user-emacs-directory
-                                                     "url_" emacs-version-short "/")))
-                                    (make-directory dir :parents)
-                                    dir))
+(use-package url
+  :defer t
+  :preface
+  (progn
+    ;; Solve the issue with `sx.el' when using that package simultaneously in
+    ;; different emacs versions
+    (setq url-configuration-directory
+          (let ((dir (concat user-emacs-directory
+                             "url_" emacs-version-short "/")))
+            (make-directory dir :parents)
+            dir))))
 
-;; Don't ask if I want to visit a sym-linked file under VC. I always do!
-(setq vc-follow-symlinks t)
+(use-package vc-hooks
+  :config
+  (progn
+    ;; Don't ask if I want to visit a sym-linked file under VC. I always want to!
+    (setq vc-follow-symlinks t)))
 
 ;; Execute the script in current buffer
 ;; http://ergoemacs.org/emacs/elisp_run_current_file.html
@@ -66,7 +67,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 
       (cond
        ((derived-mode-p 'emacs-lisp-mode)
-        (eval-buffer) ; also works for .el.gz and .el.gpg files
+        (eval-buffer)                   ;Also works for .el.gz and .el.gpg files
         (message "Evaluated `%0s'." (buffer-name)))
        ((and (featurep 'cider)
              (derived-mode-p 'clojure-mode))
@@ -99,7 +100,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 ;; Set the major mode for plain text/log files
 (use-package text-mode
   :mode (("\\.log\\'" . text-mode)
-         ("\\.f\\'" . text-mode)) ; I never need to code in Fortran
+         ("\\.f\\'" . text-mode))         ;I never need to code in Fortran
   :config
   (progn
     ;; http://emacs.stackexchange.com/a/16854/115
@@ -117,18 +118,18 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   (progn
     (bind-keys
      :map help-map
-      ("c"   . describe-key-briefly)
-      ("C-c" . describe-command))
+     ("c" . describe-key-briefly)
+     ("C-c" . describe-command))
     (>=e "25.0"
         (bind-keys
          :map help-map
-          ("o" . describe-symbol)))))
+         ("o" . describe-symbol)))))
 
 (>=e "25.0"
     (use-package saveplace
-      :defer t
-      :init
-      (save-place-mode 1)))
+      :config
+      (progn
+        (save-place-mode 1))))
 
 (use-package browse-url
   :defer t
@@ -139,7 +140,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
       (setq browse-url-browser-function 'browse-url-firefox))))
 
 ;; Unset keys
-(global-unset-key (kbd "C-z")) ; It is bound to `suspend-frame' by default.
+(global-unset-key (kbd "C-z"))          ;Bound to `suspend-frame' by default
 ;; `suspend-frame' can be called using C-x C-z too.
 ;; C-z is used as prefix key by me in tmux. So removing the C-z binding from
 ;; emacs makes it possible to use emacs in -nw (no-window) mode in tmux without
@@ -154,13 +155,14 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 
 ;; https://github.com/kaushalmodi/.emacs.d/issues/7
 (defun modi/startup-time()
+  "Print the time it takes to load the emacs config."
   (message (format "init.el loaded in %s." (emacs-init-time))))
 (add-hook 'emacs-startup-hook #'modi/startup-time)
 
 ;; Don't put the build system info "built on <IP>" in emacs bug reports
 (defun modi/advice-report-emacs-bug-without-build-system (orig-fun &rest args)
   "Do not insert the user system IP when creating emacs bug report."
-  (let (emacs-build-system) ; Temporarily set `emacs-build-system' to nil.
+  (let (emacs-build-system)         ;Temporarily set `emacs-build-system' to nil
     (apply orig-fun args)))
 (advice-add 'report-emacs-bug :around #'modi/advice-report-emacs-bug-without-build-system)
 
@@ -168,49 +170,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   :defer t
   :config
   (progn
-    ;; Highlight today's date in the calendar
-    (add-hook 'calendar-today-visible-hook 'calendar-mark-today)))
-
-;;;;;;;;;;
-;; Organize the order of minor mode lighters
-(defvar mode-line-space-mode-lighter " "
-  "Lighter for `mode-line-space-mode'." )
-(define-minor-mode mode-line-space-mode
-  "A minor mode whose sole purpose is to retain a space between the major mode
-name and the bunch of minor mode lighters in the mode line."
-  :init-value t
-  :lighter    mode-line-space-mode-lighter
-  :global     t)
-(mode-line-space-mode)
-
-(defun modi/organize-minor-mode-lighters ()
-  "The `multiple-cursors-mode' lighter is very useful in showing how many cursors
-are created or if multiple-cursors-mode is enabled. Move that lighter to the
-foremost position in the `minor-mode-alist'.
-
-Move the `mode-line-space-mode' lighter to the second-foremost position
-in the mode line."
-  (interactive)
-
-  ;; If `mode-line-space-mode' is not the first in `minor-mode-alist' ..
-  (when (not (equal 'mode-line-space-mode (car (car minor-mode-alist))))
-    ;; First remove it from the alist
-    (setq minor-mode-alist (assq-delete-all 'mode-line-space-mode minor-mode-alist))
-    ;; Now add it back but to the beginning of the alist
-    (add-to-list 'minor-mode-alist '(mode-line-space-mode mode-line-space-mode-lighter)))
-
-  ;; If `multiple-cursors-mode' is not the first in `minor-mode-alist' ..
-  (with-eval-after-load 'multiple-cursors
-    (when (not (equal 'multiple-cursors-mode (car (car minor-mode-alist))))
-      ;; First remove it from the alist
-      (setq minor-mode-alist (assq-delete-all 'multiple-cursors-mode minor-mode-alist))
-      ;; Now add it back but to the beginning of the alist
-      (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line)))))
-
-(modi/organize-minor-mode-lighters)
-;; Also add the above fn to `after-revert-hook'. So in the event you don't find
-;; the minor-mode lighters in right order, simply revert the buffer.
-(add-hook 'after-revert-hook #'modi/organize-minor-mode-lighters)
+    (add-hook 'calendar-today-visible-hook 'calendar-mark-today))) ;Highlight today's date
 
 (bind-keys
  ;; `save-buffers-kill-terminal' kills only the current frame; it will NOT
@@ -226,16 +186,16 @@ https://lists.gnu.org/archive/html/emacs-devel/2016-07/msg00519.html "
   (interactive)
   (bind-keys
    :map modi-mode-map
-    ("M-w" . kill-ring-save)
-    ("C-y" . yank)
-    ("C-p" . previous-line)
-    ("C-n" . next-line)
-    ("C-b" . backward-char)
-    ("C-f" . forward-char)
-    ("C-c t" . hydra-toggle/body)
-    ("C-h l" . view-lossage)
-    ("C-x C-c" . modi/quit-emacs)
-    ("C-x M-c" . modi/quit-emacs-no-desktop-save)))
+   ("M-w" . kill-ring-save)
+   ("C-y" . yank)
+   ("C-p" . previous-line)
+   ("C-n" . next-line)
+   ("C-b" . backward-char)
+   ("C-f" . forward-char)
+   ("C-c t" . hydra-toggle/body)
+   ("C-h l" . view-lossage)
+   ("C-x C-c" . modi/quit-emacs)
+   ("C-x M-c" . modi/quit-emacs-no-desktop-save)))
 (bind-key "C-c ;" #'modi/restore-imp-keys)
 
 
@@ -288,5 +248,5 @@ https://lists.gnu.org/archive/html/emacs-devel/2016-07/msg00519.html "
 ;; replacement it's 1, and so on). To start the numbering at one, we
 ;; just add one to it with the function 1+.
 ;;
-;; (10) C-x =     <-- `what-cursor-position' ; default binding
+;; (10) C-x =     <-- `what-cursor-position' (default binding)
 ;;      C-u C-x = <-- `describe-char'
