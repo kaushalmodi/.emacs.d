@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-11 15:29:06 kmodi>
+;; Time-stamp: <2017-06-08 08:07:19 kmodi>
 
 ;; Line number package manager
 
@@ -80,10 +80,9 @@ background color to that of the theme."
 ;; nlinum
 ;; http://elpa.gnu.org/packages/nlinum.html
 (use-package nlinum
-  :load-path "elisp/nlinum"
   :config
   (progn
-    (setq nlinum-format " %d ") ; 1 space padding on each side of line number
+    (setq nlinum-format " %d ")     ;1 space padding on each side of line number
     (setq nlinum-highlight-current-line t)
 
     (defun modi/turn-on-nlinum ()
@@ -116,7 +115,7 @@ disabled altogether."
    (list (intern (completing-read
                   "linum pkg (default nlinum): "
                   '("nlinum" "linum" "nil")
-                  nil t nil nil "nlinum"))))
+                  nil :require-match nil nil "nlinum"))))
   (when (stringp linum-pkg)
     (setq linum-pkg (intern linum-pkg)))
   (cl-case linum-pkg
