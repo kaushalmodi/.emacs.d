@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-07 14:24:47 kmodi>
+;; Time-stamp: <2017-06-08 08:24:50 kmodi>
 
 ;; Python
 
@@ -16,7 +16,8 @@
     ;; of `python-indent-offset'.
     (setq python-indent-guess-indent-offset-verbose nil)
 
-    (if modi/python-use-ipython
+    (if (and (executable-find "ipython")
+             modi/python-use-ipython)
         (progn
           (setq python-shell-buffer-name "Ipython")
           (setq python-shell-interpreter "ipython")
