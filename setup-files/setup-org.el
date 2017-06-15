@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-27 11:56:35 kmodi>
+;; Time-stamp: <2017-06-14 14:53:47 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -465,6 +465,7 @@ returned value `entity-name' will be nil."
                                         "ditaa"
                                         "plantuml"
                                         "awk"
+                                        "python"
                                         "shell")
       "List of languages for which the ob-* packages need to be loaded.")
 
@@ -495,6 +496,9 @@ the languages in `modi/ob-enabled-languages'."
         ;; re-all-lang re-unsafe-lang lang body unsafe)
         unsafe))
     (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn)
+
+    (with-eval-after-load 'ob-python
+      (setq org-babel-python-command "python3")) ;Default to python 3.x
 
 ;;; org-tree-slide
     ;; https://github.com/takaxp/org-tree-slide
@@ -1159,12 +1163,14 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
 org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext           _I_NCLUDE:
                _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
                _a_scii         _q_uote        _E_macs-lisp        _S_hell          _i_ndex:         _A_SCII:
+               ^^              ^^             ^^                  _p_ython         ^^               ^^
 "
       ("s" (modi/org-template-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
       ("v" (modi/org-template-expand "<s" "systemverilog"))
       ("m" (modi/org-template-expand "<s" "matlab"))
       ("S" (modi/org-template-expand "<s" "shell"))
+      ("p" (modi/org-template-expand "<s" "python"))
       ("t" (modi/org-template-expand "<s" "text"))
       ("e" (modi/org-template-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
       ("x" (modi/org-template-expand "<e")) ; #+BEGIN_EXAMPLE ... #+END_EXAMPLE
