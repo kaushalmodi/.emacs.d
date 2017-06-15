@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-20 08:04:46 kmodi>
+;; Time-stamp: <2017-06-15 17:57:11 kmodi>
 
 ;; Info
 
@@ -6,7 +6,7 @@
   :defer t
   :config
   (progn
-    (>=e "25.0" ; `Info-quoted' was a new face introduced then
+    (>=e "25.0"                    ;`Info-quoted' was a new face introduced then
         (with-eval-after-load 'setup-font-check
           (when font-dejavu-sans-mono-p
             (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))))
@@ -20,11 +20,11 @@
         ;; the double quotes.
         (setq info-quoted+<>-regexp
               (concat
-               ;; "\"\\(?:[^\"]\\|\\\\\\(?:.\\|[\n]\\)\\)*\"\\|"           ; "..."
-               "`\\(?:[^']\\|\\\\\\(.\\|[\n]\\)\\)*'\\|"                ; `...'
-               "‘\\(?:[^’]\\|\\\\\\(.\\|[\n]\\)\\)*’\\|"                ; ‘...’
-               "\“\\(?:[^”]\\|\\\\\\(.\\|[\n]\\)\\)*”\\|"               ; “...”
-               "<\\(?:[[:alpha:]][^>]*\\|\\(\\\\\\(.\\|[\n]\\)\\)*\\)>" ; <...>
+               ;; "\"\\(?:[^\"]\\|\\\\\\(?:.\\|[\n]\\)\\)*\"\\|"           ;"..."
+               "`\\(?:[^']\\|\\\\\\(.\\|[\n]\\)\\)*'\\|"                                ;`...'
+               "‘\\(?:[^’]\\|\\\\\\(.\\|[\n]\\)\\)*’\\|"                                ;‘...’
+               "\“\\(?:[^”]\\|\\\\\\(.\\|[\n]\\)\\)*”\\|"                               ;“...”
+               "<\\(?:[[:alpha:]][^>]*\\|\\(\\\\\\(.\\|[\n]\\)\\)*\\)>" ;<...>
                ))
 
         (defun modi/Info-mode-customization ()
@@ -41,11 +41,11 @@
 
         (bind-keys
          :map Info-mode-map
-          ;; Allow mouse scrolling to do its normal thing
-          ("<mouse-4>" . nil)
-          ("<mouse-5>" . nil)
-          ;; Override the Info-mode-map binding to "?" set by info+
-          ("?" . hydra-info/body))))
+         ;; Allow mouse scrolling to do its normal thing
+         ("<mouse-4>" . nil)
+         ("<mouse-5>" . nil)
+         ;; Override the Info-mode-map binding to "?" set by info+
+         ("?" . hydra-info/body))))
 
     (defhydra hydra-info (:color blue
                           :hint nil)
@@ -89,7 +89,7 @@ Info-mode:
 
       ("d"   Info-directory)
       ("T"   Info-toc)
-      ("w"   Info-copy-current-node-name) ; M-0 w will copy elisp form of current node name
+      ("w"   Info-copy-current-node-name) ;M-0 w will copy elisp form of current node name
       ("c"   clone-buffer)
       ("a"   info-apropos)
 
@@ -110,7 +110,12 @@ Info-mode:
       ("h"   Info-help "Info help")
       ("q"   Info-exit "Info exit")
       ("C-g" nil "cancel" :color blue))
-    (bind-key "?" #'hydra-info/body Info-mode-map)))
+
+    (bind-keys
+     :map Info-mode-map
+     ("y" . bury-buffer)
+     ;; Override the Info-mode-map binding to "?" set by info+
+     ("?" . hydra-info/body))))
 
 (defun counsel-ag-emacs-info (&optional initial-input)
   "Search in all Info manuals in the emacs 'info/' directory using ag.
