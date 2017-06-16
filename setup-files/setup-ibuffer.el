@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-10 09:26:23 kmodi>
+;; Time-stamp: <2017-06-16 12:08:17 kmodi>
 
 ;; Ibuffer
 
@@ -8,6 +8,19 @@
   :config
   (progn
     (setq ibuffer-default-sorting-mode 'major-mode)
+
+    ;; Do not show empty groups
+    (setq ibuffer-show-empty-filter-groups nil)
+
+    ;; Do not prompt when executing 'dangerous' operations; the ones tagged with
+    ;; ":dangerous t" when defined using the `define-ibuffer-op' macro.
+    ;; Fri Jun 16 12:04:05 EDT 2017 - kmodi
+    ;; As of today only buffer killing operations are marked as dangerous.
+    ;; Actually it's not so dangerous, as kill confirmation  prompts still
+    ;; show up for modified buffers regardless of the value of `ibuffer-expert'.
+    ;; So setting `ibuffer-expert' to t will enable promptless-killing of only
+    ;; unmodified buffers.. which is OK.
+    (setq ibuffer-expert t)
 
     (use-package ibuffer-projectile
       :config
