@@ -20,6 +20,10 @@ tmux-256color|tmux with 256 colors and italics,
  use=xterm+256setaf, use=tmux,
 
 # I am not sure if the below works; but it doesn't seem to hurt too.
+# Mon May 22 11:39:14 EDT 2017 - kmodi
+# Actually it hurts.. Blinking text does not work.. so now the broken symlinks
+# are not shown with blinking text in ls.
+# Switching back to use screen-256color started showing blinking text in tmux.
 tmux-24bits|tmux with 24-bit colors and italics,
  use=tmux-256color,
  Tc,
