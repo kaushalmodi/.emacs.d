@@ -1,14 +1,26 @@
-;; Time-stamp: <2017-05-16 17:32:52 kmodi>
+;; Time-stamp: <2017-06-21 11:47:15 kmodi>
 
 ;; All things diff
 
 ;; Contents:
 ;;
+;;  add-log
 ;;  vc-git
 ;;    vc
 ;;  Diff-hl
 ;;  Ediff
 ;;  Smerge
+
+;;; add-log
+(use-package add-log
+  :commands (modi/add-change-log-entry-other-window-and-return)
+  :config
+  (progn
+    (defun modi/add-change-log-entry-other-window-and-return ()
+      "Call `add-change-log-entry-other-window' and return to the previous window."
+      (interactive)
+      (add-change-log-entry-other-window)
+      (select-window (previous-window)))))
 
 ;;; vc-git
 (use-package vc-git
@@ -68,13 +80,14 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
 
     (defhydra hydra-diff-hl (:color red)
       "diff-hl"
-      ("="     diff-hl-diff-goto-hunk "goto hunk")
+      ("=" diff-hl-diff-goto-hunk "goto hunk")
       ("<RET>" diff-hl-diff-goto-hunk "goto hunk")
-      ("u"     diff-hl-revert-hunk    "revert hunk")
-      ("["     diff-hl-previous-hunk  "prev hunk")
-      ("p"     diff-hl-previous-hunk  "prev hunk")
-      ("]"     diff-hl-next-hunk      "next hunk")
-      ("n"     diff-hl-next-hunk      "next hunk")
+      ("u" diff-hl-revert-hunk "revert hunk")
+      ("[" diff-hl-previous-hunk "prev hunk")
+      ("p" diff-hl-previous-hunk "prev hunk")
+      ("]" diff-hl-next-hunk "next hunk")
+      ("n" diff-hl-next-hunk "next hunk")
+      ("a" modi/add-change-log-entry-other-window-and-return "add change log entry")
       ("q" nil "cancel"))
 
     (add-hook 'dired-mode-hook #'diff-hl-dired-mode)))
