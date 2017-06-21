@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-16 12:08:17 kmodi>
+;; Time-stamp: <2017-06-21 11:32:23 kmodi>
 
 ;; Ibuffer
 
@@ -8,9 +8,6 @@
   :config
   (progn
     (setq ibuffer-default-sorting-mode 'major-mode)
-
-    ;; Do not show empty groups
-    (setq ibuffer-show-empty-filter-groups nil)
 
     ;; Do not prompt when executing 'dangerous' operations; the ones tagged with
     ;; ":dangerous t" when defined using the `define-ibuffer-op' macro.
@@ -35,6 +32,13 @@
 
     ;; ibuffer-projectile setup
     (add-hook 'ibuffer-hook #'modi/ibuffer-customization)))
+
+(use-package ibuf-ext
+  :defer t
+  :config
+  (progn
+    ;; Do not show empty groups
+    (setq ibuffer-show-empty-filter-groups nil)))
 
 
 (provide 'setup-ibuffer)
