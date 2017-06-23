@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-17 13:02:34 kmodi>
+;; Time-stamp: <2017-06-23 15:01:45 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -17,22 +17,26 @@
 (add-to-list 'load-path (concat user-emacs-directory "elisp/"))
 (add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
 
-(defvar modi/default-lisp-directory
-  (let* ((bin-dir (when (and invocation-directory
-                             (file-exists-p invocation-directory))
-                    invocation-directory))
-         (prefix-dir (when bin-dir
-                       (replace-regexp-in-string "bin/\\'" "" bin-dir)))
-         (lisp-dir (when prefix-dir
-                     (concat prefix-dir "share/emacs/"
-                             ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
-                             ;; Though, this is not needed and also will do nothing in emacs 26+
-                             ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
-                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
-                             "/lisp/"))))
-    (when (file-exists-p lisp-dir)
-      lisp-dir))
-  "Directory containing emacs lisp code installed with emacs.")
+(let* ((bin-dir (when (and invocation-directory
+                           (file-exists-p invocation-directory))
+                  invocation-directory))
+       (prefix-dir (when bin-dir
+                     (replace-regexp-in-string "bin/\\'" "" bin-dir)))
+       (share-dir (when prefix-dir
+                    (concat prefix-dir "share/")))
+       (lisp-dir (when share-dir
+                   (concat prefix-dir "emacs/"
+                           ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
+                           ;; Though, this is not needed and also will do nothing in emacs 26+
+                           ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
+                           (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
+                           "/lisp/"))))
+  (defvar modi/default-share-directory (when (file-exists-p share-dir)
+                                         share-dir)
+    "Share directory for this emacs installation.")
+  (defvar modi/default-lisp-directory (when (file-exists-p lisp-dir)
+                                        lisp-dir)
+    "Directory containing emacs lisp code installed with emacs."))
 
 ;; Add theme paths
 (add-to-list 'custom-theme-load-path
@@ -43,8 +47,8 @@
 ;; Add melpa package source when using package list
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
-;; For org-plus-contrib
-(unless (bound-and-true-p org-load-version-dev)
+;; Install `org-plus-contrib' only when it's set to use the Elpa version of Org.
+(when (eq modi/org-version-select 'elpa)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   (add-to-list 'my-packages 'org-plus-contrib)) ;Latest stable version of org-mode, includes org-eww
 
@@ -75,9 +79,13 @@ to be installed.")
     (package-install p))
   (setq modi/missing-packages '()))
 
-;; Mark packages to not be updated
+;; Mark packages to *not* to be updated
 ;; http://emacs.stackexchange.com/a/9342/115
-(defvar modi/package-menu-dont-update-packages '()
+;; Tue Sep 06 12:29:06 EDT 2016 - kmodi
+;; Do not upgrade Org using the package manager if it's set to *not* use the
+;; Elpa version of Org.
+(defvar modi/package-menu-dont-update-packages (unless (eq modi/org-version-select 'elpa)
+                                                 '(org org-plus-contrib))
   "List of packages for which the package manager should not look for updates.
    Example: '(org org-plus-contrib) ")
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-14 14:53:47 kmodi>
+;; Time-stamp: <2017-06-23 15:16:13 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -38,23 +38,52 @@
 (use-package org
   :preface
   (progn
-    ;; If `org-load-version-dev' is non-nil, remove the older versions of org
-    ;; from the `load-path'.
-    (when (bound-and-true-p org-load-version-dev)
-      (>=e "25.0" ; `directory-files-recursively' is not available in older emacsen
-          (let ((org-stable-install-path (car (directory-files-recursively
-                                               package-user-dir
-                                               "org-plus-contrib-[0-9]+"
-                                               :include-directories))))
-            (setq load-path (delete org-stable-install-path load-path))
-            ;; Also ensure that the associated path is removed from Info search list
-            (setq Info-directory-list (delete org-stable-install-path
-                                              Info-directory-list))
+    (defvar org-dev-lisp-directory (concat modi/default-share-directory "emacs/site-lisp/org")
+      "Directory containing lisp files for the development version of Org.
 
-            ;; Remove org that ships with emacs from the `load-path'.
-            (dolist (path load-path)
-              (when (string-match-p (expand-file-name "org" modi/default-lisp-directory) path)
-                (setq load-path (delete path load-path)))))))
+For this to work, the `prefix' variable in local.mk file in Org build directory
+should be set to `modi/default-share-directory'.")
+
+    (defvar org-dev-info-directory (concat modi/default-share-directory "org/info")
+      "Directory containing Info manual file for the development version of Org.
+
+For this to work, the `infodir' variable in local.mk file in Org build directory
+should be set to `modi/default-share-directory'/org/info.")
+
+    ;; If `modi/org-version-select' is *not* `emacs', remove the Emacs version of Org
+    ;; from the `load-path'.
+    (unless (eq modi/org-version-select 'emacs)
+      ;; Remove Org that ships with Emacs from the `load-path'.
+      (dolist (path load-path)
+        (when (string-match-p (expand-file-name "org" modi/default-lisp-directory) path)
+          (setq load-path (delete path load-path)))))
+
+    ;; If `modi/org-version-select' is *not* `elpa', remove the Elpa version of Org
+    ;; from the `load-path'.
+    (unless (eq modi/org-version-select 'elpa)
+      (>=e "25.0" ;`directory-files-recursively' is not available in older emacsen
+          (let ((org-elpa-install-path (car (directory-files-recursively
+                                             package-user-dir
+                                             "org-plus-contrib-[0-9]+"
+                                             :include-directories))))
+            (setq load-path (delete org-elpa-install-path load-path))
+            ;; Also ensure that the associated path is removed from Info search list
+            (setq Info-directory-list (delete org-elpa-install-path
+                                              Info-directory-list)))))
+
+    (if (eq modi/org-version-select 'dev)
+        ;; It's possible that `org-dev-info-directory' is set to an
+        ;; unconventional value, in which case, it will not be automatically
+        ;; added to `Info-directory-alist'. So to ensure that the correct Org
+        ;; Info is used, add this variable to `Info-directory-alist' manually.
+        (add-to-list 'Info-directory-list org-dev-info-directory)
+      ;; If `modi/org-version-select' is *not* `dev', remove the development
+      ;; version of Org from the `load-path'.
+      (dolist (path load-path)
+        (when (string= org-dev-lisp-directory path)
+          (setq load-path (delete path load-path))))
+      ;; Also ensure that the associated path is removed from Info search list.
+      (setq Info-directory-list (delete org-dev-info-directory Info-directory-list)))
 
     ;; Modules that should always be loaded together with org.el.
     ;; `org-modules' default: '(org-w3m org-bbdb org-bibtex org-docview org-gnus
@@ -180,7 +209,7 @@
 
     (with-eval-after-load 'org-capture
       ;; See `org-capture-templates' doc-string for info on Capture templates
-      (if (bound-and-true-p org-load-version-dev)
+      (if (eq modi/org-version-select 'dev)
           (progn
             ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-02/msg00084.html
             (add-to-list 'org-capture-templates

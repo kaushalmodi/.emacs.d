@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-26 10:53:11 kmodi>
+;; Time-stamp: <2017-06-23 15:02:08 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -25,6 +25,14 @@
                                     emacs-major-version emacs-minor-version)
   "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
 So, for emacs version 25.0.50.1, this variable will be 25_0.")
+
+(defvar modi/org-version-select 'emacs
+  "Variable to choose the version of Org to be loaded.
+Valid values are `dev', `elpa' and `emacs'.
+
+When set to `dev', the development version of Org built locally is loaded.
+When set to `elpa', Org is installed and loaded from Org Elpa.
+When set to `emacs', the Org version shipped with Emacs is used.")
 
 (defconst my-packages
   '(ace-window
