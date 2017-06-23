@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-11 10:25:20 kmodi>
+;; Time-stamp: <2017-06-23 08:55:04 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -34,6 +34,34 @@
       ("F" magit-pull-popup "pull popup")
       ("W" magit-format-patch "format patch")
       ("$" magit-process "process"))))
+
+(use-package magit-log
+  :init
+  (progn
+    ;; Set `magit-log-margin' value in :init as many other variables will be
+    ;; dynamically set based on its value when `magit-log' is loaded.
+    ;; (setq magit-log-margin '(t age magit-log-margin-width t 18)) ;Default value
+    ;; Show the commit ages with 1-char time units
+    ;;   minute->m, hour->h, day->d, week->w, month->M, year->Y
+    ;; Also reduce the author column width to 10 as the author name is being
+    ;; abbreviated below.
+    (setq magit-log-margin '(t age-abbreviated magit-log-margin-width :author 11)))
+  :config
+  (progn
+    ;; Abbreviate author name, show "F Last" instead of "First Last".
+    ;; If author's name is just "First", don't abbreviate it.
+    (defun modi/magit-log--abbreviate-author (&rest args)
+      "The first arg is AUTHOR, abbreviate it.
+First Last -> F Last
+First      -> First (no change)."
+      ;; ARGS             -> '((AUTHOR DATE))
+      ;; (car ARGS)       -> '(AUTHOR DATE)
+      ;; (car (car ARGS)) -> AUTHOR
+      (let* ((author (car (car args)))
+             (author-abbr (replace-regexp-in-string "\\(.\\).*? +\\(.*\\)" "\\1 \\2" author)))
+        (setf (car (car args)) author-abbr))
+      (car args))                       ;'(AUTHOR-ABBR DATE)
+    (advice-add 'magit-log-format-margin :filter-args #'modi/magit-log--abbreviate-author)))
 
 
 (provide 'setup-magit)
