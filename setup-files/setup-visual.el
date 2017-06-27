@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-08 16:38:23 kmodi>
+;; Time-stamp: <2017-06-27 15:26:53 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -169,7 +169,8 @@ the smart-mode-line theme."
            ;; Below commented code does not work
            ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
            (setq fci-rule-color ,fci-rule-color)
-           (modi/fci-redraw-frame-all-buffers))))))
+           (when (fboundp 'modi/fci-redraw-frame-all-buffers)
+             (modi/fci-redraw-frame-all-buffers)))))))
 
 (defmacro modi/gen-all-theme-fns ()
   `(progn ,@(mapcar
