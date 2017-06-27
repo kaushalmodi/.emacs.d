@@ -1,6 +1,12 @@
-;; Time-stamp: <2017-06-08 08:07:19 kmodi>
+;; Time-stamp: <2017-06-27 17:46:08 kmodi>
 
 ;; Line number package manager
+
+;; Contents:
+;;
+;;  Native line number support (emacs 26+)
+;;  linum
+;;  nlinum
 
 (defvar modi/linum-fn-default 'nlinum
   "Default “linum” mode. This is used when toggling linum on and off.
@@ -38,7 +44,44 @@ mode hooks added to the `modi/linum-mode-hooks' variable.")
                                   yaml-mode-hook)
   "List of hooks of major modes in which a “linum” mode should be enabled.")
 
-;; linum
+;;; Native line number support (emacs 26+)
+(defun modi/native-linum-absolute ()
+  "Set buffer-local variable `display-line-numbers' to t."
+  (interactive)
+  (setq display-line-numbers t))
+
+(defun modi/native-linum-relative ()
+  "Set buffer-local variable `display-line-numbers' to `relative'."
+  (interactive)
+  (setq display-line-numbers 'relative))
+
+(defun modi/native-linum-off ()
+  "Set buffer-local variable `display-line-numbers' to nil."
+  (interactive)
+  (setq display-line-numbers nil))
+
+(defun modi/turn-on-native-linum ()
+  "Turn on native line numbers in specific modes."
+  (interactive)
+  (if modi/linum-mode-enable-global
+      (progn
+        (dolist (hook modi/linum-mode-hooks)
+          (remove-hook hook #'modi/native-linum-absolute))
+        (setq-default display-line-numbers t))
+    (progn
+      (when global-linum-mode
+        (setq-default display-line-numbers nil))
+      (dolist (hook modi/linum-mode-hooks)
+        (add-hook hook #'modi/native-linum-absolute)))))
+
+(defun modi/turn-off-native-linum ()
+  "Turn off native line numbers in specific modes."
+  (interactive)
+  (setq-default display-line-numbers nil)
+  (dolist (hook modi/linum-mode-hooks)
+    (remove-hook hook #'modi/native-linum-absolute)))
+
+;;; linum
 (use-package linum
   :config
   (progn
@@ -77,7 +120,7 @@ background color to that of the theme."
       (dolist (hook modi/linum-mode-hooks)
         (remove-hook hook #'linum-mode)))))
 
-;; nlinum
+;;; nlinum
 ;; http://elpa.gnu.org/packages/nlinum.html
 (use-package nlinum
   :config
@@ -108,24 +151,32 @@ background color to that of the theme."
 
 (defun modi/linum-set (linum-pkg)
   "Enable or disable linum.
-With LINUM-PKG set to either 'nlinum or 'linum, the
-respective linum mode will be enabled. When LINUM-PKG is nil, linum will be
-disabled altogether."
+
+With LINUM-PKG set to either `native-linum', `nlinum' or `linum',
+the respective linum mode will be enabled. When LINUM-PKG is nil,
+linum will be disabled altogether."
   (interactive
    (list (intern (completing-read
                   "linum pkg (default nlinum): "
-                  '("nlinum" "linum" "nil")
+                  '("native-linum" "nlinum" "linum" "nil")
                   nil :require-match nil nil "nlinum"))))
   (when (stringp linum-pkg)
     (setq linum-pkg (intern linum-pkg)))
   (cl-case linum-pkg
+    (native-linum
+     (modi/turn-off-linum)
+     (modi/turn-off-nlinum)
+     (modi/turn-on-native-linum))
     (nlinum
+     (modi/turn-off-native-linum)
      (modi/turn-off-linum)
      (modi/turn-on-nlinum))
     (linum
+     (modi/turn-off-native-linum)
      (modi/turn-off-nlinum)
      (modi/turn-on-linum))
     (t
+     (modi/turn-off-native-linum)
      (modi/turn-off-linum)
      (modi/turn-off-nlinum)))
   (let (state-str filler-str)
