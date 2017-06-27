@@ -1,10 +1,11 @@
-;; Time-stamp: <2016-08-19 02:08:48 kmodi>
+;; Time-stamp: <2017-06-27 17:48:45 kmodi>
 
 ;; Fill Column Indicator
 ;; http://www.emacswiki.org/FillColumnIndicator
 
 (use-package fill-column-indicator
   :if (not (bound-and-true-p disable-pkg-fci))
+  :commands (modi/turn-on-fci-mode)
   :config
   (progn
     ;; Set global default value for the local var `fci-handle-truncate-lines'
@@ -36,7 +37,10 @@
       (dolist (hook modi/fci-mode-hooks)
         (remove-hook hook #'fci-mode)))
 
-    (modi/turn-on-fci-mode)
+    ;; Tue Jun 27 17:48:17 EDT 2017 - kmodi
+    ;; Do not enable fci mode by default. Experimenting to check if I really
+    ;; need this mode ..
+    ;; (modi/turn-on-fci-mode)
 
     ;; Turn off fci-mode when popups are activated
     ;; https://github.com/alpaker/Fill-Column-Indicator/issues/21#issuecomment-6959718
