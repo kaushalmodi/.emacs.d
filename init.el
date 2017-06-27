@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-04 13:55:36 kmodi>
+;; Time-stamp: <2017-07-04 13:57:07 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -314,6 +314,7 @@ need Org version to be at least 9.x.")
   (require 'setup-sml))
 (require 'setup-tcl)
 (when (executable-find "hugo")
+  (require 'setup-hugo)
   ;; Setup `toml-mode' is used for the `config.toml' configuration files for
   ;; the Static Site Generator hugo.
   (require 'setup-toml))

@@ -28,3 +28,6 @@
 [submodule "eless"]
 	path = misc/eless
 	url = https://kaushalmodi@github.com/kaushalmodi/eless
+[submodule "elisp/ox-hugo"]
+	path = elisp/ox-hugo
+	url = https://kaushalmodi@github.com/kaushalmodi/ox-hugo.git
