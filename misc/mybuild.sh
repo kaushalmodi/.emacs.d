@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2017-05-15 12:04:03 kmodi>
+# Time-stamp: <2017-06-27 17:13:42 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -130,7 +130,7 @@ emacs_configure_CXXFLAGS=""
 emacs_configure_CPPFLAGS=""
 emacs_configure_LDFLAGS=""
 
-emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-fgnu89-inline -I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
+emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
 # -L${HOME}/usr_local/${MY_OSREV}/lib required for libgpm (GPM feature)
 # -L${HOME}/usr_local/${MY_OSREV}/lib64 required for libgif (GIF feature)
 emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
