@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-23 15:01:45 kmodi>
+;; Time-stamp: <2017-06-30 14:11:42 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -45,11 +45,11 @@
              (concat user-emacs-directory "elisp/smyx/"))
 
 ;; Add melpa package source when using package list
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") :append)
 
 ;; Install `org-plus-contrib' only when it's set to use the Elpa version of Org.
 (when (eq modi/org-version-select 'elpa)
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append)
   (add-to-list 'my-packages 'org-plus-contrib)) ;Latest stable version of org-mode, includes org-eww
 
 ;; Load emacs packages and activate them
@@ -67,7 +67,7 @@
 to be installed.")
 
 (dolist (p my-packages)
-  (when (not (package-installed-p p))
+  (unless (package-installed-p p)
     (add-to-list 'modi/missing-packages p)))
 
 (when modi/missing-packages
