@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-30 14:11:42 kmodi>
+;; Time-stamp: <2017-07-04 13:50:36 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -81,13 +81,13 @@ to be installed.")
 
 ;; Mark packages to *not* to be updated
 ;; http://emacs.stackexchange.com/a/9342/115
-;; Tue Sep 06 12:29:06 EDT 2016 - kmodi
+(defvar modi/package-menu-dont-update-packages '(org)
+  "List of packages for which the package manager should not look for updates.
+Example: '(org org-plus-contrib).")
 ;; Do not upgrade Org using the package manager if it's set to *not* use the
 ;; Elpa version of Org.
-(defvar modi/package-menu-dont-update-packages (unless (eq modi/org-version-select 'elpa)
-                                                 '(org org-plus-contrib))
-  "List of packages for which the package manager should not look for updates.
-   Example: '(org org-plus-contrib) ")
+(unless (eq modi/org-version-select 'elpa)
+  (add-to-list 'modi/package-menu-dont-update-packages 'org-plus-contrib))
 
 (defun modi/package-menu-remove-excluded-packages (orig-fun &rest args)
   "Remove the packages listed in `modi/package-menu-dont-update-packages' from
