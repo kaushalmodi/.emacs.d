@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-27 15:26:53 kmodi>
+;; Time-stamp: <2017-07-06 18:30:53 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -482,7 +482,7 @@ Toggling off this mode reverts everything to their original states."
 ;;; Show mode line in header
 ;; http://bzg.fr/emacs-strip-tease.html
 ;; Careful: you need to deactivate hidden-mode-line-mode
-(defun mode-line-in-header ()
+(defun bzg/mode-line-in-header ()
   (interactive)
   (if (not header-line-format)
       (setq header-line-format mode-line-format)
@@ -490,18 +490,8 @@ Toggling off this mode reverts everything to their original states."
   (force-mode-line-update))
 
 ;;; Fringes
-(defun modi/enable-fringe ()
-  "Display the left/right fringes with default widths of 8 pixels."
-  (interactive)
-  (fringe-mode '(nil . nil)))
-
-(defun modi/disable-fringe ()
-  "Do not show the fringes."
-  (interactive)
-  (fringe-mode '(0 . 0)))
-
 ;; Show the top/bottom buffer boundaries only in the right fringe
-(setq-default indicate-buffer-boundaries '((top    . right)
+(setq-default indicate-buffer-boundaries '((top . right)
                                            (bottom . right)))
 
 ;;; Coloring regions with ANSI color codes
@@ -600,3 +590,6 @@ narrowed."
 
 
 (provide 'setup-visual)
+
+;; Use the interactive function `fringe-mode' or `set-fringe-mode' (in elisp) to
+;; tweak the fringe widths. Do not set the `fringe-mode' variable directly!
