@@ -1,12 +1,12 @@
-;; Time-stamp: <2017-05-18 12:33:50 kmodi>
+;; Time-stamp: <2017-07-06 11:10:43 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
 (use-package ivy
   :bind (:map modi-mode-map
-         ("M-u" . ivy-resume)   ; Override the default binding for `upcase-word'
-         ("C-c w" . ivy-push-view)      ; Push window configuration to `ivy-views'
-         ("C-c W" . ivy-pop-view))      ; Remove window configuration from `ivy-views'
+         ("M-u" . ivy-resume)    ;Override the default binding for `upcase-word'
+         ("C-c w" . ivy-push-view) ;Push window configuration to `ivy-views'
+         ("C-c W" . ivy-pop-view)) ;Remove window configuration from `ivy-views'
   :config
   (progn
     ;; Disable ido
@@ -17,14 +17,14 @@
 
     ;; Show recently killed buffers when calling `ivy-switch-buffer'
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-virtual-abbreviate 'full) ; Show the full virtual file paths
+    (setq ivy-virtual-abbreviate 'full) ;Show the full virtual file paths
 
     (setq ivy-count-format "%d/%d ")
-    (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ; default
+    (setq ivy-re-builders-alist '((t . ivy--regex-plus))) ;Default
     ;; (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
 
     ;; Do not show "./" and "../" in the `counsel-find-file' completion list
-    (setq ivy-extra-directories nil) ; default value: ("../" "./")
+    (setq ivy-extra-directories nil)    ;Default value: ("../" "./")
 
     (defun modi/ivy-set-prompt-text-properties (prompt std-props)
       "Add a different face for the \"<..>\" string in `counsel-set-variable'."
@@ -34,77 +34,62 @@
     (setq ivy-set-prompt-text-properties-function 'modi/ivy-set-prompt-text-properties)
 
     ;; https://github.com/abo-abo/swiper/blob/master/ivy-hydra.el
-    ;; https://www.reddit.com/r/emacs/comments/5wwkg6/using_emacs_31_elfeed_part_3_macros/deds4jx/
-    (defun ivy-dispatching-done-hydra ()
-      "Select one of the available actions and call `ivy-done'."
-      (interactive)
-      (let ((actions (ivy-state-action ivy-last)))
-        (if (null (ivy--actionp actions))
-            (ivy-done)
-          (funcall
-           (eval
-            `(defhydra ivy-read-action (:color teal)
-               "action"
-               ,@(mapcar (lambda (x)
-                           (list (nth 0 x)
-                                 `(progn
-                                    (ivy-set-action ',(nth 1 x))
-                                    (ivy-done))
-                                 (nth 2 x)))
-                         (cdr actions))
-               ("M-o" nil "back")))))))
-
-    (defun ivy--matcher-desc () ; used in `hydra-ivy'
-      (if (eq ivy--regex-function
-              'ivy--regex-fuzzy)
-          "fuzzy"
-        "ivy"))
-    (defhydra hydra-ivy (:hint nil
-                         :color pink)
-      "
-^^_,_        _f_ollow      occ_u_r      _g_o          ^^_c_alling %-7s(if ivy-calling \"on\" \"off\")      _w_/_s_/_a_: %-14s(ivy-action-name)
-_p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matcher-desc)^^^^^^^^^^^^      _C_ase-fold: %-10`ivy-case-fold-search
-^^_._        _D_o it!      ^^           _q_uit        _<_/_>_ shrink/grow^^^^^^^^^^^^^^^^^^^^^^^^^^^^      _t_runcate: %-11`truncate-lines
+    (use-package ivy-hydra
+      :ensure t
+      :config
+      (progn
+        ;; Re-define the `hydra-ivy' defined in `ivy-hydra' package.
+        (defhydra hydra-ivy (:hint nil
+                             :color pink)
+          "
+^ _,_ ^      _f_ollow      occ_u_r      _g_o          ^^_c_alling: %-7s(if ivy-calling \"on\" \"off\")      _w_(prev)/_s_(next)/_a_(read) action: %-14s(ivy-action-name)
+_p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher: %-7s(ivy--matcher-desc)^^^^^^^^^^^^      _C_ase-fold: %-10`ivy-case-fold-search
+^ _._ ^      _D_o it!      ^^           _q_uit        _<_/_>_ shrink/grow^^^^^^^^^^^^^^^^^^^^^^^^^^^^       _t_runcate: %-11`truncate-lines
 "
-      ;; arrows
-      ("," ivy-beginning-of-buffer) ; default h
-      ("p" ivy-previous-line) ; default j
-      ("n" ivy-next-line) ; default k
-      ("." ivy-end-of-buffer) ; default l
-      ;; quit ivy
-      ("q" keyboard-escape-quit :exit t) ; default o
-      ("C-g" keyboard-escape-quit :exit t)
-      ;; quit hydra
-      ("i" nil)
-      ("C-o" nil)
-      ;; actions
-      ("f" ivy-alt-done :exit nil)
-      ;; Exchange the default bindings for C-j and C-m
-      ("C-m" ivy-alt-done :exit nil) ; RET, default C-j
-      ("C-j" ivy-done :exit t) ; default C-m
-      ("d" ivy-done :exit t)
-      ("g" ivy-call)
-      ("D" ivy-immediate-done :exit t)
-      ("c" ivy-toggle-calling)
-      ("m" ivy-toggle-fuzzy)
-      (">" ivy-minibuffer-grow)
-      ("<" ivy-minibuffer-shrink)
-      ("w" ivy-prev-action)
-      ("s" ivy-next-action)
-      ("a" ivy-read-action)
-      ("t" (setq truncate-lines (not truncate-lines)))
-      ("C" ivy-toggle-case-fold)
-      ("u" ivy-occur :exit t))
+          ;; Arrows
+          ("," ivy-beginning-of-buffer)      ;Default h
+          ("p" ivy-previous-line)            ;Default j
+          ("n" ivy-next-line)                ;Default k
+          ("." ivy-end-of-buffer)            ;Default l
+          ;; Quit ivy
+          ("q" keyboard-escape-quit :exit t) ;Default o
+          ("C-g" keyboard-escape-quit :exit t)
+          ;; Quit hydra
+          ("i" nil)
+          ("C-o" nil)
+          ;; actions
+          ("f" ivy-alt-done :exit nil)
+          ;; Exchange the default bindings for C-j and C-m
+          ("C-m" ivy-alt-done :exit nil) ;RET, default C-j
+          ("C-j" ivy-done :exit t)       ;Default C-m
+          ("d" ivy-done :exit t)
+          ("D" ivy-immediate-done :exit t)
+          ("g" ivy-call)
+          ("c" ivy-toggle-calling)
+          ("m" ivy-rotate-preferred-builders)
+          (">" ivy-minibuffer-grow)
+          ("<" ivy-minibuffer-shrink)
+          ("w" ivy-prev-action)
+          ("s" ivy-next-action)
+          ("a" ivy-read-action)
+          ("t" (setq truncate-lines (not truncate-lines)))
+          ("C" ivy-toggle-case-fold)
+          ("u" ivy-occur :exit t)
+          ("?" (ivy-exit-with-action    ;Default D
+                (lambda (_) (find-function #'hydra-ivy/body))) "Definition of this hydra" :exit t))
+
+        (bind-keys
+         :map ivy-minibuffer-map
+         ("C-t" . ivy-rotate-preferred-builders)
+         ("C-o" . hydra-ivy/body)
+         ("M-o" . ivy-dispatching-done-hydra))))
 
     (bind-keys
      :map ivy-minibuffer-map
      ;; Exchange the default bindings for C-j and C-m
-     ("C-m" . ivy-alt-done) ; RET, default C-j
-     ("C-j" . ivy-done) ; default C-m
-     ("C-S-m" . ivy-immediate-done)
-     ("C-t" . ivy-toggle-fuzzy)
-     ("C-o" . hydra-ivy/body)
-     ("M-o" . ivy-dispatching-done-hydra))
+     ("C-m" . ivy-alt-done)             ;RET, default C-j
+     ("C-j" . ivy-done)                 ;Default C-m
+     ("C-S-m" . ivy-immediate-done))
 
     (bind-keys
      :map ivy-occur-mode-map
@@ -112,7 +97,7 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher %-7s(ivy--matc
      ("p" . ivy-occur-previous-line)
      ("b" . backward-char)
      ("f" . forward-char)
-     ("v" . ivy-occur-press)            ;default f
+     ("v" . ivy-occur-press)            ;Default f
      ("RET" . ivy-occur-press))
 
     (with-eval-after-load 'setup-windows-buffers
