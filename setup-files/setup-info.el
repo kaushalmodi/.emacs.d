@@ -39,6 +39,26 @@
           (Info-breadcrumbs-in-mode-line-mode -1))
         (add-hook 'Info-mode-hook #'modi/Info-mode-customization)
 
+        (defun modi/Info--get-current-node-hierarchy ()
+          "Return the hierarchy for the current node.
+An alist with elements of type (INDEX . NODE) is returned where
+INDEX is the hierarchy level starting from \"Top\" of the
+`Info-current-file' and NODE is the node name corresponding to
+that level."
+          (let* ((nodes (Info-toc-nodes Info-current-file))
+                 (node Info-current-node)
+                 (index 0)
+                 (node-hier `((,index . ,node))))
+            (while (not (equal "Top" node))
+              ;; (message "modi/Info--get-current-node-hierarchy: %0d %s" index node)
+              (setq node (nth 1 (assoc node nodes)))
+              (setq index (1+ index))
+              (add-to-list 'node-hier `(,index . ,node)))
+            (dolist (node node-hier)
+              (setcar node (- index (car node))))
+            ;; (message "modi/Info--get-current-node-hierarchy: %S" node-hier)
+            node-hier))
+
         (bind-keys
          :map Info-mode-map
          ;; Allow mouse scrolling to do its normal thing
