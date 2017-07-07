@@ -159,14 +159,15 @@ INITIAL-INPUT can be given as the initial minibuffer input."
 (defhydra hydra-info-to (:hint nil
                          :color teal)
   "
-_i_nfo      _o_rg      e_l_isp      e_L_isp intro      _e_macs      _c_alc      _g_rep emacs info"
+_i_nfo      _o_rg      e_l_isp      e_L_isp intro      _e_macs      _c_alc      _g_rep emacs info      _p_ython"
   ("i" info)
-  ("o" (ora-open-info "org" "*org info*"))
-  ("l" (ora-open-info "elisp" "*elisp info*"))
-  ("L" (ora-open-info "eintr" "*elisp intro info*"))
-  ("e" (ora-open-info "emacs" "*emacs info*"))
-  ("c" (ora-open-info "calc" "*calc info*"))
-  ("C" (ora-open-info "cl" "*emacs common lisp info*"))
+  ("o" (ora-open-info "org" "*Org Info*"))
+  ("l" (ora-open-info "elisp" "*Elisp Info*"))
+  ("L" (ora-open-info "eintr" "*Elisp Intro Info*"))
+  ("e" (ora-open-info "emacs" "*Emacs Info*"))
+  ("c" (ora-open-info "calc" "*Calc Info*"))
+  ("C" (ora-open-info "cl" "* Emacs Common Lisp Info*"))
+  ("p" (ora-open-info "python3" "*Python 3 Info*"))
   ("g" counsel-ag-emacs-info))
 (bind-key "C-h i" #'hydra-info-to/body modi-mode-map)
 
