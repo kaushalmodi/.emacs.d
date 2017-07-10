@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-19 17:05:03 kmodi>
+;; Time-stamp: <2017-07-10 14:45:10 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -52,6 +52,7 @@
       "C-x 8"   "unicode"
       "C-x a"   "abbrev/expand"
       "C-x r"   "rectangle/register/bookmark"
+      "C-x v"   "version control"
       "C-c /"   "engine-mode-map"
       "C-c C-v" "org-babel"
       "C-x 8 0" "ZWS")
