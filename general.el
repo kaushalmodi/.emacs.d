@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-07 12:10:55 kmodi>
+;; Time-stamp: <2017-07-11 12:40:04 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -203,6 +203,43 @@ Example usage:
   (with-temp-buffer
     (insert-file-contents f)
     (buffer-substring-no-properties (point-min) (point-max))))
+
+;; Tue Jul 11 12:37:11 EDT 2017 - kmodi
+;; Added the below variable watching code out of necessity when debugging
+;; debbugs # 27647: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27647#14
+(defvar modi/variables-to-be-watched ()
+  "List of variables to be watched.
+Used by `modi/set-variable-watchers' and
+`modi/unset-variable-watchers'")
+
+(defun modi/variable-watcher-fn (symbol newval operation where)
+  "Print message when the value of variable SYMBOL changes.
+The message shows the NEWVAL it changed to, the OPERATION that
+caused that, and the buffer WHERE that happened if the value
+change was buffer-local."
+  (message (format "[Watcher: %s] Now set to %S, by `%S'%s"
+                   (symbol-name symbol)
+                   newval
+                   operation
+                   (if where
+                       (format " in %S" where)
+                     ""))))
+
+(defun modi/set-variable-watchers ()
+  "Enable printing messages when any watched variable changes.
+The variables to be watched should be added to
+`modi/variables-to-be-watched'."
+  (interactive)
+  (dolist (var modi/variables-to-be-watched)
+    (add-variable-watcher var #'modi/variable-watcher-fn)))
+
+(defun modi/unset-variable-watchers ()
+  "Disable variable watchers.
+Variable watching will be disabled for the list of variables set
+in `modi/variables-to-be-watched'."
+  (interactive)
+  (dolist (var modi/variables-to-be-watched)
+    (remove-variable-watcher var #'modi/variable-watcher-fn)))
 
 
 (provide 'general)
