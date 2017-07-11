@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-27 17:46:08 kmodi>
+;; Time-stamp: <2017-07-10 17:12:49 kmodi>
 
 ;; Line number package manager
 
@@ -45,41 +45,48 @@ mode hooks added to the `modi/linum-mode-hooks' variable.")
   "List of hooks of major modes in which a “linum” mode should be enabled.")
 
 ;;; Native line number support (emacs 26+)
-(defun modi/native-linum-absolute ()
-  "Set buffer-local variable `display-line-numbers' to t."
-  (interactive)
-  (setq display-line-numbers t))
+(defvar modi/native-linum-default t
+  "Value set for `display-line-numbers' when enabled.
+Valid values are t, `visual', `relative' and nil. See
+`display-line-numbers' for more information.")
 
-(defun modi/native-linum-relative ()
-  "Set buffer-local variable `display-line-numbers' to `relative'."
-  (interactive)
-  (setq display-line-numbers 'relative))
+(defun modi/native-linum--on (&optional global)
+  "Enable native line number display in the current buffer.
+If GLOBAL is non-nil, enable this globally."
+  (interactive "P")
+  (if global
+      (setq-default display-line-numbers modi/native-linum-default)
+    (setq-local display-line-numbers modi/native-linum-default)))
 
-(defun modi/native-linum-off ()
-  "Set buffer-local variable `display-line-numbers' to nil."
-  (interactive)
-  (setq display-line-numbers nil))
+(defun modi/native-linum--off (&optional global)
+  "Disable native line number display in the current buffer.
+If GLOBAL is non-nil, disable this globally."
+  (interactive "P")
+  (if global
+      (setq-default display-line-numbers nil)
+    (setq-local display-line-numbers nil)))
 
 (defun modi/turn-on-native-linum ()
-  "Turn on native line numbers in specific modes."
+  "Turn on native line numbers in specific modes.
+In enabled state, `display-line-numbers' is set to
+`modi/native-linum-default'."
   (interactive)
   (if modi/linum-mode-enable-global
       (progn
         (dolist (hook modi/linum-mode-hooks)
-          (remove-hook hook #'modi/native-linum-absolute))
-        (setq-default display-line-numbers t))
+          (remove-hook hook #'modi/native-linum--on))
+        (modi/native-linum--on :global))
     (progn
-      (when global-linum-mode
-        (setq-default display-line-numbers nil))
+      (modi/native-linum--off :global)
       (dolist (hook modi/linum-mode-hooks)
-        (add-hook hook #'modi/native-linum-absolute)))))
+        (add-hook hook #'modi/native-linum--on)))))
 
 (defun modi/turn-off-native-linum ()
   "Turn off native line numbers in specific modes."
   (interactive)
-  (setq-default display-line-numbers nil)
+  (modi/native-linum--off :global)
   (dolist (hook modi/linum-mode-hooks)
-    (remove-hook hook #'modi/native-linum-absolute)))
+    (remove-hook hook #'modi/native-linum--on)))
 
 ;;; linum
 (use-package linum
@@ -137,7 +144,7 @@ background color to that of the theme."
               (remove-hook hook #'nlinum-mode))
             (global-nlinum-mode 1))
         (progn
-          (when global-linum-mode
+          (when global-nlinum-mode
             (global-nlinum-mode -1))
           (dolist (hook modi/linum-mode-hooks)
             (add-hook hook #'nlinum-mode)))))
