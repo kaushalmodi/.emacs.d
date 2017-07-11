@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-10 17:12:49 kmodi>
+;; Time-stamp: <2017-07-11 12:28:39 kmodi>
 
 ;; Line number package manager
 
@@ -8,22 +8,25 @@
 ;;  linum
 ;;  nlinum
 
-(defvar modi/linum-fn-default 'nlinum
+(defvar modi/linum-fn-default (>=e "26.0"
+                                  'native-linum
+                                'nlinum)
   "Default “linum” mode. This is used when toggling linum on and off.
-Set this value to either `nlinum' or `linum'.")
+Set this value to either `native-linum', `nlinum' or `linum'.")
 
-(defvar modi/linum--state nil
-  "State variable that tells if line numbers are being displayed or not.
+(defvar modi/linum--prev-state nil
+  "State variable that tells if line numbers are being displayed.
 
-If nil, the line numbers are not displayed. Otherwise this value is either
-`nlinum' or `linum'.
+If nil, the line numbers are not displayed. Otherwise this value
+is either `native-linum', `nlinum' or `linum'.
 
-This variable is meant to show only the current “linum” state; it must not
-be set by the user.")
+This variable is meant to show only the current “linum” state; it
+must not be set by the user.")
 
 (defvar modi/linum-mode-enable-global nil
-  "Variable to enable a “linum” mode globally or selectively based on major
-mode hooks added to the `modi/linum-mode-hooks' variable.")
+  "Variable to enable a “linum” mode globally or selectively
+based on major mode hooks added to the `modi/linum-mode-hooks'
+variable.")
 
 (defconst modi/linum-mode-hooks '(verilog-mode-hook
                                   emacs-lisp-mode-hook
@@ -42,7 +45,8 @@ mode hooks added to the `modi/linum-mode-hooks' variable.")
                                   sml-mode-hook
                                   nim-mode-hook
                                   yaml-mode-hook)
-  "List of hooks of major modes in which a “linum” mode should be enabled.")
+  "List of hooks of major modes in which a “linum” mode should be
+  enabled.")
 
 ;;; Native line number support (emacs 26+)
 (defvar modi/native-linum-default t
@@ -93,8 +97,9 @@ In enabled state, `display-line-numbers' is set to
   :config
   (progn
     (defun modi/blend-linum ()
-      "Set the linum foreground face to that of `font-lock-comment-face' and
-background color to that of the theme."
+      "Set the linum foreground face to that of
+`font-lock-comment-face' and background color to that of the
+theme."
       (interactive)
       (set-face-attribute
        'linum nil
@@ -160,12 +165,13 @@ background color to that of the theme."
   "Enable or disable linum.
 
 With LINUM-PKG set to either `native-linum', `nlinum' or `linum',
-the respective linum mode will be enabled. When LINUM-PKG is nil,
-linum will be disabled altogether."
+the respective linum mode will be enabled.
+
+When LINUM-PKG is `off' or nil, linum will be disabled altogether."
   (interactive
    (list (intern (completing-read
                   "linum pkg (default nlinum): "
-                  '("native-linum" "nlinum" "linum" "nil")
+                  '("native-linum" "nlinum" "linum" "off")
                   nil :require-match nil nil "nlinum"))))
   (when (stringp linum-pkg)
     (setq linum-pkg (intern linum-pkg)))
@@ -182,37 +188,39 @@ linum will be disabled altogether."
      (modi/turn-off-native-linum)
      (modi/turn-off-nlinum)
      (modi/turn-on-linum))
-    (t
+    (t                                  ;'off or nil
      (modi/turn-off-native-linum)
      (modi/turn-off-linum)
      (modi/turn-off-nlinum)))
-  (let (state-str filler-str)
-    (when linum-pkg
-      (setq state-str (format "Activated `%s'." linum-pkg)))
-    (when modi/linum--state
-      (when state-str
-        (setq filler-str " "))
-      (setq state-str (concat (format "Deactivated `%s'." modi/linum--state)
-                              filler-str state-str)))
-    (message (format "%s Revert buffer to see the change." state-str)))
-  (setq modi/linum--state linum-pkg))
+  (let ((activated-str (if (or (null linum-pkg)
+                               (equal linum-pkg 'off))
+                           ""
+                         (format "Activated `%s'. " linum-pkg)))
+        (deactivated-str (if modi/linum--prev-state
+                             (format "Deactivated `%s'. " modi/linum--prev-state)
+                           ""))
+        (note-str "Revert buffer to see the change."))
+    (message (concat activated-str deactivated-str note-str)))
+  ;; Set the 'previous state' of linum
+  (if (or (null linum-pkg)
+          (equal linum-pkg 'off))
+      (setq modi/linum--prev-state nil)
+    (setq modi/linum--prev-state linum-pkg)))
 
-(defun modi/linum-toggle ()
-  "Toggle “linum” between the disabled and enabled states using the default
-package set by the user in `modi/linum-fn-default'."
-  (interactive)
-  (if modi/linum--state
-      (modi/linum-set nil)
-    (modi/linum-set modi/linum-fn-default)))
-
-(defun modi/linum-enable (&optional frame)
+(defun modi/linum--enable (&optional frame)
   "Set “linum” using the default package set by the user in
 `modi/linum-fn-default'.
 
-The optional FRAME argument is added as it is needed when this function is
-added to the `after-make-frame-functions' hook."
-  (let (modi/linum--state)        ;Force let-bound `modi/linum--state' to be nil
-    (modi/linum-toggle)))
+The optional FRAME argument is added as it is needed if this
+function is added to the `after-make-frame-functions' hook."
+  (modi/linum-set modi/linum-fn-default))
+
+(defun modi/linum-toggle ()
+  "Toggle “linum” between the disabled and enabled states."
+  (interactive)
+  (if modi/linum--prev-state
+      (modi/linum-set 'off)
+    (modi/linum--enable)))
 
 ;; Set linum
 (if (daemonp)
@@ -221,12 +229,12 @@ added to the `after-make-frame-functions' hook."
     ;; frame is loaded *before* the emacs config is read. Not doing so results
     ;; in the below error in emacs 24.5:
     ;;   *ERROR*: Invalid face: linum
-    (add-hook 'after-make-frame-functions #'modi/linum-enable)
-  ;; Even when running in non-daemon mode, run `modi/linum-enable' only after the
+    (add-hook 'after-make-frame-functions #'modi/linum--enable)
+  ;; Even when running in non-daemon mode, run `modi/linum--enable' only after the
   ;; init has loaded, so that the last modified value of `modi/linum-fn-default'
   ;; if any in setup-personal.el is the one effective, not its standard value
   ;; in its defvar form above.
-  (add-hook 'after-init-hook #'modi/linum-enable))
+  (add-hook 'after-init-hook #'modi/linum--enable))
 
 
 (provide 'setup-linum)
