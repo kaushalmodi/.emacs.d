@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-07 12:15:21 kmodi>
+;; Time-stamp: <2017-07-11 22:53:51 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -38,7 +38,7 @@
       (with-eval-after-load 'org
         (bind-keys
          :map org-mode-map
-         ("C-c C-q" . counsel-org-tag))
+         ("C-c C-q" . modi/counsel-org-tag))
         (bind-chords
          :map org-mode-map
          ("JJ" . counsel-org-goto)))    ;Jump to org headings
@@ -124,7 +124,22 @@
                                           modi/counsel-org-goto-level-5
                                           modi/counsel-org-goto-level-6
                                           modi/counsel-org-goto-level-7
-                                          modi/counsel-org-goto-level-8))))
+                                          modi/counsel-org-goto-level-8))
+
+    ;; Counsel and Org tags
+    (defun modi/counsel-org-tag (&optional option)
+      "Set Org tags, or just align tags in current heading or whole buffer.
+
+If OPTION is \\='(4), only align the tags in the whole buffer.
+If OPTION is \\='(16), only align the tags in the current heading."
+      (interactive "P")
+      (cond
+       ((equal '(4) option)
+        (org-set-tags-command :just-align))
+       ((equal '(16) option)
+        (org-set-tags-command nil :align-only-current))
+       (t
+        (counsel-org-tag))))))
 
 
 (provide 'setup-counsel)
