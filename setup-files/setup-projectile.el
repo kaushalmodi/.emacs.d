@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-08 12:36:35 kmodi>
+;; Time-stamp: <2017-07-13 11:07:24 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -185,13 +185,19 @@ files in Fundamental mode."
                   (find-file-literally (expand-file-name file ,(projectile-project-root)))
                   (run-hooks 'projectile-find-file-hook))))
 
+    (defun modi/projectile-switch-project-magit-status ()
+      "Switch to other project and open Magit status there."
+      (interactive)
+      (let ((projectile-switch-project-action #'magit-status))
+        (call-interactively #'projectile-switch-project)))
+
     (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
-      ("f"  projectile-find-file-other-window        "file")
-      ("g"  projectile-find-file-dwim-other-window   "file dwim")
-      ("d"  projectile-find-dir-other-window         "dir")
-      ("b"  projectile-switch-to-buffer-other-window "buffer")
-      ("q"  nil                                      "cancel" :color blue))
+      ("b" projectile-switch-to-buffer-other-window "buffer")
+      ("D" projectile-find-dir-other-window "dir")
+      ("f" projectile-find-file-other-window "file")
+      ("F" projectile-find-file-dwim-other-window "file dwim")
+      ("q" nil "cancel" :color blue))
 
     (defhydra hydra-projectile (:color teal
                                 :hint  nil)
@@ -201,10 +207,10 @@ files in Fundamental mode."
 ^^^^       Find               ^^   Search/Tags       ^^^^       Buffers               ^^   Cache                     ^^^^       Other
 ^^^^--------------------------^^---------------------^^^^-----------------------------^^------------------------------------------------------------------
 _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear               ^^    _E_: edit project's .dir-locals.el
-^^    _F_: file dwim          _g_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project      _s-p_/_p_: switch to any other project
-^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: kill all buffers      _X_: cleanup non-existing      ^^    _P_: switch to an open project
-^^    _l_: file literally     ^^                     ^^^^                             _z_: cache current             ^^    _D_: find dir
-^^    _r_: recent file
+^^    _F_: file dwim          _G_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project      _s-p_/_p_: switch to other project
+^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: kill all buffers      _X_: cleanup non-existing      ^^    _g_: switch to Magit status of other project
+^^    _l_: file literally     ^^                     ^^^^                             _z_: cache current             ^^    _P_: switch to an open project
+^^    _r_: recent file        ^^                     ^^^^                             ^^                             ^^    _D_: find dir
 "
       ("a"   projectile-ag)
       ("b"   projectile-switch-to-buffer)
@@ -215,7 +221,8 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
       ("F"   projectile-find-file-dwim)
       ("D"   projectile-find-dir)
       ("E"   projectile-edit-dir-locals)
-      ("g"   ggtags-update-tags)
+      ("g"   modi/projectile-switch-project-magit-status)
+      ("G"   ggtags-update-tags)
       ("i"   projectile-ibuffer)
       ("K"   projectile-kill-buffers)
       ("s-k" projectile-kill-buffers)
