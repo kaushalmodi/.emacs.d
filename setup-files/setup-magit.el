@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-23 08:55:04 kmodi>
+;; Time-stamp: <2017-07-13 13:56:44 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -48,17 +48,25 @@
     (setq magit-log-margin '(t age-abbreviated magit-log-margin-width :author 11)))
   :config
   (progn
-    ;; Abbreviate author name, show "F Last" instead of "First Last".
-    ;; If author's name is just "First", don't abbreviate it.
+    ;; Abbreviate author name. I added this so that I can view Magit log without
+    ;; too much commit message truncation even on narrow screens (like on phone).
     (defun modi/magit-log--abbreviate-author (&rest args)
       "The first arg is AUTHOR, abbreviate it.
-First Last -> F Last
-First      -> First (no change)."
+First Last  -> F Last
+First.Last  -> F Last
+Last, First -> F Last
+First       -> First (no change).
+
+It is assumed that the author has only one or two names."
       ;; ARGS             -> '((AUTHOR DATE))
       ;; (car ARGS)       -> '(AUTHOR DATE)
       ;; (car (car ARGS)) -> AUTHOR
       (let* ((author (car (car args)))
-             (author-abbr (replace-regexp-in-string "\\(.\\).*? +\\(.*\\)" "\\1 \\2" author)))
+             (author-abbr (if (string-match-p "," author)
+                              ;; Last, First -> F Last
+                              (replace-regexp-in-string "\\(.*?\\), *\\(.\\).*" "\\2 \\1" author)
+                            ;; First Last -> F Last
+                            (replace-regexp-in-string "\\(.\\).*?[. ]+\\(.*\\)" "\\1 \\2" author))))
         (setf (car (car args)) author-abbr))
       (car args))                       ;'(AUTHOR-ABBR DATE)
     (advice-add 'magit-log-format-margin :filter-args #'modi/magit-log--abbreviate-author)))
