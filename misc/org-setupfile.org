@@ -1,9 +1,20 @@
-# Time-stamp: <2017-05-23 15:01:37 kmodi>
-*Common org SETUPFILE*
+# Time-stamp: <2017-07-17 12:16:19 kmodi>
+*Common Org SETUPFILE*
 
-[[https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/org-setupfile.org][URL of this file]]
+*NOTE*: Do *not* include this file to an Org file using =#+INCLUDE: ...=.
 
-This file HAS TO BE included in an org file using =#+SETUPFILE: /path/to/this/file=, *not* =#+INCLUDE: ...=.
+Do:
+
+#+BEGIN_SRC org
+#+SETUPFILE: /path/to/org-setupfile.org
+#+END_SRC
+
+Or (even better, though you would need to use Org built from its =master= branch
+as of <2017-07-17 Mon>):
+
+#+BEGIN_SRC org
+#+SETUPFILE: https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/org-setupfile.org
+#+END_SRC
 
 * Latex Setup
 ** Change default font
@@ -64,7 +75,8 @@ Note that fontspec works with only xelatex (not pdflatex).
 #+LaTeX_HEADER: rightmargin=-5pt, %
 #+LaTeX_HEADER: linewidth=1pt, backgroundcolor=yellow!20!white %
 #+LaTeX_HEADER: }
-If the below 2 lines are not included, the mdframed config above will not be effective.
+If the below 2 lines are not included, the mdframed config above will not be
+effective.
 #+LaTeX_HEADER: \BeforeBeginEnvironment{minted}{\begin{mdframed}}
 #+LaTeX_HEADER: \AfterEndEnvironment{minted}{\end{mdframed}}
 * HTML Setup
@@ -83,7 +95,8 @@ If the below 2 lines are not included, the mdframed config above will not be eff
 #+REVEAL_ROOT: https://cdn.rawgit.com/hakimel/reveal.js/master/
 # #+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
 ** Themes
-Available theme values: default beige blood moon night serif simple sky solarized
+Available theme values: default beige blood moon night serif simple sky
+solarized
 #+REVEAL_THEME: simple
 ** My customizations over =reveal.js=
 #+REVEAL_EXTRA_CSS: https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/reveal.extra.css
@@ -94,7 +107,10 @@ Available theme values: default beige blood moon night serif simple sky solarize
 * Macros
 ** Newline
 #+MACRO: NEWLINE @@latex:​\\@@@@html:<br>@@@@ascii:|@@
-In the =NEWLINE= macro above, =C-x 8 RET 200b= was used to enter a zero-width space character between =@@latex:= and =\\=. If that is not done, then latex->pdf does not work if the ={{{NEWLINE}}}= macro is used at the beginning of a line as below,
+In the =NEWLINE= macro above, =C-x 8 RET 200b= was used to enter a zero-width
+space character between =@@latex:= and =\\=. If that is not done, then latex->pdf
+does not work if the ={{{NEWLINE}}}= macro is used at the beginning of a line as
+below,
 #+BEGIN_SRC org
 ​* Vary tone params
 {{{NEWLINE}}} The data driving and tone param variation code blocks
