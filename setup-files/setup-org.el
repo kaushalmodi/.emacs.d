@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-23 15:16:13 kmodi>
+;; Time-stamp: <2017-07-17 10:44:16 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1244,7 +1244,9 @@ region is selected. Else call `self-insert-command'."
      ("C-m" . modi/org-return-no-indent)
      ("<" . modi/org-template-maybe)
      ("M-p". org-previous-visible-heading)
-     ("M-n". org-next-visible-heading))
+     ("M-P". org-backward-heading-same-level)
+     ("M-n". org-next-visible-heading)
+     ("M-N". org-forward-heading-same-level))
 
     (bind-keys
      :map modi-mode-map
