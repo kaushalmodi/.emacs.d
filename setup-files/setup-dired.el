@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-29 17:18:07 kmodi>
+;; Time-stamp: <2017-07-17 17:20:10 kmodi>
 
 ;; Dired
 
@@ -25,9 +25,9 @@
     (with-eval-after-load 'dired
       (bind-keys
        :map dired-mode-map
-        ("<return>"         . dired-single-buffer)
-        ("<double-mouse-1>" . dired-single-buffer-mouse)
-        ("^"                . dired-single-up-directory)))))
+       ("<return>"         . dired-single-buffer)
+       ("<double-mouse-1>" . dired-single-buffer-mouse)
+       ("^"                . dired-single-up-directory)))))
 
 (use-package dired
   :commands (dired-toggle-read-only ; to toggle read-only state of any buffer
@@ -106,7 +106,14 @@ It added extra strings at the front and back of the default dired buffer name."
                               :background (face-background 'default))
           (set-face-attribute 'diredp-link-priv nil
                               :foreground "#00007373FFFF"))
-        (add-hook 'dired-mode-hook #'modi/dired-update-privilege-faces)))))
+        (add-hook 'dired-mode-hook #'modi/dired-update-privilege-faces)))
+
+    ;; https://fuco1.github.io/2017-07-15-Collapse-unique-nested-paths-in-dired-with-dired-collapse-mode.html
+    ;; https://github.com/Fuco1/dired-hacks/blob/master/dired-collapse.el
+    (use-package dired-collapse
+      :config
+      (progn
+        (add-hook 'dired-mode-hook #'dired-collapse-mode)))))
 
 
 (provide 'setup-dired)
