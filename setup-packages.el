@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-04 13:50:36 kmodi>
+;; Time-stamp: <2017-07-22 08:13:54 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -25,7 +25,7 @@
        (share-dir (when prefix-dir
                     (concat prefix-dir "share/")))
        (lisp-dir (when share-dir
-                   (concat prefix-dir "emacs/"
+                   (concat share-dir "emacs/"
                            ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
                            ;; Though, this is not needed and also will do nothing in emacs 26+
                            ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
