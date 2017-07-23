@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-21 17:52:53 kmodi>
+;; Time-stamp: <2017-07-23 00:59:17 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -16,14 +16,8 @@
   (defun org-hugo-new-subtree-post-capture-template ()
     "Returns `org-capture' template string for new Hugo post.
 See `org-capture-templates' for more information."
-    (let* ((hugo-date-fmt "%Y-%m-%dT%T%z")
-           (date-nocolon (format-time-string hugo-date-fmt (current-time)))
-           ;; Hugo expects the date stamp in this format:
-           ;;   2017-07-06T14:59:45-04:00
-           ;; But the "%Y-%m-%dT%T%z" format produces the date in this format:
-           ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
-           ;; Below simply adds that colon.
-           (date (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2" date-nocolon))
+    (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
+           (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
            (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
            (fname (org-hugo--slug title)))
       (mapconcat #'identity
