@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-11 12:40:04 kmodi>
+;; Time-stamp: <2017-07-22 23:51:33 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -14,16 +14,18 @@
 ;;  Emacs version and git branch
 
 ;;; Emacs version check
-(defmacro >=e (V &rest body)
-  "The BODY can contain both
-'if'   (emacs version at least version V) and
-'else' (emacs version older than V) blocks.
+(defmacro >=e (version &rest body)
+  "Emacs VERSION check wrapper around BODY.
+BODY can contain both `if' block (for stuff to execute if emacs
+is equal or newer than VERSION) and `else' block (for stuff to
+execute if emacs is older than VERSION).
 
-Usage: (>=e \"25.0\"
-           (defun-compatible-with-25.0)
-         (defun-not-compatible-in-older-version))"
-  (declare (indent 2)) ;`if'-style indentation where this macro is used
-  `(if (version<= ,V emacs-version)
+Example:
+  (>=e \"25.0\"
+      (defun-compatible-with-25.0)
+    (defun-not-compatible-in-older-version))"
+  (declare (indent 2))          ;`if'-style indentation where this macro is used
+  `(if (version<= ,version emacs-version)
        ,@body))
 
 ;;; Aliases
