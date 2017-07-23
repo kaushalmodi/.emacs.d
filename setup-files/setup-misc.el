@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-08 08:29:19 kmodi>
+;; Time-stamp: <2017-07-22 23:54:54 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -14,6 +14,17 @@
 
 ;; Uncompress->edit->save->compress .gz, .bz2, .Z files on the fly
 (auto-compression-mode 1)
+
+(use-package executable
+  :config
+  (progn
+    (>=e "26.0"
+        (setq executable-prefix-env t)) ;Use "#!/usr/bin/env python3" style magic number
+
+    ;; On saving, automatically make a file an executable if it begins with "#!"
+    ;; Examples: #!/usr/bin/env bash
+    ;;           #!/usr/bin/env perl
+    (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)))
 
 (use-package sendmail
   :defer t
