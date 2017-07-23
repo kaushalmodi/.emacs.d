@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-22 08:13:54 kmodi>
+;; Time-stamp: <2017-07-23 00:03:34 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -33,10 +33,15 @@
                            "/lisp/"))))
   (defvar modi/default-share-directory (when (file-exists-p share-dir)
                                          share-dir)
-    "Share directory for this emacs installation.")
+    "Share directory for this Emacs installation.")
   (defvar modi/default-lisp-directory (when (file-exists-p lisp-dir)
                                         lisp-dir)
-    "Directory containing emacs lisp code installed with emacs."))
+    "Directory containing lisp files for the Emacs installation.
+
+This value must match the path to the lisp/ directory of the
+Emacs installation.  If Emacs is installed using
+--prefix=\"${PREFIX_DIR}\" this value would typically be
+\"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\"."))
 
 ;; Add theme paths
 (add-to-list 'custom-theme-load-path
