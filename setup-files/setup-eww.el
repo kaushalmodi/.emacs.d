@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-07-08 18:22:46 kmodi>
+;; Time-stamp: <2017-07-24 13:27:20 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -90,10 +90,14 @@ See the `eww-search-prefix' variable for the search engine used."
       (let ((eww-buffer-name))
         (modi/eww--go-to-first-search-result search-term)
         (setq eww-buffer-name (rename-buffer "*eww-temp*" t))
-        ;; Copy the actual link instead of the redirection link by calling
-        ;; `shr-copy-url' twice
-        (dotimes (i 2)
-          (shr-copy-url))
+        (>=e "26.0"
+            ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=1b4f0a92ff3505ef9a465b9b391756e3a73a6443
+            (call-interactively #'shr-probe-and-copy-url)
+          ;; Copy the actual link instead of the redirection link by calling
+          ;; `shr-copy-url' twice. This twice-calling is needed only on emacs
+          ;; versions 25.x and older.
+          (dotimes (i 2)
+            (shr-copy-url)))
         (kill-buffer eww-buffer-name)))
 
     (defun modi/eww-im-feeling-lucky (search-term)
@@ -102,27 +106,47 @@ See the `eww-search-prefix' variable for the search engine used."
       (modi/eww--go-to-first-search-result search-term)
       (eww-follow-link))
 
-    (defun modi/eww-copy-url-dwim(&optional option)
-      "Copy the URL under point to the kill ring.
+    (defun modi/eww-copy-url-dwim (&optional option)
+      "Copy the URL or image under point to the kill ring.
 
-If OPTION is other than 16 or nil (`C-u'), or there is no link under
+If OPTION is \\[universal-argument], or if there is no link under
 point, but there is an image under point then copy the URL of the
 image under point instead.
 
-If called twice, then try to fetch the URL and see whether it
-redirects somewhere else.
+If OPTION is \\[universal-argument] \\[universal-argument], or if
+there is neither a link nor an image, the page URL will be
+copied.
 
-If both link and image url recovery fails, copy the page url.
+(For emacs 25.x and older) If this function is called twice, try
+to fetch the URL and see whether it redirects somewhere else.
 
-If OPTION is 16 (`C-u C-u'), copy the page url."
+(For emacs 26.x and newer) Automatically use the fetched URL's
+redirection destination if it has one."
       (interactive "P")
-      (cl-case (car option)
-        (16 (message "Copied page url: %s" (eww-copy-page-url))) ; C-u C-u
-        (t  (when (string= (shr-copy-url option) ; no prefix or C-u
-                           "No URL under point")
+      (let (image-url page-url)
+        (cond
+         ((equal '(4) option)           ;C-u
+          (setq image-url t))
+         ((equal '(16) option)          ;C-u C-u
+          (setq page-url t))
+         (t                             ;No prefix
+          ))
+        (>=e "26.0"
+            (let* ((pt-on-url (shr-url-at-point nil))
+                   (pt-on-image (shr-url-at-point :image-url)))
+              (when (and (not pt-on-url)
+                         (not pt-on-image))
+                (setq page-url t)) ;Get page URL if point is neither on URL nor image
+              (if page-url
+                  (message "Copied page url: %s" (eww-copy-page-url))
+                (let ((current-prefix-arg image-url))
+                  (call-interactively #'shr-probe-and-copy-url))))
+          (if page-url
+              (message "Copied page url: %s" (eww-copy-page-url))
+            (when (string= (shr-copy-url image-url) "No URL under point") ;No prefix or C-u
               ;; Copy page url if COMMAND or C-u COMMAND returns
-              ;; "No URL under point"
-              (message "Copied page url: %s" (eww-copy-page-url))))))
+              ;; "No URL under point".
+              (message "Copied page url: %s" (eww-copy-page-url)))))))
 
     (defun modi/eww-keep-lines (regexp)
       "Show only the lines matching regexp in the web page.
@@ -200,30 +224,30 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
 
     (bind-keys
      :map eww-mode-map
-      (":" . eww) ; Go to URL
-      ("h" . eww-list-histories) ; View history
-      ("w" . modi/eww-copy-url-dwim)
-      ("/" . highlight-regexp)
-      ("k" . modi/eww-keep-lines))
+     (":" . eww) ; Go to URL
+     ("h" . eww-list-histories) ; View history
+     ("w" . modi/eww-copy-url-dwim)
+     ("/" . highlight-regexp)
+     ("k" . modi/eww-keep-lines))
     ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
     (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
     (bind-keys
      :map eww-text-map ; For single line text fields
-      ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
-      ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
+     ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
+     ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
     (bind-keys
      :map eww-textarea-map ; For multi-line text boxes
-      ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
-      ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
+     ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
+     ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
     (bind-keys
      :map eww-checkbox-map
-      ("<down-mouse-1>" . eww-toggle-checkbox))
+     ("<down-mouse-1>" . eww-toggle-checkbox))
     (bind-keys
      :map shr-map
-      ("w" . modi/eww-copy-url-dwim))
+     ("w" . modi/eww-copy-url-dwim))
     (bind-keys
      :map eww-link-keymap
-      ("w" . modi/eww-copy-url-dwim))))
+     ("w" . modi/eww-copy-url-dwim))))
 
 
 (provide 'setup-eww)
