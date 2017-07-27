@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-11 22:53:51 kmodi>
+;; Time-stamp: <2017-07-27 14:52:02 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -44,6 +44,7 @@
          ("JJ" . counsel-org-goto)))    ;Jump to org headings
       (with-eval-after-load 'org-agenda
         (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))))
+  :commands (modi/counsel-org-tag)
   :config
   (progn
     ;; counsel-find-file
