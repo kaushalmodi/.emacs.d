@@ -1,4 +1,4 @@
-# Time-stamp: <2017-08-03 15:22:50 kmodi>
+# Time-stamp: <2017-08-03 16:36:56 kmodi>
 *Common Org SETUPFILE*
 
 *NOTE*: Do *not* include this file to an Org file using =#+INCLUDE: ...=.
@@ -92,7 +92,7 @@ Switch to using Iosevka font today <2017-08-03 Thu>.
 ** My custom css modifications
 #+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/bootstrap.extra.css" rel="stylesheet">
 ** Iosevka font
-#+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/iosevka.css" rel="stylesheet">
+#+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/v1.13.2/iosevka.css" rel="stylesheet">
 * Reveal Setup
 ** =reveal.js= source
 #+REVEAL_ROOT: https://cdn.rawgit.com/hakimel/reveal.js/master/
