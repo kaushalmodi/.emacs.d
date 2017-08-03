@@ -31,3 +31,6 @@
 [submodule "elisp/ox-hugo"]
 	path = elisp/ox-hugo
 	url = https://kaushalmodi@github.com/kaushalmodi/ox-hugo.git
+[submodule "misc/fonts/iosevka"]
+	path = misc/fonts/iosevka
+	url = https://kaushalmodi@github.com/kaushalmodi/iosevka-mirror.git

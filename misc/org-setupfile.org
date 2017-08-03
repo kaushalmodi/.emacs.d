@@ -1,4 +1,4 @@
-# Time-stamp: <2017-07-17 12:16:19 kmodi>
+# Time-stamp: <2017-08-03 15:22:50 kmodi>
 *Common Org SETUPFILE*
 
 *NOTE*: Do *not* include this file to an Org file using =#+INCLUDE: ...=.
@@ -84,12 +84,15 @@ effective.
 [[http://getbootstrap.com/getting-started/][Source]]
 #+HTML_HEAD: <!-- Bootstrap -->
 #+HTML_HEAD: <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-** Get Source Code Pro font
-#+HTML_HEAD: <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+** COMMENT Get Source Code Pro font
+Switch to using Iosevka font today <2017-08-03 Thu>.
+# #+HTML_HEAD: <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
 ** Leuven theme for code snippets
 #+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/leuven_theme.css" rel="stylesheet">
 ** My custom css modifications
 #+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/bootstrap.extra.css" rel="stylesheet">
+** Iosevka font
+#+HTML_HEAD: <link href="https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/css/iosevka.css" rel="stylesheet">
 * Reveal Setup
 ** =reveal.js= source
 #+REVEAL_ROOT: https://cdn.rawgit.com/hakimel/reveal.js/master/
