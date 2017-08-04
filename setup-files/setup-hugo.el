@@ -1,7 +1,8 @@
-;; Time-stamp: <2017-07-23 00:59:17 kmodi>
+;; Time-stamp: <2017-08-04 14:10:53 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
+;; https://github.com/kaushalmodi/ox-hugo
 
 (use-package ox-hugo
   :after ox
@@ -10,7 +11,12 @@
              org-hugo--slug)
   :load-path "elisp/ox-hugo"
   :bind (:map modi-mode-map
-         ("C-c G" . org-hugo-export-subtree-to-md))) ;Same as "C-c C-e H H"
+         ("C-c G" . org-hugo-export-subtree-to-md)) ;Same as "C-c C-e H H"
+  :config
+  (progn
+    ;; Set `org-hugo-pygments-code-fences' to non-nil if setting
+    ;; `pygmentsCodeFences' to `true' in Hugo site `config.toml'.
+    (setq org-hugo-pygments-code-fences t)))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
