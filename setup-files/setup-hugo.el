@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-04 14:10:53 kmodi>
+;; Time-stamp: <2017-08-07 10:14:45 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -14,9 +14,11 @@
          ("C-c G" . org-hugo-export-subtree-to-md)) ;Same as "C-c C-e H H"
   :config
   (progn
-    ;; Set `org-hugo-pygments-code-fences' to non-nil if setting
-    ;; `pygmentsCodeFences' to `true' in Hugo site `config.toml'.
-    (setq org-hugo-pygments-code-fences t)))
+    ;; Set `org-hugo-langs-no-descr-in-code-fences' to '(org) if setting
+    ;; `pygmentsCodeFences' to `true' in Hugo site `config.toml', as syntax
+    ;; highlighting for Org code blocks is not yet supported by Pygments:
+    ;; https://github.com/kaushalmodi/ox-hugo/issues/60
+    (setq org-hugo-langs-no-descr-in-code-fences '(org))))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
