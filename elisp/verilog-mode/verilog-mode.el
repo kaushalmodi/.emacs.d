@@ -4,8 +4,7 @@
 
 ;; Author: Michael McNamara <mac@verilog.com>
 ;;    Wilson Snyder <wsnyder@wsnyder.org>
-;;    http://www.verilog.com
-;;    http://www.veripool.org
+;; X-URL: http://www.veripool.org
 ;; Created: 3 Jan 1996
 ;; Keywords: languages
 
@@ -70,7 +69,7 @@
 ;; default.
 
 ;; You can get step by step help in installing this file by going to
-;; <http://www.verilog.com/emacs_install.html>
+;; <http://www.veripool.com/verilog-mode>
 
 ;; The short list of installation instructions are: To set up
 ;; automatic Verilog mode, put this file in your load path, and put
@@ -123,7 +122,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2017-05-09-eb40517-vpo"
+(defconst verilog-mode-version "2017-07-14-c36a886-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -345,6 +344,12 @@ wherever possible, since it is slow."
       (unless (fboundp 'buffer-chars-modified-tick)  ; Emacs 22 added
 	(defmacro buffer-chars-modified-tick () (buffer-modified-tick)))
     (error nil))
+  ;; Added in Emacs 23.1
+  (condition-case nil
+      (unless (fboundp 'ignore-errors)
+        (defmacro ignore-errors (&rest body)
+          (declare (debug t) (indent 0))
+          `(condition-case nil (progn ,@body) (error nil)))))
   ;; Added in Emacs 24.1
   (condition-case nil
       (unless (fboundp 'prog-mode)
@@ -961,7 +966,8 @@ Only used in XEmacs; GNU Emacs uses `verilog-error-regexp-emacs-alist'.")
 These arguments are used to find files for `verilog-auto', and match
 the flags accepted by a standard Verilog-XL simulator.
 
-    -f filename     Reads more `verilog-library-flags' from the filename.
+    -f filename     Reads absolute `verilog-library-flags' from the filename.
+    -F filename     Reads relative `verilog-library-flags' from the filename.
     +incdir+dir     Adds the directory to `verilog-library-directories'.
     -Idir           Adds the directory to `verilog-library-directories'.
     -y dir          Adds the directory to `verilog-library-directories'.
@@ -1956,7 +1962,7 @@ be substituted."
 		 t t command))
   (setq command	(verilog-string-replace-matches
 		 "\\b__FILE__\\b" (file-name-nondirectory
-                                 (or (buffer-file-name) ""))
+                                   (or (buffer-file-name) ""))
 		 t t command))
   command)
 
@@ -2410,7 +2416,7 @@ find the errors."
        ;; distribution weighting
        ":=" ":/"
        ) 't
-         )))
+     )))
 (defconst verilog-assignment-operation-re
   (concat
    ;; "\\(^\\s-*[A-Za-z0-9_]+\\(\\[\\([A-Za-z0-9_]+\\)\\]\\)*\\s-*\\)"
@@ -3290,14 +3296,14 @@ See also `verilog-font-lock-extra-types'.")
 		 '("\\(\\\\\\S-*\\s-\\)"  0 font-lock-function-name-face)
 		 ;; Fontify macro definitions/ uses
 		 '("`\\s-*[A-Za-z][A-Za-z0-9_]*" 0 (if (boundp 'font-lock-preprocessor-face)
-                                                      'font-lock-preprocessor-face
-                                                    'font-lock-type-face))
+                                                       'font-lock-preprocessor-face
+                                                     'font-lock-type-face))
 		 ;; Fontify delays/numbers
 		 '("\\(@\\)\\|\\([ \t\n\f\r]#\\s-*\\(\\([0-9_.]+\\('s?[hdxbo][0-9a-fA-F_xz]*\\)?\\)\\|\\(([^()]+)\\|\\sw+\\)\\)\\)"
 		   0 font-lock-type-face append)
-     ;; Fontify property/sequence cycle delays - these start with '##'
-     '("\\(##\\(\\sw+\\|\\[[^]]+\\]\\)\\)"
-       0 font-lock-type-face append)
+                 ;; Fontify property/sequence cycle delays - these start with '##'
+                 '("\\(##\\(\\sw+\\|\\[[^]]+\\]\\)\\)"
+                   0 font-lock-type-face append)
 		 ;; Fontify instantiation names
 		 '("\\([A-Za-z][A-Za-z0-9_]*\\)\\s-*(" 1 font-lock-function-name-face)
 		 )))
@@ -3350,37 +3356,37 @@ user-visible changes to the buffer must not be within a
 (make-variable-buffer-local 'verilog-save-font-mod-hooked)
 
 (defmacro verilog-save-font-no-change-functions (&rest body)
- "Execute BODY forms, disabling all change hooks in BODY.
+  "Execute BODY forms, disabling all change hooks in BODY.
 Includes temporary disabling of `font-lock' to restore the buffer
 to full text form for parsing.  Additional actions may be specified with
 `verilog-before-save-font-hook' and `verilog-after-save-font-hook'.
 For insignificant changes, see instead `verilog-save-buffer-state'."
- `(if verilog-save-font-mod-hooked ; Short-circuit a recursive call
-      (progn ,@body)
-    ;; Before version 20, match-string with font-lock returns a
-    ;; vector that is not equal to the string.  IE if on "input"
-    ;; nil==(equal "input" (progn (looking-at "input") (match-string 0)))
-    ;; Therefore we must remove and restore font-lock mode
-    (verilog-run-hooks 'verilog-before-save-font-hook)
-    (let* ((verilog-save-font-mod-hooked (- (point-max) (point-min)))
-           ;; Significant speed savings with no font-lock properties
-           (fontlocked (when (and (boundp 'font-lock-mode) font-lock-mode)
-                         (font-lock-mode 0)
-                         t)))
-      (run-hook-with-args 'before-change-functions (point-min) (point-max))
-      (unwind-protect
-          ;; Must inhibit and restore hooks before restoring font-lock
-          (let* ((inhibit-point-motion-hooks t)
-                 (inhibit-modification-hooks t)
-                 (verilog-no-change-functions t)
-                 ;; XEmacs and pre-Emacs 21 ignore inhibit-modification-hooks.
-                 before-change-functions after-change-functions)
-            (progn ,@body))
-        ;; Unwind forms
-        (run-hook-with-args 'after-change-functions (point-min) (point-max)
-                            verilog-save-font-mod-hooked) ; old length
-        (when fontlocked (font-lock-mode t))
-        (verilog-run-hooks 'verilog-after-save-font-hook)))))
+  `(if verilog-save-font-mod-hooked ; Short-circuit a recursive call
+       (progn ,@body)
+     ;; Before version 20, match-string with font-lock returns a
+     ;; vector that is not equal to the string.  IE if on "input"
+     ;; nil==(equal "input" (progn (looking-at "input") (match-string 0)))
+     ;; Therefore we must remove and restore font-lock mode
+     (verilog-run-hooks 'verilog-before-save-font-hook)
+     (let* ((verilog-save-font-mod-hooked (- (point-max) (point-min)))
+            ;; Significant speed savings with no font-lock properties
+            (fontlocked (when (and (boundp 'font-lock-mode) font-lock-mode)
+                          (font-lock-mode 0)
+                          t)))
+       (run-hook-with-args 'before-change-functions (point-min) (point-max))
+       (unwind-protect
+           ;; Must inhibit and restore hooks before restoring font-lock
+           (let* ((inhibit-point-motion-hooks t)
+                  (inhibit-modification-hooks t)
+                  (verilog-no-change-functions t)
+                  ;; XEmacs and pre-Emacs 21 ignore inhibit-modification-hooks.
+                  before-change-functions after-change-functions)
+             (progn ,@body))
+         ;; Unwind forms
+         (run-hook-with-args 'after-change-functions (point-min) (point-max)
+                             verilog-save-font-mod-hooked) ; old length
+         (when fontlocked (font-lock-mode t))
+         (verilog-run-hooks 'verilog-after-save-font-hook)))))
 
 ;;
 ;; Comment detection and caching
@@ -5783,8 +5789,8 @@ Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
                 (cond ((verilog-in-paren)
                        t) ; this is a normal statement
                       ((save-excursion
-                        (verilog-beg-of-statement)
-                        (looking-at verilog-default-clocking-re))
+                         (verilog-beg-of-statement)
+                         (looking-at verilog-default-clocking-re))
                        t) ; default clocking, normal statement
                       (t
                        (goto-char here) ; or is clocking, starts a new block
@@ -6662,7 +6668,7 @@ Only look at a few lines to determine indent level."
 	  (let ((val))
 	    (verilog-beg-of-statement-1)
 	    (if (and (< (point) here)
-		     (verilog-re-search-forward "=[ \\t]*" here 'move)
+		     (verilog-re-search-forward "=[ \t]*" here 'move)
 		     ;; not at a |=>, #=#, or [=n] operator
 		     (not (string-match "\\[=.\\|#=#\\||=>"
                                         (or (buffer-substring (- (point) 2) (1+ (point)))
@@ -9337,7 +9343,7 @@ Returns REGEXP and list of ( (signal_name connection_name)... )."
 	      ;; Regexp form??
 	      ((looking-at
 		;; Regexp bug in XEmacs disallows ][ inside [], and wants + last
-		"\\s-*\\.\\(\\([a-zA-Z0-9`_$+@^.*?|---]+\\|[][]\\|\\\\[()|]\\)+\\)\\s-*(\\(.*\\))\\s-*\\(,\\|)\\s-*;\\)")
+		"\\s-*\\.\\(\\([a-zA-Z0-9`_$+@^.*?|---]\\|[][]\\|\\\\[()|]\\)+\\)\\s-*(\\(.*\\))\\s-*\\(,\\|)\\s-*;\\)")
 	       (setq rep (match-string-no-properties 3))
 	       (goto-char (match-end 0))
 	       (setq tpl-wild-list
@@ -9612,8 +9618,9 @@ Some macros and such are also found and included.  For dinotrace.el."
 ;; Argument file parsing
 ;;
 
-(defun verilog-getopt (arglist)
-  "Parse -f, -v etc arguments in ARGLIST list or string."
+(defun verilog-getopt (arglist &optional default-dir)
+  "Parse -f, -v etc arguments in ARGLIST list or string.
+Use DEFAULT-DIR to anchor paths if non-nil."
   (unless (listp arglist) (setq arglist (list arglist)))
   (let ((space-args '())
 	arg next-param)
@@ -9631,6 +9638,8 @@ Some macros and such are also found and included.  For dinotrace.el."
 	    space-args (cdr space-args))
       (cond
        ;; Need another arg
+       ((equal arg "-F")
+	(setq next-param arg))
        ((equal arg "-f")
 	(setq next-param arg))
        ((equal arg "-v")
@@ -9654,32 +9663,37 @@ Some macros and such are also found and included.  For dinotrace.el."
        ((or (string-match "^\\+incdir\\+\\(.*\\)" arg)  ; +incdir+dir
             (string-match "^-I\\(.*\\)" arg))   ; -Idir
 	(verilog-add-list-unique `verilog-library-directories
-				 (match-string 1 (substitute-in-file-name arg))))
+				 (substitute-in-file-name (match-string 1 arg))))
        ;; Ignore
        ((equal "+librescan" arg))
        ((string-match "^-U\\(.*\\)" arg))  ; -Udefine
        ;; Second parameters
+       ((equal next-param "-F")
+	(setq next-param nil)
+	(verilog-getopt-file (verilog-substitute-file-name-path arg default-dir)
+                             (file-name-directory (verilog-substitute-file-name-path arg default-dir))))
        ((equal next-param "-f")
 	(setq next-param nil)
-	(verilog-getopt-file (substitute-in-file-name arg)))
+	(verilog-getopt-file (verilog-substitute-file-name-path arg default-dir) nil))
        ((equal next-param "-v")
 	(setq next-param nil)
 	(verilog-add-list-unique `verilog-library-files
-				 (substitute-in-file-name arg)))
+				 (verilog-substitute-file-name-path arg default-dir)))
        ((equal next-param "-y")
 	(setq next-param nil)
 	(verilog-add-list-unique `verilog-library-directories
-				 (substitute-in-file-name arg)))
+				 (verilog-substitute-file-name-path arg default-dir)))
        ;; Filename
        ((string-match "^[^-+]" arg)
 	(verilog-add-list-unique `verilog-library-files
-				 (substitute-in-file-name arg)))
+				 (verilog-substitute-file-name-path arg default-dir)))
        ;; Default - ignore; no warning
        ))))
 ;;(verilog-getopt (list "+libext+.a+.b" "+incdir+foodir" "+define+a+aval" "-f" "otherf" "-v" "library" "-y" "dir"))
 
-(defun verilog-getopt-file (filename)
-  "Read Verilog options from the specified FILENAME."
+(defun verilog-getopt-file (filename &optional default-dir)
+  "Read Verilog options from the specified FILENAME.
+Use DEFAULT-DIR to anchor paths if non-nil."
   (save-excursion
     (let ((fns (verilog-library-filenames filename (buffer-file-name)))
 	  (orig-buffer (current-buffer))
@@ -9695,7 +9709,7 @@ Some macros and such are also found and included.  For dinotrace.el."
 	(when (string-match "//" line)
 	  (setq line (substring line 0 (match-beginning 0))))
 	(with-current-buffer orig-buffer  ; Variables are buffer-local, so need right context.
-	  (verilog-getopt line))))))
+	  (verilog-getopt line default-dir))))))
 
 (defun verilog-getopt-flags ()
   "Convert `verilog-library-flags' into standard library variables."
@@ -9711,6 +9725,13 @@ Some macros and such are also found and included.  For dinotrace.el."
   (verilog-getopt verilog-library-flags)
   ;; Allow user to customize
   (verilog-run-hooks 'verilog-getopt-flags-hook))
+
+(defun verilog-substitute-file-name-path (filename default-dir)
+  "Return FILENAME with environment variables substituted.
+Use DEFAULT-DIR to anchor paths if non-nil."
+  (if default-dir
+      (expand-file-name (substitute-in-file-name filename) default-dir)
+    (substitute-in-file-name filename)))
 
 (defun verilog-add-list-unique (varref object)
   "Append to VARREF list the given OBJECT,
@@ -9891,42 +9912,44 @@ Or, just the existing dirnames themselves if there are no wildcards."
   (interactive)
   (unless dirnames
     (error "`verilog-library-directories' should include at least `.'"))
-  (setq dirnames (reverse dirnames))	; not nreverse
-  (let ((dirlist nil)
-	pattern dirfile dirfiles dirname root filename rest basefile)
-    (while dirnames
-      (setq dirname (substitute-in-file-name (car dirnames))
-	    dirnames (cdr dirnames))
-      (cond ((string-match (concat "^\\(\\|[/\\]*[^*?]*[/\\]\\)"  ; root
-                                   "\\([^/\\]*[*?][^/\\]*\\)"     ; filename with *?
-                                   "\\(.*\\)")                    ; rest
-			   dirname)
-	     (setq root (match-string 1 dirname)
-		   filename (match-string 2 dirname)
-		   rest (match-string 3 dirname)
-		   pattern filename)
-	     ;; now replace those * and ? with .+ and .
-	     ;; use ^ and /> to get only whole file names
-	     (setq pattern (verilog-string-replace-matches "[*]" ".+" nil nil pattern)
-		   pattern (verilog-string-replace-matches "[?]" "." nil nil pattern)
-		   pattern (concat "^" pattern "$")
-		   dirfiles (verilog-dir-files root))
-	     (while dirfiles
-	       (setq basefile (car dirfiles)
-		     dirfile (expand-file-name (concat root basefile rest))
-		     dirfiles (cdr dirfiles))
-	       (if (and (string-match pattern basefile)
-			;; Don't allow abc/*/rtl to match abc/rtl via ..
-			(not (equal basefile "."))
-			(not (equal basefile ".."))
-			(file-directory-p dirfile))
-		   (setq dirlist (cons dirfile dirlist)))))
-	    ;; Defaults
-	    (t
-	     (if (file-directory-p dirname)
-		 (setq dirlist (cons dirname dirlist))))))
-    dirlist))
-;;(verilog-expand-dirnames (list "." ".." "nonexist" "../*" "/home/wsnyder/*/v"))
+  (save-match-data
+    (setq dirnames (reverse dirnames))	; not nreverse
+    (let ((dirlist nil)
+          pattern dirfile dirfiles dirname root filename rest basefile)
+      (setq dirnames (mapcar 'substitute-in-file-name dirnames))
+      (while dirnames
+        (setq dirname (car dirnames)
+              dirnames (cdr dirnames))
+        (cond ((string-match (concat "^\\(\\|[/\\]*[^*?]*[/\\]\\)"  ; root
+                                     "\\([^/\\]*[*?][^/\\]*\\)"     ; filename with *?
+                                     "\\(.*\\)")                    ; rest
+                             dirname)
+               (setq root (match-string 1 dirname)
+                     filename (match-string 2 dirname)
+                     rest (match-string 3 dirname)
+                     pattern filename)
+               ;; now replace those * and ? with .+ and .
+               ;; use ^ and /> to get only whole file names
+               (setq pattern (verilog-string-replace-matches "[*]" ".+" nil nil pattern)
+                     pattern (verilog-string-replace-matches "[?]" "." nil nil pattern)
+                     pattern (concat "^" pattern "$")
+                     dirfiles (verilog-dir-files root))
+               (while dirfiles
+                 (setq basefile (car dirfiles)
+                       dirfile (expand-file-name (concat root basefile rest))
+                       dirfiles (cdr dirfiles))
+                 (when (and (string-match pattern basefile)
+                            ;; Don't allow abc/*/rtl to match abc/rtl via ..
+                            (not (equal basefile "."))
+                            (not (equal basefile "..")))
+                   ;; Might have more wildcards, so process again
+                   (setq dirnames (cons dirfile dirnames)))))
+              ;; Defaults
+              (t
+               (if (file-directory-p dirname)
+                   (setq dirlist (cons dirname dirlist))))))
+      dirlist)))
+;;(verilog-expand-dirnames (list "." ".." "nonexist" "../*" "/home/wsnyder/*/v" "../*/*"))
 
 (defun verilog-library-filenames (filename &optional current check-ext)
   "Return a search path to find the given FILENAME or module name.
@@ -14413,7 +14436,7 @@ Files are checked based on `verilog-library-flags'."
   (with-output-to-temp-buffer "*verilog-mode help*"
     (princ (format "You are using verilog-mode %s\n" verilog-mode-version))
     (princ "\n")
-    (princ "For new releases, see http://www.verilog.com\n")
+    (princ "For new releases, see http://www.veripool.com/verilog-mode\n")
     (princ "\n")
     (princ "For frequently asked questions, see http://www.veripool.org/verilog-mode-faq.html\n")
     (princ "\n")
