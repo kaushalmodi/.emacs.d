@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-08 17:02:08 kmodi>
+;; Time-stamp: <2017-08-14 18:05:16 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -915,13 +915,14 @@ See `org-latex-format-headline-function' for details."
             ;; Customize the HTML postamble
             ;; http://thread.gmane.org/gmane.emacs.orgmode/104502/focus=104526
             (defun modi/org-html-postamble-fn (info)
-              "My custom postamble for org to HTML exports.
+              "My custom postamble for Org to HTML exports.
 INFO is the property list of export options."
-              (let ((author (car (plist-get info :author)))
-                    (creator (plist-get info :creator))
-                    (date (car (org-export-get-date info)))
-                    (d1 "<div style=\"display: inline\" ")
-                    (d2 "</div>"))
+              (let* ((author (car (plist-get info :author)))
+                     (creator (plist-get info :creator))
+                     (date-raw (car (org-export-get-date info)))
+                     (date (org-export-data date-raw info))
+                     (d1 "<div style=\"display: inline\" ")
+                     (d2 "</div>"))
                 (concat "Exported using "
                         d1 "class=\"creator\">" creator d2 ; emacs and org versions
                         (when author
