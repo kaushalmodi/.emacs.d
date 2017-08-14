@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-02-24 11:51:14 kmodi>
+;; Time-stamp: <2017-08-14 13:36:14 kmodi>
 
 ;; Hspice, Spice
 
@@ -7,6 +7,7 @@
   :mode (("\\.sp\\'"  . spice-mode)
          ("\\.cir\\'" . spice-mode)
          ("\\.ckt\\'" . spice-mode)
+         ("\\.sckt\\'" . spice-mode)
          ("\\.mod\\'" . spice-mode)
          ("\\.cdl\\'" . spice-mode)
          ("\\.chi\\'" . spice-mode)
