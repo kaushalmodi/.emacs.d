@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-23 01:32:31 kmodi>
+;; Time-stamp: <2017-08-08 17:02:08 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1197,13 +1197,14 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
       "
 org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext           _I_NCLUDE:
                _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
-               _a_scii         _q_uote        _E_macs-lisp        _S_hell          _i_ndex:         _A_SCII:
-               ^^              ^^             ^^                  _p_ython         ^^               ^^
+               _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:         _A_SCII:
+               ^^              ^^             _S_hell             _p_ython         ^^               ^^
 "
       ("s" (modi/org-template-expand "<s")) ; #+BEGIN_SRC ... #+END_SRC
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
       ("v" (modi/org-template-expand "<s" "systemverilog"))
       ("m" (modi/org-template-expand "<s" "matlab"))
+      ("n" (modi/org-template-expand "<s" "nim"))
       ("S" (modi/org-template-expand "<s" "shell"))
       ("p" (modi/org-template-expand "<s" "python"))
       ("t" (modi/org-template-expand "<s" "text"))
