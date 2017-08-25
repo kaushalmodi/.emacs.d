@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-04-13 15:22:28 kmodi>
+;; Time-stamp: <2017-08-25 11:10:45 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -10,13 +10,36 @@
   :preface
   (setq outline-minor-mode-prefix "\M-#")
   :defer t
+  :init
+  (progn
+    (defvar modi/outline-minor-mode-hooks '(verilog-mode-hook
+                                            emacs-lisp-mode-hook
+                                            conf-space-mode-hook) ;For .tmux.conf
+      "List of hooks of major modes in which `outline-minor-mode' should be enabled.")
+
+    (defun modi/turn-on-outline-minor-mode ()
+      "Turn on `outline-minor-mode' only for specific modes."
+      (interactive)
+      (dolist (hook modi/outline-minor-mode-hooks)
+        (add-hook hook #'outline-minor-mode)))
+
+    (defun modi/turn-off-outline-minor-mode ()
+      "Turn off `outline-minor-mode' only for specific modes."
+      (interactive)
+      (dolist (hook modi/outline-minor-mode-hooks)
+        (remove-hook hook #'outline-minor-mode)))
+
+    (modi/turn-on-outline-minor-mode))
   :config
   (progn
+    ;; Always enable Outshine in `outline-minor-mode'
+    (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
+
     (defun modi/outline-next-visible-heading (arg)
       "Move to the next visible heading line.
-With ARG, repeats or can move backward if negative.
-A heading line is one that starts with a `*' (or that
-`outline-regexp' matches)."
+    With ARG, repeats or can move backward if negative.
+    A heading line is one that starts with a `*' (or that
+    `outline-regexp' matches)."
       (interactive "p")
       (if (< arg 0)
           (beginning-of-line)
@@ -27,9 +50,9 @@ A heading line is one that starts with a `*' (or that
                       (setq found-heading-p
                             (re-search-backward
                              (concat "^"
-                                     (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
-                                         ""
-                                       "\\s-*")
+                                     (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                         "\\s-*"
+                                       "")
                                      "\\(?:" outline-regexp "\\)")
                              nil 'move))
                       (outline-invisible-p)))
@@ -39,25 +62,19 @@ A heading line is one that starts with a `*' (or that
                       (setq found-heading-p
                             (re-search-forward
                              (concat "^"
-                                     (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
-                                         ""
-                                       "\\s-*")
+                                     (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                         "\\s-*"
+                                       "")
                                      "\\(?:" outline-regexp "\\)")
                              nil 'move))
                       (outline-invisible-p (match-beginning 0))))
           (setq arg (1- arg)))
         (if found-heading-p (beginning-of-line))))
-    (advice-add 'outline-next-visible-heading :override #'modi/outline-next-visible-heading)))
-
-(use-package outshine
-  :config
-  (progn
-    (setq outshine-use-speed-commands t)
-    (setq outshine-org-style-global-cycling-at-bob-p t)
+    (advice-add 'outline-next-visible-heading :override #'modi/outline-next-visible-heading)
 
     ;; http://emacs.stackexchange.com/a/2803/115
     (defun modi/outline-toc ()
-      "Create a table of contents for outshine headers.
+      "Create a table of contents for outline/outshine headers.
 
 For `emacs-lisp-mode':
  - The Contents header has to be “;; Contents:”
@@ -90,7 +107,7 @@ Don't add “Revision Control” heading to TOC."
                (content-header-regexp (concat "^"
                                               outline-comment-start
                                               (when el-mode
-                                                "\\{2\\}") ; 2 consecutive ; in `emacs-lisp-mode'
+                                                "\\{2\\}") ;2 consecutive ;in `emacs-lisp-mode'
                                               " Contents:")))
           (goto-char (point-min))
           (when (re-search-forward content-header-regexp nil :noerror)
@@ -102,22 +119,24 @@ Don't add “Revision Control” heading to TOC."
                   heading star)
               ;; (message "%s" outline-comment-start)
               (while (re-search-forward
-                      (concat "^"           ; beginning of line
-                              (if outshine-outline-regexp-outcommented-p "" "\\s-*")
+                      (concat "^"       ;beginning of line
+                              (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                  "\\s-*"
+                                "")
                               "\\(?1:"
                               outline-comment-start
                               (if el-mode
-                                  (concat "\\{2\\}\\)" ; 2 consecutive ; in `emacs-lisp-mode'
-                                          ";\\(?2:;*\\)") ; followed by one or more ; chars
-                                (concat "\\s-\\{1\\}\\)" ; SINGLE white space
-                                        "\\*\\(?2:\\**\\)")) ; followed by one or more * chars
-                              " "                        ; followed by a space
-                              "\\(?3:.+\\)")               ; followed by heading
+                                  (concat "\\{2\\}\\)" ;2 consecutive ;in `emacs-lisp-mode'
+                                          ";\\(?2:;*\\)") ;followed by one or more ;chars
+                                (concat "\\s-\\{1\\}\\)"   ;SINGLE white space
+                                        "\\*\\(?2:\\**\\)")) ;followed by one or more * chars
+                              " "                        ;followed by a space
+                              "\\(?3:.+\\)")               ;followed by heading
                       nil :noerror)
                 (setq parsed-outline-comment-start (match-string-no-properties 1))
                 ;; Note that the below `star' var stores one less * than the actual;
                 ;; that's intentional. Also note that for `emacs-lisp-mode' the 3rd
-                ;; consecutive ; onwards is counted as a “star”.
+                ;; consecutive ;onwards is counted as a “star”.
                 (setq star    (match-string-no-properties 2))
                 (setq heading (match-string-no-properties 3))
                 ;; (message "%s %s %s" parsed-outline-comment-start star heading)
@@ -144,7 +163,7 @@ Don't add “Revision Control” heading to TOC."
               ;; Then print table of contents
               (let ((content-comment-prefix
                      (if el-mode
-                         ";; " ; 2 consecutive ; in `emacs-lisp-mode'
+                         ";; " ;2 consecutive ;in `emacs-lisp-mode'
                        parsed-outline-comment-start)))
                 (insert (format "%s\n" content-comment-prefix))
                 (let ((n 1))
@@ -157,68 +176,64 @@ Don't add “Revision Control” heading to TOC."
                                     h))
                     (setq n (1+ n))))))))))
 
-    (defvar modi/outline-minor-mode-hooks '(verilog-mode-hook
-                                            emacs-lisp-mode-hook
-                                            conf-space-mode-hook) ; for .tmux.conf
-      "List of hooks of major modes in which `outline-minor-mode' should be enabled.")
-
-    (defun modi/turn-on-outline-minor-mode ()
-      "Turn on `outline-minor-mode' only for specific modes."
-      (interactive)
-      ;; When outshine is enabled, it remaps `self-insert-command' to
-      ;; `outshine-self-insert-command.' That works fine, except that in
-      ;; `emacs-lisp-mode' when `outline-minor-mode' is enabled (and thus outshine
-      ;; is enabled), the eldoc-mode gets messed up.
-      ;; Example: After typing "(define-key", the eldoc-mode should show the
-      ;; hint for `define-key' in the echo area. But that does not happen while
-      ;; outshine is enabled. It starts working fine if I disable
-      ;; `outline-minor-mode' (and thus outshine too).
-      ;; The workaround is to do "C-b" after hitting SPACE after typing
-      ;; "(define-key" to get the eldoc hint to show up.
-      ;; Wed Aug 10 11:45:39 EDT 2016 - kmodi
-      ;; Thanks to _compunaut_'s comment https://www.reddit.com/r/emacs/comments/4v4bof/sharing_my_first_package_modeonregion/d6bwxhc,
-      ;; below now fixes that.
-      (with-eval-after-load 'eldoc
-        (eldoc-add-command 'outshine-self-insert-command))
-
-      (dolist (hook modi/outline-minor-mode-hooks)
-        (add-hook hook #'outline-minor-mode)))
-
-    (defun modi/turn-off-outline-minor-mode ()
-      "Turn off `outline-minor-mode' only for specific modes."
-      (interactive)
-      (dolist (hook modi/outline-minor-mode-hooks)
-        (remove-hook hook #'outline-minor-mode)))
-
-    (defun modi/outshine-update-toc ()
+    ;; Call `modi/outline-toc' on file saves *only* in major modes where
+    ;; `outline-minor-mode' is enabled.
+    (defun modi/outline-add-update-toc-hook ()
       "Auto-generate/update TOC on file saves."
       (add-hook 'before-save-hook #'modi/outline-toc nil :local))
-    (advice-add 'outshine-hook-function :after #'modi/outshine-update-toc)
+    (add-hook 'outline-minor-mode-hook #'modi/outline-add-update-toc-hook)
 
-    ;; Always enable Outshine in `outline-minor-mode'
-    (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
+    (use-package foldout
+      :config
+      (progn
+        (bind-keys
+         :map outline-minor-mode-map
+         ("C-c C-z" . foldout-zoom-subtree)
+         ("C-c C-x" . foldout-exit-fold))))
 
-    (modi/turn-on-outline-minor-mode)
+    (defun modi/outline-minor-mode-bindings ()
+      "Mirror few default Org bindings in `outline-minor-mode-map'."
+      (bind-keys
+       :map outline-minor-mode-map
+       ("M-p" . outline-previous-visible-heading)
+       ("M-n" . outline-next-visible-heading)
+       ("<M-up>" . outline-move-subtree-up)
+       ("<M-down>" . outline-move-subtree-down)
+       ("<M-left>" . outline-promote)
+       ("<M-right>" . outline-demote)))
+    (modi/outline-minor-mode-bindings)))
 
-    (with-eval-after-load 'outline
-      (use-package foldout
-        :config
-        (progn
-          (bind-keys
-           :map outline-minor-mode-map
-            ("C-c C-z" . foldout-zoom-subtree)
-            ("C-c C-x" . foldout-exit-fold)))))
+(use-package outshine
+  :defer t
+  :config
+  (progn
+    (setq outshine-use-speed-commands t)
+    (setq outshine-org-style-global-cycling-at-bob-p t)
 
-    ;; Mirror the default org-mode behavior in `outline-minor-mode-map'
+    (defvar-local modi/outshine-allow-space-before-heading nil
+      "When non-nil, allow outshine heading to begin with whitespace.
+For example, when non-nil, do not require the \"// *\" style
+comments used by `outshine' to start at column 0 in `verilog-mode.'")
+
+    (defun modi/outshine-calc-outline-regexp (orig-ret)
+      "Prefix the outline regexp with whitespace regexp, may be.
+Do this if `modi/outshine-allow-space-before-heading' is non-nil."
+      (let ((ret orig-ret))
+        (when modi/outshine-allow-space-before-heading
+          (setq ret (concat "\\s-*" orig-ret)))
+        ret))
+    (advice-add 'outshine-calc-outline-regexp :filter-return #'modi/outshine-calc-outline-regexp)
+    ;; (advice-remove 'outshine-calc-outline-regexp #'modi/outshine-calc-outline-regexp)
+
+    ;; Thu Aug 24 18:37:49 EDT 2017 - kmodi
+    ;; Why is the `outline-minor-mode-hook' called twice? Who is calling it the second time?!
+    ;; Answer: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28229#8
+
     (bind-keys
      :map outline-minor-mode-map
-      ("<backtab>" . outshine-cycle-buffer) ; global cycle using S-TAB
-      ("M-p"       . outline-previous-visible-heading)
-      ("M-n"       . outline-next-visible-heading)
-      ("<M-up>"    . outline-move-subtree-up)
-      ("<M-down>"  . outline-move-subtree-down)
-      ("<M-left>"  . outline-promote)
-      ("<M-right>" . outline-demote))))
+     ("<backtab>" . outshine-cycle-buffer)) ;Global cycle using S-TAB
+    ;; Override the `outline-minor-mode-map' bindings set by `outshine'.
+    (modi/outline-minor-mode-bindings)))
 
 
 (provide 'setup-outshine)

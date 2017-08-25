@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-11 13:12:30 kmodi>
+;; Time-stamp: <2017-08-25 11:19:38 kmodi>
 
 ;; Verilog
 
@@ -509,10 +509,10 @@ The match with \"//.\" resolves this issue:
 "
       (save-excursion
         (beginning-of-line)
-        (let* ((outline-comment (looking-at "^[[:blank:]]*// \\*+\\s-")) ; // *(space)
-               (dont-touch-indentation (looking-at "^.*//\\.")) ; Line contains "//."
-               (is-in-multi-line-define (looking-at "^.*\\\\$")) ; \ at EOL
-               (do-not-run-orig-fn (or (and (bound-and-true-p outshine-outline-regexp-outcommented-p)
+        (let* ((outline-comment (looking-at "^[[:blank:]]*// \\*+\\s-")) ;(space)// *(space)
+               (dont-touch-indentation (looking-at "^.*//\\.")) ;Line contains "//."
+               (is-in-multi-line-define (looking-at "^.*\\\\$")) ;\ at EOL
+               (do-not-run-orig-fn (or (and (not (bound-and-true-p modi/outshine-allow-space-before-heading))
                                             outline-comment)
                                        dont-touch-indentation
                                        is-in-multi-line-define
@@ -520,7 +520,7 @@ The match with \"//.\" resolves this issue:
           ;; Cache the current value of `is-in-multi-line-define'
           (setq modi/verilog-multi-line-define-line-cache is-in-multi-line-define)
           ;; Force remove any indentation for outline comments
-          (when (and (bound-and-true-p outshine-outline-regexp-outcommented-p)
+          (when (and (not (bound-and-true-p modi/outshine-allow-space-before-heading))
                      outline-comment)
             (delete-horizontal-space))
           do-not-run-orig-fn)))
@@ -660,35 +660,32 @@ _a_lways         _f_or              _g_enerate         _O_utput
       (defun modi/verilog-outshine-imenu-generic-expression (&rest _)
         "Update `imenu-generic-expression' when using outshine."
         (when (derived-mode-p 'verilog-mode)
-          ;; Do not require the "// *" style comments used by `outshine' to start
-          ;; at column 0 just for this major mode
-          (setq-local outshine-outline-regexp-outcommented-p nil)
-
           (setq-local imenu-generic-expression
                       (append `(("*Level 1*"
                                  ,(concat "^"
-                                          (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
-                                              ""
-                                            "\\s-*")
+                                          (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                              "\\s-*"
+                                            "")
                                           "// \\*\\{1\\} \\(?1:.*$\\)")
                                  1)
                                 ("*Level 2*"
                                  ,(concat "^"
-                                          (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
-                                              ""
-                                            "\\s-*")
+                                          (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                              "\\s-*"
+                                            "")
                                           "// \\*\\{2\\} \\(?1:.*$\\)")
                                  1)
                                 ("*Level 3*"
                                  ,(concat "^"
-                                          (if (bound-and-true-p outshine-outline-regexp-outcommented-p)
-                                              ""
-                                            "\\s-*")
+                                          (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                              "\\s-*"
+                                            "")
                                           "// \\*\\{3\\} \\(?1:.*$\\)")
                                  1))
                               verilog-imenu-generic-expression))))
-      (advice-add 'outshine-hook-function :after
-                  #'modi/verilog-outshine-imenu-generic-expression))
+      (advice-add 'outshine-hook-function :after #'modi/verilog-outshine-imenu-generic-expression)
+      ;; (advice-remove 'outshine-hook-function #'modi/verilog-outshine-imenu-generic-expression)
+      )
 
 ;;; modi/verilog-mode-customization
     (defun modi/verilog-mode-customization ()
@@ -727,12 +724,22 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ;; Replace tabs with spaces when saving files in verilog-mode.
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
 
-      ;; Stop cluttering my buffer list by not opening all the `included files
-      (modi/verilog-do-not-read-includes-defines-mode 1))
+      ;; Stop cluttering my buffer list by not opening all the `included files.
+      (modi/verilog-do-not-read-includes-defines-mode 1)
 
-    ;; *Append* `modi/verilog-mode-customization' to `verilog-mode-hook' so that
-    ;; that function is run very last of all other functions added to that hook.
-    (add-hook 'verilog-mode-hook #'modi/verilog-mode-customization :append)
+      (with-eval-after-load 'outshine
+        ;; Do not require the "// *" style comments used by `outshine' to
+        ;; start at column 0 just for this major mode.
+        (setq-local modi/outshine-allow-space-before-heading t)))
+
+    ;; Fri Aug 25 10:51:34 EDT 2017 - kmodi
+    ;; Above, the `modi/outshine-allow-space-before-heading' variable is set to
+    ;; `t' specifically for `verilog-mode'. So do not set the APPEND argument of
+    ;; `add-hook' to non-nil when adding the container function
+    ;; `modi/verilog-mode-customization' to `verilog-mode-hook'. This ensures
+    ;; that that variable is set correctly *before* `outline-minor-mode' is
+    ;; enabled (the act of which runs `outshine-hook-function').
+    (add-hook 'verilog-mode-hook #'modi/verilog-mode-customization)
 
 ;;; Key bindings
     (bind-keys
