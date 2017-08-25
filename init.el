@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-24 09:20:02 kmodi>
+;; Time-stamp: <2017-08-25 11:08:18 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -262,7 +262,6 @@ need Org version to be at least 9.x.")
 (require 'setup-neotree)
 (require 'setup-news)
 (require 'setup-org)
-(require 'setup-orgstruct)
 (require 'setup-outshine)
 (require 'setup-page-break-lines)
 (require 'setup-pcache)
