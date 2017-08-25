@@ -1,4 +1,8 @@
-(("verilog-mode/src"
+((nil
+  . ((indent-tabs-mode . nil)
+     (fill-column . 70)
+     (sentence-end-double-space . t)))
+ ("verilog-mode/src"
   . ((nil . ((do-not-delete-trailing-whitespace . t)
              ;; Thu Jan 26 11:12:48 EST 2017 - kmodi
              ;; Do not turn on whitespace-mode as magit does not like it.
