@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-29 11:34:14 kmodi>
+;; Time-stamp: <2017-08-29 11:36:06 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -225,7 +225,9 @@ This value must match the `infodir' variable in the Org local.mk.")
         (unless is-heading
           (org-toggle-heading))
         (apply orig-fun args)))
-    (advice-add 'org-todo :around #'modi/org-first-convert-to-heading)
+    ;; Tue Aug 29 11:35:28 EDT 2017 - kmodi
+    ;; Stopped advising this today as I don't seem to find this useful.
+    ;; (advice-add 'org-todo :around #'modi/org-first-convert-to-heading)
 
     (defun modi/org-return-no-indent (&optional n)
       "Make `org-return' repeat the number passed through the argument"
