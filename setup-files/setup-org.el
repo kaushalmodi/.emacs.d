@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-29 11:36:06 kmodi>
+;; Time-stamp: <2017-08-29 12:36:44 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -211,6 +211,13 @@ This value must match the `infodir' variable in the Org local.mk.")
       ;; http://stackoverflow.com/a/14072295/1219634
       ;; touch `modi/one-org-agenda-file'
       (write-region "" :ignore modi/one-org-agenda-file))
+
+    ;; Allow multiple line Org emphasis markup
+    ;; http://emacs.stackexchange.com/a/13828/115
+    (setcar (nthcdr 4 org-emphasis-regexp-components) 20) ;Up to 20 lines, default is just 1
+    ;; Below is needed to apply the modified `org-emphasis-regexp-components'
+    ;; settings from above.
+    (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
 
 ;;; Org Defuns
     ;; http://emacs.stackexchange.com/a/13854/115
@@ -1362,9 +1369,6 @@ the languages in `modi/ob-enabled-languages'."
 
 ;; Disable selected org-mode markup character on per-file basis
 ;; http://emacs.stackexchange.com/a/13231/115
-
-;; How to modify `org-emphasis-regexp-components'
-;; http://emacs.stackexchange.com/a/13828/115
 
 ;; Installing minted.sty
 ;; In order to have that tex convert to pdf, you have to ensure that you have
