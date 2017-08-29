@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-29 11:30:55 kmodi>
+;; Time-stamp: <2017-08-29 11:34:14 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -948,10 +948,6 @@ footer > div {
   :defer t
   :config
   (progn
-    (setq org-agenda-archives-mode nil) ;Required in Org 8.0+
-    (setq org-agenda-skip-comment-trees nil)
-    (setq org-agenda-skip-function nil)
-
     ;; http://sachachua.com/blog/2013/01/emacs-org-task-related-keyboard-shortcuts-agenda/
     (defun sacha/org-agenda-done (&optional arg)
       "Mark current TODO as done.
