@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-02-21 18:32:35 kmodi>
+;; Time-stamp: <2017-08-30 13:28:08 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
@@ -6,107 +6,8 @@
   :defer t
   :init
   (progn
-    (bind-to-modi-map "\\" #'modi/tiny-helper))
-  :chords (("]\\" . modi/tiny-helper))
-  :config
-  (progn
-    (defun modi/tiny-helper (&optional end-val begin-val sep op fmt)
-      "Helper function for `tiny-expand'.
-
-If `tiny' expansion is possible at point, do it. Otherwise activate the helper
-to generate a valid “tiny expression” and expand that.
-
-Usage: M-x COMMAND ↵↵↵↵↵            -> 0 1 2 3 4 5 6 7 8 9
-       M-x COMMAND 9↵2↵_↵+1*x2↵↵    -> 5_7_9_11_13_15_17_19
-       M-x COMMAND 15↵1↵↵-30*2x↵%x↵ -> 1c 1a 18 16 14 12 10 e c a 8 6 4 2 0
-"
-      (interactive
-       (when (null (tiny-mapconcat)) ; enable the helper only if tiny expansion is
-                                        ; not possible at point.
-         (list (number-to-string (string-to-number
-                                  (read-string
-                                   (concat (propertize "tiny-helper: "
-                                                       'face 'font-lock-function-name-face)
-                                           "END value "
-                                           "[Hit RET for default=0; "
-                                           "auto-set to 9 if both "
-                                           "begin and end values are 0]: "))))
-               (number-to-string (string-to-number
-                                  (read-string
-                                   (concat (propertize "tiny-helper: "
-                                                       'face 'font-lock-function-name-face)
-                                           "BEGIN value "
-                                           "[Hit RET for default=0; "
-                                           "this has to be *smaller* than the "
-                                           "end value]: "))))
-               (read-string (concat (propertize "tiny-helper: "
-                                                'face 'font-lock-function-name-face)
-                                    "Separator "
-                                    "[Hit RET for default=Space; "
-                                    "eg: \\n; "
-                                    "no math operators like - or = allowed]: "))
-               (read-string (concat (propertize "tiny-helper: "
-                                                'face 'font-lock-function-name-face)
-                                    "Lisp Operation "
-                                    "[Hit RET for default=no Lisp operation; "
-                                    "parentheses are optional; "
-                                    "eg: *xx | (+ x ?A) | *2+3x]: "))
-               (read-string (concat (propertize "tiny-helper: "
-                                                'face 'font-lock-function-name-face)
-                                    "Format "
-                                    "[Hit RET for default=%0d; "
-                                    "eg: %x | 0x%x | %c | %s | %(+ x x) | "
-                                    "%014.2f | %03d; parentheses required "
-                                    "here for sexps]: ")))))
-      (when (null (tiny-mapconcat)) ; enable the helper only if tiny expansion is
-                                        ; not possible at point.
-        (let ((tiny-key-binding (or (substitute-command-keys "\\[modi/tiny-helper]")
-                                    (substitute-command-keys "\\[tiny-expand]")))
-              (begin-val-num (string-to-number begin-val))
-              (end-val-num (string-to-number end-val))
-              tiny-expr)
-          ;; Begin and end values cannot be same
-          (when (= end-val-num begin-val-num)
-            (if (zerop end-val-num) ; if both are zero, set the end value to 9
-                (setq end-val "9")
-              (error (concat "Begin and end values cannot be same; "
-                             "Begin value = " begin-val
-                             ", End value = " end-val "."))))
-          ;; End value has to be greater than the begin value
-          (when (< end-val-num begin-val-num)
-            (error (concat "End value has to be greater than the begin value; "
-                           "Begin value = " begin-val
-                           ", End value = " end-val ".")))
-          (when (string= sep "")
-            (setq sep " ")) ; `sep' cannot be empty string
-          (when (not (string= fmt ""))
-            ;; When non-nil, prefix `fmt' with the `|' char for reading clarity
-            (setq fmt (concat "|" fmt)))
-          (when (string= begin-val "0")
-            (setq begin-val "") ; it's OK to not specify begin-val if it is 0
-            (when (string= sep " ")
-              (setq sep "")))
-          (setq tiny-expr (concat "m" begin-val sep end-val op fmt))
-          (message "%s" (concat "This "
-                                (propertize "tiny"
-                                            'face 'font-lock-function-name-face)
-                                " expansion can also be done by typing "
-                                (propertize tiny-expr
-                                            'face 'font-lock-keyword-face)
-                                " and then "
-                                (propertize tiny-key-binding
-                                            'face 'font-lock-keyword-face)
-                                (when (null tiny-key-binding)
-                                  (concat
-                                   (propertize "M-x modi/tiny-helper"
-                                               'face 'font-lock-keyword-face)
-                                   " or "
-                                   (propertize "M-x tiny-expand"
-                                               'face 'font-lock-keyword-face)))
-                                "."))
-          (insert tiny-expr)
-          (undo-boundary)))
-      (tiny-expand))))
+    (bind-to-modi-map "\\" #'tiny-helper))
+  :chords (("]\\" . tiny-helper)))
 
 
 (provide 'setup-tiny)
