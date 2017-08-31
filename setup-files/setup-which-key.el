@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-10 14:45:10 kmodi>
+;; Time-stamp: <2017-08-31 14:57:19 kmodi>
 
 ;; Which Key
 ;; https://github.com/justbur/emacs-which-key
@@ -7,10 +7,12 @@
   :defer 10
   :config
   (progn
-    (setq which-key-popup-type 'side-window) ; default
+    (setq which-key-popup-type 'side-window) ;Default
     ;; (setq which-key-popup-type 'minibuffer)
 
     (setq which-key-compute-remaps t) ;Show correct descriptions for remapped keys
+
+    (setq which-key-allow-multiple-replacements t) ;Default = nil
 
     (setq which-key-replacement-alist
           '(
@@ -20,25 +22,29 @@
             ;; Eg: After "d" in `calc', display "6 → calc-hex-radix" as "6 → 🖩hex-radix"
             ((nil . "Prefix Command")           . (nil . "prefix"))
             ((nil . "which-key-show-next-page") . (nil . "wk next pg"))
-            ((nil . "\\`calc-")                  . (nil . "")) ; Hide "calc-" prefixes when listing M-x calc keys
-            ((nil . "/body\\'")                  . (nil . "")) ; Remove display the "/body" portion of hydra fn names
-            ((nil . "\\`artist-select-op-")      . (nil . "")) ; Make artist-mode function names less verbose
+            ((nil . "\\`calc-")                  . (nil . "")) ;Hide "calc-" prefixes when listing M-x calc keys
+            ((nil . "\\`artist-select-op-")      . (nil . "")) ;Make artist-mode function names less verbose
             ((nil . "\\`artist-select-")         . (nil . "sel-"))
             ((nil . "\\`artist-toggle-")         . (nil . "toggle-"))
-            ((nil . "modi/")                    . (nil . "m/")) ; The car is intentionally not "\\`modi/" to cover cases like `hydra-toggle/modi/..'.
-            ((nil . "\\`hydra-")                 . (nil . "+h/"))
+            ((nil . "modi/")                    . (nil . "m/")) ;The car is intentionally not "\\`modi/" to cover cases like `hydra-toggle/modi/..'.
+            ((nil . "\\`hydra-\\(.+\\)/body\\'")      . (nil . "h/\\1"))
             ((nil . "\\`org-babel-")             . (nil . "ob/"))
             ;; Replacements for how KEY is replaced when which-key displays
             ;;   KEY → FUNCTION
-            ;; Eg: After "C-c", display "right → winner-redo" as "▶ → winner-redo"
-            (("<left>"   . nil)                 . ("◀" . nil))
-            (("<right>"  . nil)                 . ("▶" . nil))
-            (("<up>"     . nil)                 . ("▲" . nil))
-            (("<down>"   . nil)                 . ("▼" . nil))
-            (("<delete>" . nil)                 . ("DLT" . nil)) ; delete key
-            (("\\`DEL\\'"  . nil)                 . ("BS" . nil)) ; backspace key
-            (("<next>"   . nil)                 . ("PgDn" . nil))
-            (("<prior>"  . nil)                 . ("PgUp" . nil))
+            ;; Eg: After "C-c", display "right → winner-redo" as "⇨ → winner-redo"
+            (("<\\(.*\\)-?left>"   . nil)         . ("\\1⇦" . nil))
+            (("<\\(.*\\)-?right>"  . nil)         . ("\\1⇨" . nil))
+            (("<\\(.*\\)-?up>"     . nil)         . ("\\1⇧" . nil))
+            (("<\\(.*\\)-?down>"   . nil)         . ("\\1⇩" . nil))
+            (("<\\(.*\\)-?return>" . nil)         . ("\\1⏎" . nil))
+            (("RET" . nil)                      . ("⏎" . nil))
+            (("<\\(.*\\)-?delete>" . nil)         . ("\\1⮽" . nil)) ;Delete key
+            (("DEL"  . nil)                     . ("BS" . nil)) ;Backspace key
+            (("<\\(.*\\)-?backspace>" . nil)      . ("\\1BS" . nil)) ;Backspace key
+            (("<\\(.*\\)-?tab>"   . nil)          . ("\\1TAB" . nil))
+            (("SPC"   . nil)                    . ("⼐" . nil))
+            (("<\\(.*\\)-?next>"   . nil)         . ("\\1PgDn" . nil))
+            (("<\\(.*\\)-?prior>"  . nil)         . ("\\1PgUp" . nil))
             ))
     ;; Use cool unicode characters if available
     (with-eval-after-load 'setup-font-check
@@ -56,15 +62,6 @@
       "C-c /"   "engine-mode-map"
       "C-c C-v" "org-babel"
       "C-x 8 0" "ZWS")
-
-    ;; List of "special" keys for which a KEY is displayed as just K but with
-    ;; "inverted video" face.
-    (setq which-key-special-keys '("SPC"
-                                   "TAB"
-                                   "RET"
-                                   "DLT" ; delete key
-                                   "BS" ; backspace key
-                                   "ESC"))
 
     ;; Highlight certain commands
     (defface modi/which-key-highlight-2-face
