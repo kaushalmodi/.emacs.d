@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-07 10:15:17 kmodi>
+;; Time-stamp: <2017-09-01 07:54:51 kmodi>
 
 ;; Standard ML
 
@@ -75,7 +75,7 @@ Calling this command again will result in:
         ;;           --modi/sml-indent-new-comment-line------>
         (save-excursion
           (forward-line -1)
-          (when (re-search-forward "(\\*\\s-+\\*)\\s-*" (line-end-position) :noerror)
+          (when (re-search-forward "(\\*[[:blank:]]+\\*)[[:blank:]]*" (line-end-position) :noerror)
             (setq nested-empty-comment t)
             (replace-match "*")
             (indent-according-to-mode)
@@ -93,7 +93,7 @@ Calling this command again will result in:
           ;;                                                           *)
           ;;           --modi/sml-indent-new-comment-line----------->
           (forward-line -1)
-          (re-search-forward "\\*)\\s-*\n\\s-*(\\*")
+          (re-search-forward "\\*)[[:blank:]]*\n[[:blank:]]*(\\*")
           (replace-match "\n*")
           (indent-according-to-mode)
           ;; Move the ending "*)" to its own line

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-24 13:27:20 kmodi>
+;; Time-stamp: <2017-09-01 07:42:52 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -61,10 +61,10 @@ See the `eww-search-prefix' variable for the search engine used."
       ;; Keep on burying the current buffer if it turns out to be an eww buffer.
       (while (string-match "^\\*?eww" (buffer-name))
         (bury-buffer))
-      ;; Start a new eww search
+      ;; Start a new eww search.
       (eww search-term)
-      (let* ((max-wait 5) ; seconds
-             (search-repeat-interval 0.1) ; seconds
+      (let* ((max-wait 5)                 ;Seconds
+             (search-repeat-interval 0.1) ;Seconds
              (max-trials (floor max-wait search-repeat-interval))
              (start-time (current-time))
              (n 1))
@@ -72,12 +72,12 @@ See the `eww-search-prefix' variable for the search engine used."
         ;; seconds till the return value of `eww-links-at-point' is non-nil.
         (catch 'break
           (while (<= n max-trials)
-            (goto-char (point-min)) ; go to the top of the buffer
-            (re-search-forward "[0-9]+\\s-+results\\s-*$" nil :noerror) ; go to the start of results
-            (shr-next-link) ; go to the first search result
+            (goto-char (point-min))     ;Go to the top of the buffer
+            (re-search-forward "[[:digit:]]+[[:blank:]]+results[[:blank:]]*$" nil :noerror) ;Go to the start of results
+            (shr-next-link)             ;Go to the first search result
             (when (eww-links-at-point)
               (throw 'break nil))
-            ;; Wait for a while before trying link check again
+            ;; Wait for a while before trying link check again.
             (sleep-for search-repeat-interval)
             ;; (message "eww search result trial # %d" n)
             (setq n (1+ n))))

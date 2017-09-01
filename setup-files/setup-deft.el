@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-19 01:11:56 kmodi>
+;; Time-stamp: <2017-09-01 08:12:37 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -41,10 +41,9 @@
 
     (setq deft-strip-summary-regexp
           (concat "\\("
-                  "[\n\t]" ; blank
-                  "\\|^#\\+[[:upper:]_]+:.*$" ; org-mode metadata
-                  "\\|^#\\s-+.*$" ; org-mode comments
-                  ;; "\\|^\\s-*:[[:upper:]_]:.*$" ; org-mode properties
+                  "[[:blank:]\n\r]"        ;Blank
+                  "\\|^#\\+[[:upper:][:lower:]_]+:.*$" ;Org metadata
+                  "\\|^#\\s-+.*$"                      ;Org comments
                   "\\)"))
 
     ;; http://pragmaticemacs.com/emacs/tweaking-deft-quicker-notes/
@@ -110,12 +109,11 @@ If NEW-FILE is non-nil, call `deft-new-file'."
 
     (bind-keys
      :map deft-mode-map
-      ("RET"        . modi/deft-complete)
-      ("C-S-m"      . deft-new-file)
-      ("<S-return>" . deft-new-file)
-      ;; Unbind the "C-o" key from `deft-mode-map'
-      ("C-o" . nil)
-      ("C-c C-o"    . deft-open-file-other-window))))
+     ("RET" . modi/deft-complete)
+     ("C-S-m" . deft-new-file)
+     ("<S-return>" . deft-new-file)
+     ("C-o" . nil)                    ;Unbind the "C-o" key from `deft-mode-map'
+     ("C-c C-o" . deft-open-file-other-window))))
 
 
 (provide 'setup-deft)

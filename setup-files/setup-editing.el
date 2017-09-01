@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-07 14:09:35 kmodi>
+;; Time-stamp: <2017-09-01 08:19:49 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -271,13 +271,20 @@ Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
         ;; to prevent false executions of this `when' form.
         (setq modi/org-capture-buffer-file-name nil)))
     (if (and (derived-mode-p 'org-mode)
-             ;; Match examples "* ", "** ", "- ", " - ", "+ ", " + ", "** TODO "
-             (looking-back (concat "^\\(?:\\*+\\(?:\\s-"
-                                   ;; If `org-todo-keywords' is '((sequence "TODO" "DONE")),
-                                   ;; the regexp will be ""\\<\\(DONE\\|TODO\\)\\>""
-                                   (regexp-opt (cdr (car org-todo-keywords)) 'words)
-                                   "\\)*\\|\\s-*[-+]\\)\\s-+")
-                           (save-excursion ;get the BOL point
+             (looking-back (concat
+                            "^\\(?:"
+                            ;; "* ", "** "
+                            "\\*+"
+                            ;; "** TODO "
+                            ;; If `org-todo-keywords' is '((sequence "TODO" "DONE")),
+                            ;; the regexp will be ""\\<\\(DONE\\|TODO\\)\\>""
+                            "\\(?:\\s-" (regexp-opt (cdr (car org-todo-keywords)) 'words)
+                            "\\)*"
+                            ;; "- ", " - ", "+ ", " + "
+                            "\\|" "[[:blank:]]*[-+]"
+                            "\\)"
+                            "\\s-")
+                           (save-excursion ;Get the BOL point
                              (beginning-of-line)
                              (point))))
         (progn
@@ -289,7 +296,7 @@ Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
 (add-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
 
 ;;; Untabify
-(setq-default indent-tabs-mode nil) ; Use spaces instead of tabs for indentation
+(setq-default indent-tabs-mode nil)  ;Use spaces instead of tabs for indentation
 
 (defun modi/untabify-buffer ()
   "Untabify the current buffer.
@@ -333,7 +340,7 @@ tabs explicitly."
   ;; group is to specify the parenthesis group that is desired to be deleted/expanded (default=1)
   ;; spacing is the number of spaces that replaces specified parenthesis group (default=0)
   ;; repeat set to t/nil tells whether the alignment needs to be done multiple times per line (default=nil)
-  (align-regexp begin end "\\(\\s-*\\)=" 1 1 nil))
+  (align-regexp begin end "\\([[:blank:]]*\\)=" 1 1 nil))
 ;; To do it manually do `M-x align-regexp`, type `=` and hit Enter
 
 ;; To perform align-regexp WITHOUT the default values of regexp, group, spacing, repeat
@@ -343,7 +350,7 @@ tabs explicitly."
   "Align text columns"
   (interactive "r")
   ;; align-regexp syntax:  align-regexp (beg end regexp &optional group spacing repeat)
-  (align-regexp begin end "\\(\\s-+\\)[a-zA-Z0-9=(),?':`\.{}]" 1 1 t)
+  (align-regexp begin end "\\([[:blank:]]+\\)[[:alnum:]=(),?':`\.{}]" 1 1 t)
   (indent-region begin end)) ; indent the region correctly after alignment
 
 ;;; Eval and replace last sexp
@@ -416,23 +423,25 @@ line and the cursor. Else, insert empty line after the current line."
 ;;;; Pull Up Line
 ;; http://emacs.stackexchange.com/q/7519/115
 (defun modi/pull-up-line ()
-  "Join the following line onto the current one (analogous to `C-e', `C-d') or
-`C-u M-^' or `C-u M-x join-line'.
+  "Join the following line onto the current one.
 
-If the current line is a comment and the pulled-up line is also a comment,
-remove the comment characters from that line."
+This is analogous to \\[move-end-of-line] followed by
+\\[delete-foward], or \\[universal-argument] \\[delete-indentation],
+or \\[universal-argument] \\[join-line].
+
+If the current line is a comment and the pulled-up line is also a
+comment, remove the leading comment characters from that line."
   (interactive)
   (join-line -1)
-  ;; If the current line is a comment
-  (when (nth 4 (syntax-ppss))
-    ;; Remove the comment prefix chars from the pulled-up line if present
+  (when (nth 4 (syntax-ppss))           ;If the current line is a comment
+    ;; Remove comment prefix chars from the pulled-up line if present.
     (save-excursion
-      ;; Delete all comment-start and space characters
-      (while (looking-at (concat "\\s<" ; comment-start char as per syntax table
-                                 "\\|" (substring comment-start 0 1) ; first char of `comment-start'
-                                 "\\|" "\\s-")) ; extra spaces
+      ;; Delete all comment-start and space characters, one at a time.
+      (while (looking-at (concat "\\s<"  ;Comment-start char as per syntax table
+                                 "\\|" (substring comment-start 0 1) ;First char of `comment-start'
+                                 "\\|" "[[:blank:]]"))               ;Extra spaces
         (delete-forward-char 1))
-      (insert-char ? )))) ; insert space
+      (insert-char ? ))))               ;Insert space
 
 ;;; Enable the disabled functions
 
@@ -952,7 +961,7 @@ Note that the selected region cannot contain any spaces."
 (defun modi/delete-blank-lines-in-region (&rest args)
   (let ((do-not-run-orig-fn (use-region-p)))
     (when do-not-run-orig-fn
-      (flush-lines "^\\s-*$" (region-beginning) (region-end)))
+      (flush-lines "^[[:blank:]]*$" (region-beginning) (region-end)))
     do-not-run-orig-fn))
 (advice-add 'delete-blank-lines :before-until #'modi/delete-blank-lines-in-region)
 

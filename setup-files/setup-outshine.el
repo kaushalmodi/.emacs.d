@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-25 11:10:45 kmodi>
+;; Time-stamp: <2017-09-01 08:03:55 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -51,7 +51,7 @@
                             (re-search-backward
                              (concat "^"
                                      (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                         "\\s-*"
+                                         "[[:blank:]]*"
                                        "")
                                      "\\(?:" outline-regexp "\\)")
                              nil 'move))
@@ -63,7 +63,7 @@
                             (re-search-forward
                              (concat "^"
                                      (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                         "\\s-*"
+                                         "[[:blank:]]*"
                                        "")
                                      "\\(?:" outline-regexp "\\)")
                              nil 'move))
@@ -121,14 +121,14 @@ Don't add “Revision Control” heading to TOC."
               (while (re-search-forward
                       (concat "^"       ;beginning of line
                               (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                  "\\s-*"
+                                  "[[:blank:]]*"
                                 "")
                               "\\(?1:"
                               outline-comment-start
                               (if el-mode
                                   (concat "\\{2\\}\\)" ;2 consecutive ;in `emacs-lisp-mode'
                                           ";\\(?2:;*\\)") ;followed by one or more ;chars
-                                (concat "\\s-\\{1\\}\\)"   ;SINGLE white space
+                                (concat "\\s-\\)"        ;SINGLE white space
                                         "\\*\\(?2:\\**\\)")) ;followed by one or more * chars
                               " "                        ;followed by a space
                               "\\(?3:.+\\)")               ;followed by heading
@@ -220,7 +220,7 @@ comments used by `outshine' to start at column 0 in `verilog-mode.'")
 Do this if `modi/outshine-allow-space-before-heading' is non-nil."
       (let ((ret orig-ret))
         (when modi/outshine-allow-space-before-heading
-          (setq ret (concat "\\s-*" orig-ret)))
+          (setq ret (concat "[[:blank:]]*" orig-ret)))
         ret))
     (advice-add 'outshine-calc-outline-regexp :filter-return #'modi/outshine-calc-outline-regexp)
     ;; (advice-remove 'outshine-calc-outline-regexp #'modi/outshine-calc-outline-regexp)

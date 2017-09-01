@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-29 12:36:44 kmodi>
+;; Time-stamp: <2017-09-01 07:44:16 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -332,7 +332,7 @@ Execute this command while the point is on or after the hyper-linked Org link."
               ;;            a
               ;;            #+END_EXAMPLE
               ;;            bc
-              (when (not (looking-at "\\s-*$"))
+              (when (not (looking-at "[[:blank:]]*$"))
                 (electric-indent-just-newline 1)))
             ;; Narrow to region so that the text surround the region does
             ;; not mess up the upcoming `org-try-structure-completion' eval
@@ -1042,7 +1042,7 @@ function is ever added to that hook."
       "Mark the current table field."
       (interactive)
       ;; Do not try to jump to the beginning of field if the point is already there
-      (when (not (looking-back "|\\s-?"))
+      (when (not (looking-back "|[[:blank:]]?"))
         (org-table-beginning-of-field 1))
       (set-mark-command nil)
       (org-table-end-of-field 1))

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-25 11:19:38 kmodi>
+;; Time-stamp: <2017-09-01 07:53:22 kmodi>
 
 ;; Verilog
 
@@ -26,7 +26,7 @@
 
 (use-package verilog-mode
   :load-path "elisp/verilog-mode"
-  :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ; .v, .sv, .svh, .tv, .vp
+  :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ;.v, .sv, .svh, .tv, .vp
          ("\\.psl\\'"         . verilog-mode)
          ("\\.vams\\'"        . verilog-mode)
          ("\\.vinc\\'"        . verilog-mode))
@@ -34,22 +34,22 @@
   (progn
 
 ;;; Variables
-    (setq verilog-indent-level             3)   ; 3 (default)
-    (setq verilog-indent-level-module      3)   ; 3
-    (setq verilog-indent-level-declaration 3)   ; 3
-    (setq verilog-indent-level-behavioral  3)   ; 3
-    (setq verilog-indent-level-directive   3)   ; 1
-    (setq verilog-case-indent              2)   ; 2
-    (setq verilog-auto-newline             nil) ; t
-    (setq verilog-auto-indent-on-newline   t)   ; t
-    (setq verilog-tab-always-indent        t)   ; t
-    (setq verilog-minimum-comment-distance 10)  ; 10
-    (setq verilog-indent-begin-after-if    t)   ; t
-    (setq verilog-auto-lineup              nil) ; 'declarations
-    (setq verilog-align-ifelse             nil) ; nil
-    (setq verilog-auto-endcomments         t)   ; t
-    (setq verilog-tab-to-comment           nil) ; nil
-    (setq verilog-date-scientific-format   t)   ; t
+    (setq verilog-indent-level             3)   ;3 (default)
+    (setq verilog-indent-level-module      3)   ;3
+    (setq verilog-indent-level-declaration 3)   ;3
+    (setq verilog-indent-level-behavioral  3)   ;3
+    (setq verilog-indent-level-directive   3)   ;1
+    (setq verilog-case-indent              2)   ;2
+    (setq verilog-auto-newline             nil) ;t
+    (setq verilog-auto-indent-on-newline   t)   ;t
+    (setq verilog-tab-always-indent        t)   ;t
+    (setq verilog-minimum-comment-distance 10)  ;10
+    (setq verilog-indent-begin-after-if    t)   ;t
+    (setq verilog-auto-lineup              nil) ;'declarations
+    (setq verilog-align-ifelse             nil) ;nil
+    (setq verilog-auto-endcomments         t)   ;t
+    (setq verilog-tab-to-comment           nil) ;nil
+    (setq verilog-date-scientific-format   t)   ;t
 
     (defconst modi/verilog-identifier-re
       (concat "\\_<\\(?:"
@@ -107,16 +107,16 @@ This is a Perl regex equivalent of the Elips regexp in
 `modi/verilog-identifier-re'.")
 
     (defconst modi/verilog-module-instance-re
-      (let* ((newline-or-space-optional "\\(?:\n\\|\\s-\\)*")
-             (newline-or-space-mandatory "\\(?:\n\\|\\s-\\)+")
+      (let* ((newline-or-space-optional "\\(?:[[:blank:]\n\r]\\)*")
+             (newline-or-space-mandatory "\\(?:[[:blank:]\n\r]\\)+")
              (param-port-list "([^;]+?)"))
-        (concat "^\\s-*"
+        (concat "^[[:blank:]]*"
                 "\\(?1:" modi/verilog-identifier-re "\\)" ;module name (subgroup 1)
                 newline-or-space-mandatory
                 ;; optional port parameters
                 "\\("
                 "#" newline-or-space-optional param-port-list
-                "\\(\\s-*//.*?\\)*"          ;followed by optional comments
+                "\\([[:blank:]]*//.*?\\)*"  ;followed by optional comments
                 "[^;\\./]+?"  ;followed by 'almost anything' before instance name
                 "\\)*"
                 "\\(?2:" modi/verilog-identifier-re "\\)" ;instance name (subgroup 2)
@@ -176,9 +176,9 @@ These keywords mirror the block end keywords (See `modi/verilog-block-end-keywor
 See `modi/verilog-block-start-keywords' for more.")
 
     (defconst modi/verilog-header-re
-      (concat "^\\s-*"
-              "\\([a-z]+\\s-+\\)*" ; optional virtual, local, protected
-              "\\(?1:"          ; force group number to 1
+      (concat "^[[:blank:]]*"
+              "\\([a-z]+[[:blank:]]+\\)*"   ;Optional virtual, local, protected
+              "\\(?1:"                    ;Force group number to 1
               (regexp-opt '("case"
                             "class"
                             "clocking"
@@ -197,11 +197,11 @@ See `modi/verilog-block-start-keywords' for more.")
                             "task")
                           'symbols)
               "\\)"
-              "\\s-+"
-              "\\([a-z]+\\s-+\\)*" ; optional void, static, automatic, ..
+              "[[:blank:]]+"
+              "\\([a-z]+[[:blank:]]+\\)*"   ;Optional void, static, automatic, ..
               "\\(?2:"
-              "\\(?:" modi/verilog-identifier-re "::\\)*" ; allow parsing extern methods like class::task
-              modi/verilog-identifier-re ; block name, force group number to 2
+              "\\(?:" modi/verilog-identifier-re "::\\)*" ;Allow parsing extern methods like class::task
+              modi/verilog-identifier-re ;Block name, force group number to 2
               "\\)"
               "\\b"
               )
@@ -233,8 +233,8 @@ is returned and `modi/verilog-which-func-xtra' is updated to \"adder\".
    (
     ▯
     );"
-      (let (instance-name return-val) ; return-val will be nil by default
-        (setq-local modi/verilog-which-func-xtra nil) ; reset
+      (let (instance-name return-val)   ;return-val will be nil by default
+        (setq-local modi/verilog-which-func-xtra nil) ;Reset
         (save-excursion
           (when (if fwd
                     (re-search-forward modi/verilog-module-instance-re nil :noerror)
@@ -245,8 +245,8 @@ is returned and `modi/verilog-which-func-xtra' is updated to \"adder\".
               ;; (message "---- 1 ---- %s" (match-string 1))
               ;; (message "---- 2 ---- %s" (match-string 2))
               ;; (message "---- 3 ---- %s" (match-string 3))
-              (setq-local modi/verilog-which-func-xtra (match-string 1)) ; module name
-              (setq instance-name (match-string 2)) ; instance name
+              (setq-local modi/verilog-which-func-xtra (match-string 1)) ;module name
+              (setq instance-name (match-string 2)) ;Instance name
 
               (when (and (stringp modi/verilog-which-func-xtra)
                          (string-match modi/verilog-keywords-re
@@ -282,8 +282,8 @@ for \"module\").
    module top ();
    ▯
    endmodule "
-      (let (block-type block-name return-val) ; return-val will be nil by default
-        (setq-local modi/verilog-which-func-xtra nil) ; reset
+      (let (block-type block-name return-val) ;return-val will be nil by default
+        (setq-local modi/verilog-which-func-xtra nil) ;Reset
         (save-excursion
           (when (if fwd
                     (re-search-forward modi/verilog-header-re nil :noerror)
@@ -311,7 +311,7 @@ for \"module\").
                              ((string= "interface" block-type) "if")
                              ((string= "package"   block-type) "pkg")
                              ((string= "sequence"  block-type) "seq")
-                             (t (substring block-type 0 4)))) ; first 4 chars
+                             (t (substring block-type 0 4)))) ;First 4 chars
                 (setq return-val block-name)))))
         (when (featurep 'which-func)
           (modi/verilog-update-which-func-format))
@@ -439,8 +439,8 @@ and to have a `ctags' TAGS file pre-generated for this command to work."
           "Find the places where the current verilog module is instantiated in
 the project."
           (interactive)
-          (let ((verilog-module-re (concat "^\\s-*"          ; elisp regexp
-                                           "\\(?:module\\)\\s-+" ; shy group
+          (let ((verilog-module-re (concat "^[[:blank:]]*" ;Elisp regexp
+                                           "\\(?:module\\)[[:blank:]]+" ;Shy group
                                            "\\(?1:"
                                            modi/verilog-identifier-re ;Elisp regexp here!
                                            "\\)\\b"))
@@ -509,7 +509,7 @@ The match with \"//.\" resolves this issue:
 "
       (save-excursion
         (beginning-of-line)
-        (let* ((outline-comment (looking-at "^[[:blank:]]*// \\*+\\s-")) ;(space)// *(space)
+        (let* ((outline-comment (looking-at "^[[:blank:]]*// \\*+\\s-")) ;(blank)// *(space)
                (dont-touch-indentation (looking-at "^.*//\\.")) ;Line contains "//."
                (is-in-multi-line-define (looking-at "^.*\\\\$")) ;\ at EOL
                (do-not-run-orig-fn (or (and (not (bound-and-true-p modi/outshine-allow-space-before-heading))
@@ -563,14 +563,14 @@ Examples: endmodule // module_name             → endmodule : module_name
       (save-excursion
         (goto-char (point-min))
         (while (re-search-forward (concat "^"
-                                          "\\(?1:\\s-*"
+                                          "\\(?1:[[:blank:]]*"
                                           modi/verilog-block-end-keywords-re
                                           "\\)"
-                                          "\\s-*//\\s-*"
+                                          "[[:blank:]]*//[[:blank:]]*"
                                           "\\(\\(block:\\|"
-                                          modi/verilog-identifier-re "\\s-*::\\)\\s-*\\)*"
+                                          modi/verilog-identifier-re "[[:blank:]]*::\\)[[:blank:]]*\\)*"
                                           "\\(?2:" modi/verilog-identifier-re "\\)"
-                                          "\\s-*$")
+                                          "[[:blank:]]*$")
                                   nil :noerror)
           ;; Make sure that the matched string after "//" is not a verilog
           ;; keyword.
@@ -664,21 +664,21 @@ _a_lways         _f_or              _g_enerate         _O_utput
                       (append `(("*Level 1*"
                                  ,(concat "^"
                                           (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                              "\\s-*"
+                                              "[[:blank:]]*"
                                             "")
                                           "// \\*\\{1\\} \\(?1:.*$\\)")
                                  1)
                                 ("*Level 2*"
                                  ,(concat "^"
                                           (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                              "\\s-*"
+                                              "[[:blank:]]*"
                                             "")
                                           "// \\*\\{2\\} \\(?1:.*$\\)")
                                  1)
                                 ("*Level 3*"
                                  ,(concat "^"
                                           (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                              "\\s-*"
+                                              "[[:blank:]]*"
                                             "")
                                           "// \\*\\{3\\} \\(?1:.*$\\)")
                                  1))
@@ -757,7 +757,7 @@ _a_lways         _f_or              _g_enerate         _O_utput
      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd)
      ("<f9>"      . modi/verilog-compile)
      ("<S-f9>"    . modi/verilog-simulate))
-    (bind-chord "\\\\" #'modi/verilog-jump-to-module-at-point verilog-mode-map) ; "\\"
+    (bind-chord "\\\\" #'modi/verilog-jump-to-module-at-point verilog-mode-map) ;"\\"
     (when (executable-find "ag")
       (bind-chord "^^" #'modi/verilog-find-parent-module verilog-mode-map))))
 
