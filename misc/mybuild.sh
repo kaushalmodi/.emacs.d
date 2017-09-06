@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2017-06-27 17:13:42 kmodi>
+# Time-stamp: <2017-09-06 18:34:46 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -199,12 +199,12 @@ then
     #        --with-gif=no
     #   as options to configure
     #   make: *** [Makefile] Error 1
-    sed -i 's|./configure|'"${MY_EMACS_CONFIGURE}"'|g' GNUmakefile
+    sed -i_orig 's|./configure|'"${MY_EMACS_CONFIGURE}"'|g' GNUmakefile
 
     # Do not build info files
     if [[ ${no_info} -eq 1 ]]
     then
-        sed -r -i 's/^(\s*all:.*)info/\1/' Makefile.in
+        sed -r -i.orig 's/^(\s*all:.*)info/\1/' Makefile.in
     fi
 
     # Do not build .elc files
@@ -220,7 +220,7 @@ then
             #       -f batch-update-autoloads ${SUBDIRS_ALMOST}
         # with:
         #   true
-        sed -r -i 's/^(\s*)@echo/\1true\n\0/'lisp/Makefile.in
+        sed -r -i.orig 's/^(\s*)@echo/\1true\n\0/'lisp/Makefile.in
         sed -r -i '/^\s*@echo/,/-f batch/d' lisp/Makefile.in
     fi
 
@@ -270,6 +270,20 @@ git log -n 1 --pretty=full "${current_commit_hash}" >> "${build_info_file}"
 if [[ $debug -eq 1 ]]
 then
     cat "${build_info_file}"
+fi
+
+# Restore the original files
+if [[ -f GNUmakefile_orig ]]
+then
+    mv GNUmakefile{_orig,}
+fi
+if [[ -f Makefile.in.orig ]]
+then
+    mv Makefile.in{.orig,}
+fi
+if [[ -f lisp/Makefile.in.orig ]]
+then
+    mv lisp/Makefile.in{.orig,}
 fi
 
 # Helpful tcsh alias associated with ${build_info_file}
