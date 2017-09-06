@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-07 10:14:45 kmodi>
+;; Time-stamp: <2017-09-06 16:32:26 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -8,7 +8,7 @@
   :after ox
   :commands (org-hugo-export-subtree-to-md
              org-hugo-export-subtree-to-md-after-save
-             org-hugo--slug)
+             org-hugo-slug)
   :load-path "elisp/ox-hugo"
   :bind (:map modi-mode-map
          ("C-c G" . org-hugo-export-subtree-to-md)) ;Same as "C-c C-e H H"
@@ -27,7 +27,7 @@ See `org-capture-templates' for more information."
     (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
            (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
            (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
-           (fname (org-hugo--slug title)))
+           (fname (org-hugo-slug title)))
       (mapconcat #'identity
                  `(
                    ,(concat "* TODO " title)
