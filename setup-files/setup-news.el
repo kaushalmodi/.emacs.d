@@ -1,14 +1,15 @@
-;; Time-stamp: <2016-07-09 14:16:07 kmodi>
+;; Time-stamp: <2017-09-06 11:50:42 kmodi>
 
 ;; Handles the NEWS better
 
 (defun modi/view-news-in-org-mode ()
   "Set the major mode to `org-mode' for NEWS files."
-  (when (string-match-p "/NEWS" buffer-file-name)
+  (when (and buffer-file-name
+             (string-match-p "/NEWS" buffer-file-name))
     (org-mode)
     ;; Do not truncate lines in NEWS files, otherwise `page-break-lines-mode'
-    ;; acts strange. Also truncation is not needed in these files as they
-    ;; are auto-filled.
+    ;; acts strange. Also truncation is not needed in these files as they are
+    ;; auto-filled.
     (toggle-truncate-lines 1)))
 ;; It is necessary to use the `find-file-hook' to set the major mode to
 ;; `org-mode' for NEWS files. The buffer-local variables in these files set the
