@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-07 12:39:04 kmodi>
+;; Time-stamp: <2017-09-07 13:21:35 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -14,11 +14,11 @@
     (bind-to-modi-map "e" #'eww-open-file))
   :config
   (progn
-    ;; (setq eww-search-prefix                 "https://duckduckgo.com/html/?q=")
-    (setq eww-search-prefix                 "https://www.google.com/search?q=")
-    (setq eww-download-directory            "~/downloads")
-    (setq eww-form-checkbox-symbol          "[ ]")
-    ;; (setq eww-form-checkbox-symbol          "☐") ; Unicode hex 2610
+    ;; (setq eww-search-prefix "https://duckduckgo.com/html/?q=")
+    (setq eww-search-prefix "https://www.google.com/search?q=")
+    (setq eww-download-directory "~/downloads")
+    (setq eww-form-checkbox-symbol "[ ]")
+    ;; (setq eww-form-checkbox-symbol "☐") ; Unicode hex 2610
     (setq eww-form-checkbox-selected-symbol "[X]")
     ;; (setq eww-form-checkbox-selected-symbol "☑") ; Unicode hex 2611
     ;; Improve the contract of pages like Google results
@@ -75,7 +75,8 @@ See the `eww-search-prefix' variable for the search engine used."
       (while (string-match "^\\*?eww" (buffer-name))
         (bury-buffer))
       ;; Start a new eww search.
-      (eww search-term)
+      (let ((eww-search-prefix "https://www.google.com/search?q="))
+        (eww search-term))
       (let* ((max-wait 5)                 ;Seconds
              (search-repeat-interval 0.1) ;Seconds
              (max-trials (floor max-wait search-repeat-interval))
@@ -86,7 +87,8 @@ See the `eww-search-prefix' variable for the search engine used."
         (catch 'break
           (while (<= n max-trials)
             (goto-char (point-min))     ;Go to the top of the buffer
-            (re-search-forward "[[:digit:]]+[[:blank:]]+results[[:blank:]]*$" nil :noerror) ;Go to the start of results
+            ;; Go to the start of results
+            (re-search-forward "[[:digit:]]+ results[[:blank:]]*$" nil :noerror)
             (shr-next-link)             ;Go to the first search result
             (when (eww-links-at-point)
               (throw 'break nil))
@@ -130,10 +132,10 @@ If OPTION is \\[universal-argument] \\[universal-argument], or if
 there is neither a link nor an image, the page URL will be
 copied.
 
-(For emacs 25.x and older) If this function is called twice, try
+\(For emacs 25.x and older) If this function is called twice, try
 to fetch the URL and see whether it redirects somewhere else.
 
-(For emacs 26.x and newer) Automatically use the fetched URL's
+\(For emacs 26.x and newer) Automatically use the fetched URL's
 redirection destination if it has one."
       (interactive "P")
       (let (image-url page-url)
@@ -147,8 +149,8 @@ redirection destination if it has one."
         (>=e "26.0"
             (let* ((pt-on-url (shr-url-at-point nil))
                    (pt-on-image (shr-url-at-point :image-url)))
-              (when (and (not pt-on-url)
-                         (not pt-on-image))
+              (unless (or pt-on-url
+                          pt-on-image)
                 (setq page-url t)) ;Get page URL if point is neither on URL nor image
               (if page-url
                   (message "Copied page url: %s" (eww-copy-page-url))
