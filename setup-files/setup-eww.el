@@ -1,10 +1,10 @@
-;; Time-stamp: <2017-09-01 07:42:52 kmodi>
+;; Time-stamp: <2017-09-07 12:39:04 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
 (use-package eww
   :bind (:map modi-mode-map
-         ("M-s M-w" . eww-search-words)
+         ("M-s M-w" . modi/eww-search-words) ;Bound by default to `eww-search-words'
          ("M-s M-l" . modi/eww-get-link))
   :chords (("-=" . eww))
   :commands (modi/eww-im-feeling-lucky
@@ -47,14 +47,27 @@ This is regardless of whether the current buffer is an eww buffer. "
         (apply orig-fun args)))
     (advice-add 'eww :around #'modi/force-new-eww-buffer)
 
-    ;; Override the default definition of `eww-search-words'
-    (defun eww-search-words (&optional beg end)
-      "Search the web for the text between the point and marker.
+    ;; Re-write of the `eww-search-words' definition.
+    (defun modi/eww-search-words ()
+      "Search the web for the text between BEG and END.
+
+If region is active (and not whitespace), search the web for
+the text in that region.
+
+Else if the region is not active, and the point is on a symbol,
+search the web for that symbol.
+
+Else prompt the user for a search string.
+
 See the `eww-search-prefix' variable for the search engine used."
-      (interactive "r")
-      (if (use-region-p)
-          (eww (buffer-substring beg end))
-        (eww (modi/get-symbol-at-point))))
+      (interactive)
+      (let ((search-string (modi/get-selected-text-or-symbol-at-point)))
+        (when (and (stringp search-string)
+                   (string-match-p "\\`[[:blank:]]*\\'" search-string))
+          (setq search-string nil))
+        (if (stringp search-string)
+            (eww search-string)
+          (call-interactively #'eww))))
 
     (defun modi/eww--go-to-first-search-result (search-term)
       "Navigate to the first search result in the *eww* buffer."

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-22 23:51:33 kmodi>
+;; Time-stamp: <2017-09-07 12:36:03 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -6,7 +6,7 @@
 ;;
 ;;  Emacs version check
 ;;  Aliases
-;;  Get symbol at point
+;;  Get symbol at point, maybe
 ;;  Quitting emacs
 ;;  Fringe face setting
 ;;  Default ag arguments
@@ -41,16 +41,18 @@ Example:
 ;; Cyclically replace "A" with "X", "Y", "Z", "X", "Y", ..
 (defalias 'query-replace-regexp-cyclic 'map-query-replace-regexp)
 
-;;; Get symbol at point
-;; https://github.com/Wilfred/ag.el
-(defun modi/get-symbol-at-point ()
-  "If there's an active selection, return that.
-Otherwise, get the symbol at point, as a string."
+;;; Get symbol at point, maybe
+(defun modi/get-selected-text-or-symbol-at-point ()
+  "Get the text in region or symbol at point.
+
+If region is active, return the text in that region.  Else if the
+point is on a symbol, return that symbol name.  Else return nil."
   (cond ((use-region-p)
          (buffer-substring-no-properties (region-beginning) (region-end)))
         ((symbol-at-point)
-         (substring-no-properties
-          (symbol-name (symbol-at-point))))))
+         (substring-no-properties (thing-at-point 'symbol)))
+        (t
+         nil)))
 
 ;;; Quitting emacs
 ;; Based on `tv-stop-emacs' function from
