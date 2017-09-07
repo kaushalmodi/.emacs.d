@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-07 13:21:35 kmodi>
+;; Time-stamp: <2017-09-07 16:18:28 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -163,16 +163,6 @@ redirection destination if it has one."
               ;; "No URL under point".
               (message "Copied page url: %s" (eww-copy-page-url)))))))
 
-    (defun modi/eww-keep-lines (regexp)
-      "Show only the lines matching regexp in the web page.
-Call `eww-reload' to undo the filtering."
-      (interactive (list (read-from-minibuffer
-                          "Keep only lines matching regexp: ")))
-      (let ((inhibit-read-only t)) ; ignore read-only status of eww buffers
-        (save-excursion
-          (goto-char (point-min))
-          (keep-lines regexp))))
-
     (defun modi/eww-browse-url-of-file ()
       "Browse the current file using `eww'."
       (interactive)
@@ -239,21 +229,20 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
 
     (bind-keys
      :map eww-mode-map
-     (":" . eww) ; Go to URL
-     ("h" . eww-list-histories) ; View history
+     (":" . eww)                        ;Go to URL
+     ("h" . eww-list-histories)         ;View history
      ("w" . modi/eww-copy-url-dwim)
-     ("/" . highlight-regexp)
-     ("k" . modi/eww-keep-lines))
+     ("/" . highlight-regexp))
     ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
     (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
     (bind-keys
-     :map eww-text-map ; For single line text fields
-     ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
-     ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
+     :map eww-text-map                  ;For single line text fields
+     ("<backtab>"  . shr-previous-link) ;S-TAB Jump to previous link on the page
+     ("<C-return>" . eww-submit))       ;S-TAB Jump to previous link on the page
     (bind-keys
-     :map eww-textarea-map ; For multi-line text boxes
-     ("<backtab>"  . shr-previous-link) ; S-TAB Jump to previous link on the page
-     ("<C-return>" . eww-submit)) ; S-TAB Jump to previous link on the page
+     :map eww-textarea-map              ;For multi-line text boxes
+     ("<backtab>"  . shr-previous-link) ;S-TAB Jump to previous link on the page
+     ("<C-return>" . eww-submit))       ;S-TAB Jump to previous link on the page
     (bind-keys
      :map eww-checkbox-map
      ("<down-mouse-1>" . eww-toggle-checkbox))

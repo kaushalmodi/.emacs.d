@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-27 01:50:05 kmodi>
+;; Time-stamp: <2017-09-07 16:23:09 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -575,7 +575,8 @@ Examples of such buffers: *gtags-global*, *ag*, *Occur*, *Diff*."
   (define-key map (kbd "y") #'bury-buffer)                ;Only bury
   (define-key map (kbd "k") #'modi/kill-buffer-dwim)      ;Only kill
   (define-key map (kbd "z") #'quit-window)                ;Quit + bury
-  (define-key map (kbd "q") #'modi/quit-and-kill-window)) ;Quit + kill
+  (define-key map (kbd "q") #'modi/quit-and-kill-window)  ;Quit + kill
+  (define-key map (kbd "K") #'modi/keep-lines-force)) ;Useful in eww, package manager
 
 ;;;; Other Bindings
 (bind-keys

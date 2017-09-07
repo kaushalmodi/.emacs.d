@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-07 14:37:30 kmodi>
+;; Time-stamp: <2017-09-07 16:23:59 kmodi>
 
 ;; Launcher
 
@@ -24,6 +24,7 @@
   ("g"       magit-status "magit status")
   ("h"       hl-line-flash "flash line")
   ("i"       counsel-git-grep "git grep")
+  ("K"       modi/keep-lines-force "keep lines")
   ("l"        modi/run-current-file "load current file")
   ("L"       (modi/run-current-file 4) "load emacs init")
   ("m"       woman "man/woman")

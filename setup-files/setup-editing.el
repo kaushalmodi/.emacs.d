@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-01 08:19:49 kmodi>
+;; Time-stamp: <2017-09-07 16:13:50 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -38,6 +38,7 @@
 ;;  Tweaking `region-extract-function'
 ;;  Commenting
 ;;  Anonymize
+;;  Keep Lines - Because I Said So
 ;;  Bindings
 
 ;;; Coding System
@@ -1114,6 +1115,23 @@ to help with some debug."
         (while (re-search-forward "[a-zA-z0-9]" nil :noerror)
           (let ((rand-char (char-to-string (+ ?a (random (- ?z ?a))))))
             (replace-match rand-char)))))))
+
+;;; Keep Lines - Because I Said So
+(defun modi/keep-lines-force (regexp)
+  "Do `keep-lines' even in read-only buffers.
+
+Useful for quickly filtering lines to show only the ones matching
+REGEXP in read-only buffers in eww, package manager, etc.
+
+Once done reviewing the filtered results, hitting \"g\" in the
+buffer should do the right thing.. `eww-reload' in eww,
+`revert-buffer' in package manager."
+  (interactive (list (read-from-minibuffer
+                      "Keep only lines matching regexp: ")))
+  (let ((inhibit-read-only t))          ;Ignore read-only status
+    (save-excursion
+      (goto-char (point-min))
+      (keep-lines regexp))))
 
 ;;; Bindings
 
