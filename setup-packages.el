@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-23 00:03:34 kmodi>
+;; Time-stamp: <2017-09-08 11:27:25 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -19,23 +19,37 @@
 
 (let* ((bin-dir (when (and invocation-directory
                            (file-exists-p invocation-directory))
-                  invocation-directory))
+                  (file-truename invocation-directory)))
        (prefix-dir (when bin-dir
                      (replace-regexp-in-string "bin/\\'" "" bin-dir)))
        (share-dir (when prefix-dir
                     (concat prefix-dir "share/")))
-       (lisp-dir (when share-dir
-                   (concat share-dir "emacs/"
-                           ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
-                           ;; Though, this is not needed and also will do nothing in emacs 26+
-                           ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
-                           (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
-                           "/lisp/"))))
+       (lisp-dir-1 (when share-dir ;Possibility where the lisp dir is something like ../emacs/26.0.50/lisp/
+                     (concat share-dir "emacs/"
+                             ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
+                             ;; Though, this is not needed and also will do nothing in emacs 26+
+                             ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
+                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
+                             "/lisp/")))
+       (lisp-dir-2 (when share-dir ;Possibility where the lisp dir is something like ../emacs/25.2/lisp/
+                     (concat share-dir "emacs/"
+                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
+                             "/lisp/"))))
+  ;; (message "setup-packages:: bin-dir: %s" bin-dir)
+  ;; (message "setup-packages:: prefix-dir: %s" prefix-dir)
+  ;; (message "setup-packages:: share-dir: %s" share-dir)
+  ;; (message "setup-packages:: lisp-dir-1: %s" lisp-dir-1)
+  ;; (message "setup-packages:: lisp-dir-2: %s" lisp-dir-2)
   (defvar modi/default-share-directory (when (file-exists-p share-dir)
                                          share-dir)
     "Share directory for this Emacs installation.")
-  (defvar modi/default-lisp-directory (when (file-exists-p lisp-dir)
-                                        lisp-dir)
+  (defvar modi/default-lisp-directory (cond
+                                       ((file-exists-p lisp-dir-1)
+                                        lisp-dir-1)
+                                       ((file-exists-p lisp-dir-2)
+                                        lisp-dir-2)
+                                       (t
+                                        nil))
     "Directory containing lisp files for the Emacs installation.
 
 This value must match the path to the lisp/ directory of the
