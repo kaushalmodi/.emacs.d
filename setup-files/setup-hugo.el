@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-06 16:32:26 kmodi>
+;; Time-stamp: <2017-09-08 13:50:17 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -48,24 +48,18 @@ See `org-capture-templates' for more information."
                  (function org-hugo-new-subtree-post-capture-template)))
 
   ;; Do not cause auto Org->Hugo export to happen when saving captures
-  (defvar modi/org-to-hugo-export-on-save-enable nil
-    "State variable to record if user has added
-`org-hugo-export-subtree-to-md-after-save' to
-`after-save-hook'.")
-
   (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
     "Function for `org-capture-before-finalize-hook'.
 Disable `org-hugo-export-subtree-to-md-after-save'."
     (setq org-hugo-allow-export-after-save nil))
-  (add-hook 'org-capture-before-finalize-hook
-            #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
 
   (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
     "Function for `org-capture-after-finalize-hook'.
 Enable `org-hugo-export-subtree-to-md-after-save'."
     (setq org-hugo-allow-export-after-save t))
-  (add-hook 'org-capture-after-finalize-hook
-            #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
+
+  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
+  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
 
 
 (provide 'setup-hugo)
