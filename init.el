@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-25 11:08:18 kmodi>
+;; Time-stamp: <2017-09-08 11:21:02 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -100,6 +100,7 @@ need Org version to be at least 9.x.")
     multiple-cursors
     neotree
     nlinum ; better performance than linum
+    nov    ;Ebook (.epub) reader
     org-cliplink ; paste copied links as well-formatted org-mode links with desc
     org-tree-slide
     outorg navi-mode ; supporting packages for outshine
