@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-01 10:17:49 kmodi>
+;; Time-stamp: <2017-09-12 14:28:44 kmodi>
 
 ;; PDF
 
@@ -14,56 +14,18 @@
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (progn
+    (defvar modi/pdf-tools-bin-directory (let ((dir (concat user-emacs-directory
+                                                            "misc/pdf-tools/bin/"))) ; must end with /
+                                           (make-directory dir :parents)
+                                           dir)
+      "Directory to hold the executable(s) for pdf-tools.")
 
     (setq-default pdf-view-display-size 'fit-page) ; fit page by default
     (setq pdf-view-resize-factor 1.10)
 
-    (defun my/get-latest-pdf-tools-dir ()
-      "Get the full directory path of the latest installed version of
-pdf-tools package.
+    (setq pdf-info-epdfinfo-program (expand-file-name "epdfinfo" modi/pdf-tools-bin-directory))
 
-If pdf-tools is installed in the elisp/ directory, that path is returned
-instead of the one present in `package-user-dir'."
-      (let ((pdf-tools-epdfinfo-dir))
-        ;; Use the package version in elisp/pdf-tools dir if available
-        (if (locate-file "pdf-tools.el" (list (concat user-emacs-directory
-                                                      "elisp/pdf-tools/lisp/")))
-            (progn
-              (setq pdf-tools-epdfinfo-dir (concat user-emacs-directory
-                                                   "elisp/pdf-tools/"
-                                                   pdf-tools-github-version-name
-                                                   "/"))
-              pdf-tools-epdfinfo-dir)
-          ;; Else use the package manager installed version
-          ;; Get a list of directories and files in `package-user-dir'
-          (let ((my/package-dirs (directory-files package-user-dir)))
-            ;; `break' implementation in elisp
-            ;; http://ergoemacs.org/emacs/elisp_break_loop.html
-            (catch 'break
-              (dotimes (index (safe-length my/package-dirs))
-                (let ((dir-name (pop my/package-dirs)))
-                  ;; (message "%s" dir-name) ; debug
-                  ;; Find a directory name that matches "pdf-tools-*"
-                  (when (string-match "pdf\\-tools\\-.*" dir-name)
-                    (setq pdf-tools-epdfinfo-dir (concat package-user-dir "/" dir-name))
-                    ;; To ensure that the directory is valid, ensure that it
-                    ;; contains "pdf-tools.el"
-                    (when (locate-file "pdf-tools.el" (list pdf-tools-epdfinfo-dir))
-                      ;; break the `dotimes' loop on finding this directory
-                      ;; and return its full path
-                      (throw 'break pdf-tools-epdfinfo-dir))))))))))
-
-    (defun my/pdf-tools-install ()
-      (interactive)
-      ;; Update the `pdf-info-epdfinfo-program' variable to point to
-      ;; the directory containing the latest version of `pdf-tools'
-      (setq pdf-info-epdfinfo-program
-            (expand-file-name "epdfinfo" (my/get-latest-pdf-tools-dir)))
-      ;; Call the original `pdf-tools-install' function after updating the
-      ;; `pdf-info-epdfinfo-program' variable
-      (pdf-tools-install))
-
-    (my/pdf-tools-install)
+    (pdf-tools-install)
 
     ;; Update `pdf-view-mode-map' bindings
     (dolist (pair '((beginning-of-buffer . pdf-view-first-page)
@@ -76,8 +38,8 @@ instead of the one present in `package-user-dir'."
 
     (bind-keys
      :map pdf-view-mode-map
-      ("l" . pdf-history-backward)
-      ("r" . pdf-history-forward))))
+     ("l" . pdf-history-backward)
+     ("r" . pdf-history-forward))))
 
 ;; https://github.com/rudolfochrist/interleave
 (use-package interleave
