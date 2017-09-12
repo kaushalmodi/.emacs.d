@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-12 14:28:44 kmodi>
+;; Time-stamp: <2017-09-12 16:35:55 kmodi>
 
 ;; PDF
 
@@ -25,7 +25,30 @@
 
     (setq pdf-info-epdfinfo-program (expand-file-name "epdfinfo" modi/pdf-tools-bin-directory))
 
-    (pdf-tools-install)
+    ;; https://github.com/politza/pdf-tools/issues/312#issuecomment-328971105
+    (defun modi/pdf-tools-install ()
+      "Install `epdfinfo' at `pdf-info-epdfinfo-program' without prompts.
+
+If the `pdf-info-epdfinfo-program' is not running and is not
+executable or does not appear to be working, attempt to rebuild
+it.  If this build succeeded, continue with the activation of the
+package.  Otherwise fail silently, i.e. no error is signaled.
+
+See `pdf-view-mode' and `pdf-tools-enabled-modes'."
+      (interactive)
+      (if (or noninteractive
+              (pdf-info-running-p)
+              (and (stringp pdf-info-epdfinfo-program)
+                   (file-executable-p pdf-info-epdfinfo-program)
+                   (ignore-errors (pdf-info-check-epdfinfo) :success)))
+          (pdf-tools-install-noverify)
+        (pdf-tools-build-server
+         (lambda (success)
+           (when success
+             (pdf-tools-install)))
+         (file-name-directory pdf-info-epdfinfo-program))))
+
+    (modi/pdf-tools-install)
 
     ;; Update `pdf-view-mode-map' bindings
     (dolist (pair '((beginning-of-buffer . pdf-view-first-page)
