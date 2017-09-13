@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-08 09:51:56 kmodi>
+;; Time-stamp: <2017-09-12 16:52:18 kmodi>
 
 ;; Customize the mode-line
 
@@ -69,7 +69,7 @@ If nil, show the same in the minibuffer.")
   :init
   (progn
     (setq sml/line-number-format "%4l")
-    (setq sml/name-width 40)            ;Buffer name width in the mode-line
+    (setq sml/name-width 70)            ;Buffer name width in the mode-line
     (setq sml/mode-width 'full)         ;Minor mode lighters area width
     (setq sml/no-confirm-load-theme t)
     (setq sml/theme (if (boundp 'dark-theme)
