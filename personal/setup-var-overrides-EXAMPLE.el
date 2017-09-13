@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-04-04 11:23:59 kmodi>
+;; Time-stamp: <2017-09-13 12:55:55 kmodi>
 
 ;; Variable overrides
 
@@ -9,7 +9,6 @@
 
 (setq disable-recursive-edit-in-minibuffer t)
 (setq disable-pkg-hardcore-mode t)
-(setq disable-pkg-pdf-tools t)
 (setq disable-pkg-ispell t)
 ;; (setq disable-pkg-yasnippet t)
 ;; (setq disable-pkg-ivy t)

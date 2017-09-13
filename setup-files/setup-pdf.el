@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-12 16:35:55 kmodi>
+;; Time-stamp: <2017-09-13 13:10:45 kmodi>
 
 ;; PDF
 
@@ -6,11 +6,10 @@
 (add-hook 'doc-view-mode-hook #'auto-revert-mode)
 
 (use-package pdf-tools
-  :if (not (bound-and-true-p disable-pkg-pdf-tools))
-  :preface
-  (progn
-    (defvar pdf-tools-github-version-name "pdf-tools-0.60"))
-  :commands (my/pdf-tools-install)
+  ;; https://github.com/zakame/.emacs.d/blob/379dbfe0f10b20f7f43054cd4d13303d8026d105/init.el#L596-L603
+  :if (and (string= system-type 'gnu/linux)
+           (eq (call-process-shell-command "pkg-config" nil nil nil "--exists" "poppler") 0))
+  :commands (modi/pdf-tools-install)
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (progn
@@ -26,27 +25,34 @@
     (setq pdf-info-epdfinfo-program (expand-file-name "epdfinfo" modi/pdf-tools-bin-directory))
 
     ;; https://github.com/politza/pdf-tools/issues/312#issuecomment-328971105
-    (defun modi/pdf-tools-install ()
-      "Install `epdfinfo' at `pdf-info-epdfinfo-program' without prompts.
+    (defun modi/pdf-tools-install (&optional force-build)
+      "Build `epdfinfo' if needed without prompts, followed by `pdf-tools' install.
 
-If the `pdf-info-epdfinfo-program' is not running and is not
-executable or does not appear to be working, attempt to rebuild
-it.  If this build succeeded, continue with the activation of the
-package.  Otherwise fail silently, i.e. no error is signaled.
+If this function is called interactively and if the
+`pdf-info-epdfinfo-program' is not running and is not executable
+or does not appear to be working, attempt to build it.  If this
+build succeeds, continue with the activation of the package.
+Otherwise fail silently, i.e. no error is signaled.
+
+If FORCE-BUILD is non-nil, build `epdfinfo' regardless.
 
 See `pdf-view-mode' and `pdf-tools-enabled-modes'."
-      (interactive)
-      (if (or noninteractive
-              (pdf-info-running-p)
-              (and (stringp pdf-info-epdfinfo-program)
-                   (file-executable-p pdf-info-epdfinfo-program)
-                   (ignore-errors (pdf-info-check-epdfinfo) :success)))
+      (interactive "P")
+      (if (and (not force-build)
+               (or noninteractive
+                   (pdf-info-running-p)
+                   (and (stringp pdf-info-epdfinfo-program)
+                        (file-executable-p pdf-info-epdfinfo-program)
+                        (ignore-errors (pdf-info-check-epdfinfo) :success))))
           (pdf-tools-install-noverify)
-        (pdf-tools-build-server
-         (lambda (success)
-           (when success
-             (pdf-tools-install)))
-         (file-name-directory pdf-info-epdfinfo-program))))
+        (let ((bin-dir (file-name-directory pdf-info-epdfinfo-program)))
+          (message "[modi/pdf-tools-install] Installing `epdfinfo' at `%s' .." bin-dir)
+          (pdf-tools-build-server
+           (lambda (success)
+             (when success
+               (pdf-tools-install)))
+           bin-dir)
+          (message "[modi/pdf-tools-install] Done"))))
 
     (modi/pdf-tools-install)
 
