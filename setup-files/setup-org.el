@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-01 07:44:16 kmodi>
+;; Time-stamp: <2017-09-13 11:59:32 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -43,6 +43,7 @@
 ;;    Org Link Ref
 ;;    Htmlize Region→File
 ;;    Include Src lines
+;;    Org TOC
 ;;  Provide
 ;;  Notes
 
@@ -1330,6 +1331,11 @@ the languages in `modi/ob-enabled-languages'."
       (add-hook 'before-save-hook #'endless/org-include-update nil :local))
     (add-hook 'org-mode-hook #'modi/org-include-update-before-save)))
 
+;;;; Org TOC
+;; https://github.com/snosov1/toc-org
+;; Used in https://github.com/kaushalmodi/ox-hugo/blob/master/doc/export-gh-doc.el
+(use-package toc-org
+  :ensure t)
 
 ;;; Provide
 (provide 'setup-org)
