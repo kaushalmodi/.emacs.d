@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-07 16:13:50 kmodi>
+;; Time-stamp: <2017-09-18 10:38:34 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -236,7 +236,7 @@ Example:
 
     (defun modi/prevent-trailing-whitespace-deletion-p ()
       \"Return non-nil for projects where trailing whitespace should not be deleted.\"
-      (if-let ((proj-root-dir (cdr (project-current)))) ;Requires emacs 25.1
+      (if-let* ((proj-root-dir (cdr (project-current)))) ;Requires emacs 25.1
           (string-match-p (concat \"\\\\(\"
                                   \"git/emacs/\"
                                   \"\\\\|/org-mode/\"
@@ -295,6 +295,7 @@ Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
           (delete-trailing-whitespace (line-end-position) nil))
       (delete-trailing-whitespace (point-min) nil))))
 (add-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
+;; (remove-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
 
 ;;; Untabify
 (setq-default indent-tabs-mode nil)  ;Use spaces instead of tabs for indentation

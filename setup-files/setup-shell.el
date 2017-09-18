@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-22 23:42:37 kmodi>
+;; Time-stamp: <2017-09-18 10:37:42 kmodi>
 
 ;; Shell Script Mode
 
@@ -17,7 +17,7 @@
       :load-path "elisp/csh-mode")
 
     ;; Change default shell file to bash if available
-    (when-let ((bash-bin (executable-find "bash")))
+    (when-let* ((bash-bin (executable-find "bash")))
       (setq-default sh-shell-file bash-bin))
 
     (setq sh-indent-supported '((sh . sh)

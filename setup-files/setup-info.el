@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-07 18:02:45 kmodi>
+;; Time-stamp: <2017-09-18 10:37:31 kmodi>
 
 ;; Info
 
@@ -243,9 +243,9 @@ argument, also open the URL in the default browser."
 	    (setq node (match-string 3 node))
             (when (equal node "")
               (setq node  "index"))     ;`Top' node
-            (when-let ((trim (string-match "\\s +\\'" file)))
+            (when-let* ((trim (string-match "\\s +\\'" file)))
               (setq file (substring file 0 trim)))
-            (when-let ((trim (string-match "\\s +\\'" node)))
+            (when-let* ((trim (string-match "\\s +\\'" node)))
               (setq node (substring node 0 trim)))
             (when (string= "" file)
               (setq file Info-current-file))
