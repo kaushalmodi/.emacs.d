@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-14 16:56:24 kmodi>
+;; Time-stamp: <2017-09-18 14:00:05 kmodi>
 
 ;; PDF
 
@@ -9,7 +9,8 @@
   ;; https://github.com/zakame/.emacs.d/blob/379dbfe0f10b20f7f43054cd4d13303d8026d105/init.el#L596-L603
   :if (and (string= system-type 'gnu/linux)
            (eq (call-process-shell-command "pkg-config" nil nil nil "--exists" "poppler") 0))
-  :commands (pdf-tools-install)
+  :commands (pdf-tools-install
+             modi/pdf-tools-re-install)
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (progn
@@ -28,6 +29,18 @@
     ;; Build the program (if necessary) without asking first, if NO-QUERY-P is
     ;; non-nil.
     (pdf-tools-install :no-query-p)
+
+    (defun modi/pdf-tools-re-install ()
+      "Re-install `epdfinfo' even if it is installed.
+The re-installation is forced by deleting the existing `epdfinfo'
+binary.
+
+Useful to run after `pdf-tools' updates."
+      (interactive)
+      (when (pdf-info-running-p)
+        (pdf-info-kill))
+      (delete-file pdf-info-epdfinfo-program)
+      (pdf-tools-install :no-query-p))
 
     ;; Update `pdf-view-mode-map' bindings
     (dolist (pair '((beginning-of-buffer . pdf-view-first-page)
