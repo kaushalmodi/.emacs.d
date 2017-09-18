@@ -33,13 +33,20 @@
   :config
   (progn
 
+    (defvar modi/verilog-indent-level 2
+      "Variable to set all `verilog-mode' indents.
+Sets `verilog-indent-level', `verilog-indent-level-module',
+`verilog-indent-level-declaration',`verilog-indent-level-behavioral',
+`verilog-indent-level-directive' and `verilog-case-indent'.")
+
 ;;; Variables
-    (setq verilog-indent-level             3)   ;3 (default)
-    (setq verilog-indent-level-module      3)   ;3
-    (setq verilog-indent-level-declaration 3)   ;3
-    (setq verilog-indent-level-behavioral  3)   ;3
-    (setq verilog-indent-level-directive   3)   ;1
-    (setq verilog-case-indent              2)   ;2
+    (setq verilog-indent-level modi/verilog-indent-level)             ;3 (default)
+    (setq verilog-indent-level-module modi/verilog-indent-level)      ;3
+    (setq verilog-indent-level-declaration modi/verilog-indent-level) ;3
+    (setq verilog-indent-level-behavioral modi/verilog-indent-level)  ;3
+    (setq verilog-indent-level-directive modi/verilog-indent-level)   ;1
+    (setq verilog-case-indent modi/verilog-indent-level)              ;2
+
     (setq verilog-auto-newline             nil) ;t
     (setq verilog-auto-indent-on-newline   t)   ;t
     (setq verilog-tab-always-indent        t)   ;t
