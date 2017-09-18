@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-01 07:53:22 kmodi>
+;; Time-stamp: <2017-09-18 10:53:14 kmodi>
 
 ;; Verilog
 
@@ -724,8 +724,8 @@ _a_lways         _f_or              _g_enerate         _O_utput
                  ;; Do not add this hook when working in the verilog-mode repo
                  (not (and (buffer-file-name) ;Has to be a file, and
                            (vc-git-root (buffer-file-name)) ;In a git repo, and
-                           (string-match-p "veripool/verilog-mode" ;Upstream URL has to match this.
-                                           (vc-git--out-ok "config" "remote.upstream.url")))))
+                           (when-let* ((git-repo-remote (vc-git--out-ok "config" "remote.upstream.url")))
+                             (string-match-p "veripool/verilog-mode" git-repo-remote))))) ;Upstream URL has to match this.
         (add-hook 'before-save-hook #'modi/verilog-block-end-comments-to-block-names nil :local))
 
       ;; Replace tabs with spaces when saving files in verilog-mode.
