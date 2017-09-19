@@ -32,7 +32,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+;; along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -122,7 +122,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2017-07-14-c36a886-vpo"
+(defconst verilog-mode-version "2017-09-14-ecdaea3-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -12090,7 +12090,7 @@ This is currently equivalent to:
 with the below at the bottom of the file
 
     // Local Variables:
-    // verilog-auto-logic-type:\"logic\"
+    // verilog-auto-wire-type:\"logic\"
     // End:
 
 In the future AUTOLOGIC may declare additional identifiers,
@@ -13239,10 +13239,12 @@ Typing \\[verilog-auto] will make this into:
 Replace the /*AUTOTIEOFF*/ comment with code to wire-tie all unused output
 signals to deasserted.
 
-/*AUTOTIEOFF*/ is used to make stub modules; modules that have the same
-input/output list as another module, but no internals.  Specifically, it
-finds all outputs in the module, and if that input is not otherwise declared
-as a register or wire, creates a tieoff.
+/*AUTOTIEOFF*/ is used to make stub modules; modules that have
+the same input/output list as another module, but no internals.
+Specifically, it finds all outputs in the module, and if that
+input is not otherwise declared as a register or wire, nor comes
+from a AUTOINST submodule's output, creates a tieoff. AUTOTIEOFF
+does not examine assignments to determine what is already driven.
 
 AUTORESET ties signals to deasserted, which is presumed to be zero.
 Signals that match `verilog-active-low-regexp' will be deasserted by tying
