@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-08 11:27:25 kmodi>
+;; Time-stamp: <2017-09-19 22:56:35 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -64,7 +64,10 @@ Emacs installation.  If Emacs is installed using
              (concat user-emacs-directory "elisp/smyx/"))
 
 ;; Add melpa package source when using package list
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") :append)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+  (add-to-list 'package-archives (cons "melpa" url) :append))
 
 ;; Install `org-plus-contrib' only when it's set to use the Elpa version of Org.
 (when (eq modi/org-version-select 'elpa)
