@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-12 16:52:18 kmodi>
+;; Time-stamp: <2017-09-20 09:44:12 kmodi>
 
 ;; Customize the mode-line
 
@@ -228,7 +228,7 @@ mode line."
       ;; First remove it from the alist
       (setq minor-mode-alist (assq-delete-all 'multiple-cursors-mode minor-mode-alist))
       ;; Now add it back but to the beginning of the alist
-      (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc:.*/mo)))))
+      (add-to-list 'minor-mode-alist '(multiple-cursors-mode mc/mode-line)))))
 ;; Update the minor-mode lighter order on actions like window switching.
 (add-hook 'buffer-list-update-hook #'modi/organize-minor-mode-lighters)
 ;; Also add the above fn to `after-revert-hook'. So in the event you don't find
