@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-06-21 11:35:08 kmodi>
+;; Time-stamp: <2017-09-20 09:52:55 kmodi>
 
 ;; Multiple Cursors
 ;; https://github.com/magnars/multiple-cursors.el
@@ -26,6 +26,12 @@
          ("$" . mc/edit-ends-of-lines))
   :init
   (progn
+    ;; Temporary hack to get around bug # 28524 in emacs 26+
+    ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28524
+    (setq mc/mode-line
+          `(" mc:" (:eval (format ,(propertize "%-2d" 'face 'font-lock-warning-face)
+                                  (mc/num-cursors)))))
+
     (setq mc/list-file (locate-user-emacs-file "mc-lists"))
 
     ;; Disable the annoying sluggish matching paren blinks for all cursors

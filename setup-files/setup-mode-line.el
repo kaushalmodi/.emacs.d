@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-20 09:44:12 kmodi>
+;; Time-stamp: <2017-09-20 09:50:18 kmodi>
 
 ;; Customize the mode-line
 
@@ -171,7 +171,7 @@ If nil, show the same in the minibuffer.")
                 " (*)"       ;beacon
                 ))
         (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face) ;Overwrite
-                                   ("\\` mc:[0-9]+\\'" 'face 'font-lock-keyword-face) ;Multiple cursors
+                                   ("\\` mc:[0-9]+ *\\'" 'face 'font-lock-keyword-face) ;Multiple cursors
                                    ("\\` rk\\'" 'display (propertize "​[]" 'face 'font-lock-warning-face)) ;Region bindings
 
                                    ("\\` Abbrev\\'" 'display "​@")   ;Abbrev
