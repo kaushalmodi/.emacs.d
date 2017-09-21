@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-13 14:20:37 kmodi>
+;; Time-stamp: <2017-09-21 16:52:09 kmodi>
 
 ;; All things diff
 
@@ -73,6 +73,7 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
                                         sh-mode-hook
                                         yaml-mode-hook ;tmuxp yaml configs
                                         c-mode-hook
+                                        makefile-mode-hook
                                         org-mode-hook)
       "List of hooks of major modes in which diff-hl-mode should be enabled.")
 
