@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-19 22:56:35 kmodi>
+;; Time-stamp: <2017-09-22 18:26:47 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -90,7 +90,7 @@ to be installed.")
 
 (dolist (p my-packages)
   (unless (package-installed-p p)
-    (add-to-list 'modi/missing-packages p)))
+    (add-to-list 'modi/missing-packages p :append)))
 
 (when modi/missing-packages
   (message "Emacs is now refreshing its package database...")
