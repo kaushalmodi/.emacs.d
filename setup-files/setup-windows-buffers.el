@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-07 16:23:09 kmodi>
+;; Time-stamp: <2017-09-25 16:34:57 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -222,18 +222,23 @@
 ;; Display the file path of the file in current buffer and also copy it to
 ;; the kill-ring
 ;; http://camdez.com/blog/2013/11/14/emacs-show-buffer-file-name/
-(defun modi/copy-buffer-file-name (arg)
+(defun modi/copy-buffer-file-name (option &optional quiet)
   "Show the full path to the current file in the minibuffer and also copy it.
 
 If the full file path has a sub-string \"_xyz\" where xyz is the user name,
 replace that with \"_${USER}\".
 
-    C-u COMMAND -> Copy only the file name (not the full path).
-C-u C-u COMMAND -> Copy the full path without env var replacement."
-  (interactive "p")
+If OPTION is \\='(4), copy only the file name (not the full path).
+If OPTION is \\='(16), copy the full path without the environment
+variable replacement.
+
+If QUIET is non-nil, do not print the \"Copied file name ..\" message.
+
+Return the copied file name."
+  (interactive "P")
   (let* ((file-name-full (buffer-file-name))
          (file-name (when file-name-full
-                      (cl-case arg
+                      (cl-case (car option)
                         (4 (file-name-nondirectory file-name-full)) ;C-u
                         (16 file-name-full)                         ;C-u C-u
                         (t ;If $USER==xyz, replace _xyz with _${USER} in file name
@@ -242,8 +247,11 @@ C-u C-u COMMAND -> Copy the full path without env var replacement."
     (if file-name
         (progn
           (kill-new file-name)
-          (message "Copied file name `%s'" file-name))
-      (error "Buffer not visiting a file"))))
+          (unless quiet
+            (message "Copied file name `%s'" file-name))
+          file-name)                    ;Return value
+      (error "Buffer not visiting a file")
+      nil)))
 
 ;;; Revert buffer
 (defun modi/revert-all-file-buffers ()
