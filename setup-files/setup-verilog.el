@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-18 10:53:14 kmodi>
+;; Time-stamp: <2017-09-26 15:49:55 kmodi>
 
 ;; Verilog
 
@@ -733,6 +733,20 @@ _a_lways         _f_or              _g_enerate         _O_utput
 
       ;; Stop cluttering my buffer list by not opening all the `included files.
       (modi/verilog-do-not-read-includes-defines-mode 1)
+
+      ;; Remove highlighting of AMS keywords
+      (setq verilog-font-lock-keywords
+            (delete (rassoc 'verilog-font-lock-ams-face verilog-font-lock-keywords)
+                    verilog-font-lock-keywords))
+      (setq verilog-font-lock-keywords-1
+            (delete (rassoc 'verilog-font-lock-ams-face verilog-font-lock-keywords-1)
+                    verilog-font-lock-keywords-1))
+      (setq verilog-font-lock-keywords-2
+            (delete (rassoc 'verilog-font-lock-ams-face verilog-font-lock-keywords-2)
+                    verilog-font-lock-keywords-2))
+      (setq verilog-font-lock-keywords-3
+            (delete (rassoc 'verilog-font-lock-ams-face verilog-font-lock-keywords-3)
+                    verilog-font-lock-keywords-3))
 
       (with-eval-after-load 'outshine
         ;; Do not require the "// *" style comments used by `outshine' to
