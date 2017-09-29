@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-06 17:41:54 kmodi>
+;; Time-stamp: <2017-09-29 16:17:35 kmodi>
 
 ;;; Compile
 
@@ -9,7 +9,8 @@
     ;; http://stackoverflow.com/a/13408008/1219634
     (require 'ansi-color)
     (defun modi/colorize-compilation-buffer ()
-      (ansi-color-apply-on-region compilation-filter-start (point)))
+      (unless (derived-mode-p 'ag-mode) ;Don't mess up colors in Ag results buffer
+        (ansi-color-apply-on-region compilation-filter-start (point))))
     (add-hook 'compilation-filter-hook #'modi/colorize-compilation-buffer)))
 
 ;;; Smart Compile
