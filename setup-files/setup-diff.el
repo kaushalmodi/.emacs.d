@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-21 16:52:09 kmodi>
+;; Time-stamp: <2017-09-30 22:15:18 kmodi>
 
 ;; All things diff
 
@@ -30,8 +30,7 @@
 ;;;; vc
 (use-package vc
   :bind (:map modi-mode-map
-         ("C-x v =" . modi/vc-diff)
-         ("C-x v H" . vc-region-history)) ; New command in emacs 25.x
+         ("C-x v =" . modi/vc-diff))
   :config
   (progn
     (defun modi/vc-diff (no-whitespace)
@@ -212,3 +211,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 
 (provide 'setup-diff)
+
+
+;; The awesome `vc-region-history' is now bound to 'C-x v h' in emacs 26.1.
+;; Yay! http://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-26&id=5b45e7e1c337ddcc357b91755500d3771459be94
