@@ -32,12 +32,12 @@
 ;;  Prettify symbols
 
 ;;; Variables
-(setq inhibit-startup-message t) ; No splash screen at startup
-(setq scroll-step 1) ; Scroll 1 line at a time
-(setq tooltip-mode nil) ; Disable tooltip appearance on mouse hover
-(setq frame-resize-pixelwise t) ; Allow frame size to inc/dec by a pixel
-(setq visible-bell t) ; Enable visible bell or screen blink to happen on error
-(setq-default fill-column 80) ; default 70
+(setq inhibit-startup-message t)     ;No splash screen at startup
+(setq scroll-step 1)                 ;Scroll 1 line at a time
+(setq tooltip-mode nil)              ;Disable tooltip appearance on mouse hover
+(setq frame-resize-pixelwise t)      ;Allow frame size to inc/dec by a pixel
+(setq visible-bell t)    ;Enable visible bell or screen blink to happen on error
+(setq-default fill-column 80)           ;Default 70
 
 (defun modi/is-font (fontname)
   "Return non-nil if the default font matches FONTNAME."
@@ -72,9 +72,9 @@ This variable is to be updated when changing themes.")
 (>=e "25.0"
     (progn
       ;; Do not resize the frame when `menu-bar-mode' is toggled.
-      (add-to-list 'frame-inhibit-implied-resize 'menu-bar-lines) ; default nil on GTK+
+      (add-to-list 'frame-inhibit-implied-resize 'menu-bar-lines) ;Default nil on GTK+
       (bind-key "<f2>" #'menu-bar-mode modi-mode-map)
-      (key-chord-define-global "2w" #'menu-bar-mode)) ; alternative to F2
+      (key-chord-define-global "2w" #'menu-bar-mode)) ;Alternative to F2
   (progn
     (defvar bkp--frame-text-height-px (frame-text-height)
       "Backup of the frame text height in pixels.")
@@ -96,16 +96,18 @@ Also restore the original frame size when disabling the menu bar."
         (when (null menu-bar-mode)
           (set-frame-size nil bkp--frame-text-width-px bkp--frame-text-height-px :pixelwise))))
     (bind-key "<f2>" #'modi/toggle-menu-bar modi-mode-map)
-    (key-chord-define-global "2w" #'modi/toggle-menu-bar))) ; alternative to F2
+    (key-chord-define-global "2w" #'modi/toggle-menu-bar))) ;Alternative to F2
 
 ;;;; Tool bar
-(if (fboundp 'tool-bar-mode)   (tool-bar-mode -1)) ; do not show the tool bar with icons on the top
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))            ;Do not show the tool bar with icons on the top
 (>=e "25.0"
     ;; Do not resize the frame when toggling `tool-bar-mode'
     (add-to-list 'frame-inhibit-implied-resize 'tool-bar-lines))
 
 ;;;; Scroll bar
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) ; disable the scroll bars
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))                 ;Disable the scroll bars
 
 ;;; Themes
 ;;                     THEME-NAME      DARK   FCI-RULE-COLOR
@@ -120,7 +122,7 @@ Also restore the original frame size when disabling the menu bar."
                       (ample-light     'light "gray")
                       (leuven          'light "gray")
                       (twilight-bright 'light "gray")
-                      (default         'light "gray")) ; default emacs theme
+                      (default         'light "gray")) ;Default emacs theme
   "Alist of themes I tend to switch to frequently.")
 
 (defun my/disable-enabled-themes ()
@@ -163,7 +165,7 @@ the smart-mode-line theme."
        (with-eval-after-load 'setup-linum
          (modi/blend-linum))
        (with-eval-after-load 'smart-mode-line
-         (sml/apply-theme ,dark nil :silent)) ; apply sml theme silently
+         (sml/apply-theme ,dark nil :silent)) ;Apply sml theme silently
        (when (not (bound-and-true-p disable-pkg-fci))
          (with-eval-after-load 'setup-fci
            ;; Below commented code does not work
@@ -178,7 +180,7 @@ the smart-mode-line theme."
              my/themes)))
 
 (modi/gen-all-theme-fns)
-;; (pp (macroexpand '(modi/gen-all-theme-fns))) ; for debug
+;; (pp (macroexpand '(modi/gen-all-theme-fns))) ;For debug
 
 (defconst default-dark-theme-fn  'load-theme/smyx
   "Function to set the default dark theme.")
@@ -392,7 +394,7 @@ Font Size:     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset    
 ;;; Cursor
 ;; Change cursor color according to mode:
 ;;   read-only buffer / overwrite / regular (insert) mode
-(blink-cursor-mode -1) ; Don't blink the cursor, it's distracting!
+(blink-cursor-mode -1)                ;Don't blink the cursor, it's distracting!
 
 (defvar hcz-set-cursor-color-color "")
 (defvar hcz-set-cursor-color-buffer "")
@@ -437,7 +439,7 @@ Toggling off this mode reverts everything to their original states."
       (progn
         (setq prez-mode--buffer-name (buffer-name))
         (setq prez-mode--frame-configuration (current-frame-configuration))
-        (set-frame-size nil 110 40) ; rows and columns w h
+        (set-frame-size nil 110 40)     ;Rows and columns w h
         (delete-other-windows)
         (modi/global-font-size-adj +3 :absolute)
         (toggle-theme))
@@ -452,7 +454,7 @@ Toggling off this mode reverts everything to their original states."
 ;; F8 key can't be used as it launches the VNC menu
 ;; It can though be used with shift/ctrl/alt keys
 (bind-key "<S-f8>" #'prez-mode modi-mode-map)
-(key-chord-define-global "8i" #'prez-mode) ; alternative to S-F8
+(key-chord-define-global "8i" #'prez-mode) ;Alternative to S-F8
 
 ;;; Hidden Mode Line Mode
 ;; (works only when one window is open)
@@ -506,18 +508,18 @@ Toggling off this mode reverts everything to their original states."
   :defer t
   :config
   (progn
-    (setq whitespace-line-column nil) ; When nil, set the value to `fill-column'
+    (setq whitespace-line-column nil)  ;When nil, set the value to `fill-column'
     (setq whitespace-style
           '(face
-            trailing ; white space at end of lines
-            tabs ; tab-mark ; `tab-mark' shows tabs as '»'
-            spaces space-mark ; `space-mark' shows spaces as '.'
-            space-before-tab space-after-tab ; mix of tabs and spaces
-            ;; lines ; highlight lines that extend beyond `whitespace-line-column'
-            lines-tail ; highlight only characters beyond `whitespace-line-column'
+            trailing                    ;White space at end of lines
+            tabs                        ;tab-mark ;`tab-mark' shows tabs as '»'
+            spaces space-mark           ;`space-mark' shows spaces as '.'
+            space-before-tab space-after-tab ;Mix of tabs and spaces
+            ;; lines   ;highlight lines that extend beyond `whitespace-line-column'
+            lines-tail ;highlight only characters beyond `whitespace-line-column'
             ;; newline newline-mark
-            ;; empty ; blank lines at BOB or EOB
-            indentation)) ; highlight spaces/tabs at BOL depending on `indent-tabs-mode'
+            ;; empty ;blank lines at BOB or EOB
+            indentation)) ;highlight spaces/tabs at BOL depending on `indent-tabs-mode'
 
     ;; Do word wrapping only at word boundaries
     (defconst modi/whitespace-mode-hooks '(verilog-mode-hook
