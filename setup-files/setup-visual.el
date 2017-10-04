@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-06 18:30:53 kmodi>
+;; Time-stamp: <2017-10-04 10:01:31 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -6,10 +6,11 @@
 ;;
 ;;  Variables
 ;;  Show Paren
-;;  Bars
+;;  Bars, Dividers, and Window Elements
 ;;    Menu bar
 ;;    Tool bar
 ;;    Scroll bar
+;;    Window Dividers
 ;;  Themes
 ;;  Frame Title
 ;;  Fonts
@@ -61,7 +62,7 @@ This variable is to be updated when changing themes.")
 ;; the closing parentheses in the minibuffer.
 (show-paren-mode 1)
 
-;;; Bars
+;;; Bars, Dividers, and Window Elements
 
 ;;;; Menu bar
 ;; Do not show the menu bar with File|Edit|Options|...
@@ -108,6 +109,20 @@ Also restore the original frame size when disabling the menu bar."
 ;;;; Scroll bar
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))                 ;Disable the scroll bars
+
+;;;; Window Dividers
+(use-package frame
+  :defer t
+  :config
+  (progn
+    (setq window-divider-default-places 'right-only) ;Default 'right-only
+    ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27830#20
+    ;; Workaround on emacs 26+ to prevent fringe truncation. You need to use
+    ;; either scroll bars or window dividers to prevent that.
+    ;; I dislike the default face of `window-divider', so I customize that in my
+    ;; `smyx-theme`.
+    (setq window-divider-default-right-width 1) ;Default 6
+    (window-divider-mode 1)))
 
 ;;; Themes
 ;;                     THEME-NAME      DARK   FCI-RULE-COLOR
