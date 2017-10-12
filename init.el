@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-11 16:01:46 kmodi>
+;; Time-stamp: <2017-10-12 17:36:42 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -364,15 +364,21 @@ need Org version to be at least 9.x.")
   "Do font check, then remove self from `focus-in-hook'; need to run this just once."
   (require 'setup-font-check)
   (remove-hook 'focus-in-hook #'modi/font-check))
+;; http://lists.gnu.org/archive/html/help-gnu-emacs/2016-05/msg00148.html
 ;; For non-daemon, regular emacs launches, the frame/fonts are loaded *before*
-;; the emacs config is read. But when emacs is launched as a daemon (using
-;; emacsclient, the fonts are not actually loaded until the point when the
-;; `after-make-frame-functions' hook is run. But even at that point, the frame
-;; is not yet selected (for the daemon case). Without a selected frame, the
-;; `find-font' will not work correctly. So we do the font check in
-;; `focus-in-hook' instead by which all the below are true:
+;; the emacs config is read.
+;;
+;; But when emacs is launched as a daemon (using emacsclient, the fonts are not
+;; actually loaded until the point when the `after-make-frame-functions' hook is
+;; run.
+;;
+;; But even at that point, the frame is not yet selected (for the daemon
+;; case). Without a selected frame, the `find-font' will not work correctly!
+;;
+;; So we do the font check in `focus-in-hook' instead, by which time in the
+;; emacs startup process, all of the below are true:
 ;;  - Fonts are loaded (in both daemon and non-daemon cases).
-;;  - The frame is selected and so `find-font' calls work correctly.
+;;  - The frame is also selected, and so `find-font' calls work correctly.
 (add-hook 'focus-in-hook #'modi/font-check)
 
 (when (and (bound-and-true-p emacs-initialized)
