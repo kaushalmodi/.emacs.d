@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-04 10:01:31 kmodi>
+;; Time-stamp: <2017-10-13 11:45:42 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -31,6 +31,7 @@
 ;;  Whitespace Mode/Show Long Lines
 ;;  Narrow/Widen
 ;;  Prettify symbols
+;;  Visually differentiate confusing characters
 
 ;;; Variables
 (setq inhibit-startup-message t)     ;No splash screen at startup
@@ -604,6 +605,34 @@ narrowed."
 (with-eval-after-load 'setup-font-check
   (when (modi/is-font "Pragmata")
     (require 'setup-pragmata-ligatures)))
+
+;;; Visually differentiate confusing characters
+;; https://emacs.stackexchange.com/a/9627/115
+(defface modi/highlight-confusing
+  '((t (:foreground "black"
+        :background "#b0b0b0")))
+  "Face used to highlight confusing characters.
+Used in `modi/highlight-confusing-chars'.")
+
+(defun modi/highlight-confusing-chars ()
+  "Highlight confusing characters in different glyphs + face.
+
+EN DASH          -> 2 Hyphens
+EM DASH          -> 3 Hyphens
+ZERO WIDTH SPACE -> ∅
+
+All glyphs are shown in `modi/highlight-confusing' face."
+  (let* ((glyph-en-dash (make-glyph-code ?- 'modi/highlight-confusing)) ;HYPHEN-MINUS follows that ?
+         (glyph-em-dash glyph-en-dash)  ;HYPHEN-MINUS follows that ?
+         (glyph-zws (make-glyph-code ?∅ 'modi/highlight-confusing)))
+    (when (not buffer-display-table)
+      (setq buffer-display-table (make-display-table)))
+    (aset buffer-display-table ?– `[,glyph-en-dash ,glyph-en-dash]) ;EN DASH follows that ?
+    (aset buffer-display-table ?— `[,glyph-em-dash ,glyph-em-dash ,glyph-em-dash]) ;EM DASH follows that ?
+    (aset buffer-display-table ?​ `[,glyph-zws])))
+(dolist (hook '(prog-mode-hook
+                org-mode-hook))
+  (add-hook hook #'modi/highlight-confusing-chars))
 
 
 (provide 'setup-visual)
