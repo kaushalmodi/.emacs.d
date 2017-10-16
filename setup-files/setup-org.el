@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-13 11:59:32 kmodi>
+;; Time-stamp: <2017-10-16 12:25:32 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -717,11 +717,21 @@ See `org-latex-format-headline-function' for details."
         ;; http://thread.gmane.org/gmane.emacs.orgmode/104502/focus=104526
         (defun modi/org-html-postamble-fn (info)
           "My custom postamble for Org to HTML exports.
-INFO is the property list of export options."
+INFO is the property list of export options.
+
+Date is not included in the postable if date is not set using
+\"#+DATE\" keyword, or if it is set to nil using \"#+DATE:\" in
+the Org document.
+
+Author is not included in the postable if author is set to nil
+using \"#+AUTHOR:\" in the Org document."
           (let* ((author (car (plist-get info :author)))
+                 ;; Replace dots, if any, with spaces: "First.Last" -> "First Last"
+                 (author (replace-regexp-in-string "\\." " " author))
                  (creator (plist-get info :creator))
                  (date-raw (car (org-export-get-date info)))
-                 (date (org-export-data date-raw info))
+                 (date (when date-raw
+                         (org-export-data date-raw info)))
                  (d1 "<div style=\"display: inline\" ")
                  (d2 "</div>"))
             (concat "Exported using "
