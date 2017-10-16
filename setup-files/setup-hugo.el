@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-08 13:50:17 kmodi>
+;; Time-stamp: <2017-10-16 08:23:14 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -18,7 +18,11 @@
     ;; `pygmentsCodeFences' to `true' in Hugo site `config.toml', as syntax
     ;; highlighting for Org code blocks is not yet supported by Pygments:
     ;; https://github.com/kaushalmodi/ox-hugo/issues/60
-    (setq org-hugo-langs-no-descr-in-code-fences '(org))))
+    ;; (setq org-hugo-langs-no-descr-in-code-fences '(org))
+    ;; Mon Oct 16 08:22:33 EDT 2017 - kmodi
+    ;; This is not needed if using the Chroma syntax highlighter (default since
+    ;; Hugo 0.28).
+    ))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
