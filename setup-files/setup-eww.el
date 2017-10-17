@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-07 16:18:28 kmodi>
+;; Time-stamp: <2017-10-17 08:14:29 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -14,8 +14,10 @@
     (bind-to-modi-map "e" #'eww-open-file))
   :config
   (progn
+    (defvar modi/eww-google-search-url "https://www.google.com/search?q="
+      "URL for Google searches.")
+    (setq eww-search-prefix modi/eww-google-search-url)
     ;; (setq eww-search-prefix "https://duckduckgo.com/html/?q=")
-    (setq eww-search-prefix "https://www.google.com/search?q=")
     (setq eww-download-directory "~/downloads")
     (setq eww-form-checkbox-symbol "[ ]")
     ;; (setq eww-form-checkbox-symbol "☐") ; Unicode hex 2610
@@ -69,26 +71,46 @@ See the `eww-search-prefix' variable for the search engine used."
             (eww search-string)
           (call-interactively #'eww))))
 
+    ;; Tue Oct 17 08:00:57 EDT 2017 - kmodi
+    ;; duckduckgo is not included in the below alist because
+    ;; `shr-probe-and-copy-url' does not work on duckduckgo search result URLs.
+    (defvar modi/eww-search-alist '((modi/eww-google-search-url . "[[:digit:]]+ results[[:blank:]]*$"))
+      "Alist of search engines and regexp matching the start of results.
+The elements are of type (SEARCH-PREFIX . REGEXP) where
+SEARCH-PREFIX is a prefix URL as would be used by
+`eww-search-prefix', and REGEXP is a regular expression to match
+the start of search results.")
+
     (defun modi/eww--go-to-first-search-result (search-term)
       "Navigate to the first search result in the *eww* buffer."
       ;; Keep on burying the current buffer if it turns out to be an eww buffer.
       (while (string-match "^\\*?eww" (buffer-name))
         (bury-buffer))
-      ;; Start a new eww search.
-      (let ((eww-search-prefix "https://www.google.com/search?q="))
-        (eww search-term))
-      (let* ((max-wait 5)                 ;Seconds
+      (let* ((eww-search-prefix eww-search-prefix) ;Use the global value of `eww-search-prefix' by default
+             (start-results-re
+              (let ((re (cdr (assoc eww-search-prefix modi/eww-search-alist))))
+                (unless re
+                  (message "Using Google search because `modi/eww-search-alist' does not have an entry for %S" eww-search-prefix)
+                  (setq eww-search-prefix modi/eww-google-search-url)
+                  (setq re (cdr (assoc eww-search-prefix modi/eww-search-alist))))
+                re))
+             (max-wait 5)                 ;Seconds
              (search-repeat-interval 0.1) ;Seconds
              (max-trials (floor max-wait search-repeat-interval))
              (start-time (current-time))
              (n 1))
+        (unless start-results-re
+          ;; This condition would be entered only if `modi/eww-search-alist' is
+          ;; messed up badly.
+          (user-error "`modi/eww-search-alist' does not contain an entry for %S" eww-search-prefix))
+        (eww search-term)               ;Start a new eww search
         ;; The while loop will keep on repeating every `search-repeat-interval'
         ;; seconds till the return value of `eww-links-at-point' is non-nil.
         (catch 'break
           (while (<= n max-trials)
             (goto-char (point-min))     ;Go to the top of the buffer
             ;; Go to the start of results
-            (re-search-forward "[[:digit:]]+ results[[:blank:]]*$" nil :noerror)
+            (re-search-forward start-results-re nil :noerror)
             (shr-next-link)             ;Go to the first search result
             (when (eww-links-at-point)
               (throw 'break nil))
