@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-17 08:14:29 kmodi>
+;; Time-stamp: <2017-10-20 11:45:46 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -74,7 +74,7 @@ See the `eww-search-prefix' variable for the search engine used."
     ;; Tue Oct 17 08:00:57 EDT 2017 - kmodi
     ;; duckduckgo is not included in the below alist because
     ;; `shr-probe-and-copy-url' does not work on duckduckgo search result URLs.
-    (defvar modi/eww-search-alist '((modi/eww-google-search-url . "[[:digit:]]+ results[[:blank:]]*$"))
+    (defvar modi/eww-search-alist `((,modi/eww-google-search-url . "[[:digit:]]+ results[[:blank:]]*$"))
       "Alist of search engines and regexp matching the start of results.
 The elements are of type (SEARCH-PREFIX . REGEXP) where
 SEARCH-PREFIX is a prefix URL as would be used by
