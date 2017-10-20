@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-20 11:57:28 kmodi>
+;; Time-stamp: <2017-10-20 16:47:58 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -290,76 +290,104 @@ Execute this command while the point is on or after the hyper-linked Org link."
 
     (defun modi/org-template-expand (str &optional lang)
       "Expand Org template."
-      (let (beg old-beg end content)
-        ;; Save restriction to automatically undo the upcoming `narrow-to-region'
-        (save-restriction
-          (when (use-region-p)
-            (setq beg (region-beginning))
-            (setq end (region-end))
-            ;; Note that regardless of the direction of selection, we will always
-            ;; have (region-beginning) < (region-end).
-            (save-excursion
-              ;; If `point' is at `end', exchange point and mark so that now the
-              ;; `point' is now at `beg'
-              (when (> (point) (mark))
-                (exchange-point-and-mark))
-              ;; Insert a newline if `beg' is *not* at beginning of the line.
-              ;; Example: You have ^abc$ where ^ is bol and $ is eol.
-              ;;          "bc" is selected and <e is pressed to result in:
-              ;;            a
-              ;;            #+BEGIN_EXAMPLE
-              ;;            bc
-              ;;            #+END_EXAMPLE
-              (when (/= beg (line-beginning-position))
-                (electric-indent-just-newline 1)
-                (setq old-beg beg)
-                (setq beg (point))
-                ;; Adjust the `end' due to newline
-                (setq end (+ end (- beg old-beg)))))
-            (save-excursion
-              ;; If `point' is at `beg', exchange point and mark so that now the
-              ;; `point' is now at `end'
-              (when (< (point) (mark))
-                (exchange-point-and-mark))
-              ;; If the `end' position is at the beginning of a line decrement
-              ;; the position by 1, so that the resultant position is eol on
-              ;; the previous line.
-              (when (= end (line-beginning-position))
-                (setq end (1- end)))
-              ;; Insert a newline if `point'/`end' is *not* at end of the line.
-              ;; Example: You have ^abc$ where ^ is bol and $ is eol.
-              ;;          "a" is selected and <e is pressed to result in:
-              ;;            #+BEGIN_EXAMPLE
-              ;;            a
-              ;;            #+END_EXAMPLE
-              ;;            bc
-              (when (not (looking-at "[[:blank:]]*$"))
-                (electric-indent-just-newline 1)))
-            ;; Narrow to region so that the text surround the region does
-            ;; not mess up the upcoming `org-try-structure-completion' eval
-            (narrow-to-region beg end)
-            (setq content (delete-and-extract-region beg end)))
-          (insert str)
-          (org-try-structure-completion)
-          (when (string= "<s" str)
-            (cond
-             (lang
-              (insert lang)
-              (forward-line))
-             ((and content (not lang))
-              (insert "???")
-              (forward-line))
-             (t
-              )))
-          ;; A special case for org source blocks.. need to escape *'s and #'s
-          ;; with commas.
-          ;; * -> ,*    ,* -> ,,*    #+ -> ,#+    ,#+ -> ,,#+ -- (org) Literal examples
+      (let* ((is-region? (use-region-p))
+             (beg (if is-region?
+                      (region-beginning)
+                    (point)))
+             ;; Copy marker for end so that if characters are added/removed
+             ;; before the `end', the reference end point is updated (because of
+             ;; being a marker).
+             (end (when is-region?
+                    (copy-marker (region-end) t)))
+             content post-src column)
+
+        (goto-char beg)
+
+        ;; Save the indentation level of the content (if region is selected) or
+        ;; the point (if region is not selected).
+        (save-excursion
+          (forward-line 0)            ;Go to BOL
+          (when (looking-at "[[:blank:]]")
+            (back-to-indentation)
+            (setq column (current-indentation))))
+
+        (when is-region?
+          ;; Update `beg' if needed..
+          ;; If `beg' is at BOL, update `beg' to be at the indentation.
+          (when (and (bolp)
+                     column)
+            (back-to-indentation)
+            (setq beg (point)))
+
+          ;; Insert a newline if `beg' is *not* at BOL.
+          ;; Example: You have ^abc$ where ^ is BOL and $ is EOL.
+          ;;          "bc" is selected and pressing <e should result in:
+          ;;            a
+          ;;            #+BEGIN_EXAMPLE
+          ;;            bc
+          ;;            #+END_EXAMPLE
+          (unless (or (bolp)
+                      (looking-back "^[[:blank:]]*"))
+            (insert "\n")
+            (when column
+              (indent-to column))
+            (setq beg (point)))
+
+          ;; Update `end' if needed ..
+          (goto-char end)
+          (cond
+           ((bolp)                      ;`end' is at BOL
+            (skip-chars-backward " \n\t")
+            (setq end (point)))
+           ((and (not (bolp))           ;`end' is neither at BOL nor at EOL
+                 (not (looking-at "[[:blank:]]*$")))
+            ;; Insert a newline if `end' is neither at BOL nor EOL
+            ;; Example: You have ^abc$ where ^ is bol and $ is eol.
+            ;;          "a" is selected and pressing <e should result in:
+            ;;            #+BEGIN_EXAMPLE
+            ;;            a
+            ;;            #+END_EXAMPLE
+            ;;            bc
+            (insert "\n")
+            (when column
+              (indent-to column))
+            (skip-chars-backward " \n\t")
+            (setq end (point)))
+           (t          ;`end' is either at EOL or looking at trailing whitespace
+            ))
+          ;; Now delete the content in the selected region and save it to
+          ;; `content'.
+          (setq content (delete-and-extract-region beg end)))
+
+        ;; Insert the `str' required for template expansion (example: "<e").
+        (insert str)
+        (org-try-structure-completion)
+        (when (string= "<s" str)
+          (cond
+           (lang
+            (insert lang)
+            (forward-line))
+           ((and content (not lang))
+            (setq post-src (point))
+            (forward-line))
+           (t
+            )))
+        ;; At this point the cursor will be between the #+BEGIN and #+END lines.
+        ;; Now also indent the point forward if needed.
+        (when column
+          (indent-to column))
+
+        ;; Now if a region was selected, and `content' was saved from that,
+        ;; paste it back in.
+        (when content
+          ;; A special case for org source blocks.. need to escape "*" and "#+"
+          ;; with commas -- (org) Literal examples.
           (when (string= "org" lang)
-            (setq content (replace-regexp-in-string "^,?\\(\\*\\|#\\+\\)" ",\\&" content)))
-          ;; At this point the cursor will be between the #+BEGIN and #+END lines
-          (when content
-            (insert content)
-            (deactivate-mark)))))
+            (setq content (org-escape-code-in-string content)))
+          (insert content)
+          (deactivate-mark)
+          (when post-src ;Case where user needs to specify the #+BEGIN_SRC language
+            (goto-char post-src)))))
 
     (defhydra hydra-org-template (:color blue
                                   :hint nil)
@@ -401,7 +429,7 @@ region is selected. Else call `self-insert-command'."
       (let ((regionp (use-region-p)))
         (if (or regionp
                 (and (not regionp)
-                     (looking-back "^")))
+                     (looking-back "^[[:blank:]]*")))
             (hydra-org-template/body)
           (self-insert-command 1))))
 
