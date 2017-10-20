@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-16 12:25:32 kmodi>
+;; Time-stamp: <2017-10-20 11:57:28 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -351,6 +351,11 @@ Execute this command while the point is on or after the hyper-linked Org link."
               (forward-line))
              (t
               )))
+          ;; A special case for org source blocks.. need to escape *'s and #'s
+          ;; with commas.
+          ;; * -> ,*    ,* -> ,,*    #+ -> ,#+    ,#+ -> ,,#+ -- (org) Literal examples
+          (when (string= "org" lang)
+            (setq content (replace-regexp-in-string "^,?\\(\\*\\|#\\+\\)" ",\\&" content)))
           ;; At this point the cursor will be between the #+BEGIN and #+END lines
           (when content
             (insert content)
@@ -362,13 +367,14 @@ Execute this command while the point is on or after the hyper-linked Org link."
 org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext           _I_NCLUDE:
                _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
                _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:         _A_SCII:
-               ^^              ^^             _S_hell             _p_ython         ^^               ^^
+               ^^              _o_rg          _S_hell             _p_ython         ^^               ^^
 "
       ("s" (modi/org-template-expand "<s")) ;#+BEGIN_SRC ... #+END_SRC
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
       ("v" (modi/org-template-expand "<s" "systemverilog"))
       ("m" (modi/org-template-expand "<s" "matlab"))
       ("n" (modi/org-template-expand "<s" "nim"))
+      ("o" (modi/org-template-expand "<s" "org"))
       ("S" (modi/org-template-expand "<s" "shell"))
       ("p" (modi/org-template-expand "<s" "python"))
       ("t" (modi/org-template-expand "<s" "text"))
@@ -386,7 +392,7 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("i" (modi/org-template-expand "<i")) ;#+INDEX: line
       ("I" (modi/org-template-expand "<I")) ;#+INCLUDE: line
       ("<" self-insert-command "<")
-      ("o" nil "quit"))
+      ("Q" nil "quit"))
 
     (defun modi/org-template-maybe ()
       "Insert org-template if point is at the beginning of the line, or is a
