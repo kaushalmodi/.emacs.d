@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-20 16:47:58 kmodi>
+;; Time-stamp: <2017-10-23 11:30:46 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -289,7 +289,21 @@ Execute this command while the point is on or after the hyper-linked Org link."
     ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 
     (defun modi/org-template-expand (str &optional lang)
-      "Expand Org template."
+      "Expand Org template based on STR.
+
+STR is always prefixed with \"<\".  The string following that
+\"<\" must match with the `car' of one of the elements in
+`org-structure-template-alist' (examples: \"<e\", \"<s\").
+
+If no region is selected, this function behaves like
+`org-try-structure-completion' (See (org) Easy templates).  If a
+region is selected, the selected text is wrapped with that org
+template.
+
+If the \"#+BEGIN_SRC\" block is inserted and LANG is a string,
+that source block is annotated with that LANG.  Instead, if LANG
+is nil, point is returned to the end of the \"#+BEGIN_SRC\" line
+after the template insertion."
       (let* ((is-region? (use-region-p))
              (beg (if is-region?
                       (region-beginning)
@@ -338,7 +352,7 @@ Execute this command while the point is on or after the hyper-linked Org link."
           (cond
            ((bolp)                      ;`end' is at BOL
             (skip-chars-backward " \n\t")
-            (setq end (point)))
+            (set-marker end (point)))
            ((and (not (bolp))           ;`end' is neither at BOL nor at EOL
                  (not (looking-at "[[:blank:]]*$")))
             ;; Insert a newline if `end' is neither at BOL nor EOL
@@ -352,22 +366,28 @@ Execute this command while the point is on or after the hyper-linked Org link."
             (when column
               (indent-to column))
             (skip-chars-backward " \n\t")
-            (setq end (point)))
+            (set-marker end (point)))
            (t          ;`end' is either at EOL or looking at trailing whitespace
             ))
           ;; Now delete the content in the selected region and save it to
           ;; `content'.
-          (setq content (delete-and-extract-region beg end)))
+          (setq content (delete-and-extract-region beg end))
+          ;; Make the `end' marker point to nothing as its job is done.
+          ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-09/msg00049.html
+          ;; (elisp) Overview of Markers
+          (set-marker end nil))
 
         ;; Insert the `str' required for template expansion (example: "<e").
         (insert str)
         (org-try-structure-completion)
-        (when (string= "<s" str)
+        (when (let* ((case-fold-search t)) ;Ignore case
+                (looking-back "^[[:blank:]]*#\\+BEGIN_SRC[[:blank:]]+"))
           (cond
-           (lang
+           ((stringp lang)
             (insert lang)
             (forward-line))
-           ((and content (not lang))
+           ((and (null lang)
+                 content)
             (setq post-src (point))
             (forward-line))
            (t
@@ -380,9 +400,15 @@ Execute this command while the point is on or after the hyper-linked Org link."
         ;; Now if a region was selected, and `content' was saved from that,
         ;; paste it back in.
         (when content
-          ;; A special case for org source blocks.. need to escape "*" and "#+"
+          ;; A special case for verbatim blocks.. need to escape "*" and "#+"
           ;; with commas -- (org) Literal examples.
-          (when (string= "org" lang)
+          ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00349.html
+          (when (save-excursion
+                  (previous-line)
+                  (forward-line 0)
+                  (let* ((case-fold-search t)) ;Ignore case
+                    (looking-at-p (concat "^[[:blank:]]*#\\+BEGIN_"
+                                          (regexp-opt '("EXAMPLE" "EXPORT" "SRC"))))))
             (setq content (org-escape-code-in-string content)))
           (insert content)
           (deactivate-mark)
@@ -423,12 +449,13 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("Q" nil "quit"))
 
     (defun modi/org-template-maybe ()
-      "Insert org-template if point is at the beginning of the line, or is a
-region is selected. Else call `self-insert-command'."
+      "Insert org-template if point is at the beginning of the
+line, or if a region is selected.  Else call
+`self-insert-command'."
       (interactive)
-      (let ((regionp (use-region-p)))
-        (if (or regionp
-                (and (not regionp)
+      (let ((is-region? (use-region-p)))
+        (if (or is-region?
+                (and (not is-region?)
                      (looking-back "^[[:blank:]]*")))
             (hydra-org-template/body)
           (self-insert-command 1))))
