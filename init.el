@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-12 17:36:42 kmodi>
+;; Time-stamp: <2017-10-26 12:16:29 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -164,6 +164,7 @@ need Org version to be at least 9.x.")
   "A list of packages to ensure are installed at launch")
 
 ;; Basic requires
+(require 'subr-x)                       ;For when-let*, if-let*, ..
 ;; Place `setup-var-overrides.el' with `(provide 'setup-var-overrides)' in
 ;; `user-personal-directory'
 (add-to-list 'load-path user-personal-directory)
