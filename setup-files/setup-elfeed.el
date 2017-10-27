@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-12-02 15:38:54 kmodi>
+;; Time-stamp: <2017-10-27 17:42:59 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
@@ -8,7 +8,8 @@
   :preface
   (progn
     (setq elfeed-db-directory
-          (let ((dir (locate-user-emacs-file "elfeed_db/"))) ; must end with /
+          (let ((dir (locate-user-emacs-file
+                      (concat "elfeed_db_" emacs-version-short "/")))) ; must end with /
             (make-directory dir :parents)
             dir)))
   :config
@@ -37,7 +38,7 @@
 
     (bind-keys
      :map elfeed-search-mode-map
-      ("R" . elfeed-mark-all-as-read))
+     ("R" . elfeed-mark-all-as-read))
 
     (bind-to-modi-map ";" #'elfeed)))
 
