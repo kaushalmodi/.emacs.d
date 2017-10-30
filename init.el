@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-29 23:07:04 kmodi>
+;; Time-stamp: <2017-10-30 12:39:56 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -99,7 +99,6 @@ need Org version to be at least 9.x.")
     multi-term
     multiple-cursors
     neotree
-    nlinum ; better performance than linum
     nov    ;Ebook (.epub) reader
     org-cliplink ; paste copied links as well-formatted org-mode links with desc
     org-tree-slide
@@ -151,6 +150,7 @@ need Org version to be at least 9.x.")
     twilight-bright-theme
     twilight-anti-bright-theme
     ;; Crypt
+    ;; nlinum ; better performance than linum ; Sticking to frozen version 1.7 in my config
     ;; bookmark+ ; able to bookmark desktop sessions
     ;; ox-twbs ; export to twitter bootstrap html < fork (supports org 9.0+)
     ;; ox-reveal ; used to export to HTML slides; < git clone

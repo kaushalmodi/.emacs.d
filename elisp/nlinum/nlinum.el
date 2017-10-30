@@ -1,10 +1,10 @@
 ;;; nlinum.el --- Show line numbers in the margin  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012, 2014, 2015, 2016  Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2014-2017  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Keywords: convenience
-;; Version: 1.6
+;; Version: 1.7
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 ;; - Add ability to highlight current line number.
 ;; - New custom variable `nlinum-highlight-current-line' and
 ;;   face `nlinum-current-line'.
+;; - New `nlinum' group in Custom.
 
 ;; v1.3:
 ;; - New custom variable `nlinum-format'.

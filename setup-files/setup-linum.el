@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-30 11:36:27 kmodi>
+;; Time-stamp: <2017-10-30 12:52:01 kmodi>
 
 ;; Line number package manager
 
@@ -135,6 +135,8 @@ theme."
 ;;; nlinum
 ;; http://elpa.gnu.org/packages/nlinum.html
 (use-package nlinum
+  ;; :load-path "GNU-Elpa/packages/nlinum"
+  :load-path "elisp/nlinum" ;Sticking to nlinum 1.7 for now because https://debbugs.gnu.org/cgi/bugreport.cgi?bug=29031#11
   :config
   (progn
     (setq nlinum-format " %d ")     ;1 space padding on each side of line number
@@ -236,11 +238,15 @@ function is added to the `after-make-frame-functions' hook."
     ;; in the below error in emacs 24.5:
     ;;   *ERROR*: Invalid face: linum
     (add-hook 'after-make-frame-functions #'modi/linum--enable)
-  ;; Even when running in non-daemon mode, run `modi/linum--enable' only after the
-  ;; init has loaded, so that the last modified value of `modi/linum-fn-default'
-  ;; if any in setup-personal.el is the one effective, not its standard value
-  ;; in its defvar form above.
-  (add-hook 'after-init-hook #'modi/linum--enable))
+  ;; Even when running in non-daemon mode, run `modi/linum--enable' only after
+  ;; the init has loaded, so that the last modified value of
+  ;; `modi/linum-fn-default' if any in setup-personal.el is the one effective,
+  ;; not its standard value in its defvar form above.
+  ;;
+  ;; Mon Oct 30 12:50:52 EDT 2017 - kmodi
+  ;; Use `window-setup-hook' instead of `after-init-hook', else emacs startup
+  ;; freezes on emacs 25.x - https://debbugs.gnu.org/cgi/bugreport.cgi?bug=29031.
+  (add-hook 'window-setup-hook #'modi/linum--enable))
 
 
 (provide 'setup-linum)
