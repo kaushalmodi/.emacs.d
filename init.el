@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-26 12:16:29 kmodi>
+;; Time-stamp: <2017-10-29 23:07:04 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -248,6 +248,7 @@ need Org version to be at least 9.x.")
 (require 'setup-header2)
 (require 'setup-highlight)
 (require 'setup-htmlize)
+(require 'setup-hugo)
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
 (if (bound-and-true-p disable-pkg-ivy)
@@ -315,8 +316,6 @@ need Org version to be at least 9.x.")
 (when (executable-find "sml")
   (require 'setup-sml))
 (require 'setup-tcl)
-(when (executable-find "hugo")
-  (require 'setup-hugo))
 (require 'setup-verilog)
 (require 'setup-web-mode)
 (require 'setup-yaml-mode)
