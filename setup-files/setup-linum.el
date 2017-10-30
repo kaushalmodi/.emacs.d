@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-11 12:28:39 kmodi>
+;; Time-stamp: <2017-10-30 11:36:27 kmodi>
 
 ;; Line number package manager
 
@@ -177,19 +177,25 @@ When LINUM-PKG is `off' or nil, linum will be disabled altogether."
     (setq linum-pkg (intern linum-pkg)))
   (cl-case linum-pkg
     (native-linum
-     (modi/turn-off-linum)
-     (modi/turn-off-nlinum)
-     (modi/turn-on-native-linum))
+     (>=e "26.0"
+         (progn
+           (modi/turn-off-linum)
+           (modi/turn-off-nlinum)
+           (modi/turn-on-native-linum))
+       (user-error "You needs emacs version 26.0 or newer to get the native line numbers feature")))
     (nlinum
-     (modi/turn-off-native-linum)
+     (>=e "26.0"
+         (modi/turn-off-native-linum))
      (modi/turn-off-linum)
      (modi/turn-on-nlinum))
     (linum
-     (modi/turn-off-native-linum)
+     (>=e "26.0"
+         (modi/turn-off-native-linum))
      (modi/turn-off-nlinum)
      (modi/turn-on-linum))
     (t                                  ;'off or nil
-     (modi/turn-off-native-linum)
+     (>=e "26.0"
+         (modi/turn-off-native-linum))
      (modi/turn-off-linum)
      (modi/turn-off-nlinum)))
   (let ((activated-str (if (or (null linum-pkg)
