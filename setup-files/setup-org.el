@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-27 16:51:19 kmodi>
+;; Time-stamp: <2017-11-05 11:22:09 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -288,12 +288,86 @@ Execute this command while the point is on or after the hyper-linked Org link."
     ;; http://oremacs.com/2015/03/07/hydra-org-templates
     ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 
+    ;; Sun Nov 05 09:30:51 EST 2017 - kmodi
+    ;; Copy of the old "Easy Templates" feature that was removed in
+    ;; http://orgmode.org/cgit.cgi/org-mode.git/diff/lisp/org.el?id=c04e357f3d5d93484277a7e439847b1233b872bd
+    (defcustom org-easy-template-alist  ;Old `org-structure-template-alist'
+      '(("s" "#+BEGIN_SRC ?\n\n#+END_SRC")
+        ("e" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE")
+        ("q" "#+BEGIN_QUOTE\n?\n#+END_QUOTE")
+        ("v" "#+BEGIN_VERSE\n?\n#+END_VERSE")
+        ("V" "#+BEGIN_VERBATIM\n?\n#+END_VERBATIM")
+        ("c" "#+BEGIN_CENTER\n?\n#+END_CENTER")
+        ("C" "#+BEGIN_COMMENT\n?\n#+END_COMMENT")
+        ("l" "#+BEGIN_EXPORT latex\n?\n#+END_EXPORT")
+        ("L" "#+LaTeX: ")
+        ("h" "#+BEGIN_EXPORT html\n?\n#+END_EXPORT")
+        ("H" "#+HTML: ")
+        ("a" "#+BEGIN_EXPORT ascii\n?\n#+END_EXPORT")
+        ("A" "#+ASCII: ")
+        ("i" "#+INDEX: ?")
+        ("I" "#+INCLUDE: %file ?"))
+      "Structure completion elements.
+This is a list of abbreviation keys and values.  The value gets inserted
+if you type `<' followed by the key and then press the completion key,
+usually `TAB'.  %file will be replaced by a file name after prompting
+for the file using completion.  The cursor will be placed at the position
+of the `?' in the template.
+There are two templates for each key, the first uses the original Org syntax,
+the second uses Emacs Muse-like syntax tags.  These Muse-like tags become
+the default when the /org-mtags.el/ module has been loaded.  See also the
+variable `org-mtags-prefer-muse-templates'."
+      :group 'org-completion
+      :type '(repeat
+	      (list
+	       (string :tag "Key")
+	       (string :tag "Template"))))
+
+    (defun org-try-structure-completion ()
+      "Try to complete a structure template before point.
+This looks for strings like \"<e\" on an otherwise empty line and
+expands them."
+      (let ((l (buffer-substring (point-at-bol) (point)))
+	    a)
+        (when (and (looking-at "[ \t]*$")
+	           (string-match "^[ \t]*<\\([a-zA-Z]+\\)$" l)
+	           (setq a (assoc (match-string 1 l) org-easy-template-alist)))
+          (org-complete-expand-structure-template (+ -1 (point-at-bol)
+						     (match-beginning 1))
+                                                  a)
+          t)))
+
+    (defun org-complete-expand-structure-template (start cell)
+      "Expand a structure template."
+      (let ((rpl (nth 1 cell))
+	    (ind ""))
+        (delete-region start (point))
+        (when (string-match "\\`[ \t]*#\\+" rpl)
+          (cond
+           ((bolp))
+           ((not (string-match "\\S-" (buffer-substring (point-at-bol) (point))))
+	    (setq ind (buffer-substring (point-at-bol) (point))))
+           (t (newline))))
+        (setq start (point))
+        (when (string-match "%file" rpl)
+          (setq rpl (replace-match
+		     (concat
+		      "\""
+		      (save-match-data
+		        (abbreviate-file-name (read-file-name "Include file: ")))
+		      "\"")
+		     t t rpl)))
+        (setq rpl (mapconcat 'identity (split-string rpl "\n")
+			     (concat "\n" ind)))
+        (insert rpl)
+        (when (re-search-backward "\\?" start t) (delete-char 1))))
+
     (defun modi/org-template-expand (str &optional lang)
       "Expand Org template based on STR.
 
 STR is always prefixed with \"<\".  The string following that
 \"<\" must match with the `car' of one of the elements in
-`org-structure-template-alist' (examples: \"<e\", \"<s\").
+`org-easy-template-alist' (examples: \"<e\", \"<s\").
 
 If no region is selected, this function behaves like
 `org-try-structure-completion' (See (org) Easy templates).  If a
