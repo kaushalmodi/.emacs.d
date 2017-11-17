@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2017-05-11 16:55:04 kmodi>
+# Time-stamp: <2017-11-17 17:31:01 kmodi>
 
 # Open emacsclient with a new frame only if one does not exist.
 # http://emacs.stackexchange.com/a/12897/115
@@ -52,8 +52,8 @@ then
     # http://www.tldp.org/LDP/abs/html/parameter-substitution.html
     # ${var#Pattern} Remove from $var the shortest part of $Pattern that matches
     # the front end of $var.
-    # So if "$@" is "-nw foo.txt", ${@/#-nw/} will be just " foo.txt"
-    if [[ "${@/#-nw/}" == "$@" ]]
+    # So if "$*" is "-nw foo.txt", ${*/#-nw/} will be just " foo.txt"
+    if [[ "${*/#-nw/}" == "$*" ]]
     then
         opts="$opts -n"
     fi
