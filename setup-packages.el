@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-22 18:26:47 kmodi>
+;; Time-stamp: <2017-11-17 17:06:25 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -64,8 +64,12 @@ Emacs installation.  If Emacs is installed using
              (concat user-emacs-directory "elisp/smyx/"))
 
 ;; Add melpa package source when using package list
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
+;; Fri Nov 17 17:05:12 EST 2017 - kmodi
+;; The `system-type' for emacs in WSL is `gnu/linux' but it could be built
+;; without TLS support. So make the below condition for `no-ssl' an OR condition
+;; instead of an AND condition.
+(let* ((no-ssl (or (memq system-type '(windows-nt ms-dos))
+                   (not (gnutls-available-p))))
        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
   (add-to-list 'package-archives (cons "melpa" url) :append))
 
