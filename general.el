@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-07 12:36:03 kmodi>
+;; Time-stamp: <2017-11-20 14:13:11 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -99,7 +99,7 @@ If SKIP-DESKTOP-SAVE is non-nil, do not save the desktop. "
     "--smart-case"
     ;; "--one-device"                      ;Do not cross mounts when searching
     "--follow"                          ;Follow symlinks
-    "--ignore" "#*#")                   ;Adding "*#*#" or "#*#" to .ignore does not work for ag (works for rg)
+    "--ignore" "#*#") ;Adding "*#*#" or "#*#" to .ignore does not work for ag (works for rg)
   "Default ag arguments used in the functions in `ag', `counsel' and `projectile'
 packages.")
 

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-13 11:07:24 kmodi>
+;; Time-stamp: <2017-11-20 14:12:23 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -69,11 +69,11 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
 
     (defun modi/advice-projectile-use-ag ()
       "Always use `ag' for getting a list of all files in the project."
-      (mapconcat 'identity
-                 (append '("\\ag") ; used unaliased version of `ag': \ag
+      (mapconcat #'shell-quote-argument
+                 (append '("ag")
                          modi/ag-arguments
-                         '("-0" ; output null separated results
-                           "-g ''")) ; get file names matching the regex '' (all files)
+                         '("-0"         ;Output null separated results
+                           "-g" ""))    ;Get file names matching "" (all files)
                  " "))
 
     (defun modi/advice-projectile-use-rg ()
@@ -82,13 +82,19 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
                                            ".ignore." (getenv "USER")))
              (prj-user-ignore (when (file-exists-p prj-user-ignore-name)
                                 (concat "--ignore-file " prj-user-ignore-name))))
-        (mapconcat 'identity
-                   (append '("\\rg") ; used unaliased version of `rg': \rg
-                           modi/rg-arguments
-                           `(,prj-user-ignore) ; If nil, this will not be appended
-                           '("--null" ; output null separated results,
-                             "--files")) ; get names of all the to-be-searched files
-                                        ; same as the "-g ''" argument in ag
+        (mapconcat #'shell-quote-argument
+                   (if prj-user-ignore
+                       (append '("rg")
+                               modi/rg-arguments
+                               `(,prj-user-ignore)
+                               '("--null" ;Output null separated results
+                                 ;; Get names of all the to-be-searched files,
+                                 ;; same as the "-g ''" argument in ag.
+                                 "--files"))
+                     (append '("rg")
+                             modi/rg-arguments
+                             '("--null"
+                               "--files")))
                    " ")))
 
     ;; Use `rg' all the time if available
