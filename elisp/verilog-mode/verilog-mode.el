@@ -122,7 +122,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2017-09-14-ecdaea3-vpo"
+(defconst verilog-mode-version "2017-11-26-c039b16-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -284,7 +284,7 @@ STRING should be given if the last search was by `string-match' on STRING."
 ;; This function is lifted directly from emacs's subr.el
 ;; so that it can be used by xemacs.
 ;; The idea for this was borrowed from org-mode via this link:
-;; https://lists.gnu.org/archive/html/emacs-orgmode/2009-12/msg00032.html
+;; https://lists.gnu.org/r/emacs-orgmode/2009-12/msg00032.html
 (eval-and-compile
   (cond
    ((fboundp 'looking-back)
@@ -1069,6 +1069,18 @@ of each Verilog file that requires it, rather than being set globally."
   :group 'verilog-mode-auto
   :type 'boolean)
 (put 'verilog-auto-sense-defines-constant 'safe-local-variable 'verilog-booleanp)
+
+(defcustom verilog-auto-simplify-expressions t
+  "Non-nil means AUTOs will simplify expressions when calculating bit ranges.
+When nil, do not simply ranges, which may simplify the output,
+but may cause problems when there are multiple instantiations
+outputting to the same wire.  To maintain compatibility with
+other sites, this should be set at the bottom of each Verilog
+file that requires it, rather than being set globally."
+  :version "26.1"
+  :group 'verilog-mode-auto
+  :type 'boolean)
+(put 'verilog-auto-simplify-expressions 'safe-local-variable 'verilog-booleanp)
 
 (defcustom verilog-auto-reset-blocking-in-non t
   "Non-nil means AUTORESET will reset blocking statements.
@@ -5426,26 +5438,31 @@ Save the result unless optional NO-SAVE is t."
    ;; Remember buffer list, so don't later pickup any verilog-getopt files
    (let ((orig-buffer-list (buffer-list)))
      (mapc (lambda (buf)
-	     (when (buffer-file-name buf)
-	       (with-current-buffer buf
-		 (verilog-mode)
-		 (verilog-auto-reeval-locals)
-		 (verilog-getopt-flags))))
-	   orig-buffer-list)
+             (when (buffer-file-name buf)
+               (with-current-buffer buf
+                 (set (make-local-variable 'verilog-batch-orig-buffer-string)
+                      (buffer-string))
+                 (put 'verilog-batch-orig-buffer-string 'permanent-local t)
+                 (verilog-mode)
+                 (verilog-auto-reeval-locals)
+                 (verilog-getopt-flags))))
+           orig-buffer-list)
      ;; Process the files
-     (mapcar (lambda (buf)
-	       (when (buffer-file-name buf)
-		 (save-excursion
-		   (if (not (file-exists-p (buffer-file-name buf)))
-		       (error
-			"File not found: %s" (buffer-file-name buf)))
-		   (message "Processing %s" (buffer-file-name buf))
-		   (set-buffer buf)
-		   (funcall funref)
-		   (when (and (not no-save)
-                              (buffer-modified-p))  ; Avoid "no changes to be saved"
-		     (save-buffer)))))
-	     orig-buffer-list))))
+     (mapc (lambda (buf)
+             (when (buffer-file-name buf)
+               (save-excursion
+                 (if (not (file-exists-p (buffer-file-name buf)))
+                     (error
+                      "File not found: %s" (buffer-file-name buf)))
+                 (message "Processing %s" (buffer-file-name buf))
+                 (set-buffer buf)
+                 (funcall funref)
+                 (verilog-star-cleanup)
+                 (when (and (not no-save)
+                            (buffer-modified-p)
+                            (not (equal verilog-batch-orig-buffer-string (buffer-string))))
+                   (save-buffer)))))
+           orig-buffer-list))))
 
 (defun verilog-batch-auto ()
   "For use with --batch, perform automatic expansions as a stand-alone tool.
@@ -6424,9 +6441,11 @@ Return >0 for nested struct."
             ;;   check next word token
             (if (looking-at "\\<\\w+\\>\\|\\s-*(\\s-*\\S-+")
                 (progn (verilog-beg-of-statement)
-                       (if (looking-at (concat "\\<\\(constraint\\|"
-                                               "\\(?:\\w+\\s-*:\\s-*\\)?\\(coverpoint\\|cross\\)"
-                                               "\\|with\\)\\>\\|" verilog-in-constraint-re))
+                       (if (and
+                            (not (string-match verilog-named-block-re (buffer-substring pt (point)))) ;; Abort if 'begin' keyword is found
+                            (looking-at (concat "\\<\\(constraint\\|"
+                                                "\\(?:\\w+\\s-*:\\s-*\\)?\\(coverpoint\\|cross\\)"
+                                                "\\|with\\)\\>\\|" verilog-in-constraint-re)))
                            (setq pass 1)))))
           (if (eq pass 0)
               (progn (goto-char pt) nil) 1)))
@@ -8191,11 +8210,11 @@ Duplicate signals are also removed.  For example A[2] and A[1] become A[2:1]."
       (setq bus (verilog-sig-bits sig))
       (setq bus (and bus (verilog-simplify-range-expression bus)))
       (cond ((and bus
-		  (or (and (string-match "\\[\\([0-9]+\\):\\([0-9]+\\)\\]" bus)
+		  (or (and (string-match "^\\[\\([0-9]+\\):\\([0-9]+\\)\\]$" bus)
 			   (setq highbit (string-to-number (match-string 1 bus))
 				 lowbit  (string-to-number
 					  (match-string 2 bus))))
-		      (and (string-match "\\[\\([0-9]+\\)\\]" bus)
+		      (and (string-match "^\\[\\([0-9]+\\)\\]$" bus)
 			   (setq highbit (string-to-number (match-string 1 bus))
 				 lowbit  highbit))))
 	     ;; Combine bits in bus
@@ -8849,8 +8868,9 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 	;;(message "vrsde-s: `%s'" (match-string 1 expr))
 	(setq sig (verilog-string-remove-spaces (match-string 1 expr))
 	      expr (substring expr (match-end 0)))))
-      ;; Find [vector] or [multi][multi][multi][vector]
-      (while (string-match "^\\s-*\\(\\[[^]]+\\]\\)" expr)
+      ;; Find [vector] or [multi][multi][multi][vector] or [vector[VEC2]]
+      ;; Unfortunately Emacs regexps don't allow matching bracket searches, so just 2 deep.
+      (while (string-match "^\\s-*\\(\\[\\([^][]+\\|\\[[^][]+\\]\\)*\\]\\)" expr)
 	;;(message "vrsde-v: `%s'" (match-string 1 expr))
 	(when vec (setq multidim (cons vec multidim)))
 	(setq vec (match-string 1 expr)
@@ -8908,7 +8928,7 @@ Inserts the list of signals found, using submodi to look up each port."
 		  (verilog-string-remove-spaces (match-string-no-properties 1)) ; sig
 		  nil nil nil)) ; vec multidim mem
 		;;
-		((looking-at "\\([a-zA-Z_][a-zA-Z_0-9]*\\)\\s-*\\(\\[[^]]+\\]\\)\\s-*)")
+		((looking-at "\\([a-zA-Z_][a-zA-Z_0-9]*\\)\\s-*\\(\\[[^][]+\\]\\)\\s-*)")
 		 (verilog-read-sub-decls-sig
                   submoddecls par-values comment port
 		  (verilog-string-remove-spaces (match-string-no-properties 1)) ; sig
@@ -8924,7 +8944,7 @@ Inserts the list of signals found, using submodi to look up each port."
 				      (point)))))))) ; expr
 	;;
 	(forward-line 1)))))
-;;(verilog-read-sub-decls-line (verilog-subdecls-new nil nil nil nil nil) nil "Cmt")
+;;(verilog-read-sub-decls-line (verilog-decls-new nil nil nil nil nil nil nil nil nil) nil "Cmt")
 
 (defun verilog-read-sub-decls-gate (submoddecls par-values comment submod end-inst-point)
   "For `verilog-read-sub-decls', read lines of UDP gate decl until none match.
@@ -10518,8 +10538,9 @@ This repairs those mis-inserted by an AUTOARG."
 (defun verilog-simplify-range-expression (expr)
   "Return a simplified range expression with constants eliminated from EXPR."
   ;; Note this is always called with brackets; ie [z] or [z:z]
-  (if (not (string-match "[---+*()]" expr))
-      expr  ; short-circuit
+  (if (or (not verilog-auto-simplify-expressions)
+          (not (string-match "[---+*()]" expr)))
+      expr  ; disabled or short-circuited
     (let ((out expr)
 	  (last-pass ""))
       (while (not (equal last-pass out))
@@ -10591,6 +10612,7 @@ This repairs those mis-inserted by an AUTOARG."
 ;;(verilog-simplify-range-expression "[FOO-1+1-1+1]")  ; FOO-0
 ;;(verilog-simplify-range-expression "[$clog2(2)]")  ; 1
 ;;(verilog-simplify-range-expression "[$clog2(7)]")  ; 3
+;;(verilog-simplify-range-expression "[(TEST[1])-1:0]")
 
 (defun verilog-clog2 (value)
   "Compute $clog2 - ceiling log2 of VALUE."
@@ -11018,8 +11040,7 @@ or `diff' in batch mode."
 	      (progn
 		(with-current-buffer b1 (setq buffer-file-name nil))
 		(verilog-auto)
-		(when (not verilog-auto-star-save)
-		  (verilog-delete-auto-star-implicit)))
+                (verilog-star-cleanup))
 	    ;; Restore name if unwind
 	    (with-current-buffer b1 (setq buffer-file-name name1)))))
       ;;
@@ -11035,6 +11056,11 @@ or `diff' in batch mode."
 ;;
 ;; Auto save
 ;;
+
+(defun verilog-star-cleanup ()
+  "On saving or diff, cleanup .* expansions."
+  (when (not verilog-auto-star-save)
+    (verilog-delete-auto-star-implicit)))
 
 (defun verilog-auto-save-check ()
   "On saving see if we need auto update."
@@ -11055,8 +11081,7 @@ or `diff' in batch mode."
 	   (verilog-auto))
 	 ;; Don't ask again if didn't update
 	 (set (make-local-variable 'verilog-auto-update-tick) (buffer-chars-modified-tick))))
-  (when (not verilog-auto-star-save)
-    (verilog-delete-auto-star-implicit))
+  (verilog-star-cleanup)
   nil)  ; Always return nil -- we don't write the file ourselves
 
 (defun verilog-auto-read-locals ()
@@ -12252,7 +12277,7 @@ same expansion will result from only extracting outputs starting with ov:
   "Expand AUTOOUTPUTEVERY statements, as part of \\[verilog-auto].
 Make output statements for any signals that aren't primary inputs or
 outputs already.  This makes every signal in the design an output.  This is
-useful to get Synopsys to preserve every signal in the design, since it
+useful to get synthesis to preserve every signal in the design, since it
 won't optimize away the outputs.
 
 An example:
@@ -13510,19 +13535,19 @@ Finally, an AUTOASCIIENUM command is used.
   `verilog-auto-wire-type' may be used to change the datatype of
   the declarations.
 
-  \"auto enum\" may be used in place of \"synopsys enum\".
+  \"synopsys enum\" may be used in place of \"auto enum\".
 
 An example:
 
 	//== State enumeration
-	parameter [2:0] // synopsys enum state_info
+	parameter [2:0] // auto enum state_info
 			   SM_IDLE =  3\\='b000,
 			   SM_SEND =  3\\='b001,
 			   SM_WAIT1 = 3\\='b010;
 	//== State variables
-	reg [2:0]  /* synopsys enum state_info */
-		   state_r;  /* synopsys state_vector state_r */
-	reg [2:0]  /* synopsys enum state_info */
+	reg [2:0]  /* auto enum state_info */
+		   state_r;  /* auto state_vector state_r */
+	reg [2:0]  /* auto enum state_info */
 		   state_e1;
 
 	/*AUTOASCIIENUM(\"state_r\", \"state_ascii_r\", \"SM_\")*/
