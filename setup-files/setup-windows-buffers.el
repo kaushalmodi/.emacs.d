@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-25 16:34:57 kmodi>
+;; Time-stamp: <2017-11-28 15:15:05 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -598,7 +598,8 @@ Examples of such buffers: *gtags-global*, *ag*, *Occur*, *Diff*."
  ("C-(" . toggle-between-buffers)
  ("C-c (" . toggle-between-buffers)     ;Alternative to C-( for terminal mode
  ("C-)" . modi/kill-buffer-dwim)
- ("C-c )" . modi/kill-buffer-dwim)      ;Alternative to C-) for terminal mode
+ ("C-S-k" . modi/kill-buffer-dwim) ;Alternative to C-) (or C-S-0) as Windows steals that binding!
+ ("C-c )" . modi/kill-buffer-dwim) ;Alternative to C-) for terminal mode
  ("C-c 0" . modi/kill-buffer-dwim))     ;Alternative to C-) for terminal mode
 
 ;; Below bindings are made in global map as I want them to work even when my
