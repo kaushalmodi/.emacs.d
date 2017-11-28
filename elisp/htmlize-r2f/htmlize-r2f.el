@@ -25,29 +25,42 @@ If the buffer file path is \"/a/b/c.txt\", the exported html file name becomes
 (defun htmlize-r2f (option)
   "Export the selected region/whole buffer to an html file.
 
-The output file is saved to `htmlize-r2f-output-directory' and its
-fontification is done using `htmlize-r2f-css-file'.
+The output file is saved to `htmlize-r2f-output-directory' and
+its fontification is done using `htmlize-r2f-css-file'.
 
-If OPTION is non-nil (for example, using `\\[universal-argument]' prefix), copy
-the output file name to kill ring.
-If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]'
-prefix), do the above and also open the html file in the default browser."
+If OPTION is non-nil (for example, using `\\[universal-argument]'
+prefix), copy the output file name to the kill ring.
+
+If OPTION is \\='(16) (using `\\[universal-argument]
+\\[universal-argument]' prefix), copy the output file name to the
+kill ring and also open the html file in the default browser.
+
+The `htmlize-r2f-preserve-file-path-in-name' variable is used to
+store the default choice for whether the output HTML file name
+should contain the buffer file path.  If OPTION is \\='(64) (using
+`\\[universal-argument] \\[universal-argument]
+\\[universal-argument]' prefix), use the inverse value of
+`htmlize-r2f-preserve-file-path-in-name' temporarily and copy the
+output file name to the kill ring."
   (interactive "P")
   (require 'ox-html)
-  (let ((src-link (concat "https://github.com/kaushalmodi/.emacs.d/blob/master/"
-                          "elisp/htmlize-r2f/htmlize-r2f.el"))
-        (org-html-htmlize-output-type 'css)
-        (org-html-htmlize-font-prefix "org-")
-        (fname (concat htmlize-r2f-output-directory
-                       (if (buffer-file-name)
-                           (if htmlize-r2f-preserve-file-path-in-name
-                               (replace-regexp-in-string "/" "!" (buffer-file-name))
-                             (file-name-nondirectory (buffer-file-name)))
-                         "temp")
-                       ".html"))
-        (current-date-time-format "%a %b %d %H:%M:%S %Z %Y")
-        (comment-char (if comment-start comment-start "#"))
-        start end html-string)
+  (let* ((src-link (concat "https://github.com/kaushalmodi/.emacs.d/blob/master/"
+                           "elisp/htmlize-r2f/htmlize-r2f.el"))
+         (org-html-htmlize-output-type 'css)
+         (org-html-htmlize-font-prefix "org-")
+         (preserve-file-path-in-name (if (= 64 (car option))
+                                         (not htmlize-r2f-preserve-file-path-in-name)
+                                       htmlize-r2f-preserve-file-path-in-name))
+         (fname (concat htmlize-r2f-output-directory
+                        (if (buffer-file-name)
+                            (if preserve-file-path-in-name
+                                (replace-regexp-in-string "/" "!" (buffer-file-name))
+                              (file-name-nondirectory (buffer-file-name)))
+                          "temp")
+                        ".html"))
+         (current-date-time-format "%a %b %d %H:%M:%S %Z %Y")
+         (comment-char (if comment-start comment-start "#"))
+         start end html-string)
     (if (use-region-p)
         (progn
           (setq start (region-beginning))
