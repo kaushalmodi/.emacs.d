@@ -1,10 +1,13 @@
-;; Time-stamp: <2017-10-30 12:39:56 kmodi>
+;; Time-stamp: <2017-12-01 16:20:44 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
 ;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
 (defvar gc-cons-threshold--orig gc-cons-threshold)
 (setq gc-cons-threshold (* 100 1024 1024)) ; 100 MB before garbage collection
+
+;; Remove dot from in-between the first and last names if present.
+(setq user-full-name (replace-regexp-in-string "\\." " " user-full-name))
 
 (defvar user-home-directory (concat (getenv "HOME") "/")) ; must end with /
 (setq user-emacs-directory (concat user-home-directory ".emacs.d/")) ; must end with /
