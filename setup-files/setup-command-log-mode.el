@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-19 22:42:28 kmodi>
+;; Time-stamp: <2017-12-01 12:34:04 kmodi>
 
 ;; Command Log Mode
 ;; https://github.com/lewang/command-log-mode
@@ -20,7 +20,7 @@
     (setq command-log-mode-window-size 60)
 
     (defhydra hydra-command-log (:color teal
-                                 :columns 7)
+                                 :columns 6)
       "Command Log"
       ("c" command-log-mode "toggle mode")
       ("o" clm/open-command-log-buffer "open log buffer")

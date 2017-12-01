@@ -1,9 +1,9 @@
-;; Time-stamp: <2017-09-07 16:23:59 kmodi>
+;; Time-stamp: <2017-12-01 12:34:12 kmodi>
 
 ;; Launcher
 
 (defhydra hydra-launch (:color teal
-                        :columns 7)
+                        :columns 6)
   "Launcher"
   ("cc"      calc "calc")
   ("qc"      quick-calc "quick calc")
@@ -48,7 +48,7 @@
   ("C-g"     nil "cancel" :color blue))
 
 (defhydra hydra-launch-freq (:color teal
-                             :columns 7)
+                             :columns 6)
   "Frequently accessed files"
   ("e" (find-file (expand-file-name "init.el" user-emacs-directory)) "emacs init")
   ("q" nil "cancel" :color blue))
