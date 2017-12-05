@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-01 16:20:44 kmodi>
+;; Time-stamp: <2017-12-05 11:58:18 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -187,9 +187,8 @@ need Org version to be at least 9.x.")
 (require 'benchmark-init)
 
 (eval-when-compile
-  (require 'use-package)
+  (require 'use-package)                ;Auto-requires `bind-key' too
   (setq use-package-always-ensure nil))
-(require 'bind-key)
 (require 'use-package-chords)
 
 ;; Enable `modi-mode' unless `disable-pkg-modi-mode' is set to `t' in
