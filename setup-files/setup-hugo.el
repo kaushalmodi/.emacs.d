@@ -1,28 +1,17 @@
-;; Time-stamp: <2017-10-16 08:23:14 kmodi>
+;; Time-stamp: <2017-12-11 09:43:20 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
 ;; https://github.com/kaushalmodi/ox-hugo
 
 (use-package ox-hugo
-  :after ox
-  :commands (org-hugo-export-subtree-to-md
-             org-hugo-export-subtree-to-md-after-save
-             org-hugo-slug)
   :load-path "elisp/ox-hugo"
+  :after ox)
+
+(use-package ox-hugo
+  :commands (org-hugo-slug)
   :bind (:map modi-mode-map
-         ("C-c G" . org-hugo-export-subtree-to-md)) ;Same as "C-c C-e H H"
-  :config
-  (progn
-    ;; Set `org-hugo-langs-no-descr-in-code-fences' to '(org) if setting
-    ;; `pygmentsCodeFences' to `true' in Hugo site `config.toml', as syntax
-    ;; highlighting for Org code blocks is not yet supported by Pygments:
-    ;; https://github.com/kaushalmodi/ox-hugo/issues/60
-    ;; (setq org-hugo-langs-no-descr-in-code-fences '(org))
-    ;; Mon Oct 16 08:22:33 EDT 2017 - kmodi
-    ;; This is not needed if using the Chroma syntax highlighter (default since
-    ;; Hugo 0.28).
-    ))
+         ("C-c G" . org-hugo-export-wip-to-md)))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
@@ -54,12 +43,12 @@ See `org-capture-templates' for more information."
   ;; Do not cause auto Org->Hugo export to happen when saving captures
   (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
     "Function for `org-capture-before-finalize-hook'.
-Disable `org-hugo-export-subtree-to-md-after-save'."
+Disable `org-hugo-export-wip-to-md-after-save'."
     (setq org-hugo-allow-export-after-save nil))
 
   (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
     "Function for `org-capture-after-finalize-hook'.
-Enable `org-hugo-export-subtree-to-md-after-save'."
+Enable `org-hugo-export-wip-to-md-after-save'."
     (setq org-hugo-allow-export-after-save t))
 
   (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
