@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-05 11:22:09 kmodi>
+;; Time-stamp: <2017-12-11 09:49:45 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -862,7 +862,8 @@ Author is not included in the postable if author is set to nil
 using \"#+AUTHOR:\" in the Org document."
           (let* ((author (car (plist-get info :author)))
                  ;; Replace dots, if any, with spaces: "First.Last" -> "First Last"
-                 (author (replace-regexp-in-string "\\." " " author))
+                 (author (when (stringp author)
+                           (replace-regexp-in-string "\\." " " author)))
                  (creator (plist-get info :creator))
                  (date-raw (car (org-export-get-date info)))
                  (date (when date-raw
