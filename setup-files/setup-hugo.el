@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-11 09:43:20 kmodi>
+;; Time-stamp: <2017-12-12 13:29:00 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -11,7 +11,7 @@
 (use-package ox-hugo
   :commands (org-hugo-slug)
   :bind (:map modi-mode-map
-         ("C-c G" . org-hugo-export-wip-to-md)))
+         ("C-c G" . org-hugo-export-wim-to-md)))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
