@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-13 13:56:44 kmodi>
+;; Time-stamp: <2017-12-15 22:41:18 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -43,7 +43,7 @@
     ;; (setq magit-log-margin '(t age magit-log-margin-width t 18)) ;Default value
     ;; Show the commit ages with 1-char time units
     ;;   minute->m, hour->h, day->d, week->w, month->M, year->Y
-    ;; Also reduce the author column width to 10 as the author name is being
+    ;; Also reduce the author column width to 11 as the author name is being
     ;; abbreviated below.
     (setq magit-log-margin '(t age-abbreviated magit-log-margin-width :author 11)))
   :config
