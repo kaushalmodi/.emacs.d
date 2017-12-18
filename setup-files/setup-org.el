@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-11 09:49:45 kmodi>
+;; Time-stamp: <2017-12-18 17:00:28 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -151,7 +151,7 @@ This value must match the `infodir' variable in the Org local.mk.")
     (with-eval-after-load 'org-indent
       (setq org-indent-indentation-per-level 1)) ;Default = 2
 
-    (setq org-log-done 'timestamp) ;Insert only timestamp when closing an Org TODO item
+    (setq org-log-done 'time) ;Insert only timestamp when closing an Org TODO item
     ;; (setq org-log-done 'note) ;Insert timestamp and note when closing an Org TODO item
     ;; http://orgmode.org/manual/Closing-items.html
     (setq org-todo-keywords '((sequence "TODO" "SOMEDAY" "CANCELED" "DONE")))
