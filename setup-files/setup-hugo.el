@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-12 13:29:00 kmodi>
+;; Time-stamp: <2017-12-15 22:34:01 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -17,16 +17,13 @@
   (defun org-hugo-new-subtree-post-capture-template ()
     "Returns `org-capture' template string for new Hugo post.
 See `org-capture-templates' for more information."
-    (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
-           (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
-           (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+    (let* ((title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
            (fname (org-hugo-slug title)))
       (mapconcat #'identity
                  `(
                    ,(concat "* TODO " title)
                    ":PROPERTIES:"
                    ,(concat ":EXPORT_FILE_NAME: " fname)
-                   ,(concat ":EXPORT_DATE: " date) ;Enter current date and time
                    ":END:"
                    "%?\n")          ;Place the cursor here finally
                  "\n")))
