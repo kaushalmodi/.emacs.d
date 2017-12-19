@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-18 17:00:28 kmodi>
+;; Time-stamp: <2017-12-19 15:00:48 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -290,8 +290,8 @@ Execute this command while the point is on or after the hyper-linked Org link."
 
     ;; Sun Nov 05 09:30:51 EST 2017 - kmodi
     ;; Copy of the old "Easy Templates" feature that was removed in
-    ;; http://orgmode.org/cgit.cgi/org-mode.git/diff/lisp/org.el?id=c04e357f3d5d93484277a7e439847b1233b872bd
-    (defcustom org-easy-template-alist  ;Old `org-structure-template-alist'
+    ;; http://orgmode.org/cgit.cgi/org-mode.git/commit/?id=c04e357f3d5d93484277a7e439847b1233b872bd
+    (defconst org-easy-template-alist   ;Old `org-structure-template-alist'
       '(("s" "#+BEGIN_SRC ?\n\n#+END_SRC")
         ("e" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE")
         ("q" "#+BEGIN_QUOTE\n?\n#+END_QUOTE")
@@ -299,6 +299,7 @@ Execute this command while the point is on or after the hyper-linked Org link."
         ("V" "#+BEGIN_VERBATIM\n?\n#+END_VERBATIM")
         ("c" "#+BEGIN_CENTER\n?\n#+END_CENTER")
         ("C" "#+BEGIN_COMMENT\n?\n#+END_COMMENT")
+        ("X" "#+BEGIN_EXPORT ?\n\n#+END_EXPORT")
         ("l" "#+BEGIN_EXPORT latex\n?\n#+END_EXPORT")
         ("L" "#+LaTeX: ")
         ("h" "#+BEGIN_EXPORT html\n?\n#+END_EXPORT")
@@ -312,16 +313,7 @@ This is a list of abbreviation keys and values.  The value gets inserted
 if you type `<' followed by the key and then press the completion key,
 usually `TAB'.  %file will be replaced by a file name after prompting
 for the file using completion.  The cursor will be placed at the position
-of the `?' in the template.
-There are two templates for each key, the first uses the original Org syntax,
-the second uses Emacs Muse-like syntax tags.  These Muse-like tags become
-the default when the /org-mtags.el/ module has been loaded.  See also the
-variable `org-mtags-prefer-muse-templates'."
-      :group 'org-completion
-      :type '(repeat
-	      (list
-	       (string :tag "Key")
-	       (string :tag "Template"))))
+of the `?' in the template.")
 
     (defun org-try-structure-completion ()
       "Try to complete a structure template before point.
@@ -362,22 +354,27 @@ expands them."
         (insert rpl)
         (when (re-search-backward "\\?" start t) (delete-char 1))))
 
-    (defun modi/org-template-expand (str &optional lang)
+    (defun modi/org-template-expand (str &optional arg)
       "Expand Org template based on STR.
 
 STR is always prefixed with \"<\".  The string following that
 \"<\" must match with the `car' of one of the elements in
 `org-easy-template-alist' (examples: \"<e\", \"<s\").
 
-If no region is selected, this function behaves like
-`org-try-structure-completion' (See (org) Easy templates).  If a
-region is selected, the selected text is wrapped with that org
-template.
+If no region is selected, this function simply runs
+`org-try-structure-completion' and does the template expansion
+based on `org-easy-template-alist'.  If a region is selected, the
+selected text is wrapped with that Org template.
 
-If the \"#+BEGIN_SRC\" block is inserted and LANG is a string,
-that source block is annotated with that LANG.  Instead, if LANG
-is nil, point is returned to the end of the \"#+BEGIN_SRC\" line
-after the template insertion."
+If the \"#+BEGIN_SRC\" block is inserted and ARG is a string
+representing the source language, that source block is annotated
+with that ARG.  If ARG is nil, point is returned to the end of
+the \"#+BEGIN_SRC\" line after the template insertion.
+
+If the \"#+BEGIN_EXPORT\" block is inserted and ARG is a string
+representing the export backend, that export block is annotated
+with that ARG.  If ARG is nil, point is returned to the end of
+the \"#+BEGIN_EXPORT\" line after the template insertion."
       (let* ((is-region? (use-region-p))
              (beg (if is-region?
                       (region-beginning)
@@ -387,7 +384,7 @@ after the template insertion."
              ;; being a marker).
              (end (when is-region?
                     (copy-marker (region-end) t)))
-             content post-src column)
+             content post-src-export column)
 
         (goto-char beg)
 
@@ -455,14 +452,14 @@ after the template insertion."
         (insert str)
         (org-try-structure-completion)
         (when (let* ((case-fold-search t)) ;Ignore case
-                (looking-back "^[[:blank:]]*#\\+BEGIN_SRC[[:blank:]]+"))
+                (looking-back "^[[:blank:]]*#\\+BEGIN_\\(SRC\\|EXPORT\\)[[:blank:]]+"))
           (cond
-           ((stringp lang)
-            (insert lang)
+           ((stringp arg)
+            (insert arg)
             (forward-line))
-           ((and (null lang)
-                 content)
-            (setq post-src (point))
+           ((and (null arg) ;If the language for the source block,
+                 content)   ;or the backend for the export block is not specified
+            (setq post-src-export (point))
             (forward-line))
            (t
             )))
@@ -486,8 +483,8 @@ after the template insertion."
             (setq content (org-escape-code-in-string content)))
           (insert content)
           (deactivate-mark)
-          (when post-src ;Case where user needs to specify the #+BEGIN_SRC language
-            (goto-char post-src)))))
+          (when post-src-export ;Case where user needs to specify the #+BEGIN_SRC language,
+            (goto-char post-src-export))))) ;or the #+BEGIN_EXPORT backend.
 
     (defhydra hydra-org-template (:color blue
                                   :hint nil)
@@ -495,7 +492,7 @@ after the template insertion."
 org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext           _I_NCLUDE:
                _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
                _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:         _A_SCII:
-               ^^              _o_rg          _S_hell             _p_ython         ^^               ^^
+               ^^              _o_rg          _S_hell             _p_ython         e_X_port         ^^
 "
       ("s" (modi/org-template-expand "<s")) ;#+BEGIN_SRC ... #+END_SRC
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
@@ -511,11 +508,12 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("q" (modi/org-template-expand "<q")) ;#+BEGIN_QUOTE ... #+END_QUOTE
       ("V" (modi/org-template-expand "<v")) ;#+BEGIN_VERSE ... #+END_VERSE
       ("c" (modi/org-template-expand "<c")) ;#+BEGIN_CENTER ... #+END_CENTER
-      ("l" (modi/org-template-expand "<l")) ;#+BEGIN_EXPORT latex ... #+END_EXPORT
+      ("X" (modi/org-template-expand "<X")) ;#+BEGIN_EXPORT ... #+END_EXPORT
+      ("l" (modi/org-template-expand "<X" "latex")) ;#+BEGIN_EXPORT latex ... #+END_EXPORT
+      ("h" (modi/org-template-expand "<X" "html")) ;#+BEGIN_EXPORT html ... #+END_EXPORT
+      ("a" (modi/org-template-expand "<X" "ascii")) ;#+BEGIN_EXPORT ascii ... #+END_EXPORT
       ("L" (modi/org-template-expand "<L")) ;#+LaTeX:
-      ("h" (modi/org-template-expand "<h")) ;#+BEGIN_EXPORT html ... #+END_EXPORT
       ("H" (modi/org-template-expand "<H")) ;#+HTML:
-      ("a" (modi/org-template-expand "<a")) ;#+BEGIN_EXPORT ascii ... #+END_EXPORT
       ("A" (modi/org-template-expand "<A")) ;#+ASCII:
       ("i" (modi/org-template-expand "<i")) ;#+INDEX: line
       ("I" (modi/org-template-expand "<I")) ;#+INCLUDE: line
