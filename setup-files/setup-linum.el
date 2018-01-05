@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-30 12:52:01 kmodi>
+;; Time-stamp: <2018-01-05 13:06:07 kmodi>
 
 ;; Line number package manager
 
@@ -13,6 +13,7 @@
                                 'nlinum)
   "Default “linum” mode. This is used when toggling linum on and off.
 Set this value to either `native-linum', `nlinum' or `linum'.")
+;; (setq modi/linum-fn-default 'nlinum)
 
 (defvar modi/linum--prev-state nil
   "State variable that tells if line numbers are being displayed.
@@ -246,6 +247,7 @@ function is added to the `after-make-frame-functions' hook."
   ;; Mon Oct 30 12:50:52 EDT 2017 - kmodi
   ;; Use `window-setup-hook' instead of `after-init-hook', else emacs startup
   ;; freezes on emacs 25.x - https://debbugs.gnu.org/cgi/bugreport.cgi?bug=29031.
+  ;; (add-hook 'after-init-hook #'modi/linum--enable) ;This does not work
   (add-hook 'window-setup-hook #'modi/linum--enable))
 
 
