@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-17 17:06:25 kmodi>
+;; Time-stamp: <2018-01-05 14:02:30 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -70,13 +70,16 @@ Emacs installation.  If Emacs is installed using
 ;; instead of an AND condition.
 (let* ((no-ssl (or (memq system-type '(windows-nt ms-dos))
                    (not (gnutls-available-p))))
-       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-  (add-to-list 'package-archives (cons "melpa" url) :append))
-
-;; Install `org-plus-contrib' only when it's set to use the Elpa version of Org.
-(when (eq modi/org-version-select 'elpa)
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append)
-  (add-to-list 'my-packages 'org-plus-contrib)) ;Latest stable version of org-mode, includes org-eww
+       (protocol (if no-ssl
+                     "http"
+                   "https"))
+       (melpa-url (concat protocol "://melpa.org/packages/"))
+       (orgelpa-url (concat protocol "://orgmode.org/elpa/")))
+  (add-to-list 'package-archives (cons "melpa" melpa-url) :append)
+  ;; Install `org-plus-contrib' only when it's set to use the Elpa version of Org.
+  (when (eq modi/org-version-select 'elpa)
+    (add-to-list 'package-archives (cons "org" orgelpa-url))
+    (add-to-list 'my-packages 'org-plus-contrib))) ;Latest stable version of org-mode, includes org-eww
 
 ;; Load emacs packages and activate them
 ;; This must come before configurations of installed packages.
