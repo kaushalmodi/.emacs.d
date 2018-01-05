@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-19 15:00:48 kmodi>
+;; Time-stamp: <2018-01-05 13:04:19 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -146,14 +146,14 @@ This value must match the `infodir' variable in the Org local.mk.")
     ;; showeverything   - same as above but without exceptions
     (setq org-startup-folded 'showall)
 
-    ;; http://orgmode.org/manual/Clean-view.html
+    ;; https://orgmode.org/manual/Clean-view.html
     (setq org-startup-indented t)       ;Enable `org-indent-mode' on Org startup
     (with-eval-after-load 'org-indent
       (setq org-indent-indentation-per-level 1)) ;Default = 2
 
     (setq org-log-done 'time) ;Insert only timestamp when closing an Org TODO item
     ;; (setq org-log-done 'note) ;Insert timestamp and note when closing an Org TODO item
-    ;; http://orgmode.org/manual/Closing-items.html
+    ;; https://orgmode.org/manual/Closing-items.html
     (setq org-todo-keywords '((sequence "TODO" "SOMEDAY" "CANCELED" "DONE")))
     (setq org-todo-keyword-faces
           '(("TODO"     . org-todo)
@@ -161,7 +161,7 @@ This value must match the `infodir' variable in the Org local.mk.")
             ("CANCELED" . (:foreground "#94BFF3" :weight bold :strike-through t))
             ("DONE"     . (:foreground "black" :background "#91ba31"))))
     ;; Block entries from changing state to DONE while they have children
-    ;; that are not DONE - http://orgmode.org/manual/TODO-dependencies.html
+    ;; that are not DONE - https://orgmode.org/manual/TODO-dependencies.html
     (setq org-enforce-todo-dependencies t)
 
     ;; http://emacs.stackexchange.com/a/17513/115
@@ -190,7 +190,7 @@ This value must match the `infodir' variable in the Org local.mk.")
     ;; ;; - "plain" links are links in normal text, no whitespace, like http://foo.com.
     ;; ;; Here's why I remove "plain" from this list:
     ;; ;; - If I have two bracketed links next to each-other in org-mode (like below),
-    ;; ;;     [[http://google.com][1]],[[http://orgmode.org][2]]
+    ;; ;;     [[http://google.com][1]],[[https://orgmode.org][2]]
     ;; ;; - and, if `plain' is in the `org-highlight-links' list,
     ;; ;;  the "," in there will also be highlighted as a link. So it would look
     ;; ;;  as if the "1,2" string pointed to a single link!
@@ -200,7 +200,7 @@ This value must match the `infodir' variable in the Org local.mk.")
     ;; (setq org-highlight-links (delete 'plain org-highlight-links))
     ;; Sat May 27 11:55:43 EDT 2017 - kmodi
     ;; Above workaround is not needed after this fix in Org master:
-    ;;   http://orgmode.org/cgit.cgi/org-mode.git/commit/?id=2d29269bb1b9af08011e091913798b6598e4b156
+    ;;   https://code.orgmode.org/bzg/org-mode/commit/2d29269bb1b9af08011e091913798b6598e4b156
 
     ;; `org-default-notes-file' is used as a fall back file for org-capture.el.
     (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
@@ -284,13 +284,13 @@ Execute this command while the point is on or after the hyper-linked Org link."
     (advice-add 'org-goto-map :after #'modi/org-goto-override-bindings)
 
 ;;; Easy Templates
-    ;; http://orgmode.org/manual/Easy-Templates.html
+    ;; https://orgmode.org/manual/Easy-Templates.html
     ;; http://oremacs.com/2015/03/07/hydra-org-templates
     ;; https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 
     ;; Sun Nov 05 09:30:51 EST 2017 - kmodi
     ;; Copy of the old "Easy Templates" feature that was removed in
-    ;; http://orgmode.org/cgit.cgi/org-mode.git/commit/?id=c04e357f3d5d93484277a7e439847b1233b872bd
+    ;; https://code.orgmode.org/bzg/org-mode/commit/c04e357f3d5d93484277a7e439847b1233b872bd
     (defconst org-easy-template-alist   ;Old `org-structure-template-alist'
       '(("s" "#+BEGIN_SRC ?\n\n#+END_SRC")
         ("e" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE")
@@ -652,7 +652,7 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
               nil :nomessage)
 
         ;; Previewing latex fragments in Org mode
-        ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+        ;; https://orgmode.org/worg/org-tutorials/org-latex-preview.html
         ;; (setq org-latex-create-formula-image-program 'dvipng) ;NOT Recommended
         (setq org-latex-create-formula-image-program 'imagemagick) ;Recommended
 
@@ -702,7 +702,7 @@ ftp://ftp.ctan.org/tex-archive/macros/latex/contrib/hyperref/README.pdf ")
             ("" "caption")
             ;;
             ;; Packages suggested to be added for previewing latex fragments
-            ;; http://orgmode.org/worg/org-tutorials/org-latex-preview.html
+            ;; https://orgmode.org/worg/org-tutorials/org-latex-preview.html
             ("mathscr" "eucal")
             ("" "latexsym"))
           "Alist of packages that have to (or can be) loaded after `hyperref'
@@ -774,7 +774,7 @@ package is loaded.")
 
         ;; `-shell-escape' is required when using the `minted' package
 
-        ;; http://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
+        ;; https://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
         ;; latexmk runs pdflatex/xelatex (whatever is specified) multiple times
         ;; automatically to resolve the cross-references.
         ;; (setq org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"))
@@ -1500,14 +1500,14 @@ the languages in `modi/ob-enabled-languages'."
 
 ;; C-c C-x C-l <-- Preview latex fragment in place; C-c C-c to exit that preview.
 
-;; Auto-completions http://orgmode.org/manual/Completion.html
+;; Auto-completions https://orgmode.org/manual/Completion.html
 ;; \ M-TAB <- TeX symbols
 ;; ​* M-TAB <- Headlines; useful when doing [[* Partial heading M-TAB when linking to headings
 ;; #+ M-TAB <- org-mode special keywords like #+DATE, #+AUTHOR, etc
 
-;; Speed-keys are awesome! http://orgmode.org/manual/Speed-keys.html
+;; Speed-keys are awesome! https://orgmode.org/manual/Speed-keys.html
 
-;; Easy Templates http://orgmode.org/manual/Easy-Templates.html
+;; Easy Templates https://orgmode.org/manual/Easy-Templates.html
 ;; To insert a structural element, type a ‘<’, followed by a template selector
 ;; and <TAB>. Completion takes effect only when the above keystrokes are typed
 ;; on a line by itself.
