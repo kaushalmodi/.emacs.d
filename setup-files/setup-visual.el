@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-13 11:45:42 kmodi>
+;; Time-stamp: <2018-01-31 16:09:55 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -623,13 +623,13 @@ ZERO WIDTH SPACE -> ∅
 
 All glyphs are shown in `modi/highlight-confusing' face."
   (let* ((glyph-en-dash (make-glyph-code ?- 'modi/highlight-confusing)) ;HYPHEN-MINUS follows that ?
-         (glyph-em-dash glyph-en-dash)  ;HYPHEN-MINUS follows that ?
-         (glyph-zws (make-glyph-code ?∅ 'modi/highlight-confusing)))
+         (glyph-em-dash glyph-en-dash)
+         (glyph-zws (make-glyph-code ?∅ 'modi/highlight-confusing))) ;EMPTY SET follows that ?
     (when (not buffer-display-table)
       (setq buffer-display-table (make-display-table)))
     (aset buffer-display-table ?– `[,glyph-en-dash ,glyph-en-dash]) ;EN DASH follows that ?
     (aset buffer-display-table ?— `[,glyph-em-dash ,glyph-em-dash ,glyph-em-dash]) ;EM DASH follows that ?
-    (aset buffer-display-table ?​ `[,glyph-zws])))
+    (aset buffer-display-table ?​ `[,glyph-zws]))) ;ZERO WIDTH SPACE follows that ?
 (dolist (hook '(prog-mode-hook
                 org-mode-hook))
   (add-hook hook #'modi/highlight-confusing-chars))
