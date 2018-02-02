@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-08-27 17:05:07 kmodi>
+;; Time-stamp: <2018-02-02 12:37:38 kmodi>
 
 ;; Implementing Markdown style link IDs in org-mode
 ;; http://emacs.stackexchange.com/q/594/115
@@ -9,7 +9,7 @@
     (goto-char (point-min))
     (let ((case-fold-search t))
       (if (re-search-forward
-           (concat "^#\\+LINK-REF:\\s-+"
+           (concat "^#\\+link-ref:\\s-+"
                    link-ref
                    "\\s-+\\(.*?\\)\\s-*$") nil :noerror)
           (match-string-no-properties 1)

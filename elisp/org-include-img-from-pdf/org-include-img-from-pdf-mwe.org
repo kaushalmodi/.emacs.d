@@ -1,4 +1,4 @@
-#+STARTUP: inlineimages
+#+startup: inlineimages
 
 # ()convertfrompdf:t # This is a special comment; tells that the upcoming
                      # link points to a to-be-converted-to file.
@@ -8,14 +8,14 @@
 
 1. Save =org-include-img-from-pdf.el= to your =~/.emacs.d/elisp/org-include-img-from-pdf=.
 2. Add below to your emacs setup and evaluate it.
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
    (use-package org-include-img-from-pdf
      :load-path "elisp/org-include-img-from-pdf"
      :config
      (progn
        (with-eval-after-load 'ox
          (add-hook 'org-export-before-processing-hook #'modi/org-include-img-from-pdf))))
-   #+END_SRC
+   #+end_src
 3. Have =org-mode-unicorn-logo.pdf= file in the same directory as this one.
 4. Do =C-c C-e h o=.
 5. You will find the =.png= image converted from the =.pdf= file and used in the exported HTML file.

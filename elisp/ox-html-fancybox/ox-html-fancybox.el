@@ -1,22 +1,22 @@
-;; Time-stamp: <2016-02-04 18:19:36 kmodi>
+;; Time-stamp: <2018-02-02 12:30:15 kmodi>
 
 ;; Insert fancybox class to all images when exporting org to html
 ;; Usage: Add the below to org files
-;;   #+OPTIONS: fancybox:t
+;;   #+options: fancybox:t
 
 ;; Update the below variables as per instructions from
 ;; http://fancyapps.com/fancybox/#instructions
 (setq modi/ox-html-fancybox-jquery-library "
-#+HTML_HEAD: <!-- Add jQuery library -->
-#+HTML_HEAD: <script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>
+#+html_head: <!-- Add jQuery library -->
+#+html_head: <script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>
 ")
 (setq modi/ox-html-fancybox-html-header "
-#+HTML_HEAD: <!-- Add fancyBox -->
-#+HTML_HEAD: <link rel=\"stylesheet\" href=\"common/js/fancybox/source/jquery.fancybox.css?v=2.1.5\" type=\"text/css\" media=\"screen\" />
-#+HTML_HEAD: <script type=\"text/javascript\" src=\"common/js/fancybox/source/jquery.fancybox.pack.js?v=2.1.5\"></script>
+#+html_head: <!-- Add fancyBox -->
+#+html_head: <link rel=\"stylesheet\" href=\"common/js/fancybox/source/jquery.fancybox.css?v=2.1.5\" type=\"text/css\" media=\"screen\" />
+#+html_head: <script type=\"text/javascript\" src=\"common/js/fancybox/source/jquery.fancybox.pack.js?v=2.1.5\"></script>
 ")
 (setq modi/ox-html-fancybox-html-body "
-#+BEGIN_EXPORT HTML
+#+begin_export HTML
 <!-- Source for fixing the issue of image disappearing about launch of fancybox.
      Using $(\"a.fancybox\").fancybox(); instead of $(\"fancybox\").fancybox();
      The issue is caused because org-mode assign class=\"fancybox\" to both <a> and
@@ -27,7 +27,7 @@
 		$(\"a.fancybox\").fancybox();
 	});
 </script>
-#+END_EXPORT
+#+end_export
 ")
 (setq modi/ox-html-fancybox-img-file-prefix-regexp "\\(file\\|http\\|https\\)")
 (setq modi/ox-html-fancybox-img-file-regexp "\\(png\\|jpg\\|svg\\)")
@@ -44,28 +44,29 @@
     (let* ((enable-fancybox nil))
       (save-excursion
         (goto-char (point-min))
-        (while (search-forward-regexp
-                "^\\s-*#\\+OPTIONS:.*fancybox:\\s-*t"
-                nil 'noerror)
-          (forward-line 1)
-          ;; Insert jQuery library
-          (when (bound-and-true-p modi/ox-html-fancybox-jquery-library)
-            (insert modi/ox-html-fancybox-jquery-library))
-          (forward-line 1)
-          ;; Insert paths to fancybox css and js
-          (when (bound-and-true-p modi/ox-html-fancybox-html-header)
-            (insert modi/ox-html-fancybox-html-header))
-          ;; Insert fancybox script in the html body
-          (when (bound-and-true-p modi/ox-html-fancybox-html-body)
-            (insert modi/ox-html-fancybox-html-body))
-          (setq enable-fancybox t))
+        (let ((case-fold-search t))
+          (while (re-search-forward
+                  "^\\s-*#\\+options:.*fancybox:\\s-*t"
+                  nil :noerror)
+            (forward-line 1)
+            ;; Insert jQuery library
+            (when (bound-and-true-p modi/ox-html-fancybox-jquery-library)
+              (insert modi/ox-html-fancybox-jquery-library))
+            (forward-line 1)
+            ;; Insert paths to fancybox css and js
+            (when (bound-and-true-p modi/ox-html-fancybox-html-header)
+              (insert modi/ox-html-fancybox-html-header))
+            ;; Insert fancybox script in the html body
+            (when (bound-and-true-p modi/ox-html-fancybox-html-body)
+              (insert modi/ox-html-fancybox-html-body))
+            (setq enable-fancybox t)))
         ;; (message "Fancybox status: %s" enable-fancybox)
         (when enable-fancybox
           ;; Go back to top of the buffer
           (goto-char (point-min))
           ;; Search for [[FILE.png]] or [[FILE.jpg]] or
           ;;         or [[FILE.png][FILE.png]] or [[FILE.jpg][FILE.jpg]]
-          (while (search-forward-regexp
+          (while (re-search-forward
                   (concat "^\\s-*\\[\\["
                           "\\(" modi/ox-html-fancybox-img-file-prefix-regexp ":\\)*" ; 1=file: 2=file
                           "\\(.*?\\)" ; 3=img-highrez
@@ -76,7 +77,7 @@
                           "\\.*" modi/ox-html-fancybox-img-file-regexp "*" ; 8=img-thumb-ext
                           "\\]*"
                           "\\]")
-                  nil 'noerror)
+                  nil :noerror)
             (let* (file-prefix1 img-highrez img-highrez-ext
                                 file-prefix2 img-thumb img-thumb-ext)
               (setq file-prefix1    (match-string-no-properties 1))
@@ -151,7 +152,7 @@
                                  :fixedcase :literal nil 1)))
               (forward-line 0)
               (open-line 1)
-              (insert "#+ATTR_HTML: :class fancybox")
+              (insert "#+attr_html: :class fancybox")
               (forward-line 2))))))))
 
 
