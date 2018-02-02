@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-02 10:38:01 kmodi>
+;; Time-stamp: <2018-02-02 11:05:20 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -786,7 +786,9 @@ C-u C-u C-u M-x xah-cycle-letter-case -> Force capitalize."
  ("~" . xah-cycle-letter-case))
 
 (defhydra hydra-change-case (:color blue
-                             :hint nil)
+                             :hint nil
+                             :after-exit (when (region-active-p)
+                                           (deactivate-mark)))
   "
 _C_apitalize        _u_PCASE        _l_owercase        _<SPC>_ →Cap→UP→down→
 "
