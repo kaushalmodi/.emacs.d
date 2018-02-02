@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-01-05 13:04:19 kmodi>
+;; Time-stamp: <2018-02-02 10:48:21 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -292,22 +292,22 @@ Execute this command while the point is on or after the hyper-linked Org link."
     ;; Copy of the old "Easy Templates" feature that was removed in
     ;; https://code.orgmode.org/bzg/org-mode/commit/c04e357f3d5d93484277a7e439847b1233b872bd
     (defconst org-easy-template-alist   ;Old `org-structure-template-alist'
-      '(("s" "#+BEGIN_SRC ?\n\n#+END_SRC")
-        ("e" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE")
-        ("q" "#+BEGIN_QUOTE\n?\n#+END_QUOTE")
-        ("v" "#+BEGIN_VERSE\n?\n#+END_VERSE")
-        ("V" "#+BEGIN_VERBATIM\n?\n#+END_VERBATIM")
-        ("c" "#+BEGIN_CENTER\n?\n#+END_CENTER")
-        ("C" "#+BEGIN_COMMENT\n?\n#+END_COMMENT")
-        ("X" "#+BEGIN_EXPORT ?\n\n#+END_EXPORT")
-        ("l" "#+BEGIN_EXPORT latex\n?\n#+END_EXPORT")
-        ("L" "#+LaTeX: ")
-        ("h" "#+BEGIN_EXPORT html\n?\n#+END_EXPORT")
-        ("H" "#+HTML: ")
-        ("a" "#+BEGIN_EXPORT ascii\n?\n#+END_EXPORT")
-        ("A" "#+ASCII: ")
-        ("i" "#+INDEX: ?")
-        ("I" "#+INCLUDE: %file ?"))
+      '(("s" "#+begin_src ?\n\n#+end_src")
+        ("e" "#+begin_example\n?\n#+end_example")
+        ("q" "#+begin_quote\n?\n#+end_quote")
+        ("v" "#+begin_verse\n?\n#+end_verse")
+        ("V" "#+begin_verbatim\n?\n#+end_verbatim")
+        ("c" "#+begin_center\n?\n#+end_center")
+        ("C" "#+begin_comment\n?\n#+end_comment")
+        ("X" "#+begin_export ?\n\n#+end_export")
+        ("l" "#+begin_export latex\n?\n#+end_export")
+        ("L" "#+latex: ")
+        ("h" "#+begin_export html\n?\n#+end_export")
+        ("H" "#+html: ")
+        ("a" "#+begin_export ascii\n?\n#+end_export")
+        ("A" "#+ascii: ")
+        ("i" "#+index: ?")
+        ("I" "#+include: %file ?"))
       "Structure completion elements.
 This is a list of abbreviation keys and values.  The value gets inserted
 if you type `<' followed by the key and then press the completion key,
@@ -366,15 +366,15 @@ If no region is selected, this function simply runs
 based on `org-easy-template-alist'.  If a region is selected, the
 selected text is wrapped with that Org template.
 
-If the \"#+BEGIN_SRC\" block is inserted and ARG is a string
+If the \"#+begin_src\" block is inserted and ARG is a string
 representing the source language, that source block is annotated
 with that ARG.  If ARG is nil, point is returned to the end of
-the \"#+BEGIN_SRC\" line after the template insertion.
+the \"#+begin_src\" line after the template insertion.
 
-If the \"#+BEGIN_EXPORT\" block is inserted and ARG is a string
+If the \"#+begin_export\" block is inserted and ARG is a string
 representing the export backend, that export block is annotated
 with that ARG.  If ARG is nil, point is returned to the end of
-the \"#+BEGIN_EXPORT\" line after the template insertion."
+the \"#+begin_export\" line after the template insertion."
       (let* ((is-region? (use-region-p))
              (beg (if is-region?
                       (region-beginning)
@@ -408,9 +408,9 @@ the \"#+BEGIN_EXPORT\" line after the template insertion."
           ;; Example: You have ^abc$ where ^ is BOL and $ is EOL.
           ;;          "bc" is selected and pressing <e should result in:
           ;;            a
-          ;;            #+BEGIN_EXAMPLE
+          ;;            #+begin_example
           ;;            bc
-          ;;            #+END_EXAMPLE
+          ;;            #+end_example
           (unless (or (bolp)
                       (looking-back "^[[:blank:]]*"))
             (insert "\n")
@@ -429,9 +429,9 @@ the \"#+BEGIN_EXPORT\" line after the template insertion."
             ;; Insert a newline if `end' is neither at BOL nor EOL
             ;; Example: You have ^abc$ where ^ is bol and $ is eol.
             ;;          "a" is selected and pressing <e should result in:
-            ;;            #+BEGIN_EXAMPLE
+            ;;            #+begin_example
             ;;            a
-            ;;            #+END_EXAMPLE
+            ;;            #+end_example
             ;;            bc
             (insert "\n")
             (when column
@@ -452,7 +452,7 @@ the \"#+BEGIN_EXPORT\" line after the template insertion."
         (insert str)
         (org-try-structure-completion)
         (when (let* ((case-fold-search t)) ;Ignore case
-                (looking-back "^[[:blank:]]*#\\+BEGIN_\\(SRC\\|EXPORT\\)[[:blank:]]+"))
+                (looking-back "^[[:blank:]]*#\\+begin_\\(src\\|export\\)[[:blank:]]+"))
           (cond
            ((stringp arg)
             (insert arg)
@@ -463,8 +463,8 @@ the \"#+BEGIN_EXPORT\" line after the template insertion."
             (forward-line))
            (t
             )))
-        ;; At this point the cursor will be between the #+BEGIN and #+END lines.
-        ;; Now also indent the point forward if needed.
+        ;; At this point the cursor will be between the #+begin_.. and
+        ;; #+end_.. lines.  Now also indent the point forward if needed.
         (when column
           (indent-to column))
 
@@ -483,8 +483,8 @@ the \"#+BEGIN_EXPORT\" line after the template insertion."
             (setq content (org-escape-code-in-string content)))
           (insert content)
           (deactivate-mark)
-          (when post-src-export ;Case where user needs to specify the #+BEGIN_SRC language,
-            (goto-char post-src-export))))) ;or the #+BEGIN_EXPORT backend.
+          (when post-src-export ;Case where user needs to specify the #+begin_src language,
+            (goto-char post-src-export))))) ;or the #+begin_export backend.
 
     (defhydra hydra-org-template (:color blue
                                   :hint nil)
@@ -494,7 +494,7 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
                _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:         _A_SCII:
                ^^              _o_rg          _S_hell             _p_ython         e_X_port         ^^
 "
-      ("s" (modi/org-template-expand "<s")) ;#+BEGIN_SRC ... #+END_SRC
+      ("s" (modi/org-template-expand "<s")) ;#+begin_src ... #+end_src
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
       ("v" (modi/org-template-expand "<s" "systemverilog"))
       ("m" (modi/org-template-expand "<s" "matlab"))
@@ -503,20 +503,20 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("S" (modi/org-template-expand "<s" "shell"))
       ("p" (modi/org-template-expand "<s" "python"))
       ("t" (modi/org-template-expand "<s" "text"))
-      ("e" (modi/org-template-expand "<e")) ;#+BEGIN_EXAMPLE ... #+END_EXAMPLE
-      ("x" (modi/org-template-expand "<e")) ;#+BEGIN_EXAMPLE ... #+END_EXAMPLE
-      ("q" (modi/org-template-expand "<q")) ;#+BEGIN_QUOTE ... #+END_QUOTE
-      ("V" (modi/org-template-expand "<v")) ;#+BEGIN_VERSE ... #+END_VERSE
-      ("c" (modi/org-template-expand "<c")) ;#+BEGIN_CENTER ... #+END_CENTER
-      ("X" (modi/org-template-expand "<X")) ;#+BEGIN_EXPORT ... #+END_EXPORT
-      ("l" (modi/org-template-expand "<X" "latex")) ;#+BEGIN_EXPORT latex ... #+END_EXPORT
-      ("h" (modi/org-template-expand "<X" "html")) ;#+BEGIN_EXPORT html ... #+END_EXPORT
-      ("a" (modi/org-template-expand "<X" "ascii")) ;#+BEGIN_EXPORT ascii ... #+END_EXPORT
-      ("L" (modi/org-template-expand "<L")) ;#+LaTeX:
-      ("H" (modi/org-template-expand "<H")) ;#+HTML:
-      ("A" (modi/org-template-expand "<A")) ;#+ASCII:
-      ("i" (modi/org-template-expand "<i")) ;#+INDEX: line
-      ("I" (modi/org-template-expand "<I")) ;#+INCLUDE: line
+      ("e" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
+      ("x" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
+      ("q" (modi/org-template-expand "<q")) ;#+begin_quote ... #+end_quote
+      ("V" (modi/org-template-expand "<v")) ;#+begin_verse ... #+end_verse
+      ("c" (modi/org-template-expand "<c")) ;#+begin_center ... #+end_center
+      ("X" (modi/org-template-expand "<X")) ;#+begin_export ... #+end_export
+      ("l" (modi/org-template-expand "<X" "latex")) ;#+begin_export latex ... #+end_export
+      ("h" (modi/org-template-expand "<X" "html")) ;#+begin_export html ... #+end_export
+      ("a" (modi/org-template-expand "<X" "ascii")) ;#+begin_export ascii ... #+end_export
+      ("L" (modi/org-template-expand "<L")) ;#+latex:
+      ("H" (modi/org-template-expand "<H")) ;#+html:
+      ("A" (modi/org-template-expand "<A")) ;#+ascii:
+      ("i" (modi/org-template-expand "<i")) ;#+index: line
+      ("I" (modi/org-template-expand "<I")) ;#+include: line
       ("<" self-insert-command "<")
       ("Q" nil "quit"))
 
@@ -575,8 +575,8 @@ line, or if a region is selected.  Else call
   :config
   (progn
     ;; Require wrapping braces to interpret _ and ^ as sub/super-script
-    (setq org-export-with-sub-superscripts '{}) ;also #+OPTIONS: ^:{}
-    (setq org-export-with-smart-quotes t) ;also #+OPTIONS: ':t
+    (setq org-export-with-sub-superscripts '{}) ;also #+options: ^:{}
+    (setq org-export-with-smart-quotes t) ;also #+options: ':t
 
     (setq org-export-headline-levels 4)
 
@@ -853,11 +853,11 @@ See `org-latex-format-headline-function' for details."
 INFO is the property list of export options.
 
 Date is not included in the postable if date is not set using
-\"#+DATE\" keyword, or if it is set to nil using \"#+DATE:\" in
+\"#+date\" keyword, or if it is set to nil using \"#+date:\" in
 the Org document.
 
 Author is not included in the postable if author is set to nil
-using \"#+AUTHOR:\" in the Org document."
+using \"#+author:\" in the Org document."
           (let* ((author (car (plist-get info :author)))
                  ;; Replace dots, if any, with spaces: "First.Last" -> "First Last"
                  (author (when (stringp author)
@@ -907,7 +907,7 @@ on each save.
       :config
       (progn
         ;; Allow for export=>beamer by placing
-        ;; #+LaTeX_CLASS: beamer in Org files
+        ;; #+latex_class: beamer in Org files
         (add-to-list 'org-latex-classes
                      '("beamer"
                        "\\documentclass[presentation]{beamer}"
@@ -1010,9 +1010,9 @@ footer > div {
                   async subtreep visible-only body-only ext-plist))
             (cond (t retfile)))))
       ;; Do not print date in the reveal title slide
-      ;;   #+OPTIONS: date:nil
+      ;;   #+options: date:nil
       ;; Do not print file time stamp in the reveal title slide
-      ;;   #+OPTIONS: timestamp:nil
+      ;;   #+options: timestamp:nil
       )
 
 ;;;;; ox-minutes - Meeting Minutes ASCII export
@@ -1058,7 +1058,7 @@ footer > div {
   (progn
     ;; Do not add the default indentation of 2 spaces when exiting the *Org Src*
     ;; buffer (the buffer you get when you do «C-c '» while in a block like
-    ;; #+BEGIN_SRC
+    ;; #+begin_src
     (setq org-edit-src-content-indentation 0) ;Default = 2
 
     (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
@@ -1153,7 +1153,7 @@ this with to-do items than with projects or headings."
     ;; http://emacs.stackexchange.com/a/22221/115
     ;; Thu Jul 14 17:06:28 EDT 2016 - kmodi
     ;; Do not enable the buffer-wide recalculation by default because if an org
-    ;; buffer has an org-table formula (like "#+TBLFM: $1=@#-1"), a *Calc*
+    ;; buffer has an org-table formula (like "#+tblfm: $1=@#-1"), a *Calc*
     ;; buffer is created when `org-table-recalculate-buffer-tables' is run each
     ;; time.
     (defvar-local modi/org-table-enable-buffer-wide-recalculation nil
@@ -1503,21 +1503,9 @@ the languages in `modi/ob-enabled-languages'."
 ;; Auto-completions https://orgmode.org/manual/Completion.html
 ;; \ M-TAB <- TeX symbols
 ;; ​* M-TAB <- Headlines; useful when doing [[* Partial heading M-TAB when linking to headings
-;; #+ M-TAB <- org-mode special keywords like #+DATE, #+AUTHOR, etc
+;; #+ M-TAB <- org-mode special keywords like #+date, #+author, etc
 
 ;; Speed-keys are awesome! https://orgmode.org/manual/Speed-keys.html
-
-;; Easy Templates https://orgmode.org/manual/Easy-Templates.html
-;; To insert a structural element, type a ‘<’, followed by a template selector
-;; and <TAB>. Completion takes effect only when the above keystrokes are typed
-;; on a line by itself.
-;; s 	#+BEGIN_SRC ... #+END_SRC
-;; e 	#+BEGIN_EXAMPLE ... #+END_EXAMPLE
-;; l 	#+BEGIN_LaTeX ... #+END_LaTeX
-;; L 	#+LaTeX:
-;; h 	#+BEGIN_HTML ... #+END_HTML
-;; H 	#+HTML:
-;; I 	#+INCLUDE: line
 
 ;; Disable selected org-mode markup character on per-file basis
 ;; http://emacs.stackexchange.com/a/13231/115
@@ -1539,14 +1527,14 @@ the languages in `modi/ob-enabled-languages'."
 ;;  - http://nakkaya.com/2010/09/07/writing-papers-using-org-mode/
 ;;  - http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
 
-;; To have an Org document auto update the #+DATE: keyword during exports, use:
-;;   #+DATE: {{{time(%b %d %Y\, %a)}}}
+;; To have an Org document auto update the #+date: keyword during exports, use:
+;;   #+date: {{{time(%b %d %Y\, %a)}}}
 ;; The time format here can be anything as documented in `format-time-string' fn.
 
 ;; Controlling section numbering, levels in `ox-twbs' exports:
 ;; https://github.com/marsmining/ox-twbs/issues/10#issuecomment-140324367
 ;;
-;;   #+OPTIONS: num:5 whn:2 toc:4 H:6
+;;   #+options: num:5 whn:2 toc:4 H:6
 ;;
 ;; Above would mean,
 ;; - Create section numbers up to level 5 (num).
@@ -1565,7 +1553,7 @@ the languages in `modi/ob-enabled-languages'."
 ;; If you want to set a buffer local variable foo to nil during Org exports,
 ;; add the below to the end of the Org file
 ;;
-;;   #+BIND: foo nil
+;;   #+bind: foo nil
 ;;   # L**ocal Variables:
 ;;   # org-export-allow-bind-keywords: t
 ;;   # E**nd:

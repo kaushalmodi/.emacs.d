@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-18 14:00:05 kmodi>
+;; Time-stamp: <2018-02-02 10:49:49 kmodi>
 
 ;; PDF
 
@@ -117,9 +117,9 @@ Useful to run after `pdf-tools' updates."
 
 ;; * =interleave= package
 ;; Create a Org file that will keep your notes. In the Org header
-;; section (#+TITLE, #+AUTHOR, etc.) add
+;; section (#+title, #+author, etc.) add
 ;;
-;;    #+INTERLEAVE_PDF: /the/path/to/pdf.pdf
+;;    #+interleave_pdf: /the/path/to/pdf.pdf
 ;;
 ;; Then you can start interleave by typing
 ;;

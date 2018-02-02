@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-01-12 17:09:58 kmodi>
+;; Time-stamp: <2018-02-02 10:49:18 kmodi>
 
 ;; Markdown Mode
 ;; https://github.com/jrblevin/markdown-mode
@@ -68,7 +68,7 @@
 ;;  - Horizontal rule below title row is needed.
 ;;  - The table identifier 'foo-tbl' after SEND has to match with that in the
 ;;    BEGIN RECEIVE and END RECEIVE lines above.
-;; #+ORGTBL: SEND foo-tbl orgtbl-to-gfm
+;; #+orgtbl: SEND foo-tbl orgtbl-to-gfm
 ;; | a | b |
 ;; |---+---|
 ;; | c | d |
