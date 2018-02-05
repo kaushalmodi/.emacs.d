@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-02 12:17:46 kmodi>
+;; Time-stamp: <2018-02-05 17:06:25 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -242,6 +242,19 @@ This value must match the `infodir' variable in the Org local.mk.")
       (interactive "p")
       (dotimes (cnt n)
         (org-return nil)))
+
+    ;; Don't allow auto-filling to happen after RET is pressed inside an Org
+    ;; property drawer.
+    ;; http://lists.gnu.org/r/emacs-orgmode/2018-02/msg00102.html
+    (defun modi/advice-org-return (orig-fun &rest args)
+      "Advice function that conditionally sets `auto-fill-function' to nil.
+
+Condition: If point is in an Org property drawer."
+      (let ((auto-fill-function (if (org-at-property-p)
+                                    nil
+                                  auto-fill-function)))
+        (apply orig-fun args)))
+    (advice-add 'org-return :around #'modi/advice-org-return)
 
     ;; http://emacs.stackexchange.com/a/10712/115
     (defun modi/org-delete-link ()
