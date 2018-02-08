@@ -1,4 +1,6 @@
-;; Time-stamp: <2018-02-07 17:07:13 kmodi>
+;;; seconds-to-human-time.el --- Convert seconds to human time -*- lexical-binding: t -*-
+;; Time-stamp: <2018-02-08 12:24:24 kmodi>
+;; https://scripter.co/convert-seconds-to-human-time/
 
 (defun modi/seconds-to-human-time (&optional seconds)
   "Convert SECONDS to \"DDd HHh MMm SSs\" string.
@@ -34,76 +36,54 @@ extracted from that, else the user is prompted to enter those."
 TIME is of the type (DD HH MM SS), where each of those elements
 are numbers.  If INTER is non-nil, echo the time string in a
 well-formatted manner instead of returning it."
-              (let* ((rev-time (reverse time))
-                     (sec (nth 0 rev-time))
-                     (min (nth 1 rev-time))
-                     (hr (nth 2 rev-time))
-                     (day (nth 3 rev-time))
-                     (filler "    ")
-                     (sec-str (cond
-                               ((> sec 0)
-                                (if (integerp sec)
-                                    (format "%2ds" sec)
-                                  (format "%5.2fs" sec)))
-                               ((and (= sec 0) (null min) (null hr) (null day)) ;0 seconds
-                                " 0s")))
-                     (min-str (if (and min (> min 0))
-                                  (format "%2dm " min)
-                                filler))
-                     (hr-str (if (and hr (> hr 0))
-                                 (format "%2dh " hr)
-                               filler))
-                     (day-str (if (and day (> day 0))
-                                  (format "%2dd " day)
-                                filler))
-                     (str (string-trim-right
-                           (concat day-str hr-str min-str sec-str))))
+              (let ((filler "    ")
+                    (str ""))
+                (dolist (unit '("d" "h" "m" "s"))
+                  (let* ((val (car (rassoc unit time)))
+                         (val-str (cond
+                                   ((and (string= unit "s") ;0 seconds
+                                         (= val 0)
+                                         (string-match-p "\\`\\s-*\\'" str))
+                                    " 0s")
+                                   ((and (string= unit "s")
+                                         (> val 0))
+                                    (if (integerp val)
+                                        (format "%2d%s" val unit)
+                                      (format "%5.2f%s" val unit)))
+                                   ((and val (> val 0))
+                                    (format "%2d%s " val unit))
+                                   (t
+                                    filler))))
+                    (setq str (concat str val-str))))
+                ;; (message "debug: %S" time)
                 (if inter
                     (message "%0.2f seconds → %s"
                              seconds
                              (string-trim (replace-regexp-in-string " +"  " " str)))
-                  str))))
+                  (string-trim-right str)))))
            (time (cond
                   ((>= sec DAY)          ;> day
                    (let* ((days (/ (floor sec) DAY))
                           (rem (- sec (* days DAY))))
-                     (cond
-                      ((= rem 0)
-                       (list days 0 0 0))
-                      ((< rem MINUTE)
-                       ;; Note that (list rem) instead of just `rem' is being
-                       ;; passed to the recursive call to
-                       ;; `modi/seconds-to-human-time'.  This helps us
-                       ;; distinguish between direct and re-entrant calls to
-                       ;; this function.
-                       (append (list days 0 0) (modi/seconds-to-human-time (list rem))))
-                      ((< rem HOUR)
-                       (append (list days 0) (modi/seconds-to-human-time (list rem))))
-                      (t
-                       (append (list days) (modi/seconds-to-human-time (list rem)))))))
+                     ;; Note that (list rem) instead of just `rem' is
+                     ;; being passed to the recursive call to
+                     ;; `modi/seconds-to-human-time'.  This helps us
+                     ;; distinguish between direct and re-entrant
+                     ;; calls to this function.
+                     (append (list (cons days "d")) (modi/seconds-to-human-time (list rem)))))
                   ((>= sec HOUR)         ;> hour AND < day
                    (let* ((hours (/ (floor sec) HOUR))
                           (rem (- sec (* hours HOUR))))
-                     (cond
-                      ((= rem 0)
-                       (list hours 0 0))
-                      ((< rem MINUTE)
-                       (append (list hours 0) (modi/seconds-to-human-time (list rem))))
-                      (t
-                       (append (list hours) (modi/seconds-to-human-time (list rem)))))))
+                     (append (list (cons hours "h")) (modi/seconds-to-human-time (list rem)))))
                   ((>= sec MINUTE)       ;> minute AND < hour
                    (let* ((mins (/ (floor sec) MINUTE))
                           (rem (- sec (* mins MINUTE))))
-                     (cond
-                      ((= rem 0)
-                       (list mins 0))
-                      (t
-                       (append (list mins) (modi/seconds-to-human-time (list rem)))))))
+                     (append (list (cons mins "m")) (modi/seconds-to-human-time (list rem)))))
                   (t                    ;< minute
-                   (list sec)))))
-      ;; If `seconds' is a number and not a list, this is *not* a recursive
-      ;; call.  Return the time as a string only then.  For re-entrant
-      ;; executions, return the `time' list instead.
+                   (list (cons sec "s"))))))
+      ;; If `seconds' is a number and not a list, this is *not* a
+      ;; recursive call.  Return the time as a string only then.  For
+      ;; re-entrant executions, return the `time' list instead.
       (if (numberp seconds)
           (funcall gen-time-string time inter)
         time))))
@@ -146,3 +126,6 @@ well-formatted manner instead of returning it."
     (cl-incf count)
     (when (= 0 (mod count len-secs))
       (message (make-string 40 ?─)))))
+
+;; (format-seconds "%2D %2H %2M %Z%S" sec) does something similar, but
+;; not quite.
