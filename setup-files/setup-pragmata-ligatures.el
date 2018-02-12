@@ -1,8 +1,18 @@
-;; Time-stamp: <2016-08-08 16:33:27 kmodi>
+;; Time-stamp: <2018-02-12 10:44:13 kmodi>
 
 ;; Enable PragmataPro ligatures
 ;; Tested to work with version 0.822
 ;; https://www.reddit.com/r/emacs/comments/4sm6fa/how_to_enable_pragmatapro_ligatures/
+
+;; Set the `fixed-pitch' face to PragmataPro as it is available, instead of
+;; defaulting to the system monospace font.  This face is used by
+;; `markdown-code-face' and other "fixed pitch" faces in Markdown.  Setting
+;; `fixed-pitch' family to PragmataPro ensures that all ligatures work as set in
+;; this file.  Below also increases the font-size of `fixed-pitch' face by 2
+;; points to distinguish them from the rest of the text.
+(set-face-attribute 'fixed-pitch nil
+                    :family "PragmataPro"
+                    :height (* (+ default-font-size-pt 2) 10))
 
 ;; https://gist.github.com/kwf/dea7bc51101083acb95c875140e2a96d
 ;; PRETTIFY SYMBOLS (with Pragmata Pro)
