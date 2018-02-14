@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-11 20:57:05 kmodi>
+;; Time-stamp: <2018-02-13 21:53:02 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -34,6 +34,7 @@
 ;;    Table Field Marking
 ;;  Org Entities
 ;;  Org Babel
+;;  Org Babel Tangle
 ;;    Diagrams
 ;;    Python
 ;;  Other Org Packages
@@ -1343,6 +1344,16 @@ the languages in `modi/ob-enabled-languages'."
         ;; re-all-lang re-unsafe-lang lang body unsafe)
         unsafe))
     (setq org-confirm-babel-evaluate #'modi/org-confirm-babel-evaluate-fn)))
+
+;;; Org Babel Tangle
+(use-package ob-tangle
+  :defer t
+  :config
+  (progn
+    ;; Trailing whitespace management
+    ;; Delete trailing whitespace in tangled buffer and save it.
+    (add-hook 'org-babel-post-tangle-hook #'delete-trailing-whitespace)
+    (add-hook 'org-babel-post-tangle-hook #'save-buffer :append)))
 
 ;;;; Diagrams
 (use-package ob-ditaa
