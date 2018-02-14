@@ -3,13 +3,27 @@
   My CSS customizations to the bootstrap CSS
 */
 
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #444;
+    padding: 0 10px;
+}
+h1, h2, h3 {
+    line-height: 1.2;
+}
+
 /*
   Set the width of HTML export to 50% and center it
   http://stackoverflow.com/a/14476955/1219634
 */
-body {
-    max-width:50%;
-    margin: auto;
+@media screen and (min-width: 1200px) {
+    body {
+        max-width:50%;
+        margin: auto;
+    }
 }
 
 /*
