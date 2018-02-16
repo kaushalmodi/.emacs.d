@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-05 11:58:18 kmodi>
+;; Time-stamp: <2018-02-16 15:34:32 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -299,8 +299,6 @@ need Org version to be at least 9.x.")
 (require 'setup-yasnippet)
 
 ;; Languages
-(when (executable-find "lein")
-  (require 'setup-clojure)) ; cider
 (require 'setup-conf)
 (when (executable-find "dmd")
   (require 'setup-d))

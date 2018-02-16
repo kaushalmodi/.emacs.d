@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-01 07:37:06 kmodi>
+;; Time-stamp: <2018-02-16 15:41:54 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -244,16 +244,25 @@ Lisp function does not specify a special indentation."
 
 ;; Overlay eval results
 ;; http://endlessparentheses.com/eval-result-overlays-in-emacs-lisp.html
-(defun endless/eval-overlay (orig-ret-val)
-  "Overlay the eval results"
-  (require 'cider-overlays nil :noerror)
-  ;; Skip this feature if `cider' is not installed
-  (when (fboundp #'cider--make-result-overlay)
-    (cider--make-result-overlay (format "%S" orig-ret-val)
-      :where (point)
-      :duration 'command))
-  orig-ret-val)
-(advice-add 'eval-last-sexp :filter-return #'endless/eval-overlay)
+(if (featurep 'cider-overlays)
+    (progn
+      (defun endless/eval-overlay (orig-ret-val)
+        "Overlay the eval results"
+        (require 'cider-overlays nil :noerror)
+        ;; Skip this feature if `cider' is not installed
+        (when (fboundp #'cider--make-result-overlay)
+          (cider--make-result-overlay (format "%S" orig-ret-val)
+            :where (point)
+            :duration 'command))
+        orig-ret-val)
+      (advice-add 'eval-last-sexp :filter-return #'endless/eval-overlay)
+      ;; (advice-remove 'eval-last-sexp #'endless/eval-overlay)
+      )
+  (use-package eros
+    :ensure t
+    :config
+    (progn
+      (eros-mode 1))))
 
 (bind-key "<f9>"  #'eval-region emacs-lisp-mode-map)
 (bind-key "C-c 9" #'eval-region emacs-lisp-mode-map) ; alternative to f9
