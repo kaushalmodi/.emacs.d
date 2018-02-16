@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-22 23:54:54 kmodi>
+;; Time-stamp: <2018-02-16 15:28:45 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -182,6 +182,10 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   :config
   (progn
     (add-hook 'calendar-today-visible-hook 'calendar-mark-today))) ;Highlight today's date
+
+(use-package seconds-to-human-time
+  :load-path "elisp/misc"
+  :commands (seconds-to-human-time))
 
 (bind-keys
  ;; `save-buffers-kill-terminal' kills only the current frame; it will NOT
