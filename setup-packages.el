@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 15:20:50 kmodi>
+;; Time-stamp: <2018-02-20 15:40:26 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -36,7 +36,8 @@
        (emacs-dir (when (and share-dir
                              (file-exists-p share-dir))
                     (file-name-as-directory (expand-file-name "emacs" share-dir))))
-       (version-dir (when emacs-dir
+       (version-dir (when (and emacs-dir
+                               (file-exists-p emacs-dir))
                       ;; Possibility where the lisp dir is something like
                       ;; ../emacs/26.0.50/lisp/.  If `emacs-version' is x.y.z.w,
                       ;; remove the ".w" portion.  Though, this is not needed
@@ -53,16 +54,20 @@
                           (setq version-dir-1 (file-name-as-directory (expand-file-name version emacs-dir)))
                           (when (file-exists-p version-dir-1)
                             version-dir-1)))))
-       (lisp-dir (file-name-as-directory (expand-file-name "lisp" version-dir))))
+       (lisp-dir (when (and version-dir
+                            (file-exists-p version-dir))
+                   (file-name-as-directory (expand-file-name "lisp" version-dir)))))
   ;; (message "setup-packages:: bin-dir: %s" bin-dir)
   ;; (message "setup-packages:: prefix-dir: %s" prefix-dir)
   ;; (message "setup-packages:: share-dir: %s" share-dir)
   ;; (message "setup-packages:: lisp-dir-1: %s" lisp-dir-1)
   ;; (message "setup-packages:: lisp-dir-2: %s" lisp-dir-2)
-  (defvar modi/default-share-directory (when (file-exists-p share-dir)
+  (defvar modi/default-share-directory (when (and share-dir
+                                                  (file-exists-p share-dir))
                                          share-dir)
     "Share directory for this Emacs installation.")
-  (defvar modi/default-lisp-directory (when (file-exists-p lisp-dir)
+  (defvar modi/default-lisp-directory (when (and lisp-dir
+                                                 (file-exists-p lisp-dir))
                                         lisp-dir)
     "Directory containing lisp files for the Emacs installation.
 
