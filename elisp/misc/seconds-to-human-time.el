@@ -1,5 +1,5 @@
 ;;; seconds-to-human-time.el --- Convert seconds to human time -*- lexical-binding: t -*-
-;; Time-stamp: <2018-02-16 15:30:04 kmodi>
+;; Time-stamp: <2018-02-20 14:10:01 kmodi>
 ;; https://scripter.co/convert-seconds-to-human-time/
 
 (defun seconds-to-human-time (&optional seconds)
@@ -11,7 +11,13 @@ SECONDS can also be a list of such numbers, which is the case
 when this function is called recursively.
 
 When called interactively, if a region is selected SECONDS is
-extracted from that, else the user is prompted to enter those."
+extracted from that, else the user is prompted to enter those.
+
+With \\[universal-argument] prefix, copy the returned string to
+the kill ring.
+
+With \\[universal-argument] \\[universal-argument] prefix, replace
+the selected region with the return value."
   (interactive)
   (let ((inter (called-interactively-p 'interactive)))
     (when inter
@@ -23,9 +29,10 @@ extracted from that, else the user is prompted to enter those."
            (HOUR (* 60 MINUTE))
            (DAY (* 24 HOUR))
            (sec (cond
-                 ((listp seconds)         ;This is entered only by recursive calls
+                 ((and seconds
+                       (listp seconds)) ;This is entered only by recursive calls
                   (car (last seconds)))
-                 ((and (numberp seconds)  ;This is entered only in the first entry
+                 ((and (numberp seconds) ;This is entered only in the first entry
                        (>= seconds 0))
                   seconds)
                  (t
@@ -34,8 +41,8 @@ extracted from that, else the user is prompted to enter those."
             (lambda (time inter)
               "Return string representation of TIME.
 TIME is of the type (DD HH MM SS), where each of those elements
-are numbers.  If INTER is non-nil, echo the time string in a
-well-formatted manner instead of returning it."
+are numbers.  If INTER is non-nil, also echo the time string in a
+well-formatted manner."
               (let ((filler "    ")
                     (str ""))
                 (dolist (unit '("d" "h" "m" "s"))
@@ -57,10 +64,12 @@ well-formatted manner instead of returning it."
                     (setq str (concat str val-str))))
                 ;; (message "debug: %S" time)
                 (if inter
-                    (message "%0.2f seconds → %s"
-                             seconds
-                             (string-trim (replace-regexp-in-string " +"  " " str)))
-                  (string-trim-right str)))))
+                    (progn
+                      (setq str (string-trim
+                                 (replace-regexp-in-string " +"  " " str)))
+                      (message "%0.2f seconds → %s" seconds str))
+                  (setq str (string-trim-right str)))
+                str)))
            (time (cond
                   ((>= sec DAY)          ;> day
                    (let* ((days (/ (floor sec) DAY))
@@ -85,7 +94,15 @@ well-formatted manner instead of returning it."
       ;; recursive call.  Return the time as a string only then.  For
       ;; re-entrant executions, return the `time' list instead.
       (if (numberp seconds)
-          (funcall gen-time-string time inter)
+          (let ((ret-val (funcall gen-time-string time inter))
+                (arg current-prefix-arg))
+            (cond
+             ((equal arg '(4))
+              (kill-new ret-val))
+             ((and (use-region-p)
+                   (equal arg '(16)))
+              (delete-active-region)
+              (insert ret-val))))
         time))))
 
 ;; Tests
