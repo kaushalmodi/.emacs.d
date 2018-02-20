@@ -1,10 +1,10 @@
-;; Time-stamp: <2018-02-16 15:34:32 kmodi>
+;; Time-stamp: <2018-02-20 13:05:43 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
 ;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
-(defvar gc-cons-threshold--orig gc-cons-threshold)
-(setq gc-cons-threshold (* 100 1024 1024)) ; 100 MB before garbage collection
+(defvar modi/gc-cons-threshold--orig gc-cons-threshold)
+(setq gc-cons-threshold (* 100 1024 1024)) ;100 MB before garbage collection
 
 ;; Remove dot from in-between the first and last names if present.
 (setq user-full-name (replace-regexp-in-string "\\." " " user-full-name))
@@ -387,4 +387,5 @@ need Org version to be at least 9.x.")
 
 (setq emacs-initialized t)
 
-(run-with-idle-timer 5 nil (lambda () (setq gc-cons-threshold gc-cons-threshold--orig)))
+(when modi/gc-cons-threshold--orig
+  (run-with-idle-timer 5 nil (lambda () (setq gc-cons-threshold modi/gc-cons-threshold--orig))))
