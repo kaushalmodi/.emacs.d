@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 13:11:33 kmodi>
+;; Time-stamp: <2018-02-20 15:20:50 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -11,35 +11,49 @@
   ;; Lower-level `package.el' variables like `package-user-dir' need to be set
   ;; in early-init.el starting emacs 27.x.
   ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=24acb31c04b4048b85311d794e600ecd7ce60d3b
-  (setq package-user-dir (format "%selpa_%s/"
-                                 user-emacs-directory emacs-major-version))) ;default = ~/.emacs.d/elpa/
+  (setq package-user-dir (let ((elpa-dir-name (format "elpa_%s" emacs-major-version))) ;default = "elpa"
+                           (file-name-as-directory (expand-file-name elpa-dir-name user-emacs-directory)))))
 ;; Below require will auto-create `package-user-dir' it doesn't exist.
 (require 'package)
 
 (>=e "25.0"
     (setq package-menu-async t)) ; If non-nil, do activities asynchronously, like refreshing menu
 
-(add-to-list 'load-path (concat user-emacs-directory "elisp/"))
-(add-to-list 'load-path (concat user-emacs-directory "setup-files/"))
+(defvar modi/elisp-directory (file-name-as-directory (expand-file-name "elisp" user-emacs-directory))
+  "Directory containing my custom elisp code.")
+
+(add-to-list 'load-path modi/elisp-directory)
+(add-to-list 'load-path (file-name-as-directory (expand-file-name "setup-files" user-emacs-directory)))
 
 (let* ((bin-dir (when (and invocation-directory
                            (file-exists-p invocation-directory))
                   (file-truename invocation-directory)))
-       (prefix-dir (when bin-dir
-                     (replace-regexp-in-string "bin/\\'" "" bin-dir)))
-       (share-dir (when prefix-dir
-                    (concat prefix-dir "share/")))
-       (lisp-dir-1 (when share-dir ;Possibility where the lisp dir is something like ../emacs/26.0.50/lisp/
-                     (concat share-dir "emacs/"
-                             ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
-                             ;; Though, this is not needed and also will do nothing in emacs 26+
-                             ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
-                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
-                             "/lisp/")))
-       (lisp-dir-2 (when share-dir ;Possibility where the lisp dir is something like ../emacs/25.2/lisp/
-                     (concat share-dir "emacs/"
-                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
-                             "/lisp/"))))
+       (prefix-dir (when bin-dir        ;Because bin-dir = prefix-dir + "bin/"
+                     (file-name-directory (directory-file-name bin-dir))))
+       (share-dir (when (and prefix-dir
+                             (file-exists-p prefix-dir))
+                    (file-name-as-directory (expand-file-name "share" prefix-dir))))
+       (emacs-dir (when (and share-dir
+                             (file-exists-p share-dir))
+                    (file-name-as-directory (expand-file-name "emacs" share-dir))))
+       (version-dir (when emacs-dir
+                      ;; Possibility where the lisp dir is something like
+                      ;; ../emacs/26.0.50/lisp/.  If `emacs-version' is x.y.z.w,
+                      ;; remove the ".w" portion.  Though, this is not needed
+                      ;; for emacs 26+, and also will do nothing in that case.
+                      ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
+                      (let* ((version (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version))
+                             (version-dir-1 (file-name-as-directory (expand-file-name version emacs-dir))))
+                        (if (file-exists-p version-dir-1)
+                            version-dir-1
+                          ;; Possibility where the lisp dir is something like
+                          ;; ../emacs/25.2/lisp/.  If `emacs-version' is x.y.z,
+                          ;; remove the ".z" portion.
+                          (setq version (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version))
+                          (setq version-dir-1 (file-name-as-directory (expand-file-name version emacs-dir)))
+                          (when (file-exists-p version-dir-1)
+                            version-dir-1)))))
+       (lisp-dir (file-name-as-directory (expand-file-name "lisp" version-dir))))
   ;; (message "setup-packages:: bin-dir: %s" bin-dir)
   ;; (message "setup-packages:: prefix-dir: %s" prefix-dir)
   ;; (message "setup-packages:: share-dir: %s" share-dir)
@@ -48,13 +62,8 @@
   (defvar modi/default-share-directory (when (file-exists-p share-dir)
                                          share-dir)
     "Share directory for this Emacs installation.")
-  (defvar modi/default-lisp-directory (cond
-                                       ((file-exists-p lisp-dir-1)
-                                        lisp-dir-1)
-                                       ((file-exists-p lisp-dir-2)
-                                        lisp-dir-2)
-                                       (t
-                                        nil))
+  (defvar modi/default-lisp-directory (when (file-exists-p lisp-dir)
+                                        lisp-dir)
     "Directory containing lisp files for the Emacs installation.
 
 This value must match the path to the lisp/ directory of the
@@ -64,9 +73,9 @@ Emacs installation.  If Emacs is installed using
 
 ;; Add theme paths
 (add-to-list 'custom-theme-load-path
-             (concat user-emacs-directory "elisp/zenburn-emacs/"))
+             (file-name-as-directory (expand-file-name "zenburn-emacs" modi/elisp-directory)))
 (add-to-list 'custom-theme-load-path
-             (concat user-emacs-directory "elisp/smyx/"))
+             (file-name-as-directory (expand-file-name "smyx" modi/elisp-directory)))
 
 ;; Add melpa package source when using package list
 ;; Fri Nov 17 17:05:12 EST 2017 - kmodi

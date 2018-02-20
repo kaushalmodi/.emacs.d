@@ -5,11 +5,10 @@
 ;;   Faces used in exported html are taken from `htmlize-r2f-css-file'
 
 ;; http://emacs.stackexchange.com/a/14560/115
-(defvar htmlize-r2f-output-directory
-  (let ((dir (concat temporary-file-directory
-                     (getenv "USER") "/.htmlize/"))) ; must end with /
-    (make-directory dir :parents)
-    dir)
+(defvar htmlize-r2f-output-directory (let* ((dir-1 (file-name-as-directory (expand-file-name (getenv "USER") temporary-file-directory)))
+                                            (dir (file-name-as-directory (expand-file-name ".htmlize" dir-1))))
+                                       (make-directory dir :parents)
+                                       dir)
   "Output directory for the exported html files.")
 
 (defvar htmlize-r2f-css-file (concat user-emacs-directory

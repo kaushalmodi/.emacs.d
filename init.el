@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 13:05:43 kmodi>
+;; Time-stamp: <2018-02-20 15:16:35 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -9,16 +9,19 @@
 ;; Remove dot from in-between the first and last names if present.
 (setq user-full-name (replace-regexp-in-string "\\." " " user-full-name))
 
-(defvar user-home-directory (concat (getenv "HOME") "/")) ; must end with /
-(setq user-emacs-directory (concat user-home-directory ".emacs.d/")) ; must end with /
+(defvar user-home-directory (file-name-as-directory (getenv "HOME")))
+(setq user-emacs-directory (file-name-as-directory (expand-file-name ".emacs.d" user-home-directory)))
 
-(setq org-directory (let ((dir (concat user-home-directory
-                                       "org/"))) ; must end with /
+(defvar modi/temporary-file-directory (let* ((dir (file-name-as-directory (expand-file-name (getenv "USER") temporary-file-directory))))
+                                        (make-directory dir :parents)
+                                        dir)
+  "User-specific temporary directory name.")
+
+(setq org-directory (let ((dir (file-name-as-directory (expand-file-name "org" user-home-directory))))
                       (make-directory dir :parents)
                       dir))
 
-(defvar user-personal-directory (let ((dir (concat user-emacs-directory
-                                                   "personal/"))) ; must end with /
+(defvar user-personal-directory (let ((dir (file-name-as-directory (expand-file-name "personal" user-emacs-directory))))
                                   (make-directory dir :parents)
                                   dir)
   "User's personal directory to contain non-git-controlled files.")

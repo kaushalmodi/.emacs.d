@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 12:59:02 kmodi>
+;; Time-stamp: <2018-02-20 15:17:07 kmodi>
 
 ;; Backups
 
@@ -28,11 +28,10 @@
 ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Rename-or-Copy.html
 (setq backup-by-copying t) ; don't clobber symlinks
 
-(setq modi/backup-directory
-      (let ((dir (concat temporary-file-directory
-                         (getenv "USER") "/.backups/"))) ; must end with /
-        (make-directory dir :parents)
-        dir))
+(defvar modi/backup-directory (let ((dir (file-name-as-directory (expand-file-name ".backups" modi/temporary-file-directory))))
+                                (make-directory dir :parents)
+                                dir)
+  "Directory for storing my backups.")
 
 ;; Save all backups to `modi/backup-directory'
 (setq backup-directory-alist `(("." . ,modi/backup-directory)))

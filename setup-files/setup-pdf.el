@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-02 10:49:49 kmodi>
+;; Time-stamp: <2018-02-20 15:10:27 kmodi>
 
 ;; PDF
 
@@ -14,8 +14,9 @@
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (progn
-    (defvar modi/pdf-tools-bin-directory (let ((dir (concat user-emacs-directory
-                                                            "misc/pdf-tools/bin/"))) ; must end with /
+    (defvar modi/pdf-tools-bin-directory (let* ((dir-1 (file-name-as-directory (expand-file-name "misc" user-emacs-directory)))
+                                                (dir-2 (file-name-as-directory (expand-file-name "pdf-tools" dir-1)))
+                                                (dir (file-name-as-directory (expand-file-name "bin" dir-2))))
                                            (make-directory dir :parents)
                                            dir)
       "Directory to hold the executable(s) for pdf-tools.")

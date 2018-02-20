@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-11-20 22:24:32 kmodi>
+;; Time-stamp: <2018-02-20 15:08:17 kmodi>
 
 ;; server/daemon setup
 
@@ -12,16 +12,19 @@
       ;; On Windows, also set the EMACS_SERVER_FILE environment variable to
       ;; point to the `server' file. For example, for emacs 25.1, that location
       ;; would be "PATH\TO\.emacs.d\server_25_1_HOSTNAME\server".
-      (setq server-auth-dir
-            (let ((dir (concat user-emacs-directory
-                               "server_" emacs-version-short
-                               ;; Prevent server file clashes when the same emacs
-                               ;; config is shared simultaneously across different
-                               ;; machines (e.g. via Dropbox)
-                               "_" (>=e "25.0" (system-name) system-name)
-                               "/"))) ; must end with /
-              (make-directory dir :parents)
-              dir))))
+
+      ;; Append the machine name to `server-auth-dir' to prevent server file
+      ;; clashes when the same emacs config is shared simultaneously across
+      ;; different machines (e.g. via Dropbox).
+      (setq server-auth-dir (let* ((machine-name (>=e "25.0"
+                                                     (system-name)
+                                                   system-name))
+                                   (server-dir (format "server_%s_%s"
+                                                       emacs-version-short
+                                                       machine-name))
+                                   (dir (file-name-as-directory (expand-file-name server-dir user-emacs-directory))))
+                              (make-directory dir :parents)
+                              dir))))
   :config
   (progn
     (when (equal window-system 'w32)

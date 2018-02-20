@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-27 17:42:59 kmodi>
+;; Time-stamp: <2018-02-20 14:59:00 kmodi>
 
 ;; Elfeed
 ;; Source: https://github.com/skeeto/elfeed
@@ -8,8 +8,8 @@
   :preface
   (progn
     (setq elfeed-db-directory
-          (let ((dir (locate-user-emacs-file
-                      (concat "elfeed_db_" emacs-version-short "/")))) ; must end with /
+          (let* ((db-dir-name (format "elfeed_db_%s" emacs-version-short))
+                 (dir (file-name-as-directory (expand-file-name db-dir-name user-emacs-directory))))
             (make-directory dir :parents)
             dir)))
   :config

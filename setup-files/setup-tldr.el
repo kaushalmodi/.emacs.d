@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-26 13:43:53 kmodi>
+;; Time-stamp: <2018-02-20 15:18:16 kmodi>
 
 ;; TLDR
 ;; https://github.com/tldr-pages/tldr
@@ -8,10 +8,10 @@
          ("C-x / t" . tldr))
   :init
   (progn
-    (setq tldr-directory-path (concat temporary-file-directory
-                                      (getenv "USER") "/tldr/")) ;must end with /
-    (setq tldr-saved-zip-path (concat temporary-file-directory
-                                      (getenv "USER") "/tldr-source.zip"))))
+    (setq tldr-saved-zip-path (expand-file-name "tldr-source.zip" modi/temporary-file-directory))
+    (setq tldr-directory-path (let ((dir (file-name-as-directory (expand-file-name "tldr" modi/temporary-file-directory))))
+                                (make-directory dir :parents)
+                                dir))))
 
 ;; Related -- curl cheat.sh
 ;; https://github.com/chubin/cheat.sh

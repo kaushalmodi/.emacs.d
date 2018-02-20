@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-16 15:28:45 kmodi>
+;; Time-stamp: <2018-02-20 15:17:37 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -6,11 +6,9 @@
 
 ;; Delete stuff to a trash directory
 (setq delete-by-moving-to-trash t)
-(setq trash-directory
-      (let ((dir (concat temporary-file-directory
-                         (getenv "USER") "/.trash_emacs/"))) ;Must end with /
-        (make-directory dir :parents)
-        dir))
+(setq trash-directory (let ((dir (file-name-as-directory (expand-file-name ".trash_emacs" modi/temporary-file-directory))))
+                        (make-directory dir :parents)
+                        dir))
 
 ;; Uncompress->edit->save->compress .gz, .bz2, .Z files on the fly
 (auto-compression-mode 1)
