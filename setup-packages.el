@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-01-05 14:02:30 kmodi>
+;; Time-stamp: <2018-02-20 13:11:33 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -6,8 +6,13 @@
 ;; Load newer version of .el and .elc if both are available
 (setq load-prefer-newer t)
 
-(setq package-user-dir (format "%selpa_%s/"
-                               user-emacs-directory emacs-major-version)) ; default = ~/.emacs.d/elpa/
+(>=e "27.0"
+    nil
+  ;; Lower-level `package.el' variables like `package-user-dir' need to be set
+  ;; in early-init.el starting emacs 27.x.
+  ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=24acb31c04b4048b85311d794e600ecd7ce60d3b
+  (setq package-user-dir (format "%selpa_%s/"
+                                 user-emacs-directory emacs-major-version))) ;default = ~/.emacs.d/elpa/
 ;; Below require will auto-create `package-user-dir' it doesn't exist.
 (require 'package)
 
@@ -81,12 +86,15 @@ Emacs installation.  If Emacs is installed using
     (add-to-list 'package-archives (cons "org" orgelpa-url))
     (add-to-list 'my-packages 'org-plus-contrib))) ;Latest stable version of org-mode, includes org-eww
 
-;; Load emacs packages and activate them
-;; This must come before configurations of installed packages.
-;; Don't delete this line.
-(package-initialize)
-;; `package-initialize' call is required before any of the below
-;; can happen
+(>=e "27.0"
+    nil           ;`package-initialize' call is not needed in emacs 27+
+  ;; Load emacs packages and activate them
+  ;; This must come before configurations of installed packages.
+  ;; Don't delete this line.
+  (package-initialize)
+  ;; `package-initialize' call is required before any of the below
+  ;; can happen.
+  )
 
 ;; Auto install the required packages
 ;; https://github.com/bbatsov/prelude/blob/master/core/prelude-packages.el
