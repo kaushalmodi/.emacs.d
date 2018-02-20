@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 16:34:54 kmodi>
+;; Time-stamp: <2018-02-20 16:39:46 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -29,6 +29,7 @@
 ;;      ├── bin (`invocation-directory')
 ;;      ├── share (`modi/default-share-directory')
 ;;      │   ├── emacs
+;;      │   │   ├── site-lisp
 ;;      │   │   ├── 27.0.50
 ;;      │   │   │   ├── lisp (`modi/default-lisp-directory')
 ;;      │   │   │   └── ..
