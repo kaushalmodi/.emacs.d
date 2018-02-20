@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 15:40:26 kmodi>
+;; Time-stamp: <2018-02-20 16:34:54 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -25,25 +25,42 @@
 (add-to-list 'load-path modi/elisp-directory)
 (add-to-list 'load-path (file-name-as-directory (expand-file-name "setup-files" user-emacs-directory)))
 
+;; <prefix-dir>
+;;      ├── bin (`invocation-directory')
+;;      ├── share (`modi/default-share-directory')
+;;      │   ├── emacs
+;;      │   │   ├── 27.0.50
+;;      │   │   │   ├── lisp (`modi/default-lisp-directory')
+;;      │   │   │   └── ..
+;;      │   │   └── ..
+;;      │   └── ..
+;;      └── ..
+(defvar modi/default-share-directory nil
+  "Share directory for this Emacs installation.")
+(defvar modi/default-lisp-directory nil
+  "Directory containing lisp files for the Emacs installation.
+
+This value must match the path to the lisp/ directory of the
+Emacs installation.  If Emacs is installed using
+--prefix=\"${PREFIX_DIR}\" this value would typically be
+\"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\".")
 (let* ((bin-dir (when (and invocation-directory
                            (file-exists-p invocation-directory))
                   (file-truename invocation-directory)))
        (prefix-dir (when bin-dir        ;Because bin-dir = prefix-dir + "bin/"
                      (file-name-directory (directory-file-name bin-dir))))
-       (share-dir (when (and prefix-dir
-                             (file-exists-p prefix-dir))
-                    (file-name-as-directory (expand-file-name "share" prefix-dir))))
-       (emacs-dir (when (and share-dir
-                             (file-exists-p share-dir))
-                    (file-name-as-directory (expand-file-name "emacs" share-dir))))
-       (version-dir (when (and emacs-dir
-                               (file-exists-p emacs-dir))
-                      ;; Possibility where the lisp dir is something like
-                      ;; ../emacs/26.0.50/lisp/.  If `emacs-version' is x.y.z.w,
-                      ;; remove the ".w" portion.  Though, this is not needed
-                      ;; for emacs 26+, and also will do nothing in that case.
-                      ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
-                      (let* ((version (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version))
+       (share-dir (when prefix-dir
+                    (let ((share-dir-1 (file-name-as-directory (expand-file-name "share" prefix-dir))))
+                      (when (file-exists-p share-dir-1)
+                        (setq modi/default-share-directory share-dir-1))
+                      share-dir-1)))
+       (version-dir (when share-dir
+                      (let* ((emacs-dir (file-name-as-directory (expand-file-name "emacs" share-dir)))
+                             ;; Possibility where the lisp dir is something like
+                             ;; ../emacs/26.0.50/lisp/.  If `emacs-version' is
+                             ;; x.y.z.w, remove the ".w" portion.
+                             ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
+                             (version (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version))
                              (version-dir-1 (file-name-as-directory (expand-file-name version emacs-dir))))
                         (if (file-exists-p version-dir-1)
                             version-dir-1
@@ -53,28 +70,15 @@
                           (setq version (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version))
                           (setq version-dir-1 (file-name-as-directory (expand-file-name version emacs-dir)))
                           (when (file-exists-p version-dir-1)
-                            version-dir-1)))))
-       (lisp-dir (when (and version-dir
-                            (file-exists-p version-dir))
-                   (file-name-as-directory (expand-file-name "lisp" version-dir)))))
+                            version-dir-1))))))
   ;; (message "setup-packages:: bin-dir: %s" bin-dir)
   ;; (message "setup-packages:: prefix-dir: %s" prefix-dir)
   ;; (message "setup-packages:: share-dir: %s" share-dir)
-  ;; (message "setup-packages:: lisp-dir-1: %s" lisp-dir-1)
-  ;; (message "setup-packages:: lisp-dir-2: %s" lisp-dir-2)
-  (defvar modi/default-share-directory (when (and share-dir
-                                                  (file-exists-p share-dir))
-                                         share-dir)
-    "Share directory for this Emacs installation.")
-  (defvar modi/default-lisp-directory (when (and lisp-dir
-                                                 (file-exists-p lisp-dir))
-                                        lisp-dir)
-    "Directory containing lisp files for the Emacs installation.
-
-This value must match the path to the lisp/ directory of the
-Emacs installation.  If Emacs is installed using
---prefix=\"${PREFIX_DIR}\" this value would typically be
-\"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\"."))
+  ;; (message "setup-packages:: version-dir: %s" version-dir)
+  (when version-dir
+    (let ((lisp-dir-1 (file-name-as-directory (expand-file-name "lisp" version-dir))))
+      (when (file-exists-p lisp-dir-1)
+        (setq modi/default-lisp-directory lisp-dir-1)))))
 
 ;; Add theme paths
 (add-to-list 'custom-theme-load-path
