@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-02 11:05:20 kmodi>
+;; Time-stamp: <2018-02-22 14:44:49 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -119,7 +119,7 @@ Additional control:
         (insert " "))
       (insert (format-time-string current-date-time-format (current-time)))
       (unless no-user-name
-        (insert " - " (getenv "USER")))
+        (insert " - " user-login-name))
       ;; Do not insert a space after the time stamp if at the end of the line
       ;; (preceding optional space).
       (unless (eol-before-space-maybe)
@@ -498,15 +498,14 @@ instead of ASCII characters for adorning the copied snippet."
           (chars-m-dash              (if unicode "──"        "---"      ))
           (chars-pipe                (if unicode "│"         "|"        ))
           (chunk                     (buffer-substring beg end))
-          (buffer-or-file-name (or (buffer-file-name) (buffer-name)))
-          (user (getenv "USER")))
+          (buffer-or-file-name (or (buffer-file-name) (buffer-name))))
       (setq chunk (concat
                    (format "%s #%-d %s %s %s\n%s "
                            chars-start-of-code-block
                            (line-number-at-pos beg)
                            chars-n-dash
                            (replace-regexp-in-string
-                            (concat "_" user) "_$USER" buffer-or-file-name)
+                            (concat "_" user-login-name) "_$USER" buffer-or-file-name)
                            chars-m-dash
                            chars-pipe)
                    (replace-regexp-in-string
@@ -517,7 +516,7 @@ instead of ASCII characters for adorning the copied snippet."
                            chars-n-dash
                            (format-time-string "%Y/%m/%d")
                            chars-n-dash
-                           user)))
+                           user-login-name)))
       (kill-new chunk)))
   (deactivate-mark))
 

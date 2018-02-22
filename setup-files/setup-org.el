@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 17:07:11 kmodi>
+;; Time-stamp: <2018-02-22 14:47:30 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -767,9 +767,9 @@ package is loaded.")
               ;; The default value of the `minted' package option `cachedir'
               ;; is "_minted-\jobname". That clutters the working dirs with
               ;; _minted* dirs. So instead create them in temp folders.
-              (defvar latex-minted-cachedir (concat temporary-file-directory
-                                                    (getenv "USER")
-                                                    "/.minted/\\jobname"))
+              (defvar latex-minted-cachedir
+                (file-name-as-directory
+                 (expand-file-name ".minted/\\jobname" modi/temporary-file-directory)))
               ;; `minted' package needed to be loaded AFTER `hyperref'.
               ;; http://tex.stackexchange.com/a/19586/52678
               (add-to-list 'modi/org-latex-packages-alist-post-hyperref

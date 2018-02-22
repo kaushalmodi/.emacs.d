@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 14:59:55 kmodi>
+;; Time-stamp: <2018-02-22 14:54:26 kmodi>
 
 ;; De-ansify
 
@@ -9,7 +9,7 @@
 
 (require 'filenotify)
 
-(defvar de-ansify-no-ansi-file-directory (let* ((dir-1 (file-name-as-directory (expand-file-name (getenv "USER") temporary-file-directory)))
+(defvar de-ansify-no-ansi-file-directory (let* ((dir-1 (file-name-as-directory (expand-file-name user-login-name temporary-file-directory)))
                                                 (dir (file-name-as-directory (expand-file-name ".de-ansify" dir-1))))
                                            (make-directory dir :parents)
                                            dir))

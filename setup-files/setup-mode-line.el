@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-20 09:50:18 kmodi>
+;; Time-stamp: <2018-02-22 14:45:37 kmodi>
 
 ;; Customize the mode-line
 
@@ -120,7 +120,7 @@ If nil, show the same in the minibuffer.")
                                           "." (upcase (match-string-no-properties 3 string))))
                       (user (match-string-no-properties 4 string))
                       (dir-abbrev (upcase (match-string-no-properties 5 string)))
-                      (is-me (string= user (getenv "USER"))))
+                      (is-me (string= user user-login-name)))
                  (concat (if is-me
                              (concat prj-root "/")
                            (concat ":" ;Has to begin with ':' to be identified in a different face

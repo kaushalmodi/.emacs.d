@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-20 14:13:11 kmodi>
+;; Time-stamp: <2018-02-22 14:43:55 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -111,7 +111,7 @@ packages.")
     "--smart-case"
     "--follow"                 ;Follow symlinks
     "--max-columns" "150"      ;Emacs doesn't handle long line lengths very well
-    "--ignore-file" ,(concat "/home/" (getenv "USER") "/.ignore"))
+    "--ignore-file" ,(expand-file-name ".ignore" (getenv "HOME")))
   "Default rg arguments used in the functions in `counsel' and `projectile'
 packages.")
 
@@ -178,10 +178,11 @@ Example usage:
   (declare (indent 1) (debug t))
   `(progn
      (require 'package)
-     (setq user-emacs-directory (concat temporary-file-directory
-                                        (getenv "USER") "/" ".emacs.d-debug/"))
-     (setq package-user-dir (format "%selpa_%s/"
-                                    user-emacs-directory emacs-major-version))
+     (setq user-emacs-directory (let* ((dir-1 (file-name-as-directory (expand-file-name user-login-name temporary-file-directory)))
+                                       (dir (file-name-as-directory (expand-file-name ".emacs.d-debug" dir-1))))
+                                  dir))
+     (setq package-user-dir (let ((elpa-dir-name (format "elpa_%s" emacs-major-version))) ;default = ~/.emacs.d/elpa/
+                              (file-name-as-directory (expand-file-name elpa-dir-name user-emacs-directory))))
      (let (archive pkgs)
        (dolist (archive-alist ,pkg-alist)
 	 (setq archive (car archive-alist))

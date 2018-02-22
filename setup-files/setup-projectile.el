@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-20 14:12:23 kmodi>
+;; Time-stamp: <2018-02-22 14:48:54 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -78,8 +78,9 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
 
     (defun modi/advice-projectile-use-rg ()
       "Always use `rg' for getting a list of all files in the project."
-      (let* ((prj-user-ignore-name (concat (projectile-project-root)
-                                           ".ignore." (getenv "USER")))
+      (let* ((prj-user-ignore-name (expand-file-name
+                                    (concat ".ignore." user-login-name)
+                                    (projectile-project-root)))
              (prj-user-ignore (when (file-exists-p prj-user-ignore-name)
                                 (concat "--ignore-file " prj-user-ignore-name))))
         (mapconcat #'shell-quote-argument

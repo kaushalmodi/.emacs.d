@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 15:16:35 kmodi>
+;; Time-stamp: <2018-02-22 15:16:22 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -12,7 +12,7 @@
 (defvar user-home-directory (file-name-as-directory (getenv "HOME")))
 (setq user-emacs-directory (file-name-as-directory (expand-file-name ".emacs.d" user-home-directory)))
 
-(defvar modi/temporary-file-directory (let* ((dir (file-name-as-directory (expand-file-name (getenv "USER") temporary-file-directory))))
+(defvar modi/temporary-file-directory (let ((dir (file-name-as-directory (expand-file-name user-login-name temporary-file-directory))))
                                         (make-directory dir :parents)
                                         dir)
   "User-specific temporary directory name.")

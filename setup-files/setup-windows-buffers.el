@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-28 15:15:05 kmodi>
+;; Time-stamp: <2018-02-22 14:45:18 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -243,7 +243,7 @@ Return the copied file name."
                         (16 file-name-full)                         ;C-u C-u
                         (t ;If $USER==xyz, replace _xyz with _${USER} in file name
                          (replace-regexp-in-string ;No prefix
-                          (concat "_" (getenv "USER")) "_$USER" file-name-full))))))
+                          (concat "_" user-login-name) "_$USER" file-name-full))))))
     (if file-name
         (progn
           (kill-new file-name)
