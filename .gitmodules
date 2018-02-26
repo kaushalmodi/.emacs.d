@@ -34,3 +34,6 @@
 [submodule "misc/fonts/iosevka"]
 	path = misc/fonts/iosevka
 	url = https://kaushalmodi@github.com/kaushalmodi/iosevka-mirror.git
+[submodule "elisp/web-mode"]
+	path = elisp/web-mode
+	url = https://github.com/kaushalmodi/web-mode
