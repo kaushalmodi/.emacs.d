@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-22 14:47:30 kmodi>
+;; Time-stamp: <2018-02-27 12:05:14 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -293,6 +293,20 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
             (setq count (1+ count))
             (replace-match (downcase (match-string-no-properties 1)) :fixedcase nil nil 1))
           (message "Lower-cased %d matches" count))))
+
+    ;; Make C-u C-return insert heading *at point* (not respecting content),
+    ;; even when the point is directly after a list item.
+    ;; Reason: http://lists.gnu.org/r/emacs-orgmode/2018-02/msg00368.html
+    (defun modi/org-insert-heading-respect-content (&optional invisible-ok)
+      "Insert heading with `org-insert-heading-respect-content' set to t.
+With \\[universal-argument] prefix, insert Org heading directly at
+point."
+      (interactive)
+      (let ((respect-content (unless current-prefix-arg
+                               '(4))))
+        (org-insert-heading respect-content invisible-ok)))
+    (advice-add 'org-insert-heading-respect-content :override
+                #'modi/org-insert-heading-respect-content)
 
 ;;; Org File Apps
     ;; Make firefox the default web browser for applications like viewing
