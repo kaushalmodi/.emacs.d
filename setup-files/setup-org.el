@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-27 12:05:14 kmodi>
+;; Time-stamp: <2018-02-27 17:32:52 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -337,6 +337,7 @@ point."
     ;; https://code.orgmode.org/bzg/org-mode/commit/c04e357f3d5d93484277a7e439847b1233b872bd
     (defconst org-easy-template-alist   ;Old `org-structure-template-alist'
       '(("s" "#+begin_src ?\n\n#+end_src")
+        ("d" "#+begin_description\n?\n#+end_description") ;Special block in `ox-hugo'
         ("e" "#+begin_example\n?\n#+end_example")
         ("q" "#+begin_quote\n?\n#+end_quote")
         ("v" "#+begin_verse\n?\n#+end_verse")
@@ -536,7 +537,7 @@ the \"#+begin_export\" line after the template insertion."
 org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext           _I_NCLUDE:
                _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
                _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:         _A_SCII:
-               ^^              _o_rg          _S_hell             _p_ython         e_X_port         ^^
+               ^^              _o_rg          _S_hell             _p_ython         e_X_port         _d_escription
 "
       ("s" (modi/org-template-expand "<s")) ;#+begin_src ... #+end_src
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
@@ -547,6 +548,7 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("S" (modi/org-template-expand "<s" "shell"))
       ("p" (modi/org-template-expand "<s" "python"))
       ("t" (modi/org-template-expand "<s" "text"))
+      ("d" (modi/org-template-expand "<d")) ;#+begin_description ... #+end_description (Special block in `ox-hugo')
       ("e" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
       ("x" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
       ("q" (modi/org-template-expand "<q")) ;#+begin_quote ... #+end_quote
