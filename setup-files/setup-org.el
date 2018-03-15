@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-27 17:32:52 kmodi>
+;; Time-stamp: <2018-03-15 14:10:11 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -337,7 +337,8 @@ point."
     ;; https://code.orgmode.org/bzg/org-mode/commit/c04e357f3d5d93484277a7e439847b1233b872bd
     (defconst org-easy-template-alist   ;Old `org-structure-template-alist'
       '(("s" "#+begin_src ?\n\n#+end_src")
-        ("d" "#+begin_description\n?\n#+end_description") ;Special block in `ox-hugo'
+        ("bd" "#+begin_description\n?\n#+end_description") ;Special block in `ox-hugo'
+        ("bn" "#+begin_note\n?\n#+end_note") ;Special block in `ox-hugo'
         ("e" "#+begin_example\n?\n#+end_example")
         ("q" "#+begin_quote\n?\n#+end_quote")
         ("v" "#+begin_verse\n?\n#+end_verse")
@@ -354,11 +355,12 @@ point."
         ("i" "#+index: ?")
         ("I" "#+include: %file ?"))
       "Structure completion elements.
-This is a list of abbreviation keys and values.  The value gets inserted
-if you type `<' followed by the key and then press the completion key,
-usually `TAB'.  %file will be replaced by a file name after prompting
-for the file using completion.  The cursor will be placed at the position
-of the `?' in the template.")
+This is a list of abbreviation keys and values.  The value gets
+inserted if you type `<' followed by one or more characters and
+then press the completion key, usually `TAB'.  %file will be
+replaced by a file name after prompting for the file using
+completion.  The cursor will be placed at the position of the `?'
+in the template.")
 
     (defun org-try-structure-completion ()
       "Try to complete a structure template before point.
@@ -534,10 +536,10 @@ the \"#+begin_export\" line after the template insertion."
     (defhydra hydra-org-template (:color blue
                                   :hint nil)
       "
-org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext           _I_NCLUDE:
-               _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:         _H_TML:
-               _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:         _A_SCII:
-               ^^              _o_rg          _S_hell             _p_ython         e_X_port         _d_escription
+org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext              _I_NCLUDE:
+               _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:            _H_TML:
+               _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:            _A_SCII:
+               _o_rg           _S_hell        _p_ython            e_X_port         [_bd_] description  [_bn_] note
 "
       ("s" (modi/org-template-expand "<s")) ;#+begin_src ... #+end_src
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
@@ -548,7 +550,8 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("S" (modi/org-template-expand "<s" "shell"))
       ("p" (modi/org-template-expand "<s" "python"))
       ("t" (modi/org-template-expand "<s" "text"))
-      ("d" (modi/org-template-expand "<d")) ;#+begin_description ... #+end_description (Special block in `ox-hugo')
+      ("bd" (modi/org-template-expand "<bd")) ;#+begin_description ... #+end_description (Special block in `ox-hugo')
+      ("bn" (modi/org-template-expand "<bn")) ;#+begin_note ... #+end_note (Special block in `ox-hugo')
       ("e" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
       ("x" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
       ("q" (modi/org-template-expand "<q")) ;#+begin_quote ... #+end_quote
