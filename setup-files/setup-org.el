@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-03-15 14:10:11 kmodi>
+;; Time-stamp: <2018-03-18 19:59:50 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1112,6 +1112,8 @@ footer > div {
 
     (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
     (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+    (add-to-list 'org-src-lang-modes '("go-html-template" . html)) ;Go Template
+    (add-to-list 'org-src-lang-modes '("go-text-template" . html)) ;Go Template
 
     (bind-keys
      :map org-src-mode-map
