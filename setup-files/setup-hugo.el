@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-15 22:34:01 kmodi>
+;; Time-stamp: <2018-03-19 18:35:22 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -23,9 +23,10 @@ See `org-capture-templates' for more information."
                  `(
                    ,(concat "* TODO " title)
                    ":PROPERTIES:"
-                   ,(concat ":EXPORT_FILE_NAME: " fname)
+                   ,(concat ":EXPORT_HUGO_BUNDLE: " fname)
+                   ":EXPORT_FILE_NAME: index"
                    ":END:"
-                   "%?\n")          ;Place the cursor here finally
+                   "%?\n")              ;Place the cursor here finally
                  "\n")))
 
   (add-to-list 'org-capture-templates
