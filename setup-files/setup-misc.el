@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 15:17:37 kmodi>
+;; Time-stamp: <2018-04-04 10:47:44 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -184,6 +184,10 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 (use-package seconds-to-human-time
   :load-path "elisp/misc"
   :commands (seconds-to-human-time))
+
+(use-package fontawesome-choose
+  :load-path "elisp/misc"
+  :commands (fontawesome-choose))
 
 (bind-keys
  ;; `save-buffers-kill-terminal' kills only the current frame; it will NOT
