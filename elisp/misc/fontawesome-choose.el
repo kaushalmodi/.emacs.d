@@ -1,13 +1,15 @@
-;; Time-stamp: <2018-04-04 10:52:14 kmodi>
+;; Time-stamp: <2018-04-04 15:48:57 kmodi>
 
 ;; Helper function `fontawesome-choose' used to uncomment only the
 ;; icons the user cares about in `fontawesome-all.js'.
+;; https://scripter.co/optimize-your-fontawesome/
 
 (defconst fontawesome-choose-icons '("list-alt" ;categories
                                      "tags"
                                      "rss"
                                      "link"
                                      "heart" ;like
+                                     "reply"
                                      "retweet"
                                      "github" ;"github-alt" "github-square"
                                      "twitter" ;"twitter-square"
@@ -21,8 +23,8 @@ Used in `fontawesome-choose'.")
 Minifying the resultant .js will then remove the commented icons,
 thus drastically reducing the minified JS size.
 
-Set the let-bound `selected-icon' string list in this function to
-the list of icons that you want to keep uncommented."
+Set the `fontawesome-choose-icons' variable to the list of icons
+that you want to keep uncommented."
   (interactive)
   (let ((case-fold-search nil)
         (count 0))
