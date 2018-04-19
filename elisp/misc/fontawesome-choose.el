@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-04-04 15:48:57 kmodi>
+;; Time-stamp: <2018-04-19 00:48:43 kmodi>
 
 ;; Helper function `fontawesome-choose' used to uncomment only the
 ;; icons the user cares about in `fontawesome-all.js'.
@@ -11,6 +11,7 @@
                                      "heart" ;like
                                      "reply"
                                      "retweet"
+                                     "hacker-news"
                                      "github" ;"github-alt" "github-square"
                                      "twitter" ;"twitter-square"
                                      "gitlab")
