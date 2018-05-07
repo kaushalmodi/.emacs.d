@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-03-18 19:59:50 kmodi>
+;; Time-stamp: <2018-05-07 16:35:47 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -636,13 +636,13 @@ line, or if a region is selected.  Else call
       "Delete columns $2 to $> marked as `<#>' on a row with `/' in $1.
 If you want a non-empty column $1 to be deleted make it $2 by
 inserting an empty column before and adding `/' in $1."
+      (goto-char (point-min))
       (while (re-search-forward
               "^[ \t]*| +/ +|\\(.*|\\)? +\\(<#>\\) *|" nil :noerror)
         (goto-char (match-beginning 2))
         (org-table-delete-column)
         (beginning-of-line)))
-    (add-hook 'org-export-before-processing-hook
-              #'mbrand/org-export-delete-commented-cols)
+    (add-hook 'org-export-before-processing-hook #'mbrand/org-export-delete-commented-cols)
 
     ;; http://lists.gnu.org/archive/html/emacs-orgmode/2016-09/msg00168.html
     (defun cpit/filter-begin-only (type)
