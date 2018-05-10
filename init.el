@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-22 15:16:22 kmodi>
+;; Time-stamp: <2018-05-10 09:35:11 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -228,6 +228,7 @@ need Org version to be at least 9.x.")
 (require 'setup-counsel)
 (require 'setup-de-ansify)
 (require 'setup-deft)
+(require 'setup-devdocs)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
 (require 'setup-elfeed)
