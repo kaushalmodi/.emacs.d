@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-06 18:46:00 kmodi>
+;; Time-stamp: <2018-05-10 09:44:07 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
@@ -8,6 +8,7 @@
   :mode (("\\.nim\\'" . nim-mode))
   :config
   (progn
+    (key-chord-define nim-mode-map "??" #'devdocs-lookup)
     (with-eval-after-load 'smart-compile
       (add-to-list 'smart-compile-alist
                    '(nim-mode . "nim c --verbosity:0 %f")))
@@ -16,7 +17,9 @@
       (setq nim-nimsuggest-path (executable-find "nimsuggest"))
       ;; Currently nimsuggest doesn't support nimscript files, so only nim-mode ..
       ;; nimsuggest will provide hints in the minibuffer using `eldoc-mode'.
-      (add-hook 'nim-mode-hook #'nimsuggest-mode))
+      (add-hook 'nim-mode-hook #'nimsuggest-mode)
+      ;; (remove-hook 'nim-mode-hook #'nimsuggest-mode)
+      )
 
     (use-package ob-nim
       :ensure t
