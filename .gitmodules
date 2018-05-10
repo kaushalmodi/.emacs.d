@@ -39,4 +39,4 @@
 	url = https://github.com/kaushalmodi/web-mode
 [submodule "elisp/devdocs-lookup"]
 	path = elisp/devdocs-lookup
-	url = https://github.com/skeeto/devdocs-lookup
+	url = https://github.com/kaushalmodi/devdocs-lookup
