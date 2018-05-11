@@ -1,12 +1,12 @@
-;; Time-stamp: <2018-05-03 10:16:35 kmodi>
+;; Time-stamp: <2018-05-11 01:49:19 kmodi>
 
 ;; Helper function `fontawesome-choose' used to uncomment only the
 ;; icons the user cares about in `fontawesome-all.js'.
 ;; https://scripter.co/optimize-your-fontawesome/
 
-(defconst fontawesome-choose-icons '("list-alt" ;categories
-                                     "tags"
-                                     "rss"
+(defconst fontawesome-choose-icons '("rss"
+                                     ;; "list-alt" ;categories
+                                     ;; "tags"
                                      "link"
                                      "heart" ;like
                                      "reply"
