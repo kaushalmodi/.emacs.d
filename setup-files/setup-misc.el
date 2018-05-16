@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-04-04 10:47:44 kmodi>
+;; Time-stamp: <2018-05-16 17:09:23 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -144,9 +144,14 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   :defer t
   :config
   (progn
-    ;; Set firefox as the default web browser if available
-    (when (executable-find "firefox")
-      (setq browse-url-browser-function 'browse-url-firefox))))
+    (setq browse-url-browser-function
+          (cond
+           ((executable-find "google-chrome")
+            #'browse-url-chrome)
+           ((executable-find "firefox")
+            #'browse-url-firefox)
+           (t
+            #'browse-url-default-browser)))))
 
 ;; Unset keys
 (global-unset-key (kbd "C-z"))          ;Bound to `suspend-frame' by default
