@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-01-31 16:09:55 kmodi>
+;; Time-stamp: <2018-05-24 11:50:07 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -351,7 +351,9 @@ Font Size:     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset    
  ;; Make Control+mousewheel do increase/decrease font-size
  ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
  ("<C-mouse-4>" . modi/global-font-size-incr)  ;Ctrl + wheel-up
- ("<C-mouse-5>" . modi/global-font-size-decr)) ;Ctrl + wheel-down
+ ("<XF86AudioRaiseVolume>" . modi/global-font-size-incr) ;DasQ Q-wheel clockwise
+ ("<C-mouse-5>" . modi/global-font-size-decr)            ;Ctrl + wheel-down
+ ("<XF86AudioLowerVolume>" . modi/global-font-size-decr)) ;DasQ Q-wheel counter-clockwise
 
 (>=e "25.0"
     ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
