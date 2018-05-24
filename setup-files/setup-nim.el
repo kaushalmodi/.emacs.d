@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-10 09:44:07 kmodi>
+;; Time-stamp: <2018-05-24 11:56:21 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
@@ -6,9 +6,10 @@
 (use-package nim-mode
   :ensure t
   :mode (("\\.nim\\'" . nim-mode))
+  :chords (:map nim-mode-map
+           ("??" . devdocs-lookup))
   :config
   (progn
-    (key-chord-define nim-mode-map "??" #'devdocs-lookup)
     (with-eval-after-load 'smart-compile
       (add-to-list 'smart-compile-alist
                    '(nim-mode . "nim c --verbosity:0 %f")))
