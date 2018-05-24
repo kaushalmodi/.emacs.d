@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 14:52:00 kmodi>
+;; Time-stamp: <2018-05-03 11:44:23 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing
 ;; directories of plain text notes, inspired by Notational Velocity.
@@ -114,6 +114,16 @@ If NEW-FILE is non-nil, call `deft-new-file'."
      ("<S-return>" . deft-new-file)
      ("C-o" . nil)                    ;Unbind the "C-o" key from `deft-mode-map'
      ("C-c C-o" . deft-open-file-other-window))))
+
+;; https://tero.hasu.is/notdeft/
+(use-package notdeft
+  :load-path "misc/notdeft"
+  :config
+  (progn
+    (setq notdeft-xapian-program
+          (expand-file-name "misc/notdeft/xapian/notdeft-xapian" user-emacs-directory))
+    (add-to-list 'notdeft-directories
+                 (file-name-as-directory (expand-file-name "notes" org-directory)))))
 
 
 (provide 'setup-deft)
