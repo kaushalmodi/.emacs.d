@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-15 22:41:18 kmodi>
+;; Time-stamp: <2018-06-08 13:13:44 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -16,9 +16,8 @@
                   magit-insert-modules-unpulled-from-upstream
                   magit-insert-modules-unpushed-to-pushremote
                   magit-insert-modules-unpushed-to-upstream
-                  magit-insert-modules-unpulled-from-pushremote
                   ;; Below will end up being the first of these newly added fns.
-                  magit-insert-submodules))
+                  magit-insert-modules-unpulled-from-pushremote))
       (magit-add-section-hook 'magit-status-sections-hook `,fn nil :append))
 
     (defhydra hydra-magit (:color blue
