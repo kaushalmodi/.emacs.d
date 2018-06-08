@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-22 14:44:49 kmodi>
+;; Time-stamp: <2018-06-08 17:23:51 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -1113,10 +1113,18 @@ to help with some debug."
     (save-restriction
       (narrow-to-region beg end)
       (save-excursion
-        (goto-char (point-min))
-        (while (re-search-forward "[a-zA-z0-9]" nil :noerror)
-          (let ((rand-char (char-to-string (+ ?a (random (- ?z ?a))))))
-            (replace-match rand-char)))))))
+        (let ((case-fold-search nil))
+          (goto-char (point-min))
+          (while (re-search-forward "[a-z]" nil :noerror)
+            (replace-match (char-to-string (+ ?a (random (- ?z ?a))))))
+          (goto-char (point-min))
+          (while (re-search-forward "[A-Z]" nil :noerror)
+            (replace-match (char-to-string (+ ?A (random (- ?Z ?A))))))
+          (goto-char (point-min))
+          (while (re-search-forward "[0-9]" nil :noerror)
+            (replace-match (char-to-string (+ ?0 (random (- ?9 ?0)))))))))))
+(defalias 'modi/obfuscate-text 'modi/anonymize)
+(defalias 'modi/randomize-text 'modi/anonymize)
 
 ;;; Keep Lines - Because I Said So
 (defun modi/keep-lines-force (regexp)
