@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-06-05 12:08:41 kmodi>
+;; Time-stamp: <2018-06-13 13:42:42 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -26,7 +26,7 @@ See `org-capture-templates' for more information."
                    ,(concat ":EXPORT_HUGO_BUNDLE: " fname)
                    ":EXPORT_FILE_NAME: index"
                    ":EXPORT_HUGO_CUSTOM_FRONT_MATTER: :versions '()"
-                   ":EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :syndication '((twitter . \"0\"))"
+                   ":EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :syndication '((twitter . \"\"))"
                    ":END:"
                    "%?\n")              ;Place the cursor here finally
                  "\n")))
