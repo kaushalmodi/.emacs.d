@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-16 17:09:23 kmodi>
+;; Time-stamp: <2018-06-14 12:27:00 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -141,7 +141,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
         (save-place-mode 1))))
 
 (use-package browse-url
-  :defer t
+  :commands (browse-url-chrome) ;https://debbugs.gnu.org/cgi/bugreport.cgi?bug=31828
   :config
   (progn
     (setq browse-url-browser-function
