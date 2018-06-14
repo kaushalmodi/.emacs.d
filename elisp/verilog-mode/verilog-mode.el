@@ -1,6 +1,6 @@
 ;;; verilog-mode.el --- major mode for editing verilog source in Emacs
 
-;; Copyright (C) 1996-2017 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2018 Free Software Foundation, Inc.
 
 ;; Author: Michael McNamara <mac@verilog.com>
 ;;    Wilson Snyder <wsnyder@wsnyder.org>
@@ -122,7 +122,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2017-11-26-c039b16-vpo"
+(defconst verilog-mode-version "2018-05-26-be4eda3-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -764,14 +764,14 @@ mode is experimental."
   :version "24.1"  ; rev670
   :group 'verilog-mode-actions
   :type 'boolean)
-(put 'verilog-auto-declare-nettype 'safe-local-variable `stringp)
+(put 'verilog-auto-declare-nettype 'safe-local-variable 'stringp)
 
 (defcustom verilog-auto-wire-comment t
   "Non-nil indicates to insert to/from comments with `verilog-auto-wire' etc."
   :version "25.1"
   :group 'verilog-mode-actions
   :type 'boolean)
-(put 'verilog-auto-wire-comment 'safe-local-variable `verilog-booleanp)
+(put 'verilog-auto-wire-comment 'safe-local-variable 'verilog-booleanp)
 
 (defcustom verilog-auto-wire-type nil
   "Non-nil specifies the data type to use with `verilog-auto-wire' etc.
@@ -781,8 +781,8 @@ this is generally only appropriate when making a non-SystemVerilog wrapper
 containing SystemVerilog cells."
   :version "24.1"  ; rev673
   :group 'verilog-mode-actions
-  :type 'string)
-(put 'verilog-auto-wire-type 'safe-local-variable `stringp)
+  :type '(choice (const nil) string))
+(put 'verilog-auto-wire-type 'safe-local-variable 'stringp)
 
 (defcustom verilog-auto-endcomments t
   "Non-nil means insert a comment /* ... */ after `end's.
@@ -1077,7 +1077,7 @@ but may cause problems when there are multiple instantiations
 outputting to the same wire.  To maintain compatibility with
 other sites, this should be set at the bottom of each Verilog
 file that requires it, rather than being set globally."
-  :version "26.1"
+  :version "27.1"
   :group 'verilog-mode-auto
   :type 'boolean)
 (put 'verilog-auto-simplify-expressions 'safe-local-variable 'verilog-booleanp)
@@ -1401,7 +1401,7 @@ See also `verilog-case-fold'."
     ("*Variables*"  "^\\s-*\\(reg\\|wire\\|logic\\)\\s-+\\(\\|\\[[^]]+\\]\\s-+\\)\\([A-Za-z0-9_]+\\)" 3)
     ("*Classes*"    "^\\s-*\\(?:\\(?:virtual\\|interface\\)\\s-+\\)?class\\s-+\\([A-Za-z_][A-Za-z0-9_]+\\)" 1)
     ("*Tasks*"      "^\\s-*\\(?:\\(?:static\\|pure\\|virtual\\|local\\|protected\\)\\s-+\\)*task\\s-+\\(?:\\(?:static\\|automatic\\)\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
-    ("*Functions*"  "^\\s-*\\(?:\\(?:static\\|pure\\|virtual\\|local\\|protected\\)\\s-+\\)*function\\s-+\\(?:\\(?:static\\|automatic\\)\\s-+\\)?\\(?:\\w+\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
+    ("*Functions*"  "^\\s-*\\(?:\\(?:static\\|pure\\|virtual\\|local\\|protected\\)\\s-+\\)*function\\s-+\\(?:\\(?:static\\|automatic\\)\\s-+\\)?\\(?:\\w+\\s-+\\)?\\(?:\\(?:un\\)signed\\s-+\\)?\\([A-Za-z_][A-Za-z0-9_:]+\\)" 1)
     ("*Interfaces*" "^\\s-*interface\\s-+\\([a-zA-Z_0-9]+\\)" 1)
     ("*Types*"      "^\\s-*typedef\\s-+.*\\s-+\\([a-zA-Z_0-9]+\\)\\s-*;" 1))
   "Imenu expression for Verilog mode.  See `imenu-generic-expression'.")
@@ -3970,15 +3970,17 @@ Key bindings specific to `verilog-mode-map' are:
   (when (boundp 'hs-special-modes-alist)
     (unless (assq 'verilog-mode hs-special-modes-alist)
       (setq hs-special-modes-alist
-	    (cons '(verilog-mode-mode  "\\<begin\\>" "\\<end\\>" nil
-				       verilog-forward-sexp-function)
-		  hs-special-modes-alist))))
+            (cons '(verilog-mode "\\<begin\\>" "\\<end\\>" nil
+                                 verilog-forward-sexp-function)
+                  hs-special-modes-alist))))
 
   (add-hook 'completion-at-point-functions
             #'verilog-completion-at-point nil 'local)
 
   ;; Stuff for autos
-  (add-hook 'write-contents-hooks 'verilog-auto-save-check nil 'local)
+  (add-hook (if (boundp 'write-contents-hooks) 'write-contents-hooks
+              'write-contents-functions) ; Emacs >= 22.1
+            'verilog-auto-save-check nil 'local)
   ;; verilog-mode-hook call added by define-derived-mode
   )
 
@@ -4174,6 +4176,7 @@ With optional ARG, remove existing end of line comments."
 To call this from the command line, see \\[verilog-batch-indent]."
   (interactive)
   (verilog-mode)
+  (verilog-auto-reeval-locals)
   (indent-region (point-min) (point-max) nil))
 
 (defun verilog-insert-block ()
@@ -4995,21 +4998,21 @@ primitive or interface named NAME."
                   (match-end 11)  ; of verilog-end-block-ordered-re
                   ;;(goto-char there)
                   (let ((nest 0)
-                        (reg "\\<\\(class\\)\\|\\(endclass\\)\\|\\(package\\|primitive\\|\\(macro\\)?module\\)\\>")
+                        (reg "\\<\\(\\(class\\)\\|\\(endclass\\)\\|\\(package\\|primitive\\|\\(macro\\)?module\\)\\)\\>")
                         string)
                     (save-excursion
                       (catch 'skip
                         (while (verilog-re-search-backward reg nil 'move)
                           (cond
-                           ((match-end 3)	; endclass
+                           ((match-end 4)       ; endclass
                             (ding 't)
                             (setq string "unmatched endclass")
                             (throw 'skip 1))
 
-                           ((match-end 2)	; endclass
+                           ((match-end 3)       ; endclass
                             (setq nest (1+ nest)))
 
-                           ((match-end 1) ; class
+                           ((match-end 2) ; class
                             (setq nest (1- nest))
                             (if (< nest 0)
                                 (progn
@@ -8643,7 +8646,8 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 		((and v2kargs-ok
 		      (eq paren 1)
 		      (not rvalue)
-		      (looking-at "\\s-*\\(\\.\\(\\s-*[a-zA-Z`_$][a-zA-Z0-9`_$]*\\)\\|\\)\\s-*[a-zA-Z`_$][a-zA-Z0-9`_$]*"))
+                      (or (looking-at "\\s-*#")
+                          (looking-at "\\s-*\\(\\.\\(\\s-*[a-zA-Z`_$][a-zA-Z0-9`_$]*\\)\\|\\)\\s-*[a-zA-Z`_$][a-zA-Z0-9`_$]*")))
 		 (when (match-end 2) (goto-char (match-end 2)))
 		 (setq vec nil          enum nil       rvalue nil  signed nil
 		       typedefed keywd  multidim nil   ptype nil   modport (match-string 2)
@@ -8695,7 +8699,8 @@ Return an array of [outputs inouts inputs wire reg assign const]."
 		((and expect-signal
 		      (not rvalue)
 		      (eq functask 0)
-		      (not (member keywd verilog-keywords)))
+                      (not (member keywd verilog-keywords))
+                      (or (not io) (eq paren sig-paren)))
 		 ;; Add new signal to expect-signal's variable
 		 ;;(if dbg (setq dbg (concat dbg (format "Pt %s  New sig %s'\n" (point) keywd))))
 		 (setq newsig (verilog-sig-new keywd vec nil nil enum signed typedefed multidim modport))
@@ -9309,7 +9314,6 @@ IGNORE-NEXT is true to ignore next token, fake from inside case statement."
 	  (forward-line 1))
 	(beginning-of-line)
 	(if (looking-at "^\\s-*\\([a-zA-Z0-9`_$]+\\)\\s-+\\([a-zA-Z0-9`_$]+\\)\\s-*(")
-	    ;;(if (looking-at "^\\(.+\\)$")
 	    (let ((module (match-string 1))
 		  (instant (match-string 2)))
 	      (if (not (member module verilog-keywords))
