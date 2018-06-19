@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-24 11:56:21 kmodi>
+;; Time-stamp: <2018-06-19 12:13:42 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
@@ -13,7 +13,9 @@
      ("??" . devdocs-lookup))
     (with-eval-after-load 'smart-compile
       (add-to-list 'smart-compile-alist
-                   '(nim-mode . "nim c --verbosity:0 %f")))
+                   ;; Devel build of nim is needed for --nep1:on
+                   ;; switch support.
+                   '(nim-mode . "nim c --verbosity:0 --nep1:on %f")))
 
     (when (executable-find "nimsuggest")
       (setq nim-nimsuggest-path (executable-find "nimsuggest"))
