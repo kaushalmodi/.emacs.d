@@ -19,8 +19,9 @@
 
     (when (executable-find "nimsuggest")
       (setq nim-nimsuggest-path (executable-find "nimsuggest"))
-      ;; Currently nimsuggest doesn't support nimscript files, so only nim-mode ..
-      ;; nimsuggest will provide hints in the minibuffer using `eldoc-mode'.
+      ;; Currently nimsuggest doesn't support nimscript files, so only
+      ;; nim-mode ..  nimsuggest will provide hints in the minibuffer
+      ;; using `eldoc-mode'.
       (add-hook 'nim-mode-hook #'nimsuggest-mode)
       ;; (remove-hook 'nim-mode-hook #'nimsuggest-mode)
       )

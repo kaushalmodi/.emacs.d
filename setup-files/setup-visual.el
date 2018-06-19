@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-24 11:50:07 kmodi>
+;; Time-stamp: <2018-06-19 12:13:12 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -39,7 +39,6 @@
 (setq tooltip-mode nil)              ;Disable tooltip appearance on mouse hover
 (setq frame-resize-pixelwise t)      ;Allow frame size to inc/dec by a pixel
 (setq visible-bell t)    ;Enable visible bell or screen blink to happen on error
-(setq-default fill-column 80)           ;Default 70
 
 (defun modi/is-font (fontname)
   "Return non-nil if the default font matches FONTNAME."
