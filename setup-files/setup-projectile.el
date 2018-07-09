@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-22 14:48:54 kmodi>
+;; Time-stamp: <2018-07-09 17:54:19 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -247,7 +247,7 @@ _f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer         
       ("4"   hydra-projectile-other-window/body "other window")
       ("q"   nil "cancel" :color blue))
 
-    (projectile-global-mode)))
+    (projectile-mode)))
 
 
 (provide 'setup-projectile)
