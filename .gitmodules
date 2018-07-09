@@ -43,3 +43,6 @@
 [submodule "misc/notdeft"]
 	path = misc/notdeft
 	url = https://github.com/kaushalmodi/deft.git
+[submodule "misc/nim-emacs-module"]
+	path = misc/nim-emacs-module
+	url = https://github.com/kaushalmodi/nim-emacs-module

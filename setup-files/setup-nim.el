@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-06-19 12:13:42 kmodi>
+;; Time-stamp: <2018-07-09 17:58:22 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
@@ -32,6 +32,10 @@
       (progn
         (with-eval-after-load 'setup-org
           (add-to-list 'modi/ob-enabled-languages "nim" :append))))))
+
+;; https://github.com/yuutayamada/nim-emacs-module
+(use-package nim-emacs-module
+  :load-path "misc/nim-emacs-module/extra/")
 
 
 (provide 'setup-nim)
