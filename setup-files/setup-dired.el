@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-07-24 12:01:12 kmodi>
+;; Time-stamp: <2017-07-17 17:20:10 kmodi>
 
 ;; Dired
 
@@ -111,10 +111,6 @@ It added extra strings at the front and back of the default dired buffer name."
     ;; https://fuco1.github.io/2017-07-15-Collapse-unique-nested-paths-in-dired-with-dired-collapse-mode.html
     ;; https://github.com/Fuco1/dired-hacks/blob/master/dired-collapse.el
     (use-package dired-collapse
-      :init
-      (progn
-        (use-package dired-hacks-utils  ;Required by `dired-collapse'
-          :ensure t))
       :config
       (progn
         (add-hook 'dired-mode-hook #'dired-collapse-mode)))))
