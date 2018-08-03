@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-10 09:35:11 kmodi>
+;; Time-stamp: <2018-08-03 12:52:04 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -134,6 +134,7 @@ need Org version to be at least 9.x.")
     visual-regexp
     volatile-highlights
     web-mode
+    webpaste   ; Paste code snippets to ptpb.pw (default), ix.io, etc.
     which-key ; > guide-key
     wolfram ; query wolframalpha; needs user to sign up for a developer AppID
     wordnut ; offline dictionary (requires installing Wordnet wn application)
@@ -292,6 +293,7 @@ need Org version to be at least 9.x.")
 (require 'setup-tldr)
 (require 'setup-undo-tree)
 (require 'setup-weather)
+(require 'setup-webpaste)
 (require 'setup-which-func)
 (require 'setup-which-key)
 (require 'setup-wolfram)
