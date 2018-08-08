@@ -1,11 +1,12 @@
-;; Time-stamp: <2016-11-21 07:47:39 kmodi>
+;; Time-stamp: <2018-08-03 17:36:41 kmodi>
 
 ;; Wordnut
 ;; https://github.com/gromnitsky/wordnut
 
-;; This package requires the user to have installed the `wn' application
-;; from https://wordnet.princeton.edu/wordnet/download/current-version/
-;; It is tested to work with Wordnet 3.0.
+;; This package requires the user to have installed the `wn'
+;; application from
+;; https://wordnet.princeton.edu/download/current-version.  It is
+;; tested to work with Wordnet 3.0.
 
 (use-package wordnut
   :bind (:map modi-mode-map
