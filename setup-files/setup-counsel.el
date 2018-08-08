@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-20 14:13:33 kmodi>
+;; Time-stamp: <2018-08-08 18:03:56 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -97,6 +97,26 @@
                   " %s"            ;This MUST be %s, not %S
                                         ;https://github.com/abo-abo/swiper/issues/427
                   ))
+
+    ;; counsel-grep
+    ;; I use `counsel-grep' mainly via
+    ;; `counsel-grep-or-swiper'. There, more often than not, I need
+    ;; the search to be case-insensitive. But even better, I'd like to
+    ;; do "Smart" about case-sensitively like ripgrep does. As grep
+    ;; does not offer that option, I am using rg instead of grep in
+    ;; `counsel-grep'.
+    (setq counsel-grep-base-command ;Original value: "grep -E -n -e %s %s"
+          (mapconcat #'identity
+                     '("rg"
+                       "--line-number" ;Matches the grep -n switch in the original value
+                       "--smart-case" ;Case-sensitive only when the searched expression has both cases
+                       "--follow" ;Allows searching in symlinked files too
+                       "--no-ignore"    ;Ignore the .ignore, .gitignore, etc.
+                       "--no-ignore-global" ;Also ignore the ignore files from "global" sources
+                       "--"        ;This marks the end of switches
+                       "%s"        ;Placeholder for regular expression
+                       "%s")       ;Placeholder for file name
+                     " "))
 
     ;; counsel and org
     (defface modi/counsel-org-goto-level-1 '((t . (:inherit org-level-1 :weight normal)))
