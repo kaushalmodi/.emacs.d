@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-06-13 13:42:42 kmodi>
+;; Time-stamp: <2018-08-11 02:21:59 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -12,6 +12,9 @@
   :commands (org-hugo-slug)
   :bind (:map modi-mode-map
          ("C-c G" . org-hugo-export-wim-to-md)))
+
+(use-package ox-hugo-auto-export
+  :load-path "elisp/ox-hugo")
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
@@ -38,21 +41,7 @@ See `org-capture-templates' for more information."
                  ;; It is assumed that below file is present in
                  ;; `org-directory' and that it has a "Blog Ideas" heading.
                  (file+olp "scripter-posts.org" "Blog Ideas")
-                 (function org-hugo-new-subtree-post-capture-template)))
-
-  ;; Do not cause auto Org->Hugo export to happen when saving captures
-  (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-before-finalize-hook'.
-Disable `org-hugo-export-wip-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save nil))
-
-  (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-after-finalize-hook'.
-Enable `org-hugo-export-wip-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save t))
-
-  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
-  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
+                 (function org-hugo-new-subtree-post-capture-template))))
 
 
 (provide 'setup-hugo)
