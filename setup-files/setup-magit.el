@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-06-08 13:13:44 kmodi>
+;; Time-stamp: <2018-08-11 00:27:36 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -57,17 +57,17 @@ Last, First -> F Last
 First       -> First (no change).
 
 It is assumed that the author has only one or two names."
-      ;; ARGS             -> '((AUTHOR DATE))
-      ;; (car ARGS)       -> '(AUTHOR DATE)
-      ;; (car (car ARGS)) -> AUTHOR
-      (let* ((author (car (car args)))
+      ;; ARGS               -> '((REV AUTHOR DATE))
+      ;; (car ARGS)         -> '(REV AUTHOR DATE)
+      ;; (nth 1 (car ARGS)) -> AUTHOR
+      (let* ((author (nth 1 (car args)))
              (author-abbr (if (string-match-p "," author)
                               ;; Last, First -> F Last
                               (replace-regexp-in-string "\\(.*?\\), *\\(.\\).*" "\\2 \\1" author)
                             ;; First Last -> F Last
                             (replace-regexp-in-string "\\(.\\).*?[. ]+\\(.*\\)" "\\1 \\2" author))))
-        (setf (car (car args)) author-abbr))
-      (car args))                       ;'(AUTHOR-ABBR DATE)
+        (setf (nth 1 (car args)) author-abbr))
+      (car args))                       ;'(REV AUTHOR-ABBR DATE)
     (advice-add 'magit-log-format-margin :filter-args #'modi/magit-log--abbreviate-author)))
 
 
