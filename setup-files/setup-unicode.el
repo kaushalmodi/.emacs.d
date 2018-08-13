@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-09-13 19:07:23 kmodi>
+;; Time-stamp: <2018-08-13 13:41:46 kmodi>
 
 ;; Unicode
 
@@ -25,6 +25,21 @@
                ;; "
                ("\"`"     . [?“]) ; left double quotation mark
                ("\"'"     . [?”]) ; right double quotation mark
+               ;; ?
+               ;; Originally "C-x 8 ?" was bound to insert ¿.
+               ;; - But I never used that char, and I would use ‽ more often than
+               ;;   that.
+               ;; - Also, ¿ can be inserted using "C-x 8 * ?".
+               ;; - And unlike other chars, "?" cannot be used in a
+               ;;   prefix map, because trying to do so will make it trigger the
+               ;;   `help-for-help' command in the `help-map'.  So I'm simply
+               ;;   overriding the default "C-x 8 ?" binding here instead of
+               ;;   making "?" a prefix map binding (like I do for "!" below).
+               ("?"       . [?‽]) ; interrobang
+               ;; !
+               ("!"       . nil) ; First unbind "!" from the map
+               ("!!"      . [?¡]) ; inverted exclamation mark
+               ("!?"      . [?‽]) ; interrobang
                ;; arrows
                ("<right>" . [?→]) ; rightwards arrow
                ("<left>"  . [?←]) ; leftwards arrow
