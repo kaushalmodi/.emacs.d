@@ -130,10 +130,11 @@ emacs_configure_CXXFLAGS=""
 emacs_configure_CPPFLAGS=""
 emacs_configure_LDFLAGS=""
 
-emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
+# -I${STOW_PKGS_TARGET}/include required for lgmp
+emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-I${STOW_PKGS_TARGET}/include -I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
 # -L${HOME}/usr_local/${MY_OSREV}/lib required for libgpm (GPM feature)
 # -L${HOME}/usr_local/${MY_OSREV}/lib64 required for libgif (GIF feature)
-emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
+emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${STOW_PKGS_TARGET}/lib -L${STOW_PKGS_TARGET}/lib64 -L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
 
 if [[ ${emacs_debug_build} -eq 1 ]] # For Debug
 then
