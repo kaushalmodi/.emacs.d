@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2018-06-25 10:28:01 kmodi>
+# Time-stamp: <2018-08-13 12:24:45 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -139,10 +139,12 @@ emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${STOW_PKGS_TARGET}/lib -L${STOW_PKG
 if [[ ${emacs_debug_build} -eq 1 ]] # For Debug
 then
     # http://git.savannah.gnu.org/cgit/emacs.git/plain/etc/DEBUG
-    # Preventing to use the --enable-check-lisp-object-type for now as that
-    # changes the representation of error_symbol in gdb from a scalar to a vector.
-    # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23424#54
-    # export MY_EMACS_CONFIGURE="${MY_EMACS_CONFIGURE} --enable-checking='yes,glyphs' --enable-check-lisp-object-type"
+    export MY_EMACS_CONFIGURE="${MY_EMACS_CONFIGURE} --enable-checking='yes,glyphs' --enable-check-lisp-object-type"
+    # If using --enable-check-lisp-object-type causes issues in the
+    # representation of error_symbol in gdb, converting it from a
+    # scalar to a vector, comment it out (
+    # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23424#54 ).
+    # About -g vs -ggdb options: http://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
     emacs_configure_CFLAGS="CFLAGS=${dquote}-ggdb3 -O0"
     emacs_configure_CXXFLAGS="CXXFLAGS=${dquote}-ggdb3 -O0"
     emacs_configure_LDFLAGS="${emacs_configure_LDFLAGS} -ggdb3"
