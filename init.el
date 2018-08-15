@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-03 12:52:04 kmodi>
+;; Time-stamp: <2018-08-14 21:46:10 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -309,6 +309,7 @@ need Org version to be at least 9.x.")
 (when (executable-find "dmd")
   (require 'setup-d))
 (require 'setup-elisp)
+(require 'setup-gujarati)
 (require 'setup-latex)
 (require 'setup-markdown)
 (when (executable-find "matlab")

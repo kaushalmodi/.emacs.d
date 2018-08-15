@@ -1,12 +1,9 @@
-;; Time-stamp: <2017-08-30 13:28:08 kmodi>
+;; Time-stamp: <2018-08-14 21:50:29 kmodi>
 
 ;; https://github.com/abo-abo/tiny
 
 (use-package tiny
   :defer t
-  :init
-  (progn
-    (bind-to-modi-map "\\" #'tiny-helper))
   :chords (("]\\" . tiny-helper)))
 
 
