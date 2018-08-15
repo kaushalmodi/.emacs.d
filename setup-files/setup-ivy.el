@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-06 11:10:43 kmodi>
+;; Time-stamp: <2018-08-15 15:19:28 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
@@ -118,6 +118,15 @@ _p_/_n_      _d_one        ^^           _i_nsert      ^^_m_atcher: %-7s(ivy--mat
     (bind-keys
      :map ivy-switch-buffer-map
      ("C-k" . modi/ivy-kill-buffer))))
+
+;; https://github.com/Yevgnen/ivy-rich
+;; Richer "C-x b" buffer-switching Ivy interface.
+(use-package ivy-rich
+  :after ivy
+  :ensure t
+  :config
+  (progn
+    (ivy-rich-mode)))
 
 
 (provide 'setup-ivy)
