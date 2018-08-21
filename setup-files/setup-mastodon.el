@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 17:31:27 kmodi>
+;; Time-stamp: <2018-08-21 17:40:07 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
@@ -100,6 +100,19 @@ original toot."
             (kill-new text)
           (message "Copied text from toot %s" url))))
 
+    (defun modi/mastodon-scroll-up ()
+      "Scroll up in the Mastodon buffer.
+If end of buffer is reached, call `mastodon-tl--more'."
+      (interactive)
+      (let ((scroll-error-top-bottom t))
+        (condition-case nil
+	    (scroll-up-command)
+	  (error
+           (mastodon-tl--more)
+           ;; Move the older end of buffer to window-line 10
+           ;; (arbitrarily picked).
+           (recenter-top-bottom 10)))))
+
     (bind-keys
      :map mastodon-mode-map
      ("#" . mastodon-tl--get-tag-timeline)
@@ -111,6 +124,7 @@ original toot."
      ("M-p" . mastodon-tl--previous-tab-item)
      ("N" . mastodon-notifications--get)
      ("P" . mastodon-profile--show-user)
+     ("SPC" . modi/mastodon-scroll-up)
      ("T" . mastodon-tl--thread)
      ("W" . modi/mastodon-copy-text-of-toot-at-point)
      ("b" . mastodon-toot--toggle-boost)
