@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 17:40:07 kmodi>
+;; Time-stamp: <2018-08-21 18:17:36 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
@@ -8,6 +8,12 @@
   :defer t
   :config
   (progn
+    (defconst modi/mastodon-account--me '((display_name . "My Profile")
+                                          (id . "77333") ;https://mastodon.technology/web/accounts/77333
+                                          (acct . "kaushalmodi")
+                                          (note . ""))
+      "Mastodon account alist used in `modi/mastodon-show-my-profile'.")
+
     (setq mastodon-instance-url "https://mastodon.technology")
     (setq mastodon-tl--enable-proportional-fonts t)
 
@@ -113,6 +119,14 @@ If end of buffer is reached, call `mastodon-tl--more'."
            ;; (arbitrarily picked).
            (recenter-top-bottom 10)))))
 
+    (defun modi/mastodon-show-my-profile ()
+      "Open Mastodon buffer for my profile."
+      (interactive)
+      (cl-letf (((symbol-function #'mastodon-profile--image-from-account)
+                 (lambda (_) "")))           ;No need to load my own image
+        (mastodon-profile--make-profile-buffer-for
+         modi/mastodon-account--me "statuses" #'mastodon-tl--timeline)))
+
     (bind-keys
      :map mastodon-mode-map
      ("#" . mastodon-tl--get-tag-timeline)
@@ -120,6 +134,7 @@ If end of buffer is reached, call `mastodon-tl--more'."
      ("F" . mastodon-tl--get-federated-timeline)
      ("H" . mastodon-tl--get-home-timeline)
      ("L" . mastodon-tl--get-local-timeline)
+     ("M" . modi/mastodon-show-my-profile)
      ("M-n" . mastodon-tl--next-tab-item)
      ("M-p" . mastodon-tl--previous-tab-item)
      ("N" . mastodon-notifications--get)
