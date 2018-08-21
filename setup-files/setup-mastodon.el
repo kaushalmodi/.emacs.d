@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 14:10:35 kmodi>
+;; Time-stamp: <2018-08-21 14:33:31 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
@@ -9,6 +9,7 @@
   :config
   (progn
     (setq mastodon-instance-url "https://mastodon.technology")
+    (setq mastodon-tl--enable-proportional-fonts t)
 
     (bind-keys
      :map mastodon-mode-map
