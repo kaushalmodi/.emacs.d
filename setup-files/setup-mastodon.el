@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 14:34:15 kmodi>
+;; Time-stamp: <2018-08-21 16:56:46 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
@@ -55,6 +55,38 @@ it is `mastodon-tl--byline-boosted'"
             'byline       t))))
       (advice-add 'mastodon-tl--byline :override #'modi/mastodon-tl--byline))
 
+    (defun modi/mastodon-toot-at-point ()
+      "Return the toot at point as an alist.
+If current toot is a Boosted toot, return the original toot."
+      (let* ((this-toot (mastodon-tl--property 'toot-json))
+             (orig-toot (cdr (assoc 'reblog this-toot))))
+        (or orig-toot this-toot)))
+
+    (defun modi/mastodon-get-url-of-toot-at-point ()
+      "Return the URL of the toot at point as a string.
+If the current toot is a Boosted toot, get the URL of the
+original toot."
+      (let ((toot (modi/mastodon-toot-at-point)))
+        (cdr (assoc 'url toot))))
+
+    (defun modi/mastodon-browse-url-of-toot-at-point ()
+      "Browse the URL of the toot at point.
+If the current toot is a Boosted toot, browse the URL of the
+original toot."
+      (interactive)
+      (let ((url (modi/mastodon-get-url-of-toot-at-point)))
+        (browse-url url)))
+
+    (defun modi/mastodon-copy-url-of-toot-at-point ()
+      "Copy the URL of the toot at point.
+If the current toot is a Boosted toot, copy the URL of the
+original toot."
+      (interactive)
+      (let ((url (modi/mastodon-get-url-of-toot-at-point)))
+        (prog1
+            (kill-new url)
+          (message "Copied toot URL: %s" url))))
+
     (bind-keys
      :map mastodon-mode-map
      ("#" . mastodon-tl--get-tag-timeline)
@@ -77,6 +109,8 @@ it is `mastodon-tl--byline-boosted'"
      ("q" . modi/quit-and-kill-window)  ;Quit + kill
      ("r" . mastodon-toot--reply)
      ("t" . mastodon-toot)
+     ("v" . modi/mastodon-browse-url-of-toot-at-point)
+     ("w" . modi/mastodon-copy-url-of-toot-at-point)
      ("y" . bury-buffer)                ;Only bury
      ("z" . quit-window))))             ;Quit + bury
 
