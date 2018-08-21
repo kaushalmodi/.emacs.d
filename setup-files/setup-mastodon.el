@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 16:56:46 kmodi>
+;; Time-stamp: <2018-08-21 17:31:27 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
@@ -87,6 +87,19 @@ original toot."
             (kill-new url)
           (message "Copied toot URL: %s" url))))
 
+    (defun modi/mastodon-copy-text-of-toot-at-point ()
+      "Copy the text of the toot at point.
+If the current toot is a Boosted toot, copy the text of the
+original toot."
+      (interactive)
+      (let* ((toot (modi/mastodon-toot-at-point))
+             (url (modi/mastodon-get-url-of-toot-at-point))
+             (content (cdr (assoc 'content toot)))
+             (text (mastodon-tl--render-text content toot)))
+        (prog1
+            (kill-new text)
+          (message "Copied text from toot %s" url))))
+
     (bind-keys
      :map mastodon-mode-map
      ("#" . mastodon-tl--get-tag-timeline)
@@ -99,6 +112,7 @@ original toot."
      ("N" . mastodon-notifications--get)
      ("P" . mastodon-profile--show-user)
      ("T" . mastodon-tl--thread)
+     ("W" . modi/mastodon-copy-text-of-toot-at-point)
      ("b" . mastodon-toot--toggle-boost)
      ("c" . mastodon-tl--toggle-spoiler-text-in-toot)
      ("f" . mastodon-toot--toggle-favourite)
