@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 13:33:13 kmodi>
+;; Time-stamp: <2018-08-21 14:10:35 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
@@ -21,7 +21,6 @@
      ("M-p" . mastodon-tl--previous-tab-item)
      ("N" . mastodon-notifications--get)
      ("P" . mastodon-profile--show-user)
-     ("Q" . kill-buffer-and-window)
      ("T" . mastodon-tl--thread)
      ("b" . mastodon-toot--toggle-boost)
      ("c" . mastodon-tl--toggle-spoiler-text-in-toot)
