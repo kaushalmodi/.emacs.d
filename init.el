@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-14 21:46:10 kmodi>
+;; Time-stamp: <2018-08-21 13:11:37 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -268,6 +268,7 @@ need Org version to be at least 9.x.")
 (require 'setup-kurecolor)
 (require 'setup-linum)
 (require 'setup-manage-minor-mode)
+(require 'setup-mastodon)
 (require 'setup-multiple-cursors)
 (require 'setup-neotree)
 (require 'setup-news)
