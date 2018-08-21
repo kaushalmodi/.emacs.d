@@ -1,8 +1,7 @@
-;; Time-stamp: <2018-08-21 18:17:36 kmodi>
+;; Time-stamp: <2018-08-21 18:22:16 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
-
 (use-package mastodon
   :ensure t
   :defer t
@@ -51,8 +50,8 @@ it is `mastodon-tl--byline-boosted'"
                                 parsed-time))
                     ;; Tue Aug 21 14:27:57 EDT 2018 - kmodi
                     ;; Start of edit
-                    ;; - Replaced "\n  ------------" with
-                    ;;   "\n"
+                    ;; - Replaced "\n  ------------" with "\n FORM FEED"
+                    ;;   (Below, after \n, the invisible FORM FEED char is inserted using C-q C-l.)
                     (propertize "\n" 'face 'default)
                     ;; End of edit
                     )
