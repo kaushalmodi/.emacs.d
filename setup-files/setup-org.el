@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-22 16:39:16 kmodi>
+;; Time-stamp: <2018-08-22 17:31:43 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -395,13 +395,14 @@ This function is heavily adapted from `org-between-regexps-p'."
     ;; Also, when point is in any Org block, make C-return split the
     ;; block instead of inserting heading.
     (defun modi/org-insert-heading-respect-content (&optional invisible-ok)
-      "Insert heading, or split the Org block if point in one.
+      "Insert heading, or if point is in an Org block, split it.
 
-Insert with `org-insert-heading-respect-content' set to t
-- With \\[universal-argument] prefix, insert Org heading directly at
-  point.
-- If point is in any Org block, split that Org block instead.  See
-  `modi/org-split-block'."
+If point is in any Org block, split that Org block.  See
+`modi/org-split-block'.
+
+Else, insert with `org-insert-heading-respect-content' set to t.
+With \\[universal-argument] prefix, insert Org heading directly at
+point."
       (interactive)
       (if (modi/org-in-any-block-p)
           (modi/org-split-block)
