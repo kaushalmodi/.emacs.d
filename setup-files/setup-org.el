@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-22 15:44:54 kmodi>
+;; Time-stamp: <2018-08-22 16:39:16 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -305,27 +305,27 @@ This function is heavily adapted from `org-between-regexps-p'."
         (let ((pos (point))
               (case-fold-search t)
               (block-begin-re "^[[:blank:]]*#\\+begin_\\(?1:.+?\\)\\(?: .*\\)*$")
-	      (limit-up (save-excursion (outline-previous-heading)))
-	      (limit-down (save-excursion (outline-next-heading)))
+              (limit-up (save-excursion (outline-previous-heading)))
+              (limit-down (save-excursion (outline-next-heading)))
               beg end)
           (save-excursion
-	    ;; Point is on a block when on BLOCK-BEGIN-RE or if
-	    ;; BLOCK-BEGIN-RE can be found before it...
-	    (and (or (org-in-regexp block-begin-re)
-		     (re-search-backward block-begin-re limit-up :noerror))
-	         (setq beg (match-beginning 0))
-	         ;; ... and BLOCK-END-RE after it...
+            ;; Point is on a block when on BLOCK-BEGIN-RE or if
+            ;; BLOCK-BEGIN-RE can be found before it...
+            (and (or (org-in-regexp block-begin-re)
+                     (re-search-backward block-begin-re limit-up :noerror))
+                 (setq beg (match-beginning 0))
+                 ;; ... and BLOCK-END-RE after it...
                  (let ((block-end-re (concat "^[[:blank:]]*#\\+end_"
                                              (match-string-no-properties 1)
                                              "\\( .*\\)*$")))
-	           (goto-char (match-end 0))
-	           (re-search-forward block-end-re limit-down :noerror))
-	         (> (setq end (match-end 0)) pos)
-	         ;; ... without another BLOCK-BEGIN-RE in-between.
-	         (goto-char (match-beginning 0))
-	         (not (re-search-backward block-begin-re (1+ beg) :noerror))
-	         ;; Return value.
-	         (cons beg end))))))
+                   (goto-char (match-end 0))
+                   (re-search-forward block-end-re limit-down :noerror))
+                 (> (setq end (match-end 0)) pos)
+                 ;; ... without another BLOCK-BEGIN-RE in-between.
+                 (goto-char (match-beginning 0))
+                 (not (re-search-backward block-begin-re (1+ beg) :noerror))
+                 ;; Return value.
+                 (cons beg end))))))
 
     (defun modi/org-split-block ()
       "Sensibly split the current Org block at point.
@@ -470,37 +470,37 @@ in the template.")
 This looks for strings like \"<e\" on an otherwise empty line and
 expands them."
       (let ((l (buffer-substring (point-at-bol) (point)))
-	    a)
+            a)
         (when (and (looking-at "[ \t]*$")
-	           (string-match "^[ \t]*<\\([a-zA-Z]+\\)$" l)
-	           (setq a (assoc (match-string 1 l) org-easy-template-alist)))
+                   (string-match "^[ \t]*<\\([a-zA-Z]+\\)$" l)
+                   (setq a (assoc (match-string 1 l) org-easy-template-alist)))
           (org-complete-expand-structure-template (+ -1 (point-at-bol)
-						     (match-beginning 1))
+                                                     (match-beginning 1))
                                                   a)
           t)))
 
     (defun org-complete-expand-structure-template (start cell)
       "Expand a structure template."
       (let ((rpl (nth 1 cell))
-	    (ind ""))
+            (ind ""))
         (delete-region start (point))
         (when (string-match "\\`[ \t]*#\\+" rpl)
           (cond
            ((bolp))
            ((not (string-match "\\S-" (buffer-substring (point-at-bol) (point))))
-	    (setq ind (buffer-substring (point-at-bol) (point))))
+            (setq ind (buffer-substring (point-at-bol) (point))))
            (t (newline))))
         (setq start (point))
         (when (string-match "%file" rpl)
           (setq rpl (replace-match
-		     (concat
-		      "\""
-		      (save-match-data
-		        (abbreviate-file-name (read-file-name "Include file: ")))
-		      "\"")
-		     t t rpl)))
+                     (concat
+                      "\""
+                      (save-match-data
+                        (abbreviate-file-name (read-file-name "Include file: ")))
+                      "\"")
+                     t t rpl)))
         (setq rpl (mapconcat 'identity (split-string rpl "\n")
-			     (concat "\n" ind)))
+                             (concat "\n" ind)))
         (insert rpl)
         (when (re-search-backward "\\?" start t) (delete-char 1))))
 
