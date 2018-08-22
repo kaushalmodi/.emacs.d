@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-07 16:35:47 kmodi>
+;; Time-stamp: <2018-08-22 15:44:54 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -294,17 +294,120 @@ https://code.orgmode.org/bzg/org-mode/commit/13424336a6f30c50952d291e7a82906c121
             (replace-match (downcase (match-string-no-properties 1)) :fixedcase nil nil 1))
           (message "Lower-cased %d matches" count))))
 
+    (defun modi/org-in-any-block-p ()
+      "Return non-nil if the point is in any Org block.
+
+The Org block can be *any*: src, example, verse, etc., even any
+Org Special block.
+
+This function is heavily adapted from `org-between-regexps-p'."
+      (save-match-data
+        (let ((pos (point))
+              (case-fold-search t)
+              (block-begin-re "^[[:blank:]]*#\\+begin_\\(?1:.+?\\)\\(?: .*\\)*$")
+	      (limit-up (save-excursion (outline-previous-heading)))
+	      (limit-down (save-excursion (outline-next-heading)))
+              beg end)
+          (save-excursion
+	    ;; Point is on a block when on BLOCK-BEGIN-RE or if
+	    ;; BLOCK-BEGIN-RE can be found before it...
+	    (and (or (org-in-regexp block-begin-re)
+		     (re-search-backward block-begin-re limit-up :noerror))
+	         (setq beg (match-beginning 0))
+	         ;; ... and BLOCK-END-RE after it...
+                 (let ((block-end-re (concat "^[[:blank:]]*#\\+end_"
+                                             (match-string-no-properties 1)
+                                             "\\( .*\\)*$")))
+	           (goto-char (match-end 0))
+	           (re-search-forward block-end-re limit-down :noerror))
+	         (> (setq end (match-end 0)) pos)
+	         ;; ... without another BLOCK-BEGIN-RE in-between.
+	         (goto-char (match-beginning 0))
+	         (not (re-search-backward block-begin-re (1+ beg) :noerror))
+	         ;; Return value.
+	         (cons beg end))))))
+
+    (defun modi/org-split-block ()
+      "Sensibly split the current Org block at point.
+
+(1) Point in-between a line
+
+    #+begin_src emacs-lisp             #+begin_src emacs-lisp
+    (message▮ \"one\")                   (message \"one\")
+    (message \"two\")          -->       #+end_src
+    #+end_src                          ▮
+                                       #+begin_src emacs-lisp
+                                       (message \"two\")
+                                       #+end_src
+
+(2) Point at EOL
+
+    #+begin_src emacs-lisp             #+begin_src emacs-lisp
+    (message \"one\")▮                   (message \"one\")
+    (message \"two\")          -->       #+end_src
+    #+end_src                          ▮
+                                       #+begin_src emacs-lisp
+                                       (message \"two\")
+                                       #+end_src
+
+(3) Point at BOL
+
+    #+begin_src emacs-lisp             #+begin_src emacs-lisp
+    (message \"one\")                    (message \"one\")
+    ▮(message \"two\")          -->      #+end_src
+    #+end_src                          ▮
+                                       #+begin_src emacs-lisp
+                                       (message \"two\")
+                                       #+end_src
+"
+      (interactive)
+      (if (modi/org-in-any-block-p)
+          (save-match-data
+            (save-restriction
+              (widen)
+              (let ((case-fold-search t)
+                    (at-bol (bolp))
+                    block-start
+                    block-end)
+                (save-excursion
+                  (re-search-backward "^\\(?1:[[:blank:]]*#\\+\\)begin_\\(?2:.+?\\)\\(?: .*\\)*$" nil nil 1)
+                  (setq block-start (match-string-no-properties 0))
+                  (setq block-end (concat
+                                   (match-string-no-properties 1)
+                                   "end_"
+                                   (match-string-no-properties 2))))
+
+                ;; Go to the end of current line, if not at the BOL
+                (unless at-bol
+                  (end-of-line 1))
+                (insert (concat (if at-bol "" "\n")
+                                block-end
+                                "\n\n"
+                                block-start
+                                (if at-bol "\n" "")))
+                ;; Go to the line before the inserted "#+begin_ .." line
+                (beginning-of-line (if at-bol -1 0)))))
+        (message "Point is not in an Org block")))
+
     ;; Make C-u C-return insert heading *at point* (not respecting content),
     ;; even when the point is directly after a list item.
     ;; Reason: http://lists.gnu.org/r/emacs-orgmode/2018-02/msg00368.html
+    ;; Also, when point is in any Org block, make C-return split the
+    ;; block instead of inserting heading.
     (defun modi/org-insert-heading-respect-content (&optional invisible-ok)
-      "Insert heading with `org-insert-heading-respect-content' set to t.
-With \\[universal-argument] prefix, insert Org heading directly at
-point."
+      "Insert heading, or split the Org block if point in one.
+
+Insert with `org-insert-heading-respect-content' set to t
+- With \\[universal-argument] prefix, insert Org heading directly at
+  point.
+- If point is in any Org block, split that Org block instead.  See
+  `modi/org-split-block'."
       (interactive)
-      (let ((respect-content (unless current-prefix-arg
-                               '(4))))
-        (org-insert-heading respect-content invisible-ok)))
+      (if (modi/org-in-any-block-p)
+          (modi/org-split-block)
+        (let ((respect-content (unless current-prefix-arg
+                                 '(4))))
+          (org-insert-heading respect-content invisible-ok))))
     (advice-add 'org-insert-heading-respect-content :override
                 #'modi/org-insert-heading-respect-content)
 
