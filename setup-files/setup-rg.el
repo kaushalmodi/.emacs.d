@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-23 17:27:03 kmodi>
+;; Time-stamp: <2018-08-23 18:00:37 kmodi>
 
 ;; Deadgrep
 ;; https://github.com/Wilfred/deadgrep
@@ -35,102 +35,99 @@
         new-ret))
     (advice-add 'deadgrep--format-command :filter-return #'modi/deadgrep--format-command-advice)
 
-    (defun modi/deadgrep--jump-to (re)
-      "Move point to button in Deadgrep buffer that matches RE.
-
-Hit RET after running this function to change option and rerun rg
-using the updated option."
+    (defun modi/deadgrep--jump-to-and-execute (re)
+      "Execute the button that matches RE and push it."
       (goto-char (point-min))
       (re-search-forward re)
-      (backward-char 3))
+      (backward-char 3)
+      (push-button))
 
-    (defun modi/deadgrep-jump-to-change-search-term ()
-      "Move point to the 'change' button for search term."
+    (defun modi/deadgrep-change-search-term ()
+      "Change the search term."
       (interactive)
-      (modi/deadgrep--jump-to "^Search term: .*change$"))
+      (modi/deadgrep--jump-to-and-execute "^Search term: .*change$"))
 
-    (defun modi/deadgrep-jump-to-search-type-string ()
-      "Move point to the 'string' search type button."
+    (defun modi/deadgrep-change-search-type-to-string ()
+      "Change the search type to 'string'."
       (interactive)
-      (modi/deadgrep--jump-to "^Search type: .*string"))
+      (modi/deadgrep--jump-to-and-execute "^Search type: .*string"))
 
-    (defun modi/deadgrep-jump-to-search-type-words ()
-      "Move point to the 'words' search type button."
+    (defun modi/deadgrep-change-search-type-to-words ()
+      "Change the search type to 'words'."
       (interactive)
-      (modi/deadgrep--jump-to "^Search type: .*words"))
+      (modi/deadgrep--jump-to-and-execute "^Search type: .*words"))
 
-    (defun modi/deadgrep-jump-to-search-type-regexp ()
-      "Move point to the 'regexp' search type button."
+    (defun modi/deadgrep-change-search-type-to-regexp ()
+      "Change the search type to 'regexp'."
       (interactive)
-      (modi/deadgrep--jump-to "^Search type: .*regexp"))
+      (modi/deadgrep--jump-to-and-execute "^Search type: .*regexp"))
 
-    (defun modi/deadgrep-jump-to-case-smart ()
-      "Move point to the 'smart' case button."
+    (defun modi/deadgrep-change-case-to-smart ()
+      "Change the case sensitivity to 'smart'."
       (interactive)
-      (modi/deadgrep--jump-to "^Case: .*smart"))
+      (modi/deadgrep--jump-to-and-execute "^Case: .*smart"))
 
-    (defun modi/deadgrep-jump-to-case-sensitive ()
-      "Move point to the 'sensitive' case button."
+    (defun modi/deadgrep-change-case-to-sensitive ()
+      "Change the case sensitivity to 'sensitive'."
       (interactive)
-      (modi/deadgrep--jump-to "^Case: .*sensitive"))
+      (modi/deadgrep--jump-to-and-execute "^Case: .*sensitive"))
 
-    (defun modi/deadgrep-jump-to-case-ignore ()
-      "Move point to the 'ignore' case button."
+    (defun modi/deadgrep-change-case-to-ignore ()
+      "Change the case sensitivity to 'ignore'."
       (interactive)
-      (modi/deadgrep--jump-to "^Case: .*ignore"))
+      (modi/deadgrep--jump-to-and-execute "^Case: .*ignore"))
 
-    (defun modi/deadgrep-jump-to-context-none ()
-      "Move point to the 'none' context button."
+    (defun modi/deadgrep-change-context-to-none ()
+      "Don't show ny context around the search results."
       (interactive)
-      (modi/deadgrep--jump-to "^Context: .*none"))
+      (modi/deadgrep--jump-to-and-execute "^Context: .*none"))
 
-    (defun modi/deadgrep-jump-to-context-before ()
-      "Move point to the 'before' context button."
+    (defun modi/deadgrep-change-context-to-before ()
+      "Set 'before' context for the search results."
       (interactive)
-      (modi/deadgrep--jump-to "^Context: .*before"))
+      (modi/deadgrep--jump-to-and-execute "^Context: .*before"))
 
-    (defun modi/deadgrep-jump-to-context-after ()
-      "Move point to the 'after' context button."
+    (defun modi/deadgrep-change-context-to-after ()
+      "Set 'after' context for the search results."
       (interactive)
-      (modi/deadgrep--jump-to "^Context: .*after"))
+      (modi/deadgrep--jump-to-and-execute "^Context: .*after"))
 
-    (defun modi/deadgrep-jump-to-change-directory ()
-      "Move point to change the directory."
+    (defun modi/deadgrep-change-directory ()
+      "Change the root directory for searches."
       (interactive)
-      (modi/deadgrep--jump-to "^Directory: .*$"))
+      (modi/deadgrep--jump-to-and-execute "^Directory: .*$"))
 
-    (defun modi/deadgrep-jump-to-files-all ()
-      "Move point to change file search to 'all'."
+    (defun modi/deadgrep-search-all-files ()
+      "Change file search scope to 'all'."
       (interactive)
-      (modi/deadgrep--jump-to "^Files: .*all"))
+      (modi/deadgrep--jump-to-and-execute "^Files: .*all"))
 
-    (defun modi/deadgrep-jump-to-files-type ()
-      "Move point to change file search to 'type'."
+    (defun modi/deadgrep-search-files-by-type ()
+      "Search only in the specified file types."
       (interactive)
-      (modi/deadgrep--jump-to "^Files: .*type"))
+      (modi/deadgrep--jump-to-and-execute "^Files: .*type"))
 
-    (defun modi/deadgrep-jump-to-files-glob ()
-      "Move point to change file search to 'glob'."
+    (defun modi/deadgrep-search-files-by-glob ()
+      "Search in files names that match the specified glob."
       (interactive)
-      (modi/deadgrep--jump-to "^Files: .*glob"))
+      (modi/deadgrep--jump-to-and-execute "^Files: .*glob"))
 
     (bind-keys
      :map deadgrep-mode-map
-     ;; "s RET" will bring up a prompt to change the search term.
-     ("s" . modi/deadgrep-jump-to-change-search-term)
-     ("ts" . modi/deadgrep-jump-to-search-type-string)
-     ("tw" . modi/deadgrep-jump-to-search-type-words)
-     ("tr" . modi/deadgrep-jump-to-search-type-regexp)
-     ("cs" . modi/deadgrep-jump-to-case-smart)
-     ("cc" . modi/deadgrep-jump-to-case-sensitive)
-     ("ci" . modi/deadgrep-jump-to-case-ignore)
-     ("xn" . modi/deadgrep-jump-to-context-none)
-     ("xb" . modi/deadgrep-jump-to-context-before)
-     ("xa" . modi/deadgrep-jump-to-context-after)
-     ("d" . modi/deadgrep-jump-to-change-directory)
-     ("fa" . modi/deadgrep-jump-to-files-all)
-     ("ft" . modi/deadgrep-jump-to-files-type)
-     ("fg" . modi/deadgrep-jump-to-files-glob))))
+     ("s" . modi/deadgrep-change-search-term)
+     ("ts" . modi/deadgrep-change-search-type-to-string)
+     ("tw" . modi/deadgrep-change-search-type-to-words)
+     ("tr" . modi/deadgrep-change-search-type-to-regexp)
+     ("cs" . modi/deadgrep-change-case-to-smart)
+     ("cc" . modi/deadgrep-change-case-to-sensitive)
+     ("ci" . modi/deadgrep-change-case-to-ignore)
+     ("xn" . modi/deadgrep-change-context-to-none)
+     ("xb" . modi/deadgrep-change-context-to-before)
+     ("xa" . modi/deadgrep-change-context-to-after)
+     ("d" . modi/deadgrep-change-directory)
+     ("fa" . modi/deadgrep-search-all-files)
+     ("ft" . modi/deadgrep-search-files-by-type)
+     ("fg" . modi/deadgrep-search-files-by-glob))))
 
 
 (provide 'setup-rg)
