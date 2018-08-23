@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-23 09:57:03 kmodi>
+;; Time-stamp: <2018-08-23 10:04:46 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -387,26 +387,27 @@ This function is heavily adapted from `org-between-regexps-p'."
                 (beginning-of-line (if at-bol -1 0)))))
         (message "Point is not in an Org block")))
 
+    ;; When point is in any Org block, make M-return split the block
+    ;; instead of inserting heading.
+    (defun modi/org-meta-return-advice (&rest args)
+      "Do not call the original function if point is in an Org block."
+      (let ((do-not-run-orig-fn (modi/org-in-any-block-p)))
+        (when do-not-run-orig-fn
+          (modi/org-split-block))
+        do-not-run-orig-fn))
+    (advice-add 'org-meta-return :before-until #'modi/org-meta-return-advice)
+
     ;; Make C-u C-return insert heading *at point* (not respecting content),
     ;; even when the point is directly after a list item.
     ;; Reason: http://lists.gnu.org/r/emacs-orgmode/2018-02/msg00368.html
-    ;; Also, when point is in any Org block, make C-return split the
-    ;; block instead of inserting heading.
     (defun modi/org-insert-heading-respect-content (&optional invisible-ok)
-      "Insert heading, or if point is in an Org block, split it.
-
-If point is in any Org block, split that Org block.  See
-`modi/org-split-block'.
-
-Else, insert with `org-insert-heading-respect-content' set to t.
+      "Insert heading with `org-insert-heading-respect-content' set to t.
 With \\[universal-argument] prefix, insert Org heading directly at
 point."
       (interactive)
-      (if (modi/org-in-any-block-p)
-          (modi/org-split-block)
-        (let ((respect-content (unless current-prefix-arg
-                                 '(4))))
-          (org-insert-heading respect-content invisible-ok))))
+      (let ((respect-content (unless current-prefix-arg
+                               '(4))))
+        (org-insert-heading respect-content invisible-ok)))
     (advice-add 'org-insert-heading-respect-content :override
                 #'modi/org-insert-heading-respect-content)
 
