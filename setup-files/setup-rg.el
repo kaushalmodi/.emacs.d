@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-23 16:48:17 kmodi>
+;; Time-stamp: <2018-08-23 16:56:35 kmodi>
 
 ;; Deadgrep
 ;; https://github.com/Wilfred/deadgrep
@@ -11,6 +11,8 @@
     (bind-to-modi-map "r" #'deadgrep))
   :config
   (progn
+    (setq-default deadgrep--search-type 'regexp) ;Default is 'string
+
     (defconst modi/deadgrep--rg-extra-args
       `("--no-ignore-vcs"       ;Ignore files/dirs ONLY from `.ignore'
         "--follow"              ;Follow symlinks
