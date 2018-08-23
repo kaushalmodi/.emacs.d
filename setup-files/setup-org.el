@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-22 17:31:43 kmodi>
+;; Time-stamp: <2018-08-23 09:57:03 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -370,13 +370,11 @@ This function is heavily adapted from `org-between-regexps-p'."
                     block-start
                     block-end)
                 (save-excursion
-                  (re-search-backward "^\\(?1:[[:blank:]]*#\\+\\)begin_\\(?2:.+?\\)\\(?: .*\\)*$" nil nil 1)
+                  (re-search-backward "^\\(?1:[[:blank:]]*#\\+begin_.+?\\)\\(?: .*\\)*$" nil nil 1)
                   (setq block-start (match-string-no-properties 0))
-                  (setq block-end (concat
-                                   (match-string-no-properties 1)
-                                   "end_"
-                                   (match-string-no-properties 2))))
-
+                  (setq block-end (replace-regexp-in-string
+                                   "begin_" "end_" ;Replaces "begin_" with "end_", "BEGIN_" with "END_"
+                                   (match-string-no-properties 1))))
                 ;; Go to the end of current line, if not at the BOL
                 (unless at-bol
                   (end-of-line 1))
