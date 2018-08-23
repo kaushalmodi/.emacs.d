@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-23 16:29:18 kmodi>
+;; Time-stamp: <2018-08-23 16:48:17 kmodi>
 
 ;; Deadgrep
 ;; https://github.com/Wilfred/deadgrep
@@ -23,12 +23,14 @@
     ;; https://github.com/Wilfred/deadgrep/issues/24
     (defun modi/deadgrep--format-command-advice (orig-ret-val)
       "Add arguments from `modi/deadgrep--rg-extra-args' to ORIG-RET-VAL."
-      (replace-regexp-in-string
-       (format "\\`\\(%s \\)\\(.*\\)\\'" (regexp-quote deadgrep-executable))
-       (concat "\\1"
-               (mapconcat #'identity modi/deadgrep--rg-extra-args " ")
-               " \\2")
-       orig-ret-val))
+      (let ((new-ret (replace-regexp-in-string
+                      (format "\\`\\(%s \\)\\(.*\\)\\'" (regexp-quote deadgrep-executable))
+                      (concat "\\1"
+                              (mapconcat #'identity modi/deadgrep--rg-extra-args " ")
+                              " \\2")
+                      orig-ret-val)))
+        (message "[Deadgrep] %s" new-ret)
+        new-ret))
     (advice-add 'deadgrep--format-command :filter-return #'modi/deadgrep--format-command-advice)))
 
 
