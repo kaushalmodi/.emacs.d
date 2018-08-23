@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 13:11:37 kmodi>
+;; Time-stamp: <2018-08-23 15:51:21 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -286,6 +286,8 @@ need Org version to be at least 9.x.")
   (require 'setup-projectile))
 (require 'setup-rainbow-delimiters)
 (require 'setup-rainbow-mode)
+(when (executable-find "rg")
+  (require 'setup-rg))
 (require 'setup-server)
 (require 'setup-smex)
 (require 'setup-sx)
