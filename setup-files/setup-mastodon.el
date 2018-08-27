@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-21 18:22:16 kmodi>
+;; Time-stamp: <2018-08-27 16:14:28 kmodi>
 
 ;; Mastodon
 ;; https://github.com/jdenen/mastodon.el
@@ -121,6 +121,7 @@ If end of buffer is reached, call `mastodon-tl--more'."
     (defun modi/mastodon-show-my-profile ()
       "Open Mastodon buffer for my profile."
       (interactive)
+      (require 'mastodon-profile)
       (cl-letf (((symbol-function #'mastodon-profile--image-from-account)
                  (lambda (_) "")))           ;No need to load my own image
         (mastodon-profile--make-profile-buffer-for
