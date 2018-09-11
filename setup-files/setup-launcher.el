@@ -1,15 +1,14 @@
-;; Time-stamp: <2017-12-01 12:34:12 kmodi>
+;; Time-stamp: <2018-08-29 10:02:22 kmodi>
 
 ;; Launcher
 
 (defhydra hydra-launch (:color teal
                         :columns 6)
   "Launcher"
-  ("cc"      calc "calc")
-  ("qc"      quick-calc "quick calc")
-  ("rc"      rpn-calc "RPN calc")
   ("a"       counsel-ag "ag cwd")
   ("b"       bookmark-jump "bookmark jump")
+  ("cc"      calc "calc")
+  ("cg"      browse-url-chrome "google chrome")
   ("cl"      calendar "calendar")
   ("d"       dired-single-magic-buffer-current-dir "dired cwd")
   ("ed"      modi/ediff-dwim "ediff dwim")
@@ -24,6 +23,8 @@
   ("g"       magit-status "magit status")
   ("h"       hl-line-flash "flash line")
   ("i"       counsel-git-grep "git grep")
+  ("qc"      quick-calc "quick calc")
+  ("rc"      rpn-calc "RPN calc")
   ("K"       modi/keep-lines-force "keep lines")
   ("l"        modi/run-current-file "load current file")
   ("L"       (modi/run-current-file 4) "load emacs init")
