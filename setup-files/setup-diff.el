@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-09 18:04:55 kmodi>
+;; Time-stamp: <2018-09-11 12:05:10 kmodi>
 
 ;; All things diff
 
@@ -74,6 +74,7 @@ If NO-WHITESPACE is non-nil, ignore all white space when doing diff."
                                         c-mode-hook
                                         makefile-mode-hook
                                         nim-mode-hook
+                                        go-mode-hook
                                         org-mode-hook)
       "List of hooks of major modes in which diff-hl-mode should be enabled.")
 
