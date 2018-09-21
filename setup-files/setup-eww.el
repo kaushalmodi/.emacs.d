@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-21 16:47:05 kmodi>
+;; Time-stamp: <2018-09-21 17:11:15 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -283,14 +283,7 @@ The page is reloaded from cache when doing this toggle."
      ("<C-return>" . eww-submit))       ;S-TAB Jump to previous link on the page
     (bind-keys
      :map eww-checkbox-map
-     ("<down-mouse-1>" . eww-toggle-checkbox))
-    (bind-keys
-     :map shr-map
-     ("w" . modi/eww-copy-url-dwim))
-    (bind-keys
-     :map eww-link-keymap
-     ("w" . modi/eww-copy-url-dwim)
-     ("I" . glucas/eww-toggle-images))))
+     ("<down-mouse-1>" . eww-toggle-checkbox))))
 
 (with-eval-after-load 'shr
   ;; Tweak the fontification of h1 heading s in eww (usually the
@@ -309,7 +302,20 @@ The page is reloaded from cache when doing this toggle."
       (shr-heading dom (if shr-use-fonts
 		           `(variable-pitch ,h2-font-prop)
                          `(fixed-pitch ,h2-font-prop)))))
-  (advice-add 'shr-tag-h2 :override #'modi/shr-tag-h2-advice))
+  (advice-add 'shr-tag-h2 :override #'modi/shr-tag-h2-advice)
+
+  ;; `shr-map' gets copied to `eww-link-keymap' in eww.el.  So we need
+  ;; to override the `shr-map' instead of the latter.
+  (bind-keys
+   :map shr-map
+   ("w" . modi/eww-copy-url-dwim)
+   ("I" . glucas/eww-toggle-images))
+  ;; `shr-image-map' gets copied to `eww-image-link-keymap' in eww.el.
+  ;; So we need to override the `shr-image-map' instead of the latter.
+  (bind-keys
+   :map shr-image-map
+   ("w" . modi/eww-copy-url-dwim)
+   ("I" . glucas/eww-toggle-images)))
 
 
 (provide 'setup-eww)
