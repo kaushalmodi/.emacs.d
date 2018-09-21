@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-21 15:12:24 kmodi>
+;; Time-stamp: <2018-09-21 16:32:36 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -278,6 +278,23 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
     (bind-keys
      :map eww-link-keymap
      ("w" . modi/eww-copy-url-dwim))))
+
+(with-eval-after-load 'shr
+  ;; Tweak the fontification of h1 heading s in eww (usually the
+  ;; article titles).
+  (defun modi/shr-tag-h1-advice (dom)
+    (shr-heading dom (if shr-use-fonts
+		         '(variable-pitch (:height 1.3 :weight bold :foreground "#c75646"))
+		       'bold)))
+  (advice-add 'shr-tag-h1 :override #'modi/shr-tag-h1-advice)
+
+  ;; Tweak the fontification of h2 headings in eww (usually the
+  ;; first-level headings in the articles).
+  (defun modi/shr-tag-h2-advice (dom)
+    (shr-heading dom (if shr-use-fonts
+		         '(variable-pitch (:weight bold :foreground "#d0b03c"))
+		       'bold)))
+  (advice-add 'shr-tag-h2 :override #'modi/shr-tag-h2-advice))
 
 
 (provide 'setup-eww)
