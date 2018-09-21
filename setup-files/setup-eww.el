@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-21 16:32:36 kmodi>
+;; Time-stamp: <2018-09-21 16:47:05 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -249,6 +249,17 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
         (file-notify-rm-watch (pop modi/eww--file-notify-descriptors-list)))
       (quit-window :kill))
 
+    ;; Toggle displaying of images
+    ;; https://emacs.stackexchange.com/a/38639/115
+    (defun glucas/eww-toggle-images ()
+      "Toggle displaying of images in the current Eww buffer,
+The page is reloaded from cache when doing this toggle."
+      (interactive)
+      (setq-local shr-inhibit-images (not shr-inhibit-images))
+      (eww-reload :local)  ;Reload from cache rather than from network
+      (message "Images are now %s"
+               (if shr-inhibit-images "disabled" "enabled")))
+
     (bind-keys
      :map eww-mode-map
      (":" . eww)                        ;Go to URL
@@ -258,7 +269,8 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
      ("=" . text-scale-increase)        ;-/_ key
      ("-" . text-scale-decrease)        ;=/+ key
      ("_" . (lambda() (interactive) (text-scale-set 0))) ;Shift + -/_ key
-     ("+" . (lambda() (interactive) (text-scale-set 0)))) ;Shift + =/+ key
+     ("+" . (lambda() (interactive) (text-scale-set 0))) ;Shift + =/+ key
+     ("I" . glucas/eww-toggle-images))
     ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
     (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
     (bind-keys
@@ -277,7 +289,8 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
      ("w" . modi/eww-copy-url-dwim))
     (bind-keys
      :map eww-link-keymap
-     ("w" . modi/eww-copy-url-dwim))))
+     ("w" . modi/eww-copy-url-dwim)
+     ("I" . glucas/eww-toggle-images))))
 
 (with-eval-after-load 'shr
   ;; Tweak the fontification of h1 heading s in eww (usually the
