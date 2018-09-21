@@ -283,17 +283,19 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
   ;; Tweak the fontification of h1 heading s in eww (usually the
   ;; article titles).
   (defun modi/shr-tag-h1-advice (dom)
-    (shr-heading dom (if shr-use-fonts
-		         '(variable-pitch (:height 1.3 :weight bold :foreground "#c75646"))
-		       'bold)))
+    (let ((h1-font-prop '(:height 1.3 :weight bold :foreground "#c75646")))
+      (shr-heading dom (if shr-use-fonts
+		           `(variable-pitch ,h1-font-prop)
+                         `(fixed-pitch ,h1-font-prop)))))
   (advice-add 'shr-tag-h1 :override #'modi/shr-tag-h1-advice)
 
   ;; Tweak the fontification of h2 headings in eww (usually the
   ;; first-level headings in the articles).
   (defun modi/shr-tag-h2-advice (dom)
-    (shr-heading dom (if shr-use-fonts
-		         '(variable-pitch (:weight bold :foreground "#d0b03c"))
-		       'bold)))
+    (let ((h2-font-prop '(:weight bold :foreground "#d0b03c")))
+      (shr-heading dom (if shr-use-fonts
+		           `(variable-pitch ,h2-font-prop)
+                         `(fixed-pitch ,h2-font-prop)))))
   (advice-add 'shr-tag-h2 :override #'modi/shr-tag-h2-advice))
 
 
