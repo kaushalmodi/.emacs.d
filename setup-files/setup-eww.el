@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-20 11:45:46 kmodi>
+;; Time-stamp: <2018-09-21 15:12:24 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -254,7 +254,11 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
      (":" . eww)                        ;Go to URL
      ("h" . eww-list-histories)         ;View history
      ("w" . modi/eww-copy-url-dwim)
-     ("/" . highlight-regexp))
+     ("/" . highlight-regexp)
+     ("=" . text-scale-increase)        ;-/_ key
+     ("-" . text-scale-decrease)        ;=/+ key
+     ("_" . (lambda() (interactive) (text-scale-set 0))) ;Shift + -/_ key
+     ("+" . (lambda() (interactive) (text-scale-set 0)))) ;Shift + =/+ key
     ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
     (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
     (bind-keys
