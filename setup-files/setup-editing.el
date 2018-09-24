@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-06-08 17:23:51 kmodi>
+;; Time-stamp: <2018-09-24 15:47:45 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -485,8 +485,9 @@ comment, remove the leading comment characters from that line."
   "Copy the selected region with file name, starting and ending
 line numbers, date and user name.
 
-When called with a prefix like `C-u', it will use unicode characters
-instead of ASCII characters for adorning the copied snippet."
+When called with a prefix like \\[universal-argument], it will use
+unicode characters instead of ASCII characters for adorning the
+copied snippet."
   (interactive "r\nP")
   (save-excursion
     (goto-char end)
