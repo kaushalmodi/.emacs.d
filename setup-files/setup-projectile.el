@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-07-09 17:54:19 kmodi>
+;; Time-stamp: <2018-09-25 14:01:02 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -7,11 +7,8 @@
   :bind (:map modi-mode-map
          ("C-c p" . hydra-projectile/body)
          ("C-c f" . hydra-projectile/body)
-         ("s-f"   . hydra-projectile/body))
+         ("s-f" . hydra-projectile/body))
   :commands (projectile-project-root)
-  :init
-  (progn
-    (setq projectile-keymap-prefix (kbd "C-c P")))
   :config
   (progn
     (when (not (bound-and-true-p disable-pkg-ivy))
@@ -45,12 +42,9 @@
             projectile-root-top-down ; First look for projects in top-down order
             projectile-root-bottom-up)) ; Then in bottom-up order
 
-    ;; Customize the Projectile mode-line lighter
-    (setq projectile-mode-line "​P")
-    ;; (setq projectile-mode-line '(:eval
-    ;;                              (if (file-remote-p default-directory)
-    ;;                                  "P"
-    ;;                                (format "‹%s›" (projectile-project-name)))))
+    ;; Disable dynamic mode-line lighter.
+    (setq projectile-mode-line-lighter "​P")
+    (setq projectile-mode-line-fn (lambda () projectile-mode-line-lighter))
 
     (defun modi/projectile-project-name (project-root)
       "Return project name after some modification if needed.
