@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-26 17:27:52 kmodi>
+;; Time-stamp: <2018-09-26 18:06:54 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1236,16 +1236,22 @@ footer > div {
     ;; Ensure that captures are auto-saved; they stopped being
     ;; auto-saved on Org master branch after this commit:
     ;; https://code.orgmode.org/bzg/org-mode/commit/b4422add3745c26ec3b2e11b8da425844b2e9d3d
-    (defun modi/org-capture-before-finalize ()
+    (defun modi/org-capture-get-base-buffer ()
+      "Stores base buffer of the Org Capture indirect buffer.
+ The base buffer is stored in `:base-buffer' entry in
+ `org-capture-plist'."
       (let ((base-buffer (buffer-base-buffer (current-buffer))))
         (org-capture-put :base-buffer base-buffer)))
-    (add-hook 'org-capture-before-finalize-hook #'modi/org-capture-before-finalize)
+    (add-hook 'org-capture-before-finalize-hook #'modi/org-capture-get-base-buffer)
 
-    (defun modi/org-capture-save-buffer ()
+    (defun modi/org-capture-save-base-buffer ()
+      "Saves the base buffer of the Org Capture indirect buffer.
+ The base buffer is retrieved from the `:base-buffer' entry in
+ `org-capture-plist'."
       (when-let ((base-buffer (org-capture-get :base-buffer)))
         (with-current-buffer base-buffer
           (save-buffer))))
-    (add-hook 'org-capture-after-finalize-hook #'modi/org-capture-save-buffer)
+    (add-hook 'org-capture-after-finalize-hook #'modi/org-capture-save-base-buffer)
 
     ;; See `org-capture-templates' doc-string for info on Capture templates
     (if (eq modi/org-version-select 'dev)
