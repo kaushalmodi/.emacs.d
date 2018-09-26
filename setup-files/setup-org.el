@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-26 02:26:22 kmodi>
+;; Time-stamp: <2018-09-26 14:27:18 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1233,6 +1233,25 @@ footer > div {
   :defer t
   :config
   (progn
+    ;; Ensure that captures are auto-saved; they stopped being
+    ;; auto-saved on Org master branch after this commit:
+    ;; https://code.orgmode.org/bzg/org-mode/commit/b4422add3745c26ec3b2e11b8da425844b2e9d3d
+    (defvar modi/org-capture-base-buffer nil)
+    (defun modi/org-capture-before-finalize ()
+      (let ((base-buffer (buffer-base-buffer (current-buffer))))
+        ;; (message "DBG before finalize: current buffer: %S" (current-buffer))
+        ;; (message "DBG before finalize: base buffer: %S" base-buffer)
+        (setq modi/org-capture-base-buffer base-buffer)))
+    (add-hook 'org-capture-before-finalize-hook #'modi/org-capture-before-finalize)
+
+    (defun modi/org-capture-save-buffer ()
+      ;; (message "DBG: capture base buffer: %S" modi/org-capture-base-buffer)
+      (when modi/org-capture-base-buffer
+        (with-current-buffer modi/org-capture-base-buffer
+          (save-buffer)))
+      (setq modi/org-capture-base-buffer nil)) ;Reset the buffer name cache
+    (add-hook 'org-capture-after-finalize-hook #'modi/org-capture-save-buffer)
+
     ;; See `org-capture-templates' doc-string for info on Capture templates
     (if (eq modi/org-version-select 'dev)
         (progn
@@ -1254,8 +1273,7 @@ footer > div {
                    "Note"
                    entry
                    (file "") ;empty string defaults to `org-default-notes-file'
-                   "\n* %?\n  Context:\n    %i\n  Entered on %U")))
-  )
+                   "\n* %?\n  Context:\n    %i\n  Entered on %U"))))
 
 ;;; Org Agenda
 (use-package org-agenda
