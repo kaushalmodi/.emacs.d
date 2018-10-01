@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-25 14:01:02 kmodi>
+;; Time-stamp: <2018-10-01 11:08:23 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -61,7 +61,7 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
         project-name))
     (setq projectile-project-name-function #'modi/projectile-project-name)
 
-    (defun modi/advice-projectile-use-ag ()
+    (defun modi/advice-projectile-use-ag (&rest _args)
       "Always use `ag' for getting a list of all files in the project."
       (mapconcat #'shell-quote-argument
                  (append '("ag")
@@ -70,7 +70,7 @@ from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
                            "-g" ""))    ;Get file names matching "" (all files)
                  " "))
 
-    (defun modi/advice-projectile-use-rg ()
+    (defun modi/advice-projectile-use-rg (&rest _args)
       "Always use `rg' for getting a list of all files in the project."
       (let* ((prj-user-ignore-name (expand-file-name
                                     (concat ".ignore." user-login-name)
