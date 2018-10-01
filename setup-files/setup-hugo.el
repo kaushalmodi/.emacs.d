@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-24 15:55:46 kmodi>
+;; Time-stamp: <2018-10-01 11:22:25 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -46,10 +46,13 @@ See `org-capture-templates' for more information."
 (with-eval-after-load 'org
   (defun modi/org-hugo-collapse-all-posts ()
     "Collapse all post subtrees in the current Org file.
-Also collapse the Footnotes subtree and COMMENT subtrees if
-present.
 
-A post subtree is one that has the EXPORT_FILE_NAME property set."
+Also collapse:
+- The Footnotes subtree and COMMENT subtrees if present.
+- Subtrees that have the CUSTOM_ID property set.
+
+A post subtree is one that has the EXPORT_FILE_NAME property
+set."
     (interactive)
     (widen)
     (org-show-all '(headings))
@@ -60,7 +63,7 @@ A post subtree is one that has the EXPORT_FILE_NAME property set."
       (org-map-entries
        (lambda ()
          (hide-subtree))
-       "EXPORT_FILE_NAME<>\"\""))
+       "EXPORT_FILE_NAME<>\"\"|CUSTOM_ID<>\"\""))
     ;; Also hide Footnotes and comments.
     (save-excursion
       (goto-char (point-min))
