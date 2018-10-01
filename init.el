@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-23 15:51:21 kmodi>
+;; Time-stamp: <2018-10-01 12:20:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -114,7 +114,6 @@ need Org version to be at least 9.x.")
     page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
     pomodoro
     poporg ; edit comments from any other mode in org mode
-    projectile ; Better than fiplr
     rainbow-delimiters
     rainbow-mode
     region-bindings-mode ; complements really well with multiple-cursors
@@ -167,6 +166,7 @@ need Org version to be at least 9.x.")
     ;; popwin ; < shackle
     ;; helm helm-swoop ; < swiper
     ;; helm-gtags ; < ggtags
+    ;; projectile ; Better than fiplr < fork
     )
   "A list of packages to ensure are installed at launch")
 

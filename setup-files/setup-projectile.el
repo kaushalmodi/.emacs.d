@@ -1,9 +1,10 @@
-;; Time-stamp: <2018-10-01 11:08:23 kmodi>
+;; Time-stamp: <2018-10-01 12:18:31 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
 
 (use-package projectile
+  :load-path "elisp/projectile"
   :bind (:map modi-mode-map
          ("C-c p" . hydra-projectile/body)
          ("C-c f" . hydra-projectile/body)
