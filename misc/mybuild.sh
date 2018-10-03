@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2018-08-13 12:24:45 kmodi>
+# Time-stamp: <2018-10-03 16:53:40 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -245,9 +245,6 @@ then
     if [[ ${no_install} -eq 0 ]]
     then
         make install
-        # Copy the emacs-module.h too.
-        mkdir -p "${MY_EMACS_INSTALL_DIR}"/include # User needs to ensure that this path is added to C_INCLUDE_PATH env var
-        cp -f src/emacs-module.h "${MY_EMACS_INSTALL_DIR}"/include/.
     fi
 fi
 
