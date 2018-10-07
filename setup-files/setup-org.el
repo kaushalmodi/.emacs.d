@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-10-07 01:41:18 kmodi>
+;; Time-stamp: <2018-10-07 02:08:28 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -416,6 +416,43 @@ point."
         (org-insert-heading respect-content invisible-ok)))
     (advice-add 'org-insert-heading-respect-content :override
                 #'modi/org-insert-heading-respect-content)
+
+    ;; Below helped be speed up eless.org tangling speed from ~4
+    ;; seconds to ~2.5 seconds, and exporting time of nim.org when
+    ;; down from 53 seconds to 39 seconds.
+    ;; https://www.reddit.com/r/emacs/comments/9lpybf/a_fast_org_tangling_solution_using_nim/e7bettq/
+    (defun modi/advice-org-tangle-and-export-boost (orig-fun &rest args)
+      "Speed up Org tangling and exporting considerably.
+
+- Prevent GC.
+- Prevent Projectile hooks/advices from interfering with the find-files
+  and file deletes."
+      (let ((orig-gc-thresh gc-cons-threshold)
+            (projectile-enabled (and (fboundp #'projectile-mode)
+                                     projectile-mode))
+            (t1 (current-time)))
+
+        ;; Try to prevent GC.
+        (setq gc-cons-threshold (* 200 1024 1024)) ;200 MB before garbage collection
+
+        (when projectile-enabled
+          ;; Disable projectile hooks and advices.
+          (remove-hook 'find-file-hook #'projectile-find-file-hook-function)
+          (ad-deactivate 'delete-file))
+
+        (apply orig-fun args)
+
+        ;; Re-add projectile mode hooks and advices.
+        (when projectile-enabled
+          (add-hook 'find-file-hook #'projectile-find-file-hook-function)
+          (ad-activate 'delete-file))
+
+        (setq gc-cons-threshold orig-gc-thresh)
+        (message "exec time: %S" (float-time (time-since t1)))))
+    (dolist (fn '(org-babel-tangle org-export-to-file))
+      (advice-add fn :around #'modi/advice-org-tangle-and-export-boost)
+      ;; (advice-remove fn #'modi/advice-org-tangle-and-export-boost)
+      )
 
 ;;; Org File Apps
     ;; Make firefox the default web browser for applications like viewing
@@ -1507,40 +1544,6 @@ the languages in `modi/ob-enabled-languages'."
   :defer t
   :config
   (progn
-    ;; Below helped be speed up eless.org tangling speed from ~4
-    ;; seconds to ~2.5 seconds.
-    ;; https://www.reddit.com/r/emacs/comments/9lpybf/a_fast_org_tangling_solution_using_nim/e7bettq/
-    (defun modi/advice-org-babel-tangle-boost (orig-fun &rest args)
-      "Speed up `org-babel-tangle' considerably.
-
-- Prevent GC during tangle.
-- Prevent Projectile hooks/advices from bogging down the tangling too."
-      (let ((orig-gc-thresh gc-cons-threshold)
-            (projectile-enabled (and (fboundp #'projectile-mode)
-                                     projectile-mode))
-            (t1 (current-time)))
-
-        ;; Try to prevent GC during tangling.
-        (setq gc-cons-threshold (* 200 1024 1024)) ;200 MB before garbage collection
-
-        (when projectile-enabled
-          ;; Disable projectile hooks and advices to speed up tangle.
-          (remove-hook 'find-file-hook #'projectile-find-file-hook-function)
-          (ad-deactivate 'delete-file))
-
-        ;; Now run `org-babel-tangle'.
-        (apply orig-fun args)
-
-        ;; Re-add projectile mode hooks and advices.
-        (when projectile-enabled
-          (add-hook 'find-file-hook #'projectile-find-file-hook-function)
-          (ad-activate 'delete-file))
-
-        (setq gc-cons-threshold orig-gc-thresh)
-        (message "Tangling time: %S" (float-time (time-since t1)))))
-    (advice-add 'org-babel-tangle :around #'modi/advice-org-babel-tangle-boost)
-    ;; (advice-remove 'org-babel-tangle #'modi/advice-org-babel-tangle-boost)
-
     ;; Trailing whitespace management
     ;; Delete trailing whitespace in tangled buffer and save it.
     (add-hook 'org-babel-post-tangle-hook #'delete-trailing-whitespace)
