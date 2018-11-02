@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-11 12:06:03 kmodi>
+;; Time-stamp: <2018-10-16 08:37:38 kmodi>
 
 ;; Line number package manager
 
@@ -45,6 +45,7 @@ variable.")
                                   d-mode-hook
                                   sml-mode-hook
                                   nim-mode-hook
+                                  nimscript-mode-hook
                                   go-mode-hook
                                   yaml-mode-hook)
   "List of hooks of major modes in which a “linum” mode should be
