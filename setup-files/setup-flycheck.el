@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-04 09:31:53 kmodi>
+;; Time-stamp: <2018-05-17 14:44:23 kmodi>
 
 ;; Flycheck
 ;; https://github.com/flycheck/flycheck
@@ -9,7 +9,8 @@
   (progn
     (defconst modi/flycheck-mode-hooks '(python-mode-hook
                                          sh-mode-hook
-                                         nim-mode-hook)
+                                         ;; nim-mode-hook
+                                         )
       "List of hooks of major modes in which flycheck mode should be enabled.")
 
     (defun modi/turn-on-flycheck-mode ()
