@@ -1,10 +1,9 @@
-;; Time-stamp: <2018-10-01 12:18:31 kmodi>
+;; Time-stamp: <2018-11-02 16:49:04 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
 
 (use-package projectile
-  :load-path "elisp/projectile"
   :bind (:map modi-mode-map
          ("C-c p" . hydra-projectile/body)
          ("C-c f" . hydra-projectile/body)
@@ -45,7 +44,7 @@
 
     ;; Disable dynamic mode-line lighter.
     (setq projectile-mode-line-lighter "​P")
-    (setq projectile-mode-line-fn (lambda () projectile-mode-line-lighter))
+    (setq projectile-mode-line-function (lambda () projectile-mode-line-lighter))
 
     (defun modi/projectile-project-name (project-root)
       "Return project name after some modification if needed.
