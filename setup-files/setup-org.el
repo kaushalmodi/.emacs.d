@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-10-07 02:08:28 kmodi>
+;; Time-stamp: <2018-11-05 11:46:47 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -440,15 +440,15 @@ point."
           (remove-hook 'find-file-hook #'projectile-find-file-hook-function)
           (ad-deactivate 'delete-file))
 
-        (apply orig-fun args)
+        (prog1
+            (apply orig-fun args)
+          ;; Re-add projectile mode hooks and advices.
+          (when projectile-enabled
+            (add-hook 'find-file-hook #'projectile-find-file-hook-function)
+            (ad-activate 'delete-file))
 
-        ;; Re-add projectile mode hooks and advices.
-        (when projectile-enabled
-          (add-hook 'find-file-hook #'projectile-find-file-hook-function)
-          (ad-activate 'delete-file))
-
-        (setq gc-cons-threshold orig-gc-thresh)
-        (message "exec time: %S" (float-time (time-since t1)))))
+          (setq gc-cons-threshold orig-gc-thresh)
+          (message "exec time: %S" (float-time (time-since t1))))))
     (dolist (fn '(org-babel-tangle org-export-to-file))
       (advice-add fn :around #'modi/advice-org-tangle-and-export-boost)
       ;; (advice-remove fn #'modi/advice-org-tangle-and-export-boost)
