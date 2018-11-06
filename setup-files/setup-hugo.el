@@ -1,20 +1,28 @@
-;; Time-stamp: <2018-10-01 11:22:25 kmodi>
+;; Time-stamp: <2018-11-06 11:14:21 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
 ;; https://github.com/kaushalmodi/ox-hugo
 
-(use-package ox-hugo
-  :load-path "elisp/ox-hugo"
-  :after ox)
+(defvar modi/ox-hugo-dir (file-name-as-directory (expand-file-name "elisp/ox-hugo" user-emacs-directory))
+  "Directory containing ox-hugo package.")
+
+;; Below is needed so that the "put .. safe-local-variable" forms get
+;; evaluated from the ox-hugo's autoloads file.
+(load-file (expand-file-name "ox-hugo-autoloads.el" modi/ox-hugo-dir))
 
 (use-package ox-hugo
+  :load-path modi/ox-hugo-dir
   :commands (org-hugo-slug)
   :bind (:map modi-mode-map
          ("C-c G" . org-hugo-export-wim-to-md)))
 
+(use-package ox-hugo
+  :load-path modi/ox-hugo-dir
+  :after ox)
+
 (use-package ox-hugo-auto-export
-  :load-path "elisp/ox-hugo")
+  :load-path modi/ox-hugo-dir)
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
