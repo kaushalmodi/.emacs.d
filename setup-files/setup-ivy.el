@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-15 15:19:28 kmodi>
+;; Time-stamp: <2018-12-05 12:06:58 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
@@ -25,13 +25,6 @@
 
     ;; Do not show "./" and "../" in the `counsel-find-file' completion list
     (setq ivy-extra-directories nil)    ;Default value: ("../" "./")
-
-    (defun modi/ivy-set-prompt-text-properties (prompt std-props)
-      "Add a different face for the \"<..>\" string in `counsel-set-variable'."
-      (ivy--set-match-props prompt "<\\(.*\\)>"
-                            `(face font-lock-string-face ,@std-props) 1)
-      (ivy-set-prompt-text-properties-default prompt std-props))
-    (setq ivy-set-prompt-text-properties-function 'modi/ivy-set-prompt-text-properties)
 
     ;; https://github.com/abo-abo/swiper/blob/master/ivy-hydra.el
     (use-package ivy-hydra
