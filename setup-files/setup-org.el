@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-12-13 16:20:02 kmodi>
+;; Time-stamp: <2018-12-18 10:13:14 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -438,14 +438,14 @@ point."
         (when projectile-enabled
           ;; Disable projectile hooks and advices.
           (remove-hook 'find-file-hook #'projectile-find-file-hook-function)
-          (ad-deactivate 'delete-file))
+          (advice-remove 'delete-file #'delete-file-projectile-remove-from-cache))
 
         (prog1
             (apply orig-fun args)
           ;; Re-add projectile mode hooks and advices.
           (when projectile-enabled
             (add-hook 'find-file-hook #'projectile-find-file-hook-function)
-            (ad-activate 'delete-file))
+            (advice-add 'delete-file :before #'delete-file-projectile-remove-from-cache))
 
           (setq gc-cons-threshold orig-gc-thresh)
           (message "exec time: %S" (float-time (time-since t1))))))
