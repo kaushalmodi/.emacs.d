@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-26 15:49:55 kmodi>
+;; Time-stamp: <2019-01-02 11:00:37 kmodi>
 
 ;; Verilog
 
@@ -663,36 +663,31 @@ _a_lways         _f_or              _g_enerate         _O_utput
       ("C-g" nil nil :color blue))
 
 ;;; imenu + outshine
-    (with-eval-after-load 'outshine
-      (defun modi/verilog-outshine-imenu-generic-expression (&rest _)
-        "Update `imenu-generic-expression' when using outshine."
-        (when (derived-mode-p 'verilog-mode)
-          (setq-local imenu-generic-expression
-                      (append `(("*Level 1*"
-                                 ,(concat "^"
-                                          (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                              "[[:blank:]]*"
-                                            "")
-                                          "// \\*\\{1\\} \\(?1:.*$\\)")
-                                 1)
-                                ("*Level 2*"
-                                 ,(concat "^"
-                                          (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                              "[[:blank:]]*"
-                                            "")
-                                          "// \\*\\{2\\} \\(?1:.*$\\)")
-                                 1)
-                                ("*Level 3*"
-                                 ,(concat "^"
-                                          (if (bound-and-true-p modi/outshine-allow-space-before-heading)
-                                              "[[:blank:]]*"
-                                            "")
-                                          "// \\*\\{3\\} \\(?1:.*$\\)")
-                                 1))
-                              verilog-imenu-generic-expression))))
-      (advice-add 'outshine-hook-function :after #'modi/verilog-outshine-imenu-generic-expression)
-      ;; (advice-remove 'outshine-hook-function #'modi/verilog-outshine-imenu-generic-expression)
-      )
+    (defun modi/verilog-outshine-imenu-generic-expression (&rest _)
+      "Update `imenu-generic-expression' when using outshine."
+      (setq-local imenu-generic-expression
+                  (append `(("*Level 1*"
+                             ,(concat "^"
+                                      (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                          "[[:blank:]]*"
+                                        "")
+                                      "// \\*\\{1\\} \\(?1:.*$\\)")
+                             1)
+                            ("*Level 2*"
+                             ,(concat "^"
+                                      (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                          "[[:blank:]]*"
+                                        "")
+                                      "// \\*\\{2\\} \\(?1:.*$\\)")
+                             1)
+                            ("*Level 3*"
+                             ,(concat "^"
+                                      (if (bound-and-true-p modi/outshine-allow-space-before-heading)
+                                          "[[:blank:]]*"
+                                        "")
+                                      "// \\*\\{3\\} \\(?1:.*$\\)")
+                             1))
+                          verilog-imenu-generic-expression)))
 
 ;;; modi/verilog-mode-customization
     (defun modi/verilog-mode-customization ()
@@ -751,15 +746,17 @@ _a_lways         _f_or              _g_enerate         _O_utput
       (with-eval-after-load 'outshine
         ;; Do not require the "// *" style comments used by `outshine' to
         ;; start at column 0 just for this major mode.
-        (setq-local modi/outshine-allow-space-before-heading t)))
+        (setq-local modi/outshine-allow-space-before-heading t)
+        (add-hook 'outshine-mode-hook #'modi/verilog-outshine-imenu-generic-expression nil :local)))
 
     ;; Fri Aug 25 10:51:34 EDT 2017 - kmodi
-    ;; Above, the `modi/outshine-allow-space-before-heading' variable is set to
-    ;; `t' specifically for `verilog-mode'. So do not set the APPEND argument of
-    ;; `add-hook' to non-nil when adding the container function
-    ;; `modi/verilog-mode-customization' to `verilog-mode-hook'. This ensures
-    ;; that that variable is set correctly *before* `outline-minor-mode' is
-    ;; enabled (the act of which runs `outshine-hook-function').
+    ;; Above, the `modi/outshine-allow-space-before-heading' variable
+    ;; is set to `t' specifically for `verilog-mode'. So do not set
+    ;; the APPEND argument of the below `add-hook' to non-nil when
+    ;; adding the container function `modi/verilog-mode-customization'
+    ;; to `verilog-mode-hook'. This ensures that that variable is set
+    ;; correctly *before* `outline-minor-mode' is enabled (the act of
+    ;; which enables `outshine-mode').
     (add-hook 'verilog-mode-hook #'modi/verilog-mode-customization)
 
 ;;; Key bindings

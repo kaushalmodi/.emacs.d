@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-01 08:03:55 kmodi>
+;; Time-stamp: <2019-01-02 10:54:47 kmodi>
 
 ;; Outshine
 ;; https://github.com/tj64/outshine
@@ -33,7 +33,7 @@
   :config
   (progn
     ;; Always enable Outshine in `outline-minor-mode'
-    (add-hook 'outline-minor-mode-hook #'outshine-hook-function)
+    (add-hook 'outline-minor-mode-hook #'outshine-mode)
 
     (defun modi/outline-next-visible-heading (arg)
       "Move to the next visible heading line.
