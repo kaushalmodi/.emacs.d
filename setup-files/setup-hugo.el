@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-11-06 11:14:21 kmodi>
+;; Time-stamp: <2018-12-24 11:38:25 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -20,9 +20,6 @@
 (use-package ox-hugo
   :load-path modi/ox-hugo-dir
   :after ox)
-
-(use-package ox-hugo-auto-export
-  :load-path modi/ox-hugo-dir)
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
