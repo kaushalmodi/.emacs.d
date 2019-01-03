@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-12-18 10:13:14 kmodi>
+;; Time-stamp: <2019-01-03 17:33:47 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -453,6 +453,32 @@ point."
       (advice-add fn :around #'modi/advice-org-tangle-and-export-boost)
       ;; (advice-remove fn #'modi/advice-org-tangle-and-export-boost)
       )
+
+    ;; Fix C-u C-c C-q
+    ;; https://lists.gnu.org/r/emacs-orgmode/2019-01/msg00051.html
+    (defun modi/org-align-tags (&optional all)
+      "Align tags in current entry.
+When optional argument ALL is non-nil, align all tags in the
+visible part of the buffer."
+      (let ((get-indent-column
+	     (lambda ()
+	       (let ((offset (if (bound-and-true-p org-indent-mode)
+			         (* (1- org-indent-indentation-per-level)
+				    (1- (org-current-level)))
+			       0)))
+	         (+ org-tags-column
+		    (if (> org-tags-column 0) (- offset) offset))))))
+        (if (and (not all) (org-at-heading-p))
+	    (org--align-tags-here (funcall get-indent-column))
+          (save-excursion
+	    (if all
+                (progn
+                  (goto-char (point-min))
+	          (while (re-search-forward org-tag-line-re nil t)
+	            (org--align-tags-here (funcall get-indent-column))))
+	      (org-back-to-heading t)
+	      (org--align-tags-here (funcall get-indent-column)))))))
+    (advice-add 'org-align-tags :override #'modi/org-align-tags)
 
 ;;; Org File Apps
     ;; Make firefox the default web browser for applications like viewing
