@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-10-01 12:20:01 kmodi>
+;; Time-stamp: <2019-01-11 21:16:44 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -275,6 +275,8 @@ need Org version to be at least 9.x.")
 (require 'setup-nov)
 (require 'setup-org)
 (require 'setup-outshine)
+(when (executable-find "p4")
+  (require 'setup-p4))
 (require 'setup-page-break-lines)
 (require 'setup-pcache)
 (require 'setup-pomodoro)
