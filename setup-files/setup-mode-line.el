@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-02 11:12:29 kmodi>
+;; Time-stamp: <2019-01-11 22:14:58 kmodi>
 
 ;; Customize the mode-line
 
@@ -169,7 +169,8 @@ If nil, show the same in the minibuffer.")
                 " ivy"       ;ivy
                 " h"         ;hungry-delete-mode
                 " (*)"       ;beacon
-                "Outshine"   ;outshine-mode https://github.com/alphapapa/outshine/pull/39
+                " Outshine"  ;outshine-mode
+                " counsel"   ;counsel
                 ))
         (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face) ;Overwrite
                                    ("\\` mc:[0-9]+ *\\'" 'face 'font-lock-keyword-face) ;Multiple cursors
