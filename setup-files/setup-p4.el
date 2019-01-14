@@ -23,9 +23,10 @@ escape codes."
     (defhydra hydra-p4 (:color blue
                         :columns 5)
       "p4"
-      ("a"   p4-add             "Add")                                     ;add
+      ("A"   p4-add             "Add")                                     ;add
       ("X"   p4-delete          "Delete")                                  ;delete
-      ("o"   p4-edit            "Check(o)ut for edit")                     ;edit
+      ("e"   p4-edit            "Check(o)ut for edit")                     ;edit
+      ("o"   p4-edit            "Check(o)ut for edit")
       ("O"   p4-reopen          "Reopen")                                  ;reopen
       ("R"   p4-revert          "Discard changes")                         ;revert
       ("i"   p4-submit          "Submit/check(I)n")                        ;submit
@@ -34,10 +35,11 @@ escape codes."
       ("r"   p4-resolve         "Resolve integ and updates to ws")         ;resolve
       ("z"   p4-reconcile       "Reconcile")                               ;reconcile
 
-      ("v"   p4-annotate        "Annotate")                                ;annotate
-      ("f"   p4-filelog         "File Changelog")                          ;filelog
+      ("a"   p4-annotate        "Annotate")                                ;annotate
+      ("c"   p4-filelog         "File (C)hangelog")                        ;filelog
+      ("f"   p4-filelog         "File (C)hangelog")
       ("d"   p4-diff            "Diff with depot version of current file") ;diff
-      ("e"   p4-ediff           "Use ediff to compare file with client")
+      ("E"   p4-ediff           "Use ediff to compare file with client")
       ("p"   p4-print           "See depot version of current file")       ;print
       ("="   p4-diff2           "Compare depot file sets")
       ("D"   p4-diff-all-opened "Diff all opened files")
@@ -66,12 +68,12 @@ escape codes."
       ("lj"  p4-jobs            "List of jobs")                            ;jobs
       ("F"   p4-fix             "Fix jobs")                                ;fix
 
-      ("cc"  p4-client          "Client spec")                             ;client
-      ("cn"  p4-get-client-name "Client name")
-      ("ci"  p4-info            "Client/server info")                      ;info
-      ("cp"  p4-set-p4-port     "Set P4PORT")
+      ("tc"  p4-client          "Client spec")                             ;client
+      ("tn"  p4-get-client-name "Client name")
+      ("ti"  p4-info            "Client/server info")                      ;info
+      ("tp"  p4-set-p4-port     "Set P4PORT")
 
-      ("t"   p4-toggle-vc-mode  "Toggle Offline mode")
+      ("T"   p4-toggle-vc-mode  "Toggle Offline mode")
 
       ("h"   p4-help            "Help")                                    ;help
       ("?"   p4-help            "Help")
