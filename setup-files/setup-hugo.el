@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-12-24 11:38:25 kmodi>
+;; Time-stamp: <2019-01-09 16:01:41 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -19,7 +19,11 @@
 
 (use-package ox-hugo
   :load-path modi/ox-hugo-dir
-  :after ox)
+  :after ox
+  :config
+  (progn
+    (add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "csv")
+    (add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "vplanx")))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
