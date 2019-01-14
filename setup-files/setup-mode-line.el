@@ -170,7 +170,6 @@ If nil, show the same in the minibuffer.")
                 " h"         ;hungry-delete-mode
                 " (*)"       ;beacon
                 " Outshine"  ;outshine-mode
-                " counsel"   ;counsel
                 ))
         (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face) ;Overwrite
                                    ("\\` mc:[0-9]+ *\\'" 'face 'font-lock-keyword-face) ;Multiple cursors
