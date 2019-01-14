@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-11 22:14:58 kmodi>
+;; Time-stamp: <2019-01-14 10:32:08 kmodi>
 
 ;; Customize the mode-line
 
@@ -88,7 +88,7 @@ If nil, show the same in the minibuffer.")
                                  (string-match-p "\\`/" orig-ret))
                             (setq new-ret (sml/perform-projectile-replacement orig-ret))
                           orig-ret))
-          ;; (message "dbg-adv: %s" new-ret)
+          ;; (message "[sml-projectile] orig-ret: %s, new-ret: %s" orig-ret new-ret)
           new-ret))
       (advice-add 'sml/replacer-raw :filter-return #'modi/sml-projectile-replacement-maybe))
 
@@ -112,7 +112,7 @@ If nil, show the same in the minibuffer.")
             ;; `(lambda (string) (concat ":" (upcase (match-string 1 string)) ":")))`.
             (,(concat "\\(?1:/proj.*?/"                         ;Project base
                       "\\(?2:[a-z0-9_]\\{3\\}\\).*?\\(?3:[a-z0-9_]\\)/" ;Project name
-                      "[so]+_\\(?4:[a-z0-9]+\\)\\)/"                ;User project root
+                      "[so]*_?\\(?4:[a-z0-9]+\\)\\)/" ;User project root
                       "\\(?5:[a-z0-9_]\\{0,3\\}\\).*?/") ;Dir in user project root
              (lambda (string)
                (let* ((prj-root (match-string-no-properties 1 string))

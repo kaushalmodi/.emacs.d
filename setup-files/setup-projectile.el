@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-11-02 16:49:04 kmodi>
+;; Time-stamp: <2019-01-14 10:28:54 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -49,16 +49,14 @@
     (defun modi/projectile-project-name (project-root)
       "Return project name after some modification if needed.
 
-If PROJECT-ROOT contains \"sos_\" or \"src\", remove the directory basename
-from the project root name. E.g. if PROJECT-ROOT is \"/a/b/src\", remove the
-\"src\" portion from it and make it \"/a/b\"."
-      (let ((project-name (projectile-default-project-name project-root)))
-        (while (string-match "\\(sos_\\|\\bsrc\\b\\)" project-name)
-          (setq project-root (replace-regexp-in-string
-                              "\\(.*\\)/.+/*$" "\\1" project-root))
-          (setq project-name (file-name-nondirectory
-                              (directory-file-name project-root))))
-        project-name))
+If PROJECT-ROOT begins with \"/proj/\", return the sub-directory
+name inside that \"proj/\" directory as the project name remove
+the directory basename."
+      (cond
+       ((string-match "\\`/proj/\\([^/]+\\)/" project-root)
+        (match-string-no-properties 1 project-root))
+       (t
+        (projectile-default-project-name project-root))))
     (setq projectile-project-name-function #'modi/projectile-project-name)
 
     (defun modi/advice-projectile-use-ag (&rest _args)
