@@ -7,16 +7,18 @@
     (setq p4-global-key-prefix nil)) ;Don't use the default `C-x p' prefix
   :config
   (progn
-    (defun modi/p4-process-sentinel (process message)
-      (let ((buffer (process-buffer process)))
-        (when (buffer-live-p buffer)
-          (p4-process-finished buffer (process-name process) message)
-          (let ((inhibit-read-only t))
-            (with-current-buffer buffer
-              ;; Render the ANSI color codes in the P4 buffers.
-              (ansi-color-apply-on-region-int (point-min) (point-max)))))))
-    (advice-add 'p4-process-sentinel :override #'modi/p4-process-sentinel)
-    ;; (advice-remove 'p4-process-sentinel #'modi/p4-process-sentinel)
+    (defun modi/p4-process-finished (buffer _process-name _message)
+      "Render the ANSI color codes in the P4 buffers.
+
+If \"P4COLORS\" environment variable is set the `p4' outputs
+would be colorful, and we would want to render those ANSI color
+escape codes."
+      (when (getenv "P4COLORS")
+        (let ((inhibit-read-only t))
+          (with-current-buffer buffer
+            (ansi-color-apply-on-region-int (point-min) (point-max))))))
+    (advice-add 'p4-process-finished :after #'modi/p4-process-finished)
+    ;; (advice-remove 'p4-process-finished #'modi/p4-process-finished)
 
     (defhydra hydra-p4 (:color blue
                         :columns 5)
