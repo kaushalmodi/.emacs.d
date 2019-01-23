@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-22 14:45:18 kmodi>
+;; Time-stamp: <2019-01-23 16:59:45 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -292,7 +292,7 @@ will be killed."
   (interactive)
   (let ((frame-resize-pixelwise t))   ;Do not round frame sizes to character h/w
     (set-frame-position nil 2560 0)   ;Pixels x y from upper left
-    (set-frame-size nil 2540 1347 :pixelwise))) ;Width, height
+    (set-frame-size nil 2540 1380 :pixelwise))) ;Width, height
 
 (defun modi/frame-width-2x (double)
   "Set the frame text width to half the current width.
