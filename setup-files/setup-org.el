@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-04 09:36:55 kmodi>
+;; Time-stamp: <2019-01-23 16:18:44 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -739,10 +739,10 @@ line, or if a region is selected.  Else call
      :map org-mode-map
      ("C-m" . modi/org-return-no-indent)
      ("<" . modi/org-template-maybe)
-     ("M-p". org-previous-visible-heading)
-     ("M-P". org-backward-heading-same-level)
-     ("M-n". org-next-visible-heading)
-     ("M-N". org-forward-heading-same-level))
+     ("M-p" . org-previous-visible-heading)
+     ("M-P" . org-backward-heading-same-level)
+     ("M-n" . org-next-visible-heading)
+     ("M-N" . org-forward-heading-same-level))
 
     ;; Bind the "org-table-*" command ONLY when the point is in an Org table.
     ;; http://emacs.stackexchange.com/a/22457/115
@@ -756,7 +756,20 @@ line, or if a region is selected.  Else call
      ("C-c `" . org-table-edit-field)
      ("C-#" . org-table-rotate-recalc-marks)
      ("C-c }" . org-table-toggle-coordinate-overlays)
-     ("C-c {" . org-table-toggle-formula-debugger))
+     ("C-c {" . org-table-toggle-formula-debugger)
+     ;; Add the <return> variant of bindings so that they work on
+     ;; Emacs GUI too.
+     ("S-<return>" . org-table-copy-down))
+
+    ;; https://lists.gnu.org/r/emacs-orgmode/2019-01/msg00312.html
+    ;; Add the <return> variant of bindings so that they work on Emacs
+    ;; GUI too.
+    (bind-keys
+     :map org-mode-map
+     ("M-S-<return>" . org-insert-todo-heading)
+     ("ESC S-<return>" . org-insert-todo-heading)
+     ("M-<return>" . org-meta-return)
+     ("ESC <return>" . org-meta-return))
 
     (bind-keys
      :map modi-mode-map
