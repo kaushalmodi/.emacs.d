@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-15 15:32:04 kmodi>
+;; Time-stamp: <2019-01-17 15:28:00 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -108,6 +108,7 @@
     (setq counsel-grep-base-command ;Original value: "grep -E -n -e %s %s"
           (mapconcat #'identity
                      '("rg"
+                       "--color=never"
                        "--line-number" ;Matches the grep -n switch in the original value
                        "--smart-case" ;Case-sensitive only when the searched expression has both cases
                        "--follow" ;Allows searching in symlinked files too
