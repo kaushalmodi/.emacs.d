@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-11 00:27:36 kmodi>
+;; Time-stamp: <2019-01-23 16:23:21 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -9,17 +9,6 @@
   :commands (magit-status magit-log-all-branches)
   :config
   (progn
-    ;; Magit Submodule support
-    ;; https://www.reddit.com/r/emacs/comments/6aiwk5/how_to_manage_multiple_gitrepositories_at_once/dhf47dg/
-    (dolist (fn '(;; Below will end up being the last of these newly added fns,
-                  ;; and the last element in `magit-status-sections-hook' too.
-                  magit-insert-modules-unpulled-from-upstream
-                  magit-insert-modules-unpushed-to-pushremote
-                  magit-insert-modules-unpushed-to-upstream
-                  ;; Below will end up being the first of these newly added fns.
-                  magit-insert-modules-unpulled-from-pushremote))
-      (magit-add-section-hook 'magit-status-sections-hook `,fn nil :append))
-
     (defhydra hydra-magit (:color blue
                            :columns 4)
       "Magit"
