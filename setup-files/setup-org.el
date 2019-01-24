@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-23 16:18:44 kmodi>
+;; Time-stamp: <2019-01-24 02:05:14 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1558,7 +1558,19 @@ the languages in `modi/ob-enabled-languages'."
   (progn
     (setq org-plantuml-jar-path (expand-file-name
                                  "plantuml.jar"
-                                 (concat user-emacs-directory "software/")))))
+                                 (concat user-emacs-directory "software/")))
+
+    (defun modi/advice-org-babel-execute:plantuml (orig-fun &rest args)
+      "Force `shell-file-name' to be bash as the \">\" operator is used for redirection.
+
+If this forcing is not done, and if `shell-file-name' is tcsh,
+\">\" does not work.  When trying to overwrite files, we get a
+\"File exists\" error, and \">!\" would need to be used instead.
+
+Instead it's simpler to use bash."
+      (let ((shell-file-name (executable-find "bash")))
+        (apply orig-fun args)))
+    (advice-add 'org-babel-execute:plantuml :around #'modi/advice-org-babel-execute:plantuml)))
 
 ;;;; Python
 (use-package ob-python
