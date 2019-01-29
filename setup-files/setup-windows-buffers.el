@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-23 16:59:45 kmodi>
+;; Time-stamp: <2019-01-29 18:49:11 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -225,8 +225,8 @@
 (defun modi/copy-buffer-file-name (option &optional quiet)
   "Show the full path to the current file in the minibuffer and also copy it.
 
-If the full file path has a sub-string \"_xyz\" where xyz is the user name,
-replace that with \"_${USER}\".
+If the full file path has a sub-string \"xyz/\" where xyz is the
+user name, replace that with \"${USER}/\".
 
 If OPTION is \\='(4), copy only the file name (not the full path).
 If OPTION is \\='(16), copy the full path without the environment
@@ -241,9 +241,9 @@ Return the copied file name."
                       (cl-case (car option)
                         (4 (file-name-nondirectory file-name-full)) ;C-u
                         (16 file-name-full)                         ;C-u C-u
-                        (t ;If $USER==xyz, replace _xyz with _${USER} in file name
+                        (t ;If $USER==xyz, replace xyz/ with ${USER}/ in file name
                          (replace-regexp-in-string ;No prefix
-                          (concat "_" user-login-name) "_$USER" file-name-full))))))
+                          (concat user-login-name "/") "${USER}/" file-name-full))))))
     (if file-name
         (progn
           (kill-new file-name)
