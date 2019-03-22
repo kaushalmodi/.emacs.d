@@ -1,11 +1,11 @@
-;; Time-stamp: <2018-09-24 00:12:39 kmodi>
+;; Time-stamp: <2018-12-11 10:55:18 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
 
 (use-package nim-mode
   :ensure t
-  :mode (("\\.nim\\'" . nim-mode))
+  :mode (("\\.nim.?\\'" . nim-mode))
   :config
   (progn
     (bind-chords
