@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-03-02 18:44:08 kmodi>
+;; Time-stamp: <2019-03-22 16:54:14 kmodi>
 
 ;; Setup for different tags
 
@@ -70,6 +70,7 @@
 ;;;; etags-select
   ;; http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags
   (use-package etags-select
+    :load-path "elisp/manually-synced/etags-select"
     :commands (modi/update-etags-table)
     :config
     (progn
@@ -78,6 +79,7 @@
       ;; Depending on the location of the file in buffer, the respective TAGS
       ;; file is opened on doing a tag find.
       (use-package etags-table
+        :load-path "elisp/manually-synced/etags-table"
         :config
         (progn
           (setq etags-table-alist nil) ; initialize `etags-table-alist'

@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 16:32:10 kmodi>
+;; Time-stamp: <2019-03-22 17:15:58 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -62,7 +62,7 @@ need Org version to be at least 9.x.")
     command-log-mode ; for logging commands; useful when demoing emacs
     deft ; quick note taking and management
     diff-hl
-    dired-single dired+ dired-collapse
+    dired-single dired-collapse
     drag-stuff
     easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
     el2markdown ; Generate README.md files from Commentary section in .el files
@@ -76,19 +76,15 @@ need Org version to be at least 9.x.")
     fold-this
     gist
     git-timemachine ; walk through git revisions
-    ggtags etags-select etags-table ctags-update
+    ggtags ctags-update
     hardcore-mode
-    header2
-    help-fns+
-    hideshow-org hideshowvis
+    hideshow-org
     htmlize
-    hl-line+
     hungry-delete
     hydra
     ibuffer-projectile
     imenu-list
     indent-guide
-    info+
     interleave ; takes notes associated to pdf files in org mode
     isend-mode ; used in setup-perl.el
     ivy swiper counsel

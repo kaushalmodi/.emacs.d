@@ -1,0 +1,15 @@
+#+title: Sources of manually synced packages
+
+|--------------+----------------------------------------------------------|
+| Package      | Source                                                   |
+|--------------+----------------------------------------------------------|
+| csv-nav      | https://www.emacswiki.org/emacs/download/csv-nav.el      |
+| dired+       | https://www.emacswiki.org/emacs/download/dired%2b.el     |
+| etags-select | https://www.emacswiki.org/emacs/download/etags-select.el |
+| etags-table  | https://www.emacswiki.org/emacs/download/etags-table.el  |
+| header2      | https://www.emacswiki.org/emacs/download/header2.el      |
+| help-fns+    | https://www.emacswiki.org/emacs/download/help-fns%2b.el  |
+| hideshowvis  | https://github.com/sheijk/hideshowvis                    |
+| hl-line+     | https://www.emacswiki.org/emacs/download/hl-line%2b.el   |
+| info+        | https://www.emacswiki.org/emacs/download/info%2b.el      |
+|--------------+----------------------------------------------------------|

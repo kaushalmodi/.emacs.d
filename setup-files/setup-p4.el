@@ -2,6 +2,7 @@
 ;; https://github.com/gareth-rees/p4.el
 
 (use-package p4
+  :ensure t
   :init
   (progn
     (setq p4-global-key-prefix nil)) ;Don't use the default `C-x p' prefix

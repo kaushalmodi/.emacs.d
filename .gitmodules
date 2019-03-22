@@ -49,3 +49,6 @@
 [submodule "elisp/projectile"]
 	path = elisp/projectile
 	url = http://kaushalmodi@github.com/kaushalmodi/projectile
+[submodule "elisp/manually-synced/hideshowvis"]
+	path = elisp/manually-synced/hideshowvis
+	url = https://github.com/sheijk/hideshowvis

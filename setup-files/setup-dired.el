@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-07-17 17:20:10 kmodi>
+;; Time-stamp: <2019-03-22 16:42:04 kmodi>
 
 ;; Dired
 
@@ -76,6 +76,7 @@ It added extra strings at the front and back of the default dired buffer name."
 
     ;; http://www.emacswiki.org/DiredPlus
     (use-package dired+
+      :load-path "elisp/manually-synced/dired-plus"
       :init
       (progn
         ;; Details toggling is bound to "(" in `dired-mode' by default

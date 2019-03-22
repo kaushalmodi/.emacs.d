@@ -1,9 +1,10 @@
-;; Time-stamp: <2016-10-07 13:43:25 kmodi>
+;; Time-stamp: <2019-03-22 17:00:00 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
 
 (use-package header2
+  :load-path "elisp/manually-synced/header2"
   :defer 10
   :config
   (progn

@@ -1,4 +1,4 @@
-;; Time-stamp: <2016-05-20 13:58:49 kmodi>
+;; Time-stamp: <2019-03-22 17:05:02 kmodi>
 
 ;; Highlight stuff
 
@@ -148,6 +148,7 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
     ;; hl-line+
     ;; http://www.emacswiki.org/emacs/hl-line+.el
     (use-package hl-line+
+      :load-path "elisp/manually-synced/hl-line-plus"
       :config
       (progn
         (toggle-hl-line-when-idle 1) ; Highlight line only when idle

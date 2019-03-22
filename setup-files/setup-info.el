@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-18 10:37:31 kmodi>
+;; Time-stamp: <2019-03-22 17:16:51 kmodi>
 
 ;; Info
 
@@ -11,7 +11,9 @@
           (when font-dejavu-sans-mono-p
             (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))))
 
+    ;; https://www.emacswiki.org/emacs/download/info%2b.el
     (use-package info+
+      :load-path "elisp/manually-synced/info-plus"
       :config
       (progn
         ;; The faces implementation to highlight strings in "..." is incomplete;

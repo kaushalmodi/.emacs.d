@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-09 16:01:41 kmodi>
+;; Time-stamp: <2019-03-22 17:30:16 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -7,9 +7,15 @@
 (defvar modi/ox-hugo-dir (file-name-as-directory (expand-file-name "elisp/ox-hugo" user-emacs-directory))
   "Directory containing ox-hugo package.")
 
+(defvar modi/ox-hugo-autoloads-file (expand-file-name "ox-hugo-autoloads.el" modi/ox-hugo-dir)
+  "Path to ox-hugo package's generated autoloads file.")
+
 ;; Below is needed so that the "put .. safe-local-variable" forms get
 ;; evaluated from the ox-hugo's autoloads file.
-(load-file (expand-file-name "ox-hugo-autoloads.el" modi/ox-hugo-dir))
+(unless (file-exists-p modi/ox-hugo-autoloads-file)
+  (let ((generated-autoload-file modi/ox-hugo-autoloads-file))
+    (update-directory-autoloads modi/ox-hugo-dir)
+    (load-file modi/ox-hugo-autoloads-file)))
 
 (use-package ox-hugo
   :load-path modi/ox-hugo-dir
