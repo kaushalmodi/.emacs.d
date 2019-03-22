@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2018-10-03 16:53:40 kmodi>
+# Time-stamp: <2019-01-30 11:25:39 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -111,6 +111,8 @@ fi
 # Use --program-transform-name to name the emacs-packaged ctags as ctags_emacs
 # because I like using the ctags binary instead that's built from Universal Ctags.
 # https://www.topbug.net/blog/2016/11/10/installing-emacs-from-source-avoid-the-conflict-of-ctags/
+# export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --with-dumping=unexec"
+# export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
 export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/'"
 
 # # Fri Oct 23 15:17:10 EDT 2015 - kmodi
@@ -145,8 +147,8 @@ then
     # scalar to a vector, comment it out (
     # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23424#54 ).
     # About -g vs -ggdb options: http://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
-    emacs_configure_CFLAGS="CFLAGS=${dquote}-ggdb3 -O0"
-    emacs_configure_CXXFLAGS="CXXFLAGS=${dquote}-ggdb3 -O0"
+    emacs_configure_CFLAGS="CFLAGS=${dquote}-ggdb3 -Og"
+    emacs_configure_CXXFLAGS="CXXFLAGS=${dquote}-ggdb3 -Og"
     emacs_configure_LDFLAGS="${emacs_configure_LDFLAGS} -ggdb3"
 else
     # http://emacs.stackexchange.com/a/19839/115
