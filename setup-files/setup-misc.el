@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-06-14 12:27:00 kmodi>
+;; Time-stamp: <2019-03-22 16:33:02 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -272,3 +272,5 @@ https://lists.gnu.org/archive/html/emacs-devel/2016-07/msg00519.html "
 ;;
 ;; (10) C-x =     <-- `what-cursor-position' (default binding)
 ;;      C-u C-x = <-- `describe-char'
+;;
+;; (11) Package for csv navigation: csv-nav: https://github.com/emacsmirror/csv-nav

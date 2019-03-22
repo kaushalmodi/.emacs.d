@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-23 12:11:15 kmodi>
+;; Time-stamp: <2019-03-22 16:32:10 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -60,7 +60,6 @@ need Org version to be at least 9.x.")
     bm ; visual bookmarks
     buffer-move
     command-log-mode ; for logging commands; useful when demoing emacs
-    csv-nav ; editing csv files
     deft ; quick note taking and management
     diff-hl
     dired-single dired+ dired-collapse
