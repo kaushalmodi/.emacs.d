@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 17:30:16 kmodi>
+;; Time-stamp: <2019-03-22 17:50:34 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -14,8 +14,8 @@
 ;; evaluated from the ox-hugo's autoloads file.
 (unless (file-exists-p modi/ox-hugo-autoloads-file)
   (let ((generated-autoload-file modi/ox-hugo-autoloads-file))
-    (update-directory-autoloads modi/ox-hugo-dir)
-    (load-file modi/ox-hugo-autoloads-file)))
+    (update-directory-autoloads modi/ox-hugo-dir)))
+(load-file modi/ox-hugo-autoloads-file)
 
 (use-package ox-hugo
   :load-path modi/ox-hugo-dir
