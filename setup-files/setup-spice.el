@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-14 13:36:14 kmodi>
+;; Time-stamp: <2019-03-23 23:25:29 kmodi>
 
 ;; Hspice, Spice
 
@@ -8,10 +8,10 @@
          ("\\.cir\\'" . spice-mode)
          ("\\.ckt\\'" . spice-mode)
          ("\\.sckt\\'" . spice-mode)
-         ("\\.mod\\'" . spice-mode)
          ("\\.cdl\\'" . spice-mode)
          ("\\.chi\\'" . spice-mode)
-         ("\\.inp\\'" . spice-mode)))
+         ("\\.inp\\'" . spice-mode)
+         ("[^g][^o]\\.mod\\'" . spice-mode)))  ;*<XY>.mod unless <XY>=="go"
 
 
 (provide 'setup-spice)
