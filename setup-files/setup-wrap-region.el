@@ -24,7 +24,7 @@
        '(("\"" "\"")
          ("'"  "'")
          ("("  ")")))
-      ;; Unbind the wrap region pairs which I am very unlikely to us.
+      ;; Unbind the wrap region pairs which I am very unlikely to use.
       ;; Doing so allows me to bind those to more useful functions in
       ;; `region-bindings-mode-map'. See `setup-multiple-cursors.el' file
       ;; for examples.
