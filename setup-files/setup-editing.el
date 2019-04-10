@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-22 16:39:18 kmodi>
+;; Time-stamp: <2019-04-10 16:59:14 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -1104,32 +1104,40 @@ Else, execute ORIG function."
     (back-to-indentation)))
 
 ;;; Anonymize
-(defun modi/anonymize ()
+(defun modi/anonymize (&optional only-numbers)
   "Replace alphabetical and numerical characters with random lowercase alphabets.
 
 Anonymize the selected region. If no region is selected, apply this function on
 the whole buffer.
 
 This function is useful when you want share an anonymized code snippet to someone
-to help with some debug."
-  (interactive)
+to help with some debug.
+
+If ONLY-NUMBERS is non-nil, randomize only the numbers."
+  (interactive "P")
   (let ((beg (if (use-region-p) (region-beginning) (point-min)))
         (end (if (use-region-p) (region-end) (point-max))))
     (save-restriction
       (narrow-to-region beg end)
       (save-excursion
         (let ((case-fold-search nil))
-          (goto-char (point-min))
-          (while (re-search-forward "[a-z]" nil :noerror)
-            (replace-match (char-to-string (+ ?a (random (- ?z ?a))))))
-          (goto-char (point-min))
-          (while (re-search-forward "[A-Z]" nil :noerror)
-            (replace-match (char-to-string (+ ?A (random (- ?Z ?A))))))
+          (unless only-numbers
+            (goto-char (point-min))
+            (while (re-search-forward "[a-z]" nil :noerror)
+              (replace-match (char-to-string (+ ?a (random (- ?z ?a))))))
+            (goto-char (point-min))
+            (while (re-search-forward "[A-Z]" nil :noerror)
+              (replace-match (char-to-string (+ ?A (random (- ?Z ?A)))))))
           (goto-char (point-min))
           (while (re-search-forward "[0-9]" nil :noerror)
             (replace-match (char-to-string (+ ?0 (random (- ?9 ?0)))))))))))
 (defalias 'modi/obfuscate-text 'modi/anonymize)
 (defalias 'modi/randomize-text 'modi/anonymize)
+
+(defun modi/randomize-numbers ()
+  "Randomize numbers in the selected region or the whole buffer."
+  (interactive)
+  (modi/anonymize :only-numbers))
 
 ;;; Keep Lines - Because I Said So
 (defun modi/keep-lines-force (regexp)
