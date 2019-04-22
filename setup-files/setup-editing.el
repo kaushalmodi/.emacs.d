@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-04-10 16:59:14 kmodi>
+;; Time-stamp: <2019-04-22 10:30:46 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -505,8 +505,11 @@ copied snippet."
                            chars-start-of-code-block
                            (line-number-at-pos beg)
                            chars-n-dash
-                           (replace-regexp-in-string
-                            (concat "_" user-login-name) "_$USER" buffer-or-file-name)
+                           (replace-regexp-in-string ;foo_<USER> -> foo_$USER
+                            (concat "_" user-login-name) "_$USER"
+                            (replace-regexp-in-string ;/proj/foo/<USER>/ -> /proj/foo/$USER/
+                             (concat "\\(/proj/[^/]+/\\)" user-login-name "/") "\\1$USER/"
+                             buffer-or-file-name))
                            chars-m-dash
                            chars-pipe)
                    (replace-regexp-in-string
