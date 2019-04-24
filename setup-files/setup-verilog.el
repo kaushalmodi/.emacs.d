@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-02 11:00:37 kmodi>
+;; Time-stamp: <2019-04-24 17:17:56 kmodi>
 
 ;; Verilog
 
@@ -27,6 +27,7 @@
 (use-package verilog-mode
   :load-path "elisp/verilog-mode"
   :mode (("\\.[st]*v[hp]*\\'" . verilog-mode) ;.v, .sv, .svh, .tv, .vp
+         ("\\.f\\'"         . verilog-mode)   ;verilog file lists
          ("\\.psl\\'"         . verilog-mode)
          ("\\.vams\\'"        . verilog-mode)
          ("\\.vinc\\'"        . verilog-mode))
