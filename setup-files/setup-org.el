@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-04-24 22:24:07 kmodi>
+;; Time-stamp: <2019-04-24 23:22:24 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1597,7 +1597,7 @@ Instead it's simpler to use bash."
       "Customize org-tree-slide variables."
       (interactive)
       (setq modi/org-tree-slide-text-scale 3)
-      (setq org-tree-slide-header t)
+      (setq org-tree-slide-header nil)
       (setq org-tree-slide-slide-in-effect t)
       (setq org-tree-slide-slide-in-blank-lines 5)
       (setq org-tree-slide-heading-emphasis nil)
@@ -1617,9 +1617,6 @@ Instead it's simpler to use bash."
       (when (bound-and-true-p writegood-mode)
         (puthash "writegood-mode" writegood-mode modi/states)
         (writegood-mode -1))
-      (when (bound-and-true-p org-sticky-header-mode)
-        (puthash "org-sticky-header-mode" org-sticky-header-mode modi/states)
-        (org-sticky-header-mode -1))
       (when (bound-and-true-p beacon-mode)
         (puthash "beacon-mode" beacon-mode modi/states)
         (beacon-mode -1))
@@ -1644,9 +1641,6 @@ Instead it's simpler to use bash."
       (when (gethash "writegood-mode" modi/states)
         (writegood-mode 1)
         (remhash "writegood-mode" modi/states))
-      (when (gethash "org-sticky-header-mode" modi/states)
-        (org-sticky-header-mode 1)
-        (remhash "org-sticky-header-mode" modi/states))
       (when (gethash "beacon-mode" modi/states)
         (beacon-mode 1)
         (remhash "beacon-mode" modi/states))
