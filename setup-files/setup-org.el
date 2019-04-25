@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-24 02:05:14 kmodi>
+;; Time-stamp: <2019-04-24 22:24:07 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1596,9 +1596,10 @@ Instead it's simpler to use bash."
     (defun modi/org-tree-slide-set-profile ()
       "Customize org-tree-slide variables."
       (interactive)
-      (setq modi/org-tree-slide-text-scale 2)
-      (setq org-tree-slide-header nil)
+      (setq modi/org-tree-slide-text-scale 3)
+      (setq org-tree-slide-header t)
       (setq org-tree-slide-slide-in-effect t)
+      (setq org-tree-slide-slide-in-blank-lines 5)
       (setq org-tree-slide-heading-emphasis nil)
       (setq org-tree-slide-cursor-init t) ;Move cursor to the head of buffer
       (setq org-tree-slide-modeline-display 'lighter)
@@ -1606,33 +1607,49 @@ Instead it's simpler to use bash."
       (setq org-tree-slide-skip-comments t)
       (setq org-tree-slide-activate-message
             (concat "Starting Org presentation. "
-                    "Use arrow keys to navigate the slides."))
+                    "Use left/right arrow keys to navigate the slides."))
       (setq org-tree-slide-deactivate-message "Ended presentation.")
       (message "my custom `org-tree-slide' profile: ON"))
-
-    (defvar modi/writegood-mode-state nil
-      "Variable to store the state of `writegood-mode'.")
 
     (defun modi/org-tree-slide-start ()
       "Set up the frame for the slideshow."
       (interactive)
-      (when (fboundp 'writegood-mode)
-        (setq modi/writegood-mode-state writegood-mode)
+      (when (bound-and-true-p writegood-mode)
+        (puthash "writegood-mode" writegood-mode modi/states)
         (writegood-mode -1))
+      (when (bound-and-true-p org-sticky-header-mode)
+        (puthash "org-sticky-header-mode" org-sticky-header-mode modi/states)
+        (org-sticky-header-mode -1))
+      (when (bound-and-true-p beacon-mode)
+        (puthash "beacon-mode" beacon-mode modi/states)
+        (beacon-mode -1))
+      (when (bound-and-true-p hl-line-when-idle-p)
+        (puthash "hl-line-idle" hl-line-when-idle-p modi/states)
+        (toggle-hl-line-when-idle))
       (modi/toggle-one-window :force-one-window) ;force 1 window
       (modi/org-tree-slide-set-profile)
-      (text-scale-set modi/org-tree-slide-text-scale))
+      (text-scale-set modi/org-tree-slide-text-scale)
+      (setq cursor-type 'bar))
     (add-hook 'org-tree-slide-play-hook #'modi/org-tree-slide-start)
 
     (defun modi/org-tree-slide-stop()
       "Undo the frame setup for the slideshow."
       (interactive)
       (modi/toggle-one-window) ;toggle 1 window
-      (when (and (fboundp 'writegood-mode)
-                 modi/writegood-mode-state)
+      (when (gethash "writegood-mode" modi/states)
         (writegood-mode 1)
-        (setq modi/writegood-mode-state nil))
-      (text-scale-set 0))
+        (remhash "writegood-mode" modi/states))
+      (when (gethash "org-sticky-header-mode" modi/states)
+        (org-sticky-header-mode 1)
+        (remhash "org-sticky-header-mode" modi/states))
+      (when (gethash "beacon-mode" modi/states)
+        (beacon-mode 1)
+        (remhash "beacon-mode" modi/states))
+      (when (gethash "hl-line-idle" modi/states)
+        (toggle-hl-line-when-idle)
+        (remhash "hl-line-idle" modi/states))
+      (text-scale-set 0)
+      (setq cursor-type t))
     (add-hook 'org-tree-slide-stop-hook #'modi/org-tree-slide-stop)
 
     (defun modi/org-tree-slide-text-scale-reset ()
