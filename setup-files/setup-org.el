@@ -1627,6 +1627,7 @@ Instead it's simpler to use bash."
         (puthash "hl-line-idle" hl-line-when-idle-p modi/states)
         (toggle-hl-line-when-idle))
       (modi/toggle-one-window :force-one-window) ;force 1 window
+      (setq org-hide-emphasis-markers t)
       (modi/org-tree-slide-set-profile)
       (text-scale-set modi/org-tree-slide-text-scale)
       (setq cursor-type 'bar))
@@ -1648,6 +1649,7 @@ Instead it's simpler to use bash."
       (when (gethash "hl-line-idle" modi/states)
         (toggle-hl-line-when-idle)
         (remhash "hl-line-idle" modi/states))
+      (setq org-hide-emphasis-markers nil)
       (text-scale-set 0)
       (setq cursor-type t))
     (add-hook 'org-tree-slide-stop-hook #'modi/org-tree-slide-stop)
