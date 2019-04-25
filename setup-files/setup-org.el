@@ -1626,6 +1626,10 @@ Instead it's simpler to use bash."
       (when (bound-and-true-p hl-line-when-idle-p)
         (puthash "hl-line-idle" hl-line-when-idle-p modi/states)
         (toggle-hl-line-when-idle))
+      (let ((is-fullscreen (frame-parameter nil 'fullscreen)))
+        (unless is-fullscreen
+          (puthash "disable-fullscreen" t modi/states)
+          (toggle-frame-fullscreen)))
       (modi/toggle-one-window :force-one-window) ;force 1 window
       (setq org-hide-emphasis-markers t)
       (modi/org-tree-slide-set-profile)
@@ -1649,6 +1653,9 @@ Instead it's simpler to use bash."
       (when (gethash "hl-line-idle" modi/states)
         (toggle-hl-line-when-idle)
         (remhash "hl-line-idle" modi/states))
+      (when (gethash "disable-fullscreen" modi/states)
+        (toggle-frame-fullscreen)
+        (remhash "disable-fullscreen" modi/states))
       (setq org-hide-emphasis-markers nil)
       (text-scale-set 0)
       (setq cursor-type t))
