@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-23 23:22:54 kmodi>
+;; Time-stamp: <2019-04-24 21:33:49 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -42,6 +42,10 @@ When set to `emacs', the Org version shipped with Emacs is used.
 
 The value is defaulted to `elpa' as few things in this config
 need Org version to be at least 9.x.")
+
+(defvar modi/states (make-hash-table :test 'equal)
+  "Hash table to store the states of various variables throughout
+  this config.")
 
 (defconst my-packages
   '(ace-window
