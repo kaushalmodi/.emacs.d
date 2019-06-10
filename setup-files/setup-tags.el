@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 16:54:14 kmodi>
+;; Time-stamp: <2019-05-31 15:17:36 kmodi>
 
 ;; Setup for different tags
 
@@ -21,6 +21,7 @@
   (use-package ggtags
     :config
     (progn
+      (setq ggtags-update-on-save nil) ;Don't try to update GTAGS on each save; makes the system sluggish for huge projects.
       (setq ggtags-sort-by-nearness nil) ; Enabling nearness requires global 6.5+
       (setq ggtags-navigation-mode-lighter nil)
       (setq ggtags-mode-line-project-name nil)
