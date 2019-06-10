@@ -111,9 +111,14 @@ fi
 # Use --program-transform-name to name the emacs-packaged ctags as ctags_emacs
 # because I like using the ctags binary instead that's built from Universal Ctags.
 # https://www.topbug.net/blog/2016/11/10/installing-emacs-from-source-avoid-the-conflict-of-ctags/
+
+# Tue May 14 13:16:25 EDT 2019 - kmodi
+# Now emacs doesn't compile with imagemagick by default:
+# https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=d2dea70415ca7ec390a2de11b224ab4cbb2c6b55
+
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --with-dumping=unexec"
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
-export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/'"
+export MY_EMACS_CONFIGURE="./configure --with-modules --with-imagemagick --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
 
 # # Fri Oct 23 15:17:10 EDT 2015 - kmodi
 # # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21738
