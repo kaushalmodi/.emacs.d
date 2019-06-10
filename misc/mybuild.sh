@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2019-01-30 11:25:39 kmodi>
+# Time-stamp: <2019-06-09 21:54:53 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -137,11 +137,14 @@ emacs_configure_CXXFLAGS=""
 emacs_configure_CPPFLAGS=""
 emacs_configure_LDFLAGS=""
 
+CAD_INC="/cad/adi/apps/gnu/linux/x86_64/${MY_OSREV}/include/" # Contains gif_lib.h for libgif 5.1.0
+CAD_LIB="/cad/adi/apps/gnu/linux/x86_64/${MY_OSREV}/lib/"     # Contains libgif .so files
+
 # -I${STOW_PKGS_TARGET}/include required for lgmp
-emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-I${STOW_PKGS_TARGET}/include -I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
+emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-I${STOW_PKGS_TARGET}/include -I${CAD_INC} -I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
 # -L${HOME}/usr_local/${MY_OSREV}/lib required for libgpm (GPM feature)
 # -L${HOME}/usr_local/${MY_OSREV}/lib64 required for libgif (GIF feature)
-emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${STOW_PKGS_TARGET}/lib -L${STOW_PKGS_TARGET}/lib64 -L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
+emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${STOW_PKGS_TARGET}/lib -L${STOW_PKGS_TARGET}/lib64 -L${CAD_LIB} -L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
 
 if [[ ${emacs_debug_build} -eq 1 ]] # For Debug
 then
