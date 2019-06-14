@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-12-11 10:55:18 kmodi>
+;; Time-stamp: <2019-06-13 23:10:21 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
@@ -25,6 +25,41 @@
     ;;   (add-hook 'nim-mode-hook #'nimsuggest-mode)
     ;;   ;; (remove-hook 'nim-mode-hook #'nimsuggest-mode)
     ;;   )
+
+    (with-eval-after-load 'nim-syntax
+      (setq nim-font-lock-keywords-extra
+        `(;; export properties
+          (,(nim-rx
+             line-start (1+ " ")
+             (? "case" (+ " "))
+             (group
+              (or identifier quoted-chars) "*"
+              (? (and "[" word "]"))
+              (0+ (and "," (? (0+ " "))
+                       (or identifier quoted-chars) "*")))
+             (0+ " ") (or ":" "{." "=") (0+ nonl)
+             line-end)
+           (1 'nim-font-lock-export-face))
+          ;; Number literal
+          (,(nim-rx nim-numbers)
+           (0 'nim-font-lock-number-face))
+          ;; Highlight identifier enclosed by "`"
+          (nim-backtick-matcher
+           (10 font-lock-constant-face prepend))
+
+          ;; Thu Jun 13 23:09:08 EDT 2019 - kmodi
+          ;; Commenting out the fontification of nim-format-$-matcher,
+          ;; else it messes up the fontification of doc strings,
+          ;; multi-line strings, etc when "$1" present in those.
+          ;; Highlight $# and $[0-9]+ inside string
+          ;; (nim-format-$-matcher 0 font-lock-preprocessor-face prepend)
+
+          ;; Highlight word after ‘is’ and ‘distinct’
+          (,(nim-rx " " (or "is" "distinct") (+ " ")
+                    (group identifier))
+           (1 font-lock-type-face))
+          ;; pragma
+          (nim-pragma-matcher . (0 'nim-font-lock-pragma-face)))))
 
     (use-package ob-nim
       :ensure t
