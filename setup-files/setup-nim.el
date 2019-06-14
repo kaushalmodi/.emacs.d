@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-06-13 23:10:21 kmodi>
+;; Time-stamp: <2019-06-13 23:16:30 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
@@ -25,6 +25,9 @@
     ;;   (add-hook 'nim-mode-hook #'nimsuggest-mode)
     ;;   ;; (remove-hook 'nim-mode-hook #'nimsuggest-mode)
     ;;   )
+
+    ;; The "pretty" triple quotes are not actually pretty.
+    (setq nim-pretty-triple-double-quotes nil)
 
     (with-eval-after-load 'nim-syntax
       (setq nim-font-lock-keywords-extra
