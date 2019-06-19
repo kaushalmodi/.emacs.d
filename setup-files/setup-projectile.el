@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-06-19 11:16:41 kmodi>
+;; Time-stamp: <2019-06-19 13:15:16 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -152,12 +152,13 @@ The return value of this function is unused as it is added as an :after advice."
 
     (defun modi/projectile-known-projects-sort ()
       "Move the now current project to the top of the `projectile-known-projects' list."
-      (let* ((prj (projectile-project-root))
-             ;; Set `prj' to nil if that project is supposed to be ignored
-             (prj (and prj (not (projectile-ignored-project-p prj))))
-             (prj-true (and prj (file-truename prj)))
-             (prj-abbr (and prj (abbreviate-file-name prj-true))))
+      (when-let* ((prj (projectile-project-root)))
+        ;; Set `prj' to nil if that project is supposed to be ignored.
+        (when (projectile-ignored-project-p prj)
+          (setq prj nil))
         (when prj
+          (setq prj-true (file-truename prj))
+          (setq prj-abbr (abbreviate-file-name prj-true))
           ;; First remove the current project from `projectile-known-projects'.
           ;; Also make sure that duplicate instance of the project name in form of symlink
           ;; name, true name and abbreviated name, if any, are also removed.
