@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-14 10:28:54 kmodi>
+;; Time-stamp: <2019-06-19 11:16:41 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -154,7 +154,7 @@ The return value of this function is unused as it is added as an :after advice."
       "Move the now current project to the top of the `projectile-known-projects' list."
       (let* ((prj (projectile-project-root))
              ;; Set `prj' to nil if that project is supposed to be ignored
-             (prj (and (not (projectile-ignored-project-p prj)) prj))
+             (prj (and prj (not (projectile-ignored-project-p prj))))
              (prj-true (and prj (file-truename prj)))
              (prj-abbr (and prj (abbreviate-file-name prj-true))))
         (when prj
