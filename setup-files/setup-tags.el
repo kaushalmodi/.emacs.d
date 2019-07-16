@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-05-31 15:17:36 kmodi>
+;; Time-stamp: <2019-07-16 11:54:16 kmodi>
 
 ;; Setup for different tags
 
@@ -29,12 +29,7 @@
       (setq ggtags-oversize-limit (* 30 1024 1024)) ; 30 MB
 
       (dolist (hook '(verilog-mode-hook
-                      matlab-mode-hook
-                      sh-mode-hook
-                      cperl-mode-hook
-                      c-mode-hook
-                      makefile-mode-hook
-                      conf-space-mode-hook))
+                      c-mode-hook))
         (add-hook hook #'ggtags-mode))
 
       ;; Don't consider ` (back quote) as part of `tag' when looking for a
