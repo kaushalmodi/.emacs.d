@@ -22,6 +22,7 @@
     :config
     (progn
       (setq ggtags-update-on-save nil) ;Don't try to update GTAGS on each save; makes the system sluggish for huge projects.
+      (setq ggtags-highlight-tag nil)  ;Don't auto-highlight tag at point.. makes the system really sluggish!
       (setq ggtags-sort-by-nearness nil) ; Enabling nearness requires global 6.5+
       (setq ggtags-navigation-mode-lighter nil)
       (setq ggtags-mode-line-project-name nil)
