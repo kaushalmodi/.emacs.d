@@ -45,9 +45,9 @@
 
     (bind-keys
      :map markdown-mode-map
-      ;; Mimicking the org-export style bindings
-      ("C-c C-e o" . gk-markdown-preview-buffer)
-      ("C-c C-e t". orgtbl-send-table))))
+     ;; Mimicking the org-export style bindings
+     ("C-c C-e o" . gk-markdown-preview-buffer)
+     ("C-c C-e t". orgtbl-send-table))))
 
 
 (provide 'setup-markdown)

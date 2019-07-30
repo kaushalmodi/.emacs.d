@@ -140,8 +140,8 @@ If RESTORE is non-nil, restore the saved point."
   (modi/save-point :restore))
 (bind-keys
  :map modi-mode-map
-  ("<M-home>" . modi/save-point)
-  ("<M-end>"  . modi/restore-point))
+ ("<M-home>" . modi/save-point)
+ ("<M-end>"  . modi/restore-point))
 
 
 (provide 'setup-bookmarks)

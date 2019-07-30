@@ -37,11 +37,11 @@
 
     (bind-keys
      :map fold-this-keymap
-      ("<mouse-1>" . fold-this-unfold-at-point)) ; left-click on ellipsis to unfold
+     ("<mouse-1>" . fold-this-unfold-at-point)) ; left-click on ellipsis to unfold
 
     (bind-keys
      :map region-bindings-mode-map
-      ("&" . fold-this))))
+     ("&" . fold-this))))
 
 ;;; Yet Another Folding - Folding code blocks based on indentation
 ;; https://github.com/zenozeng/yafolding.el

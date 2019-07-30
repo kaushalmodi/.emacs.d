@@ -35,7 +35,7 @@
         (add-hook 'ag-mode-hook #'wgrep-ag-setup)
         (bind-keys
          :map wgrep-mode-map
-          ("C-x s" . wgrep-save-all-buffers))))
+         ("C-x s" . wgrep-save-all-buffers))))
 
     ;; Set default ag arguments
     ;; It looks like the ~/.ignore is used when launching ag from emacs too.
@@ -93,11 +93,11 @@ If called with a prefix, prompts for flags to pass to ag."
 
     (bind-keys
      :map ag-mode-map
-      ("i" . wgrep-change-to-wgrep-mode)
-      ("/" . isearch-forward)
-      ("n" . next-error-no-select)
-      ("p" . previous-error-no-select)
-      ("Q" . ag-kill-buffers))))
+     ("i" . wgrep-change-to-wgrep-mode)
+     ("/" . isearch-forward)
+     ("n" . next-error-no-select)
+     ("p" . previous-error-no-select)
+     ("Q" . ag-kill-buffers))))
 
 
 (provide 'setup-ag)

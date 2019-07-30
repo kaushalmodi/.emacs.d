@@ -242,7 +242,7 @@ argument, also open the URL in the default browser."
             (setq file (if (= (match-beginning 1) (match-end 1))
                            ""
                          (match-string 2 node)))
-	    (setq node (match-string 3 node))
+            (setq node (match-string 3 node))
             (when (equal node "")
               (setq node  "index"))     ;`Top' node
             (when-let* ((trim (string-match "\\s +\\'" file)))
