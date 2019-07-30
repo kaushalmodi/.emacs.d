@@ -2,7 +2,7 @@
 
 ;; Tcl
 
-(use-package tcl-mode
+(use-package tcl
   :mode (("\\.tcl\\'"   . tcl-mode)
          ("\\.tcons\\'" . tcl-mode)
          ("\\.svcf\\'" . tcl-mode)
