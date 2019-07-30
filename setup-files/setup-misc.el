@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 17:04:27 kmodi>
+;; Time-stamp: <2019-07-29 16:00:44 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -147,8 +147,6 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   (progn
     (setq browse-url-browser-function
           (cond
-           ((executable-find "google-chrome")
-            #'browse-url-chrome)
            ((executable-find "firefox")
             #'browse-url-firefox)
            (t
