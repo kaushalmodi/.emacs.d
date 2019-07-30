@@ -190,10 +190,10 @@ If USE-CTAGS is non-nil, use `ctags'."
 
 (bind-keys
  :map modi-mode-map
-  ;; Do not set the below binding in `emacs-lisp-mode' buffers because we do
-  ;; not want to override the default "M-." binding to `xref-find-definitions'.
+ ;; Do not set the below binding in `emacs-lisp-mode' buffers because we do
+ ;; not want to override the default "M-." binding to `xref-find-definitions'.
  :filter (not (derived-mode-p 'emacs-lisp-mode))
-  ("M-." . modi/find-tag))
+ ("M-." . modi/find-tag))
 
 
 (provide 'setup-tags)

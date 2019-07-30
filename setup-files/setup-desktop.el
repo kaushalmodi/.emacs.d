@@ -141,8 +141,8 @@ saved desktop at startup:
 
     (bind-keys
      :map modi-mode-map
-      ("<S-f2>" . desktop-save-in-desktop-dir)
-      ("<C-f2>" . modi/restore-last-saved-desktop))))
+     ("<S-f2>" . desktop-save-in-desktop-dir)
+     ("<C-f2>" . modi/restore-last-saved-desktop))))
 
 
 (provide 'setup-desktop)

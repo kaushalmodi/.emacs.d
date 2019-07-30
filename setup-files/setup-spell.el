@@ -81,10 +81,10 @@
 
         (bind-keys
          :map flyspell-mode-map
-          ;; Stop flyspell overriding other key bindings
-          ("C-," . nil)
-          ("C-." . nil)
-          ("<C-f12>" . flyspell-goto-next-error))))))
+         ;; Stop flyspell overriding other key bindings
+         ("C-," . nil)
+         ("C-." . nil)
+         ("<C-f12>" . flyspell-goto-next-error))))))
 
 
 (provide 'setup-spell)
