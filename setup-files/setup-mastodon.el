@@ -111,8 +111,8 @@ If end of buffer is reached, call `mastodon-tl--more'."
       (interactive)
       (let ((scroll-error-top-bottom t))
         (condition-case nil
-	    (scroll-up-command)
-	  (error
+            (scroll-up-command)
+          (error
            (mastodon-tl--more)
            ;; Move the older end of buffer to window-line 10
            ;; (arbitrarily picked).

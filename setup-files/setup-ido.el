@@ -135,14 +135,14 @@ This is merged into emacs 25.0."
       (unbind-key "C-a" ido-completion-map) ; default binding: `ido-toggle-ignore'
       (bind-keys
        :map ido-completion-map
-        ;; C-n/p  and up/down keys are more intuitive in vertical layout
-        ("C-n"    . ido-next-match)
-        ("<down>" . ido-next-match)
-        ("C-p"    . ido-prev-match)
-        ("<up>"   . ido-prev-match)
-        ("C-f"    . ido-magic-forward-char)
-        ("C-b"    . ido-magic-backward-char)
-        ("C-i"    . ido-toggle-ignore))
+       ;; C-n/p  and up/down keys are more intuitive in vertical layout
+       ("C-n"    . ido-next-match)
+       ("<down>" . ido-next-match)
+       ("C-p"    . ido-prev-match)
+       ("<up>"   . ido-prev-match)
+       ("C-f"    . ido-magic-forward-char)
+       ("C-b"    . ido-magic-backward-char)
+       ("C-i"    . ido-toggle-ignore))
       (>=e "25.0"
           (bind-key "C-S-b" #'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
         (bind-key "C-S-b" #'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0

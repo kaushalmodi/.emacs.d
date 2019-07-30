@@ -100,7 +100,7 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
     (bind-keys
      :map modi-mode-map
-      ("C-." . modi/hi-lock-face-symbol-at-point-or-sel))))
+     ("C-." . modi/hi-lock-face-symbol-at-point-or-sel))))
 
 ;; Highlight Global
 ;; https://github.com/glen-dai/highlight-global
@@ -132,11 +132,11 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
     (bind-keys
      :map auto-highlight-symbol-mode-map
-      ("M-<"     . ahs-backward)
-      ("M->"     . ahs-forward)
-      ("M--"     . ahs-back-to-start)
-      ("C-x C-'" . ahs-change-range)
-      ("C-x C-a" . ahs-edit-mode))))
+     ("M-<"     . ahs-backward)
+     ("M->"     . ahs-forward)
+     ("M--"     . ahs-back-to-start)
+     ("C-x C-'" . ahs-change-range)
+     ("C-x C-a" . ahs-edit-mode))))
 
 ;; Highlight line
 (use-package hl-line

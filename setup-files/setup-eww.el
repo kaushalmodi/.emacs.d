@@ -291,7 +291,7 @@ The page is reloaded from cache when doing this toggle."
   (defun modi/shr-tag-h1-advice (dom)
     (let ((h1-font-prop '(:height 1.3 :weight bold :foreground "#c75646")))
       (shr-heading dom (if shr-use-fonts
-		           `(variable-pitch ,h1-font-prop)
+                           `(variable-pitch ,h1-font-prop)
                          `(fixed-pitch ,h1-font-prop)))))
   (advice-add 'shr-tag-h1 :override #'modi/shr-tag-h1-advice)
 
@@ -300,7 +300,7 @@ The page is reloaded from cache when doing this toggle."
   (defun modi/shr-tag-h2-advice (dom)
     (let ((h2-font-prop '(:weight bold :foreground "#d0b03c")))
       (shr-heading dom (if shr-use-fonts
-		           `(variable-pitch ,h2-font-prop)
+                           `(variable-pitch ,h2-font-prop)
                          `(fixed-pitch ,h2-font-prop)))))
   (advice-add 'shr-tag-h2 :override #'modi/shr-tag-h2-advice)
 

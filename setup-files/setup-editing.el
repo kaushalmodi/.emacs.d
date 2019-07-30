@@ -259,7 +259,7 @@ want my cursor to move back (\"*|\").
 Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
   (interactive)
   (unless (if (functionp do-not-delete-trailing-whitespace)
-	      (funcall do-not-delete-trailing-whitespace)
+              (funcall do-not-delete-trailing-whitespace)
             do-not-delete-trailing-whitespace)
     (let ((pre-marker-restore-point (point)))
       ;; Only in org capture buffers, first restore the point to the marker
