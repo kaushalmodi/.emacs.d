@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-07-29 16:00:44 kmodi>
+;; Time-stamp: <2019-07-30 13:50:27 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -192,6 +192,40 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
 (use-package fontawesome-choose
   :load-path "elisp/misc"
   :commands (fontawesome-choose))
+
+;; Tue Jul 30 13:49:35 EDT 2019 - kmodi
+;; Commenting out the below as I do not think they are needed.
+;; Or rather, I need to better understand if and how these settings
+;; are needed.
+;; (use-package auth-source
+;;   :preface
+;;   (progn
+;;     ;; https://magit.vc/manual/ghub/How-Ghub-uses-Auth_002dSource.html
+;;     ;; The variable auth-sources controls how and where Auth-Source
+;;     ;; stores new secrets and where it looks for known secrets. The
+;;     ;; default value is ("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"),
+;;     ;; which means that it looks in all of these files in order to
+;;     ;; find secrets and that it stores new secrets in ~/.authinfo
+;;     ;; because that is the first element of the list. It doesn’t
+;;     ;; matter which files already do or don’t exist when storing a new
+;;     ;; secret, the first file is always used.
+
+;;     ;; Secrets are stored in ~/.authinfo in plain text. If you don’t
+;;     ;; want that (good choice), then you have to customize
+;;     ;; auth-sources, e.g. by flipping the positions of the first two
+;;     ;; elements.
+;;     (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")))
+;;   :defer t)
+
+;; (use-package epa-file
+;;   :init
+;;   (progn
+;;     ;; Somehow this `custom-set-variables' form is needed, else I get
+;;     ;; the error "epg-context--make: GPG error: "no usable
+;;     ;; configuration", OpenPGP" when trying to open any .gpg file.
+;;     ;; https://stackoverflow.com/a/41767733/1219634
+;;     (custom-set-variables '(epg-gpg-program  "gpg2"))
+;;     (epa-file-enable)))
 
 (bind-keys
  ;; `save-buffers-kill-terminal' kills only the current frame; it will NOT
