@@ -18,7 +18,7 @@
 	url = http://github.com/kaushalmodi/git-link
 [submodule "elisp/ox-twbs"]
 	path = elisp/ox-twbs
-	url = https://kaushalmodi@www.github.com/kaushalmodi/ox-twbs
+	url = https://github.com/kaushalmodi/ox-twbs
 [submodule "elisp/ox-minutes"]
 	path = elisp/ox-minutes
 	url = https://github.com/kaushalmodi/ox-minutes.git
