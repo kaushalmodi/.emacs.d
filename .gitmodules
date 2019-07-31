@@ -15,25 +15,25 @@
 	url = https://github.com/kaushalmodi/org-reveal.git
 [submodule "elisp/git-link"]
 	path = elisp/git-link
-	url = http://kaushalmodi@github.com/kaushalmodi/git-link
+	url = http://github.com/kaushalmodi/git-link
 [submodule "elisp/ox-twbs"]
 	path = elisp/ox-twbs
 	url = https://kaushalmodi@www.github.com/kaushalmodi/ox-twbs
 [submodule "elisp/ox-minutes"]
 	path = elisp/ox-minutes
-	url = https://kaushalmodi@github.com/kaushalmodi/ox-minutes.git
+	url = https://github.com/kaushalmodi/ox-minutes.git
 [submodule "elisp/el2markdown"]
 	path = elisp/el2markdown
-	url = https://kaushalmodi@github.com/kaushalmodi/el2markdown
+	url = https://github.com/kaushalmodi/el2markdown
 [submodule "eless"]
 	path = misc/eless
-	url = https://kaushalmodi@github.com/kaushalmodi/eless
+	url = https://github.com/kaushalmodi/eless
 [submodule "elisp/ox-hugo"]
 	path = elisp/ox-hugo
-	url = https://kaushalmodi@github.com/kaushalmodi/ox-hugo.git
+	url = https://github.com/kaushalmodi/ox-hugo.git
 [submodule "misc/fonts/iosevka"]
 	path = misc/fonts/iosevka
-	url = https://kaushalmodi@github.com/kaushalmodi/iosevka-mirror.git
+	url = https://github.com/kaushalmodi/iosevka-mirror.git
 [submodule "elisp/web-mode"]
 	path = elisp/web-mode
 	url = https://github.com/kaushalmodi/web-mode
@@ -48,7 +48,10 @@
 	url = https://github.com/kaushalmodi/nim-emacs-module
 [submodule "elisp/projectile"]
 	path = elisp/projectile
-	url = http://kaushalmodi@github.com/kaushalmodi/projectile
+	url = http://github.com/kaushalmodi/projectile
 [submodule "elisp/manually-synced/hideshowvis"]
 	path = elisp/manually-synced/hideshowvis
 	url = https://github.com/sheijk/hideshowvis
+[submodule "elisp/verilog-mode/src"]
+	path = elisp/verilog-mode/src
+	url = https://github.com/kaushalmodi/verilog-mode
