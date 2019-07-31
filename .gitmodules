@@ -49,3 +49,6 @@
 [submodule "elisp/verilog-mode/src"]
 	path = elisp/verilog-mode/src
 	url = https://github.com/kaushalmodi/verilog-mode
+[submodule "misc/ntangle"]
+	path = misc/ntangle
+	url = https://github.com/OrgTangle/ntangle.git
