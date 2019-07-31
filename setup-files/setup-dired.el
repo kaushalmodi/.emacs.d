@@ -2,7 +2,7 @@
 
 ;; Dired
 
-;; http://www.emacswiki.org/emacs-en/dired-single.el
+;; https://www.emacswiki.org/emacs/dired-single.el
 (use-package dired-single
   :bind (:map modi-mode-map
          ;; Change the default `C-x C-d` key binding from `ido-list-directory'

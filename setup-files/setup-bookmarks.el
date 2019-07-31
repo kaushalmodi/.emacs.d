@@ -102,7 +102,7 @@ Bookmark _n_ext (_N_ in lifo order)            toggle book_m_ark        ^^_/_ bm
       ("q"   nil "cancel" :color blue))))
 
 ;;; bookmark+ (bmkp)
-;; http://www.emacswiki.org/BookmarkPlus
+;; https://www.emacswiki.org/emacs/BookmarkPlus
 (use-package bookmark+
   ;; Mon Aug 15 17:50:25 EDT 2016 - kmodi
   ;; Checking if I do actually need this package
