@@ -46,9 +46,6 @@
 [submodule "misc/nim-emacs-module"]
 	path = misc/nim-emacs-module
 	url = https://github.com/kaushalmodi/nim-emacs-module
-[submodule "elisp/projectile"]
-	path = elisp/projectile
-	url = http://github.com/kaushalmodi/projectile
 [submodule "elisp/manually-synced/hideshowvis"]
 	path = elisp/manually-synced/hideshowvis
 	url = https://github.com/sheijk/hideshowvis
