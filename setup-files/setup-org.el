@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-04-24 23:22:24 kmodi>
+;; Time-stamp: <2019-07-31 07:58:45 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1138,6 +1138,7 @@ on each save.
 ;;;;; ox-twbs - Twitter Bootstrap
     ;; https://github.com/marsmining/ox-twbs
     (use-package ox-twbs
+      :disabled
       ;; My fork of ox-twbs has the following fixes in order to work with
       ;; Org 9.0+
       ;;  - https://github.com/kaushalmodi/ox-twbs/commit/c72586abbcf857a3ecf5b665112d9672142b8504
