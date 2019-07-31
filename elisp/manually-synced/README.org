@@ -12,4 +12,5 @@
 | hideshowvis  | https://github.com/sheijk/hideshowvis                    |
 | hl-line+     | https://www.emacswiki.org/emacs/download/hl-line%2b.el   |
 | info+        | https://www.emacswiki.org/emacs/download/info%2b.el      |
+| spice-mode   | Not known                                                |
 |--------------+----------------------------------------------------------|

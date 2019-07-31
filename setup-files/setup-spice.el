@@ -1,9 +1,9 @@
-;; Time-stamp: <2019-03-23 23:25:29 kmodi>
+;; Time-stamp: <2019-07-31 08:03:09 kmodi>
 
 ;; Hspice, Spice
 
 (use-package spice-mode
-  :load-path "elisp/spice-mode"
+  :load-path "elisp/manually-synced/spice-mode"
   :mode (("\\.sp\\'"  . spice-mode)
          ("\\.cir\\'" . spice-mode)
          ("\\.ckt\\'" . spice-mode)
