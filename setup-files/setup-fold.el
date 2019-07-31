@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 17:11:43 kmodi>
+;; Time-stamp: <2019-07-31 07:58:02 kmodi>
 
 ;;;; Fold setup
 
@@ -77,7 +77,7 @@
 
     ;; Show hideshow foldable sections in the buffer
     (use-package hideshowvis
-      :load-path "elisp/manually-synced/hideshowvis"
+      :load-path "elisp/manually-synced/hideshowvis" ;This package is not on Melpa yet.
       :if (display-graphic-p) ; no fringe in terminal mode
       :config
       (progn
