@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-07-31 07:58:45 kmodi>
+;; Time-stamp: <2019-07-31 08:11:40 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -20,7 +20,6 @@
 ;;      ox-beamer - Beamer export
 ;;      ox-odt - ODT, doc export
 ;;    External Exporters
-;;      ox-twbs - Twitter Bootstrap
 ;;      ox-reveal - Presentations using reveal.js
 ;;      ox-minutes - Meeting Minutes ASCII export
 ;;    Helper Packages for Export
@@ -1135,47 +1134,6 @@ on each save.
 
 ;;;; External Exporters
 
-;;;;; ox-twbs - Twitter Bootstrap
-    ;; https://github.com/marsmining/ox-twbs
-    (use-package ox-twbs
-      :disabled
-      ;; My fork of ox-twbs has the following fixes in order to work with
-      ;; Org 9.0+
-      ;;  - https://github.com/kaushalmodi/ox-twbs/commit/c72586abbcf857a3ecf5b665112d9672142b8504
-      ;;  - https://github.com/kaushalmodi/ox-twbs/commit/0ef10224c332cf79e6724019a863180484026ef7
-      :load-path "elisp/ox-twbs"
-      :config
-      (progn
-        (setq org-twbs-link-org-files-as-html nil)
-
-        ;; Postamble tweaks
-        (setq org-twbs-postamble #'modi/org-html-postamble-fn)
-
-        (defvar bkp/org-twbs-style-default
-          org-twbs-style-default
-          "Save the default `org-twbs-style-default'.")
-
-        (setq org-twbs-style-default
-              (concat bkp/org-twbs-style-default
-                      "
-<style type=\"text/css\">
-/* Reduce the bottom margin; default is too big. */
-body {
-    margin-bottom : 35px;
-}
-footer {
-    height        : 35px;
-    text-align    : center;
-    /* vertical alignment trick: http://stackoverflow.com/a/16205949/1219634 */
-    line-height   : 35px;
-    font-style    : italic;
-}
-/* Remove the padding from in-between the div elements
-   in the footer. */
-footer > div {
-    padding: 0px;
-}
-</style>"))))
 
 ;;;;; ox-reveal - Presentations using reveal.js
     (use-package ox-reveal
