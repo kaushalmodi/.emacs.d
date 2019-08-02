@@ -183,7 +183,7 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
   :defer t
   :config
   (progn
-    (add-hook 'calendar-today-visible-hook 'calendar-mark-today))) ;Highlight today's date
+    (add-hook 'calendar-today-visible-hook #'calendar-mark-today))) ;Highlight today's date
 
 (use-package seconds-to-human-time
   :load-path "elisp/misc"
