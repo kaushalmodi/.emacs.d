@@ -7,7 +7,7 @@
   :config
   (progn
     ;; Enable in all programming-related modes
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 
 (provide 'setup-rainbow-delimiters)
