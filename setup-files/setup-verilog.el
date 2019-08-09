@@ -544,7 +544,7 @@ If OPTION is \\='(4) (using `\\[universal-argument]' prefix), run simulation.
 If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' prefix), run linter."
       (interactive "P")
       (when (fboundp #'modi/verilog-tool-setup)
-        ;; Update values of `verilog-simualator', `verilog-compiler', etc here
+        ;; Update values of `verilog-simulator', `verilog-compiler', etc here
         ;; if this function is defined.
         (modi/verilog-tool-setup))
       (cl-case (car option)
