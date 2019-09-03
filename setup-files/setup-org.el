@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-07-31 08:11:40 kmodi>
+;; Time-stamp: <2019-09-03 10:28:04 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1458,6 +1458,7 @@ returned value `entity-name' will be nil."
                                         "plantuml"
                                         "awk"
                                         "python"
+                                        "tcl" ;Requires installing ob-tcl.el from Org contrib
                                         ,(if (version< (org-version) "8.3")
                                              "sh" ;ob-shell.el was called ob-sh.el in older Org versions
                                            "shell"))
