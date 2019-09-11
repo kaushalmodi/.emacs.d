@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-07-16 11:54:16 kmodi>
+;; Time-stamp: <2019-09-11 12:03:15 kmodi>
 
 ;; Setup for different tags
 
@@ -103,7 +103,7 @@
 
       (bind-keys
        :map etags-select-mode-map
-        ("C-g" . etags-select-quit))))
+       ("C-g" . etags-select-quit))))
 
 ;;;; ctags-update
   ;; https://github.com/jixiuf/ctags-update
@@ -112,6 +112,16 @@
     (progn
       ;; Auto update
       (setq ctags-update-delay-seconds (* 30 60)) ; every 1/2 hour
+
+      (defvar ctags-options-file (let ((file (expand-file-name ".ctags" user-home-directory)))
+                                   (when (file-exists-p file)
+                                     file))
+        "User's Ctags options file.")
+
+      (when ctags-options-file
+        (setq ctags-update-other-options
+              (list
+               (concat "--options=" ctags-options-file))))
 
       ;; Override `ctags-update-how-to-update' so that when it called
       ;; non-interactively (via `after-save-hook), then the user is not nagged
@@ -136,7 +146,7 @@ already running\" caused in `ctags-update' function if value returned by this
 function is non-nil and the tag generation process is already running."
         (let (tags)
           (cond
-           ((> (prefix-numeric-value current-prefix-arg) 1)  ;C-u or C-uC-u ,generate new tags in selected directory
+           ((> (prefix-numeric-value current-prefix-arg) 1)  ;C-u or C-u C-u ,generate new tags in selected directory
             (setq tags (expand-file-name "TAGS"
                                          (read-directory-name "Generate TAGS in dir:"))))
            (is-interactive
@@ -190,10 +200,10 @@ If USE-CTAGS is non-nil, use `ctags'."
 
 (bind-keys
  :map modi-mode-map
-  ;; Do not set the below binding in `emacs-lisp-mode' buffers because we do
-  ;; not want to override the default "M-." binding to `xref-find-definitions'.
+ ;; Do not set the below binding in `emacs-lisp-mode' buffers because we do
+ ;; not want to override the default "M-." binding to `xref-find-definitions'.
  :filter (not (derived-mode-p 'emacs-lisp-mode))
-  ("M-." . modi/find-tag))
+ ("M-." . modi/find-tag))
 
 
 (provide 'setup-tags)
