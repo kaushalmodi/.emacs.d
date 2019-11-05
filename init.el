@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-04-24 21:33:49 kmodi>
+;; Time-stamp: <2019-11-05 14:52:45 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -309,8 +309,6 @@ need Org version to be at least 9.x.")
 
 ;; Languages
 (require 'setup-conf)
-(when (executable-find "dmd")
-  (require 'setup-d))
 (require 'setup-elisp)
 (when (executable-find "go")
   (require 'setup-go))
