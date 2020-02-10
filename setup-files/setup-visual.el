@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-06-19 12:13:12 kmodi>
+;; Time-stamp: <2020-01-20 13:52:35 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -50,6 +50,7 @@
     (cond
      ((modi/is-font "Monoid") 11)
      ((modi/is-font "Pragmata") 13)
+     ((modi/is-font "Iosevka SS08") 14)
      (t 12))
     "Default font size in points."))
 
