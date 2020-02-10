@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2019-06-09 21:54:53 kmodi>
+# Time-stamp: <2020-01-20 14:08:20 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -118,6 +118,7 @@ fi
 
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --with-dumping=unexec"
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
+# export MY_EMACS_CONFIGURE="./configure --with-modules --with-imagemagick --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --without-cairo"
 export MY_EMACS_CONFIGURE="./configure --with-modules --with-imagemagick --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
 
 # # Fri Oct 23 15:17:10 EDT 2015 - kmodi
