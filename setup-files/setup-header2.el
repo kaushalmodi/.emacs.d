@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 17:00:00 kmodi>
+;; Time-stamp: <2019-11-14 06:59:46 kmodi>
 
 ;; header2
 ;; http://www.emacswiki.org/emacs/header2.el
@@ -98,7 +98,8 @@ a `lambda' return `t', so the version fields are always inserted.")
       "Insert current user's name (`user-full-name') as this file's author."
       (insert header-prefix-string
               "Original Author    : "
-              (user-full-name) "@"
+              (replace-regexp-in-string " " "." (user-full-name)) ;"Foo Bar" -> "Foo.Bar"
+              "@"
               (replace-regexp-in-string ".*?\\(\\w+\\.\\w+\\)$" "\\1"
                                         (getenv "HOST"))
               "\n"))
