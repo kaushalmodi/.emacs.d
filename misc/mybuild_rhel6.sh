@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2020-06-22 10:27:33 kmodi>
+# Time-stamp: <2020-06-22 10:25:50 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -26,7 +26,7 @@
 #   prepend MANPATH  with "${HOME}/usr_local/apps/${OSREV}/emacs/`basename ${MY_EMACS_INSTALL_DIR}`/share/man"
 #   prepend INFOPATH with "${HOME}/usr_local/apps/${OSREV}/emacs/`basename ${MY_EMACS_INSTALL_DIR}`/share/info"
 
-# For CentOS 7, do "setenv MY_OSREV 7"
+# For RHEL 6, do "setenv MY_OSREV 6"
 # "${HOME}/usr_local/${MY_OSREV}" is the directory that I use as
 # --prefix for building libraries locally when the default library
 # does not exist or is older than the requirements.
@@ -119,7 +119,7 @@ fi
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --with-dumping=unexec"
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
 # export MY_EMACS_CONFIGURE="./configure --with-modules --with-imagemagick --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --without-cairo"
-export MY_EMACS_CONFIGURE="./configure --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-modules --with-harfbuzz --with-imagemagick"
+export MY_EMACS_CONFIGURE="./configure --with-modules --with-imagemagick --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
 
 # # Fri Oct 23 15:17:10 EDT 2015 - kmodi
 # # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21738
@@ -138,9 +138,14 @@ emacs_configure_CXXFLAGS=""
 emacs_configure_CPPFLAGS=""
 emacs_configure_LDFLAGS=""
 
+CAD_INC="/cad/adi/apps/gnu/linux/x86_64/${MY_OSREV}/include/" # Contains gif_lib.h for libgif 5.1.0
+CAD_LIB="/cad/adi/apps/gnu/linux/x86_64/${MY_OSREV}/lib/"     # Contains libgif .so files
+
 # -I${STOW_PKGS_TARGET}/include required for lgmp
-emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-I${STOW_PKGS_TARGET}/include"
-emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${STOW_PKGS_TARGET}/lib -L${STOW_PKGS_TARGET}/lib64"
+emacs_configure_CPPFLAGS="CPPFLAGS=${dquote}-I${STOW_PKGS_TARGET}/include -I${CAD_INC} -I${HOME}/usr_local/${MY_OSREV}/include -I/usr/include/freetype2 -I/usr/include"
+# -L${HOME}/usr_local/${MY_OSREV}/lib required for libgpm (GPM feature)
+# -L${HOME}/usr_local/${MY_OSREV}/lib64 required for libgif (GIF feature)
+emacs_configure_LDFLAGS="LDFLAGS=${dquote}-L${STOW_PKGS_TARGET}/lib -L${STOW_PKGS_TARGET}/lib64 -L${CAD_LIB} -L${HOME}/usr_local/${MY_OSREV}/lib -L${HOME}/usr_local/${MY_OSREV}/lib64"
 
 if [[ ${emacs_debug_build} -eq 1 ]] # For Debug
 then
