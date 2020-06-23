@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-10-16 08:37:38 kmodi>
+;; Time-stamp: <2020-04-28 10:54:13 kmodi>
 
 ;; Line number package manager
 
@@ -42,6 +42,7 @@ variable.")
                                   makefile-gmake-mode-hook
                                   tcl-mode-hook
                                   conf-space-mode-hook
+                                  conf-colon-mode-hook
                                   d-mode-hook
                                   sml-mode-hook
                                   nim-mode-hook
