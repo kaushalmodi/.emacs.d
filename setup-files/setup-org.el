@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-06-23 14:15:03 kmodi>
+;; Time-stamp: <2020-06-23 14:27:50 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -112,9 +112,12 @@ This value must match the `infodir' variable in the Org local.mk.")
               (setq Info-directory-list (delete dev-org-info Info-directory-list)))))))
 
     ;; Modules that should always be loaded together with org.el.
-    ;; `org-modules' default: '(org-w3m org-bbdb org-bibtex org-docview org-gnus
-    ;;                          org-info org-irc org-mhe org-rmail)
-    (setq org-modules '(org-info))
+    ;; `org-modules' default:
+    ;; Org 9.3 and older: '(org-w3m org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail)
+    ;; Org 9.4 and newer: '(ol-w3m ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail ol-eww)
+    (if (eq modi/org-version-select 'dev)
+        (setq org-modules '(ol-info))
+      (setq org-modules '(org-info)))
 
     ;; Set my default org-export backends. This variable needs to be set before
     ;; org.el is loaded.
