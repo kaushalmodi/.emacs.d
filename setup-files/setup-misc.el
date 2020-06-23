@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-07-30 13:50:27 kmodi>
+;; Time-stamp: <2020-06-23 14:01:10 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files
 
@@ -118,22 +118,6 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
       (when (equal major-mode 'text-mode)
         (font-lock-add-keywords nil '(("#.+" . font-lock-comment-face)))))
     (add-hook 'text-mode-hook #'modi/text-mode-comments)))
-
-;; Help Functions +
-;; http://www.emacswiki.org/emacs/HelpPlus
-(use-package help-fns+
-  :load-path "elisp/manually-synced/help-fns-plus"
-  :defer 20
-  :config
-  (progn
-    (bind-keys
-     :map help-map
-     ("c" . describe-key-briefly)
-     ("C-c" . describe-command))
-    (>=e "25.0"
-        (bind-keys
-         :map help-map
-         ("o" . describe-symbol)))))
 
 (>=e "25.0"
     (use-package saveplace
