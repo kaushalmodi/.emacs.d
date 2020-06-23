@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-09-03 10:28:04 kmodi>
+;; Time-stamp: <2020-06-23 14:15:03 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1458,11 +1458,15 @@ returned value `entity-name' will be nil."
                                         "plantuml"
                                         "awk"
                                         "python"
-                                        "tcl" ;Requires installing ob-tcl.el from Org contrib
                                         ,(if (version< (org-version) "8.3")
                                              "sh" ;ob-shell.el was called ob-sh.el in older Org versions
                                            "shell"))
       "List of languages for which the ob-* packages need to be loaded.")
+
+    ;; Requires installing ob-tcl.el from Org contrib.
+    ;; If `ob-tcl' is available add "tcl" to `modi/ob-enabled-languages'.
+    (when (require 'ob-tcl nil :noerror)
+      (add-to-list 'modi/ob-enabled-languages "tcl"))
 
     (defvar modi/ob-eval-unsafe-languages '("emacs-lisp"
                                             "shell")
@@ -1661,7 +1665,6 @@ Instead it's simpler to use bash."
     ;; path is set.
     (setq org-sticky-header-always-show-header (if org-sticky-header-full-path t nil))
     (add-hook 'org-mode-hook #'org-sticky-header-mode)))
-
 
 ;;;; Org Link Ref
 ;; Support markdown-style link id references
