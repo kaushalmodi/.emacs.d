@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-04-28 10:54:13 kmodi>
+;; Time-stamp: <2020-06-26 16:14:19 kmodi>
 
 ;; Line number package manager
 
@@ -33,6 +33,7 @@ variable.")
                                   emacs-lisp-mode-hook
                                   cperl-mode-hook
                                   c-mode-hook
+                                  c++-mode-hook
                                   python-mode-hook
                                   matlab-mode-hook
                                   sh-mode-hook
