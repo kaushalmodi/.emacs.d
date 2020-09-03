@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-11-05 14:52:45 kmodi>
+;; Time-stamp: <2020-07-11 15:43:05 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -129,7 +129,7 @@ need Org version to be at least 9.x.")
     undo-tree ; supercool undo visualization
     use-package use-package-chords ; optimize package loading
     visual-regexp
-    volatile-highlights
+    ;; volatile-highlights
     web-mode
     webpaste   ; Paste code snippets to ptpb.pw (default), ix.io, etc.
     which-key ; > guide-key
@@ -219,7 +219,9 @@ need Org version to be at least 9.x.")
 (require 'setup-all)
 (require 'setup-artist)
 (require 'setup-auto-complete)
-(require 'setup-beacon)
+;; Wed Jun 10 16:10:59 EDT 2020 - kmodi
+;; Disabling beacon-mode to see if that solves minor performance glitches
+;; (require 'setup-beacon)
 (require 'setup-bookmarks)
 (require 'setup-buffer-move)
 (require 'setup-calc)
