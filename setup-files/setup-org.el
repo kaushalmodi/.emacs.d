@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-06-23 14:27:50 kmodi>
+;; Time-stamp: <2020-09-03 11:19:35 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1667,14 +1667,47 @@ Instead it's simpler to use bash."
     ;; Always show the header if the option to show the full or reversed
     ;; path is set.
     (setq org-sticky-header-always-show-header (if org-sticky-header-full-path t nil))
-    (add-hook 'org-mode-hook #'org-sticky-header-mode)
-    ;; Tue Jun 23 14:19:52 EDT 2020 - kmodi
-    ;; Do not enable this package for now:
-    ;;   Error during redisplay: (eval (progn (setq org-sticky-header-stickyline
-    ;;(propertize (org-sticky-header--fetch-stickyline) 'keymap org-sticky-header-keymap))
-    ;;(list (propertize " " 'display '((space :align-to 0))) 'org-sticky-header-stickyline))) signaled (wrong-type-argument stringp nil)
-    (remove-hook 'org-mode-hook #'org-sticky-header-mode)
-    ))
+
+    ;; https://github.com/alphapapa/org-sticky-header/pull/20
+    (defun org-sticky-header--fetch-stickyline ()
+      "Return string of Org heading or outline path for display in header line."
+      (org-with-wide-buffer
+       (goto-char (window-start))
+       (if (org-before-first-heading-p)
+           ""
+         (progn
+           ;; No non-header lines above top displayed header
+           (when (or org-sticky-header-always-show-header
+                     (not (org-at-heading-p)))
+             ;; Header should be shown
+             (when (fboundp 'org-inlinetask-in-task-p)
+               ;; Skip inline tasks
+               (while (and (org-back-to-heading)
+                           (org-inlinetask-in-task-p))
+                 (forward-line -1)))
+             (cond
+              ;; FIXME: Convert cond back to pcase, but one compatible with Emacs 24
+              ((null org-sticky-header-full-path)
+               (concat (org-sticky-header--get-prefix)
+                       (org-get-heading t t)))
+              ((eq org-sticky-header-full-path 'full)
+               (concat (org-sticky-header--get-prefix)
+                       (org-format-outline-path (org-get-outline-path t)
+                                                (window-width)
+                                                nil org-sticky-header-outline-path-separator)))
+              ((eq org-sticky-header-full-path 'reversed)
+               (let ((s (concat (org-sticky-header--get-prefix)
+                                (mapconcat 'identity
+                                           (nreverse (org-split-string (org-format-outline-path (org-get-outline-path t)
+                                                                                                1000 nil "")
+                                                                       ""))
+                                           org-sticky-header-outline-path-reversed-separator))))
+                 (if (> (length s) (window-width))
+                     (concat (substring s 0 (- (window-width) 2))
+                             "..")
+                   s)))
+              (t "")))))))
+    (add-hook 'org-mode-hook #'org-sticky-header-mode)))
 
 ;;;; Org Link Ref
 ;; Support markdown-style link id references
