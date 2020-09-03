@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-09-03 10:50:04 kmodi>
+;; Time-stamp: <2020-06-23 14:27:50 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1667,7 +1667,14 @@ Instead it's simpler to use bash."
     ;; Always show the header if the option to show the full or reversed
     ;; path is set.
     (setq org-sticky-header-always-show-header (if org-sticky-header-full-path t nil))
-    (add-hook 'org-mode-hook #'org-sticky-header-mode)))
+    (add-hook 'org-mode-hook #'org-sticky-header-mode)
+    ;; Tue Jun 23 14:19:52 EDT 2020 - kmodi
+    ;; Do not enable this package for now:
+    ;;   Error during redisplay: (eval (progn (setq org-sticky-header-stickyline
+    ;;(propertize (org-sticky-header--fetch-stickyline) 'keymap org-sticky-header-keymap))
+    ;;(list (propertize " " 'display '((space :align-to 0))) 'org-sticky-header-stickyline))) signaled (wrong-type-argument stringp nil)
+    (remove-hook 'org-mode-hook #'org-sticky-header-mode)
+    ))
 
 ;;;; Org Link Ref
 ;; Support markdown-style link id references
