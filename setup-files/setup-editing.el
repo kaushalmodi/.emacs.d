@@ -11,7 +11,7 @@
 ;;  Show Paren
 ;;  Duplicate current line or region
 ;;  Managing white spaces and empty newlines
-;;  Untabify
+;;  Tabs and Untabify
 ;;  Align
 ;;  Eval and replace last sexp
 ;;  My modified basic functions
@@ -297,9 +297,9 @@ Do not do anything if `do-not-delete-trailing-whitespace' is non-nil."
 (add-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
 ;; (remove-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer)
 
-;;; Untabify
+;;; Tabs and Untabify
+(setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)  ;Use spaces instead of tabs for indentation
-
 (defun modi/untabify-buffer ()
   "Untabify the current buffer.
 
