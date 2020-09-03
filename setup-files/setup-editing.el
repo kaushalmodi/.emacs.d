@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-04-22 10:30:46 kmodi>
+;; Time-stamp: <2020-09-01 13:44:20 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -1158,6 +1158,26 @@ buffer should do the right thing.. `eww-reload' in eww,
     (save-excursion
       (goto-char (point-min))
       (keep-lines regexp))))
+
+(defun modi/search-replace-pairs (sr-pairs)
+  "Search/replace in the buffer/region using SR-PAIRS.
+SR-PAIRS is a list of cons (SEARCH-REGEX . REPLACE-EXPR) where
+the cons elements are strings."
+  (let ((cnt 0)
+        (beg (if (use-region-p) (region-beginning) (point-min)))
+        (end (if (use-region-p) (region-end) (point-max))))
+    (dolist (pair sr-pairs)
+      (let ((search-regex (car pair))
+            (replace-expr (cdr pair)))
+        (save-restriction
+          (narrow-to-region beg end)
+          (save-excursion
+            (goto-char (point-min))
+            (while (re-search-forward search-regex nil :noerror)
+              (replace-match replace-expr)
+              (cl-incf cnt))))))
+    (message "Finished %d replacements" cnt)))
+;; Example use: M-: (modi/search-replace-pairs '(("a" . "b")))
 
 ;;; Bindings
 
