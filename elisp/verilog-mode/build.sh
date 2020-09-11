@@ -13,7 +13,7 @@ done
 cd ./src/ || exit
 
 make clean
-make
+make e/verilog-mode.elc
 if [[ "${run_test}" -eq 1 ]]
 then
     make -j 8 test
