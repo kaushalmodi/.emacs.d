@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-02-10 08:33:54 kmodi>
+;; Time-stamp: <2020-09-10 23:08:37 kmodi>
 
 ;; Shell Script Mode
 
@@ -19,11 +19,6 @@
     ;; Change default shell file to bash if available
     (when-let* ((bash-bin (executable-find "bash")))
       (setq-default sh-shell-file bash-bin))
-
-    (setq sh-indent-supported '((sh . sh)
-                                (rc . rc)
-                                (csh . csh)
-                                (tcsh . csh)))
 
     ;; Thu Mar 30 15:41:39 EDT 2017 - kmodi
     ;; Below function is the same as original except that that message is not
@@ -46,6 +41,11 @@ command `sh-reset-indent-vars-to-global-values'."
     (>=e "28.0"
         nil
       (progn
+        (setq sh-indent-supported '((sh . sh)
+                                    (rc . rc)
+                                    (csh . csh)
+                                    (tcsh . csh)))
+
         (defun modi/sh-set-shell (shell &optional no-query-flag insert-flag)
           "Set this buffer's shell to SHELL (a string).
 When used interactively, insert the proper starting #!-line,
