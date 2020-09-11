@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-08 11:31:21 kmodi>
+;; Time-stamp: <2020-09-10 23:11:53 kmodi>
 
 ;; Desktop save and restore
 
@@ -14,6 +14,9 @@ saved desktop at startup:
 
 > emacs --eval \"(setq modi/no-desktop-read-at-startup t)\"
 ")
+
+    ;; Immediately load 10 buffers and lazy-load the rest.
+    (setq desktop-restore-eager 10)
 
     (setq desktop-base-file-name (concat "emacs_" emacs-version-short
                                          ".desktop"))
