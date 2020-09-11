@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-17 15:28:00 kmodi>
+;; Time-stamp: <2020-09-10 21:42:49 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -88,15 +88,16 @@
     ;; the `--follow' option to allow search through symbolic links (part of
     ;; `modi/rg-arguments').
     (setq counsel-rg-base-command
-          (concat (mapconcat #'shell-quote-argument
-                             (append '("rg")
-                                     modi/rg-arguments
-                                     '("--no-heading" ;No file names above matching content
-                                       ))
-                             " ")
-                  " %s"            ;This MUST be %s, not %S
-                                        ;https://github.com/abo-abo/swiper/issues/427
-                  ))
+          (append '("rg")
+                  modi/rg-arguments
+                  '("--no-heading" ;No file names above matching content
+                    "%s" ;This MUST be %s, not %S -- ;https://github.com/abo-abo/swiper/issues/427
+                    )))
+    ;; https://github.com/abo-abo/swiper/blob/7e4c56776f811f78b8eb95210156f8fbbdba67e7/counsel.el#L3156
+    (when (memq system-type '(ms-dos windows-nt))
+      (setq counsel-rg-base-command
+            (append counsel-rg-base-command
+                    '("--path-separator" "/" "."))))
 
     ;; counsel-grep
     ;; I use `counsel-grep' mainly via
