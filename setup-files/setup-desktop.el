@@ -134,6 +134,12 @@ saved desktop at startup:
       "Enable `desktop-save-mode' and restore the last saved desktop."
       (interactive)
       (desktop-save-mode 1)
+      ;; Thu Sep 10 22:52:47 EDT 2020 - kmodi
+      ;; Prevent Desktop conflict messages "Desktop file is more recent .."
+      ;; Desktop file is more recent ((24410 58051 572466 0),(51 36 22 10 9 2020 4 t -14400))
+      ;; than the one loaded ((24410 58051 572462 0),(51 36 22 10 9 2020 4 t -14400)).
+      ;; Save anyway? y
+      (desktop-auto-save-disable)
       (desktop-read))
 
     (when (null modi/no-desktop-read-at-startup)
