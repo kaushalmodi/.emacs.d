@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-09-10 21:53:21 kmodi>
+;; Time-stamp: <2020-09-15 17:44:23 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -120,7 +120,6 @@ need Org version to be at least 9.x.")
     smart-compile
     smart-mark
     smart-mode-line popup rich-minority
-    smex ; smart M-x
     sunshine forecast ; weather
     sx
     tiny
@@ -292,7 +291,6 @@ need Org version to be at least 9.x.")
 (when (executable-find "rg")
   (require 'setup-rg))
 (require 'setup-server)
-(require 'setup-smex)
 (require 'setup-sx)
 (require 'setup-term)
 (require 'setup-tiny)
