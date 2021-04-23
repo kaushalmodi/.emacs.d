@@ -1,4 +1,4 @@
-;; Time-stamp: <2015-01-16 17:32:53 kmodi>
+;; Time-stamp: <2020-09-29 23:30:40 kmodi>
 
 ;; Calc settings file
 ;; https://www.gnu.org/software/emacs/manual/html_node/calc/Customizing-Calc.html
@@ -7,7 +7,8 @@
 (setq calc-twos-complement-mode nil)
 
 ;; Calculator output value format
-(setq calc-float-format '(eng 4)) ; Engineering notation
+;; (setq calc-float-format '(eng 4)) ; Engineering notation
+(setq calc-float-format '(float 0))
 ;; |------------+--------------------------------------------------------------+-------------|
 ;; | value      | Description                                                  | Key Binding |
 ;; |------------+--------------------------------------------------------------+-------------|
