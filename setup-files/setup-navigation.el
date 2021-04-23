@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-18 21:31:30 kmodi>
+;; Time-stamp: <2021-04-23 16:35:10 kmodi>
 
 (>=e "25.0"
     (setq fast-but-imprecise-scrolling t))
@@ -18,6 +18,7 @@
 ;; iy-go-to-char
 ;; https://github.com/doitian/iy-go-to-char
 (use-package iy-go-to-char
+  :load-path "elisp/manually-synced/iy-go-to-char"
   :defer t
   ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
   ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
