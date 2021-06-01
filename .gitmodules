@@ -55,3 +55,6 @@
 [submodule "elisp/manually-synced/iy-go-to-char"]
 	path = elisp/manually-synced/iy-go-to-char
 	url = https://github.com/doitian/iy-go-to-char
+[submodule "elisp/ob-nim"]
+	path = elisp/ob-nim
+	url = https://github.com/kaushalmodi-forks/ob-nim
