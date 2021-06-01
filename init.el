@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-04-23 16:34:39 kmodi>
+;; Time-stamp: <2021-04-23 16:39:56 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -222,6 +222,7 @@ need Org version to be at least 9.x.")
 ;; (require 'setup-beacon)
 (require 'setup-bookmarks)
 (require 'setup-buffer-move)
+(require 'setup-c)
 (require 'setup-calc)
 (require 'setup-command-log-mode)
 (require 'setup-counsel)
