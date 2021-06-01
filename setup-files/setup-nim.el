@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-06-01 10:35:55 kmodi>
+;; Time-stamp: <2021-06-01 14:24:43 kmodi>
 
 ;; Nim
 ;; https://github.com/nim-lang/nim-mode
@@ -65,7 +65,7 @@
           (nim-pragma-matcher . (0 'nim-font-lock-pragma-face)))))
 
     (use-package ob-nim
-      :load-path "elisp/ob-nim/" ;https://github.com/kaushalmodi-forks/ob-nim
+      :ensure t
       :config
       (progn
         (with-eval-after-load 'setup-org
