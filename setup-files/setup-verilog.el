@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-04-24 17:17:56 kmodi>
+;; Time-stamp: <2021-06-04 15:45:15 kmodi>
 
 ;; Verilog
 
@@ -720,7 +720,7 @@ _a_lways         _f_or              _g_enerate         _O_utput
                  ;; Do not add this hook when working in the verilog-mode repo
                  (not (and (buffer-file-name) ;Has to be a file, and
                            (vc-git-root (buffer-file-name)) ;In a git repo, and
-                           (when-let* ((git-repo-remote (vc-git--out-ok "config" "remote.upstream.url")))
+                           (let ((git-repo-remote (shell-command-to-string "git --no-pager config remote.upstream.url")))
                              (string-match-p "veripool/verilog-mode" git-repo-remote))))) ;Upstream URL has to match this.
         (add-hook 'before-save-hook #'modi/verilog-block-end-comments-to-block-names nil :local))
 
