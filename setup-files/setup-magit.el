@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-23 16:23:21 kmodi>
+;; Time-stamp: <2020-09-15 17:40:49 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -9,6 +9,20 @@
   :commands (magit-status magit-log-all-branches)
   :config
   (progn
+    ;; Speed up Magit a bit
+    ;; https://magit.vc/manual/magit/Performance.html
+    (setq magit-refresh-status-buffer nil)
+
+    ;; https://github.com/hlissner/doom-emacs/blob/1456108d5bef89195b2b63f962e0ae9d24f4c652/modules/tools/magit/config.el#L23
+    (setq magit-diff-refine-hunk t) ;Show granular diffs in selected hunk.
+    ;; Don't autosave repo buffers. This is too magical, and saving can
+    ;; trigger a bunch of unwanted side-effects, like save hooks and
+    ;; formatters. Trust the user to know what they're doing.
+    (setq magit-save-repository-buffers nil)
+    ;; Don't display parent/related refs in commit buffers; they are rarely
+    ;; helpful and only add to runtime costs.
+    (setq magit-revision-insert-related-refs nil)
+
     (defhydra hydra-magit (:color blue
                            :columns 4)
       "Magit"
