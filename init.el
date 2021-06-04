@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-04-23 16:39:56 kmodi>
+;; Time-stamp: <2021-06-04 15:30:25 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -60,7 +60,6 @@ need Org version to be at least 9.x.")
     auto-highlight-symbol
     avy ; > ace-jump-mode
     beacon ; visual flash to show the cursor position
-    benchmark-init
     bm ; visual bookmarks
     buffer-move
     command-log-mode ; for logging commands; useful when demoing emacs
@@ -183,13 +182,19 @@ need Org version to be at least 9.x.")
 ;;   I call this function in setup-packages.el and so am keeping the
 ;; commented out version here so that package.el does not add it again.
 
-;; Start `benchmark-init' as soon as possible
-(require 'benchmark-init)
-
 (eval-when-compile
   (require 'use-package)                ;Auto-requires `bind-key' too
   (setq use-package-always-ensure nil))
 (require 'use-package-chords)
+
+(use-package benchmark-init
+  :demand t
+  :load-path "elisp/manually-synced/benchmark-init-el"
+  :config
+  (progn
+    ;; https://github.com/dholm/benchmark-init-el/issues/15#issuecomment-766010566
+    (require 'benchmark-init-modes)     ;Explicitly required
+    (add-hook 'after-init-hook #'benchmark-init/deactivate)))
 
 ;; Enable `modi-mode' unless `disable-pkg-modi-mode' is set to `t' in
 ;; `setup-var-overrides.el'.

@@ -55,3 +55,6 @@
 [submodule "elisp/manually-synced/iy-go-to-char"]
 	path = elisp/manually-synced/iy-go-to-char
 	url = https://github.com/doitian/iy-go-to-char
+[submodule "elisp/manually-synced/benchmark-init-el"]
+	path = elisp/manually-synced/benchmark-init-el
+	url = https://github.com/kekeimiku/benchmark-init-el

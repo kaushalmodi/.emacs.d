@@ -1,17 +1,19 @@
 #+title: Sources of manually synced packages
 
-|---------------+----------------------------------------------------------+------------------------------------------|
-| Package       | Source                                                   | Why is this manually synced?             |
-|---------------+----------------------------------------------------------+------------------------------------------|
-| csv-nav       | https://www.emacswiki.org/emacs/download/csv-nav.el      | https://github.com/melpa/melpa/pull/5008 |
-| dired+        | https://www.emacswiki.org/emacs/download/dired%2b.el     | https://github.com/melpa/melpa/pull/5008 |
-| etags-select  | https://www.emacswiki.org/emacs/download/etags-select.el | https://github.com/melpa/melpa/pull/5008 |
-| etags-table   | https://www.emacswiki.org/emacs/download/etags-table.el  | https://github.com/melpa/melpa/pull/5008 |
-| header2       | https://www.emacswiki.org/emacs/download/header2.el      | https://github.com/melpa/melpa/pull/5008 |
-| help-fns+     | https://www.emacswiki.org/emacs/download/help-fns%2b.el  | https://github.com/melpa/melpa/pull/5008 |
-| hideshowvis   | https://github.com/sheijk/hideshowvis                    | Not available on GNU Elpa or Melpa       |
-| hl-line+      | https://www.emacswiki.org/emacs/download/hl-line%2b.el   | https://github.com/melpa/melpa/pull/5008 |
-| info+         | https://www.emacswiki.org/emacs/download/info%2b.el      | https://github.com/melpa/melpa/pull/5008 |
-| spice-mode    | Not known                                                | Not available on GNU Elpa or Melpa       |
-| iy-go-to-char | https://github.com/doitian/iy-go-to-char                 | Not available on Melpa                   |
-|---------------+----------------------------------------------------------+------------------------------------------|
+|----------------+----------------------------------------------------------+--------------------------------------------------------------------------------------------------|
+| Package        | Source                                                   | Why is this manually synced?                                                                     |
+|----------------+----------------------------------------------------------+--------------------------------------------------------------------------------------------------|
+| csv-nav        | https://www.emacswiki.org/emacs/download/csv-nav.el      | https://github.com/melpa/melpa/pull/5008                                                         |
+| dired+         | https://www.emacswiki.org/emacs/download/dired%2b.el     | https://github.com/melpa/melpa/pull/5008                                                         |
+| etags-select   | https://www.emacswiki.org/emacs/download/etags-select.el | https://github.com/melpa/melpa/pull/5008                                                         |
+| etags-table    | https://www.emacswiki.org/emacs/download/etags-table.el  | https://github.com/melpa/melpa/pull/5008                                                         |
+| header2        | https://www.emacswiki.org/emacs/download/header2.el      | https://github.com/melpa/melpa/pull/5008                                                         |
+| help-fns+      | https://www.emacswiki.org/emacs/download/help-fns%2b.el  | https://github.com/melpa/melpa/pull/5008                                                         |
+| hideshowvis    | https://github.com/sheijk/hideshowvis                    | Not available on GNU Elpa or Melpa                                                               |
+| hl-line+       | https://www.emacswiki.org/emacs/download/hl-line%2b.el   | https://github.com/melpa/melpa/pull/5008                                                         |
+| info+          | https://www.emacswiki.org/emacs/download/info%2b.el      | https://github.com/melpa/melpa/pull/5008                                                         |
+| spice-mode     | Not known                                                | Not available on GNU Elpa or Melpa                                                               |
+| iy-go-to-char  | https://github.com/doitian/iy-go-to-char                 | Not available on Melpa                                                                           |
+| benchmark-init | https://github.com/kekeimiku/benchmark-init-el           | The main package fails compilation on emacs 28.x and the package author isn't merging the fix PR |
+|                |                                                          | https://github.com/dholm/benchmark-init-el/pull/16                                                                                                 |
+|----------------+----------------------------------------------------------+--------------------------------------------------------------------------------------------------|
