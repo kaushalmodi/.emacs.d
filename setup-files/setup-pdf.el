@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 15:10:27 kmodi>
+;; Time-stamp: <2021-06-08 10:05:18 kmodi>
 
 ;; PDF
 
@@ -57,16 +57,9 @@ Useful to run after `pdf-tools' updates."
      ("l" . pdf-history-backward)
      ("r" . pdf-history-forward))))
 
-;; https://github.com/rudolfochrist/interleave
-(use-package interleave
-  :init
-  (progn
-    (bind-to-modi-map "i" #'interleave-mode)
-    (with-eval-after-load 'doc-view
-      (bind-key "i" #'interleave-open-notes-file-for-pdf doc-view-mode-map))
-    (with-eval-after-load 'pdf-view
-      (bind-key "i" #'interleave-open-notes-file-for-pdf pdf-view-mode-map)))
-  :defer t)
+;; https://github.com/weirdNox/org-noter
+;; Org Noter bindings: https://github.com/weirdNox/org-noter#keys
+(use-package org-noter)
 
 (with-eval-after-load 'doc-view
   ;; In continuous mode, reaching the page edge advances to the next/prev page
