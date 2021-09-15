@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-06-08 09:57:39 kmodi>
+;; Time-stamp: <2021-09-15 15:34:41 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -92,7 +92,6 @@ need Org version to be at least 9.x.")
     isend-mode ; used in setup-perl.el
     ivy swiper counsel
     key-chord ; map pairs of simultaneously pressed keys to commands
-    keyfreq ; find which commands you use the most
     kurecolor ; Quick tweaks to color codes in CSS files
     magit ; for git management
     manage-minor-mode
@@ -269,7 +268,6 @@ need Org version to be at least 9.x.")
 (require 'setup-imenu-list)
 (require 'setup-indent-guide)
 (require 'setup-info)
-(require 'setup-keyfreq)
 (require 'setup-kurecolor)
 (require 'setup-linum)
 (require 'setup-manage-minor-mode)
