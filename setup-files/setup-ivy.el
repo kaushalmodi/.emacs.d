@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-12-05 12:06:58 kmodi>
+;; Time-stamp: <2021-10-05 16:56:01 kmodi>
 
 ;; Ivy (better than ido in my opinion)
 
@@ -9,7 +9,11 @@
          ("C-c W" . ivy-pop-view)) ;Remove window configuration from `ivy-views'
   :config
   (progn
-    ;; Disable ido
+    ;; Enable `ivy-mode'.
+    (ivy-mode 1)
+
+    ;; When `ido' gets loaded, disable `ido-mode' and ensure that
+    ;; `ivy-mode' is enabled.
     (with-eval-after-load 'ido
       (ido-mode -1)
       ;; Enable ivy
