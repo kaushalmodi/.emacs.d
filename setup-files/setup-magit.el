@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-09-15 17:40:49 kmodi>
+;; Time-stamp: <2021-09-27 13:45:50 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -22,6 +22,23 @@
     ;; Don't display parent/related refs in commit buffers; they are rarely
     ;; helpful and only add to runtime costs.
     (setq magit-revision-insert-related-refs nil)
+
+    ;; ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/
+    ;; (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+    ;; (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+    ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
+    ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
+    ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
+    ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
+
+    ;; Mon Sep 27 13:39:10 EDT 2021 - kmodi
+    ;; Later I realized that the major contributor to the slowness of magit-status was that
+    ;; the submodules were being recursed in the `git status' and `git diff` commands (which are
+    ;; called by `magit-insert-untracked-files' and `magit-insert-unstaged-changes' functions
+    ;; respectively. Doing this once in the git repo with a lot of submodules fixed the magit-status
+    ;; sluggishness:
+    ;;
+    ;;     git config diff.ignoreSubmodules all
 
     (defhydra hydra-magit (:color blue
                            :columns 4)
