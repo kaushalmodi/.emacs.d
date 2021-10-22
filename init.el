@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-09-15 15:34:41 kmodi>
+;; Time-stamp: <2021-10-22 12:59:59 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -69,7 +69,6 @@ need Org version to be at least 9.x.")
     drag-stuff
     easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
     el2markdown ; Generate README.md files from Commentary section in .el files
-    elfeed
     engine-mode ; search engines
     expand-region
     eww-lnum ; jump to links in eww buffer ace-jump style
@@ -235,7 +234,6 @@ need Org version to be at least 9.x.")
 (require 'setup-devdocs)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
-(require 'setup-elfeed)
 (when (executable-find "tmux")
   (require 'setup-emamux))
 (require 'setup-eww)
