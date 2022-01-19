@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2017-11-17 17:31:01 kmodi>
+# Time-stamp: <2021-07-09 10:26:39 kmodi>
 
 # Open emacsclient with a new frame only if one does not exist.
 # http://emacs.stackexchange.com/a/12897/115
@@ -59,6 +59,7 @@ then
     fi
 else
     # Otherwise, open emacsclient in the terminal
+    echo "DISPLAY env var is unset"
     opts='-nw'
 fi
 
