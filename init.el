@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-10-22 12:59:59 kmodi>
+;; Time-stamp: <2021-12-14 23:28:01 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -121,7 +121,7 @@ need Org version to be at least 9.x.")
     tiny
     tldr                ;Concise "man pages"
     transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
-    undo-tree ; supercool undo visualization
+    ;; undo-tree ; supercool undo visualization
     use-package use-package-chords ; optimize package loading
     visual-regexp
     ;; volatile-highlights
@@ -296,7 +296,7 @@ need Org version to be at least 9.x.")
 (require 'setup-term)
 (require 'setup-tiny)
 (require 'setup-tldr)
-(require 'setup-undo-tree)
+;; (require 'setup-undo-tree)
 (require 'setup-weather)
 (require 'setup-webpaste)
 (require 'setup-which-func)
