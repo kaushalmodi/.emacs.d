@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-09-03 11:19:35 kmodi>
+;; Time-stamp: <2022-01-19 14:42:25 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -486,7 +486,9 @@ point."
     (defconst org-easy-template-alist   ;Old `org-structure-template-alist'
       '(("s" "#+begin_src ?\n\n#+end_src")
         ("bd" "#+begin_description\n?\n#+end_description") ;Special block in `ox-hugo'
+        ("bm" "#+begin_mark\n?\n#+end_mark") ;Special block in `ox-hugo'
         ("bn" "#+begin_note\n?\n#+end_note") ;Special block in `ox-hugo'
+        ("bs" "#+begin_sidenote\n?\n#+end_sidenote") ;Special block in `ox-hugo'
         ("e" "#+begin_example\n?\n#+end_example")
         ("q" "#+begin_quote\n?\n#+end_quote")
         ("v" "#+begin_verse\n?\n#+end_verse")
@@ -681,10 +683,10 @@ the \"#+begin_export\" line after the template insertion."
     (defhydra hydra-org-template (:color blue
                                   :hint nil)
       "
-org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext              _I_NCLUDE:
-               _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:            _H_TML:
-               _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:            _A_SCII:
-               _o_rg           _S_hell        _p_ython            e_X_port         [_bd_] description  [_bn_] note
+org-template:  _c_enter        _s_rc               _e_xample       _v_erilog         _t_ext          [_bd_] description
+               _l_atex         _h_tml              _V_erse         _m_atlab          _L_aTeX:        [_bm_] mark
+               _q_uote         _E_macs-lisp        _n_im           _i_nclude:        _H_TML:         [_bn_] note
+               _o_rg           _S_hell             _p_ython        e_X_port                          [_bs_] sidenote
 "
       ("s" (modi/org-template-expand "<s")) ;#+begin_src ... #+end_src
       ("E" (modi/org-template-expand "<s" "emacs-lisp"))
@@ -696,7 +698,9 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("p" (modi/org-template-expand "<s" "python"))
       ("t" (modi/org-template-expand "<s" "text"))
       ("bd" (modi/org-template-expand "<bd")) ;#+begin_description ... #+end_description (Special block in `ox-hugo')
+      ("bm" (modi/org-template-expand "<bm")) ;#+begin_mark ... #+end_mark (Special block in `ox-hugo')
       ("bn" (modi/org-template-expand "<bn")) ;#+begin_note ... #+end_note (Special block in `ox-hugo')
+      ("bs" (modi/org-template-expand "<bs")) ;#+begin_sidenote ... #+end_sidenote (Special block in `ox-hugo')
       ("e" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
       ("x" (modi/org-template-expand "<e")) ;#+begin_example ... #+end_example
       ("q" (modi/org-template-expand "<q")) ;#+begin_quote ... #+end_quote
