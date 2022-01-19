@@ -119,7 +119,15 @@ fi
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --with-dumping=unexec"
 # export MY_EMACS_CONFIGURE="./configure --with-modules --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz"
 # export MY_EMACS_CONFIGURE="./configure --with-modules --with-imagemagick --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-harfbuzz --without-cairo"
-export MY_EMACS_CONFIGURE="./configure --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-modules --with-harfbuzz --with-imagemagick"
+# export MY_EMACS_CONFIGURE="./configure --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-modules --with-harfbuzz --with-imagemagick"
+
+# Mon Apr 26 16:47:05 EDT 2021 - kmodi
+# https://www.reddit.com/r/emacs/comments/myej3z/the_nativecompilation_branch_was_just_merged_into/
+# export MY_EMACS_CONFIGURE="./configure --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-modules --with-harfbuzz --with-imagemagick --with-native-compilation"
+
+# Mon May 24 16:19:28 EDT 2021 - kmodi
+# I was unable to open png files in emacs, so trying without the --with-imagemagick now.
+export MY_EMACS_CONFIGURE="./configure --prefix=${MY_EMACS_INSTALL_DIR} --program-transform-name='s/^ctags$/ctags_emacs/' --with-modules --with-harfbuzz --with-native-compilation"
 
 # # Fri Oct 23 15:17:10 EDT 2015 - kmodi
 # # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21738
