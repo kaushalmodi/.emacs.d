@@ -498,10 +498,7 @@ point."
         ("L" "#+latex: ")
         ("h" "#+begin_export html\n?\n#+end_export")
         ("H" "#+html: ")
-        ("a" "#+begin_export ascii\n?\n#+end_export")
-        ("A" "#+ascii: ")
-        ("i" "#+index: ?")
-        ("I" "#+include: %file ?"))
+        ("i" "#+include: %file ?"))
       "Structure completion elements.
 This is a list of abbreviation keys and values.  The value gets
 inserted if you type `<' followed by one or more characters and
@@ -708,12 +705,9 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
       ("X" (modi/org-template-expand "<X")) ;#+begin_export ... #+end_export
       ("l" (modi/org-template-expand "<X" "latex")) ;#+begin_export latex ... #+end_export
       ("h" (modi/org-template-expand "<X" "html")) ;#+begin_export html ... #+end_export
-      ("a" (modi/org-template-expand "<X" "ascii")) ;#+begin_export ascii ... #+end_export
       ("L" (modi/org-template-expand "<L")) ;#+latex:
       ("H" (modi/org-template-expand "<H")) ;#+html:
-      ("A" (modi/org-template-expand "<A")) ;#+ascii:
-      ("i" (modi/org-template-expand "<i")) ;#+index: line
-      ("I" (modi/org-template-expand "<I")) ;#+include: line
+      ("i" (modi/org-template-expand "<I")) ;#+include: line
       ("<" self-insert-command "<")
       ("Q" nil "quit"))
 
