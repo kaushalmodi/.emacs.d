@@ -288,6 +288,18 @@ then
     cat "${build_info_file}"
 fi
 
+# Delete all branch except for the current one.
+# https://github.com/koalaman/shellcheck/wiki/SC2046
+git branch | grep -v '\*' | tr -d ' ' | while IFS='' read -r br
+do
+    echo "deleting '${br}' .."
+    git branch -D "${br}"
+done
+
+# Optimize the git database
+git reflog expire --all --expire=now
+git gc --prune=now --aggressive
+
 # Restore the original files
 if [[ -f GNUmakefile_orig ]]
 then
