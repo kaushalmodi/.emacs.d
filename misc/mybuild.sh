@@ -280,7 +280,7 @@ if [[ $debug -eq 0 ]]
 then
     echo "Build date        : $(date +'%Y/%m/%d %H:%M %a')" >> "${build_info_file}"
 fi
-echo -e "Savannah Git link : http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=${current_commit_hash}\n" >> "${build_info_file}"
+echo -e "Savannah Git link : http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=${current_commit_hash}\\n" >> "${build_info_file}"
 git log -n 1 --pretty=full "${current_commit_hash}" >> "${build_info_file}"
 
 if [[ $debug -eq 1 ]]
