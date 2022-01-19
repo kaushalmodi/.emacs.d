@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2020-06-22 10:27:33 kmodi>
+# Time-stamp: <2021-11-08 21:44:45 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -42,8 +42,7 @@
 set -euo pipefail # http://redsymbol.net/articles/unofficial-bash-strict-mode
 IFS=$'\n\t'
 
-# emacs_rev="origin/master"
-emacs_rev="origin/emacs-25"
+emacs_rev="origin/master"
 emacs_debug_build=0
 quick_make=0
 install_sub_dir=""
