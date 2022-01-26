@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-06-19 13:15:16 kmodi>
+;; Time-stamp: <2022-01-26 11:30:23 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -23,9 +23,16 @@
     (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/"))
 
     ;; (setq projectile-enable-caching nil)
-    (setq projectile-enable-caching t) ; Enable caching, otherwise
-                                        ; `projectile-find-file' is really slow
-                                        ; for large projects.
+    (setq projectile-enable-caching t) ;Enable caching, otherwise `projectile-find-file'
+                                       ;is really slow for large
+                                       ;projects.
+    ;; Disable auto-updating of cache each time a file is opened or
+    ;; deleted. The `projectile-serialize-cache' call in
+    ;; `projectile-cache-current-file' (through
+    ;; `projectile-find-file-hook-function') makes opening and
+    ;; deleting files very slow.
+    (setq projectile-auto-update-cache nil)
+
     (dolist (item '(".SOS" "nobackup"))
       (add-to-list 'projectile-globally-ignored-directories item))
     (dolist (item '("GTAGS" "GRTAGS" "GPATH"))
