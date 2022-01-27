@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 17:50:34 kmodi>
+;; Time-stamp: <2022-01-27 14:03:48 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -29,7 +29,9 @@
   :config
   (progn
     (add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "csv")
-    (add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "vplanx")))
+    (add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "vplanx")
+
+    (add-to-list 'org-hugo-special-block-type-properties '("sidenote" . (:trim-pre t :trim-post t)))))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
