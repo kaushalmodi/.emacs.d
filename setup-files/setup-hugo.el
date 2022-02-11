@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-01-27 14:03:48 kmodi>
+;; Time-stamp: <2022-02-11 09:20:42 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -31,7 +31,22 @@
     (add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "csv")
     (add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "vplanx")
 
-    (add-to-list 'org-hugo-special-block-type-properties '("sidenote" . (:trim-pre t :trim-post t)))))
+    (add-to-list 'org-hugo-special-block-type-properties '("sidenote" . (:trim-pre t :trim-post t)))
+
+    (defun modi/org-hugo-inline-src-block (inline-src-block _contents _info)
+      "Transcode INLINE-SRC-BLOCK object into Hugo-compatible Markdown format.
+
+This advice override will work given that the below code snippet is saved as `inline-src.html' in
+the Hugo site's \"layouts/shortcodes/\" directory:
+
+    {{- transform.Highlight .Inner (.Get 0) (.Get 1 | default \"\")
+        | replaceRE \\=`^<div class=\"highlight\"><pre [^>]+>((.|\\n)+)</pre></div>$\\=`
+                    \\=`<span class=\"inline-src chroma\">${1}</span>\\=`
+        | safeHTML -}}"
+      (let ((lang (org-element-property :language inline-src-block))
+            (code (org-element-property :value inline-src-block)))
+        (format "{{< inline-src %s >}}%s{{< /inline-src >}}" lang code)))
+    (advice-add 'org-hugo-inline-src-block :override #'modi/org-hugo-inline-src-block)))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
