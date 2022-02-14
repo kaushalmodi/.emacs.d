@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-01-19 14:42:25 kmodi>
+;; Time-stamp: <2022-02-11 13:16:27 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -44,6 +44,7 @@
 ;;    Htmlize Region→File
 ;;    Include Src lines
 ;;    Org TOC
+;;    Citations
 ;;  Provide
 ;;  Notes
 
@@ -1737,6 +1738,12 @@ Instead it's simpler to use bash."
 ;; Used in https://github.com/kaushalmodi/ox-hugo/blob/master/doc/export-gh-doc.el
 (use-package toc-org
   :ensure t)
+
+;;;; Citations
+;; https://github.com/andras-simonyi/citeproc-el
+(use-package citeproc
+  :ensure t
+  :defer t)
 
 ;;; Provide
 (provide 'setup-org)
