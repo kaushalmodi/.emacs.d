@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 16:39:46 kmodi>
+;; Time-stamp: <2022-02-11 13:04:48 kmodi>
 
 ;; Package management
 ;; Loading of packages at startup
@@ -97,13 +97,8 @@ Emacs installation.  If Emacs is installed using
        (protocol (if no-ssl
                      "http"
                    "https"))
-       (melpa-url (concat protocol "://melpa.org/packages/"))
-       (orgelpa-url (concat protocol "://orgmode.org/elpa/")))
-  (add-to-list 'package-archives (cons "melpa" melpa-url) :append)
-  ;; Install `org-plus-contrib' only when it's set to use the Elpa version of Org.
-  (when (eq modi/org-version-select 'elpa)
-    (add-to-list 'package-archives (cons "org" orgelpa-url))
-    (add-to-list 'my-packages 'org-plus-contrib))) ;Latest stable version of org-mode, includes org-eww
+       (melpa-url (concat protocol "://melpa.org/packages/")))
+  (add-to-list 'package-archives (cons "melpa" melpa-url) :append))
 
 (>=e "27.0"
     nil           ;`package-initialize' call is not needed in emacs 27+
