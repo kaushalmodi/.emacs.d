@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-02-11 09:20:42 kmodi>
+;; Time-stamp: <2022-03-01 11:48:05 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -43,8 +43,10 @@ the Hugo site's \"layouts/shortcodes/\" directory:
         | replaceRE \\=`^<div class=\"highlight\"><pre [^>]+>((.|\\n)+)</pre></div>$\\=`
                     \\=`<span class=\"inline-src chroma\">${1}</span>\\=`
         | safeHTML -}}"
-      (let ((lang (org-element-property :language inline-src-block))
-            (code (org-element-property :value inline-src-block)))
+      (let* ((lang (org-element-property :language inline-src-block))
+             (code (org-hugo--escape-hugo-shortcode
+                    (org-element-property :value inline-src-block)
+                    lang)))
         (format "{{< inline-src %s >}}%s{{< /inline-src >}}" lang code)))
     (advice-add 'org-hugo-inline-src-block :override #'modi/org-hugo-inline-src-block)))
 
