@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-29 10:02:22 kmodi>
+;; Time-stamp: <2022-04-11 08:51:42 kmodi>
 
 ;; Launcher
 
@@ -55,9 +55,11 @@
   ("q" nil "cancel" :color blue))
 
 (bind-key "<s-SPC>" #'hydra-launch/body modi-mode-map)
-;; Bind C-c SPC in global-map so that the org-mode-map binding is not overridden.
+;; Bind C-c SPC in global-map so that the org-mode-map binding is not
+;; overridden.
 (bind-key "C-c SPC" #'hydra-launch/body)
-(bind-key "C-c l" #'hydra-launch/body modi-mode-map)
+;; `C-c l' is bound to `org-store-link'.
+(bind-key "C-c n" #'hydra-launch/body modi-mode-map)
 
 
 (provide 'setup-launcher)

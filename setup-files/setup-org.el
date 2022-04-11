@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-02-11 13:16:27 kmodi>
+;; Time-stamp: <2022-04-11 08:49:04 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -772,11 +772,12 @@ line, or if a region is selected.  Else call
      ("M-<return>" . org-meta-return)
      ("ESC <return>" . org-meta-return))
 
+    ;; https://orgmode.org/manual/Activation.html
     (bind-keys
      :map modi-mode-map
      ("C-c a" . org-agenda)
      ("C-c c" . org-capture)
-     ("C-c i" . org-store-link))))
+     ("C-c l" . org-store-link))))
 
 ;;; Org Export
 (use-package ox
