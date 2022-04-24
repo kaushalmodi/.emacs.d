@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-04-11 08:49:04 kmodi>
+;; Time-stamp: <2022-04-23 21:56:45 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -778,6 +778,10 @@ line, or if a region is selected.  Else call
      ("C-c a" . org-agenda)
      ("C-c c" . org-capture)
      ("C-c l" . org-store-link))))
+
+(use-package org-eldoc
+  :load-path "elisp/org-contrib/lisp/"
+  :after org)
 
 ;;; Org Export
 (use-package ox

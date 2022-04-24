@@ -58,3 +58,6 @@
 [submodule "elisp/manually-synced/benchmark-init-el"]
 	path = elisp/manually-synced/benchmark-init-el
 	url = https://github.com/kekeimiku/benchmark-init-el
+[submodule "elisp/org-contrib"]
+	path = elisp/org-contrib
+	url = https://git.sr.ht/~bzg/org-contrib
