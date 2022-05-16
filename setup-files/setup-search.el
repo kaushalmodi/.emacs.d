@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-06-08 08:17:02 kmodi>
+;; Time-stamp: <2022-05-15 22:41:53 kmodi>
 
 ;; Search / Replace
 
@@ -10,6 +10,7 @@
 ;;  Query exchange
 ;;  Swiper
 ;;  grep
+;;  find-func
 ;;  Apropos
 ;;  Key bindings
 
@@ -154,6 +155,67 @@ searches all buffers."
           (remove-if-not 'buffer-file-name (buffer-list))))
        regexp))
     (bind-to-modi-map "s" #'offby1/search-all-buffers)))
+
+;;; find-func
+;; Backport a `find-library' enhancement from Emacs 29.1 to older
+;; versions. The new `find-library-include-other-files' variable when
+;; set to nil reduces the clutter in the candidates for `find-library'
+;; -- https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=eea93a8aaac30690c6e864f2556010d3b62f4eee
+(when (version< emacs-version "29.1")
+  (use-package find-func
+    :config
+    (progn
+      (defconst find-library-include-other-files nil
+        "If non-nil, `read-library-name' will also include non-library files.
+This affects commands like `read-library'.  If nil, only library
+files (i.e., \".el\" files) will be offered for completion.")
+
+      (defun read-library-name--find-files (dirs suffixes)
+        "Return a list of all files in DIRS that match SUFFIXES."
+        (let ((files nil)
+              (regexp (concat (regexp-opt suffixes) "\\'")))
+          (dolist (dir dirs)
+            (dolist (file (ignore-errors (directory-files dir nil regexp t)))
+              (and (string-match regexp file)
+                   (push (substring file 0 (match-beginning 0)) files))))
+          files))
+
+      (defun emacs-29/read-library-name ()
+        "Read and return a library name, defaulting to the one near point.
+
+A library name is the filename of an Emacs Lisp library located
+in a directory under `load-path' (or `find-library-source-path',
+if non-nil)."
+        (let* ((dirs (or find-library-source-path load-path))
+               (suffixes (find-library-suffixes))
+               (def (if (eq (function-called-at-point) 'require)
+                        ;; `function-called-at-point' may return 'require
+                        ;; with `point' anywhere on this line.  So wrap the
+                        ;; `save-excursion' below in a `condition-case' to
+                        ;; avoid reporting a scan-error here.
+                        (condition-case nil
+                            (save-excursion
+                              (backward-up-list)
+                              (forward-char)
+                              (forward-sexp 2)
+                              (thing-at-point 'symbol))
+                          (error nil))
+                      (thing-at-point 'symbol))))
+          (if find-library-include-other-files
+              (let ((table (apply-partially #'locate-file-completion-table
+                                            dirs suffixes)))
+                (when (and def (not (test-completion def table)))
+                  (setq def nil))
+                (completing-read (format-prompt "Library name" def)
+                                 table nil nil nil nil def))
+            (let ((files (read-library-name--find-files dirs suffixes)))
+              (when (and def (not (member def files)))
+                (setq def nil))
+              (completing-read (format-prompt "Library name" def)
+                               files nil t nil nil def)))))
+      (advice-add 'read-library-name :override #'emacs-29/read-library-name)
+      ;; (advice-remove 'read-library-name #'emacs-29/read-library-name)
+      )))
 
 ;;; Apropos
 (use-package apropos
