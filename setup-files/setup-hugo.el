@@ -138,7 +138,22 @@ set."
       (when do-not-run-orig-fn
         (modi/org-hugo-collapse-all-posts))
       do-not-run-orig-fn))
-  (advice-add 'org-ctrl-c-tab :before-until #'modi/org-ctrl-c-tab-advice))
+  (advice-add 'org-ctrl-c-tab :before-until #'modi/org-ctrl-c-tab-advice)
+
+  (defun modi/org-hugo-update-file-name ()
+    "Update the EXPORT_HUGO_BUNDLE or EXPORT_FILE_NAME property in current subtree."
+    (interactive)
+    (org-with-wide-buffer
+     (let ((post-subtree (or (org-hugo--get-valid-subtree) ;Move the point the post subtree
+                             (user-error "Point is not in a valid Hugo post subtree; move to one and try again")))
+           (bundle-subtree (car (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE))))
+       (when bundle-subtree
+         (goto-char (org-element-property :begin bundle-subtree)))
+       (org-set-property (if bundle-subtree
+                             "EXPORT_HUGO_BUNDLE"
+                           "EXPORT_FILE_NAME")
+                         (org-hugo-slug
+                          (org-get-heading :no-tags :no-todo :no-priority :no-comment)))))))
 
 
 (provide 'setup-hugo)
