@@ -48,7 +48,34 @@ the Hugo site's \"layouts/shortcodes/\" directory:
                     (org-element-property :value inline-src-block)
                     lang)))
         (format "{{< inline-src %s >}}%s{{< /inline-src >}}" lang code)))
-    (advice-add 'org-hugo-inline-src-block :override #'modi/org-hugo-inline-src-block)))
+    (advice-add 'org-hugo-inline-src-block :override #'modi/org-hugo-inline-src-block)
+    ;; (advice-remove 'org-hugo-inline-src-block  #'modi/org-hugo-inline-src-block)
+
+    (defun modi/org-blackfriday-center-block (_center-block contents info)
+      "Center-align the text in CONTENTS using CSS.
+
+INFO is a plist used as a communication channel.
+
+This advice override removes the in-content <style> block.
+
+CSS rules for .org-center need to be added separated to the theme
+CSS."
+      (let* ((class "org-center"))
+        (format "<div class=\"%s\">%s\n\n%s\n</div>"
+                class (org-blackfriday--extra-div-hack info) contents)))
+    (advice-add 'org-blackfriday-center-block :override #'modi/org-blackfriday-center-block)
+    ;; (advice-remove 'org-blackfriday-center-block  #'modi/org-blackfriday-center-block)
+
+    (defun modi/org-cite-csl-render-bibliography (bib-str)
+      "Remove the HTML style element from BIB-STR.
+
+CSS rules for .csl-entry need to be added separated to the theme
+CSS."
+      (replace-regexp-in-string "<style>\\.csl-entry[^<]+</style>" "" bib-str))
+    (advice-add 'org-cite-csl-render-bibliography :filter-return #'modi/org-cite-csl-render-bibliography)
+    ;; (advice-remove 'org-cite-csl-render-bibliography  #'modi/org-cite-csl-render-bibliography)
+
+    ))
 
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
