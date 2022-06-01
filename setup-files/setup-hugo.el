@@ -90,7 +90,7 @@ See `org-capture-templates' for more information."
                    ,(concat ":EXPORT_HUGO_BUNDLE: " fname)
                    ":EXPORT_FILE_NAME: index"
                    ":EXPORT_HUGO_CUSTOM_FRONT_MATTER: :versions '()"
-                   ":EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :syndication '((mastodon . \"\"))"
+                   ":EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :syndication '(:mastodon \"\")"
                    ":END:"
                    "%?\n")              ;Place the cursor here finally
                  "\n")))
