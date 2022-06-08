@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-16 15:41:54 kmodi>
+;; Time-stamp: <2022-06-08 16:57:45 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -224,14 +224,32 @@ Lisp function does not specify a special indentation."
   (setq-local lisp-indent-function #'Fuco1/lisp-indent-function))
 (add-hook 'emacs-lisp-mode-hook #'modi/set-emacs-lisp-indentation)
 
-;; http://ergoemacs.org/emacs/emacs_byte_compile.html
-(defun byte-compile-current-buffer ()
-  "`byte-compile' current buffer if in `emacs-lisp-mode' and compiled file exists."
-  (interactive)
-  (when (and (derived-mode-p 'emacs-lisp-mode)
-             (file-exists-p (byte-compile-dest-file buffer-file-name)))
-    (byte-compile-file buffer-file-name)))
-(add-hook 'after-save-hook #'byte-compile-current-buffer)
+(defun modi/compile-current-file (&optional dont-check-if-exists)
+  "Byte compile current file if it's already compiled earlier.
+
+If DONT-CHECK-IF-EXISTS is non-nil, just byte compile the current
+file and don't check if it's already compiled before."
+  (interactive "P")
+  (let ((do-comp (and buffer-file-name
+                      (or dont-check-if-exists
+                          (if (native-comp-available-p)
+                              (let* ((eln-cache-dir (or native-compile-target-directory
+                                                        (file-name-as-directory
+                                                         (expand-file-name
+                                                          comp-native-version-dir
+                                                          (expand-file-name "eln-cache" user-emacs-directory)))))
+                                     (eln-file-re (concat (file-name-base buffer-file-name) "-[a-f0-9]+-[a-f0-9]+\\.eln"))
+                                     (eln-file-exists (directory-files-recursively eln-cache-dir eln-file-re)))
+                                eln-file-exists)
+                            (file-exists-p (byte-compile-dest-file buffer-file-name)))))))
+    (when do-comp
+      (if (native-comp-available-p)
+          (native-compile buffer-file-name)
+        (byte-compile-file buffer-file-name)))))
+(defun modi/el-auto-compile-current-file-on-save ()
+  "Auto compile current file on save."
+  (add-hook 'after-save-hook #'modi/compile-current-file nil :local))
+(add-hook 'emacs-lisp-mode-hook #'modi/el-auto-compile-current-file-on-save)
 
 ;; Easy Escape
 ;; https://github.com/cpitclaudel/easy-escape
