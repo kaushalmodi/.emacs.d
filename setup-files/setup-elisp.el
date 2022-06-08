@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-06-08 16:57:45 kmodi>
+;; Time-stamp: <2022-06-08 17:01:31 kmodi>
 
 ;; Emacs Lisp Mode
 
@@ -244,7 +244,7 @@ file and don't check if it's already compiled before."
                             (file-exists-p (byte-compile-dest-file buffer-file-name)))))))
     (when do-comp
       (if (native-comp-available-p)
-          (native-compile buffer-file-name)
+          (native-compile-async buffer-file-name)
         (byte-compile-file buffer-file-name)))))
 (defun modi/el-auto-compile-current-file-on-save ()
   "Auto compile current file on save."
