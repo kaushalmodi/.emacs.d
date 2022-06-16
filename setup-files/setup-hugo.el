@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-06-16 11:20:36 kmodi>
+;; Time-stamp: <2022-06-16 12:51:28 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -36,18 +36,13 @@
     (defun modi/org-hugo-inline-src-block (inline-src-block _contents _info)
       "Transcode INLINE-SRC-BLOCK object into Hugo-compatible Markdown format.
 
-This advice override will work given that the below code snippet is saved as `inline-src.html' in
-the Hugo site's \"layouts/shortcodes/\" directory:
-
-    {{- transform.Highlight .Inner (.Get 0) (.Get 1 | default \"\")
-        | replaceRE \\=`^<div class=\"highlight\"><pre [^>]+>((.|\\n)+)</pre></div>$\\=`
-                    \\=`<span class=\"inline-src chroma\">${1}</span>\\=`
-        | safeHTML -}}"
+The highlight shortcode started recognizing `hl_inline=true'
+parameter starting with Hugo v0.101.0."
       (let* ((lang (org-element-property :language inline-src-block))
              (code (org-hugo--escape-hugo-shortcode
                     (org-element-property :value inline-src-block)
                     lang)))
-        (format "{{< inline-src %s >}}%s{{< /inline-src >}}" lang code)))
+        (format "{{< highlight %s \"hl_inline=true\" >}}%s{{< /highlight >}}" lang code)))
     (advice-add 'org-hugo-inline-src-block :override #'modi/org-hugo-inline-src-block)
     ;; (advice-remove 'org-hugo-inline-src-block  #'modi/org-hugo-inline-src-block)
 
