@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-04-23 21:56:45 kmodi>
+;; Time-stamp: <2022-06-11 11:35:39 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -80,18 +80,17 @@ This value must match the `infodir' variable in the Org local.mk.")
           (let ((default-org-path (expand-file-name "org" modi/default-lisp-directory)))
             (setq load-path (delete default-org-path load-path))))
 
-        (>=e "25.0" ;`directory-files-recursively' is not available in older emacsen
-            ;; If `modi/org-version-select' is *not* `elpa', remove the Elpa
-            ;; version of Org from the `load-path'.
-            (unless (eq modi/org-version-select 'elpa)
-              (dolist (org-elpa-install-path (directory-files-recursively
-                                              package-user-dir
-                                              "\\`org\\(-plus-contrib\\)*-[0-9.]+\\'"
-                                              :include-directories))
-                (setq load-path (delete org-elpa-install-path load-path))
-                ;; Also ensure that the associated path is removed from Info
-                ;; search list.
-                (setq Info-directory-list (delete org-elpa-install-path Info-directory-list)))))
+        (dolist (org-elpa-install-path (directory-files-recursively
+                                        package-user-dir
+                                        "\\`org-[0-9.]+\\'"
+                                        :include-directories))
+          (unless (eq modi/org-version-select 'elpa)
+            (setq load-path (delete org-elpa-install-path load-path))
+            ;; Also ensure that the associated path is removed from Info
+            ;; search list.
+            (setq Info-directory-list (delete org-elpa-install-path Info-directory-list)))
+          (when (eq modi/org-version-select 'elpa)
+            (add-to-list 'load-path org-elpa-install-path)))
 
         (let ((dev-org-path (directory-file-name org-dev-lisp-directory))
               (dev-org-info (directory-file-name org-dev-info-directory)))
@@ -405,6 +404,7 @@ context.  When called with an argument, unconditionally call
                                     ((modi/org-in-any-block-p) #'modi/org-split-block)
                                     (t #'org-insert-heading)))))
     (advice-add 'org-meta-return :override #'modi/org-meta-return)
+    ;; (advice-remove 'org-meta-return #'modi/org-meta-return)
 
     ;; Make C-u C-return insert heading *at point* (not respecting content),
     ;; even when the point is directly after a list item.
