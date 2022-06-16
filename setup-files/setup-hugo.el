@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-04-11 22:03:15 kmodi>
+;; Time-stamp: <2022-06-16 11:20:36 kmodi>
 
 ;; Hugo
 ;; https://gohugo.io
@@ -105,31 +105,36 @@ See `org-capture-templates' for more information."
                  (function org-hugo-new-subtree-post-capture-template))))
 
 (with-eval-after-load 'org
+  ;; Companion post: https://scripter.co/org-show-only-post-subtree-headings/
   (defun modi/org-hugo-collapse-all-posts ()
     "Collapse all post subtrees in the current Org file.
 
-Also collapse:
-- The Footnotes subtree and COMMENT subtrees if present.
-- Subtrees that have the CUSTOM_ID property set.
+Also collapse the Footnotes subtree and COMMENT subtrees if
+present.
 
 A post subtree is one that has the EXPORT_FILE_NAME property
 set."
     (interactive)
-    (widen)
-    (org-show-all '(headings))
-    ;; Collapse all the post subtrees (ones with EXPORT_FILE_NAME
-    ;; property set).
-    (save-excursion
-      (goto-char (point-min))
-      (org-map-entries
-       (lambda ()
-         (hide-subtree))
-       "EXPORT_FILE_NAME<>\"\"|CUSTOM_ID<>\"\""))
-    ;; Also hide Footnotes and comments.
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward "^\\(\\* Footnotes\\|\\*+ COMMENT\\)" nil :noerror)
-        (hide-subtree))))
+    ;; https://lists.gnu.org/r/emacs-orgmode/2022-05/msg00807.html
+    ;; outline.el functions will not be supported by Org starting
+    ;; version 9.6+. Use org-fold-* functions instead of outline-*
+    ;; functions.
+    (cl-flet ((show-all (if (fboundp 'org-fold-show-all)
+                            #'org-fold-show-all
+                          #'org-show-all))
+              (hide-subtree (if (fboundp 'org-fold-hide-subtree)
+                                #'org-fold-hide-subtree
+                              #'outline-hide-subtree)))
+      (widen)
+      (show-all '(headings))
+      ;; Collapse all the post subtrees (ones with EXPORT_FILE_NAME
+      ;; property set).
+      (org-map-entries #'hide-subtree "EXPORT_FILE_NAME<>\"\"" 'file)
+      ;; Also hide Footnotes and comments.
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward "^\\(\\* Footnotes\\|\\*+ COMMENT\\)" nil :noerror)
+          (hide-subtree)))))
 
   ;; C-u C-c TAB in Org mode -> `modi/org-hugo-collapse-all-posts'
   (defun modi/org-ctrl-c-tab-advice (&rest args)
