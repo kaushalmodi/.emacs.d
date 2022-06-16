@@ -9,7 +9,7 @@
 ;; Keywords: languages
 ;; The "Version" is the date followed by the decimal rendition of the Git
 ;;     commit hex.
-;; Version: 2022.06.13.263427885
+;; Version: 2022.06.16.010301656
 
 ;; Yoni Rabkin <yoni@rabkins.net> contacted the maintainer of this
 ;; file on 19/3/2008, and the maintainer agreed that when a bug is
@@ -124,7 +124,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2022-06-13-fb3972d-vpo"
+(defconst verilog-mode-version "2022-06-16-09d30d8-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -3372,7 +3372,7 @@ See also `verilog-font-lock-extra-types'.")
                    1 'font-lock-constant-face append)
                  ;; Fontify variable names in declarations
                  (list
-                  verilog-declaration-re
+                  verilog-declaration-re-2-no-macro ;declaration type with optional (un)signed keyword and range
                   (list
                    ;; Anchored matcher (lookup Search-Based Fontification)
                    'verilog-declaration-varname-matcher
@@ -3396,8 +3396,8 @@ See also `verilog-font-lock-extra-types'.")
                  '("\\(\\\\\\S-*\\s-\\)"  0 font-lock-function-name-face)
                  ;; Fontify macro definitions/ uses
                  '("`\\s-*[A-Za-z][A-Za-z0-9_]*" 0 (if (boundp 'font-lock-preprocessor-face)
-                                                      'font-lock-preprocessor-face
-                                                    'font-lock-type-face))
+                                                       'font-lock-preprocessor-face
+                                                     'font-lock-type-face))
                  ;; Fontify delays/numbers
                  '("\\(@\\)\\|\\([ \t\n\f\r]#\\s-*\\(\\([0-9_.]+\\('s?[hdxbo][0-9a-fA-F_xz]*\\)?\\)\\|\\(([^()]+)\\|\\sw+\\)\\)\\)"
                    0 font-lock-type-face append)
