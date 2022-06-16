@@ -9,7 +9,7 @@
 ;; Keywords: languages
 ;; The "Version" is the date followed by the decimal rendition of the Git
 ;;     commit hex.
-;; Version: 2022.01.02.238185360
+;; Version: 2022.06.13.263427885
 
 ;; Yoni Rabkin <yoni@rabkins.net> contacted the maintainer of this
 ;; file on 19/3/2008, and the maintainer agreed that when a bug is
@@ -124,7 +124,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2022-01-02-e326b90-vpo"
+(defconst verilog-mode-version "2022-06-13-fb3972d-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -722,6 +722,13 @@ Otherwise, line them up."
   :group 'verilog-mode-indent
   :type 'boolean)
 (put 'verilog-indent-begin-after-if 'safe-local-variable #'verilog-booleanp)
+
+(defcustom verilog-indent-class-inside-pkg t
+  "Non-nil means indent classes inside packages.
+Otherwise, classes have zero indentation."
+  :group 'verilog-mode-indent
+  :type 'boolean)
+(put 'verilog-indent-class-inside-pkg 'safe-local-variable #'verilog-booleanp)
 
 (defcustom verilog-align-ifelse nil
   "Non-nil means align `else' under matching `if'.
@@ -2845,12 +2852,26 @@ find the errors."
 
 (defconst verilog-declaration-re-1-no-macro (concat "^" verilog-declaration-re-2-no-macro))
 
+(defconst verilog-interface-modport-re "\\(\\s-*\\([a-zA-Z0-9`_$]+\\.[a-zA-Z0-9`_$]+\\)[ \t\f]+\\)")
+(defconst verilog-declaration-or-iface-mp-re
+  (concat "\\(" verilog-declaration-re "\\|" verilog-interface-modport-re "\\)"))
+(defconst verilog-declaration-or-iface-mp-re-1-no-macro
+  (concat "\\(" verilog-declaration-re-1-no-macro "\\|" verilog-interface-modport-re "\\)"))
+(defconst verilog-declaration-or-iface-mp-re-2-no-macro
+  (concat "\\(" verilog-declaration-re-2-no-macro "\\)\\|\\(" verilog-interface-modport-re "\\)"))
+
 (defconst verilog-defun-re
   (eval-when-compile (verilog-regexp-words '("macromodule" "connectmodule" "module" "class" "program" "interface" "package" "primitive" "config"))))
 (defconst verilog-end-defun-re
   (eval-when-compile (verilog-regexp-words '("endconnectmodule" "endmodule" "endclass" "endprogram" "endinterface" "endpackage" "endprimitive" "endconfig"))))
+(defconst verilog-defun-no-class-re
+  (eval-when-compile (verilog-regexp-words '("macromodule" "connectmodule" "module" "program" "interface" "package" "primitive" "config"))))
+(defconst verilog-end-defun-no-class-re
+  (eval-when-compile (verilog-regexp-words '("endconnectmodule" "endmodule" "endprogram" "endinterface" "endpackage" "endprimitive" "endconfig"))))
 (defconst verilog-zero-indent-re
   (concat verilog-defun-re "\\|" verilog-end-defun-re))
+(defconst verilog-zero-indent-no-class-re
+  (concat verilog-defun-no-class-re "\\|" verilog-end-defun-no-class-re))
 (defconst verilog-inst-comment-re
   (eval-when-compile (verilog-regexp-words '("Outputs" "Inouts" "Inputs" "Interfaces" "Interfaced"))))
 
@@ -3622,12 +3643,10 @@ is 0.
 Meaning of *single* declaration:
    E.g. In a module's port-list -
            module test(input clk, rst, x, output [1:0] y);
-   Here 'input clk, rst, x' is 1 *single* declaration statement,
-and 'output [1:0] y' is the other single declaration.  In the 1st single
-declaration, POINT is moved to start of 'clk'.  And in the 2nd declaration,
-POINT is moved to 'y'."
-
-
+   Here `input clk, rst, x' is 1 *single* declaration statement,
+and `output [1:0] y' is the other single declaration.  In the 1st single
+declaration, POINT is moved to start of `clk'.  And in the 2nd declaration,
+POINT is moved to `y'."
   (let (maxpoint old-point)
     ;; maxpoint = min(curr-point + limit, buffer-size)
     (setq maxpoint (if (eq limit 0)
@@ -3751,7 +3770,17 @@ Use filename, if current buffer being edited shorten to just buffer name."
 	      (setq found 't))))))
      ((looking-at verilog-end-block-re)
       (verilog-leap-to-head))
-     ((looking-at "\\(endmodule\\>\\)\\|\\(\\<endprimitive\\>\\)\\|\\(\\<endclass\\>\\)\\|\\(\\<endprogram\\>\\)\\|\\(\\<endinterface\\>\\)\\|\\(\\<endpackage\\>\\)\\|\\(\\<endconnectmodule\\>\\)")
+     (;; Fallback, when current word does not match `verilog-end-block-re'
+      (looking-at (concat
+                   "\\(\\<endmodule\\>\\)\\|"        ; 1
+                   "\\(\\<endprimitive\\>\\)\\|"     ; 2
+                   "\\(\\<endclass\\>\\)\\|"         ; 3
+                   "\\(\\<endprogram\\>\\)\\|"       ; 4
+                   "\\(\\<endinterface\\>\\)\\|"     ; 5
+                   "\\(\\<endpackage\\>\\)\\|"       ; 6
+                   "\\(\\<endconnectmodule\\>\\)\\|" ; 7
+                   "\\(\\<endchecker\\>\\)\\|"       ; 8
+                   "\\(\\<endconfig\\>\\)"))         ; 9
       (cond
        ((match-end 1)
 	(verilog-re-search-backward "\\<\\(macro\\)?module\\>" nil 'move))
@@ -3766,7 +3795,11 @@ Use filename, if current buffer being edited shorten to just buffer name."
        ((match-end 6)
 	(verilog-re-search-backward "\\<package\\>" nil 'move))
        ((match-end 7)
-       (verilog-re-search-backward "\\<connectmodule\\>" nil 'move))
+        (verilog-re-search-backward "\\<connectmodule\\>" nil 'move))
+       ((match-end 8)
+        (verilog-re-search-backward "\\<checker\\>" nil 'move))
+       ((match-end 9)
+        (verilog-re-search-backward "\\<config\\>" nil 'move))
        (t
 	(goto-char st)
 	(backward-sexp 1))))
@@ -3840,16 +3873,16 @@ Use filename, if current buffer being edited shorten to just buffer name."
         ;; Search forward for matching endtask
         (setq reg "\\<endtask\\>" )
         (setq nest 'no))
-       ((match-end 12)
+       ((match-end 13)
         ;; Search forward for matching endgenerate
         (setq reg "\\(\\<generate\\>\\)\\|\\(\\<endgenerate\\>\\)" ))
-       ((match-end 13)
+       ((match-end 14)
         ;; Search forward for matching endgroup
         (setq reg "\\(\\<covergroup\\>\\)\\|\\(\\<endgroup\\>\\)" ))
-       ((match-end 14)
+       ((match-end 15)
         ;; Search forward for matching endproperty
         (setq reg "\\(\\<property\\>\\)\\|\\(\\<endproperty\\>\\)" ))
-       ((match-end 15)
+       ((match-end 16)
         ;; Search forward for matching endsequence
         (setq reg "\\(\\<\\(rand\\)?sequence\\>\\)\\|\\(\\<endsequence\\>\\)" )
         (setq md 3)) ; 3 to get to endsequence in the reg above
@@ -3872,7 +3905,9 @@ Use filename, if current buffer being edited shorten to just buffer name."
 		      (setq here (point)) ; remember where we started
 		      (goto-char (match-beginning 1))
 		      (cond
-		       ((if (or
+                       ((verilog-looking-back "\\(\\<typedef\\>\\s-+\\)" (point-at-bol)) ; avoid nesting for typedef class defs
+                        (forward-word-strictly 1))
+                       ((if (or
 			     (looking-at verilog-disable-fork-re)
 			     (and (looking-at "fork")
 				  (progn
@@ -3887,28 +3922,37 @@ Use filename, if current buffer being edited shorten to just buffer name."
 		  (throw 'skip 1))))))
 
      ((looking-at (concat
-		   "\\(\\<\\(macro\\)?module\\>\\)\\|"
-		   "\\(\\<primitive\\>\\)\\|"
-		   "\\(\\<class\\>\\)\\|"
-		   "\\(\\<program\\>\\)\\|"
-		   "\\(\\<interface\\>\\)\\|"
-                  "\\(\\<package\\>\\)\\|"
-                  "\\(\\<connectmodule\\>\\)"))
+                   "\\(\\<\\(macro\\)?module\\>\\)\\|"                         ; 1,2
+                   "\\(\\<primitive\\>\\)\\|"                                  ; 3
+                   "\\(\\(\\(interface\\|virtual\\)\\s-+\\)?\\<class\\>\\)\\|" ; 4,5,6
+                   "\\(\\<program\\>\\)\\|"                                    ; 7
+                   "\\(\\<interface\\>\\)\\|"                                  ; 8
+                   "\\(\\<package\\>\\)\\|"                                    ; 9
+                   "\\(\\<connectmodule\\>\\)\\|"                              ; 10
+                   "\\(\\<generate\\>\\)\\|"                                   ; 11
+                   "\\(\\<checker\\>\\)\\|"                                    ; 12
+                   "\\(\\<config\\>\\)"))                                      ; 13
       (cond
        ((match-end 1)
 	(verilog-re-search-forward "\\<endmodule\\>" nil 'move))
-       ((match-end 2)
-	(verilog-re-search-forward "\\<endprimitive\\>" nil 'move))
        ((match-end 3)
-	(verilog-re-search-forward "\\<endclass\\>" nil 'move))
+	(verilog-re-search-forward "\\<endprimitive\\>" nil 'move))
        ((match-end 4)
-	(verilog-re-search-forward "\\<endprogram\\>" nil 'move))
-       ((match-end 5)
-	(verilog-re-search-forward "\\<endinterface\\>" nil 'move))
-       ((match-end 6)
-	(verilog-re-search-forward "\\<endpackage\\>" nil 'move))
+	(verilog-re-search-forward "\\<endclass\\>" nil 'move))
        ((match-end 7)
-       (verilog-re-search-forward "\\<endconnectmodule\\>" nil 'move))
+	(verilog-re-search-forward "\\<endprogram\\>" nil 'move))
+       ((match-end 8)
+	(verilog-re-search-forward "\\<endinterface\\>" nil 'move))
+       ((match-end 9)
+	(verilog-re-search-forward "\\<endpackage\\>" nil 'move))
+       ((match-end 10)
+        (verilog-re-search-forward "\\<endconnectmodule\\>" nil 'move))
+       ((match-end 11)
+        (verilog-re-search-forward "\\<endgenerate\\>" nil 'move))
+       ((match-end 12)
+        (verilog-re-search-forward "\\<endchecker\\>" nil 'move))
+       ((match-end 13)
+        (verilog-re-search-forward "\\<endconfig\\>" nil 'move))
        (t
 	(goto-char st)
 	(if (= (following-char) ?\) )
@@ -3985,6 +4029,9 @@ Variables controlling indentation/edit style:
    otherwise you get:
       if (a)
       begin
+ `verilog-indent-class-inside-pkg'  (default t)
+   Non-nil means indent classes inside packages.
+   Otherwise, classes have zero indentation.
  `verilog-auto-endcomments'         (default t)
    Non-nil means a comment /* ... */ is set after the ends which ends
    cases, tasks, functions and modules.
@@ -4638,7 +4685,10 @@ Uses `verilog-scan' cache."
                 (= (preceding-char) ?\;)
 		(progn
 		  (verilog-backward-token)
-		  (looking-at verilog-ends-re)))
+		  (if verilog-indent-lists
+                      (looking-at verilog-ends-re)
+                    (or (looking-at verilog-ends-re)
+                        (looking-at "begin")))))
             (progn
               (goto-char pt)
               (throw 'done t)))))
@@ -5769,7 +5819,6 @@ Return a list of two elements: (INDENT-TYPE INDENT-LEVEL)."
                    ;; if we are in a parenthesized list, and the user likes to indent these, return.
                    ;; unless we are in the newfangled coverpoint or constraint blocks
                    (if (and
-                        verilog-indent-lists
                         (verilog-in-paren)
                         (not (verilog-in-coverage-p))
                         )
@@ -6105,6 +6154,23 @@ of the appropriate enclosing block."
 	(ding 't)
 	(setq nest 0))))))
 
+(defun verilog-leap-to-class-head ()
+  (let ((nest 1)
+        (class-re (concat "\\(\\<class\\>\\)\\|\\(\\<endclass\\>\\)")))
+    (catch 'skip
+      (while (verilog-re-search-backward class-re nil 'move)
+        (cond
+         ((match-end 1) ; begin
+          (when (verilog-looking-back "\\(\\<interface\\>\\s-+\\)\\|\\(\\<virtual\\>\\s-+\\)" (point-at-bol))
+            (goto-char (match-beginning 0)))
+          (unless (verilog-looking-back "\\<typedef\\>\\s-+" (point-at-bol))
+            (setq nest (1- nest))
+            (if (= 0 nest)
+	        ;; Now previous line describes syntax
+	        (throw 'skip 1))))
+	 ((match-end 2) ; end
+          (setq nest (1+ nest))))))))
+
 (defun verilog-leap-to-head ()
   "Move point to the head of this block.
 Jump from end to matching begin, from endcase to matching case, and so on."
@@ -6132,7 +6198,9 @@ Jump from end to matching begin, from endcase to matching case, and so on."
       (setq reg "\\(\\<fork\\>\\)\\|\\(\\<join\\(_any\\|_none\\)?\\>\\)" ))
      ((looking-at "\\<endclass\\>")
       ;; 5: Search back for matching class
-      (setq reg "\\(\\<class\\>\\)\\|\\(\\<endclass\\>\\)" ))
+      (catch 'nesting
+        (verilog-leap-to-class-head)
+        (setq reg nil)))
      ((looking-at "\\<endtable\\>")
       ;; 6: Search back for matching table
       (setq reg "\\(\\<table\\>\\)\\|\\(\\<endtable\\>\\)" ))
@@ -6170,7 +6238,13 @@ Jump from end to matching begin, from endcase to matching case, and so on."
       (setq reg "\\(\\<\\(rand\\)?sequence\\>\\)\\|\\(\\<endsequence\\>\\)" ))
      ((looking-at "\\<endclocking\\>")
       ;; 12: Search back for matching clocking
-      (setq reg "\\(\\<clocking\\)\\|\\(\\<endclocking\\>\\)" )))
+      (setq reg "\\(\\<clocking\\)\\|\\(\\<endclocking\\>\\)" ))
+     ;; Search back for matching package
+     ((looking-at "\\<endpackage\\>")
+      (setq reg "\\(\\<package\\>\\)" ))
+     ;; Search back for matching program
+     ((looking-at "\\<endprogram\\>")
+      (setq reg "\\(\\<program\\>\\)" )))
     (if reg
 	(catch 'skip
 	  (if (eq nesting 'yes)
@@ -6620,7 +6694,7 @@ Also move point to constraint."
                        ))
             ;; if first word token not keyword, it maybe the instance name
             ;;   check next word token
-            (if (looking-at "\\<\\w+\\>\\|\\s-*(\\s-*\\S-+")
+            (if (looking-at "\\<\\w+\\>\\|\\s-*[\[(}]\\s-*\\S-+")
                 (progn (verilog-beg-of-statement)
                        (if (and
                             (not (string-match verilog-named-block-re (buffer-substring pt (point)))) ;; Abort if 'begin' keyword is found
@@ -6893,14 +6967,21 @@ Only look at a few lines to determine indent level."
      (; handle inside parenthetical expressions
       (eq type 'cparenexp)
       (let* ( here
+              (close-par (looking-at ")"))
 	      (val (save-excursion
 		     (verilog-backward-up-list 1)
-		     (forward-char 1)
                      (if verilog-indent-lists
-                         (skip-chars-forward " \t")
-                       (verilog-forward-syntactic-ws))
+                         (progn
+		           (forward-char 1)
+                           (skip-chars-forward " \t"))
+                       (verilog-beg-of-statement-1)
+                       (when (looking-at "\\<\\(function\\|task\\)\\>")
+                         (verilog-beg-of-statement))) ; find virtual/protected/static
                      (setq here (point))
-                     (current-column)))
+                     (if (or verilog-indent-lists
+                             close-par)
+                         (current-column)
+                       (+ (current-column) verilog-indent-level))))
 
 	      (decl (save-excursion
 		      (goto-char here)
@@ -6933,7 +7014,10 @@ Only look at a few lines to determine indent level."
 
      (;-- defun
       (and (eq type 'defun)
-	   (looking-at verilog-zero-indent-re))
+	   (or (and verilog-indent-class-inside-pkg
+                    (looking-at verilog-zero-indent-no-class-re))
+               (and (not verilog-indent-class-inside-pkg)
+                    (looking-at verilog-zero-indent-re))))
       (indent-line-to 0))
 
      (;-- declaration
@@ -7058,25 +7142,19 @@ _ARG is ignored, for `comment-indent-function' compatibility."
   "Line up declarations around point.
 Be verbose about progress unless optional QUIET set."
   (interactive)
-  (let* ((m1 (make-marker))
-         (e (point))
-	 el
-         r
-	 (here (point))
-         ind
-         start
-         startpos
-         end
-         endpos
-         base-ind
-         )
+  (let ((m1 (make-marker))
+        (e (point))
+	(here (point))
+	el r ind start startpos end endpos base-ind)
     (save-excursion
       (if (progn
             ;; (verilog-beg-of-statement-1)
             (beginning-of-line)
             (verilog-forward-syntactic-ws)
-            (and (not (verilog-in-directive-p))  ; could have `define input foo
-                 (looking-at verilog-declaration-re)))
+            (or (and (not (verilog-in-directive-p))  ; could have `define input foo
+                     (looking-at verilog-declaration-re))
+                (and (verilog-parenthesis-depth)
+                     (looking-at verilog-interface-modport-re))))
 	  (progn
 	    (if (verilog-parenthesis-depth)
 		;; in an argument list or parameter block
@@ -7084,8 +7162,7 @@ Be verbose about progress unless optional QUIET set."
 		      start (progn
 			      (goto-char e)
 			      (verilog-backward-up-list 1)
-                              (forward-line)  ; ignore ( input foo,
-			      (verilog-re-search-forward verilog-declaration-re el 'move)
+			      (verilog-re-search-forward verilog-declaration-or-iface-mp-re el 'move)
 			      (goto-char (match-beginning 0))
 			      (skip-chars-backward " \t")
 			      (point))
@@ -7099,7 +7176,8 @@ Be verbose about progress unless optional QUIET set."
 		      endpos (set-marker (make-marker) end)
 		      base-ind (progn
 				 (goto-char start)
-				 (forward-char 1)
+                                 (unless (verilog-looking-back "(" (point-at-bol))
+                                   (forward-char 1))
 				 (skip-chars-forward " \t")
 				 (current-column)))
 	      ;; in a declaration block (not in argument list)
@@ -7110,7 +7188,6 @@ Be verbose about progress unless optional QUIET set."
 				   (not (bobp)))
 			 (skip-chars-backward " \t")
 			 (setq e (point))
-			 (beginning-of-line)
 			 (verilog-backward-syntactic-ws)
 			 (backward-char)
 			 (verilog-beg-of-statement-1))
@@ -7149,7 +7226,8 @@ Be verbose about progress unless optional QUIET set."
                 (if (< (point) e)
                     (verilog-re-search-forward "[ \t\n\f]" e 'move)))
 	       (t
-		(just-one-space)
+                (unless (verilog-looking-back "(" (point-at-bol))
+                  (just-one-space))
 		(verilog-re-search-forward "[ \t\n\f]" e 'move)))
 	      ;;(forward-line)
 	      )
@@ -7167,7 +7245,7 @@ Be verbose about progress unless optional QUIET set."
 	      (cond
 	       ((or (and verilog-indent-declaration-macros
 			 (looking-at verilog-declaration-re-2-macro))
-		    (looking-at verilog-declaration-re-2-no-macro))
+		    (looking-at verilog-declaration-or-iface-mp-re-2-no-macro))
 		(let ((p (match-end 0)))
 		  (set-marker m1 p)
 		  (if (verilog-re-search-forward "[[#`]" p 'move)
@@ -7374,13 +7452,14 @@ Region is defined by B and EDPOS."
 	(if (verilog-re-search-forward
 	     (or (and verilog-indent-declaration-macros
 		      verilog-declaration-re-1-macro)
-		 verilog-declaration-re-1-no-macro) e 'move)
+                 verilog-declaration-or-iface-mp-re-2-no-macro) e 'move)
 	    (progn
 	      (goto-char (match-end 0))
 	      (verilog-backward-syntactic-ws)
 	      (if (> (current-column) ind)
 		  (setq ind (current-column)))
-	      (goto-char (match-end 0)))))
+              (goto-char (match-end 0))
+              (forward-line 1))))
       (if (> ind 0)
 	  (1+ ind)
 	;; No lineup-string found
@@ -9827,8 +9906,7 @@ variable over and over when many modules are compiled together, put a test
 around the inside each include file:
 
 foo.v (an include file):
-        \\=`ifdef _FOO_V        // include if not already included
-        \\=`else
+        \\=`ifndef _FOO_V        // include if not already included
         \\=`define _FOO_V
         ... contents of file
         \\=`endif // _FOO_V"
@@ -14950,6 +15028,7 @@ Files are checked based on `verilog-library-flags'."
        verilog-highlight-modules
        verilog-highlight-translate-off
        verilog-indent-begin-after-if
+       verilog-indent-class-inside-pkg
        verilog-indent-declaration-macros
        verilog-indent-level
        verilog-indent-level-behavioral
