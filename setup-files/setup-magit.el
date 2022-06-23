@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-10-22 13:28:59 kmodi>
+;; Time-stamp: <2022-06-23 18:11:47 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -52,7 +52,30 @@
       ("P" magit-push-popup "push popup")
       ("F" magit-pull-popup "pull popup")
       ("W" magit-format-patch "format patch")
-      ("$" magit-process "process"))))
+      ("$" magit-process "process")))
+
+  ;; https://scripter.co/view-github-pull-requests-in-magit/
+  ;; https://endlessparentheses.com/automatically-configure-magit-to-access-github-prs.html
+  (defun modi/add-PR-fetch-ref (&optional remote-name)
+    "If refs/pull is not defined on a GH repo, define it.
+
+If REMOTE-NAME is not specified, it defaults to the `remote' set
+for the \"main\" or \"master\" branch."
+    (let* ((remote-name (or remote-name
+                            (magit-get "branch" "main" "remote")
+                            (magit-get "branch" "master" "remote")))
+           (remote-url (magit-get "remote" remote-name "url"))
+           (fetch-refs (and (stringp remote-url)
+                            (string-match "github" remote-url)
+                            (magit-get-all "remote" remote-name "fetch")))
+           ;; https://oremacs.com/2015/03/11/git-tricks/
+           (fetch-address (format "+refs/pull/*/head:refs/pull/%s/*" remote-name)))
+      (unless (member fetch-address fetch-refs)
+        (magit-git-string "config"
+                          "--add"
+                          (format "remote.%s.fetch" remote-name)
+                          fetch-address))))
+  (add-hook 'magit-mode-hook #'modi/add-PR-fetch-ref))
 
 (use-package magit-log
   :init
