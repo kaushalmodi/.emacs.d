@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-06-23 18:11:47 kmodi>
+;; Time-stamp: <2022-07-14 15:44:04 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -70,11 +70,12 @@ for the \"main\" or \"master\" branch."
                             (magit-get-all "remote" remote-name "fetch")))
            ;; https://oremacs.com/2015/03/11/git-tricks/
            (fetch-address (format "+refs/pull/*/head:refs/pull/%s/*" remote-name)))
-      (unless (member fetch-address fetch-refs)
-        (magit-git-string "config"
-                          "--add"
-                          (format "remote.%s.fetch" remote-name)
-                          fetch-address))))
+      (when remote-name
+        (unless (member fetch-address fetch-refs)
+          (magit-git-string "config"
+                            "--add"
+                            (format "remote.%s.fetch" remote-name)
+                            fetch-address)))))
   (add-hook 'magit-mode-hook #'modi/add-PR-fetch-ref))
 
 (use-package magit-log
