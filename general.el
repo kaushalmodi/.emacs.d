@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-22 14:43:55 kmodi>
+;; Time-stamp: <2022-07-22 09:18:53 kmodi>
 
 ;; Collection of general purposes defuns and macros
 
@@ -139,8 +139,8 @@ packages.")
       ;;   "
       ;; (message "%S" shell-return)
       (when (not (string= "" shell-return))
-	(string-match ".*[/ ]\\([^ ]+?\\)\\s-*$" shell-return)
-	(match-string-no-properties 1 shell-return))))
+        (string-match ".*[/ ]\\([^ ]+?\\)\\s-*$" shell-return)
+        (match-string-no-properties 1 shell-return))))
   "Name of git branch from which the current emacs is built.")
 
 (defun emacs-version-dev (here)
