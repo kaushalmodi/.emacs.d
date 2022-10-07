@@ -7,6 +7,9 @@
 (defvar modi/ox-hugo-dir (file-name-as-directory (expand-file-name "elisp/ox-hugo" user-emacs-directory))
   "Directory containing ox-hugo package.")
 
+(defvar modi/tomelr-dir (file-name-as-directory (expand-file-name "elisp/tomelr" user-emacs-directory))
+  "Directory containing tomelr package.")
+
 (defvar modi/ox-hugo-autoloads-file (expand-file-name "ox-hugo-autoloads.el" modi/ox-hugo-dir)
   "Path to ox-hugo package's generated autoloads file.")
 
@@ -16,6 +19,9 @@
   (let ((generated-autoload-file modi/ox-hugo-autoloads-file))
     (update-directory-autoloads modi/ox-hugo-dir)))
 (load-file modi/ox-hugo-autoloads-file)
+
+(use-package tomelr
+  :load-path modi/tomelr-dir)
 
 (use-package ox-hugo
   :load-path modi/ox-hugo-dir
