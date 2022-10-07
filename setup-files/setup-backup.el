@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 15:17:07 kmodi>
+;; Time-stamp: <2022-06-17 14:19:51 kmodi>
 
 ;; Backups
 
@@ -14,8 +14,8 @@
 ;; numbered backups.
 (setq version-control :make-numbered-backups)
 
-(setq kept-new-versions 4) ; default 2
-(setq kept-old-versions 2) ; default 2
+(setq kept-new-versions 20) ; default 2
+(setq kept-old-versions 5) ; default 2
 ;; If there are backups numbered 1, 2, 3, 5, and 7, and both of the above
 ;; variables have the value 2, then the backups numbered 1 and 2 are kept
 ;; as old versions and those numbered 5 and 7 are kept as new versions;
