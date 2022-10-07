@@ -1,4 +1,4 @@
-# Time-stamp: <2018-02-02 13:03:05 kmodi>
+# Time-stamp: <2022-06-16 14:25:43 kmodi>
 *Common Org SETUPFILE*
 
 *NOTE*: Do *not* include this file to an Org file using =#+include: ...=.
@@ -13,7 +13,7 @@ Or (even better, though you would need to use Org built from its =master= branch
 as of <2017-07-17 Mon>):
 
 #+begin_src org
-#+setupfile: https://cdn.rawgit.com/kaushalmodi/.emacs.d/master/misc/org-setupfile.org
+#+setupfile: https://raw.githubusercontent.com/kaushalmodi/.emacs.d/master/misc/org-setupfile.org
 #+end_src
 
 * Latex Setup
