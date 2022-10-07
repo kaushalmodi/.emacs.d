@@ -159,22 +159,29 @@ If HERE is non-nil, also insert the string at point."
     emacs-build-info))
 
 (defmacro emacs-pkg-debug-setup (pkg-alist &rest body)
-  "Install packages in PKG-ALIST and evaluate BODY.
+  "Install packages in PKG-ALIST and evaluate BODY in a temporary directory.
+
+The packages are installed in
+\"`temporary-file-directory'/`user-login-name'/.emacs.d-debug/elpa_`emacs-major-version'/\".
+
 Each element of PKG-ALIST has the form (((ID . LOCATION) . (PKG1 PKG2 ..)) ..).
 The ID and LOCATION are the same as the ones in `package-archives'.
 PKG1, PKG2, .. are package names from the ID archive.
+
+If a package is available in one of the default archives from
+`package-archives', leave the ID as nil.
 
 Example usage:
 
 1. Launch 'emacs -Q'.
 2. Copy this macro definition to its scratch buffer and evaluate it.
 3. Evaluate a minimum working example using this macro as below:
-     (emacs-pkg-debug-setup '(;; Install hydra from GNU Elpa
+     (emacs-pkg-debug-setup \\='(;; Install Hydra from GNU Elpa.
                               (nil . (hydra))
-                              ;; Install org from Org Elpa
-                              ((\"org\" . \"http://orgmode.org/elpa/\") . (org)))
-       ;; Then evaluate the below forms
-       (org-mode)) "
+                              ;; Install ox-hugo from Melpa.
+                              ((\"melpa\" . \"https://melpa.org/packages/\") . (ox-hugo)))
+       ;; Then evaluate the below forms.
+       (org-version nil :full)) "
   (declare (indent 1) (debug t))
   `(progn
      (require 'package)
@@ -183,12 +190,14 @@ Example usage:
                                   dir))
      (setq package-user-dir (let ((elpa-dir-name (format "elpa_%s" emacs-major-version))) ;default = ~/.emacs.d/elpa/
                               (file-name-as-directory (expand-file-name elpa-dir-name user-emacs-directory))))
-     (let (archive pkgs)
+     (let (pkgs)
        (dolist (archive-alist ,pkg-alist)
-	 (setq archive (car archive-alist))
-	 (when archive
+         (when-let* ((archive (car archive-alist)))
            (add-to-list 'package-archives archive :append))
          (setq pkgs (append pkgs (cdr archive-alist))))
+       ;; The `package-initialize' call is needed even in Emacs 27+
+       ;; because we need to add our custom `package-user-directory'
+       ;; and the underlying packages to the `load-path'.
        (package-initialize)
        (package-refresh-contents)
 
@@ -198,8 +207,7 @@ Example usage:
          (require pkg))
 
        ,@body)))
-;; (emacs-pkg-debug-setup '((nil . (hydra))
-;;                          (("melpa" . "http://melpa.org/packages/") . (use-package)))
+;; (emacs-pkg-debug-setup '((("melpa" . "https://melpa.org/packages/") . (use-package ox-hugo)))
 ;;   (message "Done!"))
 
 ;; http://stackoverflow.com/a/20747279/1219634
