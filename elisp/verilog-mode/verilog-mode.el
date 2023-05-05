@@ -9,7 +9,7 @@
 ;; Keywords: languages
 ;; The "Version" is the date followed by the decimal rendition of the Git
 ;;     commit hex.
-;; Version: 2022.06.16.131522631
+;; Version: 2023.03.01.209837472
 
 ;; Yoni Rabkin <yoni@rabkins.net> contacted the maintainer of this
 ;; file on 19/3/2008, and the maintainer agreed that when a bug is
@@ -124,7 +124,7 @@
 ;;
 
 ;; This variable will always hold the version number of the mode
-(defconst verilog-mode-version "2022-06-16-7d6e047-vpo"
+(defconst verilog-mode-version "2023-03-01-c81dda0-vpo"
   "Version of this Verilog mode.")
 (defconst verilog-mode-release-emacs nil
   "If non-nil, this version of Verilog mode was released with Emacs itself.")
@@ -3441,7 +3441,7 @@ See also `verilog-font-lock-extra-types'.")
 		           1 'font-lock-constant-face append)
                  ;; Fontify variable names in declarations
                  (list
-                  verilog-declaration-re-2-no-macro ;declaration type with optional (un)signed keyword and range
+                  verilog-declaration-re
                   (list
                    ;; Anchored matcher (lookup Search-Based Fontification)
                    'verilog-declaration-varname-matcher
