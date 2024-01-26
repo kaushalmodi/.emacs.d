@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-08-19 14:20:16 kmodi>
+;; Time-stamp: <2024-01-26 18:46:37 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -113,25 +113,6 @@ It is assumed that the author has only one or two names."
         (setf (nth 1 (car args)) author-abbr))
       (car args))                       ;'(REV AUTHOR-ABBR DATE)
     (advice-add 'magit-log-format-margin :filter-args #'modi/magit-log--abbreviate-author)))
-
-;; https://github.com/dandavison/magit-delta
-;; Requires the user to download the `delta' executable and put it somewhere
-;; in the PATH before starting emacs.
-;;
-;; Due to a current issue in delta, you cannot enable its `line-numbers' feature without
-;; messing up the diffs in magit. A workaround is that you can enable `side-by-side'
-;; mode. That shows line numbers in side-by-side mode in the terminal, but leaves
-;; `magit-delta' unaffected!
-;;
-;; [delta]
-;;     # https://github.com/dandavison/magit-delta/issues/13
-;;     # line-numbers = true    # Don't do this.. messes up diffs in magit
-;;     #
-;;     side-by-side = true      # Display a side-by-side diff view instead of the traditional view
-(when (executable-find "delta")
-  (use-package magit-delta
-    :ensure t
-    :hook (magit-mode . magit-delta-mode)))
 
 
 (provide 'setup-magit)
