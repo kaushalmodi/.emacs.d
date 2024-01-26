@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-04-11 08:51:42 kmodi>
+;; Time-stamp: <2024-01-26 18:44:36 kmodi>
 
 ;; Launcher
 
@@ -29,7 +29,6 @@
   ("l"        modi/run-current-file "load current file")
   ("L"       (modi/run-current-file 4) "load emacs init")
   ("m"       woman "man/woman")
-  ("n"       neotree-toggle "neotree")
   ("o"       org-capture "org capture")
   ("p"       (call-interactively (if (package-installed-p 'paradox)
                                      #'paradox-list-packages ;Launch paradox if installed

@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-12-14 23:28:01 kmodi>
+;; Time-stamp: <2024-01-26 18:44:11 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -98,7 +98,6 @@ need Org version to be at least 9.x.")
     minibuffer-line
     multi-term
     multiple-cursors
-    neotree
     nov    ;Ebook (.epub) reader
     org-cliplink ; paste copied links as well-formatted org-mode links with desc
     org-tree-slide
@@ -271,7 +270,6 @@ need Org version to be at least 9.x.")
 (require 'setup-manage-minor-mode)
 (require 'setup-mastodon)
 (require 'setup-multiple-cursors)
-(require 'setup-neotree)
 (require 'setup-news)
 (require 'setup-nov)
 (require 'setup-org)

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-05-11 13:40:41 kmodi>
+;; Time-stamp: <2024-01-26 18:45:13 kmodi>
 
 ;; Toggles
 
@@ -24,7 +24,6 @@
   ("k"     key-chord-mode "key chord mode" :color red)
   ("l"     modi/linum-toggle "line numbers")
   ("m"     modi-mode "Modi mode")
-  ("n"     neotree-toggle "neotree")
   ("o"     modi/toggle-one-window "one window" :color red)
   ("p"     prez-mode "presentation mode")
   ("r"     dired-toggle-read-only "read only/editable") ; generalized `read-only-mode'
