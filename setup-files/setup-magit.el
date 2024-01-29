@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-01-26 18:46:37 kmodi>
+;; Time-stamp: <2024-01-29 08:32:32 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -57,25 +57,38 @@
   ;; https://scripter.co/view-github-pull-requests-in-magit/
   ;; https://endlessparentheses.com/automatically-configure-magit-to-access-github-prs.html
   (defun modi/add-PR-fetch-ref (&optional remote-name)
-    "If refs/pull is not defined on a GH repo, define it.
+    "If refs/pull is not defined on a GH or BB repo, define it.
 
 If REMOTE-NAME is not specified, it defaults to the `remote' set
 for the \"main\" or \"master\" branch."
     (let* ((remote-name (or remote-name
                             (magit-get "branch" "main" "remote")
                             (magit-get "branch" "master" "remote")))
-           (remote-url (magit-get "remote" remote-name "url"))
-           (fetch-refs (and (stringp remote-url)
-                            (string-match "github" remote-url)
-                            (magit-get-all "remote" remote-name "fetch")))
-           ;; https://oremacs.com/2015/03/11/git-tricks/
-           (fetch-address (format "+refs/pull/*/head:refs/pull/%s/*" remote-name)))
-      (when fetch-refs
-        (unless (member fetch-address fetch-refs)
-          (magit-git-string "config"
-                            "--add"
-                            (format "remote.%s.fetch" remote-name)
-                            fetch-address)))))
+           (remote-url (magit-get "remote" remote-name "url")))
+      ;; (message "remote-url: %s" remote-url)
+      (when (stringp remote-url)
+        (let ((fetch-refs (magit-get-all "remote" remote-name "fetch")))
+          (when fetch-refs
+            (cond
+             ((string-match "github" remote-url)
+              (let (;; https://oremacs.com/2015/03/11/git-tricks/
+                    (fetch-address (format "+refs/pull/*/head:refs/pull/%s/*" remote-name)))
+                (unless (member fetch-address fetch-refs)
+                  (magit-git-string "config"
+                                    "--add"
+                                    (format "remote.%s.fetch" remote-name)
+                                    fetch-address))))
+             ((string-match "bitbucket" remote-url)
+              (let (;; https://stackoverflow.com/a/48805473/1219634
+                    ;; https://www.atlassian.com/git/articles/pull-request-proficiency-fetching-abilities-unlocked
+                    (fetch-address (format "+refs/pull-requests/*/from:refs/pr/%s/*" remote-name)))
+                (unless (member fetch-address fetch-refs)
+                  (magit-git-string "config"
+                                    "--add"
+                                    (format "remote.%s.fetch" remote-name)
+                                    fetch-address))))
+             (t
+              )))))))
   (add-hook 'magit-mode-hook #'modi/add-PR-fetch-ref))
 
 (use-package magit-log
