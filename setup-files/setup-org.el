@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-06-11 11:35:39 kmodi>
+;; Time-stamp: <2022-06-30 09:57:41 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -45,6 +45,7 @@
 ;;    Include Src lines
 ;;    Org TOC
 ;;    Citations
+;;    Denote
 ;;  Provide
 ;;  Notes
 
@@ -1749,6 +1750,18 @@ Instead it's simpler to use bash."
 (use-package citeproc
   :ensure t
   :defer t)
+
+;;;; Denote
+;; https://protesilaos.com/codelog/2022-06-07-denote-introduction/
+;; https://git.sr.ht/~protesilaos/denote
+(use-package denote
+  :load-path "elisp/denote"
+  :defer t
+  :config
+  (progn
+    (setq denote-directory (expand-file-name "~/org/denote/"))
+    (setq denote-link-use-org-id t)))
+
 
 ;;; Provide
 (provide 'setup-org)
