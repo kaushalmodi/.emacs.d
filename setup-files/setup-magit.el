@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-01-29 08:32:32 kmodi>
+;; Time-stamp: <2024-02-16 15:57:31 kmodi>
 
 ;; magit
 ;; https://github.com/magit/magit
@@ -63,7 +63,8 @@ If REMOTE-NAME is not specified, it defaults to the `remote' set
 for the \"main\" or \"master\" branch."
     (let* ((remote-name (or remote-name
                             (magit-get "branch" "main" "remote")
-                            (magit-get "branch" "master" "remote")))
+                            (magit-get "branch" "master" "remote")
+                            "origin"))
            (remote-url (magit-get "remote" remote-name "url")))
       ;; (message "remote-url: %s" remote-url)
       (when (stringp remote-url)
@@ -72,7 +73,7 @@ for the \"main\" or \"master\" branch."
             (cond
              ((string-match "github" remote-url)
               (let (;; https://oremacs.com/2015/03/11/git-tricks/
-                    (fetch-address (format "+refs/pull/*/head:refs/pull/%s/*" remote-name)))
+                    (fetch-address (format "+refs/pull/*/head:refs/remotes/%s/pr/*" remote-name)))
                 (unless (member fetch-address fetch-refs)
                   (magit-git-string "config"
                                     "--add"
@@ -81,7 +82,14 @@ for the \"main\" or \"master\" branch."
              ((string-match "bitbucket" remote-url)
               (let (;; https://stackoverflow.com/a/48805473/1219634
                     ;; https://www.atlassian.com/git/articles/pull-request-proficiency-fetching-abilities-unlocked
-                    (fetch-address (format "+refs/pull-requests/*/from:refs/pr/%s/*" remote-name)))
+                    (fetch-address (format "+refs/pull-requests/*/from:refs/remotes/%s/pr/*" remote-name)))
+                (unless (member fetch-address fetch-refs)
+                  (magit-git-string "config"
+                                    "--add"
+                                    (format "remote.%s.fetch" remote-name)
+                                    fetch-address))))
+             ((string-match "gitlab" remote-url)
+              (let ((fetch-address (format "+refs/merge-requests/*/head:refs/remotes/%s/pr/*" remote-name)))
                 (unless (member fetch-address fetch-refs)
                   (magit-git-string "config"
                                     "--add"
