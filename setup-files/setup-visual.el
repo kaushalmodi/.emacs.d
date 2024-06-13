@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-01-20 13:52:35 kmodi>
+;; Time-stamp: <2024-06-13 12:02:15 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -241,6 +241,8 @@ See `mode-line-format' to get help on the %-identifers used in this function."
                             ,(concat (number-to-string emacs-major-version)
                                      "."
                                      (number-to-string emacs-minor-version)))
+          "   "
+          "@",(replace-regexp-in-string "\\(^[^.]+\\.[^.]+\\).*" "\\1" (system-name)) ;host name subdomain
           "   "
           (buffer-file-name "%f" ;Show full file path if buffer is showing a file
                             (dired-directory dired-directory ;Else if in dired mode, show the directory name
