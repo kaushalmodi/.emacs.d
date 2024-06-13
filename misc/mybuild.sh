@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2021-11-08 21:44:45 kmodi>
+# Time-stamp: <2023-05-21 11:17:43 kmodi>
 
 # Generic script to build (without root access) any version of emacs from git.
 
@@ -244,6 +244,9 @@ then
     # when switching branches (e.g. from emacs-25 to master, or vice-versa),
     # or when git bisecting.
     eval "${MY_EMACS_CONFIGURE}"
+
+    # Fix the issue with Org version check.
+    rm -rf lisp/org/*.elc
 
     if [[ ${quick_make} -eq 1 ]]
     then
