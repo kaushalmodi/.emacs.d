@@ -1,9 +1,9 @@
-;; Time-stamp: <2023-01-20 16:54:21 kmodi>
+;; Time-stamp: <2024-10-02 10:39:14 kmodi>
 
 ;; C/C++
 
 (use-package cc-mode
-  :mode (("\\.pss\\'" . c-or-c++-mode)) ;Perspec Portable Stimulus files
+  :mode (("\\.pss\\'" . c++-mode)) ;Portable Stimulus files
   :config
   (progn
     (setq-default c-basic-offset 4)))
