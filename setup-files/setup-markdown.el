@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-02 10:49:18 kmodi>
+;; Time-stamp: <2024-10-23 12:15:57 kmodi>
 
 ;; Markdown Mode
 ;; https://github.com/jrblevin/markdown-mode
@@ -43,11 +43,59 @@
         (orgtbl-to-generic table (org-combine-plists params2 params))))
     (add-hook 'markdown-mode-hook #'orgtbl-mode)
 
+    ;; Fix the org-table generated tables before each save;
+    ;; changes the `-+-' in the tables to the GFM format `-|-'.
+    ;; https://emacs.stackexchange.com/a/82451/115
+    (defun modi/markdown-next-table ()
+      "Move point to the next table."
+      (interactive)
+      (when (markdown-table-at-point-p)
+        (markdown-forward-paragraph))
+      (while (not (or (eobp) (markdown-table-at-point-p)))
+        (let ((prev-pt (point)))
+          (markdown-forward-paragraph)
+          (backward-char)
+          (when (eq prev-pt (point))
+            (markdown-forward-paragraph))))
+      (when (markdown-table-at-point-p)
+        ;; Go to the beginning of the table.
+        (markdown-backward-paragraph)))
+
+    (defun modi/convert-tablefmt-to-gfm ()
+      "Convert the table format from Org to GFM."
+      (interactive)
+      (save-excursion
+        (goto-char (point-min))
+        (while (not (eobp))
+          (modi/markdown-next-table)
+          (let ((table-end (save-excursion
+                             (markdown-forward-paragraph)
+                             (point))))
+            (while (search-forward "-+-" table-end :noerror)
+              (replace-match "-|-"))))))
+
+    (defun modi/markdown-prev-table ()
+      "Move point to the previous table."
+      (interactive)
+      (when (markdown-table-at-point-p)
+        (markdown-backward-paragraph)
+        (backward-char))
+      (while (not (or (bobp) (markdown-table-at-point-p)))
+        (markdown-backward-paragraph)))
+
+    (defun modi/markdown-mode-customization ()
+      "My customization for `markdown-mode'."
+      ;; Correct the table format.
+      (add-hook 'before-save-hook #'modi/convert-tablefmt-to-gfm nil :local))
+    (add-hook 'markdown-mode-hook #'modi/markdown-mode-customization)
+
     (bind-keys
      :map markdown-mode-map
      ;; Mimicking the org-export style bindings
      ("C-c C-e o" . gk-markdown-preview-buffer)
-     ("C-c C-e t". orgtbl-send-table))))
+     ("C-c C-e t". orgtbl-send-table)
+     ("M-}" . modi/markdown-next-table)
+     ("M-{" . modi/markdown-prev-table))))
 
 
 (provide 'setup-markdown)
