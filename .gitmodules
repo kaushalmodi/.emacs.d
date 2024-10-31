@@ -61,3 +61,6 @@
 [submodule "elisp/org-contrib"]
 	path = elisp/org-contrib
 	url = https://git.sr.ht/~bzg/org-contrib
+[submodule "elisp/tomelr"]
+	path = elisp/tomelr
+	url = https://github.com/kaushalmodi/tomelr
