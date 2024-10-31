@@ -1,9 +1,10 @@
-;; Time-stamp: <2019-03-22 16:42:04 kmodi>
+;; Time-stamp: <2024-10-31 15:15:42 kmodi>
 
 ;; Dired
 
-;; https://www.emacswiki.org/emacs/dired-single.el
+;; https://codeberg.org/amano.kenji/dired-single
 (use-package dired-single
+  :load-path "elisp/manually-synced/dired-single"
   :bind (:map modi-mode-map
          ;; Change the default `C-x C-d` key binding from `ido-list-directory'
          ("C-x C-d" . dired-single-magic-buffer-current-dir)
