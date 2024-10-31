@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-01-26 18:44:11 kmodi>
+;; Time-stamp: <2024-10-31 15:20:40 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -65,7 +65,7 @@ need Org version to be at least 9.x.")
     command-log-mode ; for logging commands; useful when demoing emacs
     deft ; quick note taking and management
     diff-hl
-    dired-single dired-collapse
+    dired-collapse
     drag-stuff
     easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps
     el2markdown ; Generate README.md files from Commentary section in .el files
