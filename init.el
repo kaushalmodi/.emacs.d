@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-10-31 15:27:42 kmodi>
+;; Time-stamp: <2024-10-31 16:13:42 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -32,16 +32,13 @@
   "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
 So, for emacs version 25.0.50.1, this variable will be 25_0.")
 
-(defvar modi/org-version-select 'elpa
+(defvar modi/org-version-select 'emacs
   "Variable to choose the version of Org to be loaded.
 Valid values are `dev', `elpa' and `emacs'.
 
 When set to `dev', the development version of Org built locally is loaded.
 When set to `elpa', Org is installed and loaded from Org Elpa.
-When set to `emacs', the Org version shipped with Emacs is used.
-
-The value is defaulted to `elpa' as few things in this config
-need Org version to be at least 9.x.")
+When set to `emacs', the Org version shipped with Emacs is used.")
 
 (defvar modi/states (make-hash-table :test 'equal)
   "Hash table to store the states of various variables throughout
