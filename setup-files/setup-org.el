@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-06-30 09:57:41 kmodi>
+;; Time-stamp: <2024-10-31 16:04:14 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1465,16 +1465,18 @@ returned value `entity-name' will be nil."
                                         "ditaa"
                                         "plantuml"
                                         "awk"
-                                        "python"
-                                        ,(if (version< (org-version) "8.3")
-                                             "sh" ;ob-shell.el was called ob-sh.el in older Org versions
-                                           "shell"))
+                                        "python")
       "List of languages for which the ob-* packages need to be loaded.")
 
     ;; Requires installing ob-tcl.el from Org contrib.
     ;; If `ob-tcl' is available add "tcl" to `modi/ob-enabled-languages'.
     (when (require 'ob-tcl nil :noerror)
       (add-to-list 'modi/ob-enabled-languages "tcl"))
+
+    (when (require 'ob-shell nil :noerror)
+      (add-to-list 'modi/ob-enabled-languages (if (version< (org-version) "8.3")
+                                                  "sh" ;ob-shell.el was called ob-sh.el in older Org versions
+                                                "shell")))
 
     (defvar modi/ob-eval-unsafe-languages '("emacs-lisp"
                                             "shell")
