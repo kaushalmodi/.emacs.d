@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-10-17 18:06:19 kmodi>
+;; Time-stamp: <2024-10-25 09:57:16 kmodi>
 
 ;; C/C++
 
@@ -8,7 +8,36 @@
          ("\\.sln\\'" . c++-mode))
   :config
   (progn
-    (setq-default c-basic-offset 3)))
+    (setq-default c-basic-offset 3)
+
+    (defun modi/sanitize-pss-file ()
+      (interactive)
+      (when (and (stringp (buffer-file-name))
+                 (string= "pss" (file-name-extension (buffer-file-name))))
+        ;; Add semi-colons after closing braces; that fixes the
+        ;; auto-indentation.
+        (save-excursion
+          (goto-char (point-min))
+          (while (re-search-forward "\\(\\}\\)\\s-*$" nil :noerror)
+            (replace-match "\\1;")))
+
+        ;; Always a single space after commas, not before!
+        (save-excursion
+          (goto-char (point-min))
+          (while (re-search-forward "\\s-*,\\s-*" nil :noerror)
+            (replace-match ", ")))
+
+        ;; ;; Auto-indent the file
+        ;; (indent-region (point-min) (point-max))
+        ))
+
+    (defun modi/cc-mode-customization ()
+      "My customization for `cc-mode'."
+      (add-hook 'before-save-hook #'modi/sanitize-pss-file nil :local)
+
+      ;; Replace tabs with spaces when saving files in a C/C++ mode.
+      (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
+    (add-hook 'c++-mode-hook #'modi/cc-mode-customization)))
 
 
 (provide 'setup-c)
