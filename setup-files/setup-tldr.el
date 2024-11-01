@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-20 15:18:16 kmodi>
+;; Time-stamp: <2024-11-01 00:18:57 kmodi>
 
 ;; TLDR
 ;; https://github.com/tldr-pages/tldr
@@ -40,7 +40,7 @@
 
 (defun modi/eww-rename-cheat-sh-buffer (&rest _)
   "Rename the `eww' buffer if it is showing a `cheat.sh' page."
-  (let ((url (eww-copy-page-url)))
+  (let ((url (plist-get eww-data :url)))
     (when (string-match "^http://cheat.sh/\\([^/?]+\\)" url)
       (rename-buffer (concat "*cheat.sh " (match-string 1 url) "*") :unique))))
 (advice-add 'eww :after #'modi/eww-rename-cheat-sh-buffer)
