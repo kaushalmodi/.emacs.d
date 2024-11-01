@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-14 10:32:08 kmodi>
+;; Time-stamp: <2024-11-01 08:45:29 kmodi>
 
 ;; Customize the mode-line
 
@@ -168,7 +168,6 @@ If nil, show the same in the minibuffer.")
                 " ez-esc"    ;easy-escape
                 " ivy"       ;ivy
                 " h"         ;hungry-delete-mode
-                " (*)"       ;beacon
                 " Outshine"  ;outshine-mode
                 ))
         (setq rm-text-properties '(("\\` Ovwrt\\'" 'face 'font-lock-warning-face) ;Overwrite

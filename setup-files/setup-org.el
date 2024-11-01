@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-10-31 17:19:22 kmodi>
+;; Time-stamp: <2024-11-01 08:45:13 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1594,9 +1594,6 @@ Instead it's simpler to use bash."
       (when (bound-and-true-p writegood-mode)
         (puthash "writegood-mode" writegood-mode modi/states)
         (writegood-mode -1))
-      (when (bound-and-true-p beacon-mode)
-        (puthash "beacon-mode" beacon-mode modi/states)
-        (beacon-mode -1))
       (when (bound-and-true-p hl-line-when-idle-p)
         (puthash "hl-line-idle" hl-line-when-idle-p modi/states)
         (toggle-hl-line-when-idle))
@@ -1618,9 +1615,6 @@ Instead it's simpler to use bash."
       (when (gethash "writegood-mode" modi/states)
         (writegood-mode 1)
         (remhash "writegood-mode" modi/states))
-      (when (gethash "beacon-mode" modi/states)
-        (beacon-mode 1)
-        (remhash "beacon-mode" modi/states))
       (when (gethash "hl-line-idle" modi/states)
         (toggle-hl-line-when-idle)
         (remhash "hl-line-idle" modi/states))
