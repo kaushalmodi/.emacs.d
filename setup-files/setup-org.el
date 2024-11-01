@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-01 08:45:13 kmodi>
+;; Time-stamp: <2024-11-01 09:47:56 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -1754,7 +1754,7 @@ Instead it's simpler to use bash."
 ;; https://protesilaos.com/codelog/2022-06-07-denote-introduction/
 ;; https://git.sr.ht/~protesilaos/denote
 (use-package denote
-  :load-path "elisp/denote"
+  :ensure t
   :defer t
   :config
   (progn
