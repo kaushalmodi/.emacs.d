@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-09-01 13:44:20 kmodi>
+;; Time-stamp: <2024-11-01 08:39:17 kmodi>
 
 ;; Functions related to editing text in the buffer
 ;; Contents:
@@ -1197,7 +1197,7 @@ the cons elements are strings."
  ("C-k" . modi/kill-line)
  ("C-o" . modi/smart-open-line)        ;Overrides `open-line'
  ("C-j" . modi/pull-up-line)
- ("M-=" . count-words) ; count words in buffer if no region selected
+ ("M-+" . count-words) ; count words in buffer if no region selected
  ("M-;" . endless/comment-line-or-region) ;Overrides`comment-dwim'
  ("C-x ;" . comment-dwim)                 ;Overrides `comment-set-column'
  ;; Override M-backspace to always do `backward-kill-word' using `modi-mode-map'.
