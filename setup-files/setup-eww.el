@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-21 17:11:15 kmodi>
+;; Time-stamp: <2024-11-01 00:54:07 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)
 
@@ -286,24 +286,6 @@ The page is reloaded from cache when doing this toggle."
      ("<down-mouse-1>" . eww-toggle-checkbox))))
 
 (with-eval-after-load 'shr
-  ;; Tweak the fontification of h1 heading s in eww (usually the
-  ;; article titles).
-  (defun modi/shr-tag-h1-advice (dom)
-    (let ((h1-font-prop '(:height 1.3 :weight bold :foreground "#c75646")))
-      (shr-heading dom (if shr-use-fonts
-                           `(variable-pitch ,h1-font-prop)
-                         `(fixed-pitch ,h1-font-prop)))))
-  (advice-add 'shr-tag-h1 :override #'modi/shr-tag-h1-advice)
-
-  ;; Tweak the fontification of h2 headings in eww (usually the
-  ;; first-level headings in the articles).
-  (defun modi/shr-tag-h2-advice (dom)
-    (let ((h2-font-prop '(:weight bold :foreground "#d0b03c")))
-      (shr-heading dom (if shr-use-fonts
-                           `(variable-pitch ,h2-font-prop)
-                         `(fixed-pitch ,h2-font-prop)))))
-  (advice-add 'shr-tag-h2 :override #'modi/shr-tag-h2-advice)
-
   ;; `shr-map' gets copied to `eww-link-keymap' in eww.el.  So we need
   ;; to override the `shr-map' instead of the latter.
   (bind-keys
