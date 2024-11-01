@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-01-20 13:46:45 kmodi>
+;; Time-stamp: <2024-11-01 09:39:02 kmodi>
 
 ;; Font Check
 
@@ -23,6 +23,11 @@ for emoji and other Unicode 6+ display.")
 
 (when (find-font (font-spec :name "Iosevka SS08"))
   (setq font-iosevka-ss08-p t))
+
+(defun modi/is-font (fontname)
+  "Return non-nil if the default font matches FONTNAME."
+  ;; http://superuser.com/a/1100378/209371
+  (string-match-p fontname (format "%s" (face-attribute 'default :font))))
 
 
 (provide 'setup-font-check)

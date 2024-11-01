@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-12 10:44:13 kmodi>
+;; Time-stamp: <2024-11-01 09:43:11 kmodi>
 
 ;; Enable PragmataPro ligatures
 ;; Tested to work with version 0.822
@@ -10,9 +10,13 @@
 ;; `fixed-pitch' family to PragmataPro ensures that all ligatures work as set in
 ;; this file.  Below also increases the font-size of `fixed-pitch' face by 2
 ;; points to distinguish them from the rest of the text.
-(set-face-attribute 'fixed-pitch nil
-                    :family "PragmataPro"
-                    :height (* (+ default-font-size-pt 2) 10))
+(>=e "29.1"
+    (set-face-attribute 'fixed-pitch nil
+                        :family "PragmataPro"
+                        :height (+ 20 global-text-scale-adjust--default-height))
+  (set-face-attribute 'fixed-pitch nil
+                      :family "PragmataPro"
+                      :height (* (+ default-font-size-pt 2) 10)))
 
 ;; https://gist.github.com/kwf/dea7bc51101083acb95c875140e2a96d
 ;; PRETTIFY SYMBOLS (with Pragmata Pro)

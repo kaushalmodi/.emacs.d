@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-01 01:19:32 kmodi>
+;; Time-stamp: <2024-11-01 09:39:17 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -39,20 +39,6 @@
 (setq tooltip-mode nil)              ;Disable tooltip appearance on mouse hover
 (setq frame-resize-pixelwise t)      ;Allow frame size to inc/dec by a pixel
 (setq visible-bell t)    ;Enable visible bell or screen blink to happen on error
-
-(defun modi/is-font (fontname)
-  "Return non-nil if the default font matches FONTNAME."
-  ;; http://superuser.com/a/1100378/209371
-  (string-match-p fontname (format "%s" (face-attribute 'default :font))))
-
-(with-eval-after-load 'setup-font-check
-  (defvar default-font-size-pt
-    (cond
-     ((modi/is-font "Monoid") 11)
-     ((modi/is-font "Pragmata") 13)
-     ((modi/is-font "Iosevka SS08") 14)
-     (t 12))
-    "Default font size in points."))
 
 (defvar dark-theme t
   "Variable to store the nature of theme whether it is light or dark.
@@ -285,72 +271,9 @@ See `mode-line-format' to get help on the %-identifers used in this function."
   (set-face-attribute 'default nil :family "Consolas"))
 
 ;;;; Global Font Resize
-(defun modi/global-font-size-adj (scale &optional absolute)
-  "Adjust the font sizes globally: in all the buffers, mode line, echo area, etc.
-
-The inbuilt `text-scale-adjust' function (bound to C-x C-0/-/= by default)
-does an excellent job of font resizing. But it does not change the font sizes
-of text outside the current buffer; for example, in the mode line.
-
-M-<SCALE> COMMAND increases font size by SCALE points if SCALE is +ve,
-                  decreases font size by SCALE points if SCALE is -ve
-                  resets    font size if SCALE is 0.
-
-If ABSOLUTE is non-nil, text scale is applied relative to the default font size
-`default-font-size-pt'. Else, the text scale is applied relative to the current
-font size."
-  (interactive "p")
-  (if (= scale 0)
-      (setq font-size-pt default-font-size-pt)
-    (if (bound-and-true-p absolute)
-        (setq font-size-pt (+ default-font-size-pt scale))
-      (setq font-size-pt (+ font-size-pt scale))))
-  ;; The internal font size value is 10x the font size in points unit.
-  ;; So a 10pt font size is equal to 100 in internal font size value.
-  (set-face-attribute 'default nil :height (* font-size-pt 10)))
-
-(defun modi/global-font-size-incr ()  (interactive) (modi/global-font-size-adj +1))
-(defun modi/global-font-size-decr ()  (interactive) (modi/global-font-size-adj -1))
-(defun modi/global-font-size-reset () (interactive) (modi/global-font-size-adj 0))
-
-;; Initialize font-size-pt var to the default value
-(with-eval-after-load 'setup-font-check
-  (modi/global-font-size-reset))
-
-;; Usage: C-c C-- = - 0 = = = = - - 0
-;; Usage: C-c C-= = 0 - = - = = = = - - 0
-(defhydra hydra-font-resize (nil
-                             "C-c"
-                             :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-                             :color red
-                             :hint nil)
-  "
-Font Size:     _C--_/_-_ Decrease     _C-=_/_=_ Increase     _C-0_/_0_ Reset     _q_ Cancel
-"
-  ;; Hydra entry bindings
-  ("C--" modi/global-font-size-decr)
-  ("C-=" modi/global-font-size-incr)
-  ("C-0" modi/global-font-size-reset :color blue)
-  ;; Hydra-internal bindings.. below work only when the hydra is active!
-  ("-"   modi/global-font-size-decr :bind nil)
-  ("="   modi/global-font-size-incr :bind nil)
-  ("+"   modi/global-font-size-incr :bind nil)
-  ("0"   modi/global-font-size-reset :bind nil)
-  ("q"   nil :color blue))
-
-(bind-keys
- :map modi-mode-map
- ;; <C-down-mouse-1> is bound to `mouse-buffer-menu' by default. It is
- ;; inconvenient when that mouse menu pops up when I don't need it
- ;; to. And actually I have never used that menu :P
- ("<C-down-mouse-1>" . modi/global-font-size-reset) ;Ctrl + left mouse down event
- ("<C-mouse-1>" . modi/global-font-size-reset)      ;Ctrl + left mouse up event
- ;; Make Control+mousewheel do increase/decrease font-size
- ;; http://ergoemacs.org/emacs/emacs_mouse_wheel_config.html
- ("<C-mouse-4>" . modi/global-font-size-incr)  ;Ctrl + wheel-up
- ("<XF86AudioRaiseVolume>" . modi/global-font-size-incr) ;DasQ Q-wheel clockwise
- ("<C-mouse-5>" . modi/global-font-size-decr)            ;Ctrl + wheel-down
- ("<XF86AudioLowerVolume>" . modi/global-font-size-decr)) ;DasQ Q-wheel counter-clockwise
+(>=e "29.1"
+    nil                      ;Emacs 29+ has `global-text-scale-adjust'
+  (require 'setup-global-text-scale-compat))
 
 (>=e "25.0"
     ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
@@ -456,13 +379,11 @@ Toggling off this mode reverts everything to their original states."
         (setq prez-mode--frame-configuration (current-frame-configuration))
         (set-frame-size nil 110 40)     ;Rows and columns w h
         (delete-other-windows)
-        (modi/global-font-size-adj +3 :absolute)
         (toggle-theme))
     ;; Disable prez mode
     (progn
       (set-frame-configuration prez-mode--frame-configuration)
       (switch-to-buffer prez-mode--buffer-name)
-      (modi/global-font-size-reset)
       (toggle-theme))))
 (define-globalized-minor-mode global-prez-mode prez-mode prez-mode)
 
