@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-01 08:45:29 kmodi>
+;; Time-stamp: <2024-11-01 08:52:46 kmodi>
 
 ;; Customize the mode-line
 
@@ -148,7 +148,6 @@ If nil, show the same in the minibuffer.")
         (setq rm-blacklist
               '(" WK"        ;which-key
                 " hc"        ;hardcore mode
-                " AC"        ;auto-complete
                 " vl"        ;global visual line mode enabled
                 " Wrap"      ;shows up if visual-line-mode is enabled for that buffer
                 " Omit"      ;omit mode in dired

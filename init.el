@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-10-31 16:13:42 kmodi>
+;; Time-stamp: <2024-11-01 08:44:28 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -53,7 +53,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     all all-ext ; edit ALL lines matching regex
     anzu   ; shows total search hits in mode line, > query-replace
     ascii-art-to-unicode
-    auto-complete fuzzy
+    fuzzy
     auto-highlight-symbol
     avy ; > ace-jump-mode
     bm ; visual bookmarks
@@ -207,12 +207,12 @@ When set to `emacs', the Org version shipped with Emacs is used.")
   (require 'setup-ag))
 (require 'setup-all)
 (require 'setup-artist)
-(require 'setup-auto-complete)
 (require 'setup-bookmarks)
 (require 'setup-buffer-move)
 (require 'setup-c)
 (require 'setup-calc)
 (require 'setup-command-log-mode)
+(require 'setup-completion)
 (require 'setup-counsel)
 (require 'setup-de-ansify)
 (require 'setup-deft)
