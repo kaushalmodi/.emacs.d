@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-01 01:09:24 kmodi>
+;; Time-stamp: <2024-11-01 01:19:32 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -130,6 +130,7 @@ Also restore the original frame size when disabling the menu bar."
 (defconst my/themes '((smyx                            'dark  "gray40")
                       (zenburn                         'dark  "gray40")
                       (modus-vivendi-deuteranopia      'dark  "gray40")
+                      (modus-vivendi-tritanopia        'dark  "gray40")
                       (leuven                          'light "gray")
                       (default                         'light "gray")) ;Default emacs theme
   "Alist of themes I tend to switch to frequently.")
@@ -174,7 +175,8 @@ the smart-mode-line theme."
        (with-eval-after-load 'setup-linum
          (modi/blend-linum))
        (with-eval-after-load 'smart-mode-line
-         (sml/apply-theme ,dark nil :silent)) ;Apply sml theme silently
+         (when (member ',theme-name '(smyx leuven))
+           (sml/apply-theme ,dark nil :silent))) ;Apply sml theme silently
        (when (not (bound-and-true-p disable-pkg-fci))
          (with-eval-after-load 'setup-fci
            ;; Below commented code does not work
