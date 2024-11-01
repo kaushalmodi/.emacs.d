@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-06-13 12:02:15 kmodi>
+;; Time-stamp: <2024-10-31 21:37:42 kmodi>
 
 ;; Set up the looks of emacs
 
@@ -128,16 +128,7 @@ Also restore the original frame size when disabling the menu bar."
 ;;; Themes
 ;;                     THEME-NAME      DARK   FCI-RULE-COLOR
 (defconst my/themes '((smyx            'dark  "gray40")
-                      (zenburn         'dark  "gray40")
-                      (darktooth       'dark  "gray40")
-                      (ample           'dark  "gray40")
-                      (ample-flat      'dark  "gray40")
-                      (planet          'dark  "gray40")
-                      (tao-yin         'dark  "gray40")
-                      (tao-yang        'light "gray")
-                      (ample-light     'light "gray")
                       (leuven          'light "gray")
-                      (twilight-bright 'light "gray")
                       (default         'light "gray")) ;Default emacs theme
   "Alist of themes I tend to switch to frequently.")
 
