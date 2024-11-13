@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-01 08:44:28 kmodi>
+;; Time-stamp: <2024-11-13 14:22:37 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -51,7 +51,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
                                         ; wgrep+wgrep-ag allow editing files
                                         ; directly in ag buffer
     all all-ext ; edit ALL lines matching regex
-    anzu   ; shows total search hits in mode line, > query-replace
     ascii-art-to-unicode
     fuzzy
     auto-highlight-symbol

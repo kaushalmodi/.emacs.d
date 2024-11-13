@@ -1,11 +1,10 @@
-;; Time-stamp: <2022-05-15 22:41:53 kmodi>
+;; Time-stamp: <2024-11-13 14:22:29 kmodi>
 
 ;; Search / Replace
 
 ;; Contents:
 ;;
 ;;  Isearch
-;;  anzu
 ;;  Visual Regular Expression search/replace
 ;;  Query exchange
 ;;  Swiper
@@ -30,6 +29,13 @@
 ;; off-screen. So you can even use C-v/M-v without worrying that you'll lose
 ;; the current match location.
 
+;; When both `isearch-lazy-count' and ‘isearch-lazy-highlight’ are
+;; non-nil, show the current match number and the total number of
+;; matches in the buffer (or its restriction), including all hidden
+;; matches.
+(setq isearch-lazy-count t)
+(setq isearch-lazy-highlight t)
+
 ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-isearch.el
 ;; DEL during isearch should edit the search string, not jump back to
 ;; the previous result
@@ -53,19 +59,6 @@ See the command `isearch-forward-symbol' for more information."
      (t
       (setq isearch-error "No symbol at point")
       (isearch-update)))))
-
-;;; anzu
-;; https://github.com/syohex/emacs-anzu
-(use-package anzu
-  :bind (:map modi-mode-map
-         ("C-c r" . anzu-query-replace))
-  :config
-  (progn
-    (setq anzu-mode-lighter "")
-    (setq anzu-search-threshold 1000)
-    (setq anzu-replace-to-string-separator " => ")
-
-    (global-anzu-mode 1)))
 
 ;;; Visual Regular Expression search/replace
 (use-package visual-regexp

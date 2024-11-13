@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-03-22 17:16:51 kmodi>
+;; Time-stamp: <2024-11-13 14:24:11 kmodi>
 
 ;; Info
 
@@ -28,18 +28,6 @@
                "\“\\(?:[^”]\\|\\\\\\(.\\|[\n]\\)\\)*”\\|"                               ;“...”
                "<\\(?:[[:alpha:]][^>]*\\|\\(\\\\\\(.\\|[\n]\\)\\)*\\)>" ;<...>
                ))
-
-        (defun modi/Info-mode-customization ()
-          "My customization for `Info-mode'."
-          ;; Show the Info node breadcrumbs only in the header
-          ;; Tue Dec 06 23:10:05 EST 2016 - kmodi
-          ;; Using both anzu and info+ results in error if info+ breadcrumbs are
-          ;; shown in the mode line because anzu modifies the mode line by adding
-          ;; its info as a cons, whereas info+ updates the mode line directly.
-          (when (not Info-breadcrumbs-in-header-flag)
-            (Info-toggle-breadcrumbs-in-header))
-          (Info-breadcrumbs-in-mode-line-mode -1))
-        (add-hook 'Info-mode-hook #'modi/Info-mode-customization)
 
         (defun modi/Info--get-current-node-hierarchy ()
           "Return the hierarchy for the current node.
