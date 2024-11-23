@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-22 15:50:55 kmodi>
+;; Time-stamp: <2024-11-23 08:55:17 kmodi>
 
 ;; C/C++
 
@@ -24,8 +24,8 @@
         ;; Always a single space after commas, not before!
         (save-excursion
           (goto-char (point-min))
-          (while (re-search-forward "\\s-*,\\s-*" nil :noerror)
-            (replace-match ", ")))
+          (while (re-search-forward "\\s-*,\\([^ ]\\)" nil :noerror)
+            (replace-match ", \\1")))
 
         ;; Always `bit[N]' and not `bit [N]'.
         (save-excursion
