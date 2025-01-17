@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-08-22 12:09:05 kmodi>
+;; Time-stamp: <2025-01-17 11:59:43 kmodi>
 
 ;; Tcl
 
@@ -6,7 +6,8 @@
   :mode (("\\.tcl\\'" . tcl-mode)
          ("\\.tcons\\'" . tcl-mode)
          ("\\.svcf\\'" . tcl-mode)
-         ("\\.cer\\'" . tcl-mode))
+         ("\\.cer\\'" . tcl-mode)
+         ("vm[a-z]+\\.cmds\\'" . tcl-mode))
   :config
   (progn
     (setq tcl-indent-level 2)
