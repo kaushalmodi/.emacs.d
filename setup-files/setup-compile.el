@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-07 17:47:44 kmodi>
+;; Time-stamp: <2025-05-08 16:00:45 kmodi>
 
 ;;; Compile
 
@@ -26,7 +26,7 @@
      :filter (not (or (derived-mode-p 'emacs-lisp-mode)
                       (derived-mode-p 'verilog-mode)
                       (derived-mode-p 'python-mode)))
-     ("<f9>" . modi/save-compile-execute)))
+     ("<f7>" . modi/save-compile-execute)))
   :config
   (progn
     ;; Always use C99 standard for compilation
