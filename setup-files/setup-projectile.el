@@ -1,4 +1,4 @@
-;; Time-stamp: <2022-01-26 11:30:23 kmodi>
+;; Time-stamp: <2025-05-08 17:08:55 kmodi>
 
 ;; Projectile
 ;; https://github.com/bbatsov/projectile
@@ -22,10 +22,7 @@
     ;; Don't consider my home dir as a project
     (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/"))
 
-    ;; (setq projectile-enable-caching nil)
-    (setq projectile-enable-caching t) ;Enable caching, otherwise `projectile-find-file'
-                                       ;is really slow for large
-                                       ;projects.
+    (setq projectile-enable-caching 'persistent)
     ;; Disable auto-updating of cache each time a file is opened or
     ;; deleted. The `projectile-serialize-cache' call in
     ;; `projectile-cache-current-file' (through
@@ -44,10 +41,11 @@
           (delete ".git" projectile-project-root-files-bottom-up))
     (add-to-list 'projectile-project-root-files ".git")
 
-    (setq projectile-project-root-files-functions
+    (setq projectile-project-root-functions
           '(projectile-root-local
-            projectile-root-top-down ; First look for projects in top-down order
-            projectile-root-bottom-up)) ; Then in bottom-up order
+            projectile-root-top-down ;First look for projects in top-down order
+            projectile-root-marked   ;Dir with .projectile
+            projectile-root-bottom-up)) ;Then in bottom-up order
 
     ;; Disable dynamic mode-line lighter.
     (setq projectile-mode-line-lighter "​P")
