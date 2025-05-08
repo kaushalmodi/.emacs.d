@@ -179,7 +179,7 @@ the smart-mode-line theme."
 (modi/gen-all-theme-fns)
 ;; (pp (macroexpand '(modi/gen-all-theme-fns))) ;For debug
 
-(defconst default-dark-theme-fn  'load-theme/smyx
+(defconst default-dark-theme-fn  'load-theme/modus-vivendi-tritanopia ;'load-theme/smyx
   "Function to set the default dark theme.")
 (defconst default-light-theme-fn 'load-theme/leuven
   "Function to set the default light theme.")
