@@ -64,3 +64,6 @@
 [submodule "elisp/tomelr"]
 	path = elisp/tomelr
 	url = https://github.com/kaushalmodi/tomelr
+[submodule "elisp/manually-synced/copilot-chat.el"]
+	path = elisp/manually-synced/copilot-chat.el
+	url = https://github.com/chep/copilot-chat.el

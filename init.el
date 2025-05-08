@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-13 14:22:37 kmodi>
+;; Time-stamp: <2025-01-10 13:05:42 kmodi>
 ;; Author: Kaushal Modi
 
 ;; Global variables
@@ -212,6 +212,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-calc)
 (require 'setup-command-log-mode)
 (require 'setup-completion)
+(require 'setup-copilot)
 (require 'setup-counsel)
 (require 'setup-de-ansify)
 (require 'setup-deft)
