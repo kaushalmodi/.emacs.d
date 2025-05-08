@@ -1,4 +1,4 @@
-;; Time-stamp: <2020-09-10 21:42:49 kmodi>
+;; Time-stamp: <2025-02-18 15:48:41 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)
 
@@ -16,7 +16,6 @@
        ("C-h F" . counsel-faces)       ;Overrides `Info-goto-emacs-command-node'
        ("C-h S" . counsel-info-lookup-symbol)
        ("C-c u" . counsel-unicode-char)
-       ("C-c C" . counsel-colors-emacs) ;Alternative to `list-colors-display'
        ([remap execute-extended-command] . counsel-M-x)
        ([remap bookmark-jump] . counsel-bookmark) ;Jump to book or set it if it doesn't exist, C-x r b
        ([remap bookmark-set] . counsel-bookmark)  ;C-x r m
