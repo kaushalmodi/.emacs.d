@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-05-17 14:44:23 kmodi>
+;; Time-stamp: <2025-02-11 13:53:23 kmodi>
 
 ;; Flycheck
 ;; https://github.com/flycheck/flycheck
@@ -7,6 +7,14 @@
   :defer t
   :config
   (progn
+    ;; Disable flake8 as flyspell checker as it keeps failing with:
+    ;; Suspicious state from syntax checker python-flake8: Flycheck
+    ;; checker python-flake8 returned 1, but its output contained no
+    ;; errors: There was a critical error during execution of Flake8:
+    ;; plugin code for `flake8-slots[SLOT]` does not match
+    ;; ^[A-Z]{1,3}[0-9]{0,3}$
+    (setq-default flycheck-disabled-checkers '(python-flake8))
+
     (defconst modi/flycheck-mode-hooks '(python-mode-hook
                                          sh-mode-hook
                                          ;; nim-mode-hook
