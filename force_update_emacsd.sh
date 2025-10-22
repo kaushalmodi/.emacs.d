@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2016-11-03 13:16:50 kmodi>
+# Time-stamp: <2025-10-22 12:36:38 kmodi>
 
 # Usage  : ./force_update_emacsd.sh <YOUR-EMACSD-PATH>
 # Example: ./force_update_emacsd.sh ~/.emacs.d
@@ -38,7 +38,7 @@ start_dir=$(pwd)
 if [[ ! -d "${emacs_config_dir}" ]]
 then
     echo "Cloning .emacs.d to ${emacs_config_dir} .."
-    git clone http://www.github.com/kaushalmodi/.emacs.d ${emacs_config_dir}
+    git clone https://www.github.com/kaushalmodi/.emacs.d ${emacs_config_dir}
 else
     cd ${emacs_config_dir}
     git_remote_origin_url=$(git config --get remote.origin.url)
