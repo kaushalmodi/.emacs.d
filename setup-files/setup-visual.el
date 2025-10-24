@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-01 09:39:17 kmodi>
+;; Time-stamp: <2025-10-22 19:07:56 kaushal.modi>
 
 ;; Set up the looks of emacs
 
@@ -38,7 +38,10 @@
 (setq scroll-step 1)                 ;Scroll 1 line at a time
 (setq tooltip-mode nil)              ;Disable tooltip appearance on mouse hover
 (setq frame-resize-pixelwise t)      ;Allow frame size to inc/dec by a pixel
-(setq visible-bell t)    ;Enable visible bell or screen blink to happen on error
+
+(if (eq system-type 'darwin)
+    (setq visible-bell nil)
+  (setq visible-bell t)) ;Enable visible bell or screen blink to happen on error
 
 (defvar dark-theme t
   "Variable to store the nature of theme whether it is light or dark.
