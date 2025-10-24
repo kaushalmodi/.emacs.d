@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-29 18:49:11 kmodi>
+;; Time-stamp: <2025-10-24 14:23:02 kmodi>
 
 ;; Windows and buffers manipulation
 
@@ -591,6 +591,7 @@ Examples of such buffers: *gtags-global*, *ag*, *Occur*, *Diff*."
  :map modi-mode-map
  ("C-x 1" . modi/toggle-one-window) ;Default binding to `delete-other-windows'
  ("C-x <delete>" . modi/delete-current-buffer-file) ;Default binding to `backward-kill-sentence'
+ ("C-x <deletechar>" . modi/delete-current-buffer-file) ;Default binding to `backward-kill-sentence'
  ("C-x C-p" . modi/copy-buffer-file-name) ;Default binding to `mark-page'
  ("C-x C-r" . rename-current-buffer-file)
  ("C-S-t" . reopen-killed-file) ;Mimick "reopen last closed tab" in browsers
