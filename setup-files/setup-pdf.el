@@ -1,4 +1,4 @@
-;; Time-stamp: <2021-06-08 10:05:18 kmodi>
+;; Time-stamp: <2025-10-23 23:25:18 kaushal.modi>
 
 ;; PDF
 
@@ -7,7 +7,7 @@
 
 (use-package pdf-tools
   ;; https://github.com/zakame/.emacs.d/blob/379dbfe0f10b20f7f43054cd4d13303d8026d105/init.el#L596-L603
-  :if (and (string= system-type 'gnu/linux)
+  :if (and (member system-type '(gnu/linux darwin))
            (eq (call-process-shell-command "pkg-config" nil nil nil "--exists" "poppler") 0))
   :commands (pdf-tools-install
              modi/pdf-tools-re-install)
