@@ -172,15 +172,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
   (setq use-package-always-ensure nil))
 (require 'use-package-chords)
 
-(use-package benchmark-init
-  :demand t
-  :load-path "elisp/manually-synced/benchmark-init-el"
-  :config
-  (progn
-    ;; https://github.com/dholm/benchmark-init-el/issues/15#issuecomment-766010566
-    (require 'benchmark-init-modes)     ;Explicitly required
-    (add-hook 'after-init-hook #'benchmark-init/deactivate)))
-
 ;; Enable `modi-mode' unless `disable-pkg-modi-mode' is set to `t' in
 ;; `setup-var-overrides.el'.
 (when (not (bound-and-true-p disable-pkg-modi-mode))
