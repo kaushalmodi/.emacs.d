@@ -115,6 +115,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     tldr                ;Concise "man pages"
     transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
     ;; undo-tree ; supercool undo visualization
+    unfill
     use-package use-package-chords ; optimize package loading
     visual-regexp
     ;; volatile-highlights
