@@ -1,0 +1,17 @@
+.cache/
+.projectile-cache.eld
+bm-repository
+abbrev_defs
+personal/setup-personal.el
+personal/custom-file.el
+projectile-bookmarks.eld
+recentf
+auto-save-list/
+*.desktop
+*.desktop.lock
+misc/pdf-tools/
+network-security.data
+places
+request/
+transient/
+org-persist/
