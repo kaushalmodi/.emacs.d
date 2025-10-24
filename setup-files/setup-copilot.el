@@ -2,6 +2,7 @@
 ;; https://github.com/copilot-emacs/copilot.el
 
 (use-package copilot
+  :ensure t
   :defer t
   :bind (:map copilot-completion-map
          ("TAB" . copilot-accept-completion)
@@ -28,20 +29,8 @@
   :ensure t
   :defer t)
 
-(defvar modi/copilot-chat-dir (file-name-as-directory (expand-file-name "elisp/manually-synced/copilot-chat.el"
-                                                                        user-emacs-directory))
-  "Directory containing copilot-chat package.")
-
-(defvar modi/copilot-chat-autoloads-file (expand-file-name "copilot-chat-autoloads.el" modi/copilot-chat-dir)
-  "Path to copilot-chat package's generated autoloads file.")
-
-(unless (file-exists-p modi/copilot-chat-autoloads-file)
-  (let ((generated-autoload-file modi/copilot-chat-autoloads-file))
-    (update-directory-autoloads modi/copilot-chat-dir)))
-(load-file modi/copilot-chat-autoloads-file)
-
 (use-package copilot-chat
-  :load-path modi/copilot-chat-dir
+  :ensure t
   :defer t
   :bind (:map modi-mode-map
          ("C-c C-p" . hydra-copilot/body))
