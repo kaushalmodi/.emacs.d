@@ -1,6 +1,12 @@
-;; Time-stamp: <2024-10-31 15:15:42 kmodi>
+;; Time-stamp: <2025-10-24 13:43:32 kaushal.modi>
 
 ;; Dired
+
+(when (equal system-type 'darwin)
+  ;; On macOS, use 'gls' from coreutils for better `ls' support in
+  ;; dired Install coreutils using homebrew: `brew install coreutils'
+  ;; and then update the PATH in your shell config file.
+  (setq insert-directory-program "gls"))
 
 ;; https://codeberg.org/amano.kenji/dired-single
 (use-package dired-single
