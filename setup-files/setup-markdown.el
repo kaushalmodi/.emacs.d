@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-10-23 12:15:57 kmodi>
+;; Time-stamp: <2026-03-26 15:17:59 kmodi>
 
 ;; Markdown Mode
 ;; https://github.com/jrblevin/markdown-mode
@@ -68,11 +68,17 @@
         (goto-char (point-min))
         (while (not (eobp))
           (modi/markdown-next-table)
-          (let ((table-end (save-excursion
-                             (markdown-forward-paragraph)
-                             (point))))
-            (while (search-forward "-+-" table-end :noerror)
-              (replace-match "-|-"))))))
+          ;; If no table was found, jump to end to avoid infinite loop.
+          (if (not (markdown-table-at-point-p))
+              (goto-char (point-max))
+            (let ((table-end (save-excursion
+                               (markdown-forward-paragraph)
+                               (point))))
+              (while (search-forward "-+-" table-end :noerror)
+                (replace-match "-|-"))
+              ;; Ensure forward progress so that `modi/markdown-next-table'
+              ;; doesn't walk backward to the same table.
+              (goto-char table-end))))))
 
     (defun modi/markdown-prev-table ()
       "Move point to the previous table."
@@ -86,7 +92,9 @@
     (defun modi/markdown-mode-customization ()
       "My customization for `markdown-mode'."
       ;; Correct the table format.
-      (add-hook 'before-save-hook #'modi/convert-tablefmt-to-gfm nil :local))
+      ;; (remove-hook 'before-save-hook #'modi/convert-tablefmt-to-gfm)
+      (add-hook 'before-save-hook #'modi/convert-tablefmt-to-gfm nil :local)
+      )
     (add-hook 'markdown-mode-hook #'modi/markdown-mode-customization)
 
     (bind-keys
