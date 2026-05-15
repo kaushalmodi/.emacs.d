@@ -78,7 +78,16 @@
                 (replace-match "-|-"))
               ;; Ensure forward progress so that `modi/markdown-next-table'
               ;; doesn't walk backward to the same table.
-              (goto-char table-end))))))
+              (goto-char table-end))))
+        ;; Second pass: catch indented tables that `markdown-table-at-point-p'
+        ;; does not recognize (e.g. tables inside ordered lists).
+        (goto-char (point-min))
+        (while (re-search-forward "^[ \t]+|[-:]+\\+" nil :noerror)
+          (beginning-of-line)
+          (let ((line-end (line-end-position)))
+            (while (search-forward "-+-" line-end :noerror)
+              (replace-match "-|-")))
+          (forward-line 1))))
 
     (defun modi/markdown-prev-table ()
       "Move point to the previous table."
