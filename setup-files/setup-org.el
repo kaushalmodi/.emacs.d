@@ -1,4 +1,4 @@
-;; Time-stamp: <2024-11-01 09:47:56 kmodi>
+;; Time-stamp: <2026-09-14 15:17:22 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
 
@@ -74,6 +74,13 @@ This value must match the `infodir' variable in the Org local.mk.")
     (when (and org-dev-lisp-directory
                org-dev-info-directory)
       (with-eval-after-load 'package
+        ;; `Info-directory-list' is defined in info.el, which is not
+        ;; necessarily loaded this early (setup-info.el defers it). Load it
+        ;; now so the `setq'/`add-to-list' calls below do not hit a
+        ;; void-variable error. This matters because use-package wraps
+        ;; `:preface' in `eval-and-compile', so this whole block runs during
+        ;; eager macroexpansion of the `use-package' form.
+        (require 'info)
         ;; If `modi/org-version-select' is *not* `emacs', remove the Emacs
         ;; version of Org from the `load-path'.
         (unless (eq modi/org-version-select 'emacs)
