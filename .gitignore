@@ -15,3 +15,7 @@ places
 request/
 transient/
 org-persist/
+/eln-cache/
+/elpa_30/
+/elpa_31/
+/projectile-frecency.eld
