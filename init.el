@@ -119,7 +119,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     use-package-chords
     visual-regexp
     ;; volatile-highlights
-    web-mode
     webpaste   ; Paste code snippets to ptpb.pw (default), ix.io, etc.
     wolfram ; query wolframalpha; needs user to sign up for a developer AppID
     wordnut ; offline dictionary (requires installing Wordnet wn application)
