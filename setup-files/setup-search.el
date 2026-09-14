@@ -139,14 +139,14 @@ searches all buffers."
       (multi-occur
        (if (member prefix '(4 (4)))
            (buffer-list)
-         (remove-if
+         (cl-remove-if
           (lambda (b)
-            (some
+            (cl-some
              (lambda (rx)
                (string-match rx (file-name-nondirectory
                                  (buffer-file-name b))))
              offby1/search-all-buffers-ignored-files))
-          (remove-if-not 'buffer-file-name (buffer-list))))
+          (cl-remove-if-not #'buffer-file-name (buffer-list))))
        regexp))
     (bind-to-modi-map "s" #'offby1/search-all-buffers)))
 

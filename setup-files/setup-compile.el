@@ -59,10 +59,10 @@
       (interactive)
       (setq modi/code-window (get-buffer-window))
       (save-buffer)
-      (lexical-let ((bin (smart-compile-string "./%n"))
-                    ;; %n - file name without extension
-                    ;; See `smart-compile-alist'.
-                    finish-callback)
+      (let ((bin (smart-compile-string "./%n"))
+            ;; %n - file name without extension
+            ;; See `smart-compile-alist'.
+            finish-callback)
         (setq finish-callback
               (lambda (buf msg)
                 (with-selected-window (get-buffer-window "*compilation*")
