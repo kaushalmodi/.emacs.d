@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2021-06-01 14:24:43 kmodi>
 
 ;; Nim

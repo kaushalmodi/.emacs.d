@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-01-09 08:15:47 kmodi>
 
 ;; Weather Forecast

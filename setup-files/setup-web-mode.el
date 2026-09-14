@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-04-04 10:45:03 kmodi>
 
 ;; Web Mode

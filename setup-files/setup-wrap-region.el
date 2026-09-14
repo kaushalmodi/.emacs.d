@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-10-12 12:19:29 kmodi>
 
 ;; wrap-region

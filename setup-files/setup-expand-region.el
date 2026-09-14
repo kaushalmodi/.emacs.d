@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-19 22:06:14 kmodi>
 
 ;; Expand Region

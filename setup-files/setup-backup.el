@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2022-06-17 14:19:51 kmodi>
 
 ;; Backups

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-13 14:22:29 kmodi>
 
 ;; Search / Replace

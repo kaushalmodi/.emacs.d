@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-06-06 16:46:16 kmodi>
 
 ;; Mouse

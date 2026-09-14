@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-09-23 13:14:12 kmodi>
 
 ;; Matlab

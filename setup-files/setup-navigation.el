@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2021-04-23 16:35:10 kmodi>
 
 (>=e "25.0"

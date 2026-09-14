@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-11-28 23:10:06 kmodi>
 
 ;; Hungry Delete

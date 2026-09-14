@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-03-11 09:47:35 kmodi>
 
 ;; which-func

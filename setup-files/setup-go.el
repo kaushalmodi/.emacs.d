@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2019-03-23 23:27:57 kmodi>
 
 ;; Go

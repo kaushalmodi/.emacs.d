@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-02-20 15:00:44 kmodi>
 ;;
 ;; LaTeX

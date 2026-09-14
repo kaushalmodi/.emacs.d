@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2019-09-11 12:03:15 kmodi>
 
 ;; Setup for different tags

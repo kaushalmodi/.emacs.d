@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-05-19 16:45:41 kmodi>
 
 ;; Engine mode

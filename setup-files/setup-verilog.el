@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2021-06-04 15:45:15 kmodi>
 
 ;; Verilog

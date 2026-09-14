@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-09-10 12:49:23 kmodi>
 
 ;; Registers

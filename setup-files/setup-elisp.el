@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2022-06-08 17:01:31 kmodi>
 
 ;; Emacs Lisp Mode

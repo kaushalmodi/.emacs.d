@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2020-09-10 23:11:53 kmodi>
 
 ;; Desktop save and restore

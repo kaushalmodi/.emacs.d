@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-09-06 11:50:42 kmodi>
 
 ;; Handles the NEWS better

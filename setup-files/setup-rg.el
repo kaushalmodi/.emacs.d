@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-08-23 18:00:37 kmodi>
 
 ;; Deadgrep

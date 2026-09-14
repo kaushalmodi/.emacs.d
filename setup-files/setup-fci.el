@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-06-27 17:48:45 kmodi>
 
 ;; Fill Column Indicator

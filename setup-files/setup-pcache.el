@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-12-10 14:58:51 kmodi>
 
 ;; Pcache

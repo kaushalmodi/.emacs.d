@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-12 17:04:01 kmodi>
 
 ;; Hydra

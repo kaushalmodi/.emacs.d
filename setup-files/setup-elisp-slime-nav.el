@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-11-29 09:54:04 kmodi>
 
 ;; Elisp Slime Nav

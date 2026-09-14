@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-08-14 21:50:29 kmodi>
 
 ;; https://github.com/abo-abo/tiny

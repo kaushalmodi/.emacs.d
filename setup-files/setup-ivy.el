@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2021-10-05 16:56:01 kmodi>
 
 ;; Ivy (better than ido in my opinion)

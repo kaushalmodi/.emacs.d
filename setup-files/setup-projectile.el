@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-05-08 17:08:55 kmodi>
 
 ;; Projectile

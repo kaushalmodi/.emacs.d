@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-02-16 15:57:31 kmodi>
 
 ;; magit

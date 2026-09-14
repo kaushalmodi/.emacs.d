@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-01 09:39:02 kmodi>
 
 ;; Font Check

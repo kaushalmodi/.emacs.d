@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2022-06-16 12:51:28 kmodi>
 
 ;; Hugo

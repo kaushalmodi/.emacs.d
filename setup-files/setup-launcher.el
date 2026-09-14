@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-01-26 18:44:36 kmodi>
 
 ;; Launcher

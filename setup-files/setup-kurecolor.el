@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-11-29 01:12:55 kmodi>
 
 ;; Kurecolor

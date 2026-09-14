@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-19 21:40:57 kmodi>
 
 ;; Calculator

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-10-22 19:07:56 kaushal.modi>
 
 ;; Set up the looks of emacs

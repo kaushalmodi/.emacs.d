@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2020-06-26 16:14:19 kmodi>
 
 ;; Line number package manager

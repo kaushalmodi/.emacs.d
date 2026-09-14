@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-01 09:02:50 kmodi>
 
 ;; Auto completion

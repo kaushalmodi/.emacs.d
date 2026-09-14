@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-05-03 11:44:23 kmodi>
 
 ;; Deft is an Emacs mode for quickly browsing, filtering, and editing

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-06-23 23:29:36 kmodi>
 ;;
 ;; Spell check

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-06-09 14:55:27 kmodi>
 
 ;; Show actual lines instead of the page break char ^L

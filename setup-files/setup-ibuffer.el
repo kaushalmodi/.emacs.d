@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-06-21 11:32:23 kmodi>
 
 ;; Ibuffer

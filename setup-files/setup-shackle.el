@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-05-09 16:12:14 kmodi>
 
 ;; Shackle

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-01 08:52:46 kmodi>
 
 ;; Customize the mode-line

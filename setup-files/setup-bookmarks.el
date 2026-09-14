@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-08-15 17:50:36 kmodi>
 
 ;; Bookmarks

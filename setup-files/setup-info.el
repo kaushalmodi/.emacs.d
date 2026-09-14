@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-13 14:24:11 kmodi>
 
 ;; Info
@@ -43,7 +44,7 @@ that level."
               ;; (message "modi/Info--get-current-node-hierarchy: %0d %s" index node)
               (setq node (nth 1 (assoc node nodes)))
               (setq index (1+ index))
-              (add-to-list 'node-hier `(,index . ,node)))
+              (push `(,index . ,node) node-hier))
             (dolist (node node-hier)
               (setcar node (- index (car node))))
             ;; (message "modi/Info--get-current-node-hierarchy: %S" node-hier)
