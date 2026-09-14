@@ -10,9 +10,6 @@
 [submodule "elisp/highlight-global"]
 	path = elisp/highlight-global
 	url = http://www.github.com/kaushalmodi/highlight-global
-[submodule "elisp/ox-reveal"]
-	path = elisp/ox-reveal
-	url = https://github.com/kaushalmodi/org-reveal.git
 [submodule "elisp/git-link"]
 	path = elisp/git-link
 	url = http://github.com/kaushalmodi/git-link

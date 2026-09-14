@@ -139,7 +139,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     ;; nlinum ; better performance than linum ; Sticking to frozen version 1.7 in my config
     ;; bookmark+ ; able to bookmark desktop sessions
     ;; ox-twbs ; export to twitter bootstrap html < fork (supports org 9.0+)
-    ;; ox-reveal ; used to export to HTML slides; < git clone
     ;; git-link ; get git links with line numbers and commit-hash/branch ; < fork
     ;; ido-vertical-mode flx-ido ido-ubiquitous ; < ivy, counsel
     ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl

@@ -21,7 +21,6 @@
 ;;      ox-beamer - Beamer export
 ;;      ox-odt - ODT, doc export
 ;;    External Exporters
-;;      ox-reveal - Presentations using reveal.js
 ;;      ox-minutes - Meeting Minutes ASCII export
 ;;    Helper Packages for Export
 ;;      Convert included pdf to image
@@ -1149,54 +1148,6 @@ on each save.
         (setq org-odt-preferred-output-format "doc")))
 
 ;;;; External Exporters
-
-
-;;;;; ox-reveal - Presentations using reveal.js
-    (use-package ox-reveal
-      ;; Use the local version instead of the one from Melpa, because the
-      ;; Melpa version ox-reveal.el has “;; Package-Requires: ((org "20150330"))”
-      ;; which installs the Org package from Melpa even though I have a newer
-      ;; Org version in `load-path' installed from its git master branch.
-      :load-path "elisp/ox-reveal"
-      :config
-      (progn
-        ;; (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-        (setq org-reveal-root "https://cdn.rawgit.com/hakimel/reveal.js/3.4.1/")
-        ;; https://www.mathjax.org/cdn-shutting-down/
-        (setq org-reveal-mathjax-url "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-        (setq org-reveal-hlevel 1)
-        (setq org-reveal-theme "simple") ;beige blood moon night serif simple sky solarized
-        (setq org-reveal-mathjax t) ;Use mathjax.org to render LaTeX equations
-
-        ;; Override the `org-reveal-export-to-html' function to generate
-        ;; files with “_slides” suffix. So “man.org” will export to
-        ;; “man_slides.html”. That way we can have separate html files from
-        ;; html and reveal exports.
-        (defun org-reveal-export-to-html
-            (&optional async subtreep visible-only body-only ext-plist)
-          "Export current buffer to a reveal.js HTML file."
-          (interactive)
-          (let* ((extension (concat "_slides." org-html-extension))
-                 (file (org-export-output-file-name extension subtreep))
-                 (clientfile (org-export-output-file-name
-                              (concat "_client" extension) subtreep)))
-
-            ;; export filename_client HTML file if multiplexing
-            (setq client-multiplex nil)
-            (setq retfile (org-export-to-file 'reveal file
-                            async subtreep visible-only body-only ext-plist))
-
-            ;; export the client HTML file if client-multiplex is set true
-            ;; by previous call to org-export-to-file
-            (if (eq client-multiplex t)
-                (org-export-to-file 'reveal clientfile
-                  async subtreep visible-only body-only ext-plist))
-            (cond (t retfile)))))
-      ;; Do not print date in the reveal title slide
-      ;;   #+options: date:nil
-      ;; Do not print file time stamp in the reveal title slide
-      ;;   #+options: timestamp:nil
-      )
 
 ;;;;; ox-minutes - Meeting Minutes ASCII export
     (use-package ox-minutes
