@@ -255,7 +255,6 @@ argument, also open the URL in the default browser."
               (browse-url-of-file url))
             (message "URL: %s" url)
             url))
-        (advice-add 'Info-url-for-node :override #'modi/Info-url-for-node)
 
         (bind-keys
          :map Info-mode-map
