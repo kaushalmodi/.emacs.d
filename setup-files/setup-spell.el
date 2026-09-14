@@ -78,7 +78,7 @@
         (use-package flyspell-correct-ivy
           :after flyspell-correct
           :bind (:map modi-mode-map
-                 ("<f12>" . flyspell-correct-word-generic)))
+                 ("<f12>" . flyspell-correct-wrapper)))
 
         (bind-keys
          :map flyspell-mode-map
