@@ -10,7 +10,7 @@
   ("af"    auto-fill-mode "auto fill")
   ("ar"    auto-revert-mode "auto revert")
   ("aw"    adaptive-wrap-prefix-mode "adaptive wrap")
-  ("b"     modi/toggle-menu-bar "menu bar")
+  ("b"     menu-bar-mode "menu bar")
   ("c"     xah-cycle-letter-case "cycle case" :color red)
   ("d"     toggle-debug-on-error "debug on error")
   ("D"     modi/toggle-debug "debug on entry")

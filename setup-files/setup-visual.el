@@ -61,34 +61,10 @@ This variable is to be updated when changing themes.")
     (menu-bar-mode -1))
 
 ;; Toggle menu bar
-(>=e "25.0"
-    (progn
-      ;; Do not resize the frame when `menu-bar-mode' is toggled.
-      (add-to-list 'frame-inhibit-implied-resize 'menu-bar-lines) ;Default nil on GTK+
-      (bind-key "<f2>" #'menu-bar-mode modi-mode-map)
-      (key-chord-define-global "2w" #'menu-bar-mode)) ;Alternative to F2
-  (progn
-    (defvar bkp--frame-text-height-px (frame-text-height)
-      "Backup of the frame text height in pixels.")
-    (defvar bkp--frame-text-width-px (frame-text-width)
-      "Backup of the frame text width in pixels.")
-
-    (defun modi/toggle-menu-bar ()
-      "Toggle the menu bar.
-Also restore the original frame size when disabling the menu bar."
-      (interactive)
-      (let ((frame-resize-pixelwise t))
-        ;; If the menu bar is hidden currently, take a backup of the frame height.
-        (when (null menu-bar-mode)
-          ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
-          (setq bkp--frame-text-height-px (frame-text-height))
-          (setq bkp--frame-text-width-px (frame-text-width)))
-        (menu-bar-mode 'toggle)
-        ;; Restore frame size if menu bar is hidden after toggle
-        (when (null menu-bar-mode)
-          (set-frame-size nil bkp--frame-text-width-px bkp--frame-text-height-px :pixelwise))))
-    (bind-key "<f2>" #'modi/toggle-menu-bar modi-mode-map)
-    (key-chord-define-global "2w" #'modi/toggle-menu-bar))) ;Alternative to F2
+;; Do not resize the frame when `menu-bar-mode' is toggled.
+(add-to-list 'frame-inhibit-implied-resize 'menu-bar-lines) ;Default nil on GTK+
+(bind-key "<f2>" #'menu-bar-mode modi-mode-map)
+(key-chord-define-global "2w" #'menu-bar-mode) ;Alternative to F2
 
 ;;;; Tool bar
 (when (fboundp 'tool-bar-mode)
