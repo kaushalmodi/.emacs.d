@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-19 22:17:09 kmodi>
 
 ;; manage-minor-mode

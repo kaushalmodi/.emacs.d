@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-04-16 15:34:31 kmodi>
 
 ;; Key Chord Mode

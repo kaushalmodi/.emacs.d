@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-09-27 22:13:54 kmodi>
 
 ;; Region Bindings Mode

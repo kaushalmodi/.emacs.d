@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-08-25 11:44:44 kmodi>
 
 ;; Printing

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-01-17 11:59:43 kmodi>
 
 ;; Tcl

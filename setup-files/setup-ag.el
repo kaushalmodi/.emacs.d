@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-10-10 13:19:30 kmodi>
 
 ;; Ag

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-19 18:26:10 kmodi>
 
 ;; Artist Mode

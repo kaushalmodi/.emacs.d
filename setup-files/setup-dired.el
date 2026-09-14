@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-10-24 13:43:32 kaushal.modi>
 
 ;; Dired

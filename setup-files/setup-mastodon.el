@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-08-27 16:14:28 kmodi>
 
 ;; Mastodon

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-02-11 13:53:23 kmodi>
 
 ;; Flycheck

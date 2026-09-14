@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-06-10 17:30:04 kmodi>
 
 ;; Writegood

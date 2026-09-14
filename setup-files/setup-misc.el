@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2020-06-23 14:01:10 kmodi>
 
 ;; Miscellaneous config not categorized in other setup-* files

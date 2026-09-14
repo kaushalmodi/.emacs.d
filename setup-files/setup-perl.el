@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-12-07 10:15:06 kmodi>
 
 ;; Perl

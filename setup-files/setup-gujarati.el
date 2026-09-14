@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-08-14 21:53:12 kmodi>
 ;; Gujarati - ગુજરાતી
 

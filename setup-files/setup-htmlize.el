@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-08-27 17:35:58 kmodi>
 
 ;; Htmlize

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-09-15 11:03:30 kmodi>
 
 ;; Undo Tree

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2020-09-10 23:08:37 kmodi>
 
 ;; Shell Script Mode

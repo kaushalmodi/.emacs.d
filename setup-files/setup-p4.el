@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; P4 / Perforce
 ;; https://github.com/gareth-rees/p4.el
 

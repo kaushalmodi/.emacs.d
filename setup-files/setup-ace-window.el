@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-07 01:13:15 kmodi>
 
 ;; Ace Window

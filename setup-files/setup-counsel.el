@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-02-18 15:48:41 kmodi>
 
 ;; Counsel (comes packaged with the `swiper' package)

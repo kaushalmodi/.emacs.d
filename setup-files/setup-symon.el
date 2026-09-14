@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-04-25 01:25:58 kmodi>
 
 ;; Mode-line system monitor

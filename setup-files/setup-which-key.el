@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-08-31 14:57:19 kmodi>
 
 ;; Which Key

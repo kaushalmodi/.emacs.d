@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-08-15 12:05:32 kmodi>
 
 ;; Conf Mode

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-05-10 09:43:05 kmodi>
 ;; Devdocs.io
 ;; https://devdocs.io

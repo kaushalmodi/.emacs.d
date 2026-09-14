@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-07-11 18:19:31 kmodi>
 
 ;; Drag Stuff

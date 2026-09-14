@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-06-29 13:40:08 kmodi>
 
 ;; Guide Key

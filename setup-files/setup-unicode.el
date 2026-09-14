@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-08-13 13:41:46 kmodi>
 
 ;; Unicode

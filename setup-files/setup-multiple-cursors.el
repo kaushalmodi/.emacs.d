@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-09-20 09:52:55 kmodi>
 
 ;; Multiple Cursors

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-10-24 14:23:02 kmodi>
 
 ;; Windows and buffers manipulation

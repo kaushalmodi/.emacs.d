@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-03 11:57:11 kmodi>
 
 ;; Pomodoro

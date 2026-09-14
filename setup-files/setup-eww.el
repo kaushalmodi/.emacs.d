@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-01 00:54:07 kmodi>
 
 ;; Eww - Emacs browser (needs emacs 24.4 or higher)

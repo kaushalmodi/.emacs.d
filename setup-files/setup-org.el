@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2026-09-14 15:17:22 kmodi>
 ;; Hi-lock: (("\\(^;\\{3,\\}\\)\\( *.*\\)" (1 'org-hide prepend) (2 '(:inherit org-level-1 :height 1.3 :weight bold :overline t :underline t) prepend)))
 ;; Hi-Lock: end
@@ -1496,7 +1497,7 @@ as safe for babel evaluation except for the languages in this variable.")
 
     (let (ob-lang-alist)
       (dolist (lang modi/ob-enabled-languages)
-        (add-to-list 'ob-lang-alist `(,(intern lang) . t)))
+        (cl-pushnew `(,(intern lang) . t) ob-lang-alist :test #'equal))
       (org-babel-do-load-languages 'org-babel-load-languages ob-lang-alist))
 
     (defun modi/org-confirm-babel-evaluate-fn (lang body)

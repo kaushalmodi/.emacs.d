@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2019-07-31 07:58:02 kmodi>
 
 ;;;; Fold setup

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-09-11 16:02:10 kmodi>
 
 ;; https://github.com/wasamasa/nov.el

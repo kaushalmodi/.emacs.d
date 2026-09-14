@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2020-07-11 15:43:41 kmodi>
 
 ;; Highlight stuff

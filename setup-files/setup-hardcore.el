@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-09-13 23:56:23 kmodi>
 
 ;; Hardcore mode

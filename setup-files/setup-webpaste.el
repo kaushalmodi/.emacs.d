@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-08-03 12:57:08 kmodi>
 
 ;; Webpaste

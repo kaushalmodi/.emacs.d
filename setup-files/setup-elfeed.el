@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-02-20 14:59:00 kmodi>
 
 ;; Elfeed

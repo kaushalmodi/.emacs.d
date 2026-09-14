@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Global text scale resizing for emacs 28 and older.
 
 (with-eval-after-load 'setup-font-check

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-10-31 23:42:17 kmodi>
 
 ;; Package management

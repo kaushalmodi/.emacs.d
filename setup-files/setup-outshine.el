@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2019-01-02 10:54:47 kmodi>
 
 ;; Outshine

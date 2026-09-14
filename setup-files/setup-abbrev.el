@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-09-08 15:40:30 kmodi>
 
 ;; Abbrev

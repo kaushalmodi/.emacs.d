@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-09-11 12:05:10 kmodi>
 
 ;; All things diff

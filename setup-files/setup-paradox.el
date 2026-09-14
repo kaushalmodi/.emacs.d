@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-06-07 14:34:58 kmodi>
 
 ;; Paradox

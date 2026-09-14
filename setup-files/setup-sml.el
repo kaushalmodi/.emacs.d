@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-09-01 07:54:51 kmodi>
 
 ;; Standard ML

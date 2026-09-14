@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-23 08:55:17 kmodi>
 
 ;; C/C++

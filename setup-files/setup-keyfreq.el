@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-06-01 14:21:17 kmodi>
 
 ;; Keyfreq

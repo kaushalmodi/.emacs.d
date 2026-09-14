@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-08-22 18:42:59 kmodi>
 
 ;; https://github.com/Lindydancer/el2markdown

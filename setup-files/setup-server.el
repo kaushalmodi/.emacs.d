@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-02-20 15:08:17 kmodi>
 
 ;; server/daemon setup

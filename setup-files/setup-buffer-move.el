@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-05-20 00:13:41 kmodi>
 
 ;; https://github.com/lukhas/buffer-move

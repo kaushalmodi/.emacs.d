@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-02-18 00:33:51 kmodi>
 
 (use-package de-ansify

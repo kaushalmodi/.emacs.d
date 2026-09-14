@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-02-23 11:42:32 kmodi>
 
 ;; Rainbow Delimiters

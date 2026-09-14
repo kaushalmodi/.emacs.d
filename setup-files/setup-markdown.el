@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2026-03-26 15:17:59 kmodi>
 
 ;; Markdown Mode

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-10-24 07:00:32 kmodi>
 
 ;; yasnippet

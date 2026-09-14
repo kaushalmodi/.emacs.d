@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-12-01 12:34:04 kmodi>
 
 ;; Command Log Mode

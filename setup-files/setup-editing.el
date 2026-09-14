@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-01 08:39:17 kmodi>
 
 ;; Functions related to editing text in the buffer
@@ -574,7 +575,7 @@ such that the longest line of region is completely included in the selection."
                                 (goto-char (line-end-position))
                                 (current-column))))
             (setq len (- line-end-col rect-left-col))
-            (add-to-list 'line-info `(,i ,line-end-col)))
+            (push `(,i ,line-end-col) line-info))
           (when (> len max-len)
             (setq max-len len))
           (forward-line 1)))

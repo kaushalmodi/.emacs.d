@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-10-23 23:25:18 kaushal.modi>
 
 ;; PDF

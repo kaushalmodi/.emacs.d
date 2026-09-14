@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-08-03 17:36:41 kmodi>
 
 ;; Wordnut

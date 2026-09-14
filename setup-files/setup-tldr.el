@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2024-11-01 00:18:57 kmodi>
 
 ;; TLDR

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-05-05 12:45:23 kmodi>
 
 ;; Git Link
@@ -74,6 +75,7 @@ With a prefix argument prompt for the remote's name. Defaults to \"origin\"."
       "Get git link with the exact commit hash, not the branch name.
 If USE-BRANCH-MAYBE is non-nil, use branch name in the link if available."
       (interactive "P")
+      (defvar git-link-use-commit)      ;Ensure the `let' below binds it dynamically
       (let ((git-link-use-commit (if use-branch-maybe
                                      nil
                                    t))

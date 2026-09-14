@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2020-09-29 23:30:40 kmodi>
 
 ;; Calc settings file

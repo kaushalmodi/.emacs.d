@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2016-11-19 23:54:37 kmodi>
 
 ;; Gist

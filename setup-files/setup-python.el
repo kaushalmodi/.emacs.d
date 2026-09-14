@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2017-07-06 18:09:49 kmodi>
 
 ;; Python

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2019-07-30 14:45:04 kmodi>
 
 (use-package image-mode

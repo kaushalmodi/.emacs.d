@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2019-11-14 06:59:46 kmodi>
 
 ;; header2
