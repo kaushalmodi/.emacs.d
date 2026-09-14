@@ -1,4 +1,4 @@
-;;; header2.el --- Support for creation and update of file headers.
+;;; header2.el --- Support for creation and update of file headers.  -*- lexical-binding: t; -*-
 ;;
 ;; Filename: header2.el
 ;; Description: Support for creation and update of file headers.

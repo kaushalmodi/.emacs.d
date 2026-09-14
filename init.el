@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2025-01-10 13:05:42 kmodi>
 ;; Author: Kaushal Modi
 

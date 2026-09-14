@@ -1,4 +1,4 @@
-;;; hl-line+.el --- Extensions to hl-line.el.
+;;; hl-line+.el --- Extensions to hl-line.el.  -*- lexical-binding: t; -*-
 ;;
 ;; Filename: hl-line+.el
 ;; Description: Extensions to hl-line.el.

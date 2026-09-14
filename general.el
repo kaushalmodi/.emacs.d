@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2022-07-22 09:18:53 kmodi>
 
 ;; Collection of general purposes defuns and macros

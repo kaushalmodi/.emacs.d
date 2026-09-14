@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2015-08-07 15:40:06 kmodi>
 
 ;; Temporary minor mode

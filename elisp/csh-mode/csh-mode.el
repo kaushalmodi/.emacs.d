@@ -1,4 +1,4 @@
-;; csh-mode.el --- csh (and tcsh) script editing mode for Emacs.
+;; csh-mode.el --- csh (and tcsh) script editing mode for Emacs.  -*- lexical-binding: t; -*-
 ;;
 ;; Version:    1.2
 ;; Date:       April 2, 1999
