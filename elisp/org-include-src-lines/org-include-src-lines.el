@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-02-02 12:37:20 kmodi>
 
 ;; Updating the #+include source code line numbers automatically

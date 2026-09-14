@@ -6,7 +6,9 @@
 ;; http://emacs.stackexchange.com/a/524/115
 ;; Main use is to enable it using File Local Variables to get buffer-specific
 ;; key bindings.
-;;   For example, put something like below in the “Local Variables:” block:
+;;   For example, put something like below in the file-local variables block
+;;   (the “Local Variables”/“End” block; the colon is omitted here so that
+;;   Emacs does not parse this comment as that block):
 ;; eval: (temp-mode 1)
 ;; eval: (define-key temp-mode-map (kbd "<f10>") #'some-special-fn)
 
@@ -16,9 +18,9 @@
 ;;;###autoload
 (define-minor-mode temp-mode
   "A temporary minor mode used to set buffer-specific key bindings."
-  nil
+  :init-value nil
   :lighter " Temp"
-  temp-mode-map)
+  :keymap temp-mode-map)
 
 
 (provide 'temp-mode)

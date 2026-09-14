@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-02-02 12:37:38 kmodi>
 
 ;; Implementing Markdown style link IDs in org-mode

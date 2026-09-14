@@ -106,7 +106,12 @@ Emacs installation.  If Emacs is installed using
   (add-to-list 'package-archives (cons "melpa" melpa-url) :append))
 
 (>=e "27.0"
-    nil           ;`package-initialize' call is not needed in emacs 27+
+    ;; `package-initialize' is called automatically before loading the init
+    ;; file in Emacs 27+, but *only* for interactive sessions. In batch mode
+    ;; (`emacs --batch -l early-init.el -l init.el'), the packages are never
+    ;; activated, so do that explicitly here.
+    (when noninteractive
+      (package-initialize))
   ;; Load emacs packages and activate them
   ;; This must come before configurations of installed packages.
   ;; Don't delete this line.
