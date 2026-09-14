@@ -111,18 +111,16 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     smart-compile
     smart-mark
     smart-mode-line popup rich-minority
-    sunshine forecast ; weather
     tiny
     tldr                ;Concise "man pages"
     transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
     ;; undo-tree ; supercool undo visualization
     unfill
-    use-package use-package-chords ; optimize package loading
+    use-package-chords
     visual-regexp
     ;; volatile-highlights
     web-mode
     webpaste   ; Paste code snippets to ptpb.pw (default), ix.io, etc.
-    which-key ; > guide-key
     wolfram ; query wolframalpha; needs user to sign up for a developer AppID
     wordnut ; offline dictionary (requires installing Wordnet wn application)
     wrap-region ; wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
@@ -273,7 +271,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-tiny)
 (require 'setup-tldr)
 ;; (require 'setup-undo-tree)
-(require 'setup-weather)
 (require 'setup-webpaste)
 (require 'setup-which-func)
 (require 'setup-which-key)
