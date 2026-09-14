@@ -1034,12 +1034,6 @@ See `org-latex-format-headline-function' for details."
     (use-package ox-html
       :config
       (progn
-        ;; https://www.mathjax.org/cdn-shutting-down/
-        (setq org-html-mathjax-options
-              (delq (assoc 'path org-html-mathjax-options) org-html-mathjax-options))
-        (add-to-list 'org-html-mathjax-options
-                     '(path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"))
-
         ;; ox-html patches
         (load (expand-file-name
                "ox-html-patches.el"
