@@ -1,4 +1,4 @@
-;; Time-stamp: <2026-03-26 15:17:59 kmodi>
+;; Time-stamp: <2026-03-26 15:41:41 kmodi>
 
 ;; Markdown Mode
 ;; https://github.com/jrblevin/markdown-mode
@@ -94,7 +94,7 @@
       ;; Correct the table format.
       ;; (remove-hook 'before-save-hook #'modi/convert-tablefmt-to-gfm)
       (add-hook 'before-save-hook #'modi/convert-tablefmt-to-gfm nil :local)
-      )
+      (add-hook 'before-save-hook #'modi/delete-trailing-whitespace-buffer nil :local))
     (add-hook 'markdown-mode-hook #'modi/markdown-mode-customization)
 
     (bind-keys
