@@ -3,7 +3,7 @@
 
 ;; Miscellaneous config not categorized in other setup-* files
 
-(fset 'yes-or-no-p 'y-or-n-p)           ;Use y or n instead of yes or no
+(setq use-short-answers t)              ;Use y or n instead of yes or no
 
 ;; Delete stuff to a trash directory
 (setq delete-by-moving-to-trash t)
