@@ -344,9 +344,11 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (use-package setup-desktop :defer 1)
 
 (defun modi/font-check ()
-  "Do font check, then remove self from `focus-in-hook'; need to run this just once."
-  (require 'setup-font-check)
-  (remove-hook 'focus-in-hook #'modi/font-check))
+  "Do font check once a frame has focus, then remove self from
+`after-focus-change-function'; need to run this just once."
+  (when (frame-focus-state)
+    (require 'setup-font-check)
+    (remove-function after-focus-change-function #'modi/font-check)))
 ;; http://lists.gnu.org/archive/html/help-gnu-emacs/2016-05/msg00148.html
 ;; For non-daemon, regular emacs launches, the frame/fonts are loaded *before*
 ;; the emacs config is read.
@@ -358,11 +360,11 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 ;; But even at that point, the frame is not yet selected (for the daemon
 ;; case). Without a selected frame, the `find-font' will not work correctly!
 ;;
-;; So we do the font check in `focus-in-hook' instead, by which time in the
-;; emacs startup process, all of the below are true:
+;; So we do the font check from `after-focus-change-function' instead, by
+;; which time in the emacs startup process, all of the below are true:
 ;;  - Fonts are loaded (in both daemon and non-daemon cases).
 ;;  - The frame is also selected, and so `find-font' calls work correctly.
-(add-hook 'focus-in-hook #'modi/font-check)
+(add-function :after after-focus-change-function #'modi/font-check)
 
 (when (and (bound-and-true-p emacs-initialized)
            (featurep 'setup-visual))
