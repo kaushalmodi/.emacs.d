@@ -1,3 +1,14 @@
+*~
+\#*\#
+
+*.bkp
+.ignore
+
+elpa_*
+elpa/
+eln-cache/
+*.elc
+
 .cache/
 .projectile-cache.eld
 bm-repository
@@ -15,7 +26,5 @@ places
 request/
 transient/
 org-persist/
-/eln-cache/
-/elpa_30/
-/elpa_31/
 /projectile-frecency.eld
+personal/
