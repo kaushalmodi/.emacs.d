@@ -289,37 +289,24 @@ Sets variables `ffap-string-at-point' and `ffap-string-at-point-region'.
     (defun modi/avy (arg)
       "Call `avy-goto-word-1' by default.
 
-If ARG is non-nil, call `avy-goto-char-2' instead.
-Temporarily disable FCI (if enabled) while the avy functions are executed."
+If ARG is non-nil, call `avy-goto-char-2' instead."
       (interactive "P")
       (let ((avy-all-windows t) ; search in all windows
-            (fci-state-orig (when (featurep 'fill-column-indicator) fci-mode))
             (current-prefix-arg nil) ; Don't pass on this wrapper's args to `fn'
             (fn (if arg
                     #'avy-goto-char-2 ; C-u
                   #'avy-goto-word-1)))
-        (if fci-state-orig
-            (fci-mode 'toggle))
-        (call-interactively fn)
-        (if fci-state-orig
-            (fci-mode 'toggle))))
+        (call-interactively fn)))
 
     (defun modi/goto-line (line)
       "Call `avy-goto-line'.
 
-If LINE is non-nil, go directly to line number LINE.
-Temporarily disable FCI (if enabled) while `avy-goto-line' is executed."
+If LINE is non-nil, go directly to line number LINE."
       (interactive "P")
-      (let ((avy-all-windows t) ; search in all windows
-            (fci-state-orig (when (featurep 'fill-column-indicator) fci-mode)))
+      (let ((avy-all-windows t)) ; search in all windows
         (if line
             (goto-line (if (listp line) (car line) line))
-          (progn
-            (if fci-state-orig
-                (fci-mode 'toggle))
-            (call-interactively #'avy-goto-line)
-            (if fci-state-orig
-                (fci-mode 'toggle))))))))
+          (call-interactively #'avy-goto-line))))))
 
 ;; http://emacs.stackexchange.com/a/4272/115
 (defun modi/forward-word-begin (arg)

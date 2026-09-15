@@ -16,6 +16,7 @@
   ("D"     modi/toggle-debug "debug on entry")
   ("e"     modi/toggle-edebug "edebug")
   ("f"     toggle-fill-unfill "fill/unfill")
+  ("|"     display-fill-column-indicator-mode "fill column indicator")
   ("F"     follow-mode "follow mode")
   ("g"     indent-guide-mode "indent guide")
   ("hc"    hardcore-mode "arrow key navigation")

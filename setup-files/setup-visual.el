@@ -124,7 +124,8 @@ Example: For `smyx' theme, the generated function will be `load-theme/smyx'.
 The DARK variable should be set to `'dark' if the theme is dark and `'light'
 if otherwise.
 
-The FCI-RULE-COLOR is the color string to set the color for fci rules.
+The FCI-RULE-COLOR is the color string used for the
+`fill-column-indicator' face (`display-fill-column-indicator-mode').
 
 Running `M-x load-theme/default' will disable all custom themes except
 the smart-mode-line theme."
@@ -143,13 +144,7 @@ the smart-mode-line theme."
        (with-eval-after-load 'smart-mode-line
          (when (member ',theme-name '(smyx leuven))
            (sml/apply-theme ,dark nil :silent))) ;Apply sml theme silently
-       (when (not (bound-and-true-p disable-pkg-fci))
-         (with-eval-after-load 'setup-fci
-           ;; Below commented code does not work
-           ;; (setq fci-rule-color (face-foreground 'font-lock-comment-face))
-           (setq fci-rule-color ,fci-rule-color)
-           (when (fboundp 'modi/fci-redraw-frame-all-buffers)
-             (modi/fci-redraw-frame-all-buffers)))))))
+       (set-face-foreground 'fill-column-indicator ,fci-rule-color))))
 
 (defmacro modi/gen-all-theme-fns ()
   `(progn ,@(mapcar
