@@ -522,12 +522,12 @@ in the template.")
       "Try to complete a structure template before point.
 This looks for strings like \"<e\" on an otherwise empty line and
 expands them."
-      (let ((l (buffer-substring (point-at-bol) (point)))
+      (let ((l (buffer-substring (line-beginning-position) (point)))
             a)
         (when (and (looking-at "[ \t]*$")
                    (string-match "^[ \t]*<\\([a-zA-Z]+\\)$" l)
                    (setq a (assoc (match-string 1 l) org-easy-template-alist)))
-          (org-complete-expand-structure-template (+ -1 (point-at-bol)
+          (org-complete-expand-structure-template (+ -1 (line-beginning-position)
                                                      (match-beginning 1))
                                                   a)
           t)))
@@ -540,8 +540,8 @@ expands them."
         (when (string-match "\\`[ \t]*#\\+" rpl)
           (cond
            ((bolp))
-           ((not (string-match "\\S-" (buffer-substring (point-at-bol) (point))))
-            (setq ind (buffer-substring (point-at-bol) (point))))
+           ((not (string-match "\\S-" (buffer-substring (line-beginning-position) (point))))
+            (setq ind (buffer-substring (line-beginning-position) (point))))
            (t (newline))))
         (setq start (point))
         (when (string-match "%file" rpl)
