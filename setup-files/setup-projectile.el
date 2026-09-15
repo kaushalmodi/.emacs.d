@@ -152,9 +152,6 @@ The return value of this function is unused as it is added as an :after advice."
                       nil :no-message-echo)))
     (advice-add 'package-menu--perform-transaction
                 :after #'modi/package-make-projectile-cache-stale)
-    (with-eval-after-load 'paradox
-      (advice-add 'paradox--perform-package-transaction
-                  :after #'modi/package-make-projectile-cache-stale))
 
     (defun modi/projectile-known-projects-sort ()
       "Move the now current project to the top of the `projectile-known-projects' list."

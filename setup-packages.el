@@ -140,23 +140,6 @@ to be installed.")
     (package-install p))
   (setq modi/missing-packages '()))
 
-;; Inspired from paradox.el
-(defun my/package-upgrade-packages (&optional no-fetch)
-  "Upgrade all packages.  No questions asked.
-This function is equivalent to `list-packages', followed by a
-`package-menu-mark-upgrades' and a `package-menu-execute'.  Except
-the user isn't asked to confirm deletion of packages.
-
-The NO-FETCH prefix argument is passed to `list-packages'.  It
-prevents re-download of information about new versions.  It does
-not prevent downloading the actual packages (obviously)."
-  (interactive "P")
-  (let ((package-menu-async nil)) ; This variable was introduced in emacs 25.0
-    (save-window-excursion
-      (package-list-packages no-fetch)
-      (package-menu-mark-upgrades)
-      (package-menu-execute 'noquery))))
-
 (defun modi/byte-recompile-elpa ()
   "Force byte-compile every `.el' file in `package-user-dir'.
 The `.el' files are re-compiled even if the corresponding `.elc' files exist,

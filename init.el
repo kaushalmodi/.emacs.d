@@ -97,7 +97,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     org-tree-slide
     outorg navi-mode ; supporting packages for outshine
     outshine ; org-mode navigation and organization outside org-mode
-    paradox ; package menu improvements
     page-break-lines ; Convert the ^L (form feed) chars to horizontal lines
     pomodoro
     poporg ; edit comments from any other mode in org mode
@@ -173,7 +172,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
   (require 'modi-mode))
 (require 'temp-mode)
 
-(require 'setup-paradox)
 (require 'setup-region-bindings-mode)
 (require 'setup-key-chord)
 (require 'setup-hydra)

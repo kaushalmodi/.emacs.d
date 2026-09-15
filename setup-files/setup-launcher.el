@@ -31,16 +31,14 @@
   ("L"       (modi/run-current-file 4) "load emacs init")
   ("m"       woman "man/woman")
   ("o"       org-capture "org capture")
-  ("p"       (call-interactively (if (package-installed-p 'paradox)
-                                     #'paradox-list-packages ;Launch paradox if installed
-                                   #'package-list-packages)) "packages")
+  ("p"       package-list-packages "packages")
   ;; chmod usage: s-SPC 644 P, s-SPC 400 P
   ("P"       modi/set-file-permissions "file permissions")
   ("r"       counsel-rg "ripgrep cwd")
   ("sa"      async-shell-command "shell async cmd")
   ("ss"      shell-command "shell cmd")
   ("t"       multi-term "terminal")
-  ("u"       paradox-upgrade-packages "upgrade packages")
+  ("u"       package-upgrade-all "upgrade packages")
   ("<SPC>"   hydra-launch-freq/body "launch freq")
   ("<s-SPC>" hydra-launch-freq/body nil)
   (":"       eval-expression "eval")
