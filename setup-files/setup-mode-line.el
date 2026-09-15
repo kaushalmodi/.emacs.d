@@ -155,7 +155,6 @@ If nil, show the same in the minibuffer.")
                 " yas"       ;yasnippet
                 " drag"      ;drag-stuff-mode
                 " VHl"       ;volatile highlights
-                " ctagsU"    ;ctags update
                 " Undo-Tree" ;undo tree
                 " wr"        ;Wrap Region
                 " SliNav"    ;elisp-slime-nav

@@ -433,7 +433,6 @@ and to have a `ctags' TAGS file pre-generated for this command to work."
                   (if (and (modi/verilog-find-module-instance)
                            modi/verilog-which-func-xtra)
                       (progn
-                        (modi/update-etags-table)
                         (visit-tags-table tags-file :local)
                         (xref-find-definitions modi/verilog-which-func-xtra))
                     ;; Do `xref-go-back' if this command is called when the

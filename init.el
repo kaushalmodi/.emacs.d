@@ -72,7 +72,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     fold-this
     gist
     git-timemachine ; walk through git revisions
-    ggtags ctags-update
+    ggtags
     hardcore-mode
     hideshow-org
     htmlize

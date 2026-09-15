@@ -8,9 +8,7 @@
 ;;  gtags, GNU global
 ;;    ggtags
 ;;  ctags
-;;    etags-select
-;;      etags-table
-;;    ctags-update
+;;    etags-regen
 ;;  modi/find-tag
 ;;  xref, semantic/symref
 
@@ -64,124 +62,37 @@
 ;; Increase the warning threshold to be more than normal TAGS file sizes
 (setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
 
-(when (executable-find "ctags")
-;;;; etags-select
-  ;; http://mattbriggs.net/blog/2012/03/18/awesome-emacs-plugins-ctags
-  (use-package etags-select
-    :load-path "elisp/manually-synced/etags-select"
-    :commands (modi/update-etags-table)
+(defun modi/universal-ctags-p ()
+  "Return non-nil if the `ctags' found in PATH is Universal Ctags.
+The BSD ctags that ships with macOS cannot write etags-format TAGS files."
+  (when (executable-find "ctags")
+    (string-match-p "Universal Ctags"
+                    (shell-command-to-string "ctags --version 2>/dev/null"))))
+
+(when (modi/universal-ctags-p)
+;;;; etags-regen
+  ;; Auto-generate the TAGS file for the current project (`project-current')
+  ;; and keep it updated as files are saved.
+  (use-package etags-regen
     :config
     (progn
-
-;;;;; etags-table
-      ;; Depending on the location of the file in buffer, the respective TAGS
-      ;; file is opened on doing a tag find.
-      (use-package etags-table
-        :load-path "elisp/manually-synced/etags-table"
-        :config
-        (progn
-          (setq etags-table-alist nil) ; initialize `etags-table-alist'
-
-          ;; emacs config
-          (add-to-list 'etags-table-alist
-                       `(,(concat user-emacs-directory ".*")
-                         ,(concat user-emacs-directory "TAGS")))
-
-          ;; Max depth to search up for a tags file; nil means don't search
-          (setq etags-table-search-up-depth 15)))
-
-      ;; Below function comes useful when you change the project-root
-      ;; symbol to a different value (when switching projects)
-      (defun modi/update-etags-table ()
-        "Update `etags-table-alist' based on the current project directory."
-        (interactive)
-        (when (and (featurep 'projectile)
-                   (projectile-project-root))
-          (add-to-list 'etags-table-alist
-                       `(,(concat (projectile-project-root) ".*")
-                         ,(concat (projectile-project-root) "TAGS"))
-                       t)))
-
-      (bind-keys
-       :map etags-select-mode-map
-       ("C-g" . etags-select-quit))))
-
-;;;; ctags-update
-  ;; https://github.com/jixiuf/ctags-update
-  (use-package ctags-update
-    :config
-    (progn
-      ;; Auto update
-      (setq ctags-update-delay-seconds (* 30 60)) ; every 1/2 hour
-
-      (defvar ctags-options-file (let ((file (expand-file-name ".ctags" user-home-directory)))
-                                   (when (file-exists-p file)
-                                     file))
-        "User's Ctags options file.")
-
-      (when ctags-options-file
-        (setq ctags-update-other-options
-              (list
-               (concat "--options=" ctags-options-file))))
-
-      ;; Override `ctags-update-how-to-update' so that when it called
-      ;; non-interactively (via `after-save-hook), then the user is not nagged
-      ;; to generate the TAGS file if it is not present. If TAGS file generation
-      ;; is necessary, do M-x ctags-update.
-      (defun modi/ctags-update-how-to-update (is-interactive)
-        "Return the TAGS file name (maybe).
-
-If \\[universal-argument] or \\[universal-argument] \\[universal-argument]
-argument is used when calling `ctags-update' interactively, user is asked for
-the location to generate the TAGS file.
-
-If `ctags-update' is called interactively without any prefix argument, user is
-asked for the TAGS file location, but only if that file is not present.
-
-Otherwise, if `ctags-update' is called non-interactively (example, via the
-`after-save-hook'), if the TAGS file is present, return that file's path; else
-do nothing and return nil.
-
-This function also prevents the user-error \"Another ctags-update process is
-already running\" caused in `ctags-update' function if value returned by this
-function is non-nil and the tag generation process is already running."
-        (let (tags)
-          (cond
-           ((> (prefix-numeric-value current-prefix-arg) 1)  ;C-u or C-u C-u ,generate new tags in selected directory
-            (setq tags (expand-file-name "TAGS"
-                                         (read-directory-name "Generate TAGS in dir:"))))
-           (is-interactive
-            (setq tags (ctags-update-find-tags-file))
-            (unless tags
-              (setq tags (expand-file-name "TAGS"
-                                           (read-directory-name "Generate TAGS in dir:")))))
-           (t
-            ;; If the TAGS file does not exist in this case, `tags' is set to nil.
-            (setq tags (ctags-update-find-tags-file))
-            (when tags
-              (let ((process-already-running (get-process tags)))
-                (when process-already-running
-                  ;; Prevent the user-error "Another ctags-update process is
-                  ;; already running" caused in `ctags-update' function if tags
-                  ;; is non-nil and the tag generation process is already running.
-                  (setq tags nil))))))
-          tags))
-      (advice-add 'ctags-update-how-to-update :override #'modi/ctags-update-how-to-update)
-
-      (add-hook 'emacs-lisp-mode-hook #'turn-on-ctags-auto-update-mode)
-      (add-hook 'verilog-mode-hook #'turn-on-ctags-auto-update-mode))))
+      (setq etags-regen-program "ctags")
+      ;; File types not covered by the default `etags-regen-file-extensions'.
+      (dolist (ext '("sv" "svh" "v" "vh" "tv" "vp" ;Verilog, SystemVerilog
+                     "nim" "nims"
+                     "tcl"))
+        (add-to-list 'etags-regen-file-extensions ext))
+      (etags-regen-mode 1))))
 
 ;;; modi/find-tag
-(defun modi/find-tag (&optional use-ctags)
-  "Use `ggtags' if available, else use `ctags' to find tags.
+(defun modi/find-tag (&optional use-xref)
+  "Use `ggtags' if available, else use `xref' to find tags.
 
-If USE-CTAGS is non-nil, use `ctags'."
+If USE-XREF is non-nil, use `xref' even when `ggtags' is available."
   (interactive "P")
-  (if (or use-ctags
+  (if (or use-xref
           (not (featurep 'ggtags)))
-      (progn
-        (modi/update-etags-table)
-        (etags-select-find-tag-at-point))
+      (call-interactively #'xref-find-definitions)
     (call-interactively #'ggtags-find-tag-dwim)))
 
 ;;; xref, semantic/symref
@@ -210,18 +121,3 @@ If USE-CTAGS is non-nil, use `ctags'."
 (provide 'setup-tags)
 
 ;; Emacs rereads the TAGS file (ctags) during every tag find operation.
-
-;; Default `etags-select' bindings
-;; |---------+------------------------------------|
-;; | Binding | Description                        |
-;; |---------+------------------------------------|
-;; | RET     | etags-select-goto-tag              |
-;; | M-RET   | etags-select-goto-tag-other-window |
-;; | p       | etags-select-previous-tag          |
-;; | n       | etags-select-next-tag              |
-;; | q       | etags-select-quit                  |
-;; | 0       | (etags-select-by-tag-number "0")   |
-;; | 1       | (etags-select-by-tag-number "1")   |
-;; | ..      | ..                                 |
-;; | 9       | (etags-select-by-tag-number "9")   |
-;; |---------+------------------------------------|
