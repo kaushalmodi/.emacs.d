@@ -134,7 +134,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     ;; smyx-theme ; < fork
     leuven-theme ; awesome white background theme
     ;; Crypt
-    ;; nlinum ; better performance than linum ; Sticking to frozen version 1.7 in my config
     ;; bookmark+ ; able to bookmark desktop sessions
     ;; ox-twbs ; export to twitter bootstrap html < fork (supports org 9.0+)
     ;; git-link ; get git links with line numbers and commit-hash/branch ; < fork

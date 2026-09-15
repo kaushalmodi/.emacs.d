@@ -107,7 +107,7 @@ This variable is to be updated when changing themes.")
 This function is not meant for interactive use. A clean way to disable all
 themes will be to run `M-x load-theme/default' (this function is generated
 by the `modi/gen-all-theme-fns' macro. That will ensure that all
-themes are disabled and also fix the faces for linum, fringe, etc."
+themes are disabled and also fix the fringe faces."
   (dolist (theme custom-enabled-themes)
     (unless (string-match "smart-mode-line-" (format "%s" theme))
       (disable-theme theme))))
@@ -139,8 +139,6 @@ the smart-mode-line theme."
          (load-theme ',theme-name :no-confirm))
        (with-eval-after-load 'general
          (modi/blend-fringe))
-       (with-eval-after-load 'setup-linum
-         (modi/blend-linum))
        (with-eval-after-load 'smart-mode-line
          (when (member ',theme-name '(smyx leuven))
            (sml/apply-theme ,dark nil :silent))) ;Apply sml theme silently
