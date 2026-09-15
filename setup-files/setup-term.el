@@ -49,7 +49,7 @@
             ("M-DEL"   . term-send-backward-kill-word)
             ("M-r"     . term-send-reverse-search-history) ; default
             ("M-,"     . term-send-raw)                    ; default
-            ("M-."     . comint-dynamic-complete)))        ; default
+            ("M-."     . completion-at-point)))            ; default
 
     (setq multi-term-buffer-name "term")))
 
