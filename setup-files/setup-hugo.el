@@ -17,8 +17,7 @@
 ;; Below is needed so that the "put .. safe-local-variable" forms get
 ;; evaluated from the ox-hugo's autoloads file.
 (unless (file-exists-p modi/ox-hugo-autoloads-file)
-  (let ((generated-autoload-file modi/ox-hugo-autoloads-file))
-    (update-directory-autoloads modi/ox-hugo-dir)))
+  (loaddefs-generate modi/ox-hugo-dir modi/ox-hugo-autoloads-file))
 (load-file modi/ox-hugo-autoloads-file)
 
 (use-package tomelr
