@@ -47,7 +47,7 @@
       ;; state.
 
       ;; Restoring bookmarks
-      (add-hook 'find-file-hooks   #'bm-buffer-restore)
+      (add-hook 'find-file-hook    #'bm-buffer-restore)
       (add-hook 'after-revert-hook #'bm-buffer-restore)
       ;; The `after-revert-hook' is not necessary to use to achieve persistence,
       ;; but it makes the bookmark data in repository more in sync with the file
