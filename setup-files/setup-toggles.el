@@ -9,7 +9,7 @@
   ("aa"    artist-mode "artist mode")
   ("af"    auto-fill-mode "auto fill")
   ("ar"    auto-revert-mode "auto revert")
-  ("aw"    adaptive-wrap-prefix-mode "adaptive wrap")
+  ("aw"    visual-wrap-prefix-mode "visual wrap prefix")
   ("b"     menu-bar-mode "menu bar")
   ("c"     xah-cycle-letter-case "cycle case" :color red)
   ("d"     toggle-debug-on-error "debug on error")

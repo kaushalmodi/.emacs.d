@@ -22,7 +22,7 @@
 ;;    Global Font Resize
 ;;  Line truncation
 ;;  Visual Line Mode
-;;    Adaptive Wrap
+;;    Visual Wrap Prefix
 ;;  Cursor
 ;;  Prez Mode
 ;;  Hidden Mode Line Mode
@@ -287,20 +287,17 @@ See `mode-line-format' to get help on the %-identifers used in this function."
 (setq-default visual-line-fringe-indicators '(left-curly-arrow
                                               right-curly-arrow))
 
-;;;; Adaptive Wrap
-;; `adaptive-wrap-prefix-mode' indents the visual lines to
-;; the level of the actual line plus `adaptive-wrap-extra-indent'. Thus line
-;; truncation has to be off for adaptive wrap to be in effect.
-(use-package adaptive-wrap
-  :defer t
-  :config
+;;;; Visual Wrap Prefix
+;; `visual-wrap-prefix-mode' indents the visual lines to the level of the
+;; actual line plus `visual-wrap-extra-indent'. Thus line truncation has to
+;; be off for it to be in effect. It needs `visual-line-mode' to be enabled,
+;; so enable it only when the latter is enabled.
+(use-package visual-wrap
+  :hook (visual-line-mode . visual-wrap-prefix-mode)
+  :init
   (progn
     ;; Need to set the below variable globally as it is a buffer-local variable.
-    (setq-default adaptive-wrap-extra-indent 2)
-
-    ;; Adaptive wrap anyways needs the `visual-line-mode' to be enabled. So
-    ;; enable it only when the latter is enabled.
-    (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)))
+    (setq-default visual-wrap-extra-indent 2)))
 
 ;;; Cursor
 ;; Change cursor color according to mode:

@@ -47,7 +47,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 
 (defconst my-packages
   '(ace-window
-    adaptive-wrap ; indented line wrapping
     ag wgrep wgrep-ag s ; ag > ack > grep
                                         ; wgrep+wgrep-ag allow editing files
                                         ; directly in ag buffer
