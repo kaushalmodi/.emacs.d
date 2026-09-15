@@ -157,7 +157,6 @@ If nil, show the same in the minibuffer.")
                 " VHl"       ;volatile highlights
                 " Undo-Tree" ;undo tree
                 " wr"        ;Wrap Region
-                " Fly"       ;Flycheck
                 " PgLn"      ;page-line-break
                 " ElDoc"     ;eldoc
                 " GG"        ;ggtags

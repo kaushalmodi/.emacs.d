@@ -67,7 +67,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     engine-mode ; search engines
     expand-region
     eww-lnum ; jump to links in eww buffer ace-jump style
-    flycheck                    ; sh-shellcheck
     flyspell-correct-ivy ; ivy interface for correct spelling suggestions
     fold-this
     gist
@@ -213,7 +212,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 ;; on emacs 25.1 or older.
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23949
 (require 'setup-fold)
-(require 'setup-flycheck)
+(require 'setup-flymake)
 (require 'setup-gist)
 (when (executable-find "git")
   (require 'setup-diff)
