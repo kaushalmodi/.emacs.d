@@ -10,7 +10,6 @@
 ;;  Clipboard
 ;;  Delete Selection
 ;;  Show Paren
-;;  Duplicate current line or region
 ;;  Managing white spaces and empty newlines
 ;;  Tabs and Untabify
 ;;  Align
@@ -158,29 +157,6 @@ Additional control:
 ;; Allow one to see matching pairs of parentheses
 ;; When point is on one of the paired characters, highlight the other
 (show-paren-mode 1)
-
-;;; Duplicate current line or region
-;; http://tuxicity.se/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
-(defun duplicate-current-line-or-region (arg)
-  "Duplicates the current line or region ARG times.
-
-If there's no region, the current line will be duplicated. However, if
-there's a region, all lines that region covers will be duplicated."
-  (interactive "p")
-  (let (beg end (origin (point)))
-    (if (and mark-active (> (point) (mark)))
-        (exchange-point-and-mark))
-    (setq beg (line-beginning-position))
-    (if mark-active
-        (exchange-point-and-mark))
-    (setq end (line-end-position))
-    (let ((region (buffer-substring-no-properties beg end)))
-      (dotimes (i arg)
-        (goto-char end)
-        (newline)
-        (insert region)
-        (setq end (point)))
-      (goto-char (+ origin (* (length region) arg) arg)))))
 
 ;;; Managing white spaces and empty newlines
 (setq require-final-newline t)
@@ -1189,8 +1165,8 @@ the cons elements are strings."
 (bind-keys
  :map modi-mode-map
  ("C-x d" . delete-region)
- ("C-S-d" . duplicate-current-line-or-region)
- ("C-M-d" . duplicate-current-line-or-region) ;Alternative to C-S-d in terminal mode, overrides `down-list'
+ ("C-S-d" . duplicate-dwim)
+ ("C-M-d" . duplicate-dwim) ;Alternative to C-S-d in terminal mode, overrides `down-list'
  ("C-x \\" . align-regexp) ; align selected region to the entered regexp
  ;; Align multiple columns in the selected region. Of course all the selected
  ;; lines must have the same number of columns of groups of non-space characters
