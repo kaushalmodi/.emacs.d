@@ -7,10 +7,10 @@
   :defer t
   :config
   (progn
-    ;; Render ANSI color escapes in compilation output. Grep/Ag results
+    ;; Render ANSI color escapes in compilation output. Grep results
     ;; buffers derive from `compilation-mode' too, so keep their colors intact.
     (defun modi/colorize-compilation-buffer ()
-      (unless (derived-mode-p '(grep-mode ag-mode))
+      (unless (derived-mode-p 'grep-mode)
         (ansi-color-compilation-filter)))
     (add-hook 'compilation-filter-hook #'modi/colorize-compilation-buffer)))
 

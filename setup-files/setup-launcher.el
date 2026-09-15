@@ -6,7 +6,6 @@
 (defhydra hydra-launch (:color teal
                         :columns 6)
   "Launcher"
-  ("a"       counsel-ag "ag cwd")
   ("b"       bookmark-jump "bookmark jump")
   ("cc"      calc "calc")
   ("cg"      browse-url-chrome "google chrome")

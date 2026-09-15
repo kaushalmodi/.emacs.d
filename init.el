@@ -47,9 +47,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 
 (defconst my-packages
   '(ace-window
-    ag wgrep wgrep-ag s ; ag > ack > grep
-                                        ; wgrep+wgrep-ag allow editing files
-                                        ; directly in ag buffer
+    wgrep s
     all all-ext ; edit ALL lines matching regex
     ascii-art-to-unicode
     fuzzy
@@ -185,8 +183,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 ;; Set up packages
 (require 'setup-abbrev)
 (require 'setup-ace-window)
-(when (executable-find "ag")
-  (require 'setup-ag))
 (require 'setup-all)
 (require 'setup-artist)
 (require 'setup-bookmarks)

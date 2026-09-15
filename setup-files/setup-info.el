@@ -335,14 +335,14 @@ Info-mode:
      ;; Override the Info-mode-map binding to "?" set by info+
      ("?" . hydra-info/body))))
 
-(defun counsel-ag-emacs-info (&optional initial-input)
-  "Search in all Info manuals in the emacs 'info/' directory using ag.
+(defun counsel-rg-emacs-info (&optional initial-input)
+  "Search in all Info manuals in the emacs 'info/' directory using rg.
 This directory contains the emacs, elisp, eintr, org, calc Info manuals and other
 manuals too for the packages that ship with emacs.
 INITIAL-INPUT can be given as the initial minibuffer input."
   (interactive)
-  (counsel-ag initial-input (car Info-default-directory-list)
-              " -z" "Search emacs/elisp info"))
+  (counsel-rg initial-input (car Info-default-directory-list)
+              "--search-zip" "Search emacs/elisp info"))
 
 ;; http://oremacs.com/2015/03/17/more-info/
 (defun ora-open-info (topic bufname)
@@ -366,7 +366,7 @@ _i_nfo      _o_rg      e_l_isp      e_L_isp intro      _e_macs      _c_alc      
   ("c" (ora-open-info "calc" "*Calc Info*"))
   ("C" (ora-open-info "cl" "* Emacs Common Lisp Info*"))
   ("p" (ora-open-info "python3" "*Python 3 Info*"))
-  ("g" counsel-ag-emacs-info))
+  ("g" counsel-rg-emacs-info))
 (bind-key "C-h i" #'hydra-info-to/body modi-mode-map)
 
 

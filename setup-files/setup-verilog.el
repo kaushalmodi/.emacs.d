@@ -441,42 +441,44 @@ and to have a `ctags' TAGS file pre-generated for this command to work."
                 (user-error "Ctags TAGS file `%s' was not found" tags-file)))
           (user-error "Executable `ctags' is required for this command to work")))
 
-      (with-eval-after-load 'ag         ;For `ag-regexp'
-
 ;;;; modi/verilog-find-parent-module (interactive)
-        (defun modi/verilog-find-parent-module ()
-          "Find the places where the current verilog module is instantiated in
+      (defun modi/verilog-find-parent-module ()
+        "Find the places where the current verilog module is instantiated in
 the project."
-          (interactive)
-          (let ((verilog-module-re (concat "^[[:blank:]]*" ;Elisp regexp
-                                           "\\(?:module\\)[[:blank:]]+" ;Shy group
-                                           "\\(?1:"
-                                           modi/verilog-identifier-re ;Elisp regexp here!
-                                           "\\)\\b"))
-                module-name
-                module-instance-pcre)
-            (save-excursion
-              (re-search-backward verilog-module-re)
-              (setq module-name (match-string 1))
-              (setq module-instance-pcre ;PCRE regex
-                    (concat "^\\s*"
-                            module-name
-                            "\\s+"
-                            "(#\\s*\\((\\n|.)*?\\))*" ;optional hardware parameters
+        (interactive)
+        (let ((verilog-module-re (concat "^[[:blank:]]*" ;Elisp regexp
+                                         "\\(?:module\\)[[:blank:]]+" ;Shy group
+                                         "\\(?1:"
+                                         modi/verilog-identifier-re ;Elisp regexp here!
+                                         "\\)\\b"))
+              module-name
+              module-instance-pcre)
+          (save-excursion
+            (re-search-backward verilog-module-re)
+            (setq module-name (match-string 1))
+            (setq module-instance-pcre ;PCRE regex
+                  (concat "^\\s*"
+                          module-name
+                          "\\s+"
+                          "(#\\s*\\((\\n|.)*?\\))*" ;optional hardware parameters
                                         ;'(\n|.)*?' does non-greedy multi-line grep
-                            "(\\n|.)*?" ;optional newline/space before instance name
-                            "([^.])*?" ;do not match ".PARAM (PARAM_VAL)," if any
-                            "\\K"       ;don't highlight anything till this point
-                            modi/verilog-identifier-pcre ;instance name
-                            "(?=[^a-zA-Z0-9_]*\\()")) ;optional space/newline after instance name
+                          "(\\n|.)*?" ;optional newline/space before instance name
+                          "([^.])*?" ;do not match ".PARAM (PARAM_VAL)," if any
+                          "\\K"       ;don't highlight anything till this point
+                          modi/verilog-identifier-pcre ;instance name
+                          "(?=[^a-zA-Z0-9_]*\\()")) ;optional space/newline after instance name
                                         ;and before opening parenthesis `('
                                         ;don't highlight anything in (?=..)
-              ;; (message module-instance-pcre)
-              (let* ((ag-arguments ag-arguments)) ;Save the global value of `ag-arguments'
-                ;; Search only through verilog type files.
-                ;; See "ag --list-file-types".
-                (add-to-list 'ag-arguments "--verilog" :append)
-                (ag-regexp module-instance-pcre (projectile-project-root))))))))
+            ;; (message module-instance-pcre)
+            ;; `--pcre2' is needed for the \K and (?=..) constructs above, and
+            ;; `--multiline' for the (\n|.)*? parts. Search only through
+            ;; verilog type files; see "rg --type-list".
+            (grep (mapconcat #'shell-quote-argument
+                             (list "rg" "--pcre2" "--multiline" "--type" "verilog"
+                                   "--line-number" "--no-heading" "--color" "never"
+                                   "--regexp" module-instance-pcre
+                                   (projectile-project-root))
+                             " "))))))
 
 ;;;; modi/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
@@ -778,7 +780,7 @@ _a_lways         _f_or              _g_enerate         _O_utput
      ("<f9>"      . modi/verilog-compile)
      ("<S-f9>"    . modi/verilog-simulate))
     (bind-chord "\\\\" #'modi/verilog-jump-to-module-at-point verilog-mode-map) ;"\\"
-    (when (executable-find "ag")
+    (when (executable-find "rg")
       (bind-chord "^^" #'modi/verilog-find-parent-module verilog-mode-map))))
 
 

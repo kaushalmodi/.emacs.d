@@ -65,15 +65,6 @@ the directory basename."
         (projectile-default-project-name project-root))))
     (setq projectile-project-name-function #'modi/projectile-project-name)
 
-    (defun modi/advice-projectile-use-ag (&rest _args)
-      "Always use `ag' for getting a list of all files in the project."
-      (mapconcat #'shell-quote-argument
-                 (append '("ag")
-                         modi/ag-arguments
-                         '("-0"         ;Output null separated results
-                           "-g" ""))    ;Get file names matching "" (all files)
-                 " "))
-
     (defun modi/advice-projectile-use-rg (&rest _args)
       "Always use `rg' for getting a list of all files in the project."
       (let* ((prj-user-ignore-name (expand-file-name
@@ -97,14 +88,8 @@ the directory basename."
                    " ")))
 
     ;; Use `rg' all the time if available
-    (if (executable-find "rg")
-        (progn
-          (advice-remove 'projectile-get-ext-command #'modi/advice-projectile-use-ag)
-          (advice-add 'projectile-get-ext-command :override #'modi/advice-projectile-use-rg))
-      ;; Else use `ag' if available
-      (when (executable-find "ag")
-        (advice-remove 'projectile-get-ext-command #'modi/advice-projectile-use-rg)
-        (advice-add 'projectile-get-ext-command :override #'modi/advice-projectile-use-ag)))
+    (when (executable-find "rg")
+      (advice-add 'projectile-get-ext-command :override #'modi/advice-projectile-use-rg))
 
     ;; Make the file list creation faster by NOT calling `projectile-get-sub-projects-files'
     (defun modi/advice-projectile-no-sub-project-files ()
@@ -209,13 +194,13 @@ files in Fundamental mode."
 
 ^^^^       Find               ^^   Search/Tags       ^^^^       Buffers               ^^   Cache                     ^^^^       Other
 ^^^^--------------------------^^---------------------^^^^-----------------------------^^------------------------------------------------------------------
-_f_/_s-f_: file               _a_: ag                ^^    _i_: Ibuffer               _c_: cache clear               ^^    _E_: edit project's .dir-locals.el
+_f_/_s-f_: file               _a_: deadgrep          ^^    _i_: Ibuffer               _c_: cache clear               ^^    _E_: edit project's .dir-locals.el
 ^^    _F_: file dwim          _G_: update gtags      ^^    _b_: switch to buffer      _x_: remove known project      _s-p_/_p_: switch to other project
 ^^    _d_: file curr dir      _o_: multi-occur       _K_/_s-k_: kill all buffers      _X_: cleanup non-existing      ^^    _g_: switch to Magit status of other project
 ^^    _l_: file literally     ^^                     ^^^^                             _z_: cache current             ^^    _P_: switch to an open project
 ^^    _r_: recent file        ^^                     ^^^^                             ^^                             ^^    _D_: find dir
 "
-      ("a"   projectile-ag)
+      ("a"   deadgrep)
       ("b"   projectile-switch-to-buffer)
       ("c"   projectile-invalidate-cache)
       ("d"   projectile-find-file-in-directory)

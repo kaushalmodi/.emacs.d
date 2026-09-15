@@ -64,26 +64,9 @@
         (lambda (x) (delete-file (expand-file-name x ivy--directory)))
         ,(propertize "delete" 'face 'font-lock-warning-face))))
 
-    ;; counsel-ag
-    ;; Redefine `counsel-ag-base-command' with my required options, especially
-    ;; the `--follow' option to allow search through symbolic links (part of
-    ;; `modi/ag-arguments').
-    ;; (setq counsel-ag-base-command "\\ag --vimgrep %s") ; default
-    (setq counsel-ag-base-command
-          ;; http://stackoverflow.com/a/12999828/1219634
-          (concat (mapconcat #'shell-quote-argument
-                             (append '("ag")
-                                     modi/ag-arguments
-                                     '("--noheading" ;No file names above matching content
-                                       "--nocolor"))
-                             " ")
-                  " %s"            ;This MUST be %s, not %S
-                                        ;https://github.com/abo-abo/swiper/issues/427
-                  ))
-    ;; Show parent directory in the prompt
-    (ivy-set-prompt 'counsel-ag #'counsel-prompt-function-dir)
-
     ;; counsel-rg
+    ;; Show parent directory in the prompt
+    (ivy-set-prompt 'counsel-rg #'counsel-prompt-function-dir)
     ;; Redefine `counsel-rg-base-command' with my required options, especially
     ;; the `--follow' option to allow search through symbolic links (part of
     ;; `modi/rg-arguments').

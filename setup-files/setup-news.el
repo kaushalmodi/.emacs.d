@@ -19,16 +19,16 @@
 (add-hook 'find-file-hook #'modi/view-news-in-org-mode)
 
 ;; NEWS search
-(when (executable-find "ag")
-  (defun counsel-ag-news (&optional initial-input)
-    "Search for a pattern in NEWS files using ag.
+(when (executable-find "rg")
+  (defun counsel-rg-news (&optional initial-input)
+    "Search for a pattern in NEWS files using rg.
 INITIAL-INPUT can be given as the initial minibuffer input."
     (interactive)
-    (counsel-ag initial-input data-directory " -G '/NEWS'" "Search NEWS"))
+    (counsel-rg initial-input data-directory "--glob 'NEWS*'" "Search NEWS"))
 
   ;; Override the default binding to `view-emacs-news', which is also bound to
   ;; "C-h C-n" by default.
-  (bind-key "C-h n" #'counsel-ag-news modi-mode-map))
+  (bind-key "C-h n" #'counsel-rg-news modi-mode-map))
 
 
 (provide 'setup-news)
