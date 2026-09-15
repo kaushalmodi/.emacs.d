@@ -62,16 +62,16 @@
         (with-eval-after-load 'auto-complete
           (ac-flyspell-workaround))
         ;; https://github.com/larstvei/dot-emacs#flyspell
-        (add-hook 'text-mode-hook #'turn-on-flyspell)
-        (add-hook 'org-mode-hook  #'turn-on-flyspell)
+        (add-hook 'text-mode-hook #'flyspell-mode)
+        (add-hook 'org-mode-hook  #'flyspell-mode)
 
         ;; Flyspell signals an error if there is no spell-checking tool is
-        ;; installed. We can advice `turn-on-flyspell' and `flyspell-prog-mode'
+        ;; installed. We can advice `flyspell-mode' and `flyspell-prog-mode'
         ;; to try to enable flyspell only if a spell-checking tool is available.
         (defun modi/ispell-not-avail-p (&rest args)
           "Return `nil' if `ispell-program-name' is available; `t' otherwise."
           (not (executable-find ispell-program-name)))
-        (advice-add 'turn-on-flyspell   :before-until #'modi/ispell-not-avail-p)
+        (advice-add 'flyspell-mode      :before-until #'modi/ispell-not-avail-p)
         (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)
 
         ;; https://github.com/d12frosted/flyspell-correct
