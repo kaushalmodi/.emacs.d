@@ -148,10 +148,7 @@ This value must match the `infodir' variable in the Org local.mk.")
 
     ;; Single key command execution when at beginning of a headline
     (setq org-use-speed-commands t)     ;? speed-key opens Speed Keys help
-    (if (version< (org-version) "9.5")
-        (setq org-speed-commands-user '(("m" . org-mark-subtree)))
-      ;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=d48276b894ef51c1e657ef3d8caa334f5abd40a3
-      (add-to-list 'org-speed-commands '("m" . org-mark-subtree) :append))
+    (add-to-list 'org-speed-commands '("m" . org-mark-subtree) :append)
 
     (setq org-hide-leading-stars  t)
     ;; Prevent auto insertion of blank lines before headings and list items
@@ -1187,7 +1184,7 @@ on each save.
     ;; Do not add the default indentation of 2 spaces when exiting the *Org Src*
     ;; buffer (the buffer you get when you do «C-c '» while in a block like
     ;; #+begin_src
-    (setq org-edit-src-content-indentation 0) ;Default = 2
+    (setq org-src-content-indentation 0) ;Default = 2
 
     (add-to-list 'org-src-lang-modes '("systemverilog" . verilog))
     (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
