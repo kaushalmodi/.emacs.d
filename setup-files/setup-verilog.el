@@ -412,7 +412,7 @@ point."
         "When in a module instance, jump to that module's definition.
 
 Calling this function again after that *without moving the point* will
-call `pop-tag-mark' and jump will be made back to the original position.
+call `xref-go-back' and jump will be made back to the original position.
 
 Usage: While the point is inside a verilog instance, say, \"core u_core\",
 calling this command, will make a jump to \"module core\". When you call this
@@ -434,10 +434,11 @@ and to have a `ctags' TAGS file pre-generated for this command to work."
                            modi/verilog-which-func-xtra)
                       (progn
                         (modi/update-etags-table)
-                        (find-tag modi/verilog-which-func-xtra))
-                    ;; Do `pop-tag-mark' if this command is called when the
+                        (visit-tags-table tags-file :local)
+                        (xref-find-definitions modi/verilog-which-func-xtra))
+                    ;; Do `xref-go-back' if this command is called when the
                     ;; point in *not* inside a verilog instance.
-                    (pop-tag-mark))
+                    (xref-go-back))
                 (user-error "Ctags TAGS file `%s' was not found" tags-file)))
           (user-error "Executable `ctags' is required for this command to work")))
 
