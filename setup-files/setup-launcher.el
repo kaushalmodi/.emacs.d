@@ -11,7 +11,7 @@
   ("cc"      calc "calc")
   ("cg"      browse-url-chrome "google chrome")
   ("cl"      calendar "calendar")
-  ("d"       dired-single-magic-buffer-current-dir "dired cwd")
+  ("d"       modi/dired-current-dir "dired cwd")
   ("ed"      modi/ediff-dwim "ediff dwim")
   ("ee"      eww "eww")
   ("eb"      eww-list-bookmarks "eww bookmarks")

@@ -9,37 +9,25 @@
   ;; and then update the PATH in your shell config file.
   (setq insert-directory-program "gls"))
 
-;; https://codeberg.org/amano.kenji/dired-single
-(use-package dired-single
-  :load-path "elisp/manually-synced/dired-single"
-  :bind (:map modi-mode-map
-         ;; Change the default `C-x C-d` key binding from `ido-list-directory'
-         ("C-x C-d" . dired-single-magic-buffer-current-dir)
-         ;; Change the default `C-x C-j` key binding from `dired-jump'
-         ;; Opens dired-single-magic-buffer but asks which directory to open that
-         ;; dired buffer for.
-         ("C-x C-j" . dired-single-magic-buffer))
-  :config
-  (progn
-    (defun dired-single-magic-buffer-current-dir ()
-      "Open a single magic dired buffer for the current buffer directory."
-      (interactive)
-      (dired-single-magic-buffer default-directory))
+;; Reuse the current Dired buffer when visiting another directory from it
+;; (RET, ^, mouse), instead of piling up one buffer per directory.
+(setq dired-kill-when-opening-new-dired-buffer t)
 
-    (defun dired-single-up-directory ()
-      (interactive)
-      (dired-single-buffer ".."))
+(defun modi/dired-current-dir ()
+  "Open Dired for the directory of the current buffer."
+  (interactive)
+  (dired default-directory))
 
-    (with-eval-after-load 'dired
-      (bind-keys
-       :map dired-mode-map
-       ("<return>"         . dired-single-buffer)
-       ("<double-mouse-1>" . dired-single-buffer-mouse)
-       ("^"                . dired-single-up-directory)))))
+(bind-keys
+ :map modi-mode-map
+ ;; Change the default `C-x C-d` key binding from `ido-list-directory'
+ ("C-x C-d" . modi/dired-current-dir)
+ ;; Change the default `C-x C-j` key binding from `dired-jump'; `dired'
+ ;; prompts for the directory to open.
+ ("C-x C-j" . dired))
 
 (use-package dired
-  :commands (dired-toggle-read-only ; to toggle read-only state of any buffer
-             dired-get-filename) ; called by `dired-single'
+  :commands (dired-toggle-read-only) ; to toggle read-only state of any buffer
   :config
   (progn
     (setq dired-recursive-deletes 'always)

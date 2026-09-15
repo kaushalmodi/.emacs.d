@@ -5,7 +5,6 @@
 |----------------+----------------------------------------------------------+--------------------------------------------------------------------------------------------------|
 | csv-nav        | https://www.emacswiki.org/emacs/download/csv-nav.el      | https://github.com/melpa/melpa/pull/5008                                                         |
 | dired+         | https://www.emacswiki.org/emacs/download/dired%2b.el     | https://github.com/melpa/melpa/pull/5008                                                         |
-| dired-single   | https://codeberg.org/amano.kenji/dired-single            | Not available on Melpa, and the upstream repo is archived                                        |
 | header2        | https://www.emacswiki.org/emacs/download/header2.el      | https://github.com/melpa/melpa/pull/5008                                                         |
 | hideshowvis    | https://github.com/sheijk/hideshowvis                    | Not available on GNU Elpa or Melpa                                                               |
 | hl-line+       | https://www.emacswiki.org/emacs/download/hl-line%2b.el   | https://github.com/melpa/melpa/pull/5008                                                         |
