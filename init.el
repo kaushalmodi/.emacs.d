@@ -298,11 +298,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-web-mode)
 (require 'setup-yaml-mode)
 
-(>=e "25.1"
-    nil       ; Emacs 25.1 has `M-.' bound to `xref-find-definitions' by default
-                                        ; which works better than elisp-slime-nav
-  (require 'setup-elisp-slime-nav))
-
 ;; Blend of other setup
 (require 'setup-backup)
 (require 'setup-compile)
