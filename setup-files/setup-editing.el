@@ -364,7 +364,7 @@ tabs explicitly."
 How to use: Put the cursor at the end of an expression like (+ 1 2) and call
 this command."
   (interactive)
-  (let ((value (eval (preceding-sexp))))
+  (let ((value (eval (elisp--preceding-sexp))))
     (kill-sexp -1)
     (insert (format "%s" value))))
 (bind-to-modi-map "x" #'eval-and-replace-last-sexp)
