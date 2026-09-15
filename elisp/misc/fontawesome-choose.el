@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2018-05-15 15:21:34 kmodi>
 
 ;; Helper function `fontawesome-choose' used to uncomment only the
