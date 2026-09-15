@@ -612,12 +612,12 @@ for all the `included files."
           (advice-remove 'verilog-read-defines #'modi/verilog-do-not-read-defines))))
 
 ;;; hideshow
-    (with-eval-after-load 'hideshow
-      (add-to-list 'hs-special-modes-alist
-                   `(verilog-mode ,modi/verilog-block-start-keywords-re
-                                  ,modi/verilog-block-end-keywords-re
-                                  nil
-                                  verilog-forward-sexp-function)))
+    (defun modi/verilog-hideshow-setup ()
+      "Set the buffer-local hideshow variables for `verilog-mode'."
+      (setq-local hs-block-start-regexp modi/verilog-block-start-keywords-re
+                  hs-block-end-regexp modi/verilog-block-end-keywords-re
+                  hs-forward-sexp-function #'verilog-forward-sexp-function))
+    (add-hook 'verilog-mode-hook #'modi/verilog-hideshow-setup)
 
 ;;; hydra-verilog-template
     (defhydra hydra-verilog-template (:color blue
