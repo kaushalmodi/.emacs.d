@@ -76,67 +76,39 @@
                                             [(shift tab)]
                                             [backtab]))))
 
-    ;; Show hideshow foldable sections in the buffer
-    (use-package hideshowvis
-      :load-path "elisp/manually-synced/hideshowvis" ;This package is not on Melpa yet.
-      :if (display-graphic-p) ; no fringe in terminal mode
-      :config
-      (progn
-        ;; + bitmap
-        (define-fringe-bitmap 'hs-expand-bitmap [0   ; 0 0 0 0 0 0 0 0
-                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                 126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                                 126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                 24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                 0]) ; 0 0 0 0 0 0 0 0
+    ;; Show fold indicators in the fringe (margin in terminals) for the
+    ;; foldable sections in the buffer. See `hs-indicator-type'.
+    (setq hs-show-indicators t)
 
-        (defface modi/hs-fringe-face
-          '((t (:foreground "#888"
-                :box (:line-width 2 :color "grey75" :style released-button))))
-          "Face used to highlight the fringe on folded regions"
-          :group 'hideshow)
-
-        (defun modi/display-code-line-counts (ov)
-          (when (eq 'code (overlay-get ov 'hs))
-            (let* ((marker-string "*fringe-dummy*"))
-              ;; Place the + bitmap in the left fringe
-              (put-text-property 0 (length marker-string)
-                                 'display
-                                 '(left-fringe hs-expand-bitmap modi/hs-fringe-face)
-                                 marker-string)
-              (overlay-put ov
-                           'before-string
-                           marker-string)
-              (overlay-put ov
-                           'display
-                           (propertize
-                            (format " ... [%d] "
-                                    (count-lines (overlay-start ov)
-                                                 (overlay-end ov)))
-                            'face 'modi/fold-face))
-              (overlay-put ov
-                           'help-echo
-                           (buffer-substring (overlay-start ov)
-                                             (overlay-end ov))))))
-        (setq hs-set-up-overlay #'modi/display-code-line-counts)))
+    (defun modi/display-code-line-counts (ov)
+      "Show the number of hidden lines in place of a folded `code' block."
+      (when (eq 'code (overlay-get ov 'hs))
+        (overlay-put ov
+                     'display
+                     (propertize
+                      (format " ... [%d] "
+                              (count-lines (overlay-start ov)
+                                           (overlay-end ov)))
+                      'face 'modi/fold-face))
+        (overlay-put ov
+                     'help-echo
+                     (buffer-substring (overlay-start ov)
+                                       (overlay-end ov)))))
+    (setq hs-set-up-overlay #'modi/display-code-line-counts)
 
     (defun modi/turn-on-hs-minor-mode ()
       "Turn on hs-minor-mode only for specific modes."
       (interactive)
       (dolist (hook modi/hs-minor-mode-hooks)
         (add-hook hook #'hs-minor-mode)
-        (add-hook hook #'hs-org/minor-mode)
-        (add-hook hook #'hideshowvis-minor-mode)))
+        (add-hook hook #'hs-org/minor-mode)))
 
     (defun modi/turn-off-hs-minor-mode ()
       "Turn off hs-minor-mode only for specific modes."
       (interactive)
       (dolist (hook modi/hs-minor-mode-hooks)
         (remove-hook hook #'hs-minor-mode)
-        (remove-hook hook #'hs-org/minor-mode)
-        (remove-hook hook #'hideshowvis-minor-mode)))
+        (remove-hook hook #'hs-org/minor-mode)))
 
     (define-minor-mode modi/hideshow-mode
       "Minor mode to toggle the `hs-minor-mode' and related modes in the
@@ -147,12 +119,10 @@ current buffer."
       (if modi/hideshow-mode
           (progn
             (hs-minor-mode 1)
-            (hs-org/minor-mode 1)
-            (hideshowvis-minor-mode 1))
+            (hs-org/minor-mode 1))
         (progn
           (hs-minor-mode -1)
-          (hs-org/minor-mode -1)
-          (hideshowvis-minor-mode -1))))))
+          (hs-org/minor-mode -1))))))
 
 ;;; DWIM
 (defvar modi/fold-dwim--last-fn nil
