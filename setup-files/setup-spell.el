@@ -31,6 +31,25 @@
 ;; `$DICPATH'
 ;;
 ;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
+;;
+;; Jinx is used when its dependencies are present, and flyspell otherwise.
+;; See `modi/jinx-available-p' below.
+
+(defconst modi/jinx-available-p
+  (and module-file-suffix                ;Emacs built with dynamic modules
+       (or
+        ;; jinx-mod was compiled already, so nothing else is needed.
+        (locate-library (file-name-with-extension "jinx-mod" module-file-suffix) :nosuffix)
+        ;; Else jinx has to compile it on first use, which needs a C
+        ;; compiler and libenchant.
+        (and (seq-find #'executable-find '("gcc" "clang" "cc"))
+             (seq-find #'executable-find '("pkg-config" "pkgconf"))
+             (eq 0 (call-process "pkg-config" nil nil nil "--exists" "enchant-2"))))
+       t)
+  "Non-nil if `jinx' can be used on this machine.
+`jinx-mode' compiles and loads a dynamic module linked against
+libenchant, and signals an error if either is missing. Check for
+that up front so that the flyspell setup can be used instead.")
 
 (use-package ispell
   :if (not (bound-and-true-p disable-pkg-ispell))
@@ -49,41 +68,67 @@
     ;; Save a new word to personal dictionary without asking
     (setq ispell-silently-savep t)
 
-    (use-package flyspell
-      :init
-      (progn
-        ;; Below variables need to be set before `flyspell' is loaded.
-        (setq flyspell-use-meta-tab nil)
-        ;; Binding for `flyspell-auto-correct-previous-word'.
-        (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
-      :config
-      (progn
-        (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-        ;; https://github.com/larstvei/dot-emacs#flyspell
-        (add-hook 'text-mode-hook #'flyspell-mode)
-        (add-hook 'org-mode-hook  #'flyspell-mode)
+    ;; Flyspell is the fallback for when jinx cannot be used; see
+    ;; `modi/jinx-available-p'. `:if' does not prevent the `:ensure' of
+    ;; `flyspell-correct-ivy' below, hence the `unless' wrapper.
+    (unless modi/jinx-available-p
+      (use-package flyspell
+        :init
+        (progn
+          ;; Below variables need to be set before `flyspell' is loaded.
+          (setq flyspell-use-meta-tab nil)
+          ;; Binding for `flyspell-auto-correct-previous-word'.
+          (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
+        :config
+        (progn
+          (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+          ;; https://github.com/larstvei/dot-emacs#flyspell
+          (add-hook 'text-mode-hook #'flyspell-mode)
+          (add-hook 'org-mode-hook  #'flyspell-mode)
 
-        ;; Flyspell signals an error if there is no spell-checking tool is
-        ;; installed. We can advice `flyspell-mode' and `flyspell-prog-mode'
-        ;; to try to enable flyspell only if a spell-checking tool is available.
-        (defun modi/ispell-not-avail-p (&rest args)
-          "Return `nil' if `ispell-program-name' is available; `t' otherwise."
-          (not (executable-find ispell-program-name)))
-        (advice-add 'flyspell-mode      :before-until #'modi/ispell-not-avail-p)
-        (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)
+          ;; Flyspell signals an error if there is no spell-checking tool is
+          ;; installed. We can advice `flyspell-mode' and `flyspell-prog-mode'
+          ;; to try to enable flyspell only if a spell-checking tool is available.
+          (defun modi/ispell-not-avail-p (&rest args)
+            "Return `nil' if `ispell-program-name' is available; `t' otherwise."
+            (not (executable-find ispell-program-name)))
+          (advice-add 'flyspell-mode      :before-until #'modi/ispell-not-avail-p)
+          (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p)
 
-        ;; https://github.com/d12frosted/flyspell-correct
-        (use-package flyspell-correct-ivy
-          :after flyspell-correct
-          :bind (:map modi-mode-map
-                 ("<f12>" . flyspell-correct-wrapper)))
+          ;; https://github.com/d12frosted/flyspell-correct
+          (use-package flyspell-correct-ivy
+            :after flyspell-correct
+            :bind (:map modi-mode-map
+                   ("<f12>" . flyspell-correct-wrapper)))
 
-        (bind-keys
-         :map flyspell-mode-map
-         ;; Stop flyspell overriding other key bindings
-         ("C-," . nil)
-         ("C-." . nil)
-         ("<C-f12>" . flyspell-goto-next-error))))))
+          (bind-keys
+           :map flyspell-mode-map
+           ;; Stop flyspell overriding other key bindings
+           ("C-," . nil)
+           ("C-." . nil)
+           ("<C-f12>" . flyspell-goto-next-error)))))))
+
+;; https://github.com/minad/jinx
+;; Unlike flyspell, jinx checks all the visible text at once, and does
+;; it asynchronously, so misspellings show up while reading and not
+;; only after point has moved past them. It spell-checks through
+;; libenchant, which on macOS reaches the system dictionary via its
+;; AppleSpell backend, so no aspell/hunspell dictionary is needed.
+(when modi/jinx-available-p
+  (use-package jinx
+    :bind (:map modi-mode-map
+           ("<f12>" . jinx-correct)     ;Same binding as `flyspell-correct-wrapper'
+           ("<C-f12>" . jinx-next))     ;Same binding as `flyspell-goto-next-error'
+    :init
+    (progn
+      ;; `jinx-mode' does the module loading, so enable it from `:init'
+      ;; rather than `:config'; the latter would not run until one of
+      ;; the keys above was pressed.
+      (dolist (hook '(text-mode-hook
+                      prog-mode-hook
+                      org-mode-hook
+                      conf-mode-hook))
+        (add-hook hook #'jinx-mode)))))
 
 
 (provide 'setup-spell)

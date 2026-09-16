@@ -65,7 +65,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     engine-mode ; search engines
     expand-region
     eww-lnum ; jump to links in eww buffer ace-jump style
-    flyspell-correct-ivy ; ivy interface for correct spelling suggestions
+    flyspell-correct-ivy ; ivy interface for correct spelling suggestions; used on machines without jinx
     fold-this
     git-timemachine ; walk through git revisions
     ggtags
@@ -80,6 +80,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     org-noter ; takes notes associated to pdf files in org mode
     isend-mode ; used in setup-perl.el
     ivy swiper counsel
+    jinx ; spell checker; needs libenchant, else flyspell is used
     key-chord ; map pairs of simultaneously pressed keys to commands
     kurecolor ; Quick tweaks to color codes in CSS files
     magit ; for git management
