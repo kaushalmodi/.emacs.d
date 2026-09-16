@@ -784,8 +784,7 @@ line, or if a region is selected.  Else call
      ("C-c c" . org-capture)
      ("C-c l" . org-store-link))))
 
-(use-package org-eldoc
-  :load-path "elisp/org-contrib/lisp/"
+(use-package org-eldoc                  ;From the `org-contrib' package
   :after org)
 
 ;;; Org Export

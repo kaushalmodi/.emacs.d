@@ -89,6 +89,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     multiple-cursors
     nov    ;Ebook (.epub) reader
     org-cliplink ; paste copied links as well-formatted org-mode links with desc
+    org-contrib ; org-eldoc
     org-tree-slide
     outorg navi-mode ; supporting packages for outshine
     outshine ; org-mode navigation and organization outside org-mode
