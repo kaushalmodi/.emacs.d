@@ -18,6 +18,8 @@ personal/setup-personal.el
 personal/custom-file.el
 projectile-bookmarks.eld
 recentf
+history
+tramp
 auto-save-list/
 *.desktop
 *.desktop.lock
