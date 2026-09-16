@@ -354,20 +354,19 @@ is set to a non-nil value."
 ;; Do not allow the cursor to go over or select the minibuffer prompt.
 ;; A good example is that we wouldn't want to ever edit/select the "Find file:"
 ;; prompt we see in the minibuffer when we do `find-file'.
-(>=e "25.0"
-    (let (;; (get ..)                   -> ((quote (read-only t face minibuffer-prompt)))
-          ;; (car (get ..))             -> (quote (read-only t face minibuffer-prompt))
-          ;; (eval (car (get ..)))      -> (read-only t face minibuffer-prompt)
-          ;; http://thread.gmane.org/gmane.emacs.devel/202463/focus=202496
-          (default (eval (car (get 'minibuffer-prompt-properties 'standard-value))))
-          (dont-touch-prompt-prop '(cursor-intangible t)))
-      (setq minibuffer-prompt-properties (append default dont-touch-prompt-prop))
-      ;; Note: If the above `minibuffer-prompt-properties' is set using the
-      ;; Customize interface, `cursor-intangible-mode' would be automatically
-      ;; added to `minibuffer-setup-hook' because of the presence of
-      ;; `cursor-intangible' property in `minibuffer-prompt-properties'.
-      ;; (see cus-start.el).
-      (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)))
+(let (;; (get ..)                   -> ((quote (read-only t face minibuffer-prompt)))
+      ;; (car (get ..))             -> (quote (read-only t face minibuffer-prompt))
+      ;; (eval (car (get ..)))      -> (read-only t face minibuffer-prompt)
+      ;; http://thread.gmane.org/gmane.emacs.devel/202463/focus=202496
+      (default (eval (car (get 'minibuffer-prompt-properties 'standard-value))))
+      (dont-touch-prompt-prop '(cursor-intangible t)))
+  (setq minibuffer-prompt-properties (append default dont-touch-prompt-prop))
+  ;; Note: If the above `minibuffer-prompt-properties' is set using the
+  ;; Customize interface, `cursor-intangible-mode' would be automatically
+  ;; added to `minibuffer-setup-hook' because of the presence of
+  ;; `cursor-intangible' property in `minibuffer-prompt-properties'.
+  ;; (see cus-start.el).
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
 ;;; Toggle between buffers
 ;; http://www.emacswiki.org/emacs/SwitchingBuffers

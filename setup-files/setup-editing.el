@@ -130,9 +130,7 @@ Additional control:
 ;; Non-nil means cutting and pasting uses the clipboard.  This can be in
 ;; addition to, but in preference to, the primary selection, if applicable (i.e.
 ;; under X11).
-(>=e "25.0"
-    (setq select-enable-clipboard t)    ; default = t
-  (setq x-select-enable-clipboard t))
+(setq select-enable-clipboard t)    ; default = t
 ;; Non-nil means cutting and pasting uses the primary selection
 ;; The existence of a primary selection depends on the underlying GUI you use.
 ;; E.g. it doesn't exist under MS-Windows.
@@ -140,9 +138,7 @@ Additional control:
 ;; Set `select-enable-primary' to non-nil as well so that any text copied/cut
 ;; within emacs gets copied to the primary too. For example, any text that
 ;; gets saved to the kill-ring using the `kill-new' function.
-(>=e "25.0"
-    (setq select-enable-primary t)    ; default = nil
-  (setq x-select-enable-primary t))
+(setq select-enable-primary t)    ; default = nil
 
 ;; Save text copied from an external program to the kill ring before killing
 ;; new text from within emacs.

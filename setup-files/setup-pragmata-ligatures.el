@@ -11,13 +11,9 @@
 ;; `fixed-pitch' family to PragmataPro ensures that all ligatures work as set in
 ;; this file.  Below also increases the font-size of `fixed-pitch' face by 2
 ;; points to distinguish them from the rest of the text.
-(>=e "29.1"
-    (set-face-attribute 'fixed-pitch nil
-                        :family "PragmataPro"
-                        :height (+ 20 global-text-scale-adjust--default-height))
-  (set-face-attribute 'fixed-pitch nil
-                      :family "PragmataPro"
-                      :height (* (+ default-font-size-pt 2) 10)))
+(set-face-attribute 'fixed-pitch nil
+                    :family "PragmataPro"
+                    :height (+ 20 global-text-scale-adjust--default-height))
 
 ;; https://gist.github.com/kwf/dea7bc51101083acb95c875140e2a96d
 ;; PRETTIFY SYMBOLS (with Pragmata Pro)

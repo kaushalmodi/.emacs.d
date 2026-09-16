@@ -5,28 +5,12 @@
 
 ;; Contents:
 ;;
-;;  Emacs version check
 ;;  Aliases
 ;;  Get symbol at point, maybe
 ;;  Quitting emacs
 ;;  Fringe face setting
 ;;  Default rg arguments
 ;;  Emacs version and git branch
-
-;;; Emacs version check
-(defmacro >=e (version &rest body)
-  "Emacs VERSION check wrapper around BODY.
-BODY can contain both `if' block (for stuff to execute if emacs
-is equal or newer than VERSION) and `else' block (for stuff to
-execute if emacs is older than VERSION).
-
-Example:
-  (>=e \"25.0\"
-      (defun-compatible-with-25.0)
-    (defun-not-compatible-in-older-version))"
-  (declare (indent 2))          ;`if'-style indentation where this macro is used
-  `(if (version<= ,version emacs-version)
-       ,@body))
 
 ;;; Aliases
 ;; Alias ^ as a function to calculate exponents

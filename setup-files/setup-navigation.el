@@ -1,13 +1,11 @@
 ;; -*- lexical-binding: t; -*-
 ;; Time-stamp: <2021-04-23 16:35:10 kmodi>
 
-(>=e "25.0"
-    (setq fast-but-imprecise-scrolling t))
+(setq fast-but-imprecise-scrolling t)
 
 ;; Horizontally scroll only the current line
 ;; https://www.reddit.com/r/emacs/comments/6au45k/is_it_possible_to_truncate_long_lines_the_same/
-(>=e "26.0"
-    (setq auto-hscroll-mode 'current-line))
+(setq auto-hscroll-mode 'current-line)
 
 ;; Bind `goto-line' in global map to <f1>, but only when running GUI, because
 ;; `C-h' binding in not available for emacs in no-window mode. And so we will

@@ -17,9 +17,7 @@
       ;; Append the machine name to `server-auth-dir' to prevent server file
       ;; clashes when the same emacs config is shared simultaneously across
       ;; different machines (e.g. via Dropbox).
-      (setq server-auth-dir (let* ((machine-name (>=e "25.0"
-                                                     (system-name)
-                                                   system-name))
+      (setq server-auth-dir (let* ((machine-name (system-name))
                                    (server-dir (format "server_%s_%s"
                                                        emacs-version-short
                                                        machine-name))

@@ -17,8 +17,7 @@
 (use-package executable
   :config
   (progn
-    (>=e "26.0"
-        (setq executable-prefix-env t)) ;Use "#!/usr/bin/env python3" style magic number
+    (setq executable-prefix-env t) ;Use "#!/usr/bin/env python3" style magic number
 
     ;; On saving, automatically make a file an executable if it begins with "#!"
     ;; Examples: #!/usr/bin/env bash
@@ -120,11 +119,10 @@ If the buffer major-mode is `clojure-mode', run `cider-load-buffer'."
         (font-lock-add-keywords nil '(("#.+" . font-lock-comment-face)))))
     (add-hook 'text-mode-hook #'modi/text-mode-comments)))
 
-(>=e "25.0"
-    (use-package saveplace
-      :config
-      (progn
-        (save-place-mode 1))))
+(use-package saveplace
+  :config
+  (progn
+    (save-place-mode 1)))
 
 (use-package browse-url
   :commands (browse-url-chrome) ;https://debbugs.gnu.org/cgi/bugreport.cgi?bug=31828

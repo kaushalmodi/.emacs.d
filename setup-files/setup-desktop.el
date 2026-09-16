@@ -27,19 +27,6 @@ saved desktop at startup:
                                          ".desktop.lock"))
 
     ;; Wed Jul 20 09:36:15 EDT 2016 - kmodi
-    ;; Below problem seems to be fixed in emacs 25.x
-    ;; Sat Feb 18 16:31:50 EST 2017 - kmodi
-    ;; Nope! It's not! https://github.com/purcell/emacs.d/issues/259
-    ;; The problem occurs when opening emacs in -nw mode, saving desktop,
-    ;; quitting, and then reopening emacs in GUI mode. I get this in a
-    ;; *Warning* buffer:
-    ;;     Error (frameset): Font ‘tty’ is not defined
-    (>=e "25.0"
-        nil
-      ;; 'Fix' the frameset error at startup
-      ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=17352
-      (setq desktop-restore-frames nil))
-
     ;; Wed Apr 12 11:30:03 EDT 2017 - kmodi
     ;; Something changed in emacs master in the last week or so. If
     ;; `desktop-restore-frames' is non-nil, nlinum get enabled in the

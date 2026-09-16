@@ -173,15 +173,6 @@ Else call `ediff-buffers'."
     (add-hook 'find-file-hook #'modi/enable-smerge-maybe :append))
   :config
   (progn
-    (>=e "26.0"
-        nil
-      ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=bdfee01a6567b9f08f82bc84d1196e6cb62587ca
-      (defalias 'smerge-keep-upper 'smerge-keep-mine)
-      (defalias 'smerge-keep-lower 'smerge-keep-other)
-      (defalias 'smerge-diff-base-upper 'smerge-diff-base-mine)
-      (defalias 'smerge-diff-upper-lower 'smerge-diff-mine-other)
-      (defalias 'smerge-diff-base-lower 'smerge-diff-base-other))
-
     (defhydra hydra-smerge (:color pink
                             :hint nil
                             :pre (smerge-mode 1)

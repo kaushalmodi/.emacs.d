@@ -57,8 +57,7 @@ This variable is to be updated when changing themes.")
 
 ;;;; Menu bar
 ;; Do not show the menu bar with File|Edit|Options|...
-(if (fboundp 'menu-bar-mode)
-    (menu-bar-mode -1))
+(menu-bar-mode -1)
 
 ;; Toggle menu bar
 ;; Do not resize the frame when `menu-bar-mode' is toggled.
@@ -67,15 +66,11 @@ This variable is to be updated when changing themes.")
 (key-chord-define-global "2w" #'menu-bar-mode) ;Alternative to F2
 
 ;;;; Tool bar
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))            ;Do not show the tool bar with icons on the top
-(>=e "25.0"
-    ;; Do not resize the frame when toggling `tool-bar-mode'
-    (add-to-list 'frame-inhibit-implied-resize 'tool-bar-lines))
+(tool-bar-mode -1)               ;Do not show the tool bar with icons on the top
+(add-to-list 'frame-inhibit-implied-resize 'tool-bar-lines)
 
 ;;;; Scroll bar
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))                 ;Disable the scroll bars
+(scroll-bar-mode -1)                    ;Disable the scroll bars
 
 ;;;; Window Dividers
 (use-package frame
@@ -244,14 +239,9 @@ See `mode-line-format' to get help on the %-identifers used in this function."
   (set-face-attribute 'default nil :family "Consolas"))
 
 ;;;; Global Font Resize
-(>=e "29.1"
-    nil                      ;Emacs 29+ has `global-text-scale-adjust'
-  (require 'setup-global-text-scale-compat))
-
-(>=e "25.0"
-    ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
-    ;; Do not resize the frame when adjusting the font size
-    (add-to-list 'frame-inhibit-implied-resize 'font))
+;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
+;; Do not resize the frame when adjusting the font size
+(add-to-list 'frame-inhibit-implied-resize 'font)
 
 ;;; Line truncation
 ;; Enable truncation. This setting does NOT apply to windows split using `C-x 3`
@@ -480,10 +470,7 @@ narrowed."
                                            text-mode-hook)
   "List of hooks of major modes in which prettify-symbols-mode should be enabled.")
 
-(>=e "25.0"
-    ;; Temporarily unprettify the symbol if the cursor is on the symbol or on
-    ;; its right edge.
-    (setq prettify-symbols-unprettify-at-point 'right-edge))
+(setq prettify-symbols-unprettify-at-point 'right-edge)
 
 (dolist (hook modi/prettify-symbols-mode-hooks)
   (add-hook hook #'prettify-symbols-mode))

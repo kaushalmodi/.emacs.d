@@ -18,10 +18,7 @@
 (use-package mouse
   :config
   (progn
-    (>=e "26.0"
-        ;; Drag-drop a region to cut/paste it; works across windows too!
-        ;; Drag, press Control, and then drop to copy/paste instead.
-        (setq mouse-drag-and-drop-region 'control))))
+    (setq mouse-drag-and-drop-region 'control)))
 
 ;;; Mouse wheel
 ;; `mouse-wheel-mode' is auto-enabled under X (GUI)

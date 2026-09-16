@@ -33,9 +33,7 @@ If nil, show the same in the minibuffer.")
 (column-number-mode 1)
 
 ;;; Buffer percentage
-(>=e "26.0"
-    ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=b0b02ca7f3e06d0f092df6f81babd1277bf93b0f
-    (setq mode-line-percent-position '(-3 "%o")))
+(setq mode-line-percent-position '(-3 "%o"))
 
 ;;; Minibuffer-line
 ;; Display date+time in the minibuffer instead of in the mode-line

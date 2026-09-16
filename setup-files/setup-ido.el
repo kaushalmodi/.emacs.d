@@ -144,9 +144,7 @@ This is merged into emacs 25.0."
        ("C-f"    . ido-magic-forward-char)
        ("C-b"    . ido-magic-backward-char)
        ("C-i"    . ido-toggle-ignore))
-      (>=e "25.0"
-          (bind-key "C-S-b" #'ido-bury-buffer-at-head ido-completion-map) ; emacs >= 25.0
-        (bind-key "C-S-b" #'endless/ido-bury-buffer-at-head ido-completion-map))) ; emacs < 25.0
+      (bind-key "C-S-b" #'ido-bury-buffer-at-head ido-completion-map)) ; emacs < 25.0
     (add-hook 'ido-setup-hook #'ido-define-keys)))
 
 

@@ -128,14 +128,7 @@ the start of search results.")
       (let ((eww-buffer-name))
         (modi/eww--go-to-first-search-result search-term)
         (setq eww-buffer-name (rename-buffer "*eww-temp*" t))
-        (>=e "26.0"
-            ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=1b4f0a92ff3505ef9a465b9b391756e3a73a6443
-            (call-interactively #'shr-probe-and-copy-url)
-          ;; Copy the actual link instead of the redirection link by calling
-          ;; `shr-copy-url' twice. This twice-calling is needed only on emacs
-          ;; versions 25.x and older.
-          (dotimes (i 2)
-            (shr-copy-url)))
+        (call-interactively #'shr-probe-and-copy-url)
         (kill-buffer eww-buffer-name)))
 
     (defun modi/eww-im-feeling-lucky (search-term)
@@ -169,22 +162,15 @@ redirection destination if it has one."
           (setq page-url t))
          (t                             ;No prefix
           ))
-        (>=e "26.0"
-            (let* ((pt-on-url (shr-url-at-point nil))
-                   (pt-on-image (shr-url-at-point :image-url)))
-              (unless (or pt-on-url
-                          pt-on-image)
-                (setq page-url t)) ;Get page URL if point is neither on URL nor image
-              (if page-url
-                  (message "Copied page url: %s" (eww-copy-page-url))
-                (let ((current-prefix-arg image-url))
-                  (call-interactively #'shr-probe-and-copy-url))))
+        (let* ((pt-on-url (shr-url-at-point nil))
+               (pt-on-image (shr-url-at-point :image-url)))
+          (unless (or pt-on-url
+                      pt-on-image)
+            (setq page-url t)) ;Get page URL if point is neither on URL nor image
           (if page-url
               (message "Copied page url: %s" (eww-copy-page-url))
-            (when (string= (shr-copy-url image-url) "No URL under point") ;No prefix or C-u
-              ;; Copy page url if COMMAND or C-u COMMAND returns
-              ;; "No URL under point".
-              (message "Copied page url: %s" (eww-copy-page-url)))))))
+            (let ((current-prefix-arg image-url))
+              (call-interactively #'shr-probe-and-copy-url))))))
 
     (defun modi/eww-browse-url-of-file ()
       "Browse the current file using `eww'."

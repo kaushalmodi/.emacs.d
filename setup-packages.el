@@ -11,18 +11,11 @@
 ;; The solution presented here did not work: https://emacs.stackexchange.com/questions/233/how-to-proceed-on-package-el-signature-check-failure
 (setq package-check-signature nil)
 
-(>=e "27.0"
-    nil
-  ;; Lower-level `package.el' variables like `package-user-dir' need to be set
-  ;; in early-init.el starting emacs 27.x.
-  ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=24acb31c04b4048b85311d794e600ecd7ce60d3b
-  (setq package-user-dir (let ((elpa-dir-name (format "elpa_%s" emacs-major-version))) ;default = "elpa"
-                           (file-name-as-directory (expand-file-name elpa-dir-name user-emacs-directory)))))
+;; `package-user-dir' is set in early-init.el.
 ;; Below require will auto-create `package-user-dir' it doesn't exist.
 (require 'package)
 
-(>=e "25.0"
-    (setq package-menu-async t)) ; If non-nil, do activities asynchronously, like refreshing menu
+(setq package-menu-async t) ; If non-nil, do activities asynchronously, like refreshing menu
 
 (defvar modi/elisp-directory (file-name-as-directory (expand-file-name "elisp" user-emacs-directory))
   "Directory containing my custom elisp code.")
@@ -105,20 +98,12 @@ Emacs installation.  If Emacs is installed using
        (melpa-url (concat protocol "://melpa.org/packages/")))
   (add-to-list 'package-archives (cons "melpa" melpa-url) :append))
 
-(>=e "27.0"
-    ;; `package-initialize' is called automatically before loading the init
-    ;; file in Emacs 27+, but *only* for interactive sessions. In batch mode
-    ;; (`emacs --batch -l early-init.el -l init.el'), the packages are never
-    ;; activated, so do that explicitly here.
-    (when noninteractive
-      (package-initialize))
-  ;; Load emacs packages and activate them
-  ;; This must come before configurations of installed packages.
-  ;; Don't delete this line.
-  (package-initialize)
-  ;; `package-initialize' call is required before any of the below
-  ;; can happen.
-  )
+;; `package-initialize' is called automatically before loading the init
+;; file, but *only* for interactive sessions. In batch mode
+;; (`emacs --batch -l early-init.el -l init.el'), the packages are never
+;; activated, so do that explicitly here.
+(when noninteractive
+  (package-initialize))
 
 ;; Auto install the required packages
 ;; https://github.com/bbatsov/prelude/blob/master/core/prelude-packages.el

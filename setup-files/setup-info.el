@@ -7,10 +7,9 @@
   :defer t
   :config
   (progn
-    (>=e "25.0"                    ;`Info-quoted' was a new face introduced then
-         (with-eval-after-load 'setup-font-check
-           (when font-dejavu-sans-mono-p
-             (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono"))))
+    (with-eval-after-load 'setup-font-check
+      (when font-dejavu-sans-mono-p
+        (set-face-attribute 'Info-quoted nil :family "DejaVu Sans Mono")))
 
     (defun modi/Info--get-current-node-hierarchy ()
       "Return the hierarchy for the current node.
