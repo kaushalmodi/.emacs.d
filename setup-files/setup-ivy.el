@@ -8,11 +8,17 @@
          ("M-u" . ivy-resume)    ;Override the default binding for `upcase-word'
          ("C-c w" . ivy-push-view) ;Push window configuration to `ivy-views'
          ("C-c W" . ivy-pop-view)) ;Remove window configuration from `ivy-views'
+  :init
+  (progn
+    ;; Enable `ivy-mode' right away instead of from `:config', which would
+    ;; not run until something else pulled ivy in. Until then
+    ;; `completing-read-function' stayed at `completing-read-default', so the
+    ;; first completing command of the session got the plain minibuffer
+    ;; instead of the ivy one. `ivy-mode' is autoloaded, so calling it here
+    ;; loads ivy and runs the `:config' block below.
+    (ivy-mode 1))
   :config
   (progn
-    ;; Enable `ivy-mode'.
-    (ivy-mode 1)
-
     ;; Show recently killed buffers when calling `ivy-switch-buffer'
     (setq ivy-use-virtual-buffers t)
     (setq ivy-virtual-abbreviate 'full) ;Show the full virtual file paths
