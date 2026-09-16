@@ -76,7 +76,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     hydra
     ibuffer-projectile
     imenu-list
-    indent-guide
+    indent-bars
     org-noter ; takes notes associated to pdf files in org mode
     isend-mode ; used in setup-perl.el
     ivy swiper counsel
@@ -225,7 +225,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     (require 'setup-ido)
   (require 'setup-ivy))
 (require 'setup-imenu-list)
-(require 'setup-indent-guide)
+(require 'setup-indent-bars)
 (require 'setup-info)
 (require 'setup-kurecolor)
 (require 'setup-linum)

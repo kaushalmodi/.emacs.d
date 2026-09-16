@@ -18,7 +18,7 @@
   ("f"     toggle-fill-unfill "fill/unfill")
   ("|"     display-fill-column-indicator-mode "fill column indicator")
   ("F"     follow-mode "follow mode")
-  ("g"     indent-guide-mode "indent guide")
+  ("g"     indent-bars-mode "indent bars")
   ("hc"    hardcore-mode "arrow key navigation")
   ("hl"    hl-line-mode "highlight line")
   ("hs"    modi/hideshow-mode "hideshow mode")
