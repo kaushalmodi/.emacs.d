@@ -11,6 +11,7 @@ tree-sitter/
 *.elc
 
 .cache/
+/.projectile
 .projectile-cache.eld
 bm-repository
 abbrev_defs
