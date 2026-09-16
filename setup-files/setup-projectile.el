@@ -10,6 +10,13 @@
          ("C-c f" . hydra-projectile/body)
          ("s-f" . hydra-projectile/body))
   :commands (projectile-project-root)
+  :init
+  (progn
+    ;; Enable `projectile-mode' right away. Doing it from `:config' would
+    ;; wait until the first `C-c f' or `projectile-project-root' call, so
+    ;; until then the `find-file-hook' that records known projects was not
+    ;; installed and visiting a file in a new repo never registered it.
+    (projectile-mode))
   :config
   (progn
     ;; Do not barf when I try to do `projectile-switch-project' while in a
@@ -248,9 +255,7 @@ _f_/_s-f_: file               _a_: deadgrep          ^^    _i_: Ibuffer         
       ("X"   projectile-cleanup-known-projects)
       ("z"   projectile-cache-current-file)
       ("4"   hydra-projectile-other-window/body "other window")
-      ("q"   nil "cancel" :color blue))
-
-    (projectile-mode)))
+      ("q"   nil "cancel" :color blue))))
 
 
 (provide 'setup-projectile)
