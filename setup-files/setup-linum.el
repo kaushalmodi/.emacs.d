@@ -42,7 +42,6 @@ variable.")
                                   nim-mode-hook
                                   nimscript-mode-hook
                                   go-mode-hook
-                                  yaml-mode-hook
                                   yaml-ts-mode-hook)
   "List of hooks of major modes in which line numbers should be
   enabled.")

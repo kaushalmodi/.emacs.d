@@ -120,7 +120,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     writegood-mode ; highlight passive voice, weasel words and duplicates
     xkcd ; comic
     yafolding ; indentation detected code folding
-    yaml-mode ; Useful for editing Octopress' _config.yml
     yasnippet
     zop-to-char
 
@@ -288,7 +287,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-tcl)
 (require 'setup-verilog)
 (require 'setup-web-mode)
-(require 'setup-yaml-mode)
 
 ;; Blend of other setup
 (require 'setup-backup)
