@@ -7,10 +7,6 @@
 ;; Load newer version of .el and .elc if both are available
 (setq load-prefer-newer t)
 
-;; Workaround to get the packages installed -- 2024/10/22
-;; The solution presented here did not work: https://emacs.stackexchange.com/questions/233/how-to-proceed-on-package-el-signature-check-failure
-(setq package-check-signature nil)
-
 ;; `package-user-dir' is set in early-init.el.
 ;; Below require will auto-create `package-user-dir' it doesn't exist.
 (require 'package)
