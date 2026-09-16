@@ -129,6 +129,55 @@ to be installed.")
     (package-install p))
   (setq modi/missing-packages '()))
 
+;; Keep `package-selected-packages' in sync with what this config actually
+;; asks for, so that `package-autoremove' does not offer to delete it. The
+;; value saved in `custom-file' is a stale snapshot: it lists packages that
+;; have since been dropped and misses the ones added since it was written.
+;;
+;; Packages arrive from two places -- `my-packages' above, and
+;; `use-package ... :ensure t' in the setup-files -- so record both. The
+;; `:ensure' ones are added by `modi/note-ensured-package' below as
+;; use-package installs them, because only the union of the two is safe to
+;; hand to `package-autoremove'.
+(defun modi/ensured-packages ()
+  "Return the packages declared with `use-package' ... `:ensure t'.
+
+Collected by reading the setup-files, because use-package calls
+`use-package-ensure-function' only when it actually installs
+something; for an already-installed package nothing would be
+recorded at run time."
+  (let ((pkgs '()))
+    (dolist (file (directory-files
+                   (expand-file-name "setup-files" user-emacs-directory)
+                   :full "\\.el\\'"))
+      (with-temp-buffer
+        (insert-file-contents file)
+        (goto-char (point-min))
+        (while (re-search-forward "^\\s-*(use-package\\s-+\\([^[:space:]()]+\\)" nil :noerror)
+          (let ((name (match-string-no-properties 1))
+                (end (save-excursion
+                       (goto-char (match-beginning 0))
+                       (ignore-errors (forward-sexp) (point)))))
+            (when (and end
+                       (save-excursion
+                         (re-search-forward ":ensure\\s-+t\\b" end :noerror)))
+              (push (intern name) pkgs))))))
+    (nreverse pkgs)))
+
+(defun modi/sync-package-selected-packages ()
+  "Set `package-selected-packages' to everything this config wants.
+
+Go through Custom rather than `setq': the value in `custom-file'
+belongs to the `user' theme, so every later `enable-theme' call runs
+`custom-theme-recalc-variable' and would put the stale list back."
+  (interactive)
+  (customize-set-variable
+   'package-selected-packages
+   (seq-uniq (append my-packages (modi/ensured-packages)))))
+;; Run this after init, so that it is not undone by the `enable-theme'
+;; calls that happen while the setup-files are loaded.
+(add-hook 'after-init-hook #'modi/sync-package-selected-packages)
+
 (defun modi/byte-recompile-elpa ()
   "Force byte-compile every `.el' file in `package-user-dir'.
 The `.el' files are re-compiled even if the corresponding `.elc' files exist,
