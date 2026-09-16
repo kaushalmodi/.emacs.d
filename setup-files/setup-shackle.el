@@ -16,7 +16,6 @@
     (setq shackle-rules
           ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
           '((compilation-mode              :select nil                                               )
-            ("*undo-tree*"                                                    :size 0.25 :align right)
             ("*eshell*"                    :select t                          :other t               )
             ("*Shell Command Output*"      :select nil                                               )
             ("\\*Async Shell.*\\*" :regexp t :ignore t                                                 )

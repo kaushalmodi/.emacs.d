@@ -192,12 +192,8 @@ If prefix argument is used, `set-selective-display' to the current column."
     (when msg
       (message msg))
     last-cmd-was-fold))
-;; Advice `undo-tree-undo' to unfold the previous fold
-(with-eval-after-load 'undo-tree
-  (advice-add 'undo-tree-undo :before-until #'modi/unfold-if-last-command-fold))
 ;; Advice `undo' to unfold the previous fold
-(with-eval-after-load 'undo-tree
-  (advice-add 'undo :before-until #'modi/unfold-if-last-command-fold))
+(advice-add 'undo :before-until #'modi/unfold-if-last-command-fold)
 
 
 (provide 'setup-fold)

@@ -108,7 +108,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     tiny
     tldr                ;Concise "man pages"
     transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
-    ;; undo-tree ; supercool undo visualization
     unfill
     use-package-chords
     verilog-ts-mode ; tree-sitter based SystemVerilog mode
@@ -254,7 +253,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-term)
 (require 'setup-tiny)
 (require 'setup-tldr)
-;; (require 'setup-undo-tree)
 (require 'setup-webpaste)
 (require 'setup-which-func)
 (require 'setup-which-key)
