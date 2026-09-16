@@ -201,9 +201,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-el2markdown)
 (require 'setup-engine-mode)
 (require 'setup-expand-region)
-;; Below will cause emacs to freeze on evaluating "(string-match-p "." nil)"
-;; on emacs 25.1 or older.
-;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23949
 (require 'setup-fold)
 (require 'setup-flymake)
 (when (executable-find "git")
@@ -240,9 +237,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-pomodoro)
 (require 'setup-poporg)
 (with-eval-after-load 'setup-tags
-  ;; Below causes `help-function-arglist' error on evaluating "(string-match-p "." nil)"
-  ;; on emacs 25.1 or older.
-  ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23949
   (require 'setup-projectile))
 (require 'setup-rainbow-delimiters)
 (require 'setup-rainbow-mode)

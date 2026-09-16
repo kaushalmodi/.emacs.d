@@ -148,11 +148,8 @@ If OPTION is \\[universal-argument] \\[universal-argument], or if
 there is neither a link nor an image, the page URL will be
 copied.
 
-\(For emacs 25.x and older) If this function is called twice, try
-to fetch the URL and see whether it redirects somewhere else.
-
-\(For emacs 26.x and newer) Automatically use the fetched URL's
-redirection destination if it has one."
+Automatically use the fetched URL's redirection destination if it
+has one."
       (interactive "P")
       (let (image-url page-url)
         (cond
