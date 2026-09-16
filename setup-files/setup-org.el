@@ -1703,6 +1703,9 @@ Instead it's simpler to use bash."
 (use-package denote
   :ensure t
   :defer t
+  :bind (:map modi-mode-map
+         ("C-c d" . denote-open-or-create)
+         ("<f6>"  . denote-open-or-create))
   :config
   (progn
     (setq denote-directory (expand-file-name "~/org/denote/"))

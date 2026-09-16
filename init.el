@@ -56,7 +56,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     bm ; visual bookmarks
     buffer-move
     command-log-mode ; for logging commands; useful when demoing emacs
-    deft ; quick note taking and management
     diff-hl
     dired-collapse
     drag-stuff
@@ -194,7 +193,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-copilot)
 (require 'setup-counsel)
 (require 'setup-de-ansify)
-(require 'setup-deft)
 (require 'setup-devdocs)
 (require 'setup-dired)
 (require 'setup-drag-stuff)
