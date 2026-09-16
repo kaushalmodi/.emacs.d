@@ -121,6 +121,13 @@ that up front so that the flyspell setup can be used instead.")
            ("<C-f12>" . jinx-next))     ;Same binding as `flyspell-goto-next-error'
     :init
     (progn
+      ;; Set the dictionary explicitly. `jinx-languages' otherwise
+      ;; defaults to whatever `current-locale-environment' or $LANG says
+      ;; at load time, which is unset for a GUI Emacs started from the
+      ;; Dock or Finder; `jinx--dicts' then ends up empty and the
+      ;; correction UI fails with "Invalid dictionary".
+      (setq jinx-languages "en_US")
+
       ;; `jinx-mode' does the module loading, so enable it from `:init'
       ;; rather than `:config'; the latter would not run until one of
       ;; the keys above was pressed.
