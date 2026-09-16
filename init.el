@@ -110,6 +110,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     ;; undo-tree ; supercool undo visualization
     unfill
     use-package-chords
+    verilog-ts-mode ; tree-sitter based SystemVerilog mode
     visual-regexp
     ;; volatile-highlights
     webpaste   ; Paste code snippets to ptpb.pw (default), ix.io, etc.
@@ -266,6 +267,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (require 'setup-yasnippet)
 
 ;; Languages
+(require 'setup-treesitter)             ;Before the language-specific setups
 (require 'setup-conf)
 (require 'setup-elisp)
 (when (executable-find "go")

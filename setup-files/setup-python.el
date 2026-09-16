@@ -6,8 +6,10 @@
 ;; Emacs built-in `python' mode
 (use-package python
   :mode (("\\.py\\'" . python-mode))
-  :bind (:map python-mode-map
-         ("<f9>" . python-shell-send-buffer))
+  :bind ((:map python-mode-map
+          ("<f9>" . python-shell-send-buffer))
+         (:map python-ts-mode-map     ;Does not inherit from `python-mode-map'
+          ("<f9>" . python-shell-send-buffer)))
   :config
   (progn
     (defvar modi/python-use-ipython t

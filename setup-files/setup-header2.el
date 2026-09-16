@@ -15,7 +15,9 @@
 
     (defconst modi/auto-headers-hooks '(verilog-mode-hook
                                         python-mode-hook
+                                        python-ts-mode-hook
                                         sh-mode-hook
+                                        bash-ts-mode-hook
                                         cperl-mode-hook)
       "List of hooks of major modes in which headers should be auto-inserted.")
 

@@ -4,10 +4,14 @@
 ;; Shell Script Mode
 
 (use-package sh-script
-  :mode (("\\.alias\\'"       . shell-script-mode)
+  ;; `sh-mode' is remapped to `bash-ts-mode' in setup-treesitter.el. The
+  ;; `shell-script-mode' alias is not, so the entries below that can be
+  ;; csh/tcsh or other non-bash shells keep using the classic `sh-mode'.
+  :mode (("\\.sh\\'"          . sh-mode)
+         ("\\.alias\\'"       . shell-script-mode)
          ("\\.gpms\\'"        . shell-script-mode)
          ("\\.cfg\\'"         . shell-script-mode)
-         ("\\.c*sh\\'"        . shell-script-mode)
+         ("\\.t?csh\\'"       . shell-script-mode)
          ("\\.[a-zA-Z]+rc\\'" . shell-script-mode)
          ("crontab.*\\'"     . shell-script-mode))
   :config

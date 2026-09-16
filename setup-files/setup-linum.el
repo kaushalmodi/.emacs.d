@@ -18,13 +18,21 @@ variable.")
                                   emacs-lisp-mode-hook
                                   cperl-mode-hook
                                   c-mode-hook
+                                  c-ts-mode-hook
                                   c++-mode-hook
+                                  c++-ts-mode-hook
                                   python-mode-hook
+                                  python-ts-mode-hook
                                   matlab-mode-hook
                                   sh-mode-hook
+                                  bash-ts-mode-hook
                                   web-mode-hook
                                   html-mode-hook
+                                  mhtml-ts-mode-hook
                                   css-mode-hook
+                                  css-ts-mode-hook
+                                  json-ts-mode-hook
+                                  toml-ts-mode-hook
                                   makefile-gmake-mode-hook
                                   tcl-mode-hook
                                   conf-space-mode-hook
@@ -34,7 +42,8 @@ variable.")
                                   nim-mode-hook
                                   nimscript-mode-hook
                                   go-mode-hook
-                                  yaml-mode-hook)
+                                  yaml-mode-hook
+                                  yaml-ts-mode-hook)
   "List of hooks of major modes in which line numbers should be
   enabled.")
 

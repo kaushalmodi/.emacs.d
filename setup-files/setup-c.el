@@ -10,6 +10,8 @@
   :config
   (progn
     (setq-default c-basic-offset 3)
+    ;; Same indentation in the tree-sitter modes (`c-ts-mode', `c++-ts-mode').
+    (setq c-ts-indent-offset c-basic-offset)
 
     (defun modi/sanitize-pss-file ()
       (interactive)
@@ -52,7 +54,8 @@
 
       ;; Replace tabs with spaces when saving files in a C/C++ mode.
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local))
-    (add-hook 'c++-mode-hook #'modi/cc-mode-customization)))
+    (add-hook 'c++-mode-hook #'modi/cc-mode-customization)
+    (add-hook 'c++-ts-mode-hook #'modi/cc-mode-customization)))
 
 
 (provide 'setup-c)

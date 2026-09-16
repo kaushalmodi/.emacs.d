@@ -28,7 +28,8 @@
       (setq ggtags-oversize-limit (* 30 1024 1024)) ; 30 MB
 
       (dolist (hook '(verilog-mode-hook
-                      c-mode-hook))
+                      c-mode-hook
+                      c-ts-mode-hook))
         (add-hook hook #'ggtags-mode))
 
       ;; Don't consider ` (back quote) as part of `tag' when looking for a
