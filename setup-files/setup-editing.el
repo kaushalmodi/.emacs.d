@@ -9,6 +9,7 @@
 ;;    Insert time-stamp + user name
 ;;  Clipboard
 ;;  Delete Selection
+;;  Duplicate whole lines
 ;;  Managing white spaces and empty newlines
 ;;  Tabs and Untabify
 ;;  Align
@@ -147,6 +148,35 @@ Additional control:
 ;; Typing anything after highlighting text overwrites that text
 ;; http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert
 (delete-selection-mode 1)
+
+;;; Duplicate whole lines
+;; `duplicate-dwim' duplicates exactly the selected region, so a region
+;; covering part of a line duplicates that fragment inline. Duplicate every
+;; line the region touches instead.
+(defun modi/duplicate-dwim-whole-lines (&rest _)
+  "Extend an active region to cover whole lines.
+Rectangular regions are left alone; `duplicate-dwim' duplicates
+those on their right-hand side."
+  (when (and (use-region-p)
+             (not (bound-and-true-p rectangle-mark-mode)))
+    (let ((beg (region-beginning))
+          (end (region-end)))
+      ;; Put END at the start of the line below the last covered line, so
+      ;; that the region carries a trailing newline. On the last line of a
+      ;; buffer with no final newline there is none to include, so add it.
+      (goto-char end)
+      (unless (and (bolp) (> end beg))
+        (end-of-line)
+        (if (eobp)
+            (insert "\n")
+          (forward-char 1)))
+      (setq end (point))
+      (goto-char beg)
+      (beginning-of-line)
+      (push-mark (point) t t)
+      (goto-char end)
+      (activate-mark))))
+(advice-add 'duplicate-dwim :before #'modi/duplicate-dwim-whole-lines)
 
 ;;; Managing white spaces and empty newlines
 (setq require-final-newline t)
