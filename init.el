@@ -66,7 +66,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     eww-lnum ; jump to links in eww buffer ace-jump style
     flyspell-correct-ivy ; ivy interface for correct spelling suggestions
     fold-this
-    gist
     git-timemachine ; walk through git revisions
     ggtags
     hardcore-mode
@@ -207,7 +206,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23949
 (require 'setup-fold)
 (require 'setup-flymake)
-(require 'setup-gist)
 (when (executable-find "git")
   (require 'setup-diff)
   (require 'setup-git-link)
