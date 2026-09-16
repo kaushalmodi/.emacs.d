@@ -2,9 +2,11 @@
 #+author: Kaushal Modi
 
 #+begin_quote
-My emacs setup is tested to work only with emacs 25.1 and newer
-versions. If you are on older versions, I would recommend that you
-upgrade to the [[https://www.gnu.org/software/emacs/download.html][latest available stable version]].
+My emacs setup requires emacs 30.1 or newer. All of the version
+compatibility shims for older releases have been removed, so it will
+*not* work on emacs 29 and older. If you are on an older version, I
+would recommend that you upgrade to the [[https://www.gnu.org/software/emacs/download.html][latest available stable
+version]].
 
 On the other hand, I keep my emacs updated to the [[http://git.savannah.gnu.org/cgit/emacs.git/log/][/latest Development
 version/]]. So my config will definitely work with that if you too are
