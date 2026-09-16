@@ -37,7 +37,7 @@
 ;;; Variables
 (setq inhibit-startup-message t)     ;No splash screen at startup
 (setq scroll-step 1)                 ;Scroll 1 line at a time
-(setq tooltip-mode nil)              ;Disable tooltip appearance on mouse hover
+(tooltip-mode -1)                    ;Disable tooltip appearance on mouse hover
 (setq frame-resize-pixelwise t)      ;Allow frame size to inc/dec by a pixel
 
 (if (eq system-type 'darwin)
