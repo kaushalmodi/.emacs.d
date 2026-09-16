@@ -157,6 +157,31 @@ The return value of this function is unused as it is added as an :after advice."
           (add-to-list 'projectile-known-projects prj-abbr))))
     (add-hook 'projectile-after-switch-project-hook #'modi/projectile-known-projects-sort)
 
+    (defun modi/projectile-purge-vcs-dir-projects ()
+      "Remove the VCS metadata directories from `projectile-known-projects'.
+
+Entries like \"/path/to/repo/.git/\" are not projects; they get
+recorded when a buffer visiting a file below \".git/\" is mistaken
+for a project root.  For each such entry, keep the containing
+repository instead.
+
+`projectile-cleanup-known-projects' does not remove these because
+the directories do exist."
+      (interactive)
+      (let ((purged 0))
+        (dolist (prj (copy-sequence projectile-known-projects))
+          (when (string-match-p "/\\.\\(git\\|hg\\|bzr\\|svn\\)/\\'" prj)
+            (projectile-remove-known-project prj)
+            (setq purged (1+ purged))
+            ;; Add back the repository that contains it, in case that is
+            ;; not already known.
+            (let ((repo (file-name-directory (directory-file-name prj))))
+              (when (file-directory-p (expand-file-name repo))
+                (projectile-add-known-project repo)))))
+        (projectile-merge-known-projects)
+        (message "Purged %d VCS directory %s from the known projects"
+                 purged (if (= purged 1) "entry" "entries"))))
+
     (defun modi/projectile-find-file-literally (&optional arg)
       "Jump to a project's file literally (see `find-file-literally') using
 completion.  With a prefix ARG invalidates the cache first.
