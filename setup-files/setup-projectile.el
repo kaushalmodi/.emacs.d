@@ -12,9 +12,6 @@
   :commands (projectile-project-root)
   :config
   (progn
-    (with-eval-after-load 'ivy
-      (setq projectile-completion-system 'ivy))
-
     ;; Do not barf when I try to do `projectile-switch-project' while in a
     ;; buffer containing a non-projectile file.
     (setq projectile-require-project-root nil)
