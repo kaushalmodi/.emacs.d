@@ -7,6 +7,12 @@
 (use-package ace-window
   :bind  (:map modi-mode-map
           ("C-x o" . ace-window))
+  :init
+  (progn
+    ;; Show the window key in the mode line from the start. Enabling this
+    ;; from `:config' would not do anything until the first `C-x o' loaded
+    ;; ace-window, which is exactly when the key is needed.
+    (ace-window-display-mode 1))
   :config
   (progn
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
@@ -26,9 +32,7 @@
           leaf 'ace-window-path
           (propertize
            (apply #'string (reverse path))
-           'face 'modi/aw-mode-line-face)))))
-
-    (ace-window-display-mode 1)))
+           'face 'modi/aw-mode-line-face)))))))
 
 
 (provide 'setup-ace-window)
