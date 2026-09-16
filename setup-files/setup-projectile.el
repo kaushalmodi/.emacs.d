@@ -35,11 +35,12 @@
     (dolist (item '("GTAGS" "GRTAGS" "GPATH"))
       (add-to-list 'projectile-globally-ignored-files item))
 
-    ;; Git projects should be marked as projects in top-down fashion,
-    ;; so that each git submodule can be a projectile project.
-    (setq projectile-project-root-files-bottom-up
-          (delete ".git" projectile-project-root-files-bottom-up))
-    (add-to-list 'projectile-project-root-files ".git")
+    ;; Detect git projects bottom-up, so that the nearest ".git" wins and
+    ;; each git submodule is its own projectile project. ".git" is a
+    ;; directory in a normal repo but a file in a submodule or a worktree;
+    ;; only the bottom-up search accepts both. The top-down search requires
+    ;; the marker to be a plain file, so ".git" can never match there.
+    (add-to-list 'projectile-project-root-files-bottom-up ".git")
 
     (setq projectile-project-root-functions
           '(projectile-root-local
