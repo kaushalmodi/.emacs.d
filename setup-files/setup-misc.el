@@ -290,5 +290,3 @@ https://lists.gnu.org/archive/html/emacs-devel/2016-07/msg00519.html "
 ;;
 ;; (10) C-x =     <-- `what-cursor-position' (default binding)
 ;;      C-u C-x = <-- `describe-char'
-;;
-;; (11) Package for csv navigation: csv-nav: https://github.com/emacsmirror/csv-nav
