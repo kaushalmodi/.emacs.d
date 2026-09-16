@@ -57,6 +57,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     buffer-move
     command-log-mode ; for logging commands; useful when demoing emacs
     diff-hl
+    diredfl ; extra font-locking in dired buffers
     dired-collapse
     drag-stuff
     easy-escape ; Make the \\ escape chars more pleasant looking in elisp regexps

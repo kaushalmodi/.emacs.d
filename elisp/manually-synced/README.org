@@ -3,7 +3,6 @@
 |----------------+----------------------------------------------------------+--------------------------------------------------------------------------------------------------|
 | Package        | Source                                                   | Why is this manually synced?                                                                     |
 |----------------+----------------------------------------------------------+--------------------------------------------------------------------------------------------------|
-| dired+         | https://www.emacswiki.org/emacs/download/dired%2b.el     | https://github.com/melpa/melpa/pull/5008                                                         |
 | header2        | https://www.emacswiki.org/emacs/download/header2.el      | https://github.com/melpa/melpa/pull/5008                                                         |
 | hl-line+       | https://www.emacswiki.org/emacs/download/hl-line%2b.el   | https://github.com/melpa/melpa/pull/5008                                                         |
 | info+          | https://www.emacswiki.org/emacs/download/info%2b.el      | https://github.com/melpa/melpa/pull/5008                                                         |

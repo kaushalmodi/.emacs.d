@@ -70,38 +70,35 @@ It added extra strings at the front and back of the default dired buffer name."
         ;; omit mode can be toggled using `M-o' in dired buffer
         (add-hook 'dired-mode-hook #'dired-omit-mode)))
 
-    ;; http://www.emacswiki.org/DiredPlus
-    (use-package dired+
-      :load-path "elisp/manually-synced/dired-plus"
-      :init
-      (progn
-        ;; Details toggling is bound to "(" in `dired-mode' by default
-        (setq diredp-hide-details-initially-flag nil))
+    ;; Extra font-locking for Dired buffers (the faces from dired+)
+    ;; https://github.com/purcell/diredfl
+    (use-package diredfl
+      :hook (dired-mode . diredfl-mode)
       :config
       (progn
         ;; Privilege indicator faces
         (defun modi/dired-update-privilege-faces ()
-          (set-face-attribute 'diredp-dir-priv nil
+          (set-face-attribute 'diredfl-dir-priv nil
                               :foreground "#7474FFFFFFFF"
                               :background (face-background 'default))
-          (set-face-attribute 'diredp-exec-priv nil
+          (set-face-attribute 'diredfl-exec-priv nil
                               :foreground "dodger blue"
                               :background (face-background 'default))
-          (set-face-attribute 'diredp-other-priv nil
+          (set-face-attribute 'diredfl-other-priv nil
                               :background (face-background 'default))
-          (set-face-attribute 'diredp-write-priv nil
+          (set-face-attribute 'diredfl-write-priv nil
                               :foreground "#25258F8F2929"
                               :background (face-background 'default))
-          (set-face-attribute 'diredp-read-priv nil
+          (set-face-attribute 'diredfl-read-priv nil
                               :foreground "#999932325555"
                               :background (face-background 'default))
-          (set-face-attribute 'diredp-no-priv nil
+          (set-face-attribute 'diredfl-no-priv nil
                               :foreground "#2C2C2C2C2C2C"
                               :background (face-background 'default))
-          (set-face-attribute 'diredp-rare-priv nil
+          (set-face-attribute 'diredfl-rare-priv nil
                               :foreground "Green"
                               :background (face-background 'default))
-          (set-face-attribute 'diredp-link-priv nil
+          (set-face-attribute 'diredfl-link-priv nil
                               :foreground "#00007373FFFF"))
         (add-hook 'dired-mode-hook #'modi/dired-update-privilege-faces)))
 
