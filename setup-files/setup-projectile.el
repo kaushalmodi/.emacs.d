@@ -12,9 +12,8 @@
   :commands (projectile-project-root)
   :config
   (progn
-    (when (not (bound-and-true-p disable-pkg-ivy))
-      (with-eval-after-load 'ivy
-        (setq projectile-completion-system 'ivy)))
+    (with-eval-after-load 'ivy
+      (setq projectile-completion-system 'ivy))
 
     ;; Do not barf when I try to do `projectile-switch-project' while in a
     ;; buffer containing a non-projectile file.

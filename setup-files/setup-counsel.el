@@ -7,43 +7,40 @@
   :defer t
   :init
   (progn
-    ;; Do not bind the below keys to counsel commands if the user has decided
-    ;; to use ido instead of ivy.
-    (when (not (bound-and-true-p disable-pkg-ivy))
+    (bind-keys
+     :map modi-mode-map
+     ("M-i" . counsel-grep-or-swiper)
+     ("C-M-y" . counsel-yank-pop)
+     ("C-h F" . counsel-faces)       ;Overrides `Info-goto-emacs-command-node'
+     ("C-h S" . counsel-info-lookup-symbol)
+     ("C-c u" . counsel-unicode-char)
+     ([remap execute-extended-command] . counsel-M-x)
+     ([remap bookmark-jump] . counsel-bookmark) ;Jump to book or set it if it doesn't exist, C-x r b
+     ([remap bookmark-set] . counsel-bookmark)  ;C-x r m
+     ([remap find-file]  . counsel-find-file)
+     ([remap describe-bindings] . counsel-descbinds)
+     ([remap finder-by-keyword] . counsel-package) ;C-h p
+     ([remap describe-variable] . counsel-describe-variable)
+     ([remap describe-function] . counsel-describe-function))
+    (bind-keys
+     ("M-o" . counsel-recentf))
+    (bind-to-modi-map "v" #'counsel-set-variable)
+    (bind-keys
+     :map read-expression-map
+     ("C-r" . counsel-expression-history)) ; useful in `eval-expression' (`M-:')
+    (bind-chords
+     ("JJ" . counsel-imenu)
+     ("'/" . counsel-grep-or-swiper)
+     (";'" . counsel-M-x))
+    (with-eval-after-load 'org
       (bind-keys
-       :map modi-mode-map
-       ("M-i" . counsel-grep-or-swiper)
-       ("C-M-y" . counsel-yank-pop)
-       ("C-h F" . counsel-faces)       ;Overrides `Info-goto-emacs-command-node'
-       ("C-h S" . counsel-info-lookup-symbol)
-       ("C-c u" . counsel-unicode-char)
-       ([remap execute-extended-command] . counsel-M-x)
-       ([remap bookmark-jump] . counsel-bookmark) ;Jump to book or set it if it doesn't exist, C-x r b
-       ([remap bookmark-set] . counsel-bookmark)  ;C-x r m
-       ([remap find-file]  . counsel-find-file)
-       ([remap describe-bindings] . counsel-descbinds)
-       ([remap finder-by-keyword] . counsel-package) ;C-h p
-       ([remap describe-variable] . counsel-describe-variable)
-       ([remap describe-function] . counsel-describe-function))
-      (bind-keys
-       ("M-o" . counsel-recentf))
-      (bind-to-modi-map "v" #'counsel-set-variable)
-      (bind-keys
-       :map read-expression-map
-       ("C-r" . counsel-expression-history)) ; useful in `eval-expression' (`M-:')
+       :map org-mode-map
+       ("C-c C-q" . modi/counsel-org-tag))
       (bind-chords
-       ("JJ" . counsel-imenu)
-       ("'/" . counsel-grep-or-swiper)
-       (";'" . counsel-M-x))
-      (with-eval-after-load 'org
-        (bind-keys
-         :map org-mode-map
-         ("C-c C-q" . modi/counsel-org-tag))
-        (bind-chords
-         :map org-mode-map
-         ("JJ" . counsel-org-goto)))    ;Jump to org headings
-      (with-eval-after-load 'org-agenda
-        (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map))))
+       :map org-mode-map
+       ("JJ" . counsel-org-goto)))    ;Jump to org headings
+    (with-eval-after-load 'org-agenda
+      (bind-key "C-c C-q" #'counsel-org-tag-agenda org-agenda-mode-map)))
   :commands (modi/counsel-org-tag)
   :config
   (progn

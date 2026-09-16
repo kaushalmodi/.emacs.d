@@ -13,13 +13,6 @@
     ;; Enable `ivy-mode'.
     (ivy-mode 1)
 
-    ;; When `ido' gets loaded, disable `ido-mode' and ensure that
-    ;; `ivy-mode' is enabled.
-    (with-eval-after-load 'ido
-      (ido-mode -1)
-      ;; Enable ivy
-      (ivy-mode 1))
-
     ;; Show recently killed buffers when calling `ivy-switch-buffer'
     (setq ivy-use-virtual-buffers t)
     (setq ivy-virtual-abbreviate 'full) ;Show the full virtual file paths

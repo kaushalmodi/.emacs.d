@@ -12,8 +12,7 @@
          ("C-c y" . hydra-yas/body))
   :config
   (progn
-    (setq yas-prompt-functions '(yas-ido-prompt
-                                 yas-completing-prompt))
+    (setq yas-prompt-functions '(yas-completing-prompt))
 
     (setq modi/yas-snippets-dir (let ((dir (concat user-emacs-directory
                                                    "snippets/")))

@@ -131,7 +131,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     ;; bookmark+ ; able to bookmark desktop sessions
     ;; ox-twbs ; export to twitter bootstrap html < fork (supports org 9.0+)
     ;; git-link ; get git links with line numbers and commit-hash/branch ; < fork
-    ;; ido-vertical-mode flx-ido ido-ubiquitous ; < ivy, counsel
     ;; git-gutter git-gutter-fringe git-gutter+ git-gutter-fringe+ ; < diff-hl
     ;; popwin ; < shackle
     ;; helm helm-swoop ; < swiper
@@ -216,9 +215,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
   (require 'setup-hugo))
 (require 'setup-hungry-delete)
 (require 'setup-ibuffer)
-(if (bound-and-true-p disable-pkg-ivy)
-    (require 'setup-ido)
-  (require 'setup-ivy))
+(require 'setup-ivy)
 (require 'setup-imenu-list)
 (require 'setup-indent-bars)
 (require 'setup-info)
