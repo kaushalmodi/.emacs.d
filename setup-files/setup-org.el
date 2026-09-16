@@ -1423,9 +1423,7 @@ returned value `entity-name' will be nil."
       (add-to-list 'modi/ob-enabled-languages "tcl"))
 
     (when (require 'ob-shell nil :noerror)
-      (add-to-list 'modi/ob-enabled-languages (if (version< (org-version) "8.3")
-                                                  "sh" ;ob-shell.el was called ob-sh.el in older Org versions
-                                                "shell")))
+      (add-to-list 'modi/ob-enabled-languages "shell"))
 
     (defvar modi/ob-eval-unsafe-languages '("emacs-lisp"
                                             "shell")

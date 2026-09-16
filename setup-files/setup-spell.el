@@ -59,8 +59,6 @@
       :config
       (progn
         (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-        (with-eval-after-load 'auto-complete
-          (ac-flyspell-workaround))
         ;; https://github.com/larstvei/dot-emacs#flyspell
         (add-hook 'text-mode-hook #'flyspell-mode)
         (add-hook 'org-mode-hook  #'flyspell-mode)

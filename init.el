@@ -141,7 +141,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
   "A list of packages to ensure are installed at launch")
 
 ;; Basic requires
-(require 'subr-x)                       ;For when-let*, if-let*, ..
 ;; Place `setup-var-overrides.el' with `(provide 'setup-var-overrides)' in
 ;; `user-personal-directory'
 (add-to-list 'load-path user-personal-directory)

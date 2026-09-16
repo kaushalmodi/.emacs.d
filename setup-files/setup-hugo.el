@@ -116,26 +116,16 @@ present.
 A post subtree is one that has the EXPORT_FILE_NAME property
 set."
     (interactive)
-    ;; https://lists.gnu.org/r/emacs-orgmode/2022-05/msg00807.html
-    ;; outline.el functions will not be supported by Org starting
-    ;; version 9.6+. Use org-fold-* functions instead of outline-*
-    ;; functions.
-    (cl-flet ((show-all (if (fboundp 'org-fold-show-all)
-                            #'org-fold-show-all
-                          #'org-show-all))
-              (hide-subtree (if (fboundp 'org-fold-hide-subtree)
-                                #'org-fold-hide-subtree
-                              #'outline-hide-subtree)))
-      (widen)
-      (show-all '(headings))
-      ;; Collapse all the post subtrees (ones with EXPORT_FILE_NAME
-      ;; property set).
-      (org-map-entries #'hide-subtree "EXPORT_FILE_NAME<>\"\"" 'file)
-      ;; Also hide Footnotes and comments.
-      (save-excursion
-        (goto-char (point-min))
-        (while (re-search-forward "^\\(\\* Footnotes\\|\\*+ COMMENT\\)" nil :noerror)
-          (hide-subtree)))))
+    (widen)
+    (org-fold-show-all '(headings))
+    ;; Collapse all the post subtrees (ones with EXPORT_FILE_NAME
+    ;; property set).
+    (org-map-entries #'org-fold-hide-subtree "EXPORT_FILE_NAME<>\"\"" 'file)
+    ;; Also hide Footnotes and comments.
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^\\(\\* Footnotes\\|\\*+ COMMENT\\)" nil :noerror)
+        (org-fold-hide-subtree))))
 
   ;; C-u C-c TAB in Org mode -> `modi/org-hugo-collapse-all-posts'
   (defun modi/org-ctrl-c-tab-advice (&rest args)
