@@ -16,71 +16,6 @@
  :filter (display-graphic-p)
  ("<f1>" . goto-line))
 
-;; iy-go-to-char
-;; https://github.com/doitian/iy-go-to-char
-(use-package iy-go-to-char
-  :load-path "elisp/manually-synced/iy-go-to-char"
-  :defer t
-  ;; Note that repeatedly calling the `iy-go-to-char' key-chords without first
-  ;; quitting the previous `iy-go-to-char' call will cause emacs to crash.
-  :chords (("]'" . iy-go-to-char)
-           ("[;" . iy-go-to-char-backward)
-           ("}\"" . iy-go-to-or-up-to-continue)
-           ("{:" . iy-go-to-or-up-to-continue-backward))
-  :config
-  (progn
-    (setq iy-go-to-char-continue-when-repeating t)
-    (setq iy-go-to-char-use-key-backward        t)
-    (setq iy-go-to-char-key-backward            ?\,)
-    (setq iy-go-to-char-use-key-forward         t)
-    (setq iy-go-to-char-key-forward             ?\.)
-    ;; To make `iy-go-to-char' works better with `multiple-cursors', add
-    ;; `iy-go-to-char-start-pos' to `mc/cursor-specific-vars' when mc is loaded:
-    (with-eval-after-load 'multiple-cursors
-      (add-to-list 'mc/cursor-specific-vars #'iy-go-to-char-start-pos))))
-
-;; Except repeating the char key, followings keys are defined before
-;; quitting the search (which can be disabled by setting
-;; `iy-go-to-char-override-local-map' to nil):
-;;
-;;    X   -- where X is the char to be searched. Repeating it will search
-;;           forward the char. Can be disabled through
-;;           `iy-go-to-char-continue-when-repeating'
-;;
-;;    ;   -- search forward the char, customizable:
-;;           `iy-go-to-char-key-forward', `iy-go-to-char-use-key-forward'
-;;
-;;    ,   -- search backward the char, customizable:
-;;           `iy-go-to-char-key-backward', `iy-go-to-char-use-key-backward'
-;;
-;;    C-g -- quit
-;;
-;;    C-s -- start `isearch-forward' using char as initial search
-;;           string
-;;
-;;    C-r -- start `isearch-backward' using char as initial search
-;;           string
-;;
-;;    C-w -- quit and kill region between start and current point.  If region is
-;;           activated before search, then use the original mark instead of the
-;;           start position.
-;;
-;;    M-w -- quit and save region between start and current point.  If region is
-;;           activated before search, use the mark instead of start position.
-;;
-;; All other keys will quit the search.  Then the key event is
-;; intepreted in the original environment before search.
-;;
-;; if the search quits because of error or using "C-g", point is set
-;; back to the start position.  Otherwise, point is not changed and the
-;; start position is set as marker.  So you can use "C-x C-x" back to
-;; that position.
-
-;; `iy-go-to-char-backward' search backward by default.  Also the search can
-;; cross lines.  To continue search last char, use `iy-go-to-char-continue' and
-;; `iy-go-to-char-continue-backward'.
-
-
 ;; https://github.com/lunaryorn/stante-pede/blob/master/init.el
 (defun modi/beginning-of-line-or-indentation (arg)
   "Move point back to indentation of beginning of line.
@@ -154,7 +89,12 @@ If point reaches the beginning or end of the buffer, stop there."
          ("M-a" . isearch-avy)) ; isearch > avy
   :bind (:map modi-mode-map
          ("C-c C-SPC" . modi/avy))
-  :chords (("l;" . modi/avy))
+  :chords (("l;" . modi/avy)
+           ;; Chords previously used for iy-go-to-char
+           ("]'" . avy-goto-char)         ;jump to a char anywhere in the visible windows
+           ("[;" . avy-goto-char-in-line) ;jump to a char on the current line
+           ("}\"" . avy-goto-char-2)      ;jump to a 2-char sequence
+           ("{:" . avy-resume))           ;repeat the last avy jump
   :config
   (progn
     (setq avy-style 'pre)
