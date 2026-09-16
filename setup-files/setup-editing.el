@@ -9,7 +9,6 @@
 ;;    Insert time-stamp + user name
 ;;  Clipboard
 ;;  Delete Selection
-;;  Show Paren
 ;;  Managing white spaces and empty newlines
 ;;  Tabs and Untabify
 ;;  Align
@@ -148,11 +147,6 @@ Additional control:
 ;; Typing anything after highlighting text overwrites that text
 ;; http://emacsredux.com/blog/2013/04/12/delete-selection-on-insert
 (delete-selection-mode 1)
-
-;;; Show Paren
-;; Allow one to see matching pairs of parentheses
-;; When point is on one of the paired characters, highlight the other
-(show-paren-mode 1)
 
 ;;; Managing white spaces and empty newlines
 (setq require-final-newline t)

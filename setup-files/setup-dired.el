@@ -39,6 +39,9 @@
     ;; in the prompt for file copy, rename etc.
     (setq dired-dwim-target t)
 
+    ;; Drag files out of a Dired buffer into other programs.
+    (setq dired-mouse-drag-files t)
+
     ;; Dired listing switches
     ;;  -a : Do not ignore entries starting with .
     ;;  -l : Use long listing format.

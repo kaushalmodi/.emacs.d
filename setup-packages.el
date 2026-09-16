@@ -7,6 +7,14 @@
 ;; Load newer version of .el and .elc if both are available
 (setq load-prefer-newer t)
 
+;; Native-compile packages when they are installed, instead of lazily on
+;; first load.
+(setq package-native-compile t)
+
+;; Third-party packages emit plenty of warnings that are not actionable for
+;; me; keep them in the *Warnings* buffer without popping it up.
+(setq native-comp-async-report-warnings-errors 'silent)
+
 ;; `package-user-dir' is set in early-init.el.
 ;; Below require will auto-create `package-user-dir' it doesn't exist.
 (require 'package)

@@ -115,6 +115,10 @@ happens within a region if one is selected."
   :commands (offby1/search-all-buffers) ; need to require `grep' for `grep-read-regexp'
   :config
   (progn
+    ;; Group the matches under a heading per file instead of prefixing every
+    ;; line with the file name.
+    (setq grep-use-headings t)
+
     (defcustom offby1/search-all-buffers-ignored-files
       (list (rx-to-string
              '(and bos

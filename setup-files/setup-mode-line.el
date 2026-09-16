@@ -139,6 +139,9 @@ If nil, show the same in the minibuffer.")
             ("\\(.*:\\)DSGN:analog_partition_rtl/"     "\\1ANA:"))))
   :config
   (progn
+    ;; Collapse the minor mode lighters that are not hidden by
+    ;; `rm-blacklist' below into a single menu.
+    (setq mode-line-collapse-minor-modes t)
 
 ;;;; Rich Minority
     (use-package rich-minority

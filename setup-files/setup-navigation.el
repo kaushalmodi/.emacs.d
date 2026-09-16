@@ -3,6 +3,10 @@
 
 (setq fast-but-imprecise-scrolling t)
 
+;; Scroll by pixel rather than by line, which makes trackpad and
+;; high-resolution wheel scrolling smooth.
+(pixel-scroll-precision-mode 1)
+
 ;; Horizontally scroll only the current line
 ;; https://www.reddit.com/r/emacs/comments/6au45k/is_it_possible_to_truncate_long_lines_the_same/
 (setq auto-hscroll-mode 'current-line)

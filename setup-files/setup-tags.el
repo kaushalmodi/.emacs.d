@@ -97,6 +97,15 @@ If USE-XREF is non-nil, use `xref' even when `ggtags' is available."
     (call-interactively #'ggtags-find-tag-dwim)))
 
 ;;; xref, semantic/symref
+(use-package xref
+  :defer t
+  :config
+  (progn
+    ;; Use rg instead of grep for the xref searches that fall back to a
+    ;; line-oriented search, like `xref-find-references'.
+    (when (executable-find "rg")
+      (setq xref-search-program 'ripgrep))))
+
 ;; `xref' using `semantic-symref-detect-symref-tool' and
 ;; `semantic-symref-calculate-rootdir' to figure out which tool is available
 ;; for finding definitions and references. It looks for `global', `idutils',

@@ -5,6 +5,22 @@
 
 (setq use-short-answers t)              ;Use y or n instead of yes or no
 
+;; Keep Emacs responsive in files with very long lines, like EDA tool logs,
+;; by disabling font-lock and other expensive minor modes in them.
+(global-so-long-mode 1)
+
+;; Persist the minibuffer history, and the kill ring, across sessions.
+(use-package savehist
+  :config
+  (progn
+    (setq savehist-additional-variables '(kill-ring
+                                          search-ring
+                                          regexp-search-ring))
+    (savehist-mode 1)))
+
+;; Do not clutter the kill ring with consecutive identical kills.
+(setq kill-do-not-save-duplicates t)
+
 ;; Delete stuff to a trash directory
 (setq delete-by-moving-to-trash t)
 (setq trash-directory (let ((dir (file-name-as-directory (expand-file-name ".trash_emacs" modi/temporary-file-directory))))

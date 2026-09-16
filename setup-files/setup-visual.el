@@ -36,7 +36,6 @@
 
 ;;; Variables
 (setq inhibit-startup-message t)     ;No splash screen at startup
-(setq scroll-step 1)                 ;Scroll 1 line at a time
 (tooltip-mode -1)                    ;Disable tooltip appearance on mouse hover
 (setq frame-resize-pixelwise t)      ;Allow frame size to inc/dec by a pixel
 
@@ -52,6 +51,11 @@ This variable is to be updated when changing themes.")
 ;; Highlight closing parentheses; show the name of the body being closed with
 ;; the closing parentheses in the minibuffer.
 (show-paren-mode 1)
+
+;; When the opening paren of the pair at point is scrolled off the top of the
+;; window, show that line in an overlay at the top instead. Useful for
+;; Verilog `end'/`endmodule' and long function bodies.
+(setq show-paren-context-when-offscreen 'overlay)
 
 ;;; Bars, Dividers, and Window Elements
 
