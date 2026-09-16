@@ -231,7 +231,6 @@ When set to `emacs', the Org version shipped with Emacs is used.")
 (when (executable-find "p4")
   (require 'setup-p4))
 (require 'setup-page-break-lines)
-(require 'setup-pcache)
 (require 'setup-pomodoro)
 (require 'setup-poporg)
 (with-eval-after-load 'setup-tags
