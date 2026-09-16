@@ -10,3 +10,16 @@
 
 (setq package-user-dir (let ((elpa-dir-name (format "elpa_%s" emacs-major-version))) ;default = ~/.emacs.d/elpa/
                          (file-name-as-directory (expand-file-name elpa-dir-name user-emacs-directory))))
+
+;; Create the initial frame without the menu bar, tool bar and scroll bars
+;; rather than removing them from setup-visual.el after the frame is already
+;; on screen, which makes the frame visibly resize while starting up.
+;; `menu-bar-mode', `tool-bar-mode' and `scroll-bar-mode' still toggle them
+;; interactively.
+(push '(menu-bar-lines . 0) default-frame-alist)
+(push '(tool-bar-lines . 0) default-frame-alist)
+(push '(vertical-scroll-bars) default-frame-alist)
+
+;; Never resize the frame implicitly, in particular when a font or one of the
+;; bars above changes.
+(setq frame-inhibit-implied-resize t)

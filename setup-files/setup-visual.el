@@ -9,8 +9,6 @@
 ;;  Show Paren
 ;;  Bars, Dividers, and Window Elements
 ;;    Menu bar
-;;    Tool bar
-;;    Scroll bar
 ;;    Window Dividers
 ;;  Themes
 ;;  Frame Title
@@ -19,7 +17,6 @@
 ;;      Syntax highlight .vimrc files (I know, blasphemy!)
 ;;    Fix italics
 ;;    Windows Font
-;;    Global Font Resize
 ;;  Line truncation
 ;;  Visual Line Mode
 ;;    Visual Wrap Prefix
@@ -60,21 +57,15 @@ This variable is to be updated when changing themes.")
 ;;; Bars, Dividers, and Window Elements
 
 ;;;; Menu bar
-;; Do not show the menu bar with File|Edit|Options|...
-(menu-bar-mode -1)
+;; The menu bar, tool bar and scroll bars are turned off for new frames in
+;; early-init.el, via `default-frame-alist'. `scroll-bar-mode' defaults to
+;; `right' though, so turn it off here too to keep the variable in sync with
+;; what the frames actually show.
+(scroll-bar-mode -1)
 
 ;; Toggle menu bar
-;; Do not resize the frame when `menu-bar-mode' is toggled.
-(add-to-list 'frame-inhibit-implied-resize 'menu-bar-lines) ;Default nil on GTK+
 (bind-key "<f2>" #'menu-bar-mode modi-mode-map)
 (key-chord-define-global "2w" #'menu-bar-mode) ;Alternative to F2
-
-;;;; Tool bar
-(tool-bar-mode -1)               ;Do not show the tool bar with icons on the top
-(add-to-list 'frame-inhibit-implied-resize 'tool-bar-lines)
-
-;;;; Scroll bar
-(scroll-bar-mode -1)                    ;Disable the scroll bars
 
 ;;;; Window Dividers
 (use-package frame
@@ -241,11 +232,6 @@ See `mode-line-format' to get help on the %-identifers used in this function."
 ;;;; Windows Font
 (when (eq system-type 'windows-nt)
   (set-face-attribute 'default nil :family "Consolas"))
-
-;;;; Global Font Resize
-;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21480
-;; Do not resize the frame when adjusting the font size
-(add-to-list 'frame-inhibit-implied-resize 'font)
 
 ;;; Line truncation
 ;; Enable truncation. This setting does NOT apply to windows split using `C-x 3`
