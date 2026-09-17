@@ -1,6 +1,7 @@
 # Emacs 31 upgrade review for `~/.emacs.d`
 
-Date: 2026-09-14. Updated 2026-09-16 after implementing sections 3.1-3.6.
+Date: 2026-09-14. Updated 2026-09-17 after implementing sections 3.1-3.6
+and the verilog-ext and verilog-mode work in 3.13 and 3.14.
 
 ## 0. Snapshot
 
@@ -16,21 +17,23 @@ Original state, 2026-09-14:
 | Config size             | 121 `setup-*.el` files, ~16.7k lines, 20 git submodules, 118 ELPA packages       |
 | Version gates in config | 33 `>=e` gates, 31 of them for Emacs < 29 (all dead code on 30.2)                |
 
-Current state, 2026-09-16:
+Current state, 2026-09-17:
 
-| Item              | Value                                                                                           |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| Running Emacs     | 31.1, native compilation available                                                              |
-| Minimum supported | **30.1**, enforced by a guard in `early-init.el`; all `>=e` gates and the macro are gone        |
-| Tree-sitter       | 11 grammars compiled, `setup-treesitter.el` routes 10 modes, safe on builds without tree-sitter |
-| Bundled Org       | 9.8                                                                                             |
-| Config size       | 110 `setup-*.el` files, 15 git submodules, 131 ELPA packages                                    |
-| Spell check       | `jinx` via libenchant/AppleSpell, with the flyspell setup kept as fallback                      |
-| Startup           | No warnings, no errors                                                                          |
+| Item              | Value                                                                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Running Emacs     | 31.1, native compilation available                                                                                                    |
+| Minimum supported | **30.1**, enforced by a guard in `early-init.el`; all `>=e` gates and the macro are gone                                              |
+| Tree-sitter       | 11 grammars compiled, `setup-treesitter.el` routes 10 modes, safe on builds without tree-sitter                                       |
+| Bundled Org       | 9.8                                                                                                                                   |
+| Config size       | 110 `setup-*.el` files, 15 git submodules, 131 ELPA packages                                                                          |
+| Spell check       | `jinx` via libenchant/AppleSpell, with the flyspell setup kept as fallback                                                            |
+| SystemVerilog     | `verilog-ts-mode` for all Verilog extensions, `verilog-ext` for xref/capf/hierarchy/navigation, `verilog-mode` submodule at `b07a0f7` |
+| Startup           | No warnings, no errors                                                                                                                |
 
 Sections 3.1, 3.2, 3.3, 3.5 and 3.6 are done; 3.4 is partly done. See
 section 3.9 for what was implemented and section 3.10 for corrections to
-this document.
+this document. Sections 3.11 through 3.14 record the decisions taken on
+project.el, `user-lisp/`, verilog-ext and the verilog-mode submodule.
 
 Sources: `etc/NEWS` on the `emacs-31` branch (4302 lines), `etc/NEWS.30`
 (2859 lines), `etc/ORG-NEWS`, plus a read of every file in `setup-files/`.
@@ -475,7 +478,7 @@ no `display-comint-buffer-action`.
 | `flyspell` + `flyspell-correct-ivy` + `ispell` config (`setup-spell.el`)                                                 | `jinx`                                                                                                                                | **Done.** Enchant-based, checks all visible text asynchronously. The flyspell setup is kept behind `modi/jinx-available-p` for machines without a compiler or libenchant                                                         |
 | `projectile` + `ibuffer-projectile` (`setup-projectile.el`, 256 lines)                                                   | `project.el` + `ibuffer-project`                                                                                                      | **Decided against; keeping projectile.** See section 3.11 for the benchmark and the feature-by-feature comparison                                                                                                                |
 | `ggtags` + GNU Global (`setup-tags.el`)                                                                                  | `eglot` + a SystemVerilog LSP (`verible-verilog-ls` or `svls`), or `citre` for ctags                                                  | Eglot is built in since 29; xref/imenu/eldoc for free                                                                                                                                                                            |
-| `verilog-mode` git submodule                                                                                             | `verilog-ts-mode` + `verilog-ext` (MELPA, gmlarumbe)                                                                                  | Tree-sitter fontification and indentation, hierarchy navigation, which-func, imenu, xref, compilation regexps, UVM templates. Covers most of the 793 lines in `setup-verilog.el`. Can run alongside classic `verilog-mode`       |
+| `verilog-mode` git submodule                                                                                             | `verilog-ts-mode` + `verilog-ext` (MELPA, gmlarumbe)                                                                                  | **Partly done.** `verilog-ts-mode` handles all Verilog extensions; `verilog-ext` adds xref, capf, hierarchy, navigation, typedefs and ports. Its other features stay off -- see section 3.13                                     |
 | `hydra` (29 `defhydra` forms)                                                                                            | `transient` (built in since 28) and `repeat-mode` (28)                                                                                | Hydra is in maintenance mode. `repeat-mode` with `defvar-keymap :repeat t` replaces the "sticky" hydras (window resize, font size, nav); Emacs 31 adds `repeat-continue`. Transient for menu hydras (projectile, magit, toggles) |
 | `smart-mode-line` + `rich-minority`                                                                                      | `doom-modeline` or `mood-line`, or plain mode line with `mode-line-format-right-align` (30) and `mode-line-collapse-minor-modes` (31) | Both current packages are effectively unmaintained                                                                                                                                                                               |
 | `multi-term`                                                                                                             | `eat` (GNU ELPA) or `vterm`                                                                                                           | multi-term is abandoned                                                                                                                                                                                                          |
@@ -636,21 +639,23 @@ Settings to change:
 7. Verify `emacs -nw` in tmux: `xterm-mouse-mode` is on by default; disable
    if it fights tmux mouse mode.
 8. Optional but high value for SystemVerilog work: add `verilog-ext` and
-   `verilog-ts-mode`, and Eglot with `verible-verilog-ls`.
+   `verilog-ts-mode`, and Eglot with `verible-verilog-ls`. Both packages
+   are now in place; see section 3.13. Eglot is still not set up because no
+   LSP server is installed.
 
 ### 3.8 Suggested order of work
 
-| Priority | Work                                                                                                                             | Effort  | Status                                                          |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------- | ------- | --------------------------------------------------------------- |
-| 1        | Fix broken bindings and dead URLs (3.1)                                                                                          | 1 hour  | Done                                                            |
-| 2        | Remove `use-package`/`which-key` from `my-packages`; restore signature check                                                     | 10 min  | Done                                                            |
-| 3        | Replace obsolete APIs (3.2), especially `hs-special-modes-alist`, `turn-on-flyspell`, `point-at-bol`, `focus-in-hook`            | 1 hour  | Done                                                            |
-| 4        | Delete dead version gates and never-loaded files (3.5), drop `>=e`                                                               | 2 hours | Done                                                            |
-| 5        | Delete `setup-fci.el`, shrink `setup-linum.el`, switch `adaptive-wrap` to `visual-wrap-prefix-mode`                              | 1 hour  | Done                                                            |
-| 6        | Flycheck to Flymake; `ctags-update` to `etags-regen-mode`; drop `paradox`                                                        | 1 hour  | Done                                                            |
-| 7        | Adopt the 3.6 defaults; move frame settings to `early-init.el`                                                                   | 30 min  | Done                                                            |
-| 8        | Switch to emacs-plus@31 with native-comp; install grammars                                                                       | 1 hour  | Done                                                            |
-| 9        | Larger migrations, one at a time: `jinx`, `verilog-ext`, `vertico`/`consult`, `project.el`, `transient`/`repeat-mode` for hydras | Weeks   | `jinx` done; `project.el` declined (3.11); the rest not started |
+| Priority | Work                                                                                                                             | Effort  | Status                                                                                                               |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
+| 1        | Fix broken bindings and dead URLs (3.1)                                                                                          | 1 hour  | Done                                                                                                                 |
+| 2        | Remove `use-package`/`which-key` from `my-packages`; restore signature check                                                     | 10 min  | Done                                                                                                                 |
+| 3        | Replace obsolete APIs (3.2), especially `hs-special-modes-alist`, `turn-on-flyspell`, `point-at-bol`, `focus-in-hook`            | 1 hour  | Done                                                                                                                 |
+| 4        | Delete dead version gates and never-loaded files (3.5), drop `>=e`                                                               | 2 hours | Done                                                                                                                 |
+| 5        | Delete `setup-fci.el`, shrink `setup-linum.el`, switch `adaptive-wrap` to `visual-wrap-prefix-mode`                              | 1 hour  | Done                                                                                                                 |
+| 6        | Flycheck to Flymake; `ctags-update` to `etags-regen-mode`; drop `paradox`                                                        | 1 hour  | Done                                                                                                                 |
+| 7        | Adopt the 3.6 defaults; move frame settings to `early-init.el`                                                                   | 30 min  | Done                                                                                                                 |
+| 8        | Switch to emacs-plus@31 with native-comp; install grammars                                                                       | 1 hour  | Done                                                                                                                 |
+| 9        | Larger migrations, one at a time: `jinx`, `verilog-ext`, `vertico`/`consult`, `project.el`, `transient`/`repeat-mode` for hydras | Weeks   | `jinx` and `verilog-ext` done; `project.el` declined (3.11); `vertico`/`consult` and the hydra migration not started |
 
 ### 3.9 What was implemented
 
@@ -754,3 +759,76 @@ genuinely local (`modi-mode.el`, `temp-mode.el`, `csh-mode`, `de-ansify`,
 `insert-week`, the `org-include-*` exporters, `patches/`), which would lose
 their explicit `:load-path` clauses and gain autoloading. That remains
 available if the `:load-path` boilerplate becomes annoying.
+
+### 3.13 verilog-ext: six features enabled
+
+`verilog-ext-feature-list` is set to `xref`, `capf`, `hierarchy`,
+`navigation`, `typedefs` and `ports`. `hierarchy` picks the tree-sitter
+backend because the systemverilog grammar is installed, so Verilog-Perl
+`vhier` is not needed.
+
+Replaced, because the verilog-ext versions are better:
+
+| Was                                              | Now                                       | Why                                                                                                                                                                                            |
+| ------------------------------------------------ | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modi/verilog-jump-to-module-at-point`           | `verilog-ext-jump-to-module-at-point-def` | The custom one needed `ctags`, a pre-generated TAGS file and projectile. This one finds the instance through the tree-sitter parse and resolves it with xref, and has a references counterpart |
+| `modi/verilog-find-parent-module`                | `verilog-ext-jump-to-parent-module`       | verilog-ext credits this config for the PCRE it uses, so it is the same search, maintained upstream                                                                                            |
+| `modi/verilog-block-end-comments-to-block-names` | `verilog-ext-block-end-comments-to-names` | Same function upstreamed. Identical output on all four cases tested; it checks the captured name against `verilog-keywords` with `member` rather than a regexp that could partial-match        |
+
+The chords carry over: `\\` jumps to the definition, `^^` to the parent
+module, and `||` is new for references.
+
+`modi/verilog-find-module-instance` is kept: which-func and
+`modi/verilog-jump-to-header-dwim` both use it, and the verilog-ext
+`which-func` feature is not enabled. Its regexp did **not** match a plain
+`core u_core (.clk(clk));` instance, where the tree-sitter version returns
+`("core" "u_core")`, so prefer the verilog-ext navigation commands.
+
+Left off, with reasons, because this is the part that is easy to get wrong:
+
+| Feature                               | Why not                                                                                                                                                                                                          |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `font-lock`                           | Adds keywords to `verilog-mode` only, and every Verilog extension here opens in `verilog-ts-mode`. Measured on one buffer: `verilog-mode` goes from 61 to 70 fontified characters, `verilog-ts-mode` stays at 70 |
+| `hideshow`                            | Registers through `hs-special-modes-alist`, obsolete as of 31.1. The hideshow setup in `setup-verilog.el` uses the buffer-local variables instead                                                                |
+| `imenu`                               | No outshine support; the custom one adds `// * Heading` levels                                                                                                                                                   |
+| `which-func`                          | Does not feed `modi/verilog-which-func-xtra` into the mode line format used here                                                                                                                                 |
+| `compilation`                         | Project-level and needs `:compile-cmd`; `modi/verilog-compile` is per-file with a `modi/verilog-tool-setup` hook for site tools. `verilog-ext-compile-project` is still on `C-c <f5>`                            |
+| `template`                            | Duplicates `hydra-verilog-template` on the same `C-c C-t`                                                                                                                                                        |
+| `eglot`, `lsp`, `lsp-bridge`, `lspce` | Need an LSP server; none installed                                                                                                                                                                               |
+| `formatter`, `beautify`, `flycheck`   | Need verible; not installed                                                                                                                                                                                      |
+| `time-stamp`                          | Trivial either way                                                                                                                                                                                               |
+
+Two things to know:
+
+- `verilog-ext-mode-map` is a minor mode map, so it shadows global
+  bindings. `C-M-d`, `C-M-p` and `C-M-n` are unbound in it to keep
+  `duplicate-dwim` and drag-stuff working in Verilog buffers.
+- `xref`, `capf`, `hierarchy` and `typedefs` only act on buffers under a
+  `:root` in `verilog-ext-project-alist`, which is nil by default. That is
+  machine-specific, so it belongs in `setup-var-overrides.el`; then run
+  `verilog-ext-tags-get` (`C-c C-u`) once per project. `navigation` and
+  `ports` work without it.
+
+### 3.14 verilog-mode submodule
+
+Updated from `fb3972d` to veripool master `b07a0f7` (~90 commits) and
+rebuilt with `build.sh`. Two of those commits are Emacs 31.1 specific:
+`0603bad` and `54a0c9b`, both about `hs-forward-sexp-function`.
+
+Two traps found here:
+
+- `build.sh` has no error checking and its last step is an unconditional
+  `cp`, so it reports success even when `make` fails. The XEmacs
+  byte-compile step does fail, because xemacs is not installed. The Emacs
+  step compiles cleanly and that is the output used.
+- The generated `verilog-mode.el` has to be reindented with this config,
+  which is how it had always been committed. Upstream reformatted its own
+  tabs and spaces, so committing the raw build gives a 7758-line diff;
+  reindenting brings it to 454 lines, 400 of which are real changes.
+
+Separately, `verilog-ts-mode` does `(require 'verilog-mode)` as it loads
+and `setup-treesitter.el` is required before `setup-verilog.el`, so the
+copy bundled with Emacs won and the `:load-path` in `setup-verilog.el`
+never took effect -- `locate-library` pointed at the submodule while the
+loaded version was Emacs's own. `setup-treesitter.el` now puts the
+submodule on `load-path` before `verilog-ts-mode` loads.
