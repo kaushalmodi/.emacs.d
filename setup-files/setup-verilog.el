@@ -15,7 +15,6 @@
 ;;      modi/verilog-update-which-func-format
 ;;    modi/verilog-selective-indent
 ;;    modi/verilog-compile
-;;    convert block-end comments to block names
 ;;    Do not open all `included files
 ;;  hideshow
 ;;  hydra-verilog-template
@@ -486,32 +485,6 @@ If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' pre
       (interactive)
       (modi/verilog-compile '(4)))
 
-;;;; convert block-end comments to block names
-    (defun modi/verilog-block-end-comments-to-block-names ()
-      "Convert valid block-end comments to ': BLOCK_NAME'.
-
-Examples: endmodule // module_name             → endmodule : module_name
-          endfunction // some comment          → endfunction // some comment
-          endfunction // class_name::func_name → endfunction : func_name
-          end // block: block_name             → end : block_name "
-      (interactive)
-      (save-excursion
-        (goto-char (point-min))
-        (while (re-search-forward (concat "^"
-                                          "\\(?1:[[:blank:]]*"
-                                          modi/verilog-block-end-keywords-re
-                                          "\\)"
-                                          "[[:blank:]]*//[[:blank:]]*"
-                                          "\\(\\(block:\\|"
-                                          modi/verilog-identifier-re "[[:blank:]]*::\\)[[:blank:]]*\\)*"
-                                          "\\(?2:" modi/verilog-identifier-re "\\)"
-                                          "[[:blank:]]*$")
-                                  nil :noerror)
-          ;; Make sure that the matched string after "//" is not a verilog
-          ;; keyword.
-          (when (not (string-match-p modi/verilog-keywords-re (match-string 2)))
-            (replace-match "\\1 : \\2")))))
-
 ;;;; Do not open all `included files
     (defun modi/verilog-do-not-read-includes ()
       "Replacement for `verilog-read-includes'."
@@ -649,7 +622,7 @@ _a_lways         _f_or              _g_enerate         _O_utput
                            (vc-git-root (buffer-file-name)) ;In a git repo, and
                            (let ((git-repo-remote (shell-command-to-string "git --no-pager config remote.upstream.url")))
                              (string-match-p "veripool/verilog-mode" git-repo-remote))))) ;Upstream URL has to match this.
-        (add-hook 'before-save-hook #'modi/verilog-block-end-comments-to-block-names nil :local))
+        (add-hook 'before-save-hook #'verilog-ext-block-end-comments-to-names nil :local))
 
       ;; Replace tabs with spaces when saving files in verilog-mode.
       (add-hook 'before-save-hook #'modi/untabify-buffer nil :local)
@@ -706,11 +679,22 @@ _a_lways         _f_or              _g_enerate         _O_utput
 
 ;;; verilog-ext
 ;; https://github.com/gmlarumbe/verilog-ext
-;; Only the features below are enabled. The rest either duplicate what this
-;; file already does (font-lock, imenu, which-func, hideshow, template,
-;; block-end-comments, compilation, time-stamp, beautify) or need a tool
-;; that is not installed (eglot/lsp/lsp-bridge/lspce need an LSP server,
-;; formatter and flycheck need verible).
+;; Only the features below are enabled. Of the rest:
+;; - `font-lock' adds keywords to `verilog-mode' only, and every Verilog
+;;   extension here opens in `verilog-ts-mode', which fontifies through
+;;   tree-sitter instead, so it would have no effect.
+;; - `hideshow' registers through `hs-special-modes-alist', obsolete as of
+;;   31.1; the hideshow section above uses the buffer-local variables.
+;; - `imenu' has no outshine support, unlike the imenu section above.
+;; - `which-func' does not feed `modi/verilog-which-func-xtra' into the
+;;   mode line format used here.
+;; - `compilation' is project-level and needs `:compile-cmd';
+;;   `modi/verilog-compile' is per-file. `verilog-ext-compile-project' is
+;;   still bound to "C-c <f5>" once `:compile-cmd' is set.
+;; - `template' duplicates `hydra-verilog-template' on the same binding.
+;; - `eglot', `lsp', `lsp-bridge' and `lspce' need an LSP server, and
+;;   `formatter', `beautify' and `flycheck' need verible; neither is
+;;   installed.
 (use-package verilog-ext
   :hook (verilog-mode . verilog-ext-mode)
   :init
@@ -735,6 +719,12 @@ _a_lways         _f_or              _g_enerate         _O_utput
                                      ports)))    ;Port connection utilities
   :config
   (progn
+    ;; `verilog-ext-block-end-comments-to-names' is added to
+    ;; `before-save-hook' above, under narrower conditions than the
+    ;; `block-end-comments' feature would apply it, so load the file
+    ;; without enabling the feature.
+    (require 'verilog-ext-block-end-comments)
+
     ;; `verilog-ext-mode-map' is a minor mode map, so it shadows these
     ;; global bindings in Verilog buffers.
     (bind-keys
