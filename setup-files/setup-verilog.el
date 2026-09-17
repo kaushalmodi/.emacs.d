@@ -13,8 +13,6 @@
 ;;    which-func
 ;;      modi/verilog-which-func
 ;;      modi/verilog-update-which-func-format
-;;    modi/verilog-jump-to-module-at-point (interactive)
-;;    modi/verilog-find-parent-module (interactive)
 ;;    modi/verilog-selective-indent
 ;;    modi/verilog-compile
 ;;    convert block-end comments to block names
@@ -24,6 +22,7 @@
 ;;  imenu + outshine
 ;;  modi/verilog-mode-customization
 ;;  Key bindings
+;;  verilog-ext
 
 (use-package verilog-mode
   :load-path "elisp/verilog-mode"
@@ -405,81 +404,6 @@ point."
                            help-echo ,modi/verilog-which-func-echo-help)
                           "]"))))))
 
-    (with-eval-after-load 'projectile
-
-;;;; modi/verilog-jump-to-module-at-point (interactive)
-      (defun modi/verilog-jump-to-module-at-point ()
-        "When in a module instance, jump to that module's definition.
-
-Calling this function again after that *without moving the point* will
-call `xref-go-back' and jump will be made back to the original position.
-
-Usage: While the point is inside a verilog instance, say, \"core u_core\",
-calling this command, will make a jump to \"module core\". When you call this
-command again *without moving the point*, the jump will be made back to the
-earlier position where the point was inside the \"core u_core\" instance.
-
-It is required to have `ctags' executable and `projectile' package installed,
-and to have a `ctags' TAGS file pre-generated for this command to work."
-        (interactive)
-        ;; You need to have ctags installed.
-        (if (and (executable-find "ctags")
-                 (projectile-project-root))
-            (let ((tags-file (expand-file-name "TAGS" (projectile-project-root))))
-              ;; You need to have the ctags TAGS file pre-generated.
-              (if (file-exists-p tags-file)
-                  ;; `modi/verilog-which-func-xtra' contains the module name in
-                  ;; whose instance declaration the point is currently.
-                  (if (and (modi/verilog-find-module-instance)
-                           modi/verilog-which-func-xtra)
-                      (progn
-                        (visit-tags-table tags-file :local)
-                        (xref-find-definitions modi/verilog-which-func-xtra))
-                    ;; Do `xref-go-back' if this command is called when the
-                    ;; point in *not* inside a verilog instance.
-                    (xref-go-back))
-                (user-error "Ctags TAGS file `%s' was not found" tags-file)))
-          (user-error "Executable `ctags' is required for this command to work")))
-
-;;;; modi/verilog-find-parent-module (interactive)
-      (defun modi/verilog-find-parent-module ()
-        "Find the places where the current verilog module is instantiated in
-the project."
-        (interactive)
-        (let ((verilog-module-re (concat "^[[:blank:]]*" ;Elisp regexp
-                                         "\\(?:module\\)[[:blank:]]+" ;Shy group
-                                         "\\(?1:"
-                                         modi/verilog-identifier-re ;Elisp regexp here!
-                                         "\\)\\b"))
-              module-name
-              module-instance-pcre)
-          (save-excursion
-            (re-search-backward verilog-module-re)
-            (setq module-name (match-string 1))
-            (setq module-instance-pcre ;PCRE regex
-                  (concat "^\\s*"
-                          module-name
-                          "\\s+"
-                          "(#\\s*\\((\\n|.)*?\\))*" ;optional hardware parameters
-                                        ;'(\n|.)*?' does non-greedy multi-line grep
-                          "(\\n|.)*?" ;optional newline/space before instance name
-                          "([^.])*?" ;do not match ".PARAM (PARAM_VAL)," if any
-                          "\\K"       ;don't highlight anything till this point
-                          modi/verilog-identifier-pcre ;instance name
-                          "(?=[^a-zA-Z0-9_]*\\()")) ;optional space/newline after instance name
-                                        ;and before opening parenthesis `('
-                                        ;don't highlight anything in (?=..)
-            ;; (message module-instance-pcre)
-            ;; `--pcre2' is needed for the \K and (?=..) constructs above, and
-            ;; `--multiline' for the (\n|.)*? parts. Search only through
-            ;; verilog type files; see "rg --type-list".
-            (grep (mapconcat #'shell-quote-argument
-                             (list "rg" "--pcre2" "--multiline" "--type" "verilog"
-                                   "--line-number" "--no-heading" "--color" "never"
-                                   "--regexp" module-instance-pcre
-                                   (projectile-project-root))
-                             " "))))))
-
 ;;;; modi/verilog-selective-indent
     ;; http://emacs.stackexchange.com/a/8033/115
     (defvar modi/verilog-multi-line-define-line-cache nil
@@ -778,10 +702,54 @@ _a_lways         _f_or              _g_enerate         _O_utput
      ("C-^"       . modi/verilog-jump-to-header-dwim)
      ("C-&"       . modi/verilog-jump-to-header-dwim-fwd)
      ("<f9>"      . modi/verilog-compile)
-     ("<S-f9>"    . modi/verilog-simulate))
-    (bind-chord "\\\\" #'modi/verilog-jump-to-module-at-point verilog-mode-map) ;"\\"
+     ("<S-f9>"    . modi/verilog-simulate))))
+
+;;; verilog-ext
+;; https://github.com/gmlarumbe/verilog-ext
+;; Only the features below are enabled. The rest either duplicate what this
+;; file already does (font-lock, imenu, which-func, hideshow, template,
+;; block-end-comments, compilation, time-stamp, beautify) or need a tool
+;; that is not installed (eglot/lsp/lsp-bridge/lspce need an LSP server,
+;; formatter and flycheck need verible).
+(use-package verilog-ext
+  :hook (verilog-mode . verilog-ext-mode)
+  :init
+  (progn
+    ;; `xref', `capf', `hierarchy' and `typedefs' work per project, and a
+    ;; buffer counts as being in one only if it sits under a `:root' in
+    ;; `verilog-ext-project-alist'. Set that in
+    ;; `setup-var-overrides.el' (see `user-personal-directory'), e.g.
+    ;;
+    ;;   (setq verilog-ext-project-alist
+    ;;         `(("my-block" :root "/proj/foo/rtl"
+    ;;                       :dirs ("src" "tb")
+    ;;                       :ignore-dirs ("src/ignore"))))
+    ;;
+    ;; then run `verilog-ext-tags-get' (C-c C-u) once per project.
+    ;; `navigation' and `ports' work without it.
+    (setq verilog-ext-feature-list '(xref        ;Tree-sitter backed definitions/references
+                                     capf        ;Completion with dot and scope support
+                                     hierarchy   ;Uses the tree-sitter backend, so no vhier needed
+                                     navigation  ;`verilog-ext-jump-to-*' and defun movement
+                                     typedefs    ;Scan project typedefs for fontification/alignment
+                                     ports)))    ;Port connection utilities
+  :config
+  (progn
+    ;; `verilog-ext-mode-map' is a minor mode map, so it shadows these
+    ;; global bindings in Verilog buffers.
+    (bind-keys
+     :map verilog-ext-mode-map
+     ("C-M-d" . nil)                    ;`duplicate-dwim'
+     ("C-M-p" . nil)                    ;`drag-stuff-up'
+     ("C-M-n" . nil))                   ;`drag-stuff-down'
+
+    ;; These find the instance at point through the tree-sitter parse
+    ;; instead of a regexp, and resolve it with xref rather than requiring
+    ;; a pre-generated ctags TAGS file.
+    (bind-chord "\\\\" #'verilog-ext-jump-to-module-at-point-def verilog-ext-mode-map) ;"\\"
+    (bind-chord "||" #'verilog-ext-jump-to-module-at-point-ref verilog-ext-mode-map)
     (when (executable-find "rg")
-      (bind-chord "^^" #'modi/verilog-find-parent-module verilog-mode-map))))
+      (bind-chord "^^" #'verilog-ext-jump-to-parent-module verilog-ext-mode-map))))
 
 
 (provide 'setup-verilog)

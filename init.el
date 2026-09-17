@@ -111,6 +111,7 @@ When set to `emacs', the Org version shipped with Emacs is used.")
     transpose-frame ; for the priceless `rotate-frame' and `transpose-frame'
     unfill
     use-package-chords
+    verilog-ext ; xref, completion, hierarchy and navigation for SystemVerilog
     verilog-ts-mode ; tree-sitter based SystemVerilog mode
     visual-regexp
     ;; volatile-highlights
