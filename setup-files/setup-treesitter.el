@@ -79,6 +79,13 @@ Not remapped:
   (use-package verilog-ts-mode
     :init
     (progn
+      ;; `verilog-ts-mode' requires `verilog-mode' as it loads, and this
+      ;; file is loaded before setup-verilog.el, so put the submodule on
+      ;; `load-path' here. Otherwise the copy bundled with Emacs is the one
+      ;; that gets loaded and the `:load-path' in setup-verilog.el has no
+      ;; effect.
+      (add-to-list 'load-path (expand-file-name "elisp/verilog-mode" user-emacs-directory))
+
       (add-to-list 'major-mode-remap-alist '(verilog-mode . verilog-ts-mode)))
     :config
     (progn
