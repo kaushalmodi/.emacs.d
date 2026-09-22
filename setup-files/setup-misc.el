@@ -27,6 +27,32 @@
                         (make-directory dir :parents)
                         dir))
 
+;; Files on cloud-synced mounts (OneDrive, iCloud Drive, Dropbox, etc.)
+;; often cannot be renamed out of their sync domain, and cloud-only
+;; placeholders fail the copy+unlink fallback with ENOENT.  Delete such
+;; files directly instead of moving them to `trash-directory'.
+(defvar modi/cloud-directories nil
+  "List of cloud-synced directories whose files are deleted outright, not trashed.
+Populate this in `setup-personal.el' (loaded before this file), e.g.
+  (setq modi/cloud-directories (list \"~/Library/CloudStorage/\"))
+Each entry is compared against the true name of the file, so symlinks
+into these directories are covered too.")
+
+(defun modi/move-file-to-trash--bypass-cloud-directories (orig-fn filename)
+  "Delete FILENAME directly if it lives under one of `modi/cloud-directories'.
+Otherwise call ORIG-FN (`move-file-to-trash') as usual."
+  (let ((true-name (file-truename filename)))
+    (if (seq-some (lambda (dir)
+                    (string-prefix-p (file-name-as-directory (file-truename dir))
+                                     true-name))
+                  modi/cloud-directories)
+        (let ((delete-by-moving-to-trash nil))
+          (if (file-directory-p filename)
+              (delete-directory filename :recursive)
+            (delete-file filename)))
+      (funcall orig-fn filename))))
+(advice-add 'move-file-to-trash :around #'modi/move-file-to-trash--bypass-cloud-directories)
+
 ;; Uncompress->edit->save->compress .gz, .bz2, .Z files on the fly
 (auto-compression-mode 1)
 
