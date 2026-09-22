@@ -81,8 +81,8 @@
          ("s-<right>" . windmove-right)
          ("s-<up>" . windmove-up)
          ("s-<down>" . windmove-down)
-         ("C-c ]" . hydra-resize-window/body)
-         ("C-c [" . hydra-resize-window/body))
+         ("C-c ]" . modi/move-splitter-right)
+         ("C-c [" . modi/move-splitter-left))
   :config
   (progn
     (setq windmove-wrap-around t)       ;default = nil
@@ -144,22 +144,25 @@
     (defun modi/move-splitter-down (delta)
       "Move window splitter down."
       (interactive "p")
-      (modi/move-splitter 'down delta))
+      (modi/move-splitter 'down delta))))
 
-    (defhydra hydra-resize-window (:color red)
-      "resize window"
-      ("<left>" modi/move-splitter-left "↤")
-      ("<right>" modi/move-splitter-right "↦")
-      ("<up>" modi/move-splitter-up "↥")
-      ("<down>" modi/move-splitter-down "↧")
-      ("[" modi/move-splitter-left nil)
-      ("]" modi/move-splitter-right nil)
-      ("{" modi/move-splitter-up nil) ;Shift + [
-      ("}" modi/move-splitter-down nil) ;Shift + ]
-      ("=" balance-windows "Balance")
-      ("+" balance-windows nil)
-      ("q" nil "cancel" :color blue)
-      ("<return>" nil "cancel" :color blue))))
+
+;; `repeat-mode' (enabled in setup-misc.el) keeps these active after the
+;; first `C-c [' or `C-c ]', so the splitter can be nudged with bare
+;; arrows or brackets until any other key is pressed.
+(defvar-keymap modi/resize-window-repeat-map
+  :doc "Repeat map for moving window splitters."
+  :repeat t
+  "<left>" #'modi/move-splitter-left
+  "<right>" #'modi/move-splitter-right
+  "<up>" #'modi/move-splitter-up
+  "<down>" #'modi/move-splitter-down
+  "[" #'modi/move-splitter-left
+  "]" #'modi/move-splitter-right
+  "{" #'modi/move-splitter-up
+  "}" #'modi/move-splitter-down
+  "=" #'balance-windows
+  "+" #'balance-windows)
 
 ;;; Reopen Killed File
 ;; http://emacs.stackexchange.com/a/3334/115
@@ -502,14 +505,24 @@ Examples of such buffers: *gtags-global*, *ag*, *Occur*, *Diff*."
 
 ;;; Other Window/Buffer
 ;; http://emacs.stackexchange.com/q/22226/115
-(defhydra hydra-other-window-buffer
-  (global-map "C-x"
-              :color red)
-  "other window/buffer"
-  ("<right>" other-window "→win")
-  ("<left>" (lambda () (interactive) (other-window -1)) "win←")
-  ("<C-right>" next-buffer "→buf")
-  ("<C-left>" previous-buffer "buf←"))
+;; The arrow keys switch windows, and with Control they switch buffers;
+;; that is the opposite of the default `C-x <right>' = `next-buffer'.
+;; `repeat-mode' (enabled in setup-misc.el) repeats the last key of each,
+;; so "C-x <right> <right>" keeps moving through windows.
+(bind-keys
+ :map modi-mode-map
+ ("C-x <right>" . other-window)
+ ("C-x <left>" . other-window-backward)
+ ("C-x C-<right>" . next-buffer)
+ ("C-x C-<left>" . previous-buffer))
+
+(defvar-keymap modi/other-window-buffer-repeat-map
+  :doc "Repeat map for the `C-x <arrow>' window and buffer switching."
+  :repeat t
+  "<right>" #'other-window
+  "<left>" #'other-window-backward
+  "C-<right>" #'next-buffer
+  "C-<left>" #'previous-buffer)
 
 ;;; *Messages* Auto-tail
 ;; Improved upon http://stackoverflow.com/a/4685005/1219634

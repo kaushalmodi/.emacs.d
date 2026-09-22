@@ -69,16 +69,11 @@ If point reaches the beginning or end of the buffer, stop there."
 ;; commands next/previous-error (M-g M-n and M-g M-p respectively), as
 ;; they enable you to cycle through the list of occur matches from
 ;; within the source buffer itself."
-(defhydra hydra-nav-error
-  (nil "M-g"
-       :bind (lambda (key cmd) (bind-key key cmd modi-mode-map))
-       :color pink)
-  "nav-error"
-  ("g" first-error "first")
-  ("n" next-error "next")
-  ("p" previous-error "prev")
-  ("q" nil "cancel")
-  ("<return>" nil "cancel"))
+;; `repeat-mode' is enabled in setup-misc.el, and `next-error-repeat-map'
+;; makes "M-g n n n" and "M-g p p p" walk the error list.
+(bind-keys
+ :map modi-mode-map
+ ("M-g g" . first-error))
 
 ;; Avy Jump
 ;; https://github.com/abo-abo/avy
