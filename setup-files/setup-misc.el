@@ -21,6 +21,17 @@
 ;; Do not clutter the kill ring with consecutive identical kills.
 (setq kill-do-not-save-duplicates t)
 
+;; After a command that belongs to a repeat map, its last key repeats it:
+;; "C-x o o o" cycles windows, "M-g n n n" walks the error list, "C-x
+;; <right> <right>" walks the buffer list. Emacs defines the maps for
+;; `other-window', `next-error', `next-buffer' and many more.
+(use-package repeat
+  :config
+  (progn
+    ;; Show which keys continue the repetition in the echo area.
+    (setq repeat-echo-function #'repeat-echo-message)
+    (repeat-mode 1)))
+
 ;; Delete stuff to a trash directory
 (setq delete-by-moving-to-trash t)
 (setq trash-directory (let ((dir (file-name-as-directory (expand-file-name ".trash_emacs" modi/temporary-file-directory))))
